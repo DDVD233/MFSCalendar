@@ -1,7 +1,7 @@
 PODS:
   - DZNEmptyDataSet (1.8.1)
   - FSCalendar (2.7.8)
-  - JTAppleCalendar (7.0.4)
+  - LTMorphingLabel (0.5.0)
   - NVActivityIndicatorView (3.6.1)
   - SCLAlertView (0.7.0)
   - SkyFloatingLabelTextField (3.1.0)
@@ -11,7 +11,7 @@ PODS:
 DEPENDENCIES:
   - DZNEmptyDataSet
   - FSCalendar
-  - JTAppleCalendar
+  - LTMorphingLabel
   - NVActivityIndicatorView
   - SCLAlertView
   - SkyFloatingLabelTextField
@@ -21,13 +21,13 @@ DEPENDENCIES:
 SPEC CHECKSUMS:
   DZNEmptyDataSet: 9525833b9e68ac21c30253e1d3d7076cc828eaa7
   FSCalendar: 09369a2bf554ba71cd8e8cfb627e2df22a2c2af4
-  JTAppleCalendar: 6def48ecd0daae1d5baaa45e813124c2a20b184d
+  LTMorphingLabel: bc170be74b219b7dae0e5543a44676d16da70ff7
   NVActivityIndicatorView: 9f52a7f84bf5c6a798722c450fe3c198e01c56ed
   SCLAlertView: 8a14ffc40590c619e183eed2298b854385f30be1
   SkyFloatingLabelTextField: 26a92ad407044dd5a7c3e4e348738ff0991514fe
   SwiftMessages: 09cea3336e3fb63c3578983c8aac65acaa6d884a
   UICircularProgressRing: e8e2e82ec347f59a05266c959e925e30725079a1
 
-PODFILE CHECKSUM: 0dcddf6915fae0a0d2ff77313cc60846e5fe505b
+PODFILE CHECKSUM: f5dd4ba6e7fcaf81e274cd900ec02bf1b0fb9a3d
 
 COCOAPODS: 1.2.0

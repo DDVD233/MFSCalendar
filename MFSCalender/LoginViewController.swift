@@ -174,6 +174,7 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
                     if self.getProfile() && self.initDayData() && self.getEvent() && self.versionCheck() {
                         self.userDefaults?.set(self.username.text, forKey: "username")
                         self.userDefaults?.set(self.password.text, forKey: "password")
+                        self.userDefaults?.set(true, forKey: "didLogin")
                         DispatchQueue.main.sync {
                             self.dismiss(animated: true, completion: nil)
                         }

@@ -88,8 +88,7 @@ class CalendarViewController: UIViewController, UIScrollViewDelegate, DZNEmptyDa
         self.backButton.title = "Fold"
         self.navigationItem.title = "Classes"
         self.view.addGestureRecognizer(self.scopeGesture)
-        self.classView.addGestureRecognizer(self.scopeGesture)
-        self.eventView.addGestureRecognizer(self.scopeGesture)
+        
         self.classView.panGestureRecognizer.require(toFail: self.scopeGesture)
         self.eventView.panGestureRecognizer.require(toFail: self.scopeGesture)
         self.bottomScrollView.contentSize = CGSize(width: self.view.frame.size.width * 2, height: self.bottomScrollView.frame.size.height)
@@ -149,10 +148,6 @@ class CalendarViewController: UIViewController, UIScrollViewDelegate, DZNEmptyDa
             }
         }
         return shouldBegin
-    }
-    
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return true
     }
     
     func title(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {

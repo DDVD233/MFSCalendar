@@ -7,7 +7,7 @@ use_frameworks!
 
 
 target 'MFSCalendar' do
-    pod 'JTAppleCalendar'
+    # pod 'JTAppleCalendar'
     pod 'SwiftMessages'
     pod 'NVActivityIndicatorView'
     pod 'UICircularProgressRing'
@@ -15,5 +15,6 @@ target 'MFSCalendar' do
     pod 'SkyFloatingLabelTextField'
     pod 'DZNEmptyDataSet'
     pod 'FSCalendar'
+    pod 'LTMorphingLabel'
 end
 
