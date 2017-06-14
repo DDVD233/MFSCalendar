@@ -280,24 +280,25 @@ extension firstTimeLaunchController {
                         //When profile retrival is success.
                         
                         print(resDict)
-                        let firstName = resDict["FirstName"] as? String
-                        let lastName = resDict["LastName"] as? String
-                        let photo = resDict["ProfilePhoto"] as? NSDictionary
-                        let lockerNumber = resDict["LockerNbr"] as? String
-                        let lockerPassword = resDict["LockerCombo"] as? String
-                        
-                        
-                        photolink = photo?["ThumbFilenameUrl"] as? String
-                        
-                        success = true
-                        
-                        DispatchQueue.main.async {
+                        if let firstName = resDict["FirstName"] as? String {
                             self.userDefaults?.set(firstName, forKey: "firstName")
+                        }
+                        
+                        if let lastName = resDict["LastName"] as? String {
                             self.userDefaults?.set(lastName, forKey: "lastName")
-                            self.userDefaults?.set(lockerNumber, forKey: "lockerNumber")
-                            self.userDefaults?.set(lockerPassword, forKey: "lockerPassword")
+                        }
+                        if let photo = resDict["ProfilePhoto"] as? NSDictionary {
+                            photolink = photo["ThumbFilenameUrl"] as? String
                             self.userDefaults?.set(photolink, forKey: "photoLink")
                         }
+                        
+                        if let lockerNumber = resDict["LockerNbr"] as? String {
+                            self.userDefaults?.set(lockerNumber, forKey: "lockerNumber")
+                        }
+                        if let lockerPassword = resDict["LockerCombo"] as? String {
+                            self.userDefaults?.set(lockerPassword, forKey: "lockerPassword")
+                        }
+                        success = true
                         
                     }
                 } catch {

@@ -10,6 +10,7 @@ import UIKit
 import NVActivityIndicatorView
 import SwiftMessages
 import UICircularProgressRing
+import LTMorphingLabel
 
 class courseFillController:UIViewController {
     
@@ -20,8 +21,9 @@ class courseFillController:UIViewController {
     let userDefaults = UserDefaults(suiteName: "group.org.dwei.MFSCalendar")
     
     @IBOutlet weak var progressView: UICircularProgressRingView!
-    @IBOutlet weak var topLabel: UILabel!
-    @IBOutlet weak var bottomLabel: UILabel!
+    @IBOutlet weak var topLabel: LTMorphingLabel!
+    @IBOutlet weak var bottomLabel: LTMorphingLabel!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,22 +57,11 @@ class courseFillController:UIViewController {
                         if self.createSchedule(fillLowPriority: 1) {
                             self.versionCheck()
                             self.progressView.setProgress(value: 100, animationDuration: 1) {
-                                let animation = CATransition()
-                                let duriation = 1
-                                animation.duration = CFTimeInterval(duriation)
-                                animation.type = kCATransitionFade
-                                animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
-                                
-                                self.topLabel.layer.add(animation, forKey: "changeTextTransition")
 
                                 self.topLabel.text = "Success"
+                                self.bottomLabel.text = "Your courses have been successfully updated!"
                                 
-                                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(duriation), execute: {
-                                    self.bottomLabel.layer.add(animation, forKey: "changeTextTransition")
-                                    self.bottomLabel.text = "Your courses have been successfully updated!"
-                                })
-                                
-                                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3), execute: {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(5), execute: {
                                     self.dismiss(animated: true, completion: nil)
                                 })
                             }

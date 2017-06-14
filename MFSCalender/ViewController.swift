@@ -58,7 +58,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     @IBOutlet weak var bottomView: UIView!
     
     let formatter = DateFormatter()
-    var listEvents:NSArray = []
+    var listEvents:NSMutableArray = []
     var listClasses:NSMutableArray = []
     
 
@@ -110,10 +110,10 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         var str:String? = ""
         var attrs:[String:Any] = [NSFontAttributeName: UIFont.preferredFont(forTextStyle: UIFontTextStyle.headline)]
         if scrollView == classView {
-            str = "No more class for today!"
+            str = "No more classes for today!"
         } else if scrollView == eventView {
             self.eventView.separatorStyle = .none
-            str = "No more events for today."
+            str = "No more events for today!"
             attrs = [NSFontAttributeName: UIFont.preferredFont(forTextStyle: UIFontTextStyle.headline), NSForegroundColorAttributeName: UIColor.white]
         }
         
@@ -450,6 +450,7 @@ extension Main: UICollectionViewDelegate, UICollectionViewDataSource, UICollecti
 extension Main: UITableViewDelegate, UITableViewDataSource {
     
     func eventDataFetching() {
+        self.listEvents = []
         let plistPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
         let fileName = "/Events.plist"
         let path = plistPath.appending(fileName)
@@ -458,21 +459,37 @@ extension Main: UITableViewDelegate, UITableViewDataSource {
         self.formatter.dateFormat = "yyyyMMdd"
         let eventDate = formatter.string(from: date as Date)
         guard let events = eventData?[eventDate] as? NSMutableArray else {
-            self.listEvents = []
             self.eventView.reloadData()
             return
         }
-        self.listEvents = events
-//        for items in events {
-//            let rowDict = items as! NSDictionary
-//            let tEnd = rowDict["tEnd"] as! String
-//            if (rowDict["tEnd"] as! Int) > 99999 {
-//                self.formatter.dateFormat = "HHmmss"
-//            } else {
-//                self.formatter.dateFormat = "Hmmss"
-//            }
-//            let timeEnd = formatter.date(from: tEnd)
-//        }
+        
+//        排序Events
+        self.formatter.dateFormat = "HHmmss"
+        let currentTime = Int(formatter.string(from: Date()))
+        var eventToSort: [NSMutableDictionary] = []
+//        先加上All Day的， 然后将其余还未结束的加入eventToSort进行排序
+        for items in events {
+            let event = items as! NSMutableDictionary
+            if (event["isAllDay"] as? Int) == 1 {
+                self.listEvents.add(event)
+            } else {
+                let rowDict = items as! NSDictionary
+                if let tEnd = rowDict["tEnd"] as? Int {
+                    if tEnd > currentTime! {
+                        event["tEnd"] = tEnd
+                        eventToSort.append(event)
+                    }
+                }
+            }
+        }
+        
+        let sortedEvents = eventToSort.sorted(by: {
+            ($0["tEnd"] as! Int) < ($1["tEnd"] as! Int)
+        })
+        
+        for items in sortedEvents {
+            self.listEvents.add(items)
+        }
         self.eventView.reloadData()
     }
     
@@ -489,6 +506,7 @@ extension Main: UITableViewDelegate, UITableViewDataSource {
             let rowDict = self.listEvents[row] as! NSDictionary
             let summary = rowDict["summary"] as? String
             cell?.ClassName.text = summary
+//        截取第一个字母
             let letter = summary?.substring(to: (summary?.index(after: (summary?.startIndex)!))!)
             cell?.PeriodNumber.text = letter!
             if rowDict["location"] != nil {
