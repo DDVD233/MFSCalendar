@@ -11,7 +11,6 @@ import UserNotifications
 import MessageUI
 
 class moreViewController: UITableViewController {
-    let userDefaults = UserDefaults(suiteName: "group.org.dwei.MFSCalendar")
     
     @IBOutlet weak var profilePhoto: UIImageView!
     @IBOutlet weak var name: UILabel!
@@ -31,7 +30,6 @@ class moreViewController: UITableViewController {
 
 
 class settingViewController: UITableViewController, UIActionSheetDelegate {
-    let userDefaults = UserDefaults(suiteName: "group.org.dwei.MFSCalendar")
 
 
     @IBAction func logout(_ sender: Any) {
@@ -43,14 +41,14 @@ class settingViewController: UITableViewController, UIActionSheetDelegate {
 
         let logOutAction = UIAlertAction(title: "Log Out", style: .default) { (alertAction) -> Void in
             NSLog("Logged Out")
-            self.userDefaults?.set(false, forKey: "didLogin")
-            self.userDefaults?.set(false, forKey: "courseInitialized")
-//            self.userDefaults?.removeObject(forKey: "username")
-//            self.userDefaults?.removeObject(forKey: "password")
-            self.userDefaults?.removeObject(forKey: "firstName")
-            self.userDefaults?.removeObject(forKey: "lastName")
-            self.userDefaults?.removeObject(forKey: "lockerNumber")
-            self.userDefaults?.removeObject(forKey: "lockerPassword")
+            userDefaults?.set(false, forKey: "didLogin")
+            userDefaults?.set(false, forKey: "courseInitialized")
+//            userDefaults?.removeObject(forKey: "username")
+//            userDefaults?.removeObject(forKey: "password")
+            userDefaults?.removeObject(forKey: "firstName")
+            userDefaults?.removeObject(forKey: "lastName")
+            userDefaults?.removeObject(forKey: "lockerNumber")
+            userDefaults?.removeObject(forKey: "lockerPassword")
             let vc = self.storyboard?.instantiateViewController(withIdentifier: "MainTab")
             self.present(vc!, animated: false, completion: nil)
         }
@@ -70,7 +68,7 @@ class settingViewController: UITableViewController, UIActionSheetDelegate {
 //
 //        let clearDataAction = UIAlertAction(title: "Clear Data", style: .default) { (alertAction) -> Void in
 //            NSLog("Data Cleared")
-//            self.userDefaults?.set(false, forKey: "dataInitialized")
+//            userDefaults?.set(false, forKey: "dataInitialized")
 //            do {
 //                let fileManager = FileManager()
 //                let filePath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
@@ -99,7 +97,6 @@ class profileViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let userDefaults = UserDefaults(suiteName: "group.org.dwei.MFSCalendar")
         firstName.text = userDefaults?.string(forKey: "firstName")
         lastName.text = userDefaults?.string(forKey: "lastName")
         lockerNumber.text = userDefaults?.string(forKey: "lockerNumber")

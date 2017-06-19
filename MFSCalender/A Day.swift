@@ -53,7 +53,7 @@ class ADay: UIViewController {
     }
 
     override func viewDidAppear(_ animated: Bool) {
-        let userDefaults = UserDefaults(suiteName: "group.org.dwei.MFSCalendar")
+        
         if userDefaults?.bool(forKey: "reloadTable") != false {
             self.dataFetching()
             self.tableView.reloadData()
@@ -63,7 +63,7 @@ class ADay: UIViewController {
     }
 
     func dataFetching() {
-        let userDefaults = UserDefaults(suiteName: "group.org.dwei.MFSCalendar")
+        
         let daySelected = userDefaults?.string(forKey: "daySelect")
         self.title = daySelected! + " Day"
         NSLog("Day: %@", daySelected!)
@@ -308,7 +308,7 @@ class AddClass: UITableViewController, UIPickerViewDelegate, UIPickerViewDataSou
             array?.add(AddData)
             NSLog(txtClassName.text!)
             array?.write(toFile: path, atomically: true)
-            let userDefaults = UserDefaults(suiteName: "group.org.dwei.MFSCalendar")
+            
             userDefaults?.set(true, forKey: "reloadTable")
             dismiss(animated: true)
         }

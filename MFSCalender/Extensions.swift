@@ -79,3 +79,63 @@ extension UIImage {
     }
     
 }
+
+public let userDefaults = UserDefaults(suiteName: "group.org.dwei.MFSCalendar")
+
+public func loginAuthentication() -> (success:Bool, token:String) {
+    
+    guard let usernameText = userDefaults?.string(forKey: "username") else {
+        return (false, "Username Not Found")
+    }
+    guard let passwordText = userDefaults?.string(forKey: "password") else {
+        return (false, "Password Not Found")
+    }
+    
+    var token: String? = nil
+    var userID: String? = nil
+    var success: Bool = false
+    let accountCheckURL = "https://mfriends.myschoolapp.com/api/authentication/login/?username=" + usernameText + "&password=" + passwordText + "&format=json"
+    let url = NSURL(string: accountCheckURL)
+    let request = URLRequest(url: url! as URL)
+    let session = URLSession.shared
+    let semaphore = DispatchSemaphore.init(value: 0)
+    let task: URLSessionDataTask = session.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
+        if error == nil {
+            do {
+                let resDict = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! NSDictionary
+                print(resDict)
+                if resDict["Error"] != nil {
+                    //                        When error occured. Like the username or password is not correct.
+                    print("Login Error!")
+                    if (resDict["ErrorType"] as! String) == "UNAUTHORIZED_ACCESS" {
+                        token = "Incorrect password"
+                    }
+                } else {
+                    //                      When authentication is success.
+                    success = true
+                    token = resDict["Token"] as? String
+                    userID = String(describing: resDict["UserId"]!)
+                    userDefaults?.set(token, forKey: "token")
+                    userDefaults?.set(userID, forKey: "userID")
+                }
+            } catch {
+                NSLog("Data parsing failed")
+                DispatchQueue.main.async {
+                    token = "Data parsing failed"
+                }
+            }
+        } else {
+            DispatchQueue.main.async {
+                let presentMessage = (error?.localizedDescription)! + " Please check your internet connection."
+                token = presentMessage
+            }
+            
+        }
+        semaphore.signal()
+        
+    })
+    
+    task.resume()
+    semaphore.wait()
+    return (success, token!)
+}

@@ -62,7 +62,6 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     var listClasses:NSMutableArray = []
     
 
-    let userDefaults = UserDefaults(suiteName: "group.org.dwei.MFSCalendar")
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -131,7 +130,6 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     }
 
     override func viewDidAppear(_ animated: Bool) {
-        let userDefaults = UserDefaults(suiteName: "group.org.dwei.MFSCalendar")
         if userDefaults?.bool(forKey: "didLogin") != true {
             let vc = self.storyboard?.instantiateViewController(withIdentifier: "ftController") as! firstTimeLaunchController
             self.present(vc, animated: true, completion: nil)
@@ -155,23 +153,29 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
                         }
                     }
                 } else {
-                    NSLog("No refresh, version: %@", String(describing: self.userDefaults?.integer(forKey: "version")))
+                    NSLog("No refresh, version: %@", String(describing: userDefaults?.integer(forKey: "version")))
                 }
             }
         }
     }
 
     func doRefreshData() -> Bool {
-        let version = self.userDefaults?.integer(forKey: "version")
+        guard let version = userDefaults?.integer(forKey: "version") else {
+            return true
+        }
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyyMMdd"
+        let refreshDate = userDefaults?.string(forKey: "refreshDate")
+        let date = formatter.string(from: Date())
         var refresh = false
         let semaphore = DispatchSemaphore.init(value: 0)
         let dayCheckURL = "https://dwei.org/dataversion"
         let url = NSURL(string: dayCheckURL)
         let request = URLRequest(url: url! as URL)
         let session = URLSession.shared
-
-        if version == nil {
-            refresh = true
+        
+        if refreshDate == date {
+            refresh = false
         } else {
             let task: URLSessionDataTask = session.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
                 NSLog("Done")
@@ -180,9 +184,9 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
                     guard let nversion = String(data: data!, encoding: .utf8) else {
                         return
                     }
-                    let newVersion = Int(nversion)
-                    print("Latest version:", newVersion ?? "ERROR")
-                    if newVersion! != version! {
+                    guard let newVersion = Int(nversion) else { return }
+                    print("Latest version:", newVersion)
+                    if newVersion != version {
                         refresh = true
                     }
                 } else {
@@ -211,7 +215,6 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     
 
     func setupTheHeader() {
-        let userDefaults = UserDefaults(suiteName: "group.org.dwei.MFSCalendar")
         let day = dayCheck()
         var dayText: String? = nil
         let date = NSDate()
@@ -647,8 +650,6 @@ extension Main {
 }
 
 class ClassSchedule: UIViewController {
-
-    let userDefaults = UserDefaults(suiteName: "group.org.dwei.MFSCalendar")
 
     override func viewDidLoad() {
         super.viewDidLoad()

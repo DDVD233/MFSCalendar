@@ -1,14 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="17A264c" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="O1K-uV-Ctu">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="17A264c" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="O1K-uV-Ctu">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--Homework-->
+        <scene sceneID="PnZ-tL-8PY">
+            <objects>
+                <viewController id="Ihz-Zz-enP" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="gs2-K3-LKA"/>
+                        <viewControllerLayoutGuide type="bottom" id="NTi-P2-vLw"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="2Og-o5-IEe">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Homework" image="homework" id="879-k8-qhx"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="e27-45-d2D" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1930" y="-306"/>
+        </scene>
         <!--Today-->
         <scene sceneID="EHf-IW-A2E">
             <objects>
@@ -85,6 +104,7 @@
                     </tabBar>
                     <connections>
                         <segue destination="01J-lp-oVM" kind="relationship" relationship="viewControllers" id="583-PH-kcd"/>
+                        <segue destination="Ihz-Zz-enP" kind="relationship" relationship="viewControllers" id="1dX-C8-VAu"/>
                         <segue destination="X3R-pZ-w0S" kind="relationship" relationship="viewControllers" id="byF-NX-WBW"/>
                         <segue destination="0JE-Ee-5nK" kind="relationship" relationship="viewControllers" id="pGX-Az-Aab"/>
                     </connections>
@@ -97,5 +117,6 @@
     <resources>
         <image name="Calendar" width="25" height="25"/>
         <image name="Today" width="25" height="25"/>
+        <image name="homework" width="25" height="25"/>
     </resources>
 </document>

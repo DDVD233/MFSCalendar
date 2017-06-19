@@ -24,8 +24,6 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var bottomLayoutConstraint: NSLayoutConstraint!
     
-    let userDefaults = UserDefaults(suiteName: "group.org.dwei.MFSCalendar")
-    
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
@@ -44,8 +42,8 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
         self.username.delegate = self
         self.password.delegate = self
         
-        self.username.text = self.userDefaults?.string(forKey: "username")
-        self.password.text = self.userDefaults?.string(forKey: "password")
+        self.username.text = userDefaults?.string(forKey: "username")
+        self.password.text = userDefaults?.string(forKey: "password")
         
         self.username.placeholder = "Username"
         self.username.title = "Username"
@@ -146,19 +144,19 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
         if (self.username.text?.isEmpty)! || (self.password.text?.isEmpty)! {
         
         } else if self.username.text == "testaccount" && self.password.text == "test" {
-            self.userDefaults?.set(self.username.text, forKey: "username")
-            self.userDefaults?.set(self.password.text, forKey: "password")
-            self.userDefaults?.set("David", forKey: "firstName")
-            self.userDefaults?.set("Dai", forKey: "lastName")
-            self.userDefaults?.set("77", forKey: "lockerNumber")
-            self.userDefaults?.set("233", forKey: "lockerPassword")
+            userDefaults?.set(self.username.text, forKey: "username")
+            userDefaults?.set(self.password.text, forKey: "password")
+            userDefaults?.set("David", forKey: "firstName")
+            userDefaults?.set("Dai", forKey: "lastName")
+            userDefaults?.set("77", forKey: "lockerNumber")
+            userDefaults?.set("233", forKey: "lockerPassword")
             DispatchQueue.global().async(execute: {
                 DispatchQueue.main.sync {
                     self.indicatorView.isHidden = false
                     self.NVIndicator.startAnimating()
                 }
                 if self.initDayData() && self.getEvent() && self.versionCheck() {
-                    self.userDefaults?.set(true, forKey: "didLogin")
+                    userDefaults?.set(true, forKey: "didLogin")
                     self.dismiss(animated: true, completion: nil)
                 }
                 self.indicatorView.isHidden = true
@@ -172,9 +170,9 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
                 }
                 if self.authentication() {
                     if self.getProfile() && self.initDayData() && self.getEvent() && self.versionCheck() {
-                        self.userDefaults?.set(self.username.text, forKey: "username")
-                        self.userDefaults?.set(self.password.text, forKey: "password")
-                        self.userDefaults?.set(true, forKey: "didLogin")
+                        userDefaults?.set(self.username.text, forKey: "username")
+                        userDefaults?.set(self.password.text, forKey: "password")
+                        userDefaults?.set(true, forKey: "didLogin")
                         DispatchQueue.main.sync {
                             self.dismiss(animated: true, completion: nil)
                         }
@@ -191,63 +189,27 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
 }
 
 extension firstTimeLaunchController {
+    
     func authentication() -> Bool {
-        var token: String? = nil
-        var userID: String? = nil
-        var success: Bool = false
-        // This may hurt people who use space as their password.
-        let usernameText = self.username.text?.replace(target: " ", withString: "")
-        let passwordText = self.password.text?.replace(target: " ", withString: "")
-        let accountCheckURL = "https://mfriends.myschoolapp.com/api/authentication/login/?username=" + usernameText! + "&password=" + passwordText! + "&format=json"
-        let url = NSURL(string: accountCheckURL)
-        let request = URLRequest(url: url! as URL)
-        let session = URLSession.shared
-        let semaphore = DispatchSemaphore.init(value: 0)
-        let task: URLSessionDataTask = session.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
-            if error == nil {
-                do {
-                    let resDict = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! NSDictionary
-                    print(resDict)
-                    if resDict["Error"] != nil {
-                        //                        When error occured. Like the username or password is not correct.
-                        print("Login Error!")
-                        if (resDict["ErrorType"] as! String) == "UNAUTHORIZED_ACCESS" {
-                            DispatchQueue.main.async {
-                                let presentMessage = "The username/password is incorrect. Please check your spelling."
-                                self.errorMessage(presentMessage: presentMessage)
-                            }
-                        }
-                    } else {
-                        //                      When authentication is success.
-                        success = true
-                        token = resDict["Token"] as? String
-                        userID = String(describing: resDict["UserId"]!)
-                        self.userDefaults?.set(token, forKey: "token")
-                        self.userDefaults?.set(userID, forKey: "userID")
-                        
-                    }
-                } catch {
-                    NSLog("Data parsing failed")
-                    DispatchQueue.main.async {
-                        let presentMessage = "The server is not returning the right data. Please contact David."
-                        self.errorMessage(presentMessage: presentMessage)
-                        
-                    }
-                }
-            } else {
-                DispatchQueue.main.async {
-                    let presentMessage = (error?.localizedDescription)! + " Please check your internet connection."
-                    self.errorMessage(presentMessage: presentMessage)
-                }
-                
-            }
-            semaphore.signal()
-            
-        })
+        guard let username = self.username.text else {
+            return false
+        }
+        guard let password = self.password.text else {
+            return false
+        }
+        userDefaults?.set(username, forKey: "username")
+        userDefaults?.set(password, forKey: "password")
+        let (success, token) = loginAuthentication()
+        if token == "Incorrect password" {
+            self.errorMessage(presentMessage: "The username/password is incorrect. Please check your spelling.")
+        } else if !success {
+            self.errorMessage(presentMessage: token)
+        } else {
+            userDefaults?.set(token, forKey: "token")
+            return true
+        }
         
-        task.resume()
-        semaphore.wait()
-        return success
+        return false
     }
     
     func getProfile() -> Bool {
@@ -281,22 +243,22 @@ extension firstTimeLaunchController {
                         
                         print(resDict)
                         if let firstName = resDict["FirstName"] as? String {
-                            self.userDefaults?.set(firstName, forKey: "firstName")
+                            userDefaults?.set(firstName, forKey: "firstName")
                         }
                         
                         if let lastName = resDict["LastName"] as? String {
-                            self.userDefaults?.set(lastName, forKey: "lastName")
+                            userDefaults?.set(lastName, forKey: "lastName")
                         }
                         if let photo = resDict["ProfilePhoto"] as? NSDictionary {
                             photolink = photo["ThumbFilenameUrl"] as? String
-                            self.userDefaults?.set(photolink, forKey: "photoLink")
+                            userDefaults?.set(photolink, forKey: "photoLink")
                         }
                         
                         if let lockerNumber = resDict["LockerNbr"] as? String {
-                            self.userDefaults?.set(lockerNumber, forKey: "lockerNumber")
+                            userDefaults?.set(lockerNumber, forKey: "lockerNumber")
                         }
                         if let lockerPassword = resDict["LockerCombo"] as? String {
-                            self.userDefaults?.set(lockerPassword, forKey: "lockerPassword")
+                            userDefaults?.set(lockerPassword, forKey: "lockerPassword")
                         }
                         success = true
                         
@@ -459,7 +421,7 @@ extension firstTimeLaunchController {
                 }
                 let versionNumber = Int(version)
                 print("Version: %@", versionNumber!)
-                self.userDefaults?.set(versionNumber, forKey: "version")
+                userDefaults?.set(versionNumber, forKey: "version")
                 success = true
             } else {
                 DispatchQueue.main.async {

@@ -63,12 +63,10 @@ class Presenter: NSObject, UIGestureRecognizerDelegate {
         panRecognizer.addTarget(self, action: #selector(Presenter.pan(_:)))
         panRecognizer.delegate = self
         maskingView.clipsToBounds = true
+        id = (view as? Identifiable)?.id
     }
     
-    var id: String? {
-        let identifiable = view as? Identifiable
-        return identifiable?.id
-    }
+    var id: String?
     
     var pauseDuration: TimeInterval? {
         let duration: TimeInterval?
@@ -279,7 +277,7 @@ class Presenter: NSObject, UIGestureRecognizerDelegate {
     private var becomeKeyWindow: Bool {
         if config.becomeKeyWindow == .some(true) { return true }
         switch config.dimMode {
-        case .gray, .color:
+        case .gray, .color, .blur:
             // Should become key window in modal presentation style
             // for proper VoiceOver handling.
             return true
@@ -325,6 +323,15 @@ class Presenter: NSObject, UIGestureRecognizerDelegate {
             })
         }
 
+        func blur(style: UIBlurEffectStyle, alpha: CGFloat) {
+            let blurView = UIVisualEffectView(effect: nil)
+            blurView.alpha = alpha
+            maskingView.backgroundView = blurView
+            UIView.animate(withDuration: 0.3) {
+                blurView.effect = UIBlurEffect(style: style)
+            }
+        }
+
         switch config.dimMode {
         case .none:
             break
@@ -332,6 +339,8 @@ class Presenter: NSObject, UIGestureRecognizerDelegate {
             dim(UIColor(white: 0, alpha: 0.3))
         case .color(let color, _):
             dim(color)
+        case .blur(let style, let alpha, _):
+            blur(style: style, alpha: alpha)
         }
     }
 
@@ -390,9 +399,16 @@ class Presenter: NSObject, UIGestureRecognizerDelegate {
         }
 
         func undim() {
-            UIView.animate(withDuration: 0.2, animations: {
+            UIView.animate(withDuration: 0.2, delay: 0, options: .beginFromCurrentState, animations: {
                 self.maskingView.backgroundColor = UIColor.clear
-            })
+            }, completion: nil)
+        }
+
+        func unblur() {
+            guard let view = maskingView.backgroundView as? UIVisualEffectView else { return }
+            UIView.animate(withDuration: 0.2, delay: 0, options: .beginFromCurrentState, animations: { 
+                view.effect = nil
+            }, completion: nil)
         }
         
         switch config.dimMode {
@@ -402,6 +418,8 @@ class Presenter: NSObject, UIGestureRecognizerDelegate {
             undim()
         case .color:
             undim()
+        case .blur:
+            unblur()
         }
     }
     

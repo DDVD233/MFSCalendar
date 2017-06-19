@@ -18,8 +18,6 @@ class courseFillController:UIViewController {
         return .lightContent
     }
     
-    let userDefaults = UserDefaults(suiteName: "group.org.dwei.MFSCalendar")
-    
     @IBOutlet weak var progressView: UICircularProgressRingView!
     @IBOutlet weak var topLabel: LTMorphingLabel!
     @IBOutlet weak var bottomLabel: LTMorphingLabel!
@@ -31,13 +29,13 @@ class courseFillController:UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyyMMdd"
+        let date = formatter.string(from: Date())
+        userDefaults?.set(date, forKey: "refreshDate")
         if importCourses() {
             NSLog("All Done!")
         }
-    }
-    
-    @IBAction func dismissButton(_ sender: Any) {
-        self.dismiss(animated: true, completion: nil)
     }
     
 //    When they click "import courses".
@@ -72,12 +70,19 @@ class courseFillController:UIViewController {
                             self.fillStudyHall(letter: "D")
                             self.fillStudyHall(letter: "E")
                             self.fillStudyHall(letter: "F")
-                            self.userDefaults?.set(true, forKey: "courseInitialized")
+                            userDefaults?.set(true, forKey: "courseInitialized")
                             success = true
+                        } else {
+                            self.dismiss(animated: true)
                         }
                     }
+                } else {
+                    userDefaults?.set(true, forKey: "courseInitialized")
+                    self.dismiss(animated: true)
                 }
             }
+        } else {
+            self.dismiss(animated: true)
         }
         return success
     }
@@ -282,7 +287,7 @@ class courseFillController:UIViewController {
                 }
                 let versionNumber = Int(version)
                 print("Version: ", versionNumber!)
-                self.userDefaults?.set(versionNumber, forKey: "version")
+                userDefaults?.set(versionNumber, forKey: "version")
                 NSLog("Data refreshed to %#", version)
             } else {
                 DispatchQueue.main.async {
