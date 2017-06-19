@@ -35,7 +35,9 @@ class homeworkViewController: UITableViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        getHomework()
+        DispatchQueue.global().async {
+            self.getHomework()
+        }
     }
     
     func errorMessage(presentMessage: String) {
@@ -56,7 +58,13 @@ class homeworkViewController: UITableViewController {
     func getHomework() {
         guard let username = userDefaults?.string(forKey: "username") else { return }
         var request = URLRequest(url: URL(string:"https://dwei.org/assignmentlist/")!)
-        let session = URLSession.shared
+        
+        let config = URLSessionConfiguration.default
+        config.requestCachePolicy = .reloadIgnoringLocalCacheData
+        config.urlCache = nil
+        
+        let session = URLSession.init(configuration: config)
+        
         if username != "testaccount" {
             let (success, token) = loginAuthentication()
             if success {
@@ -118,7 +126,9 @@ class homeworkViewController: UITableViewController {
         task.resume()
         semaphore.wait()
         manageDate(originalData: originalData)
-        self.tableView.reloadData()
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
     }
     
     func manageDate(originalData: Array<NSDictionary>) {
@@ -144,7 +154,6 @@ class homeworkViewController: UITableViewController {
         }
         
         self.listHomework = managedHomework
-        print(managedHomework)
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -158,7 +167,7 @@ class homeworkViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-//        TODO: 加入今天，明天，这周内容
+//        TODO: 加入这周内容
         let dueDateMDString = sections[section]
         formatter.dateFormat = "yyyyMMdd"
         guard let dueDate = formatter.date(from: dueDateMDString) else { return "Unknown" }
@@ -176,8 +185,12 @@ class homeworkViewController: UITableViewController {
         
         let homeworkInSection = self.listHomework[sections[indexPath.section]]
         guard let homework = homeworkInSection?[indexPath.row] else { return cell }
-        if let assignmentId = homework["assignment_id"] as? String {
-            cell.assignmentId = assignmentId
+        if let assignmentId = homework["assignment_id"] as? Int {
+            cell.assignmentId = String(describing:assignmentId)
+        }
+        
+        if let sectionId = homework["section_id"] as? Int {
+            cell.sectionId = String(describing:sectionId)
         }
         var description = homework["short_description"] as? String
         description = description?.removingHTMLEntities
@@ -206,6 +219,17 @@ class homeworkViewController: UITableViewController {
             }
         }
         
+        if let status = homework["assignment_status"] as? Int {
+            switch status {
+            case -1:
+                cell.checkMark.setCheckState(.unchecked, animated: false)
+            case 1:
+                cell.checkMark.setCheckState(.checked, animated: false)
+            default:
+                cell.checkMark.setCheckState(.unchecked, animated: false)
+            }
+        }
+        
         cell.checkMark.tintColor = cell.tagView.backgroundColor
         return cell
     }
@@ -218,7 +242,8 @@ class homeworkViewCell: UITableViewCell {
     @IBOutlet weak var homeworkClass: UILabel!
     @IBOutlet weak var tagView: UIView!
     
-    var assignmentId: String? = nil
+    var assignmentId: String?
+    var sectionId: String?
     
     override func awakeFromNib() {
         checkMark.stateChangeAnimation = .bounce(.fill)
@@ -226,15 +251,52 @@ class homeworkViewCell: UITableViewCell {
         checkMark.addTarget(self, action: #selector(checkDidChange), for: UIControlEvents.valueChanged)
     }
     
-    func checkDidChange() {
+    func checkDidChange(checkMark: M13Checkbox) {
         guard (assignmentId != nil) else { return }
+        guard (sectionId != nil) else { return }
+        
+        var assignmentStatus: String? = nil
+        
         switch checkMark.checkState {
         case .checked:
-            break
-        case .unchecked: break
-            
+            assignmentStatus = "1"
+        case .unchecked:
+            assignmentStatus = "-1"
         default:
             NSLog("Something strange happened.")
         }
+        
+        var url: String? = nil
+        
+        if userDefaults?.string(forKey: "username") == "testaccount" {
+            url = "https://dwei.org/updateAssignmentStatus/" + assignmentId! + "/" + sectionId! + "/" + assignmentStatus!
+        }
+        
+        let request = URLRequest(url: URL(string: url!)!)
+        let session = URLSession.shared
+        
+        let task: URLSessionDataTask = session.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
+            if error == nil {
+                
+            } else {
+                switch checkMark.checkState {
+                case .checked:
+                    checkMark.setCheckState(.unchecked, animated: false)
+                case .unchecked:
+                    checkMark.setCheckState(.checked, animated: false)
+                default:
+                    break
+                }
+                let presentMessage = error!.localizedDescription + "Please check your internet connection"
+                let view = MessageView.viewFromNib(layout: .CardView)
+                view.configureTheme(.error)
+                view.configureContent(title: "Error!", body: presentMessage)
+                view.button?.isHidden = true
+                let config = SwiftMessages.Config()
+                SwiftMessages.show(config: config, view: view)
+            }
+        })
+        
+        task.resume()
     }
 }
