@@ -12,11 +12,14 @@
 		E413AB101EE89683001EB189 /* questionmark.png in Resources */ = {isa = PBXBuildFile; fileRef = E413AB0F1EE89683001EB189 /* questionmark.png */; };
 		E413AB121EE8A796001EB189 /* brush_pencil.png in Resources */ = {isa = PBXBuildFile; fileRef = E413AB111EE8A796001EB189 /* brush_pencil.png */; };
 		E413AB141EE8AF87001EB189 /* School_building.png in Resources */ = {isa = PBXBuildFile; fileRef = E413AB131EE8AF87001EB189 /* School_building.png */; };
+		E41DE2F81EFA4293001155E9 /* No_homework.png in Resources */ = {isa = PBXBuildFile; fileRef = E41DE2F71EFA4293001155E9 /* No_homework.png */; };
 		E445E73E1EAD8B7D00794560 /* MoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E445E73D1EAD8B7D00794560 /* MoreViewController.swift */; };
 		E44DCD921EB80E0600CEB68A /* School.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E44DCD911EB80E0600CEB68A /* School.jpg */; };
 		E453F0D11EA137D900BCE58D /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E453F0D01EA137D900BCE58D /* CalendarViewController.swift */; };
 		E45476EB1E8B3607004466D0 /* th-menu2.png in Resources */ = {isa = PBXBuildFile; fileRef = E45476EA1E8B3607004466D0 /* th-menu2.png */; };
 		E45476F11E8B3A4D004466D0 /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = E45476F01E8B3A4D004466D0 /* background.png */; };
+		E484E6551EFA33260056F2D5 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E484E6541EFA33260056F2D5 /* Localizable.strings */; };
+		E484E6581EFA337F0056F2D5 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E484E65A1EFA337F0056F2D5 /* InfoPlist.strings */; };
 		E48D4DF01E61F275008B0A97 /* A Day.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48D4DEF1E61F275008B0A97 /* A Day.swift */; };
 		E48D4DFA1E61F5EC008B0A97 /* BlankArray.plist in Resources */ = {isa = PBXBuildFile; fileRef = E48D4DF91E61F5EC008B0A97 /* BlankArray.plist */; };
 		E48D4E021E61FC26008B0A97 /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E48D4E011E61FC26008B0A97 /* NotificationCenter.framework */; };
@@ -82,12 +85,19 @@
 		E413AB0F1EE89683001EB189 /* questionmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = questionmark.png; sourceTree = "<group>"; };
 		E413AB111EE8A796001EB189 /* brush_pencil.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = brush_pencil.png; sourceTree = "<group>"; };
 		E413AB131EE8AF87001EB189 /* School_building.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = School_building.png; sourceTree = "<group>"; };
+		E41DE2F71EFA4293001155E9 /* No_homework.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = No_homework.png; sourceTree = "<group>"; };
 		E44484D71E13A105002C68D5 /* MFSCalender.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MFSCalender.entitlements; sourceTree = "<group>"; };
 		E445E73D1EAD8B7D00794560 /* MoreViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoreViewController.swift; sourceTree = "<group>"; };
 		E44DCD911EB80E0600CEB68A /* School.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = School.jpg; sourceTree = "<group>"; };
 		E453F0D01EA137D900BCE58D /* CalendarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = CalendarViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		E45476EA1E8B3607004466D0 /* th-menu2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "th-menu2.png"; sourceTree = "<group>"; };
 		E45476F01E8B3A4D004466D0 /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = background.png; sourceTree = "<group>"; };
+		E484E64F1EFA2FF20056F2D5 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = "zh-Hans"; path = "zh-Hans.lproj/Main.storyboard"; sourceTree = "<group>"; };
+		E484E6501EFA2FF20056F2D5 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.storyboard"; sourceTree = "<group>"; };
+		E484E6511EFA2FF20056F2D5 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = "zh-Hans"; path = "zh-Hans.lproj/MainInterface.storyboard"; sourceTree = "<group>"; };
+		E484E6541EFA33260056F2D5 /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
+		E484E6591EFA337F0056F2D5 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		E484E65B1EFA338B0056F2D5 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		E48D4DEF1E61F275008B0A97 /* A Day.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = "A Day.swift"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		E48D4DF91E61F5EC008B0A97 /* BlankArray.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = BlankArray.plist; sourceTree = "<group>"; };
 		E48D4DFF1E61FC25008B0A97 /* Class Schedule.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Class Schedule.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -170,6 +180,7 @@
 		E4EA9D7B1DF225FB0021A823 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				E41DE2F71EFA4293001155E9 /* No_homework.png */,
 				E4AAD1601EE8CC9E00E4E5EC /* bell.png */,
 				E413AB131EE8AF87001EB189 /* School_building.png */,
 				E413AB111EE8A796001EB189 /* brush_pencil.png */,
@@ -206,6 +217,7 @@
 		E4F86B2F1DF0E20C00CAD72B /* MFSCalendar */ = {
 			isa = PBXGroup;
 			children = (
+				E484E6541EFA33260056F2D5 /* Localizable.strings */,
 				E44484D71E13A105002C68D5 /* MFSCalender.entitlements */,
 				E4F86B301DF0E20C00CAD72B /* AppDelegate.swift */,
 				E4F86B321DF0E20C00CAD72B /* ViewController.swift */,
@@ -220,6 +232,7 @@
 				E4F86B3A1DF0E20C00CAD72B /* Assets.xcassets */,
 				E4EA9D7B1DF225FB0021A823 /* Images */,
 				E4F86B3F1DF0E20C00CAD72B /* Info.plist */,
+				E484E65A1EFA337F0056F2D5 /* InfoPlist.strings */,
 				E4F86B371DF0E20C00CAD72B /* MFSCalender.xcdatamodeld */,
 				E4EEFB121DF274EA00F199BE /* Images.xcassets */,
 				E48D4DF91E61F5EC008B0A97 /* BlankArray.plist */,
@@ -320,6 +333,7 @@
 			knownRegions = (
 				en,
 				Base,
+				"zh-Hans",
 			);
 			mainGroup = E4F86B241DF0E20C00CAD72B;
 			productRefGroup = E4F86B2E1DF0E20C00CAD72B /* Products */;
@@ -355,12 +369,15 @@
 				E4F86B361DF0E20C00CAD72B /* Main.storyboard in Resources */,
 				E4D3A1AE1E123D0200F709DC /* periodPicker.plist in Resources */,
 				E45476F11E8B3A4D004466D0 /* background.png in Resources */,
+				E484E6581EFA337F0056F2D5 /* InfoPlist.strings in Resources */,
 				E44DCD921EB80E0600CEB68A /* School.jpg in Resources */,
 				E413AB141EE8AF87001EB189 /* School_building.png in Resources */,
 				E4CE43991EAC36F3000D743B /* BlankDictionary.plist in Resources */,
+				E484E6551EFA33260056F2D5 /* Localizable.strings in Resources */,
 				E48D4DFA1E61F5EC008B0A97 /* BlankArray.plist in Resources */,
 				E45476EB1E8B3607004466D0 /* th-menu2.png in Resources */,
 				E4AAD1611EE8CC9E00E4E5EC /* bell.png in Resources */,
+				E41DE2F81EFA4293001155E9 /* No_homework.png in Resources */,
 				E413AB0E1EE89441001EB189 /* Achievement.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -452,10 +469,20 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		E484E65A1EFA337F0056F2D5 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E484E6591EFA337F0056F2D5 /* en */,
+				E484E65B1EFA338B0056F2D5 /* zh-Hans */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
 		E48D4E061E61FC26008B0A97 /* MainInterface.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				E48D4E071E61FC26008B0A97 /* Base */,
+				E484E6511EFA2FF20056F2D5 /* zh-Hans */,
 			);
 			name = MainInterface.storyboard;
 			sourceTree = "<group>";
@@ -464,6 +491,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				E4F86B351DF0E20C00CAD72B /* Base */,
+				E484E64F1EFA2FF20056F2D5 /* zh-Hans */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -472,6 +500,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				E4F86B3D1DF0E20C00CAD72B /* Base */,
+				E484E6501EFA2FF20056F2D5 /* zh-Hans */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -520,6 +549,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -571,6 +601,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";

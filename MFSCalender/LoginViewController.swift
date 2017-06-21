@@ -213,7 +213,13 @@ extension firstTimeLaunchController {
     }
     
     func getProfile() -> Bool {
-        let session = URLSession.shared
+        
+        let config = URLSessionConfiguration.default
+        config.requestCachePolicy = .reloadIgnoringLocalCacheData
+        config.urlCache = nil
+        
+        let session = URLSession.init(configuration: config)
+        
         let semaphore = DispatchSemaphore.init(value: 0)
         let token = userDefaults?.string(forKey: "token")
         let userID = userDefaults?.string(forKey: "userID")
@@ -249,9 +255,12 @@ extension firstTimeLaunchController {
                         if let lastName = resDict["LastName"] as? String {
                             userDefaults?.set(lastName, forKey: "lastName")
                         }
+                        
                         if let photo = resDict["ProfilePhoto"] as? NSDictionary {
                             photolink = photo["ThumbFilenameUrl"] as? String
+                            let largePhotoLink = photo["LargeFilenameUrl"] as? String
                             userDefaults?.set(photolink, forKey: "photoLink")
+                            userDefaults?.set(largePhotoLink, forKey: "largePhotoLink")
                         }
                         
                         if let lockerNumber = resDict["LockerNbr"] as? String {
@@ -310,6 +319,7 @@ extension firstTimeLaunchController {
                     }
                     try! fileManager.moveItem(atPath: locationPath, toPath: path)
                     print("new location:\(path)")
+                    userDefaults?.set(false, forKey: "didDownloadFullSizeImage")
                     success = true
                 } else {
                     DispatchQueue.main.async {

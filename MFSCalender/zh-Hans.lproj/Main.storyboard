@@ -23,13 +23,13 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please Wait" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="poj-9P-jXp" customClass="LTMorphingLabel" customModule="LTMorphingLabel">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="请稍等..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="poj-9P-jXp" customClass="LTMorphingLabel" customModule="LTMorphingLabel">
                                 <rect key="frame" x="92" y="490" width="230" height="32.666666666666629"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="230" id="eYi-Xb-KgM"/>
                                     <constraint firstAttribute="height" constant="32.329999999999998" id="oeG-Yf-NlR"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="27"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="26"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                                 <userDefinedRuntimeAttributes>
@@ -38,7 +38,7 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="While we are updating your courses" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mge-lm-nyj" customClass="LTMorphingLabel" customModule="LTMorphingLabel">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="我们正在更新课程列表" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mge-lm-nyj" customClass="LTMorphingLabel" customModule="LTMorphingLabel">
                                 <rect key="frame" x="20" y="530" width="374" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="12H-k5-MzP"/>
@@ -204,7 +204,7 @@
                                             <constraint firstAttribute="height" constant="50" id="CTT-TB-JYS"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
-                                        <state key="normal" title="LOG IN">
+                                        <state key="normal" title="登录">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
@@ -314,12 +314,12 @@
             </objects>
             <point key="canvasLocation" x="1834" y="134"/>
         </scene>
-        <!--Homework-->
+        <!--我的作业-->
         <scene sceneID="WEb-Ck-hsA">
             <objects>
                 <tableViewController id="rXz-aA-11j" customClass="homeworkViewController" customModule="MFSCalendar" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" allowsSelection="NO" rowHeight="80" sectionHeaderHeight="18" sectionFooterHeight="18" id="FPY-tO-elr">
-                        <rect key="frame" x="0.0" y="64" width="414" height="672"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
@@ -417,7 +417,7 @@
                             <outlet property="delegate" destination="rXz-aA-11j" id="U8a-jW-ELB"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Homework" id="2Cr-mv-nvG"/>
+                    <navigationItem key="navigationItem" title="我的作业" id="2Cr-mv-nvG"/>
                     <connections>
                         <outlet property="homeworkTable" destination="FPY-tO-elr" id="Vn2-lX-4d8"/>
                     </connections>
@@ -492,7 +492,7 @@
                                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="School Events" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="K1h-Qj-X6m">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="事件" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="K1h-Qj-X6m">
                                                 <rect key="frame" x="17" y="3" width="136" height="21"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="136" id="1Km-Cb-Uxm"/>
@@ -752,7 +752,7 @@
                             <constraint firstAttribute="bottom" secondItem="U8A-Xp-bII" secondAttribute="bottom" id="cOI-xf-r8l"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Today" image="Today" id="abE-uF-9cL">
+                    <tabBarItem key="tabBarItem" title="今日" image="Today" id="abE-uF-9cL">
                         <inset key="imageInsets" minX="0.0" minY="2" maxX="0.0" maxY="-2"/>
                     </tabBarItem>
                     <navigationItem key="navigationItem" id="tZQ-co-LRg">
@@ -776,7 +776,7 @@
             </objects>
             <point key="canvasLocation" x="2740.579710144928" y="133.69565217391306"/>
         </scene>
-        <!--Class Schedule-->
+        <!--课程表-->
         <scene sceneID="Eub-9A-Pg9">
             <objects>
                 <viewController id="zfV-c9-BkE" customClass="ClassSchedule" customModule="MFSCalendar" customModuleProvider="target" sceneMemberID="viewController">
@@ -899,7 +899,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Class Schedule" id="fhi-Y6-YrP">
+                    <navigationItem key="navigationItem" title="课程表" id="fhi-Y6-YrP">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="PjH-nt-O8h">
                             <connections>
                                 <segue destination="Nlv-vd-RNK" kind="presentation" id="lkL-A8-2ff"/>
@@ -1042,7 +1042,7 @@
             </objects>
             <point key="canvasLocation" x="7168.115942028986" y="-70.108695652173921"/>
         </scene>
-        <!--Add a class-->
+        <!--添加课程-->
         <scene sceneID="uwf-Re-VIj">
             <objects>
                 <tableViewController id="9Ta-kW-tnZ" customClass="AddClass" customModule="MFSCalendar" customModuleProvider="target" sceneMemberID="viewController">
@@ -1139,7 +1139,7 @@
                             <outlet property="delegate" destination="9Ta-kW-tnZ" id="tdx-NM-jbE"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Add a class" id="20x-gM-v4i">
+                    <navigationItem key="navigationItem" title="添加课程" id="20x-gM-v4i">
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="Enc-lK-dN2">
                             <connections>
                                 <segue destination="jao-z4-Adg" kind="unwind" unwindAction="unWindSegueBackWithSegue:" id="2EC-Pv-Cag"/>
@@ -1181,7 +1181,7 @@
             </objects>
             <point key="canvasLocation" x="7168.115942028986" y="-771.19565217391312"/>
         </scene>
-        <!--TimeTable-->
+        <!--日历-->
         <scene sceneID="8hJ-ls-6yL">
             <objects>
                 <viewController id="QUz-Th-8ul" customClass="CalendarViewController" customModule="MFSCalendar" customModuleProvider="target" sceneMemberID="viewController">
@@ -1249,14 +1249,14 @@
                             <constraint firstAttribute="trailing" secondItem="Rj8-l0-2iy" secondAttribute="trailing" id="tXf-TI-X60"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="TimeTable" id="cej-1q-Hf0">
+                    <navigationItem key="navigationItem" title="日历" id="cej-1q-Hf0">
                         <barButtonItem key="leftBarButtonItem" title="Back" id="9e5-Da-MZM">
                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <connections>
                                 <action selector="expandButton:" destination="QUz-Th-8ul" id="BXl-FN-H3g"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" title="Today" id="Vqp-lJ-jaV">
+                        <barButtonItem key="rightBarButtonItem" title="今天" id="Vqp-lJ-jaV">
                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <connections>
                                 <action selector="backToToday:" destination="QUz-Th-8ul" id="UbB-ft-YWS"/>
@@ -1437,7 +1437,7 @@
             </objects>
             <point key="canvasLocation" x="2742.0289855072465" y="959.51086956521749"/>
         </scene>
-        <!--Me-->
+        <!--我-->
         <scene sceneID="u2F-iz-YVM">
             <objects>
                 <tableViewController id="ABn-Yn-rrm" customClass="moreViewController" customModule="MFSCalendar" customModuleProvider="target" sceneMemberID="viewController">
@@ -1507,7 +1507,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="381" height="43.666666666666664"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="My Courses" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="y7x-hU-r7O">
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="我的课程" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="y7x-hU-r7O">
                                                     <rect key="frame" x="15" y="0.0" width="364" height="43.666666666666664"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -1527,7 +1527,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="381" height="43.666666666666664"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Class Schedule" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="pgT-AK-QGz">
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="课程表" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="pgT-AK-QGz">
                                                     <rect key="frame" x="15" y="0.0" width="364" height="43.666666666666664"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -1551,7 +1551,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="381" height="43.666666666666664"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Settings" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="yFC-Qw-ON8">
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="设置" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="yFC-Qw-ON8">
                                                     <rect key="frame" x="15" y="0.0" width="364" height="43.666666666666664"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -1575,7 +1575,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="381" height="43.666666666666664"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="About" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="EYo-Ni-xA0">
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="关于" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="EYo-Ni-xA0">
                                                     <rect key="frame" x="15" y="0.0" width="364" height="43.666666666666664"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -1596,7 +1596,7 @@
                             <outlet property="delegate" destination="ABn-Yn-rrm" id="uHQ-tV-5DH"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Me" id="WO6-QS-rrD"/>
+                    <navigationItem key="navigationItem" title="我" id="WO6-QS-rrD"/>
                     <connections>
                         <outlet property="name" destination="m38-zn-x54" id="frb-lh-Inr"/>
                         <outlet property="profilePhoto" destination="bZo-X5-HgR" id="VKn-o2-Peg"/>
@@ -1609,7 +1609,7 @@
         <!--User-->
         <scene sceneID="hZ8-dz-bXo">
             <objects>
-                <tableViewController title="About Me" id="laA-fL-7Hp" userLabel="User" customClass="profileViewController" customModule="MFSCalendar" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController title="关于我" id="laA-fL-7Hp" userLabel="User" customClass="profileViewController" customModule="MFSCalendar" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="NVa-XU-jiU">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1624,7 +1624,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="43.666666666666664"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="First Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CNJ-AB-30Q">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="名" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CNJ-AB-30Q">
                                                     <rect key="frame" x="21" y="8" width="87" height="27.666666666666664"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="87" id="Ovq-Lt-dOi"/>
@@ -1660,7 +1660,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="43.666666666666664"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Last Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QG6-Mk-JTF" userLabel="Last Name">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="姓" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QG6-Mk-JTF" userLabel="Last Name">
                                                     <rect key="frame" x="21" y="0.0" width="120" height="43.666666666666664"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="120" id="HDN-2E-j4K"/>
@@ -1696,7 +1696,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="43.666666666666664"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Locker Number" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2xY-fX-ha7">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="柜号" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2xY-fX-ha7">
                                                     <rect key="frame" x="21" y="0.0" width="150" height="43.666666666666664"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="150" id="Hz0-Jm-wYi"/>
@@ -1809,7 +1809,7 @@
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nsp-wn-1Gy">
                                                     <rect key="frame" x="0.0" y="0.0" width="414" height="43.666666666666664"/>
-                                                    <state key="normal" title="Log Out">
+                                                    <state key="normal" title="退出登录">
                                                         <color key="titleColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     </state>
                                                     <connections>
@@ -1918,11 +1918,11 @@
             </objects>
             <point key="canvasLocation" x="3717.3913043478265" y="960.32608695652186"/>
         </scene>
-        <!--Calendar-->
+        <!--日历-->
         <scene sceneID="90T-Fs-8NC">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="rt2-9L-AaP" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Calendar" image="Calendar" id="Ga6-gg-IQU">
+                    <tabBarItem key="tabBarItem" title="日历" image="Calendar" id="Ga6-gg-IQU">
                         <inset key="imageInsets" minX="0.0" minY="3" maxX="0.0" maxY="-3"/>
                     </tabBarItem>
                     <toolbarItems/>
@@ -1944,13 +1944,13 @@
             </objects>
             <point key="canvasLocation" x="1834.7826086956522" y="959.51086956521749"/>
         </scene>
-        <!--Homework-->
+        <!--作业-->
         <scene sceneID="YKL-WX-RcU">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="2Rt-XE-Yqg" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Homework" image="homework" id="bSa-Cf-LM5"/>
+                    <tabBarItem key="tabBarItem" title="作业" image="homework" id="bSa-Cf-LM5"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" barStyle="black" translucent="NO" id="0NX-nu-npG">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="0NX-nu-npG">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" red="1" green="0.49327188729999999" blue="0.47399842739999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

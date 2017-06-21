@@ -54,6 +54,16 @@ extension UIColor {
     }
 }
 
+extension UIColor {
+    subscript(color: String) -> UIColor {
+        if color == "salmon" {
+            return UIColor(hexString: 0xFF6666)
+        }
+        
+        return UIColor.white
+    }
+}
+
 
 extension UIView
 {
@@ -97,7 +107,13 @@ public func loginAuthentication() -> (success:Bool, token:String) {
     let accountCheckURL = "https://mfriends.myschoolapp.com/api/authentication/login/?username=" + usernameText + "&password=" + passwordText + "&format=json"
     let url = NSURL(string: accountCheckURL)
     let request = URLRequest(url: url! as URL)
-    let session = URLSession.shared
+    
+    let config = URLSessionConfiguration.default
+    config.requestCachePolicy = .reloadIgnoringLocalCacheData
+    config.urlCache = nil
+    
+    let session = URLSession.init(configuration: config)
+    
     let semaphore = DispatchSemaphore.init(value: 0)
     let task: URLSessionDataTask = session.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
         if error == nil {

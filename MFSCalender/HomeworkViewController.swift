@@ -13,6 +13,9 @@ import HTMLLabel
 import HTMLString
 import M13Checkbox
 import SwiftDate
+import DZNEmptyDataSet
+import DGElasticPullToRefresh
+
 
 class homeworkViewController: UITableViewController {
     
@@ -32,6 +35,23 @@ class homeworkViewController: UITableViewController {
         super.viewDidLoad()
         homeworkTable.rowHeight = UITableViewAutomaticDimension
         homeworkTable.estimatedRowHeight = 80
+        homeworkTable.emptyDataSetSource = self
+        
+//        Remove the bottom 1px line
+        self.navigationController?.navigationBar.barTintColor = UIColor(hexString: 0xFF7E79)
+        self.navigationController?.navigationBar.isTranslucent = false
+        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
+        self.navigationController?.navigationBar.shadowImage = UIImage()
+        
+        let loadingview = DGElasticPullToRefreshLoadingViewCircle()
+        loadingview.tintColor = UIColor.white
+        homeworkTable.dg_addPullToRefreshWithActionHandler({ [weak self] () -> Void in
+            self?.getHomework()
+            self?.tableView.dg_stopLoading()
+            }, loadingView: loadingview)
+        homeworkTable.dg_setPullToRefreshFillColor(UIColor(hexString: 0xFF7E79))
+        homeworkTable.dg_setPullToRefreshBackgroundColor(tableView.backgroundColor!)
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -232,6 +252,18 @@ class homeworkViewController: UITableViewController {
         
         cell.checkMark.tintColor = cell.tagView.backgroundColor
         return cell
+    }
+}
+
+extension homeworkViewController: DZNEmptyDataSetSource {
+    func image(forEmptyDataSet scrollView: UIScrollView!) -> UIImage! {
+        return UIImage(named: "No_homework.png")?.imageResize(sizeChange: CGSize(width: 95, height: 95))
+    }
+    
+    func title(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
+        let attr = [NSFontAttributeName: UIFont.preferredFont(forTextStyle: UIFontTextStyle.headline)]
+        let str = "There is no homework to display."
+        return NSAttributedString(string: str, attributes: attr)
     }
 }
 

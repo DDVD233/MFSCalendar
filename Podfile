@@ -20,5 +20,7 @@ target 'MFSCalendar' do
     pod 'HTMLString'
     pod 'M13Checkbox'
     pod 'SwiftDate', '~> 4.0'
+    pod 'DGElasticPullToRefresh'
+    pod 'ReachabilitySwift'
 end
 

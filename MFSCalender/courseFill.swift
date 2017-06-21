@@ -57,7 +57,7 @@ class courseFillController:UIViewController {
                             self.progressView.setProgress(value: 100, animationDuration: 1) {
 
                                 self.topLabel.text = "Success"
-                                self.bottomLabel.text = "Your courses have been successfully updated!"
+                                self.bottomLabel.text = "Successfully updated"
                                 
                                 DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(5), execute: {
                                     self.dismiss(animated: true, completion: nil)

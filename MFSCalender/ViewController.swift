@@ -10,6 +10,8 @@ import UIKit
 import SwiftMessages
 import UserNotifications
 import DZNEmptyDataSet
+import ReachabilitySwift
+
 
 class customEventCellDashboard: UITableViewCell {
     
@@ -61,7 +63,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     var listEvents:NSMutableArray = []
     var listClasses:NSMutableArray = []
     
-
+    let reachability = Reachability()!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -102,33 +104,11 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         self.eventView.dataSource = self
         self.eventView.emptyDataSetDelegate = self
         self.eventView.emptyDataSetSource = self
+        
+
         // Do any additional setup after loading the view, typically from a nib.
     }
     
-    func title(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
-        var str:String? = ""
-        var attrs:[String:Any] = [NSFontAttributeName: UIFont.preferredFont(forTextStyle: UIFontTextStyle.headline)]
-        if scrollView == classView {
-            str = "No more classes for today!"
-        } else if scrollView == eventView {
-            self.eventView.separatorStyle = .none
-            str = "No more events for today!"
-            attrs = [NSFontAttributeName: UIFont.preferredFont(forTextStyle: UIFontTextStyle.headline), NSForegroundColorAttributeName: UIColor.white]
-        }
-        
-        return NSAttributedString(string: str!, attributes: attrs)
-    }
-    
-    func image(forEmptyDataSet scrollView: UIScrollView!) -> UIImage! {
-        var image:UIImage? = nil
-        if scrollView == classView {
-            image = UIImage(named: "Achievement.png")?.imageResize(sizeChange: CGSize(width: 120, height: 93.3))
-        } else if scrollView == eventView {
-            image = UIImage(named: "bell.png")?.imageResize(sizeChange: CGSize(width: 80, height: 80))
-        }
-        return image
-    }
-
     override func viewDidAppear(_ animated: Bool) {
         if userDefaults?.bool(forKey: "didLogin") != true {
             let vc = self.storyboard?.instantiateViewController(withIdentifier: "ftController") as! firstTimeLaunchController
@@ -154,9 +134,77 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
                     }
                 } else {
                     NSLog("No refresh, version: %@", String(describing: userDefaults?.integer(forKey: "version")))
+                    self.downloadLargeProfilePhoto()
                 }
             }
         }
+    }
+    
+    func downloadLargeProfilePhoto() {
+        if reachability.isReachableViaWiFi && userDefaults?.bool(forKey: "didDownloadFullSizeImage") == false {
+            if let largeFileLink = userDefaults?.string(forKey: "largePhotoLink") {
+                let urlString = "https://mfriends.myschoolapp.com" + largeFileLink
+                let url = URL(string: urlString)
+                //create request.
+                let request3 = URLRequest(url: url!)
+                
+                let config = URLSessionConfiguration.default
+                config.requestCachePolicy = .reloadIgnoringLocalCacheData
+                config.urlCache = nil
+                
+                let session = URLSession.init(configuration: config)
+                
+                let downloadTask = session.downloadTask(with: request3, completionHandler: { (location: URL?, response: URLResponse?, error: Error?) -> Void in
+                    if error == nil {
+                        //Temp location:
+                        print("location:\(String(describing: location))")
+                        let locationPath = location!.path
+                        //Copy to User Directory
+                        let photoPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
+                        let path = photoPath.appending("/ProfilePhoto.png")
+                        //Init FileManager
+                        let fileManager = FileManager.default
+                        if fileManager.fileExists(atPath: path) {
+                            do {
+                                try fileManager.removeItem(atPath: path)
+                            } catch {
+                                NSLog("File does not exist! (Which is impossible)")
+                            }
+                        }
+                        try! fileManager.moveItem(atPath: locationPath, toPath: path)
+                        print("new location:\(path)")
+                        userDefaults?.set(true, forKey: "didDownloadFullSizeImage")
+                    } else {
+                    }
+                })
+                //使用resume方法启动任务
+                downloadTask.resume()
+            }
+        }
+    }
+    
+    func title(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
+        var str:String? = ""
+        var attrs:[String:Any] = [NSFontAttributeName: UIFont.preferredFont(forTextStyle: UIFontTextStyle.headline)]
+        if scrollView == classView {
+            str = "No more classes for today!"
+        } else if scrollView == eventView {
+            self.eventView.separatorStyle = .none
+            str = "No more events for today!"
+            attrs = [NSFontAttributeName: UIFont.preferredFont(forTextStyle: UIFontTextStyle.headline), NSForegroundColorAttributeName: UIColor.white]
+        }
+        
+        return NSAttributedString(string: str!, attributes: attrs)
+    }
+    
+    func image(forEmptyDataSet scrollView: UIScrollView!) -> UIImage! {
+        var image:UIImage? = nil
+        if scrollView == classView {
+            image = UIImage(named: "Achievement.png")?.imageResize(sizeChange: CGSize(width: 120, height: 93.3))
+        } else if scrollView == eventView {
+            image = UIImage(named: "bell.png")?.imageResize(sizeChange: CGSize(width: 80, height: 80))
+        }
+        return image
     }
 
     func doRefreshData() -> Bool {
