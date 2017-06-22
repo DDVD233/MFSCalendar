@@ -208,9 +208,12 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     }
 
     func doRefreshData() -> Bool {
+        
+//        当版本号不存在时，默认更新数据
         guard let version = userDefaults?.integer(forKey: "version") else {
             return true
         }
+        
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyyMMdd"
         let refreshDate = userDefaults?.string(forKey: "refreshDate")

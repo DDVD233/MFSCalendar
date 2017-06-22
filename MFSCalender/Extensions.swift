@@ -18,6 +18,16 @@ extension UIView {
             layer.cornerRadius = newValue
         }
     }
+    
+    @IBInspectable var masksToBounds: Bool {
+        get {
+            return layer.masksToBounds
+        }
+        
+        set {
+            layer.masksToBounds = newValue
+        }
+    }
 }
 
 extension String {
@@ -91,6 +101,8 @@ extension UIImage {
 }
 
 public let userDefaults = UserDefaults(suiteName: "group.org.dwei.MFSCalendar")
+
+
 
 public func loginAuthentication() -> (success:Bool, token:String) {
     

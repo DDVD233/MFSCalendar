@@ -154,6 +154,8 @@
                                             <userDefinedRuntimeAttribute type="color" keyPath="selectedLineColor">
                                                 <color key="value" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                             </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="string" keyPath="placeholder" value="用户名"/>
+                                            <userDefinedRuntimeAttribute type="string" keyPath="title" value="用户名"/>
                                         </userDefinedRuntimeAttributes>
                                     </textField>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="14" translatesAutoresizingMaskIntoConstraints="NO" id="EPk-aJ-Rux" customClass="SkyFloatingLabelTextField" customModule="SkyFloatingLabelTextField">
@@ -186,6 +188,8 @@
                                             <userDefinedRuntimeAttribute type="color" keyPath="selectedLineColor">
                                                 <color key="value" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                             </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="string" keyPath="placeholder" value="密码"/>
+                                            <userDefinedRuntimeAttribute type="string" keyPath="title" value="密码"/>
                                         </userDefinedRuntimeAttributes>
                                     </textField>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="The username/password is incorrect. Please check your spelling." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="o2p-ku-fch">
@@ -1470,7 +1474,7 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="About Me" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kYc-Tp-uOq">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="关于我" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kYc-Tp-uOq">
                                                     <rect key="frame" x="157" y="40" width="94" height="18"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="18" id="tGL-OO-XtH"/>
@@ -1544,7 +1548,7 @@
                             </tableViewSection>
                             <tableViewSection id="7eg-PV-V26">
                                 <cells>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" textLabel="yFC-Qw-ON8" style="IBUITableViewCellStyleDefault" id="Y2I-CI-QeI">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" textLabel="yFC-Qw-ON8" imageView="pjb-Ag-XIw" style="IBUITableViewCellStyleDefault" id="Y2I-CI-QeI">
                                         <rect key="frame" x="0.0" y="275" width="414" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Y2I-CI-QeI" id="7zq-bO-pLX">
@@ -1552,12 +1556,21 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="设置" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="yFC-Qw-ON8">
-                                                    <rect key="frame" x="15" y="0.0" width="364" height="43.666666666666664"/>
+                                                    <rect key="frame" x="58" y="0.0" width="321" height="43.666666666666664"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" image="Settings" id="pjb-Ag-XIw">
+                                                    <rect key="frame" x="15" y="7" width="28" height="28"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                            <real key="value" value="3"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
+                                                </imageView>
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
@@ -1745,10 +1758,10 @@
             </objects>
             <point key="canvasLocation" x="5430" y="601"/>
         </scene>
-        <!--My Classes-->
+        <!--我的课程-->
         <scene sceneID="afF-Fh-vaR">
             <objects>
-                <tableViewController title="My Classes" id="vWx-MB-oMO" customClass="classListController" customModule="MFSCalendar" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController title="我的课程" id="vWx-MB-oMO" customClass="classListController" customModule="MFSCalendar" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="VXR-IK-C65">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1789,10 +1802,10 @@
             </objects>
             <point key="canvasLocation" x="6180" y="960"/>
         </scene>
-        <!--Settings-->
+        <!--设置-->
         <scene sceneID="dCL-MH-bcM">
             <objects>
-                <tableViewController title="Settings" id="XRE-Nj-Rag" customClass="settingViewController" customModule="MFSCalendar" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController title="设置" id="XRE-Nj-Rag" customClass="settingViewController" customModule="MFSCalendar" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="qtr-Lw-dXe">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1838,16 +1851,16 @@
             </objects>
             <point key="canvasLocation" x="5429" y="1331"/>
         </scene>
-        <!--About View-->
+        <!--关于-->
         <scene sceneID="RfK-T2-m1d">
             <objects>
-                <tableViewController id="3kg-Bk-lvv" customClass="aboutView" customModule="MFSCalendar" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController title="关于" id="3kg-Bk-lvv" customClass="aboutView" customModule="MFSCalendar" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="BL3-4k-nFQ">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
-                            <tableViewSection headerTitle="Contact Information" footerTitle="Please contact me if you found any bug." id="f58-G3-a9j">
+                            <tableViewSection headerTitle="联系信息" footerTitle="如果你发现了bug，请通过邮件通知我" id="f58-G3-a9j">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="6c5-16-340">
                                         <rect key="frame" x="0.0" y="55.333333333333336" width="414" height="44"/>
@@ -1856,7 +1869,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="43.666666666666664"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RRC-aI-PNR">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="邮件" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RRC-aI-PNR">
                                                     <rect key="frame" x="21" y="12" width="42" height="21"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="21" id="4wf-ya-8qh"/>
@@ -1872,7 +1885,7 @@
                                                         <constraint firstAttribute="width" constant="78" id="h0W-Xq-3go"/>
                                                         <constraint firstAttribute="height" constant="30" id="tBh-Ps-LT9"/>
                                                     </constraints>
-                                                    <state key="normal" title="Send Email"/>
+                                                    <state key="normal" title="发送邮件"/>
                                                     <connections>
                                                         <action selector="sendEmail:" destination="3kg-Bk-lvv" eventType="touchUpInside" id="qIb-PG-U60"/>
                                                     </connections>
@@ -1969,6 +1982,7 @@
         <image name="Calendar" width="25" height="25"/>
         <image name="MFS Logo.jpg" width="300" height="300"/>
         <image name="School.jpg" width="1080" height="1921"/>
+        <image name="Settings" width="28" height="28"/>
         <image name="Today" width="25" height="25"/>
         <image name="homework" width="25" height="25"/>
     </resources>

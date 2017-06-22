@@ -45,11 +45,11 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
         self.username.text = userDefaults?.string(forKey: "username")
         self.password.text = userDefaults?.string(forKey: "password")
         
-        self.username.placeholder = "Username"
-        self.username.title = "Username"
-        
-        self.password.placeholder = "Password"
-        self.password.title = "Password"
+//        self.username.placeholder = "Username"
+//        self.username.title = "Username"
+//        
+//        self.password.placeholder = "Password"
+//        self.password.title = "Password"
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardNotification(notification:)), name:NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardHide(notification:)), name:NSNotification.Name.UIKeyboardWillHide, object: nil)
