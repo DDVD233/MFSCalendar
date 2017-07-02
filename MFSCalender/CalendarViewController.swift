@@ -91,11 +91,13 @@ class CalendarViewController: UIViewController, UIScrollViewDelegate, DZNEmptyDa
         
         self.classView.panGestureRecognizer.require(toFail: self.scopeGesture)
         self.eventView.panGestureRecognizer.require(toFail: self.scopeGesture)
+        
         self.bottomScrollView.contentSize = CGSize(width: self.view.frame.size.width * 2, height: self.bottomScrollView.frame.size.height)
         self.classView.frame = CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: self.bottomScrollView.frame.size.height)
         self.bottomScrollView.addSubview(classView)
         self.eventView.frame = CGRect(x: self.view.frame.size.width, y: 0, width: self.view.frame.size.width, height: self.bottomScrollView.frame.size.height)
         self.bottomScrollView.addSubview(eventView)
+        
         self.calendarView.select(Date())
         dataFetching()
         eventDataFetching()
@@ -390,6 +392,8 @@ extension CalendarViewController: FSCalendarDelegate, FSCalendarDataSource {
         self.view.layoutIfNeeded()
         self.classView.frame.size.height = self.bottomScrollView.frame.height
         self.eventView.frame.size.height = self.bottomScrollView.frame.height
+        
+        self.bottomScrollView.contentSize = CGSize(width: self.view.frame.size.width * 2, height: self.bottomScrollView.frame.size.height)
     }
     
 }

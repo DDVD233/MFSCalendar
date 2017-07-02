@@ -14,6 +14,7 @@ PODS:
   - SwiftMessages (3.3.4)
   - SwiftyJSON (3.1.4)
   - UICircularProgressRing (1.6.1)
+  - XLPagerTabStrip (7.0.0)
 
 DEPENDENCIES:
   - DGElasticPullToRefresh
@@ -31,6 +32,7 @@ DEPENDENCIES:
   - SwiftMessages
   - SwiftyJSON
   - UICircularProgressRing
+  - XLPagerTabStrip (~> 7.0)
 
 SPEC CHECKSUMS:
   DGElasticPullToRefresh: 28f11a6026302a90f8ffebbc6e24748e584dddd3
@@ -48,7 +50,8 @@ SPEC CHECKSUMS:
   SwiftMessages: 1172842c4d4af818704f90c50ec8dc597e55c9af
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
   UICircularProgressRing: 99419d03525be7b4ad29c0021e0fbb7d913b0030
+  XLPagerTabStrip: 9be80a66c6b7d60306b2c0a6004965016d68f813
 
-PODFILE CHECKSUM: 43e682afbfdbafaa459375f7c9d99befd055850e
+PODFILE CHECKSUM: 29172f975e8aeeb8e7cb6f92a61ed2eb2564ce88
 
 COCOAPODS: 1.2.0

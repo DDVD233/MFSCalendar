@@ -199,7 +199,7 @@ extension firstTimeLaunchController {
         }
         userDefaults?.set(username, forKey: "username")
         userDefaults?.set(password, forKey: "password")
-        let (success, token) = loginAuthentication()
+        let (success, token, _) = loginAuthentication()
         if token == "Incorrect password" {
             self.errorMessage(presentMessage: "The username/password is incorrect. Please check your spelling.")
         } else if !success {

@@ -86,7 +86,7 @@ class homeworkViewController: UITableViewController {
         let session = URLSession.init(configuration: config)
         
         if username != "testaccount" {
-            let (success, token) = loginAuthentication()
+            let (success, token, _) = loginAuthentication()
             if success {
                 let formatter = DateFormatter()
                 formatter.locale = Locale(identifier: "en_US")

@@ -22,5 +22,6 @@ target 'MFSCalendar' do
     pod 'SwiftDate', '~> 4.0'
     pod 'DGElasticPullToRefresh'
     pod 'ReachabilitySwift'
+    pod 'XLPagerTabStrip', '~> 7.0'
 end
 

@@ -104,17 +104,17 @@ public let userDefaults = UserDefaults(suiteName: "group.org.dwei.MFSCalendar")
 
 
 
-public func loginAuthentication() -> (success:Bool, token:String) {
+public func loginAuthentication() -> (success:Bool, token:String, userId: String) {
     
     guard let usernameText = userDefaults?.string(forKey: "username") else {
-        return (false, "Username Not Found")
+        return (false, "Username Not Found", "")
     }
     guard let passwordText = userDefaults?.string(forKey: "password") else {
-        return (false, "Password Not Found")
+        return (false, "Password Not Found", "")
     }
     
-    var token: String? = nil
-    var userID: String? = nil
+    var token: String? = ""
+    var userID: String? = ""
     var success: Bool = false
     let accountCheckURL = "https://mfriends.myschoolapp.com/api/authentication/login/?username=" + usernameText + "&password=" + passwordText + "&format=json"
     let url = NSURL(string: accountCheckURL)
@@ -165,5 +165,5 @@ public func loginAuthentication() -> (success:Bool, token:String) {
     
     task.resume()
     semaphore.wait()
-    return (success, token!)
+    return (success, token!, userID!)
 }

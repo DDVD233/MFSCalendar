@@ -14,6 +14,8 @@ class moreViewController: UITableViewController {
     
     @IBOutlet weak var profilePhoto: UIImageView!
     @IBOutlet weak var name: UILabel!
+    
+    @IBOutlet weak var settingImage: UIImageView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,67 +27,6 @@ class moreViewController: UITableViewController {
         let firstName = userDefaults?.string(forKey: "firstName")
         name.text = firstName! + " " + lastName!
     }
-
-}
-
-
-class settingViewController: UITableViewController, UIActionSheetDelegate {
-
-
-    @IBAction func logout(_ sender: Any) {
-        let logOutActionSheet = UIAlertController(title: nil, message: "Are you sure you want to log out?", preferredStyle: .actionSheet)
-
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (alertAction) -> Void in
-            NSLog("Canceled")
-        }
-
-        let logOutAction = UIAlertAction(title: "Log Out", style: .default) { (alertAction) -> Void in
-            NSLog("Logged Out")
-            userDefaults?.set(false, forKey: "didLogin")
-            userDefaults?.set(false, forKey: "courseInitialized")
-//            userDefaults?.removeObject(forKey: "username")
-//            userDefaults?.removeObject(forKey: "password")
-            userDefaults?.removeObject(forKey: "firstName")
-            userDefaults?.removeObject(forKey: "lastName")
-            userDefaults?.removeObject(forKey: "lockerNumber")
-            userDefaults?.removeObject(forKey: "lockerPassword")
-            let vc = self.storyboard?.instantiateViewController(withIdentifier: "MainTab")
-            self.present(vc!, animated: false, completion: nil)
-        }
-
-        logOutActionSheet.addAction(cancelAction)
-        logOutActionSheet.addAction(logOutAction)
-
-        self.present(logOutActionSheet, animated: true, completion: nil)
-    }
-
-//    @IBAction func clearData(_ sender: Any) {
-//        let clearDataActionSheet = UIAlertController(title: nil, message: "This will clear all the data.", preferredStyle: .actionSheet)
-//
-//        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (alertAction) -> Void in
-//            NSLog("Canceled")
-//        }
-//
-//        let clearDataAction = UIAlertAction(title: "Clear Data", style: .default) { (alertAction) -> Void in
-//            NSLog("Data Cleared")
-//            userDefaults?.set(false, forKey: "dataInitialized")
-//            do {
-//                let fileManager = FileManager()
-//                let filePath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-//                let path = filePath.appending("/day.plist")
-//                try fileManager.removeItem(atPath: path)
-//            } catch {
-//                print(error)
-//            }
-//            let vc = self.storyboard?.instantiateViewController(withIdentifier: "MainTab")
-//            self.present(vc!, animated: false, completion: nil)
-//        }
-//
-//        clearDataActionSheet.addAction(cancelAction)
-//        clearDataActionSheet.addAction(clearDataAction)
-//
-//        self.present(clearDataActionSheet, animated: true, completion: nil)
-//    }
 
 }
 
@@ -103,49 +44,6 @@ class profileViewController: UITableViewController {
     }
 
 
-}
-
-class classListController:UITableViewController {
-    
-    var classList:NSArray!
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        self.tableView.delegate = self
-        self.tableView.dataSource = self
-        
-        let classPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-        let path = classPath.appending("/CourseList.plist")
-        classList = NSArray(contentsOfFile: path)!
-    }
-    
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.classList.count
-    }
-    
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "classList", for: indexPath as IndexPath)
-        let row = indexPath.row
-        let classObject = self.classList[row] as? NSDictionary
-        let className = classObject?["className"] as? String
-//        let block = classObject?["block"] as? String
-        let roomNumber = classObject?["roomNumber"] as? String
-        let teacherName = classObject?["teacherName"] as? String
-        cell.textLabel?.text = className!
-        var detail:String? = nil
-        if !((roomNumber?.isEmpty)!) {
-//            Room number 不为空的时候
-            detail = "Room: " + roomNumber!
-        }
-        if !((teacherName?.isEmpty)!) {
-//            Same
-            detail = detail?.appending((" Teacher's name: " + teacherName!))
-        }
-        cell.detailTextLabel?.text = detail
-        
-        cell.selectionStyle = .none
-        return cell
-    }
 }
 
 
