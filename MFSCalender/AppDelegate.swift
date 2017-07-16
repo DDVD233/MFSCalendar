@@ -8,6 +8,10 @@
 
 import UIKit
 import CoreData
+import Firebase
+import Fabric
+import Crashlytics
+import MAThemeKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -17,6 +21,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        FirebaseApp.configure()
+        Fabric.with([Crashlytics.self])
+        MAThemeKit.setupTheme(withPrimaryColor: UIColor(hexString: 0xFF7E79), secondaryColor: UIColor.white, fontName: "System", lightStatusBar: true)
         return true
     }
 

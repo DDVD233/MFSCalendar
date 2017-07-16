@@ -12,6 +12,8 @@ import SwiftMessages
 import UICircularProgressRing
 import LTMorphingLabel
 import SwiftyJSON
+import FirebasePerformance
+import Alamofire
 
 class courseFillController:UIViewController {
     
@@ -23,6 +25,7 @@ class courseFillController:UIViewController {
     @IBOutlet weak var topLabel: LTMorphingLabel!
     @IBOutlet weak var bottomLabel: LTMorphingLabel!
     
+    let trace = Performance.startTrace(name: "course fill trace")
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,6 +37,7 @@ class courseFillController:UIViewController {
         formatter.dateFormat = "yyyyMMdd"
         let date = formatter.string(from: Date())
         userDefaults?.set(date, forKey: "refreshDate")
+        trace?.start()
         if importCourses() {
             NSLog("All Done!")
         }
@@ -60,8 +64,10 @@ class courseFillController:UIViewController {
             self.clearData(day: "E")
             self.clearData(day: "F")
             if self.createSchedule(fillLowPriority: 0) {
+                
                 self.progressView.setProgress(value: 66, animationDuration: 1) {
                     if self.createSchedule(fillLowPriority: 1) {
+                        self.getProfilePhoto()
                         self.versionCheck()
                         self.progressView.setProgress(value: 100, animationDuration: 1) {
                             
@@ -70,65 +76,163 @@ class courseFillController:UIViewController {
                             
                             DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(5), execute: {
                                 self.dismiss(animated: true, completion: nil)
+                                self.trace?.stop()
                             })
                         }
                         NSLog("Success Filling schedules")
-//                        self.fillStudyHall(letter: "A")
-//                        self.fillStudyHall(letter: "B")
-//                        self.fillStudyHall(letter: "C")
-//                        self.fillStudyHall(letter: "D")
-//                        self.fillStudyHall(letter: "E")
-//                        self.fillStudyHall(letter: "F")
                         userDefaults?.set(true, forKey: "courseInitialized")
                     } else {
                         self.dismiss(animated: true)
+                        self.trace?.stop()
                     }
                 }
             } else {
                 userDefaults?.set(true, forKey: "courseInitialized")
                 self.dismiss(animated: true)
+                self.trace?.stop()
             }
         }
     }
     
     
-    func getCourse() -> Bool {
-        let username = userDefaults?.string(forKey: "username")
-        let password = userDefaults?.string(forKey: "password")
+//    func getCourse() -> Bool {
+//        let username = userDefaults?.string(forKey: "username")
+//        let password = userDefaults?.string(forKey: "password")
+//        
+//        var success = false
+//        let semaphore = DispatchSemaphore.init(value: 0)
+//        let urlString = "https://dwei.org/classlistdata/" + username! + "/" + password!
+//        let url = URL(string: urlString)
+//        //create request.
+//        let request3 = URLRequest(url: url!)
+//        let session = URLSession.shared
+//        let downloadTask = session.downloadTask(with: request3, completionHandler: { (location: URL?, response: URLResponse?, error: Error?) -> Void in
+//            if error == nil {
+//                //Temp location:
+//                print("location:\(String(describing: location))")
+//                let locationPath = location!.path
+//                //Copy to User Directory
+//                let coursePath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
+//                let path = coursePath.appending("/CourseList.plist")
+//                //Init FileManager
+//                let fileManager = FileManager.default
+//                if fileManager.fileExists(atPath: path) {
+//                    do {
+//                        try fileManager.removeItem(atPath: path)
+//                    } catch {
+//                        NSLog("File does not exist! (Which is impossible)")
+//                    }
+//                }
+//                try! fileManager.moveItem(atPath: locationPath, toPath: path)
+//                print("new location:\(path)")
+//                success = true
+//            } else {
+//                DispatchQueue.main.async {
+//                    let presentMessage = (error?.localizedDescription)! + " Please check your internet connection."
+//                    let view = MessageView.viewFromNib(layout: .CardView)
+//                    view.configureTheme(.error)
+//                    let icon = "🤔"
+//                    view.configureContent(title: "Error!", body: presentMessage, iconText: icon)
+//                    view.button?.isHidden = true
+//                    let config = SwiftMessages.Config()
+//                    SwiftMessages.show(config: config, view: view)
+//                }
+//            }
+//            semaphore.signal()
+//        })
+//        //使用resume方法启动任务
+//        downloadTask.resume()
+//        semaphore.wait()
+//        return success
+//    }
+    
+    func getProfilePhoto() {
+        let path = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
+        let coursePath = path.appending("/CourseList.plist")
         
-        var success = false
-        let semaphore = DispatchSemaphore.init(value: 0)
-        let urlString = "https://dwei.org/classlistdata/" + username! + "/" + password!
+        guard let courseList = NSArray(contentsOfFile: coursePath) as? Array<Dictionary<String, Any>> else {
+            return
+        }
+        let group = DispatchGroup()
+        let queue = DispatchQueue.global()
+        
+        for items in courseList {
+            queue.async(group: group) {
+                guard let sectionIdInt = items["sectionid"] as? Int else {
+                    return
+                }
+                
+                guard let leadSectionIdInt = items["leadsectionid"] as? Int else {
+                    return
+                }
+                
+                let sectionId = String(sectionIdInt)
+                let leadSectionId = String(leadSectionIdInt)
+                
+                let photoLink = self.getProfilePhotoLink(sectionId: sectionId)
+                
+                guard !photoLink.isEmpty else {
+                    NSLog("\(items["coursedescription"] as? String ?? "") has no photo.")
+                    return
+                }
+                
+                let url = URL(string: photoLink)
+                
+                let downloadSemaphore = DispatchSemaphore.init(value: 0)
+                
+                let destination: DownloadRequest.DownloadFileDestination = { _, _ in
+                    let path = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
+                    let photoPath = path.appending("/\(leadSectionId)_profile.png")
+                    
+                    let fileURL = URL(fileURLWithPath: photoPath)
+                    print(fileURL)
+                    
+                    downloadSemaphore.signal()
+                    
+                    return (fileURL, [.removePreviousFile, .createIntermediateDirectories])
+                }
+                
+                Alamofire.download(url!, to: destination).resume()
+                
+                downloadSemaphore.wait()
+            }
+        }
+        
+        group.wait()
+    }
+    
+    func getProfilePhotoLink(sectionId: String) -> String {
+        guard loginAuthentication().success else {
+            NSLog("Login failed")
+            return ""
+        }
+        let urlString = "https://mfriends.myschoolapp.com/api/media/sectionmediaget/\(sectionId)/?format=json&contentId=31&editMode=false&active=true&future=false&expired=false&contextLabelId=2"
         let url = URL(string: urlString)
         //create request.
         let request3 = URLRequest(url: url!)
-        let session = URLSession.shared
-        let downloadTask = session.downloadTask(with: request3, completionHandler: { (location: URL?, response: URLResponse?, error: Error?) -> Void in
+        let semaphore = DispatchSemaphore(value: 0)
+        
+        let config = URLSessionConfiguration.default
+        config.requestCachePolicy = .reloadIgnoringLocalCacheData
+        config.urlCache = nil
+        var photolink = ""
+        
+        let session = URLSession.init(configuration: config)
+        
+        let dataTask = session.dataTask(with: request3, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
             if error == nil {
-                //Temp location:
-                print("location:\(String(describing: location))")
-                let locationPath = location!.path
-                //Copy to User Directory
-                let coursePath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-                let path = coursePath.appending("/CourseList.plist")
-                //Init FileManager
-                let fileManager = FileManager.default
-                if fileManager.fileExists(atPath: path) {
-                    do {
-                        try fileManager.removeItem(atPath: path)
-                    } catch {
-                        NSLog("File does not exist! (Which is impossible)")
-                    }
+                let json = JSON(data: data!)
+                if let filePath = json[0]["FilenameUrl"].string {
+                    photolink = "https:" + filePath
+                } else {
+                    NSLog("File path not found. Error code: 13")
                 }
-                try! fileManager.moveItem(atPath: locationPath, toPath: path)
-                print("new location:\(path)")
-                success = true
             } else {
                 DispatchQueue.main.async {
                     let presentMessage = (error?.localizedDescription)! + " Please check your internet connection."
                     let view = MessageView.viewFromNib(layout: .CardView)
                     view.configureTheme(.error)
-                    let icon = "🤔"
+                    let icon = "😱"
                     view.configureContent(title: "Error!", body: presentMessage, iconText: icon)
                     view.button?.isHidden = true
                     let config = SwiftMessages.Config()
@@ -138,9 +242,9 @@ class courseFillController:UIViewController {
             semaphore.signal()
         })
         //使用resume方法启动任务
-        downloadTask.resume()
+        dataTask.resume()
         semaphore.wait()
-        return success
+        return photolink
     }
     
     func newGetCourse() -> Bool {
@@ -153,19 +257,7 @@ class courseFillController:UIViewController {
         
         let session = URLSession.init(configuration: config)
         
-        let (loginSuccess, token, userId) = loginAuthentication()
-        if loginSuccess {
-            let cookieProps: [HTTPCookiePropertyKey : Any] = [
-                HTTPCookiePropertyKey.domain: "mfriends.myschoolapp.com",
-                HTTPCookiePropertyKey.path: "/",
-                HTTPCookiePropertyKey.name: "t",
-                HTTPCookiePropertyKey.value: token
-            ]
-            
-            if let cookie = HTTPCookie(properties: cookieProps) {
-                HTTPCookieStorage.shared.setCookie(cookie)
-            }
-        }
+        let (_, _, userId) = loginAuthentication()
         
         let urlString = "https://mfriends.myschoolapp.com/api/datadirect/ParentStudentUserAcademicGroupsGet?userId=\(userId)&schoolYearLabel=2016+-+2017&memberLevel=3&persona=2&durationList=73751"
         
@@ -224,54 +316,59 @@ class courseFillController:UIViewController {
             return
         }
         
+        let group = DispatchGroup()
+        let queue = DispatchQueue.global()
         var filledCourse = [NSMutableDictionary]()
         
         for course in courseList {
-            guard let courseName = course["className"] as? String else { return }
-            print(courseName)
-            let teacherName = course["teacherName"] as? String
-            print(teacherName ?? "")
-            var urlString = "https://dwei.org/course/getAdditionalInformation/\(courseName)/\(teacherName ?? "None")"
-            urlString = urlString.replace(target: " ", withString: "+")
-            let semaphore = DispatchSemaphore.init(value: 0)
-            let url = URL(string: urlString)
-            let request = URLRequest(url: url!)
-            let session = URLSession.shared
-            
-            let downloadTask = session.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
-                if error == nil {
-                    do {
-                        let json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! Array<NSDictionary>
-                        
-                        for infoToAdd in json {
-                            print(infoToAdd)
-                            let courseToAdd = course.mutableCopy() as! NSMutableDictionary
-                            courseToAdd.addEntries(from: infoToAdd as! [String : Any])
-                            filledCourse.append(courseToAdd)
+            queue.async(group: group) {
+                guard let courseName = course["className"] as? String else { return }
+                print(courseName)
+                let teacherName = course["teacherName"] as? String
+                print(teacherName ?? "")
+                var urlString = "https://dwei.org/course/getAdditionalInformation/\(courseName)/\(teacherName ?? "None")"
+                urlString = urlString.replace(target: " ", withString: "+")
+                let semaphore = DispatchSemaphore.init(value: 0)
+                let url = URL(string: urlString)
+                let request = URLRequest(url: url!)
+                let session = URLSession.shared
+                
+                let downloadTask = session.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
+                    if error == nil {
+                        do {
+                            let json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! Array<NSDictionary>
+                            
+                            for infoToAdd in json {
+                                print(infoToAdd)
+                                let courseToAdd = course.mutableCopy() as! NSMutableDictionary
+                                courseToAdd.addEntries(from: infoToAdd as! [String : Any])
+                                filledCourse.append(courseToAdd)
+                            }
+                            
+                        } catch {
+                            NSLog("Failed parsing the data")
                         }
-                        
-                    } catch {
-                        NSLog("Failed parsing the data")
+                    } else {
+                        DispatchQueue.main.async {
+                            let presentMessage = (error?.localizedDescription)! + " Please check your internet connection."
+                            let view = MessageView.viewFromNib(layout: .CardView)
+                            view.configureTheme(.error)
+                            let icon = "🤔"
+                            view.configureContent(title: "Error!", body: presentMessage, iconText: icon)
+                            view.button?.isHidden = true
+                            let config = SwiftMessages.Config()
+                            SwiftMessages.show(config: config, view: view)
+                        }
                     }
-                } else {
-                    DispatchQueue.main.async {
-                        let presentMessage = (error?.localizedDescription)! + " Please check your internet connection."
-                        let view = MessageView.viewFromNib(layout: .CardView)
-                        view.configureTheme(.error)
-                        let icon = "🤔"
-                        view.configureContent(title: "Error!", body: presentMessage, iconText: icon)
-                        view.button?.isHidden = true
-                        let config = SwiftMessages.Config()
-                        SwiftMessages.show(config: config, view: view)
-                    }
-                }
-                semaphore.signal()
-            })
-            //使用resume方法启动任务
-            downloadTask.resume()
-            semaphore.wait()
+                    semaphore.signal()
+                })
+                //使用resume方法启动任务
+                downloadTask.resume()
+                semaphore.wait()
+            }
         }
         
+        group.wait()
         NSArray(array: filledCourse).write(toFile: path, atomically: true)
     }
     
@@ -289,98 +386,106 @@ class courseFillController:UIViewController {
         let path = coursePath.appending("/CourseList.plist")
         let coursesObject = NSMutableArray(contentsOfFile: path)!
         var removeIndex:IndexSet = []
+        
+        let group = DispatchGroup()
+        let queue = DispatchQueue.global()
+        
         for (index, items) in coursesObject.enumerated() {
-            guard let courses = items as? NSDictionary else {
-                break
-            }
-//            let block = courses["block"] as? String ?? ""
-            let className = courses["className"] as? String
-            let teacherName = courses["teacherName"] as? String
-            let roomNumber = courses["roomNumber"] as? String
-            let lowPriority = courses["lowPriority"] as? Int ?? 0
-            if lowPriority == fillLowPriority {
-//                When the block is not empty
-                let semaphore = DispatchSemaphore.init(value: 0)
-                var courseCheckURL:String? = nil
-//                如果有block用查Block的方法，否则直接查课。
-//                if !block.isEmpty {
-//                courseCheckURL = "https://dwei.org/classmeettime/" + block
-//                } else {
-                var classId = courses["id"] as! String
-                classId = classId.replacingOccurrences(of: " ", with: "%20")
-                print(classId)
-                courseCheckURL = "https://dwei.org/searchbyid/" + classId
-//                }
-                let url = NSURL(string: courseCheckURL!)
-                let request = URLRequest(url: url! as URL)
-                let session = URLSession.shared
-                success = false
-                //Task 1: Getting day data.
-                let task: URLSessionDataTask = session.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
-                    
-                    if error == nil {
-                        do {
-                            let resDict = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? NSArray
-                            let plistPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-//                            遍历所有的meet time， 格式为day + period
-                            for items in resDict! {
-                                print(items)
-                                guard let meetTime = items as? String else {
-                                    continue
-                                }
-                                
-                                guard !meetTime.isEmpty else {
-                                    continue
-                                }
-                                let day = meetTime[0,0]
-                                let period = meetTime[1,1]
-                                let fileName = "/Class" + day + ".plist"
-                                let path = plistPath.appending(fileName)
-                                let classOfDay = NSMutableArray(contentsOfFile: path)
-                                var writeFile = true
-                                if classOfDay != nil {
-                                    for items in classOfDay! {
-                                        let classes = items as! NSDictionary
-                                        if (classes["period"] as! String) == period {
-                                            writeFile = false
+            queue.async(group: group) {
+                guard let courses = items as? NSDictionary else {
+                    return
+                }
+                //            let block = courses["block"] as? String ?? ""
+                let className = courses["className"] as? String
+                let teacherName = courses["teacherName"] as? String
+                let roomNumber = courses["roomNumber"] as? String
+                let lowPriority = courses["lowPriority"] as? Int ?? 0
+                if lowPriority == fillLowPriority {
+                    //                When the block is not empty
+                    let semaphore = DispatchSemaphore.init(value: 0)
+                    var courseCheckURL:String? = nil
+                    //                如果有block用查Block的方法，否则直接查课。
+                    //                if !block.isEmpty {
+                    //                courseCheckURL = "https://dwei.org/classmeettime/" + block
+                    //                } else {
+                    var classId = courses["id"] as! String
+                    classId = classId.replacingOccurrences(of: " ", with: "%20")
+                    print(classId)
+                    courseCheckURL = "https://dwei.org/searchbyid/" + classId
+                    //                }
+                    let url = NSURL(string: courseCheckURL!)
+                    let request = URLRequest(url: url! as URL)
+                    let session = URLSession.shared
+                    success = false
+                    //Task 1: Getting day data.
+                    let task: URLSessionDataTask = session.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
+                        
+                        if error == nil {
+                            do {
+                                let resDict = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? NSArray
+                                let plistPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
+                                //                            遍历所有的meet time， 格式为day + period
+                                for items in resDict! {
+                                    print(items)
+                                    guard let meetTime = items as? String else {
+                                        continue
+                                    }
+                                    
+                                    guard !meetTime.isEmpty else {
+                                        continue
+                                    }
+                                    let day = meetTime[0,0]
+                                    let period = meetTime[1,1]
+                                    let fileName = "/Class" + day + ".plist"
+                                    let path = plistPath.appending(fileName)
+                                    let classOfDay = NSMutableArray(contentsOfFile: path)
+                                    var writeFile = true
+                                    if classOfDay != nil {
+                                        for items in classOfDay! {
+                                            let classes = items as! NSDictionary
+                                            if (classes["period"] as! String) == period {
+                                                writeFile = false
+                                            }
+                                        }
+                                    }
+                                    if writeFile {
+                                        let AddData = ["name": className, "period": period, "room": roomNumber, "teacherName": teacherName ?? ""]
+                                        //                          添加数据
+                                        classOfDay?.add(AddData)
+                                        classOfDay?.write(toFile: path, atomically: true)
+                                    } else {
+                                        if ((className?.characters.count)! >= 10)  && (className?[0,9] == "Study Hall") {
+                                            removeIndex.insert(index)
                                         }
                                     }
                                 }
-                                if writeFile {
-                                    let AddData = ["name": className, "period": period, "room": roomNumber, "teacherName": teacherName ?? ""]
-                                    //                          添加数据
-                                    classOfDay?.add(AddData)
-                                    classOfDay?.write(toFile: path, atomically: true)
-                                } else {
-                                    if ((className?.characters.count)! >= 10)  && (className?[0,9] == "Study Hall") {
-                                        removeIndex.insert(index)
-                                    }
-                                }
+                                success = true
+                            } catch {
+                                NSLog("Data parsing failed")
                             }
-                            success = true
-                        } catch {
-                            NSLog("Data parsing failed")
+                        } else {
+                            //                        When it fails because of the internet.
+                            DispatchQueue.main.async {
+                                let presentMessage = (error?.localizedDescription)! + " Please check your internet connection."
+                                let view = MessageView.viewFromNib(layout: .CardView)
+                                view.configureTheme(.error)
+                                let icon = "🤔"
+                                view.configureContent(title: "Error!", body: presentMessage, iconText: icon)
+                                view.button?.isHidden = true
+                                let config = SwiftMessages.Config()
+                                SwiftMessages.show(config: config, view: view)
+                            }
                         }
-                    } else {
-//                        When it fails because of the internet.
-                        DispatchQueue.main.async {
-                            let presentMessage = (error?.localizedDescription)! + " Please check your internet connection."
-                            let view = MessageView.viewFromNib(layout: .CardView)
-                            view.configureTheme(.error)
-                            let icon = "🤔"
-                            view.configureContent(title: "Error!", body: presentMessage, iconText: icon)
-                            view.button?.isHidden = true
-                            let config = SwiftMessages.Config()
-                            SwiftMessages.show(config: config, view: view)
-                        }
-                    }
-                    semaphore.signal()
-                })
-                
-                task.resume()
-                semaphore.wait()
+                        semaphore.signal()
+                    })
+                    
+                    task.resume()
+                    semaphore.wait()
+                }
             }
         }
+        
+        group.wait()
         
         if fillLowPriority == 1 {
             coursesObject.removeObjects(at: removeIndex)

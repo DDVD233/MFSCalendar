@@ -9,6 +9,7 @@
 import UIKit
 import DZNEmptyDataSet
 import FSCalendar
+import Crashlytics
 
 class customCalendarCell: UITableViewCell {
 
@@ -133,6 +134,7 @@ class CalendarViewController: UIViewController, UIScrollViewDelegate, DZNEmptyDa
         let _ = self.checkDate(checkDate: Date())
         self.dataFetching()
         self.eventDataFetching()
+//        Crashlytics.sharedInstance().crash()
     }
     
     func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
@@ -142,6 +144,7 @@ class CalendarViewController: UIViewController, UIScrollViewDelegate, DZNEmptyDa
         }
         if shouldBegin {
             let velocity = self.scopeGesture.velocity(in: self.view)
+//            往上拉->日历拉长。
             switch self.calendarView.scope {
             case .month:
                 return velocity.y < 0
@@ -226,6 +229,7 @@ extension CalendarViewController: UITableViewDelegate, UITableViewDataSource {
         }
         if (self.dayOfSchool == "No School") || (self.dayOfSchool == nil) {
             self.listClasses = []
+            self.classView.reloadData(with: .automatic)
             self.classView.reloadData()
         } else {
             self.classView.separatorStyle = .singleLine
@@ -247,6 +251,7 @@ extension CalendarViewController: UITableViewDelegate, UITableViewDataSource {
                 i += 1
             }
             self.listClasses = sortedClass
+            self.classView.reloadData(with: .automatic)
             self.classView.reloadData()
         }
     }
@@ -265,10 +270,12 @@ extension CalendarViewController: UITableViewDelegate, UITableViewDataSource {
         let eventDate = formatter.string(from: SelectedDate)
         guard let events = eventData?[eventDate] as? NSMutableArray else {
             self.listEvents = []
+            self.eventView.reloadData(with: .automatic)
             self.eventView.reloadData()
             return
         }
         self.listEvents = events
+        self.eventView.reloadData(with: .automatic)
         self.eventView.reloadData()
     }
 

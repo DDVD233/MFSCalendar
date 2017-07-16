@@ -23,5 +23,12 @@ target 'MFSCalendar' do
     pod 'DGElasticPullToRefresh'
     pod 'ReachabilitySwift'
     pod 'XLPagerTabStrip', '~> 7.0'
+    pod 'Firebase/Core'
+    pod 'Firebase/Performance'
+    pod 'Fabric'
+    pod 'Crashlytics'
+    pod 'Alamofire', '~> 4.4'
+    pod 'SDWebImage', '~>3.8'
+    pod 'MAThemeKit'
 end
 

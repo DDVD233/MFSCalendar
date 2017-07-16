@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftMessages
 
 extension UIView {
     @IBInspectable var cornerRadius: CGFloat {
@@ -64,16 +65,6 @@ extension UIColor {
     }
 }
 
-extension UIColor {
-    subscript(color: String) -> UIColor {
-        if color == "salmon" {
-            return UIColor(hexString: 0xFF6666)
-        }
-        
-        return UIColor.white
-    }
-}
-
 
 extension UIView
 {
@@ -100,9 +91,13 @@ extension UIImage {
     
 }
 
+extension UITableView {
+    func reloadData(with animation: UITableViewRowAnimation) {
+        reloadSections(IndexSet(integersIn: 0..<numberOfSections), with: animation)
+    }
+}
+
 public let userDefaults = UserDefaults(suiteName: "group.org.dwei.MFSCalendar")
-
-
 
 public func loginAuthentication() -> (success:Bool, token:String, userId: String) {
     
@@ -116,6 +111,41 @@ public func loginAuthentication() -> (success:Bool, token:String, userId: String
     var token: String? = ""
     var userID: String? = ""
     var success: Bool = false
+    
+    if let loginDate = userDefaults?.object(forKey: "loginTime") as? Date {
+        let now = Date()
+        let timeInterval = Int(now.timeIntervalSince(loginDate))
+        if timeInterval < 1200 {
+            success = true
+            token = userDefaults?.string(forKey: "token")
+            userID = userDefaults?.string(forKey: "userID")
+            
+            let cookieProps: [HTTPCookiePropertyKey : Any] = [
+                HTTPCookiePropertyKey.domain: "mfriends.myschoolapp.com",
+                HTTPCookiePropertyKey.path: "/",
+                HTTPCookiePropertyKey.name: "t",
+                HTTPCookiePropertyKey.value: token!
+            ]
+            
+            if let cookie = HTTPCookie(properties: cookieProps) {
+                HTTPCookieStorage.shared.setCookie(cookie)
+            }
+            
+            let cookieProps2: [HTTPCookiePropertyKey : Any] = [
+                HTTPCookiePropertyKey.domain: "mfriends.myschoolapp.com",
+                HTTPCookiePropertyKey.path: "/",
+                HTTPCookiePropertyKey.name: "bridge",
+                HTTPCookiePropertyKey.value: "action=create&src=webapp&xdb=true"
+            ]
+            
+            if let cookie = HTTPCookie(properties: cookieProps2) {
+                HTTPCookieStorage.shared.setCookie(cookie)
+            }
+            
+            return (success, token!, userID!)
+        }
+    }
+    
     let accountCheckURL = "https://mfriends.myschoolapp.com/api/authentication/login/?username=" + usernameText + "&password=" + passwordText + "&format=json"
     let url = NSURL(string: accountCheckURL)
     let request = URLRequest(url: url! as URL)
@@ -145,6 +175,7 @@ public func loginAuthentication() -> (success:Bool, token:String, userId: String
                     userID = String(describing: resDict["UserId"]!)
                     userDefaults?.set(token, forKey: "token")
                     userDefaults?.set(userID, forKey: "userID")
+                    userDefaults?.set(Date(), forKey: "loginTime")
                 }
             } catch {
                 NSLog("Data parsing failed")
@@ -165,5 +196,41 @@ public func loginAuthentication() -> (success:Bool, token:String, userId: String
     
     task.resume()
     semaphore.wait()
+    
+    if success {
+        
+        let cookieProps: [HTTPCookiePropertyKey : Any] = [
+            HTTPCookiePropertyKey.domain: "mfriends.myschoolapp.com",
+            HTTPCookiePropertyKey.path: "/",
+            HTTPCookiePropertyKey.name: "t",
+            HTTPCookiePropertyKey.value: token!
+        ]
+        
+        if let cookie = HTTPCookie(properties: cookieProps) {
+            HTTPCookieStorage.shared.setCookie(cookie)
+        }
+        
+        let cookieProps2: [HTTPCookiePropertyKey : Any] = [
+            HTTPCookiePropertyKey.domain: "mfriends.myschoolapp.com",
+            HTTPCookiePropertyKey.path: "/",
+            HTTPCookiePropertyKey.name: "bridge",
+            HTTPCookiePropertyKey.value: "action=create&src=webapp&xdb=true"
+        ]
+        
+        if let cookie = HTTPCookie(properties: cookieProps2) {
+            HTTPCookieStorage.shared.setCookie(cookie)
+        }
+    }
+    
     return (success, token!, userID!)
+}
+
+public func presentErrorMessage(presentMessage: String) {
+    let view = MessageView.viewFromNib(layout: .CardView)
+    view.configureTheme(.error)
+    let icon = "😱"
+    view.configureContent(title: "Error!", body: presentMessage, iconText: icon)
+    view.button?.isHidden = true
+    let config = SwiftMessages.Config()
+    SwiftMessages.show(config: config, view: view)
 }

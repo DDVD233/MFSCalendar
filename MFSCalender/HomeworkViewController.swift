@@ -86,7 +86,7 @@ class homeworkViewController: UITableViewController {
         let session = URLSession.init(configuration: config)
         
         if username != "testaccount" {
-            let (success, token, _) = loginAuthentication()
+            let (success, _, _) = loginAuthentication()
             if success {
                 let formatter = DateFormatter()
                 formatter.locale = Locale(identifier: "en_US")
@@ -94,27 +94,6 @@ class homeworkViewController: UITableViewController {
                 let today = formatter.string(from: Date()).addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
                 let url = "https://mfriends.myschoolapp.com/api/DataDirect/AssignmentCenterAssignments/?format=json&filter=2&dateStart=\(today)&dateEnd=\(today)&persona=2"
                 request.url = URL(string:url)
-                let cookieProps: [HTTPCookiePropertyKey : Any] = [
-                    HTTPCookiePropertyKey.domain: "mfriends.myschoolapp.com",
-                    HTTPCookiePropertyKey.path: "/",
-                    HTTPCookiePropertyKey.name: "token",
-                    HTTPCookiePropertyKey.value: token
-                ]
-                
-                if let cookie = HTTPCookie(properties: cookieProps) {
-                    HTTPCookieStorage.shared.setCookie(cookie)
-                }
-                
-                let cookieProps2: [HTTPCookiePropertyKey : Any] = [
-                    HTTPCookiePropertyKey.domain: "mfriends.myschoolapp.com",
-                    HTTPCookiePropertyKey.path: "/",
-                    HTTPCookiePropertyKey.name: "bridge",
-                    HTTPCookiePropertyKey.value: "action=create&src=webapp&xdb=true"
-                ]
-                
-                if let cookie = HTTPCookie(properties: cookieProps2) {
-                    HTTPCookieStorage.shared.setCookie(cookie)
-                }
             }
         }
         var originalData = [NSDictionary]()
