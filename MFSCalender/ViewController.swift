@@ -62,6 +62,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     let formatter = DateFormatter()
     var listEvents:NSMutableArray = []
     var listClasses:NSMutableArray = []
+    var listHomework = [String: Array<Dictionary<String, Any?>>]()
     
     let reachability = Reachability()!
 
@@ -105,7 +106,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         self.eventView.emptyDataSetDelegate = self
         self.eventView.emptyDataSetSource = self
         
-
+        
         // Do any additional setup after loading the view, typically from a nib.
     }
     
@@ -285,122 +286,162 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
 
     func periodCheck(day: String) {
         print("Excuted")
-//        初始化，否则会加两遍
+//        清空所有现存数据
         self.listClasses = []
         let plistPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
         let fileName = "/Class" + day + ".plist"
         let path = plistPath.appending(fileName)
+        
+        guard let allClasses = NSMutableArray(contentsOfFile: path) else {
+            return
+        }
+        
+        let date = NSDate()
+        let timeFormatter = DateFormatter()
+        timeFormatter.dateFormat = "HHmm"
+        let Now = Int(timeFormatter.string(from: date as Date) as String)
+        print(date)
+        NSLog(String(describing: Now))
 
-        if NSMutableArray(contentsOfFile: path) != nil {
-            let allClasses = NSMutableArray(contentsOfFile: path)!
-            let date = NSDate()
-            let timeFormatter = DateFormatter()
-            timeFormatter.dateFormat = "HHmm"
-            let Now = Int(timeFormatter.string(from: date as Date) as String)
-            print(date)
-            NSLog(String(describing: Now))
+        let Period1Start = 800
+        let Period2Start = 847
+        let Period3Start = 934
+        let Period4Start = 1044
+        let Period5Start = 1131
+        let Period6Start = 1214
+        let LunchStart   = 1300
+        let Period7Start = 1340
+        let Period8Start = 1427
+        let Period8End   = 1510
+        var currentClass: Int? = nil
 
-
-            // I am going to rewrite this.
-            let Period1Start: Int = 800
-            let Period2Start: Int = 847
-            let Period3Start: Int = 934
-            let Period4Start = 1044
-            let Period5Start = 1131
-            let Period6Start = 1214
-            let LunchStart = 1300
-            let Period7Start = 1340
-            let Period8Start = 1427
-            let Period8End = 1510
-            var currentClass: Int? = nil
-
-            switch Now! {
-            case 0..<Period1Start:
-                NSLog("Period 0")
-                currentClass = 0
-            case Period1Start..<Period2Start:
-                NSLog("Period 1")
-                currentClass = 1
-            case Period2Start..<Period3Start:
-                NSLog("Period 2")
-                currentClass = 2
-            case Period3Start..<Period4Start:
-                NSLog("Period 3")
-                currentClass = 3
-            case Period4Start..<Period5Start:
-                NSLog("Period 4")
-                currentClass = 4
-            case Period5Start..<Period6Start:
-                NSLog("Period 5")
-                currentClass = 5
-            case Period6Start..<LunchStart:
-                NSLog("Period 6")
-                currentClass = 6
-            case LunchStart..<Period7Start:
-                NSLog("Lunch")
-                currentClass = 11
-            case Period7Start..<Period8Start:
-                NSLog("Period 7")
-                currentClass = 7
-            case Period8Start..<Period8End:
-                NSLog("Period 8")
-                currentClass = 8
-            case Period8End..<3000:
-                NSLog("Have a great afternoon!")
-                currentClass = 9
-            default:
-                NSLog("???")
-            }
-            if currentClass! < 9 {
-                for number in currentClass!...8 {
-                    if number == 6 {
-                        for items in allClasses {
-                            let rowDict = items as! NSDictionary
-                            let period = Int(rowDict["period"] as! String)
-                            if period == number {
-                                let name = rowDict["name"] as? String
-                                let room = rowDict["room"] as? String
-                                let teacher = rowDict["teacherName"] as? String
-                                let addData: NSDictionary = ["name": name ?? "", "roomNumber": room ?? "", "teacher": teacher ?? "", "period": String(describing:period!)]
-                                self.listClasses.add(addData)
-                            }
-                        }
-                        let addData: NSDictionary = ["name": "Lunch", "roomNumber": "DH/C", "teacher": "", "period": "11"]
-                        self.listClasses.add(addData)
-                    } else {
-                        for items in allClasses {
-                            let rowDict = items as! NSDictionary
-                            let period = Int(rowDict["period"] as! String)
-                            if period == number {
-                                let name = rowDict["name"] as? String
-                                let room = rowDict["room"] as? String
-                                let teacher = rowDict["teacherName"] as? String
-                                let addData: NSDictionary = ["name": name ?? "", "roomNumber": room ?? "", "teacher": teacher ?? "", "period": String(describing:period!)]
-                                self.listClasses.add(addData)
-                            }
-                        }
-                    }
+        switch Now! {
+        case 0..<Period1Start:
+            NSLog("Period 0")
+            currentClass = 0
+        case Period1Start..<Period2Start:
+            NSLog("Period 1")
+            currentClass = 1
+        case Period2Start..<Period3Start:
+            NSLog("Period 2")
+            currentClass = 2
+        case Period3Start..<Period4Start:
+            NSLog("Period 3")
+            currentClass = 3
+        case Period4Start..<Period5Start:
+            NSLog("Period 4")
+            currentClass = 4
+        case Period5Start..<Period6Start:
+            NSLog("Period 5")
+            currentClass = 5
+        case Period6Start..<LunchStart:
+            NSLog("Period 6")
+            currentClass = 6
+        case LunchStart..<Period7Start:
+            NSLog("Lunch")
+            currentClass = 11
+        case Period7Start..<Period8Start:
+            NSLog("Period 7")
+            currentClass = 7
+        case Period8Start..<Period8End:
+            NSLog("Period 8")
+            currentClass = 8
+        case Period8End..<3000:
+            NSLog("Have a great afternoon!")
+            currentClass = 9
+        default:
+            NSLog("???")
+        }
+        
+        if currentClass! < 9 {
+            for number in currentClass!...8 {
+                
+//                    Add Lunch period.
+                if number == 7 {
+                    let addData: NSDictionary = ["name": "Lunch", "roomNumber": "DH/C", "teacher": "", "period": "11"]
+                    self.listClasses.add(addData)
                 }
-            } else if currentClass == 11 {
-                let addData: NSDictionary = ["name": "Lunch", "roomNumber": "DH/C", "teacher": "", "period": "5"]
-                self.listClasses.add(addData)
-                for number in 7...8 {
-                    for items in allClasses {
-                        let rowDict = items as! NSDictionary
-                        let period = Int(rowDict["period"] as! String)
-                        if period == number {
-                            let name = rowDict["name"] as? String
-                            let room = rowDict["room"] as? String
-                            let teacher = rowDict["teacherName"] as? String
-                            let addData: NSDictionary = ["name": name ?? "", "roomNumber": room ?? "", "teacher": teacher ?? "", "period": String(describing:period!)]
-                            self.listClasses.add(addData)
-                        }
+                
+                for items in allClasses {
+                    let rowDict = items as! NSDictionary
+                    let period = Int(rowDict["period"] as! String)
+                    if period == number {
+                        self.listClasses.add(rowDict)
                     }
                 }
             }
+        } else if currentClass == 11 {
+            let addData: NSDictionary = ["name": "Lunch", "roomNumber": "DH/C", "teacher": "", "period": "5"]
+            self.listClasses.add(addData)
+            
+            for number in 7...8 {
+                for items in allClasses {
+                    
+                    let rowDict = items as! NSDictionary
+                    let period = Int(rowDict["period"] as! String)
+                    if period == number {
+                        self.listClasses.add(rowDict)
+                    }
+                }
+                
+            }
+            
+        }
+        
+        self.classView.reloadData()
+        print(listClasses)
+    }
+    
+    func getHomework() {
+        guard let username = userDefaults?.string(forKey: "username") else { return }
+        var request = URLRequest(url: URL(string:"https://dwei.org/assignmentlist/")!)
+        
+        let config = URLSessionConfiguration.default
+        config.requestCachePolicy = .reloadIgnoringLocalCacheData
+        config.urlCache = nil
+        
+        let session = URLSession.init(configuration: config)
+        
+        if username != "testaccount" {
+            let (success, _, _) = loginAuthentication()
+            if success {
+                let formatter = DateFormatter()
+                formatter.locale = Locale(identifier: "en_US")
+                formatter.dateFormat = "M/d/yyyy"
+                let today = formatter.string(from: Date()).addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+                let url = "https://mfriends.myschoolapp.com/api/DataDirect/AssignmentCenterAssignments/?format=json&filter=2&dateStart=\(today)&dateEnd=\(today)&persona=2"
+                request.url = URL(string:url)
+            }
+        }
+        
+        
+        let semaphore = DispatchSemaphore.init(value: 0)
+        let task: URLSessionDataTask = session.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
+            if error == nil {
+                do {
+                    if let json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? Array<Dictionary<String, Any?>> {
+                        for items in json {
+                            let leadSectionId = String(items["leadsectionid"] as! Int)
+                            if self.listHomework[leadSectionId] != nil {
+                                self.listHomework[leadSectionId]?.append(items)
+                            } else {
+                                self.listHomework[leadSectionId] = [items]
+                            }
+                        }
+                    }
+                    
+                } catch {
+                    NSLog("Data parsing failed")
+                }
+            }
+            semaphore.signal()
+        })
+        
+        task.resume()
+        semaphore.wait()
+        
+        DispatchQueue.main.async {
             self.classView.reloadData()
-            print(listClasses)
-        } else {
         }
     }
 
@@ -477,9 +518,11 @@ extension Main: UICollectionViewDelegate, UICollectionViewDataSource, UICollecti
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "classViewCell", for: indexPath as IndexPath) as! classViewCell
         let row = indexPath.row
         let classData = listClasses[row] as! NSDictionary
-        let className = classData["name"] as? String
+        let className = classData["className"] as? String
         let roomNumber = classData["roomNumber"] as? String
-        let teacher = classData["teacher"] as? String
+        let teacher = classData["teacherName"] as? String
+        
+//        It is impossible to be nil.
         let period = classData["period"] as! String
         if !((roomNumber?.isEmpty)!) {
             cell.roomNumber.text = "AT: " + roomNumber!
@@ -560,7 +603,7 @@ extension Main: UITableViewDelegate, UITableViewDataSource {
             let rowDict = self.listEvents[row] as! NSDictionary
             let summary = rowDict["summary"] as? String
             cell?.ClassName.text = summary
-//        截取第一个字母
+//        截取第一个字母作为cell左侧的字母
             let letter = summary?.substring(to: (summary?.index(after: (summary?.startIndex)!))!)
             cell?.PeriodNumber.text = letter!
             if rowDict["location"] != nil {

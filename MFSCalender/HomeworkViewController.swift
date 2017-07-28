@@ -9,8 +9,6 @@
 import UIKit
 import SwiftMessages
 import SwiftyJSON
-import HTMLLabel
-import HTMLString
 import M13Checkbox
 import SwiftDate
 import DZNEmptyDataSet
@@ -23,6 +21,7 @@ class homeworkViewController: UITableViewController {
     
     
     @IBOutlet weak var homeworkTable: UITableView!
+    var isUpdatingHomework = false
     
     var listHomework = [String: Array<NSDictionary>]()
     var sections: [String] {
@@ -37,7 +36,7 @@ class homeworkViewController: UITableViewController {
         homeworkTable.estimatedRowHeight = 80
         homeworkTable.emptyDataSetSource = self
         
-//        Remove the bottom 1px line
+//        Remove the bottom 1px line on Navigation Bar
         self.navigationController?.navigationBar.barTintColor = UIColor(hexString: 0xFF7E79)
         self.navigationController?.navigationBar.isTranslucent = false
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
@@ -76,6 +75,10 @@ class homeworkViewController: UITableViewController {
     }
     
     func getHomework() {
+        isUpdatingHomework = true
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
         guard let username = userDefaults?.string(forKey: "username") else { return }
         var request = URLRequest(url: URL(string:"https://dwei.org/assignmentlist/")!)
         
@@ -191,10 +194,20 @@ class homeworkViewController: UITableViewController {
         if let sectionId = homework["section_id"] as? Int {
             cell.sectionId = String(describing:sectionId)
         }
-        var description = homework["short_description"] as? String
-        description = description?.removingHTMLEntities
-        cell.title.text = description ?? ""
-        cell.title.sizeToFit()
+        
+        if let description = homework["short_description"] as? String {
+            let htmlDescription = NSString(string: description).data(using: String.Encoding.unicode.rawValue)
+            if let attributedString = try? NSAttributedString(data: htmlDescription!, options: [NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType], documentAttributes: nil) {
+                cell.shortDescription.attributedText = attributedString
+            } else {
+                cell.shortDescription.text = description
+            }
+        } else {
+            cell.shortDescription.text = ""
+        }
+        
+        cell.shortDescription.sizeToFit()
+        cell.layoutIfNeeded()
         
         cell.homeworkClass.text = homework["groupname"] as? String
         
@@ -241,17 +254,22 @@ extension homeworkViewController: DZNEmptyDataSetSource {
     
     func title(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
         let attr = [NSFontAttributeName: UIFont.preferredFont(forTextStyle: UIFontTextStyle.headline)]
-        let str = "There is no homework to display."
+        
+        var str = "There is no homework to display."
+        if isUpdatingHomework {
+            str = "Updating homework..."
+        }
         return NSAttributedString(string: str, attributes: attr)
     }
 }
 
 class homeworkViewCell: UITableViewCell {
-    @IBOutlet weak var title: HTMLLabel!
     @IBOutlet weak var checkMark: M13Checkbox!
     @IBOutlet weak var homeworkType: UILabel!
     @IBOutlet weak var homeworkClass: UILabel!
     @IBOutlet weak var tagView: UIView!
+    
+    @IBOutlet var shortDescription: UITextView!
     
     var assignmentId: String?
     var sectionId: String?
@@ -260,6 +278,7 @@ class homeworkViewCell: UITableViewCell {
         checkMark.stateChangeAnimation = .bounce(.fill)
         checkMark.boxLineWidth = 3
         checkMark.addTarget(self, action: #selector(checkDidChange), for: UIControlEvents.valueChanged)
+        
     }
     
     func checkDidChange(checkMark: M13Checkbox) {

@@ -19,16 +19,7 @@ extension UIView {
             layer.cornerRadius = newValue
         }
     }
-    
-    @IBInspectable var masksToBounds: Bool {
-        get {
-            return layer.masksToBounds
-        }
-        
-        set {
-            layer.masksToBounds = newValue
-        }
-    }
+
 }
 
 extension String {

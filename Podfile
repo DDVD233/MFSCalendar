@@ -16,8 +16,6 @@ target 'MFSCalendar' do
     pod 'FSCalendar'
     pod 'LTMorphingLabel'
     pod 'SwiftyJSON'
-    pod 'HTMLLabel', '~> 1.1'
-    pod 'HTMLString'
     pod 'M13Checkbox'
     pod 'SwiftDate', '~> 4.0'
     pod 'DGElasticPullToRefresh'

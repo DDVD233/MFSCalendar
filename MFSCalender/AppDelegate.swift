@@ -23,7 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         FirebaseApp.configure()
         Fabric.with([Crashlytics.self])
-        MAThemeKit.setupTheme(withPrimaryColor: UIColor(hexString: 0xFF7E79), secondaryColor: UIColor.white, fontName: "System", lightStatusBar: true)
+//        MAThemeKit.setupTheme(withPrimaryColor: UIColor(hexString: 0xFF7E79), secondaryColor: UIColor.white, fontName: "System", lightStatusBar: true)
         return true
     }
 

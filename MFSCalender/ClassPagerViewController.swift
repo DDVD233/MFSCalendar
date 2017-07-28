@@ -42,8 +42,9 @@ class classPagerViewController: ButtonBarPagerTabStripViewController, UIDocument
     
     override func viewControllers(for pagerTabStripController: PagerTabStripViewController) -> [UIViewController] {
         let overviewViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "overview")
-        let topicViewCOntroller = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "topic")
-        return [overviewViewController, topicViewCOntroller]
+        let topicViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "topic")
+        let gradeViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "gradeViewController")
+        return [overviewViewController, topicViewController, gradeViewController]
     }
     
     func getTheClassToPresent() {

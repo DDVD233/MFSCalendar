@@ -67,7 +67,9 @@ class classTopicViewController: UIViewController {
         }
         
         self.getTopics(leadSectionIdInt: leadSectionIdInt)
-        self.topicsCollectionView.reloadData()
+        DispatchQueue.main.async {
+            self.topicsCollectionView.reloadData()
+        }
     }
     
     func getTopics(leadSectionIdInt: Int) {
@@ -168,8 +170,15 @@ extension classTopicViewController: UICollectionViewDelegate, UICollectionViewDa
         cell.topicTitle.text = topicObject["Name"] as? String ?? ""
         
         if let imageName = topicObject["ThumbFilename"] as? String {
-            let imageUrl = "https://bbk12e1-cdn.myschoolcdn.com/ftpimages/736/topics/" + imageName
-            cell.backgroundImage.sd_setImage(with: URL(string: imageUrl)!)
+            if !imageName.isEmpty {
+                cell.backgroundImage.isHidden = false
+                cell.darkCover.isHidden = false
+                let imageUrl = "https://bbk12e1-cdn.myschoolcdn.com/ftpimages/736/topics/" + imageName
+                cell.backgroundImage.sd_setImage(with: URL(string: imageUrl)!)
+            } else {
+                cell.backgroundImage.isHidden = true
+                cell.darkCover.isHidden = true
+            }
         }
         
         return cell
@@ -185,6 +194,7 @@ extension classTopicViewController: IndicatorInfoProvider {
 class classTopicsCell: UICollectionViewCell {
     @IBOutlet var backgroundImage: UIImageView!
     @IBOutlet var topicTitle: UILabel!
+    @IBOutlet var darkCover: UIView!
     
     override func awakeFromNib() {
         super.awakeFromNib()

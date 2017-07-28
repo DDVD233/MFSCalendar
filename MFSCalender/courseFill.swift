@@ -51,6 +51,7 @@ class courseFillController:UIViewController {
             fillSchedule()
         } else {
             self.dismiss(animated: true)
+            userDefaults?.set(true, forKey: "courseInitialized")
         }
         return true
     }
@@ -259,7 +260,11 @@ class courseFillController:UIViewController {
         
         let (_, _, userId) = loginAuthentication()
         
-        let urlString = "https://mfriends.myschoolapp.com/api/datadirect/ParentStudentUserAcademicGroupsGet?userId=\(userId)&schoolYearLabel=2016+-+2017&memberLevel=3&persona=2&durationList=73751"
+        guard let durationId = getDurationId() else {
+            return false
+        }
+        
+        let urlString = "https://mfriends.myschoolapp.com/api/datadirect/ParentStudentUserAcademicGroupsGet?userId=\(userId)&schoolYearLabel=2016+-+2017&memberLevel=3&persona=2&durationList=\(durationId)"
         
         let url = URL(string: urlString)
         var request = URLRequest(url: url!)
@@ -267,9 +272,12 @@ class courseFillController:UIViewController {
         
         let downloadTask = session.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
             if error == nil {
-                var courseData = JSON(data: data!).arrayObject
+                guard var courseData = JSON(data: data!).arrayObject else {
+                    semaphore.signal()
+                    return
+                }
                 
-                for (index, item) in courseData!.enumerated() {
+                for (index, item) in courseData.enumerated() {
                     var course = (item as! NSDictionary).mutableCopy() as! Dictionary<String, Any>
                     print(course)
                     course["className"] = course["sectionidentifier"] as? String
@@ -280,14 +288,14 @@ class courseFillController:UIViewController {
                             course[key] = ""
                         }
                     }
-                    courseData?[index] = course
+                    courseData[index] = course
                 }
                 
                 let coursePath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
                 let path = coursePath.appending("/CourseList.plist")
                 print(path)
                 
-                NSArray(array: courseData!).write(toFile: path, atomically: true)
+                NSArray(array: courseData).write(toFile: path, atomically: true)
                 success = true
             } else {
                 DispatchQueue.main.async {
@@ -307,6 +315,24 @@ class courseFillController:UIViewController {
         downloadTask.resume()
         semaphore.wait()
         return success
+    }
+    
+    func getDurationId() -> String? {
+        let session = URLSession.shared
+        let request = URLRequest(url: URL(string: "https://dwei.org/currentDurationId")!)
+        var strReturn: String? = nil
+        let semaphore = DispatchSemaphore.init(value: 0)
+        
+        let task = session.dataTask(with: request, completionHandler: { (data, _, error) -> Void in
+            if error == nil {
+                strReturn = String(data: data!, encoding: .utf8)
+            }
+            semaphore.signal()
+        })
+        
+        task.resume()
+        semaphore.wait()
+        return strReturn
     }
     
     func fillAdditionalInformarion() {
@@ -392,22 +418,17 @@ class courseFillController:UIViewController {
         
         for (index, items) in coursesObject.enumerated() {
             queue.async(group: group) {
-                guard let courses = items as? NSDictionary else {
+                guard let courses = items as? NSMutableDictionary else {
                     return
                 }
-                //            let block = courses["block"] as? String ?? ""
+                
                 let className = courses["className"] as? String
-                let teacherName = courses["teacherName"] as? String
-                let roomNumber = courses["roomNumber"] as? String
                 let lowPriority = courses["lowPriority"] as? Int ?? 0
+                
                 if lowPriority == fillLowPriority {
                     //                When the block is not empty
                     let semaphore = DispatchSemaphore.init(value: 0)
                     var courseCheckURL:String? = nil
-                    //                如果有block用查Block的方法，否则直接查课。
-                    //                if !block.isEmpty {
-                    //                courseCheckURL = "https://dwei.org/classmeettime/" + block
-                    //                } else {
                     var classId = courses["id"] as! String
                     classId = classId.replacingOccurrences(of: " ", with: "%20")
                     print(classId)
@@ -434,6 +455,7 @@ class courseFillController:UIViewController {
                                     guard !meetTime.isEmpty else {
                                         continue
                                     }
+                                    
                                     let day = meetTime[0,0]
                                     let period = meetTime[1,1]
                                     let fileName = "/Class" + day + ".plist"
@@ -449,12 +471,12 @@ class courseFillController:UIViewController {
                                         }
                                     }
                                     if writeFile {
-                                        let AddData = ["name": className, "period": period, "room": roomNumber, "teacherName": teacherName ?? ""]
+                                        courses["period"] = period
                                         //                          添加数据
-                                        classOfDay?.add(AddData)
+                                        classOfDay?.add(courses)
                                         classOfDay?.write(toFile: path, atomically: true)
                                     } else {
-                                        if ((className?.characters.count)! >= 10)  && (className?[0,9] == "Study Hall") {
+                                        if className!.characters.count >= 10  && className?[0,9] == "Study Hall" {
                                             removeIndex.insert(index)
                                         }
                                     }

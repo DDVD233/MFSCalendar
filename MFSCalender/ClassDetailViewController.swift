@@ -43,13 +43,13 @@ class classDetailViewController: UITableViewController, UIDocumentInteractionCon
     
     override func viewWillAppear(_ animated: Bool) {
         let loadingview = DGElasticPullToRefreshLoadingViewCircle()
-        loadingview.tintColor = UIColor(hexString: 0xFF7E79)
+        loadingview.tintColor = UIColor.white
         classDetailTable.dg_addPullToRefreshWithActionHandler({ [weak self] () -> Void in
             self?.handleBasicInformation(forceRefresh: true)
             //            self?.semaphore.wait()
             self?.tableView.dg_stopLoading()
             }, loadingView: loadingview)
-        classDetailTable.dg_setPullToRefreshFillColor(UIColor.white)
+        classDetailTable.dg_setPullToRefreshFillColor(UIColor(hexString: 0xFF7E79))
         classDetailTable.dg_setPullToRefreshBackgroundColor(tableView.backgroundColor!)
     }
     
@@ -407,9 +407,6 @@ class syllabusView: UITableViewCell {
         super.awakeFromNib()
         
 //        syllabusDescription.translatesAutoresizingMaskIntoConstraints = true
-        syllabusDescription.isScrollEnabled = false
-        syllabusDescription.isEditable = false
-        syllabusDescription.isSelectable = false
     }
     
     @IBAction func titleClicked(_ sender: Any) {

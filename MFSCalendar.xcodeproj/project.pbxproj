@@ -40,6 +40,7 @@
 		E4CE43991EAC36F3000D743B /* BlankDictionary.plist in Resources */ = {isa = PBXBuildFile; fileRef = E4CE43981EAC36F3000D743B /* BlankDictionary.plist */; };
 		E4CE439B1EAD0D51000D743B /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CE439A1EAD0D51000D743B /* LoginViewController.swift */; };
 		E4D3A1AE1E123D0200F709DC /* periodPicker.plist in Resources */ = {isa = PBXBuildFile; fileRef = E4D3A1AD1E123D0200F709DC /* periodPicker.plist */; };
+		E4E8B21A1F1C5AF200913DAE /* GradeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E8B2191F1C5AF200913DAE /* GradeViewController.swift */; };
 		E4EEFB131DF274EA00F199BE /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4EEFB121DF274EA00F199BE /* Images.xcassets */; };
 		E4F0B3751EAD1BE900C923A8 /* dayPicker.plist in Resources */ = {isa = PBXBuildFile; fileRef = E4F0B3741EAD1BE900C923A8 /* dayPicker.plist */; };
 		E4F86B311DF0E20C00CAD72B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F86B301DF0E20C00CAD72B /* AppDelegate.swift */; };
@@ -126,6 +127,7 @@
 		E4CE43981EAC36F3000D743B /* BlankDictionary.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = BlankDictionary.plist; sourceTree = "<group>"; };
 		E4CE439A1EAD0D51000D743B /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		E4D3A1AD1E123D0200F709DC /* periodPicker.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = periodPicker.plist; sourceTree = "<group>"; };
+		E4E8B2191F1C5AF200913DAE /* GradeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GradeViewController.swift; sourceTree = "<group>"; };
 		E4EEFB121DF274EA00F199BE /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		E4F0B3741EAD1BE900C923A8 /* dayPicker.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = dayPicker.plist; sourceTree = "<group>"; };
 		E4F86B2D1DF0E20C00CAD72B /* MFSCalendar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MFSCalendar.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -178,6 +180,7 @@
 				E4B340031F0891AE00D6039A /* ClassPagerViewController.swift */,
 				E472A1611EFB72EA00EF5A74 /* SettingViewController.swift */,
 				E472A1631EFB735C00EF5A74 /* ClassListViewController.swift */,
+				E4E8B2191F1C5AF200913DAE /* GradeViewController.swift */,
 			);
 			name = "More View";
 			sourceTree = "<group>";
@@ -495,6 +498,7 @@
 				E4B340041F0891AE00D6039A /* ClassPagerViewController.swift in Sources */,
 				E4CE439B1EAD0D51000D743B /* LoginViewController.swift in Sources */,
 				E4F86B331DF0E20C00CAD72B /* ViewController.swift in Sources */,
+				E4E8B21A1F1C5AF200913DAE /* GradeViewController.swift in Sources */,
 				E4B340061F08942000D6039A /* classTopicViewController.swift in Sources */,
 				E4ADC9EE1E882172002A46F7 /* Extensions.swift in Sources */,
 				E472A1601EFB6F8400EF5A74 /* ClassDetailViewController.swift in Sources */,
