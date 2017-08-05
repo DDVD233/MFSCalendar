@@ -11,7 +11,6 @@ import CoreData
 import Firebase
 import Fabric
 import Crashlytics
-import MAThemeKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {

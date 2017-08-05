@@ -27,6 +27,7 @@ target 'MFSCalendar' do
     pod 'Crashlytics'
     pod 'Alamofire', '~> 4.4'
     pod 'SDWebImage', '~>3.8'
-    pod 'MAThemeKit'
+    pod 'Moya'
+    pod 'IGListKit'
 end
 

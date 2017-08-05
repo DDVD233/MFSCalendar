@@ -1,4 +1,4 @@
-    //
+//
 //  ViewController.swift
 //  MFSCalender
 //
@@ -11,6 +11,7 @@ import SwiftMessages
 import UserNotifications
 import DZNEmptyDataSet
 import ReachabilitySwift
+import SwiftDate
 
 
 class customEventCellDashboard: UITableViewCell {
@@ -41,6 +42,10 @@ class classViewCell: UICollectionViewCell {
     
     @IBOutlet weak var roomNumber: UILabel!
     
+    @IBOutlet var homeworkView: UIView!
+    
+    @IBOutlet var homeworkButton: UIButton!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
     }
@@ -63,6 +68,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     var listEvents:NSMutableArray = []
     var listClasses:NSMutableArray = []
     var listHomework = [String: Array<Dictionary<String, Any?>>]()
+//    Format: {Lead_Section_ID: [Homework]}
     
     let reachability = Reachability()!
 
@@ -72,31 +78,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         self.bottomView.layer.shadowOpacity = 0.15
         self.bottomView.layer.shadowOffset = CGSize.zero
         self.bottomView.layer.shadowRadius = 15
-//        Could Crash?
-        if userDefaults?.bool(forKey: "dataInitialized") != true {
-            dataCheck(fileName: "ClassA", format: "array")
-            dataCheck(fileName: "ClassB", format: "array")
-            dataCheck(fileName: "ClassC", format: "array")
-            dataCheck(fileName: "ClassD", format: "array")
-            dataCheck(fileName: "ClassE", format: "array")
-            dataCheck(fileName: "ClassF", format: "array")
-            dataCheck(fileName: "Day", format: "dictionary")
-            dataCheck(fileName: "Events", format: "dictionary")
-            userDefaults?.set(true, forKey: "dataInitialized")
-        } else {
-            NSLog("Data already initialized")
-            if userDefaults?.object(forKey: "firstName") == nil {
-                userDefaults?.set(false, forKey: "didLogin")
-            }
-            if (userDefaults?.bool(forKey: "didLogin") == true) && (userDefaults?.bool(forKey: "courseInitialized") == true) {
-                eventDataFetching()
-                periodCheck(day: dayCheck())
-                NSLog("Already Logged in.")
-                setupTheHeader()
-            } else {
-                print("Not logged in")
-            }
-        }
+        
         self.classView.delegate = self
         self.classView.dataSource = self
         self.classView.emptyDataSetSource = self
@@ -105,38 +87,74 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         self.eventView.dataSource = self
         self.eventView.emptyDataSetDelegate = self
         self.eventView.emptyDataSetSource = self
+        self.eventView.separatorStyle = .singleLine
         
-        
+        if userDefaults?.object(forKey: "firstName") == nil {
+            userDefaults?.set(false, forKey: "didLogin")
+        }
+        if (userDefaults?.bool(forKey: "didLogin") == true) && (userDefaults?.bool(forKey: "courseInitialized") == true) {
+
+            DispatchQueue.global().async {
+                self.refreshDisplayedData()
+            }
+            
+            NSLog("Already Logged in.")
+        } else {
+            print("Cannot initialize data because the user did not logged in")
+        }
         // Do any additional setup after loading the view, typically from a nib.
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        if userDefaults?.bool(forKey: "didLogin") != true {
+        
+//        Added "== true" to prevent force unwrap.
+        guard userDefaults?.bool(forKey: "didLogin") == true else {
             let vc = self.storyboard?.instantiateViewController(withIdentifier: "ftController") as! firstTimeLaunchController
             self.present(vc, animated: true, completion: nil)
-        } else if userDefaults?.bool(forKey: "courseInitialized") != true {
+            return
+        }
+        
+        guard userDefaults?.bool(forKey: "didLogin") == true else {
             let vc = self.storyboard?.instantiateViewController(withIdentifier: "courseFillController")
             self.present(vc!, animated: true, completion: nil)
-        } else {
-            self.eventView.separatorStyle = .singleLine
-            eventDataFetching()
-            periodCheck(day: dayCheck())
-            NSLog("Already Logged in.")
-            setupTheHeader()
-            DispatchQueue.global().async {
-                if self.doRefreshData() {
-                    NSLog("Refresh Data")
-                    if self.refreshData() && self.refreshEvents() {
-                        let vc = self.storyboard?.instantiateViewController(withIdentifier: "courseFillController")
-                        self.present(vc!, animated: true, completion: nil)
-                        DispatchQueue.main.sync {
-                            self.setupTheHeader()
-                        }
-                    }
-                } else {
-                    NSLog("No refresh, version: %@", String(describing: userDefaults?.integer(forKey: "version")))
-                    self.downloadLargeProfilePhoto()
+            return
+        }
+        
+        refreshDisplayedData()
+        
+        DispatchQueue.global().async {
+            if self.doRefreshData() {
+                NSLog("Refresh Data")
+                
+//                When these two processes successfully finished.
+                if self.refreshData() && self.refreshEvents() {
+                    let vc = self.storyboard?.instantiateViewController(withIdentifier: "courseFillController")
+                    self.present(vc!, animated: true, completion: nil)
+                    self.refreshDisplayedData()
                 }
+            } else {
+                NSLog("No refresh, version: %@", String(describing: userDefaults?.integer(forKey: "version")))
+                self.downloadLargeProfilePhoto()
+            }
+        }
+    }
+    
+    func refreshDisplayedData() {
+        eventDataFetching()
+        periodCheck(day: dayCheck())
+        setupTheHeader()
+        
+        DispatchQueue.main.async {
+            self.classView.reloadData()
+            self.eventView.reloadData()
+        }
+        
+//        Put time-taking process here.
+        DispatchQueue.global().async {
+            self.getHomework()
+            
+            DispatchQueue.main.async {
+                self.classView.reloadData()
             }
         }
     }
@@ -144,42 +162,14 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     func downloadLargeProfilePhoto() {
         if reachability.isReachableViaWiFi && userDefaults?.bool(forKey: "didDownloadFullSizeImage") == false {
             if let largeFileLink = userDefaults?.string(forKey: "largePhotoLink") {
-                let urlString = "https://mfriends.myschoolapp.com" + largeFileLink
-                let url = URL(string: urlString)
-                //create request.
-                let request3 = URLRequest(url: url!)
-                
-                let config = URLSessionConfiguration.default
-                config.requestCachePolicy = .reloadIgnoringLocalCacheData
-                config.urlCache = nil
-                
-                let session = URLSession.init(configuration: config)
-                
-                let downloadTask = session.downloadTask(with: request3, completionHandler: { (location: URL?, response: URLResponse?, error: Error?) -> Void in
-                    if error == nil {
-                        //Temp location:
-                        print("location:\(String(describing: location))")
-                        let locationPath = location!.path
-                        //Copy to User Directory
-                        let photoPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-                        let path = photoPath.appending("/ProfilePhoto.png")
-                        //Init FileManager
-                        let fileManager = FileManager.default
-                        if fileManager.fileExists(atPath: path) {
-                            do {
-                                try fileManager.removeItem(atPath: path)
-                            } catch {
-                                NSLog("File does not exist! (Which is impossible)")
-                            }
-                        }
-                        try! fileManager.moveItem(atPath: locationPath, toPath: path)
-                        print("new location:\(path)")
+                provider.request(.downloadLargeProfilePhoto(link: largeFileLink), completion: { result in
+                    switch result {
+                    case .success(_):
                         userDefaults?.set(true, forKey: "didDownloadFullSizeImage")
-                    } else {
+                    case let .failure(error):
+                        NSLog("Failed downloading large profile photo because: \(error)")
                     }
                 })
-                //使用resume方法启动任务
-                downloadTask.resume()
             }
         }
     }
@@ -273,19 +263,20 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         let formatter = DateFormatter()
         formatter.dateFormat = "MMMM d, yyyy."
         let today = formatter.string(from: date as Date)
-        if day == "No School" {
-            dayLabel.text = "No school today,"
-        } else {
-            dayText = day + " Day"
-            dayLabel.text = "Today is " + dayText! + ","
+        DispatchQueue.main.async {
+            if day == "No School" {
+                self.dayLabel.text = "No school today,"
+            } else {
+                dayText = day + " Day"
+                self.dayLabel.text = "Today is " + dayText! + ","
+            }
+            self.welcomeLabel.text = "Welcome back, " + (userDefaults?.string(forKey: "firstName"))! + "!"
+            self.dateLabel.text = today
         }
-        welcomeLabel.text = "Welcome back, " + (userDefaults?.string(forKey: "firstName"))! + "!"
-        dateLabel.text = today
 
     }
 
     func periodCheck(day: String) {
-        print("Excuted")
 //        清空所有现存数据
         self.listClasses = []
         let plistPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
@@ -296,11 +287,9 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
             return
         }
         
-        let date = NSDate()
         let timeFormatter = DateFormatter()
         timeFormatter.dateFormat = "HHmm"
-        let Now = Int(timeFormatter.string(from: date as Date) as String)
-        print(date)
+        let Now = Int(timeFormatter.string(from: Date()))
         NSLog(String(describing: Now))
 
         let Period1Start = 800
@@ -347,7 +336,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
             NSLog("Period 8")
             currentClass = 8
         case Period8End..<3000:
-            NSLog("Have a great afternoon!")
+            NSLog("After School.")
             currentClass = 9
         default:
             NSLog("???")
@@ -358,7 +347,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
                 
 //                    Add Lunch period.
                 if number == 7 {
-                    let addData: NSDictionary = ["name": "Lunch", "roomNumber": "DH/C", "teacher": "", "period": "11"]
+                    let addData: NSDictionary = ["className": "Lunch", "roomNumber": "DH/C", "teacher": "", "period": "11"]
                     self.listClasses.add(addData)
                 }
                 
@@ -387,12 +376,11 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
             }
             
         }
-        
-        self.classView.reloadData()
-        print(listClasses)
     }
     
     func getHomework() {
+        self.listHomework = [String: Array<Dictionary<String, Any?>>]()
+        
         guard let username = userDefaults?.string(forKey: "username") else { return }
         var request = URLRequest(url: URL(string:"https://dwei.org/assignmentlist/")!)
         
@@ -402,17 +390,17 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         
         let session = URLSession.init(configuration: config)
         
-        if username != "testaccount" {
-            let (success, _, _) = loginAuthentication()
-            if success {
-                let formatter = DateFormatter()
-                formatter.locale = Locale(identifier: "en_US")
-                formatter.dateFormat = "M/d/yyyy"
-                let today = formatter.string(from: Date()).addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-                let url = "https://mfriends.myschoolapp.com/api/DataDirect/AssignmentCenterAssignments/?format=json&filter=2&dateStart=\(today)&dateEnd=\(today)&persona=2"
-                request.url = URL(string:url)
-            }
-        }
+//        if username != "testaccount" {
+//            let (success, _, _) = loginAuthentication()
+//            if success {
+//                let formatter = DateFormatter()
+//                formatter.locale = Locale(identifier: "en_US")
+//                formatter.dateFormat = "M/d/yyyy"
+//                let today = formatter.string(from: Date()).addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+//                let url = "https://mfriends.myschoolapp.com/api/DataDirect/AssignmentCenterAssignments/?format=json&filter=2&dateStart=\(today)&dateEnd=\(today)&persona=2"
+//                request.url = URL(string:url)
+//            }
+//        }
         
         
         let semaphore = DispatchSemaphore.init(value: 0)
@@ -420,12 +408,23 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
             if error == nil {
                 do {
                     if let json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? Array<Dictionary<String, Any?>> {
+                        let formatter = DateFormatter()
+                        formatter.dateFormat = "M/d/yyyy"
+                        let tomorrow = formatter.string(from: (Date() + 1.day))
                         for items in json {
-                            let leadSectionId = String(items["leadsectionid"] as! Int)
+//                            Temp
+                            var homework = items
+                            homework["date_due"] = tomorrow
+                            let dueDate = homework["date_due"] as? String
+                            guard dueDate?.range(of: tomorrow) != nil else {
+                                continue
+                            }
+                            
+                            let leadSectionId = String(homework["section_id"] as! Int)
                             if self.listHomework[leadSectionId] != nil {
-                                self.listHomework[leadSectionId]?.append(items)
+                                self.listHomework[leadSectionId]?.append(homework)
                             } else {
-                                self.listHomework[leadSectionId] = [items]
+                                self.listHomework[leadSectionId] = [homework]
                             }
                         }
                     }
@@ -440,33 +439,6 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         task.resume()
         semaphore.wait()
         
-        DispatchQueue.main.async {
-            self.classView.reloadData()
-        }
-    }
-
-
-    func dataCheck(fileName: String, format: String) {
-        let plistPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-        //let plistPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as String
-        let filePathName = "/" + fileName + ".plist"
-        let path = plistPath.appending(filePathName)
-        let fileManager = FileManager.default
-        var bundle: String? = nil
-        if (!(fileManager.fileExists(atPath: path))) {
-            if format == "array" {
-                bundle = Bundle.main.path(forResource: "BlankArray", ofType: "plist")!
-            } else {
-                bundle = Bundle.main.path(forResource: "BlankDictionary", ofType: "plist")!
-            }
-            NSLog("Creating File..." + fileName)
-            do {
-                try fileManager.copyItem(atPath: bundle!, toPath: path)
-            } catch {
-                NSLog("Error!")
-            }
-        }
-
     }
 
     func dayCheck() -> String {
@@ -519,15 +491,16 @@ extension Main: UICollectionViewDelegate, UICollectionViewDataSource, UICollecti
         let row = indexPath.row
         let classData = listClasses[row] as! NSDictionary
         let className = classData["className"] as? String
-        let roomNumber = classData["roomNumber"] as? String
         let teacher = classData["teacherName"] as? String
         
 //        It is impossible to be nil.
         let period = classData["period"] as! String
-        if !((roomNumber?.isEmpty)!) {
-            cell.roomNumber.text = "AT: " + roomNumber!
-        } else {
-            cell.roomNumber.text = nil
+        if let roomNumber = classData["roomNumber"] as? String {
+            if !roomNumber.isEmpty {
+                cell.roomNumber.text = "AT: " + roomNumber
+            } else {
+                cell.roomNumber.text = nil
+            }
         }
         cell.teacher.text = teacher
         cell.className.text = className
@@ -540,6 +513,32 @@ extension Main: UICollectionViewDelegate, UICollectionViewDataSource, UICollecti
         } else {
             cell.period.text = "PERIOD " + period
         }
+        
+        cell.homeworkView.isHidden = true
+        if let leadSectionId = classData["leadsectionid"] as? Int {
+            print(listHomework)
+            if let thisClassHomework = listHomework[String(leadSectionId)] {
+                cell.homeworkView.isHidden = false
+                
+                let numberOfHomework = thisClassHomework.count
+                
+                let numberOfCompletedHomework = thisClassHomework.filter({
+                    ($0["assignment_status"] as? Int) == 1
+                }).count
+                
+                let numberOfUncompletedHomework = numberOfHomework - numberOfCompletedHomework
+                
+                var homeworkButtonText = ""
+                if numberOfUncompletedHomework == 0 {
+                    homeworkButtonText = "All \(String(numberOfHomework)) HW were completed!"
+                } else {
+                    homeworkButtonText = "\(String(numberOfHomework)) were uncompleted"
+                }
+                
+                cell.homeworkButton.setTitle(homeworkButtonText, for: .normal)
+            }
+        }
+        
         return cell
     }
 }
@@ -555,8 +554,7 @@ extension Main: UITableViewDelegate, UITableViewDataSource {
         let date = NSDate()
         self.formatter.dateFormat = "yyyyMMdd"
         let eventDate = formatter.string(from: date as Date)
-        guard let events = eventData?[eventDate] as? NSMutableArray else {
-            self.eventView.reloadData()
+        guard let events = eventData?[eventDate] as? NSMutableArray else { 
             return
         }
         
@@ -587,7 +585,6 @@ extension Main: UITableViewDelegate, UITableViewDataSource {
         for items in sortedEvents {
             self.listEvents.add(items)
         }
-        self.eventView.reloadData()
     }
     
     //    the number of the cell
@@ -661,7 +658,6 @@ extension Main {
                     let plistPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
                     let path = plistPath.appending("/Day.plist")
                     resDict.write(toFile: path, atomically: true)
-                    print(resDict)
                     success = true
                     NSLog("Day Data refreshed.")
                 } catch {

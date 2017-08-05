@@ -86,7 +86,7 @@ class CalendarViewController: UIViewController, UIScrollViewDelegate, DZNEmptyDa
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.backButton.title = "Fold"
+        self.backButton.title = "Collapse"
         self.navigationItem.title = "Classes"
         self.view.addGestureRecognizer(self.scopeGesture)
         
@@ -123,7 +123,7 @@ class CalendarViewController: UIViewController, UIScrollViewDelegate, DZNEmptyDa
             self.backButton.title = "Expand"
             self.calendarView.setScope(.week, animated: true)
         } else {
-            self.backButton.title = "Fold"
+            self.backButton.title = "Collapse"
             self.calendarView.setScope(.month, animated: true)
         }
         
@@ -392,7 +392,7 @@ extension CalendarViewController: FSCalendarDelegate, FSCalendarDataSource {
     func calendar(_ calendar: FSCalendar, boundingRectWillChange bounds: CGRect, animated: Bool) {
         self.calendarHeightConstraint.constant = bounds.height
         if self.calendarView.scope == .month {
-            self.backButton.title = "Fold"
+            self.backButton.title = "Collapse"
         } else {
             self.backButton.title = "Expand"
         }

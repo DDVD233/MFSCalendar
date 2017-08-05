@@ -268,7 +268,6 @@ class courseFillController:UIViewController {
         
         let url = URL(string: urlString)
         var request = URLRequest(url: url!)
-        request.setValue("Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:52.0) Gecko/20100101 Firefox/52.0", forHTTPHeaderField: "User-Agent")
         
         let downloadTask = session.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
             if error == nil {
@@ -352,7 +351,7 @@ class courseFillController:UIViewController {
                 print(courseName)
                 let teacherName = course["teacherName"] as? String
                 print(teacherName ?? "")
-                var urlString = "https://dwei.org/course/getAdditionalInformation/\(courseName)/\(teacherName ?? "None")"
+                var urlString = "https://dwei.org/getAdditionalInformation/\(courseName)/\(teacherName ?? "None")"
                 urlString = urlString.replace(target: " ", withString: "+")
                 let semaphore = DispatchSemaphore.init(value: 0)
                 let url = URL(string: urlString)
