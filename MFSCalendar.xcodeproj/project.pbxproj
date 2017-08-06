@@ -251,6 +251,7 @@
 		E4F86B2F1DF0E20C00CAD72B /* MFSCalendar */ = {
 			isa = PBXGroup;
 			children = (
+				E4BD88951F35973C0000FEF3 /* PublicFunctions.swift */,
 				E4B340071F0905EB00D6039A /* GoogleService-Info.plist */,
 				E484E6541EFA33260056F2D5 /* Localizable.strings */,
 				E44484D71E13A105002C68D5 /* MFSCalender.entitlements */,
@@ -265,7 +266,6 @@
 				E440F1BB1EEA7F4E004AFD0B /* MoyaNetworkLayer.swift */,
 				E472A15E1EFB6F3C00EF5A74 /* More View */,
 				E4F86B341DF0E20C00CAD72B /* Main.storyboard */,
-				E4BD88951F35973C0000FEF3 /* PublicFunctions.swift */,
 				E4F86B3A1DF0E20C00CAD72B /* Assets.xcassets */,
 				E4EA9D7B1DF225FB0021A823 /* Images */,
 				E4F86B3F1DF0E20C00CAD72B /* Info.plist */,

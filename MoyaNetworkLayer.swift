@@ -80,6 +80,8 @@ extension MyService: TargetType {
         switch self {
         case .downloadLargeProfilePhoto:
             return .download(.request(downloadDestination))
+        case .getProfile:
+            return .request
         }
     }
 }

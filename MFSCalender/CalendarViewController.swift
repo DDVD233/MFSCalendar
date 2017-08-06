@@ -238,19 +238,7 @@ extension CalendarViewController: UITableViewDelegate, UITableViewDataSource {
             let path = plistPath.appending(fileName)
 
             self.listClasses = NSMutableArray(contentsOfFile: path)!
-            var i = 1
-            let sortedClass: NSMutableArray = []
-            for _ in 1...8 {
-                for items in self.listClasses {
-                    let dict = items as! NSDictionary
-                    let periodNumber = Int(dict["period"] as! String)!
-                    if (periodNumber == i) {
-                        sortedClass.add(dict)
-                    }
-                }
-                i += 1
-            }
-            self.listClasses = sortedClass
+            
             self.classView.reloadData(with: .automatic)
             self.classView.reloadData()
         }
@@ -297,35 +285,42 @@ extension CalendarViewController: UITableViewDelegate, UITableViewDataSource {
             
             let rowDict = self.listClasses[row] as! NSDictionary
             
-            cell?.ClassName.text = rowDict["name"] as? String
-            cell?.PeriodNumber.text = rowDict["period"] as? String
-            let inFormatter = DateFormatter()
-            inFormatter.dateFormat = "HH:mm"
-            let PeriodNumberInt = Int(rowDict["period"] as! String)!
+            cell?.ClassName.text = rowDict["className"] as? String
+            
             var meetTime:String? = nil
             
-            switch PeriodNumberInt {
-            case 1: meetTime = "8:00 - 8:43"
-            case 2: meetTime = "8:47 - 9:30"
-            case 3: meetTime = "9:34 - 10:34"
-            case 4: meetTime = "10:44 - 11:27"
-            case 5: meetTime = "11:31 - 12:14"
-            case 6: meetTime = "12:14 - 12:57"
-            case 7: meetTime = "13:40 - 14:23"
-            case 8: meetTime = "14:27 - 15: 10"
-            default: meetTime = "Error!"
+            if let period = rowDict["period"] as? Int {
+                cell?.PeriodNumber.text = String(describing: period)
+                
+                switch period {
+                case 1: meetTime = "8:00 - 8:43"
+                case 2: meetTime = "8:47 - 9:30"
+                case 3: meetTime = "9:34 - 10:34"
+                case 4: meetTime = "10:44 - 11:27"
+                case 5: meetTime = "11:31 - 12:14"
+                case 6: meetTime = "12:14 - 12:57"
+                case 7: meetTime = "13:40 - 14:23"
+                case 8: meetTime = "14:27 - 15: 10"
+                default: meetTime = "Error!"
+                }
             }
+            
             let teacherName = rowDict["teacherName"] as? String
             if teacherName != nil {
                 cell?.PeriodTime.text = meetTime! + "     Teacher: " + teacherName!
             } else {
                 cell?.PeriodTime.text = meetTime!
             }
-            if rowDict["room"] != nil {
-                cell?.RoomNumber.text = "Room " + (rowDict["room"] as! String)
+            if let roomNumber = rowDict["roomNumber"] as? String {
+                if !roomNumber.isEmpty {
+                    cell?.RoomNumber.text = "At: " + roomNumber
+                } else {
+                    cell?.RoomNumber.text = nil
+                }
             } else {
                 cell?.RoomNumber.text = nil
             }
+            
             return cell!
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "eventTable", for: indexPath as IndexPath) as? customEventCell

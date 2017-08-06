@@ -401,8 +401,8 @@ class courseFillController:UIViewController {
         let coursePath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
         let fileName = "/Class" + day + ".plist"
         let path = coursePath.appending(fileName)
-        let blankArray:NSArray = []
-        blankArray.write(toFile: path, atomically: true)
+        let blankArray = Array(repeating: [String: Any?](), count: 8)
+        NSArray(array: blankArray).write(toFile: path, atomically: true)
     }
     
     func createSchedule(fillLowPriority:Int) -> Bool {
@@ -416,12 +416,20 @@ class courseFillController:UIViewController {
         let queue = DispatchQueue.global()
         
         for (index, items) in coursesObject.enumerated() {
+            guard let courses = items as? NSMutableDictionary else {
+                continue
+            }
+            
+            guard let className = courses["className"] as? String else {
+                continue
+            }
+            
+            guard !className.contains("Break") else {
+                continue
+            }
+            
             queue.async(group: group) {
-                guard let courses = items as? NSMutableDictionary else {
-                    return
-                }
                 
-                let className = courses["className"] as? String
                 let lowPriority = courses["lowPriority"] as? Int ?? 0
                 
                 if lowPriority == fillLowPriority {
@@ -456,28 +464,21 @@ class courseFillController:UIViewController {
                                     }
                                     
                                     let day = meetTime[0,0]
-                                    let period = meetTime[1,1]
+                                    let period = Int(meetTime[1,1])! - 1
                                     let fileName = "/Class" + day + ".plist"
                                     let path = plistPath.appending(fileName)
+                                    
                                     let classOfDay = NSMutableArray(contentsOfFile: path)
-                                    var writeFile = true
-                                    if classOfDay != nil {
-                                        for items in classOfDay! {
-                                            let classes = items as! NSDictionary
-                                            if (classes["period"] as! String) == period {
-                                                writeFile = false
-                                            }
-                                        }
-                                    }
-                                    if writeFile {
-                                        courses["period"] = period
-                                        //                          添加数据
-                                        classOfDay?.add(courses)
+                                    
+                                    let classOfThePeriod = classOfDay?[period] as! NSDictionary
+                                    
+                                    if classOfThePeriod.count == 0 {
+                                        courses["period"] = period + 1
+                                        classOfDay?[period] = courses
                                         classOfDay?.write(toFile: path, atomically: true)
-                                    } else {
-                                        if className!.characters.count >= 10  && className?[0,9] == "Study Hall" {
-                                            removeIndex.insert(index)
-                                        }
+                                    } else if className.characters.count >= 10  && className[0,9] == "Study Hall" {
+//                                        It is possible that a study hall that the user doesn't take appear on the course list.
+                                        removeIndex.insert(index)
                                     }
                                 }
                                 success = true
@@ -508,10 +509,12 @@ class courseFillController:UIViewController {
         
         group.wait()
         
-        if fillLowPriority == 1 {
+        
+        if removeIndex.count != 0 {
             coursesObject.removeObjects(at: removeIndex)
             coursesObject.write(toFile: path, atomically: true)
         }
+        
         return success
     }
 //    Finish creating schedule

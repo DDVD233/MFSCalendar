@@ -66,7 +66,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     
     let formatter = DateFormatter()
     var listEvents:NSMutableArray = []
-    var listClasses:NSMutableArray = []
+    var listClasses = [[String: Any?]]()
     var listHomework = [String: Array<Dictionary<String, Any?>>]()
 //    Format: {Lead_Section_ID: [Homework]}
     
@@ -114,7 +114,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
             return
         }
         
-        guard userDefaults?.bool(forKey: "didLogin") == true else {
+        guard userDefaults?.bool(forKey: "courseInitialized") == true else {
             let vc = self.storyboard?.instantiateViewController(withIdentifier: "courseFillController")
             self.present(vc!, animated: true, completion: nil)
             return
@@ -283,98 +283,33 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         let fileName = "/Class" + day + ".plist"
         let path = plistPath.appending(fileName)
         
-        guard let allClasses = NSMutableArray(contentsOfFile: path) else {
+        guard var allClasses = NSArray(contentsOfFile: path) as? Array<Dictionary<String, Any?>> else {
             return
         }
         
         let timeFormatter = DateFormatter()
         timeFormatter.dateFormat = "HHmm"
-        let Now = Int(timeFormatter.string(from: Date()))
-        NSLog(String(describing: Now))
+        let now = Int(timeFormatter.string(from: Date()))
 
-        let Period1Start = 800
-        let Period2Start = 847
-        let Period3Start = 934
-        let Period4Start = 1044
-        let Period5Start = 1131
-        let Period6Start = 1214
-        let LunchStart   = 1300
-        let Period7Start = 1340
-        let Period8Start = 1427
-        let Period8End   = 1510
-        var currentClass: Int? = nil
-
-        switch Now! {
-        case 0..<Period1Start:
-            NSLog("Period 0")
-            currentClass = 0
-        case Period1Start..<Period2Start:
-            NSLog("Period 1")
-            currentClass = 1
-        case Period2Start..<Period3Start:
-            NSLog("Period 2")
-            currentClass = 2
-        case Period3Start..<Period4Start:
-            NSLog("Period 3")
-            currentClass = 3
-        case Period4Start..<Period5Start:
-            NSLog("Period 4")
-            currentClass = 4
-        case Period5Start..<Period6Start:
-            NSLog("Period 5")
-            currentClass = 5
-        case Period6Start..<LunchStart:
-            NSLog("Period 6")
-            currentClass = 6
-        case LunchStart..<Period7Start:
-            NSLog("Lunch")
-            currentClass = 11
-        case Period7Start..<Period8Start:
-            NSLog("Period 7")
-            currentClass = 7
-        case Period8Start..<Period8End:
-            NSLog("Period 8")
-            currentClass = 8
-        case Period8End..<3000:
-            NSLog("After School.")
-            currentClass = 9
-        default:
-            NSLog("???")
-        }
+        let currentClass = getCurrentPeriod(time: now!)
         
-        if currentClass! < 9 {
-            for number in currentClass!...8 {
-                
-//                    Add Lunch period.
-                if number == 7 {
-                    let addData: NSDictionary = ["className": "Lunch", "roomNumber": "DH/C", "teacher": "", "period": "11"]
-                    self.listClasses.add(addData)
-                }
-                
-                for items in allClasses {
-                    let rowDict = items as! NSDictionary
-                    let period = Int(rowDict["period"] as! String)
-                    if period == number {
-                        self.listClasses.add(rowDict)
-                    }
-                }
-            }
-        } else if currentClass == 11 {
-            let addData: NSDictionary = ["name": "Lunch", "roomNumber": "DH/C", "teacher": "", "period": "5"]
-            self.listClasses.add(addData)
+        let lunch = ["className": "Lunch", "roomNumber": "DH/C", "teacher": "", "period": "11"]
+        
+        switch currentClass {
+        case 1...8:
+            self.listClasses = Array(allClasses[(currentClass - 1)...7])
             
-            for number in 7...8 {
-                for items in allClasses {
-                    
-                    let rowDict = items as! NSDictionary
-                    let period = Int(rowDict["period"] as! String)
-                    if period == number {
-                        self.listClasses.add(rowDict)
-                    }
-                }
-                
+            if self.listClasses.count >= 2 { //Before lunch
+                self.listClasses.insert(lunch, at: 6-currentClass)
             }
+        case 11:
+            // At lunch
             
+            self.listClasses = Array(allClasses[6...7])
+            
+            self.listClasses.insert(lunch, at: 0)
+        default:
+            self.listClasses = []
         }
     }
     
@@ -489,7 +424,7 @@ extension Main: UICollectionViewDelegate, UICollectionViewDataSource, UICollecti
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "classViewCell", for: indexPath as IndexPath) as! classViewCell
         let row = indexPath.row
-        let classData = listClasses[row] as! NSDictionary
+        let classData = listClasses[row]
         let className = classData["className"] as? String
         let teacher = classData["teacherName"] as? String
         
