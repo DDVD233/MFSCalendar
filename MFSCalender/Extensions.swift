@@ -2,7 +2,7 @@
 //  UIView+O2CornerRadius.swift
 //  MFSCalender
 //
-//  Created by 戴元平 on 2017/3/26.
+//  Created by David Dai on 2017/3/26.
 //  Copyright © 2017年 David. All rights reserved.
 //
 

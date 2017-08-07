@@ -2,7 +2,7 @@
 //  A Day.swift
 //  MFSCalender
 //
-//  Created by 戴元平 on 2017/2/25.
+//  Created by David Dai on 2017/2/25.
 //  Copyright © 2017年 David. All rights reserved.
 //
 

@@ -2,7 +2,7 @@
 //  ViewController.swift
 //  MFSCalender
 //
-//  Created by 戴元平 on 2016/12/1.
+//  Created by David Dai on 2016/12/1.
 //  Copyright © 2016年 David. All rights reserved.
 //
 
@@ -467,7 +467,7 @@ extension Main: UICollectionViewDelegate, UICollectionViewDataSource, UICollecti
                 if numberOfUncompletedHomework == 0 {
                     homeworkButtonText = "All \(String(numberOfHomework)) HW were completed!"
                 } else {
-                    homeworkButtonText = "\(String(numberOfHomework)) were uncompleted"
+                    homeworkButtonText = "\(String(numberOfHomework)) uncompleted HW"
                 }
                 
                 cell.homeworkButton.setTitle(homeworkButtonText, for: .normal)
@@ -678,8 +678,6 @@ class ClassSchedule: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-
     }
 
     @IBAction func aDayButton(_ sender: Any) {

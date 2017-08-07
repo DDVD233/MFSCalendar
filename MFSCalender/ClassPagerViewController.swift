@@ -2,7 +2,7 @@
 //  ClassPagerViewController.swift
 //  MFSCalendar
 //
-//  Created by 戴元平 on 2017/7/2.
+//  Created by David Dai on 2017/7/2.
 //  Copyright © 2017年 David. All rights reserved.
 //
 

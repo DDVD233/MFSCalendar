@@ -46,7 +46,9 @@ class TodayViewController: UIViewController, NCWidgetProviding, UITableViewDeleg
         self.tableView.delegate = self
         self.tableView.dataSource = self
         
-        self.extensionContext?.widgetLargestAvailableDisplayMode = .expanded
+        if #available(iOSApplicationExtension 10.0, *) {
+            self.extensionContext?.widgetLargestAvailableDisplayMode = .expanded
+        }
         // Do any additional setup after loading the view, typically from a nib.
     }
     
@@ -228,6 +230,7 @@ class TodayViewController: UIViewController, NCWidgetProviding, UITableViewDeleg
     }
     
     
+    @available(iOSApplicationExtension 10.0, *)
     func widgetActiveDisplayModeDidChange(_ activeDisplayMode: NCWidgetDisplayMode, withMaximumSize maxSize: CGSize) {
         if activeDisplayMode == .compact {
             print("Change to compact")

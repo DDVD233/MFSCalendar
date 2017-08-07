@@ -2,7 +2,7 @@
 //  PublicFunctions.swift
 //  MFSCalendar
 //
-//  Created by 戴元平 on 2017/8/5.
+//  Created by David Dai on 2017/8/5.
 //  Copyright © 2017年 David. All rights reserved.
 //
 
@@ -148,6 +148,7 @@ public func presentErrorMessage(presentMessage: String) {
 protocol reusable {
     func getCurrentPeriod(time: Int) -> Int
 }
+
 func getCurrentPeriod(time: Int) -> Int {
     let Period1Start = 800
     let Period2Start = 847

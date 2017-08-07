@@ -2,7 +2,7 @@
 //  firstTimeLaunch.swift
 //  MFSCalendar
 //
-//  Created by 戴元平 on 2017/4/23.
+//  Created by David Dai on 2017/4/23.
 //  Copyright © 2017年 David. All rights reserved.
 //
 
@@ -68,7 +68,12 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
     override func viewDidAppear(_ animated: Bool) {
         let loginNotice = SCLAlertView()
         loginNotice.addButton("Go to myMFS website", action: {
-            UIApplication.shared.open(URL(string: "https://mfriends.myschoolapp.com/app/#login")!, options: [:], completionHandler: nil)
+            if #available(iOS 10.0, *) {
+                UIApplication.shared.open(URL(string: "https://mfriends.myschoolapp.com/app/#login")!, options: [:], completionHandler: nil)
+            } else {
+                UIApplication.shared.openURL(URL(string: "https://mfriends.myschoolapp.com/app/#login")!)
+                // Fallback on earlier versions
+            }
         })
         loginNotice.showInfo("Welcome", subTitle: "Welcome to MFS Calendar. Please use your myMFS account to log in.", animationStyle: .bottomToTop)
     }
@@ -134,7 +139,12 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
     
     func wrongPassword(button: UIButton!) {
         print("Password?")
-        UIApplication.shared.open(URL(string: "https://mfriends.myschoolapp.com/app/#login/request")!, options: [:], completionHandler: nil)
+        if #available(iOS 10.0, *) {
+            UIApplication.shared.open(URL(string: "https://mfriends.myschoolapp.com/app/#login/request")!, options: [:], completionHandler: nil)
+        } else {
+            // Fallback on earlier versions
+            UIApplication.shared.openURL(URL(string: "https://mfriends.myschoolapp.com/app/#login/request")!)
+        }
     }
     
     //When you click "Log in".
