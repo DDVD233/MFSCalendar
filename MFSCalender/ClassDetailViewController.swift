@@ -12,6 +12,7 @@ import SwiftMessages
 import SwiftyJSON
 import DGElasticPullToRefresh
 import Alamofire
+import M13ProgressSuite
 
 class classDetailViewController: UITableViewController, UIDocumentInteractionControllerDelegate {
     
@@ -53,6 +54,13 @@ class classDetailViewController: UITableViewController, UIDocumentInteractionCon
             }, loadingView: loadingview)
         classDetailTable.dg_setPullToRefreshFillColor(UIColor(hexString: 0xFF7E79))
         classDetailTable.dg_setPullToRefreshBackgroundColor(tableView.backgroundColor!)
+        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        DispatchQueue.global().async {
+            self.handleBasicInformation(forceRefresh: true)
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -88,6 +96,11 @@ class classDetailViewController: UITableViewController, UIDocumentInteractionCon
         
         if let sectionId = classObject?["leadsectionid"] as? Int {
             DispatchQueue.global().async {
+                DispatchQueue.main.async {
+                    self.navigationController?.showProgress()
+                    self.navigationController?.setIndeterminate(true)
+                }
+                
                 let path = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
                 let fileManager = FileManager.default
                 
@@ -123,8 +136,10 @@ class classDetailViewController: UITableViewController, UIDocumentInteractionCon
                 
                 DispatchQueue.main.async {
                     self.classDetailTable.reloadData(with: .automatic)
-                    semaphore.signal()
+                    self.navigationController?.cancelProgress()
                 }
+                
+                semaphore.signal()
             }
             
             semaphore.wait()
@@ -412,9 +427,14 @@ class syllabusView: UITableViewCell {
     }
     
     @IBAction func titleClicked(_ sender: Any) {
+        DispatchQueue.main.async {
+            self.parentViewController!.navigationController?.showProgress()
+            self.parentViewController!.navigationController?.setIndeterminate(true)
+        }
         
         guard !self.attachmentFileName!.isEmpty else {
             presentMessage(message: "There is no attachment.")
+            self.parentViewController!.navigationController?.cancelProgress()
             return
         }
         
@@ -431,6 +451,8 @@ class syllabusView: UITableViewCell {
         }
         
         guard !(attachmentQueryString?.isEmpty)! else {
+            presentMessage(message: "The attachment cannot be found.")
+            self.parentViewController!.navigationController?.cancelProgress()
             return
         }
         
@@ -453,10 +475,12 @@ class syllabusView: UITableViewCell {
 //            print(response)
             
             if response.error == nil {
+                
                 NSLog("Attempting to open file: \(self.attachmentFileName!)")
                 self.openFile(fileUrl: URL(fileURLWithPath: attachmentPath))
             } else {
                 DispatchQueue.main.async {
+                    self.parentViewController!.navigationController?.cancelProgress()
                     let message = response.error!.localizedDescription + " Please check your internet connection."
                     self.presentMessage(message: message)
                 }
@@ -467,9 +491,14 @@ class syllabusView: UITableViewCell {
     func openFile(fileUrl: URL) {
         let documentController = UIDocumentInteractionController.init(url: fileUrl)
         
+        
         documentController.delegate = parentViewController! as? UIDocumentInteractionControllerDelegate
         
-        documentController.presentPreview(animated: true)
+        DispatchQueue.main.async {
+            self.parentViewController!.navigationController?.cancelProgress()
+            documentController.presentPreview(animated: true)
+        }
+        
     }
     
     func presentMessage(message: String) {

@@ -38,9 +38,15 @@ class gradeViewController: UITableViewController {
     }
     
     func refreshView() {
+        DispatchQueue.main.async {
+            self.navigationController?.showProgress()
+            self.navigationController?.setIndeterminate(true)
+        }
+        
         cumGrade = Float(getcumGrade()) ?? 0
         
         DispatchQueue.main.async {
+            self.navigationController?.cancelProgress()
             let cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as! cumGradeCell
             cell.cumGradeProgressRing.setProgress(value: CGFloat(self.cumGrade), animationDuration: 1.0)
         }
