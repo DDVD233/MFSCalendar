@@ -6,5 +6,5 @@ With MFS Calendar you can:
 - Automatically fills your schedule.
 - Find all you need on Today view when you open the app.
 - Find & Mark your homework as completed on homework page.
-- Find your next class using Today widget without unlocking the screen.
+- Find your next class using Today widget without unlocking the phone.
 
