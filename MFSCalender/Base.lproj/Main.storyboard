@@ -934,13 +934,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Class Schedule" id="fhi-Y6-YrP">
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="PjH-nt-O8h">
-                            <connections>
-                                <segue destination="Nlv-vd-RNK" kind="presentation" id="lkL-A8-2ff"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="Class Schedule" id="fhi-Y6-YrP"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tfh-Lb-pgs" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -1061,13 +1055,7 @@
                         </constraints>
                     </view>
                     <toolbarItems/>
-                    <navigationItem key="navigationItem" title="A Day" id="bQk-s9-hqs">
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="DHN-DX-N8c">
-                            <connections>
-                                <segue destination="Nlv-vd-RNK" kind="presentation" id="GTk-Wf-2rE"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="A Day" id="bQk-s9-hqs"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="tableView" destination="ZNY-P5-9Jd" id="5HM-Ni-eG1"/>
@@ -2154,10 +2142,10 @@
             </objects>
             <point key="canvasLocation" x="7895.652173913044" y="1209.7826086956522"/>
         </scene>
-        <!--View Controller-->
+        <!--Topic Detail View Controller-->
         <scene sceneID="MYT-rh-4Xk">
             <objects>
-                <viewController id="oiM-Rv-hM3" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="topicDetailViewController" id="oiM-Rv-hM3" customClass="topicDetailViewController" customModule="MFSCalendar" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="8t9-Ie-fhA"/>
                         <viewControllerLayoutGuide type="bottom" id="Srm-Kg-I8Q"/>
@@ -2166,20 +2154,56 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="207" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="lix-a0-OIr">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="50" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="lix-a0-OIr">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="207" id="dpy-bA-0mZ">
-                                        <rect key="frame" x="0.0" y="28" width="375" height="207"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="descriptionCell" rowHeight="207" id="dpy-bA-0mZ">
+                                        <rect key="frame" x="0.0" y="55.5" width="375" height="207"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="dpy-bA-0mZ" id="d6D-aX-vzd">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="206.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="HHg-wk-BT3">
+                                                    <rect key="frame" x="8" y="8" width="359" height="190.5"/>
+                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                                </textView>
+                                            </subviews>
                                             <color key="backgroundColor" red="0.0" green="0.97680455450000003" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <constraints>
+                                                <constraint firstAttribute="trailingMargin" secondItem="HHg-wk-BT3" secondAttribute="trailing" id="Ggr-Mj-5xY"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="HHg-wk-BT3" secondAttribute="bottom" id="TtU-zX-lCB"/>
+                                                <constraint firstItem="HHg-wk-BT3" firstAttribute="top" secondItem="d6D-aX-vzd" secondAttribute="topMargin" id="X7F-sC-oJf"/>
+                                                <constraint firstItem="HHg-wk-BT3" firstAttribute="leading" secondItem="d6D-aX-vzd" secondAttribute="leadingMargin" id="xgm-d8-lXM"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="plainCell" textLabel="yIm-4N-XoN" rowHeight="50" style="IBUITableViewCellStyleDefault" id="iFd-tM-FRj">
+                                        <rect key="frame" x="0.0" y="262.5" width="375" height="50"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="iFd-tM-FRj" id="GCC-ha-oy8">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="49.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="yIm-4N-XoN">
+                                                    <rect key="frame" x="15" y="0.0" width="345" height="49.5"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                 </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="oiM-Rv-hM3" id="GhL-LE-UID"/>
+                                    <outlet property="delegate" destination="oiM-Rv-hM3" id="0ra-fO-IU9"/>
+                                </connections>
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -2521,7 +2545,7 @@
         <!--Navigation Controller-->
         <scene sceneID="1uP-z5-Pag">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Wod-VY-kcK" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="moreViewNavigationController" automaticallyAdjustsScrollViewInsets="NO" id="Wod-VY-kcK" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" systemItem="more" id="nHY-1U-imv"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="oQ5-0I-mSm">
@@ -2596,6 +2620,5 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="Iu6-v0-c6g"/>
-        <segue reference="GTk-Wf-2rE"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -2,7 +2,7 @@
 //  classTopicViewController.swift
 //  MFSCalendar
 //
-//  Created by 戴元平 on 2017/7/2.
+//  Created by David Dai on 2017/7/2.
 //  Copyright © 2017年 David. All rights reserved.
 //
 
@@ -14,6 +14,7 @@ import DGElasticPullToRefresh
 
 class classTopicViewController: UIViewController {
     @IBOutlet var topicsCollectionView: UICollectionView!
+    var pagerViewController: UIViewController? = nil
     
     var topicsList = [Dictionary<String, Any>]()
     
@@ -182,6 +183,22 @@ extension classTopicViewController: UICollectionViewDelegate, UICollectionViewDa
         }
         
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let topicObject = topicsList[indexPath.row]
+        
+        if let topicID = topicObject["TopicID"] as? Int {
+            userDefaults?.set(topicID, forKey: "topicID")
+        }
+        
+        if let topicIndexID = topicObject["TopicIndexID"] as? Int {
+            userDefaults?.set(topicIndexID, forKey: "topicIndexID")
+        }
+        
+        if let topicDetailViewController = storyboard?.instantiateViewController(withIdentifier: "topicDetailViewController") {
+            navigationController?.show(topicDetailViewController, sender: self)
+        }
     }
 }
 

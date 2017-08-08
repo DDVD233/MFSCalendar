@@ -39,6 +39,7 @@
 		E4B3400A1F0905F400D6039A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E4B340091F0905F400D6039A /* GoogleService-Info.plist */; };
 		E4BD88961F35973C0000FEF3 /* PublicFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BD88951F35973C0000FEF3 /* PublicFunctions.swift */; };
 		E4BD88981F383A060000FEF3 /* ClassTimetableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BD88971F383A060000FEF3 /* ClassTimetableViewController.swift */; };
+		E4BD889A1F397BE80000FEF3 /* TopicDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BD88991F397BE80000FEF3 /* TopicDetailViewController.swift */; };
 		E4C46A2E1ED50CD3007F8F1A /* CourseFillViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C46A2D1ED50CD3007F8F1A /* CourseFillViewController.swift */; };
 		E4CE43991EAC36F3000D743B /* BlankDictionary.plist in Resources */ = {isa = PBXBuildFile; fileRef = E4CE43981EAC36F3000D743B /* BlankDictionary.plist */; };
 		E4CE439B1EAD0D51000D743B /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CE439A1EAD0D51000D743B /* LoginViewController.swift */; };
@@ -129,6 +130,7 @@
 		E4B340091F0905F400D6039A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		E4BD88951F35973C0000FEF3 /* PublicFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PublicFunctions.swift; sourceTree = "<group>"; };
 		E4BD88971F383A060000FEF3 /* ClassTimetableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClassTimetableViewController.swift; sourceTree = "<group>"; };
+		E4BD88991F397BE80000FEF3 /* TopicDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopicDetailViewController.swift; sourceTree = "<group>"; };
 		E4C46A2D1ED50CD3007F8F1A /* CourseFillViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CourseFillViewController.swift; sourceTree = "<group>"; };
 		E4CE43981EAC36F3000D743B /* BlankDictionary.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = BlankDictionary.plist; sourceTree = "<group>"; };
 		E4CE439A1EAD0D51000D743B /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -180,6 +182,9 @@
 		E472A15E1EFB6F3C00EF5A74 /* More View */ = {
 			isa = PBXGroup;
 			children = (
+				E4BD88991F397BE80000FEF3 /* TopicDetailViewController.swift */,
+				E48D4DEF1E61F275008B0A97 /* ADayViewController.swift */,
+				E4BD88971F383A060000FEF3 /* ClassTimetableViewController.swift */,
 				E4B340051F08942000D6039A /* ClassTopicViewController.swift */,
 				E445E73D1EAD8B7D00794560 /* MoreViewController.swift */,
 				E472A15F1EFB6F8400EF5A74 /* ClassDetailViewController.swift */,
@@ -259,10 +264,8 @@
 				E44484D71E13A105002C68D5 /* MFSCalender.entitlements */,
 				E4F86B301DF0E20C00CAD72B /* AppDelegate.swift */,
 				E4F86B321DF0E20C00CAD72B /* MainViewController.swift */,
-				E4BD88971F383A060000FEF3 /* ClassTimetableViewController.swift */,
 				E4C46A2D1ED50CD3007F8F1A /* CourseFillViewController.swift */,
 				E4CE439A1EAD0D51000D743B /* LoginViewController.swift */,
-				E48D4DEF1E61F275008B0A97 /* ADayViewController.swift */,
 				E453F0D01EA137D900BCE58D /* CalendarViewController.swift */,
 				E4ADC9ED1E882172002A46F7 /* Extensions.swift */,
 				E4F8D4E31EF0DD2200F47525 /* HomeworkViewController.swift */,
@@ -504,6 +507,7 @@
 				E472A1641EFB735C00EF5A74 /* ClassListViewController.swift in Sources */,
 				E4F86B391DF0E20C00CAD72B /* MFSCalender.xcdatamodeld in Sources */,
 				E48D4DF01E61F275008B0A97 /* ADayViewController.swift in Sources */,
+				E4BD889A1F397BE80000FEF3 /* TopicDetailViewController.swift in Sources */,
 				E4B340041F0891AE00D6039A /* ClassPagerViewController.swift in Sources */,
 				E4CE439B1EAD0D51000D743B /* LoginViewController.swift in Sources */,
 				E4F86B331DF0E20C00CAD72B /* MainViewController.swift in Sources */,

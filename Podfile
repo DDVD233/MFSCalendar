@@ -28,6 +28,7 @@ target 'MFSCalendar' do
     pod 'Alamofire', '~> 4.4'
     pod 'SDWebImage', '~>3.8'
     pod 'Moya'
-    pod 'IGListKit'
+    # pod 'IGListKit'
+    pod 'M13ProgressSuite'
 end
 

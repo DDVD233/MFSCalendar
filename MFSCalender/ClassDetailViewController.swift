@@ -32,12 +32,14 @@ class classDetailViewController: UITableViewController, UIDocumentInteractionCon
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        DispatchQueue.global().async(execute: {
+        DispatchQueue.global().async {
             self.getTheClassToPresent()
             self.handleBasicInformation(forceRefresh: false)
-        })
-        
-        classDetailTable.reloadData()
+            
+            DispatchQueue.main.async {
+                self.classDetailTable.reloadData()
+            }
+        }
         
     }
     
