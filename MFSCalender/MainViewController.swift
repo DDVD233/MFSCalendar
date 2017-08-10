@@ -34,6 +34,8 @@ class customEventCellDashboard: UITableViewCell {
 }
 
 class classViewCell: UICollectionViewCell {
+    var index = 0
+    
     @IBOutlet weak var period: UILabel!
     
     @IBOutlet weak var className: UILabel!
@@ -45,6 +47,16 @@ class classViewCell: UICollectionViewCell {
     @IBOutlet var homeworkView: UIView!
     
     @IBOutlet var homeworkButton: UIButton!
+    
+    @IBOutlet var classViewButton: UIButton!
+    
+    @IBAction func classViewButtonClicked(_ sender: Any) {
+        userDefaults?.set(index, forKey: "indexForCourseToPresent")
+        let classDetailViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "classDetailViewController")
+        if parentViewController != nil {
+            parentViewController!.present(classDetailViewController, animated: true)
+        }
+    }
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -325,17 +337,17 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         
         let session = URLSession.init(configuration: config)
         
-//        if username != "testaccount" {
-//            let (success, _, _) = loginAuthentication()
-//            if success {
-//                let formatter = DateFormatter()
-//                formatter.locale = Locale(identifier: "en_US")
-//                formatter.dateFormat = "M/d/yyyy"
-//                let today = formatter.string(from: Date()).addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-//                let url = "https://mfriends.myschoolapp.com/api/DataDirect/AssignmentCenterAssignments/?format=json&filter=2&dateStart=\(today)&dateEnd=\(today)&persona=2"
-//                request.url = URL(string:url)
-//            }
-//        }
+        if username != "testaccount" {
+            let (success, _, _) = loginAuthentication()
+            if success {
+                let formatter = DateFormatter()
+                formatter.locale = Locale(identifier: "en_US")
+                formatter.dateFormat = "M/d/yyyy"
+                let today = formatter.string(from: Date()).addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+                let url = "https://mfriends.myschoolapp.com/api/DataDirect/AssignmentCenterAssignments/?format=json&filter=2&dateStart=\(today)&dateEnd=\(today)&persona=2"
+                request.url = URL(string:url)
+            }
+        }
         
         
         let semaphore = DispatchSemaphore.init(value: 0)
@@ -405,6 +417,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
 
 }
 
+//Class view.
 extension Main: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
@@ -528,44 +541,46 @@ extension Main: UITableViewDelegate, UITableViewDataSource {
     }
     
     
-    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-            let cell = tableView.dequeueReusableCell(withIdentifier: "eventTableDash", for: indexPath as IndexPath) as? customEventCellDashboard
-            let row = indexPath.row
-            let rowDict = self.listEvents[row] as! NSDictionary
-            let summary = rowDict["summary"] as? String
-            cell?.ClassName.text = summary
+        let cell = tableView.dequeueReusableCell(withIdentifier: "eventTableDash", for: indexPath as IndexPath) as? customEventCellDashboard
+        let row = indexPath.row
+        let rowDict = self.listEvents[row] as! NSDictionary
+        let summary = rowDict["summary"] as? String
+        cell?.ClassName.text = summary
 //        截取第一个字母作为cell左侧的字母
-            let letter = summary?.substring(to: (summary?.index(after: (summary?.startIndex)!))!)
-            cell?.PeriodNumber.text = letter!
-            if rowDict["location"] != nil {
-                cell?.RoomNumber.text = "At: " + (rowDict["location"] as! String)
+        let letter = summary?.substring(to: (summary?.index(after: (summary?.startIndex)!))!)
+        cell?.PeriodNumber.text = letter!
+    
+        if rowDict["location"] != nil {
+            cell?.RoomNumber.text = "At: " + (rowDict["location"] as! String)
+        } else {
+            cell?.RoomNumber.text = nil
+        }
+    
+        if (rowDict["isAllDay"] as! Int) == 1 {
+            cell?.PeriodTime.text = "All Day"
+        } else {
+            let tEnd = String(describing:(rowDict["tEnd"] as! Int))
+            if (rowDict["tEnd"] as! Int) > 99999 {
+                self.formatter.dateFormat = "HHmmss"
             } else {
-                cell?.RoomNumber.text = nil
+                self.formatter.dateFormat = "Hmmss"
             }
-            if (rowDict["isAllDay"] as! Int) == 1 {
-                cell?.PeriodTime.text = "All Day"
+            let timeEnd = formatter.date(from: tEnd)
+            let tStart = String(describing:(rowDict["tStart"] as! Int))
+            if (rowDict["tStart"] as! Int) > 99999 {
+                self.formatter.dateFormat = "HHmmss"
             } else {
-                let tEnd = String(describing:(rowDict["tEnd"] as! Int))
-                if (rowDict["tEnd"] as! Int) > 99999 {
-                    self.formatter.dateFormat = "HHmmss"
-                } else {
-                    self.formatter.dateFormat = "Hmmss"
-                }
-                let timeEnd = formatter.date(from: tEnd)
-                let tStart = String(describing:(rowDict["tStart"] as! Int))
-                if (rowDict["tStart"] as! Int) > 99999 {
-                    self.formatter.dateFormat = "HHmmss"
-                } else {
-                    self.formatter.dateFormat = "Hmmss"
-                }
-                let timeStart = formatter.date(from: tStart)
-                self.formatter.dateFormat = "h:mm a"
-                let startString = formatter.string(from: timeStart!)
-                let endString = formatter.string(from: timeEnd!)
-                cell?.PeriodTime.text = startString + " - " + endString
+                self.formatter.dateFormat = "Hmmss"
             }
-            return cell!
+            let timeStart = formatter.date(from: tStart)
+            self.formatter.dateFormat = "h:mm a"
+            let startString = formatter.string(from: timeStart!)
+            let endString = formatter.string(from: timeEnd!)
+            cell?.PeriodTime.text = startString + " - " + endString
+        }
+        return cell!
 //        }
     }
 }

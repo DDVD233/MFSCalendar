@@ -36,9 +36,8 @@ class classListController:UIViewController {
         majorClasslist = [NSDictionary]()
         minorClassList = [NSDictionary]()
         
-        for (index, items) in classList.enumerated() {
+        for items in classList {
             let classObject = items as! NSMutableDictionary
-            classObject["index"] = index
             var isMinorClass = false
             
             guard let className = classObject["className"] as? String else {

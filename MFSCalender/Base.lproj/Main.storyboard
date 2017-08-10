@@ -709,16 +709,26 @@
                                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
+                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8Wk-gW-WdH">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="169" height="113"/>
+                                                                    <state key="normal" title=" "/>
+                                                                    <connections>
+                                                                        <action selector="classViewButtonClicked:" destination="QqS-YB-yDB" eventType="touchUpInside" id="b6o-Bd-MlO"/>
+                                                                    </connections>
+                                                                </button>
                                                             </subviews>
                                                             <color key="backgroundColor" red="1" green="0.40000000600000002" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
                                                             <constraints>
                                                                 <constraint firstItem="2Kt-U5-vXr" firstAttribute="leading" secondItem="9Fo-fi-YE8" secondAttribute="leading" id="1Xc-fe-Ddg"/>
+                                                                <constraint firstAttribute="trailing" secondItem="8Wk-gW-WdH" secondAttribute="trailing" id="59x-T0-TEO"/>
                                                                 <constraint firstAttribute="trailing" secondItem="l4m-jp-B4s" secondAttribute="trailing" constant="8" id="8ag-L7-k6D"/>
                                                                 <constraint firstItem="2Kt-U5-vXr" firstAttribute="top" secondItem="9Fo-fi-YE8" secondAttribute="top" id="8oa-h0-ioH"/>
                                                                 <constraint firstAttribute="width" secondItem="9Fo-fi-YE8" secondAttribute="height" multiplier="169:113" id="8t2-rU-5tQ"/>
                                                                 <constraint firstItem="JNj-nw-gIh" firstAttribute="top" secondItem="uqj-Bb-Yyn" secondAttribute="bottom" id="Dds-ym-VwD"/>
+                                                                <constraint firstItem="8Wk-gW-WdH" firstAttribute="leading" secondItem="9Fo-fi-YE8" secondAttribute="leading" id="EKx-Zg-l4A"/>
                                                                 <constraint firstAttribute="trailing" secondItem="JNj-nw-gIh" secondAttribute="trailing" constant="5" id="EZC-Ue-AYP"/>
                                                                 <constraint firstAttribute="trailing" secondItem="uqj-Bb-Yyn" secondAttribute="trailing" constant="8" id="Ksg-sZ-F7T"/>
+                                                                <constraint firstItem="8Wk-gW-WdH" firstAttribute="top" secondItem="9Fo-fi-YE8" secondAttribute="top" id="NgY-Hf-mkn"/>
                                                                 <constraint firstItem="L1A-eY-tem" firstAttribute="leading" secondItem="9Fo-fi-YE8" secondAttribute="leading" constant="10" id="OIg-pG-oHR"/>
                                                                 <constraint firstItem="2Kt-U5-vXr" firstAttribute="centerY" secondItem="L1A-eY-tem" secondAttribute="centerY" id="QqS-GS-WEK"/>
                                                                 <constraint firstItem="uqj-Bb-Yyn" firstAttribute="top" secondItem="L1A-eY-tem" secondAttribute="bottom" constant="3" id="YJH-sw-bYl"/>
@@ -728,6 +738,7 @@
                                                                 <constraint firstAttribute="trailing" secondItem="2Kt-U5-vXr" secondAttribute="trailing" id="cVA-u3-YlK"/>
                                                                 <constraint firstItem="L1A-eY-tem" firstAttribute="top" secondItem="l4m-jp-B4s" secondAttribute="top" id="diY-EK-1dU"/>
                                                                 <constraint firstAttribute="bottom" secondItem="JNj-nw-gIh" secondAttribute="bottom" constant="2" id="pHE-m6-BUU"/>
+                                                                <constraint firstAttribute="bottom" secondItem="8Wk-gW-WdH" secondAttribute="bottom" id="sCv-ki-aJ8"/>
                                                                 <constraint firstItem="uqj-Bb-Yyn" firstAttribute="top" secondItem="2Kt-U5-vXr" secondAttribute="bottom" id="shT-2w-aSH"/>
                                                             </constraints>
                                                             <userDefinedRuntimeAttributes>
@@ -748,6 +759,7 @@
                                                 </constraints>
                                                 <connections>
                                                     <outlet property="className" destination="uqj-Bb-Yyn" id="656-yC-Va9"/>
+                                                    <outlet property="classViewButton" destination="8Wk-gW-WdH" id="QZ9-5K-fvk"/>
                                                     <outlet property="homeworkButton" destination="2as-Md-liJ" id="WyA-am-Jtj"/>
                                                     <outlet property="homeworkView" destination="WOl-gq-AAR" id="Cc5-zr-FPF"/>
                                                     <outlet property="period" destination="L1A-eY-tem" id="0Bt-d3-uyp"/>

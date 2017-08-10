@@ -29,6 +29,7 @@ class courseFillController:UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        trace?.start()
         progressView.font = UIFont.systemFont(ofSize: 40)
     }
     
@@ -37,7 +38,6 @@ class courseFillController:UIViewController {
         formatter.dateFormat = "yyyyMMdd"
         let date = formatter.string(from: Date())
         userDefaults?.set(date, forKey: "refreshDate")
-        trace?.start()
         if importCourses() {
             NSLog("All Done!")
         }
@@ -94,6 +94,8 @@ class courseFillController:UIViewController {
             }
         }
     }
+    
+    
     
     
 //    func getCourse() -> Bool {
@@ -394,7 +396,16 @@ class courseFillController:UIViewController {
         }
         
         group.wait()
+        
+        filledIndex(array: &filledCourse)
         NSArray(array: filledCourse).write(toFile: path, atomically: true)
+    }
+    
+    func filledIndex( array: inout Array<NSMutableDictionary>) {
+        for (index, item) in array.enumerated() {
+            item["index"] = index
+            array[index] = item
+        }
     }
     
     func clearData(day:String) {

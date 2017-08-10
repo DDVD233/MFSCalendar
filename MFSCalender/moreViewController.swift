@@ -2,7 +2,7 @@
 //  moreViewController.swift
 //  MFSCalendar
 //
-//  Created by 戴元平 on 2017/4/23.
+//  Created by David Dai on 2017/4/23.
 //  Copyright © 2017年 David. All rights reserved.
 //
 
@@ -23,9 +23,15 @@ class moreViewController: UITableViewController {
         let path = photoPath.appending("/ProfilePhoto.png")
         profilePhoto.image = UIImage(contentsOfFile: path)
         profilePhoto.contentMode = UIViewContentMode.scaleAspectFill
-        let lastName = userDefaults?.string(forKey: "lastName")
-        let firstName = userDefaults?.string(forKey: "firstName")
-        name.text = firstName! + " " + lastName!
+        
+        name.text = ""
+        if let firstName = userDefaults?.string(forKey: "firstName") {
+            name.text?.append(firstName + " ")
+        }
+        
+        if let lastName = userDefaults?.string(forKey: "lastName") {
+            name.text?.append(lastName)
+        }
     }
 
 }
@@ -81,16 +87,3 @@ class aboutView:UITableViewController, MFMailComposeViewControllerDelegate {
         controller.dismiss(animated: true, completion: nil)
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

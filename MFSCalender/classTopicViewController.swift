@@ -15,6 +15,7 @@ import DGElasticPullToRefresh
 class classTopicViewController: UIViewController {
     @IBOutlet var topicsCollectionView: UICollectionView!
     var pagerViewController: UIViewController? = nil
+    var leadSectionIdInt = 0
     
     var topicsList = [Dictionary<String, Any>]()
     
@@ -24,12 +25,12 @@ class classTopicViewController: UIViewController {
         topicsCollectionView.dataSource = self
         
         DispatchQueue.global().async {
-            let leadSectionIdInt = self.getTheClassToPresent()
+            self.leadSectionIdInt = self.getTheClassToPresent()
             
             let fileManager = FileManager.default
             
             let path = fileManager.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-            let topicPath = path.appending("/topics_\(String(leadSectionIdInt)).plist")
+            let topicPath = path.appending("/topics_\(String(self.leadSectionIdInt)).plist")
             
             if fileManager.fileExists(atPath: topicPath) {
                 if let dataFromFile = NSArray(contentsOfFile: topicPath) as? Array<Dictionary<String, Any>> {
@@ -40,8 +41,6 @@ class classTopicViewController: UIViewController {
                     return
                 }
             }
-            
-            self.refreshTopics(leadSectionIdInt: leadSectionIdInt)
         }
     }
     
@@ -56,6 +55,10 @@ class classTopicViewController: UIViewController {
             }, loadingView: loadingview)
         topicsCollectionView.dg_setPullToRefreshFillColor(UIColor(hexString: 0xFF7E79))
         topicsCollectionView.dg_setPullToRefreshBackgroundColor(topicsCollectionView.backgroundColor!)
+        
+        DispatchQueue.global().async {
+            self.refreshTopics(leadSectionIdInt: self.leadSectionIdInt)
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -67,9 +70,14 @@ class classTopicViewController: UIViewController {
             return
         }
         
+        DispatchQueue.main.async {
+            self.navigationController?.showProgress()
+        }
+        
         self.getTopics(leadSectionIdInt: leadSectionIdInt)
         DispatchQueue.main.async {
             self.topicsCollectionView.reloadData()
+            self.navigationController?.cancelProgress()
         }
     }
     

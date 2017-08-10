@@ -244,7 +244,7 @@ extension classDetailViewController {
             syllabusCell.layoutIfNeeded()
 
             syllabusCell.selectionStyle = .none
-            syllabusCell.parentViewController = self
+            //syllabusCell.parentViewController = self
             
             return syllabusCell
         default:
@@ -418,7 +418,6 @@ class syllabusView: UITableViewCell {
     @IBOutlet var syllabusDescription: UITextView!
     var attachmentQueryString: String? = nil
     var attachmentFileName: String? = nil
-    var parentViewController: UIViewController? = nil
     
     override func awakeFromNib() {
         super.awakeFromNib()
