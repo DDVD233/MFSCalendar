@@ -1216,10 +1216,10 @@
             </objects>
             <point key="canvasLocation" x="7168.115942028986" y="-771.19565217391312"/>
         </scene>
-        <!--TimeTable-->
+        <!--Calender-->
         <scene sceneID="8hJ-ls-6yL">
             <objects>
-                <viewController id="QUz-Th-8ul" customClass="CalendarViewController" customModule="MFSCalendar" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="QUz-Th-8ul" userLabel="Calender" customClass="CalendarViewController" customModule="MFSCalendar" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="E1w-9L-wQ7"/>
                         <viewControllerLayoutGuide type="bottom" id="Omy-wF-ACe"/>
@@ -1233,18 +1233,6 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <gestureRecognizers/>
                             </scrollView>
-                            <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="2" translatesAutoresizingMaskIntoConstraints="NO" id="829-3P-fmL">
-                                <rect key="frame" x="168" y="517" width="39" height="37"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="37" id="8GK-nT-dl1"/>
-                                    <constraint firstAttribute="width" constant="39" id="F9S-v1-M8J"/>
-                                </constraints>
-                                <color key="pageIndicatorTintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                <color key="currentPageIndicatorTintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                <connections>
-                                    <action selector="changePage:" destination="QUz-Th-8ul" eventType="valueChanged" id="8TM-aV-frQ"/>
-                                </connections>
-                            </pageControl>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Rj8-l0-2iy" customClass="FSCalendar">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="343"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1269,6 +1257,13 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </view>
+                            <pageControl hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="2" translatesAutoresizingMaskIntoConstraints="NO" id="OIu-gb-RIU">
+                                <rect key="frame" x="168" y="546" width="39" height="37"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="37" id="5kP-zs-aWw"/>
+                                    <constraint firstAttribute="width" constant="39" id="Ef8-MK-rCB"/>
+                                </constraints>
+                            </pageControl>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <gestureRecognizers/>
@@ -1276,11 +1271,11 @@
                             <constraint firstAttribute="trailing" secondItem="3nJ-HW-HKL" secondAttribute="trailing" id="057-Db-HwU"/>
                             <constraint firstItem="3nJ-HW-HKL" firstAttribute="top" secondItem="Rj8-l0-2iy" secondAttribute="bottom" id="700-W1-DER"/>
                             <constraint firstItem="Rj8-l0-2iy" firstAttribute="leading" secondItem="BtL-VQ-het" secondAttribute="leading" id="BOS-5n-THC"/>
-                            <constraint firstItem="Omy-wF-ACe" firstAttribute="top" secondItem="829-3P-fmL" secondAttribute="bottom" id="LoX-e1-iAF"/>
                             <constraint firstItem="Rj8-l0-2iy" firstAttribute="top" secondItem="E1w-9L-wQ7" secondAttribute="bottom" id="Qgr-jD-N0n"/>
-                            <constraint firstItem="829-3P-fmL" firstAttribute="centerX" secondItem="BtL-VQ-het" secondAttribute="centerX" id="Sx3-9X-vNX"/>
                             <constraint firstItem="3nJ-HW-HKL" firstAttribute="leading" secondItem="BtL-VQ-het" secondAttribute="leading" id="fM4-Ew-ha6"/>
+                            <constraint firstItem="OIu-gb-RIU" firstAttribute="centerX" secondItem="BtL-VQ-het" secondAttribute="centerX" id="hU4-gu-EfN"/>
                             <constraint firstItem="Omy-wF-ACe" firstAttribute="top" secondItem="3nJ-HW-HKL" secondAttribute="bottom" id="kXh-P3-umx"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="OIu-gb-RIU" secondAttribute="bottom" constant="20" id="ql1-D6-v1b"/>
                             <constraint firstAttribute="trailing" secondItem="Rj8-l0-2iy" secondAttribute="trailing" id="tXf-TI-X60"/>
                         </constraints>
                     </view>
@@ -1305,7 +1300,7 @@
                         <outlet property="calendarView" destination="Rj8-l0-2iy" id="upA-TS-Fdg"/>
                         <outlet property="classView" destination="lSD-Ah-jUH" id="FqX-uX-2Aq"/>
                         <outlet property="eventView" destination="uy9-OK-bFC" id="QYz-4k-2Yq"/>
-                        <outlet property="pageControl" destination="829-3P-fmL" id="VMC-fh-jix"/>
+                        <outlet property="pageControl" destination="OIu-gb-RIU" id="vCJ-7B-orI"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="k5C-IO-qBZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1388,6 +1383,12 @@
                             </connections>
                         </tableViewCell>
                     </prototypes>
+                    <connections>
+                        <outlet property="dataSource" destination="QUz-Th-8ul" id="wRb-s3-kXv"/>
+                        <outlet property="delegate" destination="QUz-Th-8ul" id="wml-4B-k78"/>
+                        <outlet property="emptyDataSetDelegate" destination="QUz-Th-8ul" id="nY2-28-ovc"/>
+                        <outlet property="emptyDataSetSource" destination="QUz-Th-8ul" id="kAs-69-cq5"/>
+                    </connections>
                 </tableView>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="80" sectionHeaderHeight="1" sectionFooterHeight="1" id="uy9-OK-bFC">
                     <rect key="frame" x="0.0" y="0.0" width="414" height="348"/>
@@ -1468,6 +1469,12 @@
                             </connections>
                         </tableViewCell>
                     </prototypes>
+                    <connections>
+                        <outlet property="dataSource" destination="QUz-Th-8ul" id="18N-9b-IHG"/>
+                        <outlet property="delegate" destination="QUz-Th-8ul" id="z7l-a6-Pd8"/>
+                        <outlet property="emptyDataSetDelegate" destination="QUz-Th-8ul" id="JBh-Wd-1hO"/>
+                        <outlet property="emptyDataSetSource" destination="QUz-Th-8ul" id="Vaa-f4-hsj"/>
+                    </connections>
                 </tableView>
             </objects>
             <point key="canvasLocation" x="2742.0289855072465" y="959.51086956521749"/>

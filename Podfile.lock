@@ -50,6 +50,7 @@ PODS:
     - SDWebImage/Core (= 3.8.2)
   - SDWebImage/Core (3.8.2)
   - SkyFloatingLabelTextField (3.1.0)
+  - SnapKit (3.2.0)
   - SwiftDate (4.1.2)
   - SwiftMessages (3.4.0)
   - SwiftyJSON (3.1.4)
@@ -74,6 +75,7 @@ DEPENDENCIES:
   - SCLAlertView
   - SDWebImage (~> 3.8)
   - SkyFloatingLabelTextField
+  - SnapKit
   - SwiftDate (~> 4.0)
   - SwiftMessages
   - SwiftyJSON
@@ -105,12 +107,13 @@ SPEC CHECKSUMS:
   SCLAlertView: 8a14ffc40590c619e183eed2298b854385f30be1
   SDWebImage: 098e97e6176540799c27e804c96653ee0833d13c
   SkyFloatingLabelTextField: 26a92ad407044dd5a7c3e4e348738ff0991514fe
+  SnapKit: 1ca44df72cfa543218d177cb8aab029d10d86ea7
   SwiftDate: 2dfdebd4f67ae71c9c3e2413ee3c56947f302858
   SwiftMessages: e20aa1557fde1525ea369361bec4943cc0d08e7c
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
   UICircularProgressRing: 99419d03525be7b4ad29c0021e0fbb7d913b0030
   XLPagerTabStrip: 9be80a66c6b7d60306b2c0a6004965016d68f813
 
-PODFILE CHECKSUM: 66a3a19b346e6f8499cd1270e1291ba88f45444f
+PODFILE CHECKSUM: 3047005ccbcfc5b79dd3ced9e4d378b554a9e473
 
 COCOAPODS: 1.2.0

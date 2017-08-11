@@ -30,5 +30,6 @@ target 'MFSCalendar' do
     pod 'Moya'
     # pod 'IGListKit'
     pod 'M13ProgressSuite'
+    pod 'SnapKit'
 end
 

@@ -10,6 +10,7 @@ import UIKit
 import DZNEmptyDataSet
 import FSCalendar
 import Crashlytics
+import SnapKit
 
 class customCalendarCell: UITableViewCell {
 
@@ -94,8 +95,10 @@ class CalendarViewController: UIViewController, UIScrollViewDelegate, DZNEmptyDa
         self.eventView.panGestureRecognizer.require(toFail: self.scopeGesture)
         
         self.bottomScrollView.contentSize = CGSize(width: self.view.frame.size.width * 2, height: self.bottomScrollView.frame.size.height)
+        
         self.classView.frame = CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: self.bottomScrollView.frame.size.height)
         self.bottomScrollView.addSubview(classView)
+        
         self.eventView.frame = CGRect(x: self.view.frame.size.width, y: 0, width: self.view.frame.size.width, height: self.bottomScrollView.frame.size.height)
         self.bottomScrollView.addSubview(eventView)
         
@@ -113,9 +116,6 @@ class CalendarViewController: UIViewController, UIScrollViewDelegate, DZNEmptyDa
         self.calendarView.delegate = self
         self.calendarView.dataSource = self
         self.bottomScrollView.delegate = self
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
     }
     
     @IBAction func expandButton(_ sender: Any) {
