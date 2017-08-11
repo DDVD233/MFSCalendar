@@ -227,6 +227,7 @@ extension CalendarViewController: UITableViewDelegate, UITableViewDataSource {
         if let checkDate = self.calendarView.selectedDates.first {
             self.dayOfSchool = self.checkDate(checkDate: checkDate)
         }
+        
         if (self.dayOfSchool == "No School") || (self.dayOfSchool == nil) {
             self.listClasses = []
             self.classView.reloadData(with: .automatic)

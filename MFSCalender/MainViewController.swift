@@ -119,7 +119,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     
     override func viewDidAppear(_ animated: Bool) {
         
-//        Added "== true" to prevent force unwrap.
+//        Add "== true" to prevent force unwrap.
         guard userDefaults?.bool(forKey: "didLogin") == true else {
             let vc = self.storyboard?.instantiateViewController(withIdentifier: "ftController") as! firstTimeLaunchController
             self.present(vc, animated: true, completion: nil)
@@ -271,7 +271,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     func setupTheHeader() {
         let day = dayCheck()
         var dayText: String? = nil
-        let date = NSDate()
+        let date = Date()
         let formatter = DateFormatter()
         formatter.dateFormat = "MMMM d, yyyy."
         let today = formatter.string(from: date as Date)
@@ -289,19 +289,20 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     }
 
     func periodCheck(day: String) {
-//        清空所有现存数据
+//        Clear all existing data
         self.listClasses = []
         let plistPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
         let fileName = "/Class" + day + ".plist"
         let path = plistPath.appending(fileName)
         
+        let timeFormatter = DateFormatter()
+        timeFormatter.dateFormat = "HHmm"
+        
+        let now = Int(timeFormatter.string(from: Date()))
+        
         guard var allClasses = NSArray(contentsOfFile: path) as? Array<Dictionary<String, Any?>> else {
             return
         }
-        
-        let timeFormatter = DateFormatter()
-        timeFormatter.dateFormat = "HHmm"
-        let now = Int(timeFormatter.string(from: Date()))
 
         let currentClass = getCurrentPeriod(time: now!)
         

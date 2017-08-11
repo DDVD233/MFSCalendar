@@ -13,6 +13,7 @@ import M13Checkbox
 import SwiftDate
 import DZNEmptyDataSet
 import DGElasticPullToRefresh
+import M13ProgressSuite
 
 
 class homeworkViewController: UITableViewController {
@@ -77,8 +78,10 @@ class homeworkViewController: UITableViewController {
     func getHomework() {
         isUpdatingHomework = true
         DispatchQueue.main.async {
+            self.navigationController?.showProgress()
             self.tableView.reloadData()
         }
+        
         guard let username = userDefaults?.string(forKey: "username") else { return }
         var request = URLRequest(url: URL(string:"https://dwei.org/assignmentlist/")!)
         
@@ -89,8 +92,7 @@ class homeworkViewController: UITableViewController {
         let session = URLSession.init(configuration: config)
         
         if username != "testaccount" {
-            let (success, _, _) = loginAuthentication()
-            if success {
+            if loginAuthentication().success {
                 let formatter = DateFormatter()
                 formatter.locale = Locale(identifier: "en_US")
                 formatter.dateFormat = "M/d/yyyy"
@@ -128,7 +130,10 @@ class homeworkViewController: UITableViewController {
         task.resume()
         semaphore.wait()
         manageDate(originalData: originalData)
+        
         DispatchQueue.main.async {
+            self.isUpdatingHomework = false
+            self.navigationController?.cancelProgress()
             self.tableView.reloadData()
         }
     }
