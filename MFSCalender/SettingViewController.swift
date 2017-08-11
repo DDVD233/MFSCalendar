@@ -10,10 +10,8 @@ import UIKit
 
 class settingViewController: UITableViewController, UIActionSheetDelegate {
     
-    @IBOutlet var themeColorLabel: UILabel!
-    
     override func viewWillAppear(_ animated: Bool) {
-        themeColorLabel.text = userDefaults?.string(forKey: "themeColor") ?? "Salmon"
+//        themeColorLabel.text = userDefaults?.string(forKey: "themeColor") ?? "Salmon"
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
