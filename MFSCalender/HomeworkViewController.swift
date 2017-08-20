@@ -36,6 +36,7 @@ class homeworkViewController: UITableViewController {
         homeworkTable.rowHeight = UITableViewAutomaticDimension
         homeworkTable.estimatedRowHeight = 80
         homeworkTable.emptyDataSetSource = self
+        homeworkTable.emptyDataSetDelegate = self
         
 //        Remove the bottom 1px line on Navigation Bar
         self.navigationController?.navigationBar.barTintColor = UIColor(hexString: 0xFF7E79)
@@ -79,6 +80,9 @@ class homeworkViewController: UITableViewController {
         isUpdatingHomework = true
         DispatchQueue.main.async {
             self.navigationController?.showProgress()
+            self.navigationController?.setPrimaryColor(UIColor(hexString: 0xFF7E79))
+            self.navigationController?.setSecondaryColor(UIColor.white)
+            self.navigationController?.setIndeterminate(true)
             self.tableView.reloadData()
         }
         
@@ -91,7 +95,7 @@ class homeworkViewController: UITableViewController {
         
         let session = URLSession.init(configuration: config)
         
-        if username != "testaccount" {
+        if username == "testaccount" {
             if loginAuthentication().success {
                 let formatter = DateFormatter()
                 formatter.locale = Locale(identifier: "en_US")
@@ -187,6 +191,15 @@ class homeworkViewController: UITableViewController {
         }
     }
     
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if let indexPath = tableView.indexPathsForVisibleRows?.first {
+            let header = tableView.headerView(forSection: indexPath.section)
+            if let headerTitle = header?.textLabel?.text {
+                self.navigationItem.title = headerTitle
+            }
+        }
+    }
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "homeworkViewCell", for: indexPath) as! homeworkViewCell
         
@@ -265,6 +278,24 @@ extension homeworkViewController: DZNEmptyDataSetSource {
             str = "Updating homework..."
         }
         return NSAttributedString(string: str, attributes: attr)
+    }
+    
+    func buttonTitle(forEmptyDataSet scrollView: UIScrollView!, for state: UIControlState) -> NSAttributedString! {
+        if isUpdatingHomework {
+            return NSAttributedString()
+        }
+        
+        let buttonTitleString = NSAttributedString(string: "Refresh...", attributes: [NSForegroundColorAttributeName: UIColor(hexString: 0xFF7E79)])
+        
+        return buttonTitleString
+    }
+}
+
+extension homeworkViewController: DZNEmptyDataSetDelegate {
+    func emptyDataSet(_ scrollView: UIScrollView!, didTap button: UIButton!) {
+        DispatchQueue.global().async {
+            self.getHomework()
+        }
     }
 }
 

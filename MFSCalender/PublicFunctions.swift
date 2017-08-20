@@ -204,3 +204,11 @@ func getCurrentPeriod(time: Int) -> Int {
     return currentClass!
 }
 
+//func removeNill(array: inout Array) {
+//    for items in array {
+//        if items == nil {
+//            array
+//        }
+//    }
+//}
+

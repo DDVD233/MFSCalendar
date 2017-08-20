@@ -96,15 +96,6 @@ class CalendarViewController: UIViewController, UIScrollViewDelegate, DZNEmptyDa
         
         self.bottomScrollView.contentSize = CGSize(width: self.view.frame.size.width * 2, height: self.bottomScrollView.frame.size.height)
         
-        self.classView.frame = CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: self.bottomScrollView.frame.size.height)
-        self.bottomScrollView.addSubview(classView)
-        
-        self.eventView.frame = CGRect(x: self.view.frame.size.width, y: 0, width: self.view.frame.size.width, height: self.bottomScrollView.frame.size.height)
-        self.bottomScrollView.addSubview(eventView)
-        
-        self.calendarView.select(Date())
-        dataFetching()
-        eventDataFetching()
         self.classView.delegate = self
         self.classView.dataSource = self
         self.classView.emptyDataSetSource = self
@@ -116,6 +107,18 @@ class CalendarViewController: UIViewController, UIScrollViewDelegate, DZNEmptyDa
         self.calendarView.delegate = self
         self.calendarView.dataSource = self
         self.bottomScrollView.delegate = self
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        self.classView.frame = CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: self.bottomScrollView.frame.size.height)
+        self.bottomScrollView.addSubview(classView)
+        
+        self.eventView.frame = CGRect(x: self.view.frame.size.width, y: 0, width: self.view.frame.size.width, height: self.bottomScrollView.frame.size.height)
+        self.bottomScrollView.addSubview(eventView)
+        
+        self.calendarView.select(Date())
+        dataFetching()
+        eventDataFetching()
     }
     
     @IBAction func expandButton(_ sender: Any) {

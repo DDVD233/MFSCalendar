@@ -13,6 +13,7 @@ import SwiftyJSON
 import DGElasticPullToRefresh
 import Alamofire
 import M13ProgressSuite
+import SnapKit
 
 class classDetailViewController: UITableViewController, UIDocumentInteractionControllerDelegate {
     
@@ -219,7 +220,7 @@ extension classDetailViewController {
                     "<style>" +
                     "body {" +
                     "font-family: 'Helvetica';" +
-                    "font-size:17px;" +
+                    "font-size:15px;" +
                     "text-decoration:none;" +
                     "}" +
                     "</style>" +
@@ -240,9 +241,22 @@ extension classDetailViewController {
             syllabusCell.attachmentFileName = syllabusItem["Attachment"] as? String ?? ""
             
             syllabusCell.title.setTitle(syllabusItem["ShortDescription"] as? String ?? "", for: .normal)
-            syllabusCell.syllabusDescription.sizeToFit()
-            syllabusCell.layoutIfNeeded()
-
+            
+            syllabusCell.syllabusDescription.isScrollEnabled = true
+            
+            if syllabusCell.syllabusDescription.contentSize.height >= 200 {
+                syllabusCell.syllabusDescription.snp.makeConstraints({ (make) in
+                    syllabusCell.heightConstrant = make.height.equalTo(200).constraint
+                })
+                
+                syllabusCell.showMoreView.isHidden = false
+            } else {
+                syllabusCell.showMoreView.isHidden = true
+                syllabusCell.sizeToFit()
+            }
+            
+            syllabusCell.syllabusDescription.isScrollEnabled = false
+            
             syllabusCell.selectionStyle = .none
             //syllabusCell.parentViewController = self
             
@@ -418,12 +432,27 @@ class syllabusView: UITableViewCell {
     @IBOutlet var syllabusDescription: UITextView!
     var attachmentQueryString: String? = nil
     var attachmentFileName: String? = nil
+    var heightConstrant: Constraint? = nil
+    
+    @IBOutlet var showMoreView: UIView!
+    
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        
-//        syllabusDescription.translatesAutoresizingMaskIntoConstraints = true
     }
+    
+    @IBAction func showMoreButtonClicked(_ sender: Any) {
+        let thisParentViewController = parentViewController as? classDetailViewController
+        DispatchQueue.main.async {
+            thisParentViewController?.tableView.beginUpdates()
+            self.heightConstrant?.deactivate()
+            self.syllabusDescription.sizeToFit()
+            self.showMoreView.isHidden = true
+            self.layoutIfNeeded()
+            thisParentViewController?.tableView.endUpdates()
+        }
+    }
+    
     
     @IBAction func titleClicked(_ sender: Any) {
         DispatchQueue.main.async {

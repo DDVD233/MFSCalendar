@@ -31,5 +31,6 @@ target 'MFSCalendar' do
     # pod 'IGListKit'
     pod 'M13ProgressSuite'
     pod 'SnapKit'
+    pod "JBWebViewController"
 end
 

@@ -269,7 +269,7 @@ class courseFillController:UIViewController {
         let urlString = "https://mfriends.myschoolapp.com/api/datadirect/ParentStudentUserAcademicGroupsGet?userId=\(userId)&schoolYearLabel=2016+-+2017&memberLevel=3&persona=2&durationList=\(durationId)"
         
         let url = URL(string: urlString)
-        var request = URLRequest(url: url!)
+        let request = URLRequest(url: url!)
         
         let downloadTask = session.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
             if error == nil {

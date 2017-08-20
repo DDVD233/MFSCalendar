@@ -72,6 +72,7 @@ class classTopicViewController: UIViewController {
         
         DispatchQueue.main.async {
             self.navigationController?.showProgress()
+            self.navigationController?.setIndeterminate(true)
         }
         
         self.getTopics(leadSectionIdInt: leadSectionIdInt)
@@ -196,11 +197,8 @@ extension classTopicViewController: UICollectionViewDelegate, UICollectionViewDa
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let topicObject = topicsList[indexPath.row]
         
-        if let topicID = topicObject["TopicID"] as? Int {
+        if let topicID = topicObject["TopicID"] as? Int, let topicIndexID = topicObject["TopicIndexID"] as? Int {
             userDefaults?.set(topicID, forKey: "topicID")
-        }
-        
-        if let topicIndexID = topicObject["TopicIndexID"] as? Int {
             userDefaults?.set(topicIndexID, forKey: "topicIndexID")
         }
         

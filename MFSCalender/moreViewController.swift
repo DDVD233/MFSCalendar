@@ -9,6 +9,7 @@
 import UIKit
 import UserNotifications
 import MessageUI
+import JBWebViewController
 
 class moreViewController: UITableViewController {
     
@@ -34,6 +35,21 @@ class moreViewController: UITableViewController {
         }
     }
 
+}
+
+extension moreViewController {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if indexPath.section == 1 && indexPath.row == 2 {
+            let webViewController = JBWebViewController()
+            var request = URLRequest(url: URL(string:"https://mfriends.myschoolapp.com/app/student#resourceboard")!)
+            let (success, token, _) = loginAuthentication()
+            guard success else { return }
+            request.setValue("t=\(token)", forHTTPHeaderField: "Cookie")
+            request.httpShouldHandleCookies = true
+            webViewController.load(request)
+            webViewController.show()
+        }
+    }
 }
 
 
