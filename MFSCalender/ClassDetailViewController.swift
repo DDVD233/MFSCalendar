@@ -36,11 +36,7 @@ class classDetailViewController: UITableViewController, UIDocumentInteractionCon
         super.viewDidLoad()
         DispatchQueue.global().async {
             self.getTheClassToPresent()
-            self.handleBasicInformation(forceRefresh: false)
-            
-            DispatchQueue.main.async {
-                self.classDetailTable.reloadData()
-            }
+            self.loadContent()
         }
         
     }
@@ -49,7 +45,7 @@ class classDetailViewController: UITableViewController, UIDocumentInteractionCon
         let loadingview = DGElasticPullToRefreshLoadingViewCircle()
         loadingview.tintColor = UIColor.white
         classDetailTable.dg_addPullToRefreshWithActionHandler({ [weak self] () -> Void in
-            self?.handleBasicInformation(forceRefresh: true)
+            self?.refreshContent()
             //            self?.semaphore.wait()
             self?.tableView.dg_stopLoading()
             }, loadingView: loadingview)
@@ -60,7 +56,7 @@ class classDetailViewController: UITableViewController, UIDocumentInteractionCon
     
     override func viewDidAppear(_ animated: Bool) {
         DispatchQueue.global().async {
-            self.handleBasicInformation(forceRefresh: true)
+            self.refreshContent()
         }
     }
     
@@ -84,66 +80,82 @@ class classDetailViewController: UITableViewController, UIDocumentInteractionCon
         print(classObject as Any!)
     }
     
-    func handleBasicInformation(forceRefresh: Bool) {
-        let semaphore = DispatchSemaphore.init(value: 0)
-        
-        roomNumber.text = classObject?["roomNumber"] as? String ?? ""
-        teacherName.text = classObject?["teacherName"] as? String ?? ""
-        
+    func loadContent() {
         if (!teacherName.text!.isEmpty || !roomNumber.text!.isEmpty) && !avaliableInformation.contains("Basic") {
-//            其中一个不为空,且目前还没有这一项时
+            //            其中一个不为空,且目前还没有这一项时
             avaliableInformation.append("Basic")
         }
         
         if let sectionId = classObject?["leadsectionid"] as? Int {
-            DispatchQueue.global().async {
-                DispatchQueue.main.async {
-                    self.navigationController?.showProgress()
-                    self.navigationController?.setIndeterminate(true)
-                }
-                
-                let path = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-                let fileManager = FileManager.default
-                
-                let syllabusPath = path.appending("/\(sectionId)_syllabus.plist")
-
-                if !fileManager.fileExists(atPath: syllabusPath) || forceRefresh {
-                    //            If a syllabus cannot be found or force refresh.
-                    self.getSyllabus(sectionId: String(sectionId))
-                }
-                
+            let path = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
+            let fileManager = FileManager.default
+            
+            let syllabusPath = path.appending("/\(sectionId)_syllabus.plist")
+            
+            if fileManager.fileExists(atPath: syllabusPath) {
                 self.syllabusList = NSArray(contentsOfFile: syllabusPath) as! [NSDictionary]
-                if self.syllabusList.count > 0 && !self.avaliableInformation.contains("Syllabus") {
-                    
-                    self.avaliableInformation.append("Syllabus")
-                    DispatchQueue.main.async {
-                        self.classDetailTable.reloadData()
-                    }
-                } else {
-                    DispatchQueue.main.async {
-                        self.classDetailTable.reloadData(with: .automatic)
-                    }
-                }
-                
-                let photoPath = path.appending("/\(sectionId)_profile.png")
-                //Init FileManager
-                if !fileManager.fileExists(atPath: photoPath) || forceRefresh {
-                    //            If a profile photo cannot be found.
-                    let photoLink = self.getProfilePhotoLink(sectionId: String(sectionId))
-                    if !photoLink.isEmpty {
-                        self.getProfilePhoto(photoLink: photoLink, sectionId: String(sectionId))
-                    }
-                }
-                
-                DispatchQueue.main.async {
-                    self.classDetailTable.reloadData(with: .automatic)
-                    self.navigationController?.cancelProgress()
-                }
-                
-                semaphore.signal()
             }
             
-            semaphore.wait()
+            if self.syllabusList.count > 0 && !self.avaliableInformation.contains("Syllabus") {
+                
+                self.avaliableInformation.append("Syllabus")
+            }
+        }
+        
+        DispatchQueue.main.async {
+            self.classDetailTable.reloadData()
+        }
+    }
+    
+    func refreshContent() {
+        
+        roomNumber.text = classObject?["roomNumber"] as? String ?? ""
+        teacherName.text = classObject?["teacherName"] as? String ?? ""
+        
+        if let sectionId = classObject?["leadsectionid"] as? Int {
+            DispatchQueue.main.async {
+                self.navigationController?.showProgress()
+                self.navigationController?.setIndeterminate(true)
+                UIApplication.shared.isNetworkActivityIndicatorVisible = true
+            }
+            
+            let sectionIdString = String(describing: sectionId)
+            
+            provider.request(.getPossibleContent(sectionId: sectionIdString), completion: {
+                (result) in
+                switch result {
+                case let .success(response):
+                    do {
+                        guard let json = try JSONSerialization.jsonObject(with: response.data, options: .allowFragments) as? Array<Dictionary<String, Any?>> else {
+                            presentErrorMessage(presentMessage: "Internal error: Incorrect data format", layout: .StatusLine)
+                            return
+                        }
+                        
+                    } catch {
+                        presentErrorMessage(presentMessage: error.localizedDescription, layout: .StatusLine)
+                    }
+                case let .failure(error):
+                    presentErrorMessage(presentMessage: error.localizedDescription, layout: .StatusLine)
+                }
+            })
+            
+            if self.syllabusList.count > 0 && !self.avaliableInformation.contains("Syllabus") {
+                
+                self.avaliableInformation.append("Syllabus")
+                DispatchQueue.main.async {
+                    self.classDetailTable.reloadData()
+                }
+            } else {
+                DispatchQueue.main.async {
+                    self.classDetailTable.reloadData(with: .automatic)
+                }
+            }
+            
+            DispatchQueue.main.async {
+                self.classDetailTable.reloadData(with: .automatic)
+                self.navigationController?.cancelProgress()
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+            }
         }
     }
 }
@@ -365,7 +377,7 @@ extension classDetailViewController {
         semaphore.wait()
     }
     
-    func getSyllabus(sectionId: String) {
+    func getContent(sectionId: String) {
         guard loginAuthentication().success else {
             return
         }

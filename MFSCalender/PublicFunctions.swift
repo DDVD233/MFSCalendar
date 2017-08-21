@@ -30,33 +30,21 @@ public func loginAuthentication() -> (success:Bool, token:String, userId: String
             token = userDefaults?.string(forKey: "token")
             userID = userDefaults?.string(forKey: "userID")
             
-            let cookieProps: [HTTPCookiePropertyKey : Any] = [
-                HTTPCookiePropertyKey.domain: "mfriends.myschoolapp.com",
-                HTTPCookiePropertyKey.path: "/",
-                HTTPCookiePropertyKey.name: "t",
-                HTTPCookiePropertyKey.value: token!
-            ]
-            
-            if let cookie = HTTPCookie(properties: cookieProps) {
-                HTTPCookieStorage.shared.setCookie(cookie)
-            }
-            
-            let cookieProps2: [HTTPCookiePropertyKey : Any] = [
-                HTTPCookiePropertyKey.domain: "mfriends.myschoolapp.com",
-                HTTPCookiePropertyKey.path: "/",
-                HTTPCookiePropertyKey.name: "bridge",
-                HTTPCookiePropertyKey.value: "action=create&src=webapp&xdb=true"
-            ]
-            
-            if let cookie = HTTPCookie(properties: cookieProps2) {
-                HTTPCookieStorage.shared.setCookie(cookie)
-            }
+            addLoginCookie(token: token!)
             
             return (success, token!, userID!)
         }
     }
     
-    let accountCheckURL = "https://mfriends.myschoolapp.com/api/authentication/login/?username=" + usernameText + "&password=" + passwordText + "&format=json"
+    guard let usernameTextUrlEscaped = usernameText.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) else {
+        return (false, "Cannot convert to url string", "")
+    }
+    
+    guard let passwordTextUrlEscaped = passwordText.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) else {
+        return (false, "Cannot convert to url string", "")
+    }
+    
+    let accountCheckURL = "https://mfriends.myschoolapp.com/api/authentication/login/?username=" + usernameTextUrlEscaped + "&password=" + passwordTextUrlEscaped + "&format=json"
     let url = NSURL(string: accountCheckURL)
     let request = URLRequest(url: url! as URL)
     
@@ -108,35 +96,38 @@ public func loginAuthentication() -> (success:Bool, token:String, userId: String
     semaphore.wait()
     
     if success {
-        
-        let cookieProps: [HTTPCookiePropertyKey : Any] = [
-            HTTPCookiePropertyKey.domain: "mfriends.myschoolapp.com",
-            HTTPCookiePropertyKey.path: "/",
-            HTTPCookiePropertyKey.name: "t",
-            HTTPCookiePropertyKey.value: token!
-        ]
-        
-        if let cookie = HTTPCookie(properties: cookieProps) {
-            HTTPCookieStorage.shared.setCookie(cookie)
-        }
-        
-        let cookieProps2: [HTTPCookiePropertyKey : Any] = [
-            HTTPCookiePropertyKey.domain: "mfriends.myschoolapp.com",
-            HTTPCookiePropertyKey.path: "/",
-            HTTPCookiePropertyKey.name: "bridge",
-            HTTPCookiePropertyKey.value: "action=create&src=webapp&xdb=true"
-        ]
-        
-        if let cookie = HTTPCookie(properties: cookieProps2) {
-            HTTPCookieStorage.shared.setCookie(cookie)
-        }
+        addLoginCookie(token: token!)
     }
     
     return (success, token!, userID!)
 }
 
-public func presentErrorMessage(presentMessage: String) {
-    let view = MessageView.viewFromNib(layout: .CardView)
+public func addLoginCookie(token: String) {
+    let cookieProps: [HTTPCookiePropertyKey : Any] = [
+        HTTPCookiePropertyKey.domain: "mfriends.myschoolapp.com",
+        HTTPCookiePropertyKey.path: "/",
+        HTTPCookiePropertyKey.name: "t",
+        HTTPCookiePropertyKey.value: token
+    ]
+    
+    if let cookie = HTTPCookie(properties: cookieProps) {
+        HTTPCookieStorage.shared.setCookie(cookie)
+    }
+    
+    let cookieProps2: [HTTPCookiePropertyKey : Any] = [
+        HTTPCookiePropertyKey.domain: "mfriends.myschoolapp.com",
+        HTTPCookiePropertyKey.path: "/",
+        HTTPCookiePropertyKey.name: "bridge",
+        HTTPCookiePropertyKey.value: "action=create&src=webapp&xdb=true"
+    ]
+    
+    if let cookie = HTTPCookie(properties: cookieProps2) {
+        HTTPCookieStorage.shared.setCookie(cookie)
+    }
+}
+
+public func presentErrorMessage(presentMessage: String, layout: MessageView.Layout) {
+    let view = MessageView.viewFromNib(layout: layout)
     view.configureTheme(.error)
     let icon = "😱"
     view.configureContent(title: "Error!", body: presentMessage, iconText: icon)

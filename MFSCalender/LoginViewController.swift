@@ -224,181 +224,92 @@ extension firstTimeLaunchController {
     
     func getProfile() -> Bool {
         
-        let config = URLSessionConfiguration.default
-        config.requestCachePolicy = .reloadIgnoringLocalCacheData
-        config.urlCache = nil
-        
-        let session = URLSession.init(configuration: config)
-        
         let semaphore = DispatchSemaphore.init(value: 0)
         let token = userDefaults?.string(forKey: "token")
         let userID = userDefaults?.string(forKey: "userID")
         var success: Bool = false
         
-        //            Copy & Paste (-_-). Gat: 1. Name 2.Locker Number & Password  3. Photo
-        let profileCheckURL = "https://mfriends.myschoolapp.com/api/user/" + userID! + "/?t=" + token! + "&format=json"
-        let url2 = NSURL(string: profileCheckURL)
-        let request2 = URLRequest(url: url2! as URL)
-        var photolink: String? = nil
-        let task2: URLSessionDataTask = session.dataTask(with: request2, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
-            if error == nil {
+        provider.request(MyService.getProfile(userID: userID!, token: token!), completion: { result in
+            switch result {
+            case let .success(response):
                 do {
-                    let resDict = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! NSDictionary
-//                    print(resDict)
-                    if resDict["Error"] != nil {
+                    guard let resDict = try response.mapJSON() as? Dictionary<String, Any?> else {
+                        presentErrorMessage(presentMessage: "Internal error: incorrect file format.", layout: .CardView)
+                        
+                        return
+                    }
+                    
+                    guard resDict["Error"] == nil else {
                         //                        When error occured.
                         print("Login Error!")
                         if (resDict["ErrorType"] as! String) == "UNAUTHORIZED_ACCESS" {
                             DispatchQueue.main.async {
-                                self.wrongPassword.text = "The username/password is incorrect. Please check your spelling."
-                                self.wrongPassword.isHidden = false
+                                presentErrorMessage(presentMessage: "The username/password is incorrect. Please check your spelling.", layout: .CardView)
                             }
                         }
-                    } else {
-                        //When profile retrival is success.
                         
-                        print(resDict)
-                        if let firstName = resDict["FirstName"] as? String {
-                            userDefaults?.set(firstName, forKey: "firstName")
-                        }
-                        
-                        if let lastName = resDict["LastName"] as? String {
-                            userDefaults?.set(lastName, forKey: "lastName")
-                        }
-                        
-                        if let photo = resDict["ProfilePhoto"] as? NSDictionary {
-                            photolink = photo["ThumbFilenameUrl"] as? String
-                            let largePhotoLink = photo["LargeFilenameUrl"] as? String
-                            userDefaults?.set(photolink, forKey: "photoLink")
-                            userDefaults?.set(largePhotoLink, forKey: "largePhotoLink")
-                        }
-                        
-                        if let lockerNumber = resDict["LockerNbr"] as? String {
-                            userDefaults?.set(lockerNumber, forKey: "lockerNumber")
-                        }
-                        if let lockerPassword = resDict["LockerCombo"] as? String {
-                            userDefaults?.set(lockerPassword, forKey: "lockerPassword")
-                        }
-                        success = true
-                        
+                        return
                     }
+                    
+                    if let firstName = resDict["FirstName"] as? String {
+                        userDefaults?.set(firstName, forKey: "firstName")
+                    }
+                    
+                    if let lastName = resDict["LastName"] as? String {
+                        userDefaults?.set(lastName, forKey: "lastName")
+                    }
+                    
+                    if let photo = resDict["ProfilePhoto"] as? NSDictionary {
+                        if let photolink = photo["ThumbFilenameUrl"] as? String {
+                            userDefaults?.set(photolink, forKey: "photoLink")
+                            self.downloadSmallProfilePhoto(photoLink: photolink)
+                        }
+                        
+                        let largePhotoLink = photo["LargeFilenameUrl"] as? String
+                        userDefaults?.set(largePhotoLink, forKey: "largePhotoLink")
+                    }
+                    
+                    if let lockerNumber = resDict["LockerNbr"] as? String {
+                        userDefaults?.set(lockerNumber, forKey: "lockerNumber")
+                    }
+                    if let lockerPassword = resDict["LockerCombo"] as? String {
+                        userDefaults?.set(lockerPassword, forKey: "lockerPassword")
+                    }
+                    success = true
+                    
                 } catch {
                     NSLog("Data parsing failed")
                     DispatchQueue.main.async {
-                        let presentMessage = "The server is not returning the right data. Please contact David."
-                        DispatchQueue.main.async {
-                            self.errorMessage(presentMessage: presentMessage)
-                        }
+                        self.errorMessage(presentMessage: error.localizedDescription)
                     }
                 }
-            } else {
-                DispatchQueue.main.async {
-                    let presentMessage = (error?.localizedDescription)! + " Please check your internet connection."
-                    self.errorMessage(presentMessage: presentMessage)
-                }
+            case let .failure(error):
+                presentErrorMessage(presentMessage: error.localizedDescription, layout: .CardView)
             }
+            
             semaphore.signal()
         })
         
-        task2.resume()
         semaphore.wait()
         
-        //            Get profile photo
-        if photolink != nil {
-            success = false
-            let urlString = "https://mfriends.myschoolapp.com" + photolink!
-            let url = URL(string: urlString)
-            //create request.
-            let request3 = URLRequest(url: url!)
-            let downloadTask = session.downloadTask(with: request3, completionHandler: { (location: URL?, response: URLResponse?, error: Error?) -> Void in
-                if error == nil {
-                    //Temp location:
-                    print("location:\(String(describing: location))")
-                    let locationPath = location!.path
-                    //Copy to User Directory
-                    let photoPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-                    let path = photoPath.appending("/ProfilePhoto.png")
-                    //Init FileManager
-                    let fileManager = FileManager.default
-                    if fileManager.fileExists(atPath: path) {
-                        do {
-                            try fileManager.removeItem(atPath: path)
-                        } catch {
-                            NSLog("File does not exist! (Which is impossible)")
-                        }
-                    }
-                    try! fileManager.moveItem(atPath: locationPath, toPath: path)
-                    print("new location:\(path)")
-                    userDefaults?.set(false, forKey: "didDownloadFullSizeImage")
-                    success = true
-                } else {
-                    DispatchQueue.main.async {
-                        let presentMessage = (error?.localizedDescription)! + " Please check your internet connection."
-                        self.errorMessage(presentMessage: presentMessage)
-                    }
-                }
-                semaphore.signal()
-            })
-            //使用resume方法启动任务
-            downloadTask.resume()
-            semaphore.wait()
-        }
         return success
     }
     
-    //获取每天的Day数据
-    func initDayData() -> Bool {
-        var success = false
-        let semaphore = DispatchSemaphore.init(value: 0)
-        let dayCheckURL = "https://dwei.org/data"
-        let url = NSURL(string: dayCheckURL)
-        let request = URLRequest(url: url! as URL)
-        let session = URLSession.shared
+    func downloadSmallProfilePhoto(photoLink: String) {
+        let semaphore = DispatchSemaphore(value: 0)
         
-        //Task 1: Getting day data.
-        let task: URLSessionDataTask = session.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
-            
-            if error == nil {
-                do {
-                    let resDict = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! NSDictionary
-                    
-                    let plistPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-                    let path = plistPath.appending("/Day.plist")
-                    resDict.write(toFile: path, atomically: true)
-                    success = true
-                } catch {
-                    NSLog("Data parsing failed")
-                }
-            } else {
-                DispatchQueue.main.async {
-                    let presentMessage = (error?.localizedDescription)! + " Please check your internet connection."
-                    self.errorMessage(presentMessage: presentMessage)
-                }
-            }
-            semaphore.signal()
-        })
-        
-        task.resume()
-        semaphore.wait()
-        return success
-    }
-
-    func getEvent() -> Bool {
-        var success = false
-        let semaphore = DispatchSemaphore.init(value: 0)
-        let downloadLink = "https://dwei.org/events.plist"
-        let url = NSURL(string: downloadLink)
-        let request = URLRequest(url: url! as URL)
-        let session = URLSession.shared
+        let urlString = "https://mfriends.myschoolapp.com" + photoLink
+        let url = URL(string: urlString)
         //create request.
-        let downloadTask = session.downloadTask(with: request, completionHandler: { (location: URL?, response: URLResponse?, error: Error?) -> Void in
+        let request3 = URLRequest(url: url!)
+        let downloadTask = URLSession.shared.downloadTask(with: request3, completionHandler: { (location: URL?, response: URLResponse?, error: Error?) -> Void in
             if error == nil {
                 //Temp location:
                 print("location:\(String(describing: location))")
                 let locationPath = location!.path
                 //Copy to User Directory
                 let photoPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-                let path = photoPath.appending("/Events.plist")
+                let path = photoPath.appending("/ProfilePhoto.png")
                 //Init FileManager
                 let fileManager = FileManager.default
                 if fileManager.fileExists(atPath: path) {
@@ -410,49 +321,102 @@ extension firstTimeLaunchController {
                 }
                 try! fileManager.moveItem(atPath: locationPath, toPath: path)
                 print("new location:\(path)")
-                success = true
+                userDefaults?.set(false, forKey: "didDownloadFullSizeImage")
             } else {
                 DispatchQueue.main.async {
-                    let presentMessage = (error?.localizedDescription)! + " Please check your internet connection."
+                    let presentMessage = error!.localizedDescription + " Please check your internet connection."
                     self.errorMessage(presentMessage: presentMessage)
                 }
             }
             semaphore.signal()
         })
+        
         //使用resume方法启动任务
         downloadTask.resume()
+        semaphore.wait()
+    }
+    
+    //Get calendar's day data.
+    func initDayData() -> Bool {
+        var success = false
+        let semaphore = DispatchSemaphore.init(value: 0)
+        
+        //Task 1: Getting day data.
+        
+        provider.request(.getCalendarData, completion: { result in
+            switch result {
+            case let .success(response):
+                do {
+                    let resDict = try response.mapJSON() as! NSDictionary
+                    
+                    let plistPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
+                    let path = plistPath.appending("/Day.plist")
+                    resDict.write(toFile: path, atomically: true)
+                    success = true
+                } catch {
+                    presentErrorMessage(presentMessage: error.localizedDescription, layout: MessageView.Layout.StatusLine)
+                    NSLog("Day Data: Data parsing failed")
+                }
+            case let .failure(error):
+                DispatchQueue.main.async {
+                    let presentMessage = error.localizedDescription
+                    self.errorMessage(presentMessage: presentMessage)
+                }
+            }
+            
+            semaphore.signal()
+        })
+        
         semaphore.wait()
         
         return success
     }
 
+    func getEvent() -> Bool {
+        var success = false
+        let semaphore = DispatchSemaphore.init(value: 0)
+        
+        provider.request(.getCalendarEvent, completion: { result in
+            switch result {
+            case .success(_):
+                success = true
+            case let .failure(error):
+                DispatchQueue.main.async {
+                    let presentMessage = error.localizedDescription + " Please check your internet connection."
+                    self.errorMessage(presentMessage: presentMessage)
+                }
+            }
+            semaphore.signal()
+        })
+        
+        semaphore.wait()
+        return success
+    }
+
     func versionCheck() -> Bool {
         var success = false
-        let versionCheckURL = "https://dwei.org/dataversion"
-        let versionUrl = NSURL(string: versionCheckURL)
-        let versionRequest = URLRequest(url: versionUrl! as URL)
-        let session = URLSession.shared
         let semaphore = DispatchSemaphore.init(value: 0)
-        let task: URLSessionDataTask = session.dataTask(with: versionRequest, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
-
-            if error == nil {
-                guard let version = String(data: data!, encoding: .utf8) else {
+        
+        provider.request(MyService.dataVersionCheck, completion: { result in
+            switch result {
+            case let .success(response):
+                guard let version = String(data: response.data, encoding: .utf8) else {
                     return
                 }
                 let versionNumber = Int(version)
                 print("Version: %@", versionNumber!)
                 userDefaults?.set(versionNumber, forKey: "version")
                 success = true
-            } else {
+            case let .failure(error):
                 DispatchQueue.main.async {
-                    let presentMessage = (error?.localizedDescription)! + " Please check your internet connection."
+                    let presentMessage = error.localizedDescription + " Please check your internet connection."
                     self.errorMessage(presentMessage: presentMessage)
                 }
             }
+            
             semaphore.signal()
         })
-
-        task.resume()
+        
         semaphore.wait()
         return success
     }

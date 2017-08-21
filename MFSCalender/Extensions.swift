@@ -102,3 +102,4 @@ extension UITableView {
 }
 
 public let userDefaults = UserDefaults(suiteName: "group.org.dwei.MFSCalendar")
+public let userDocumentPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path

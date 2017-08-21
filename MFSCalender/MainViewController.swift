@@ -134,21 +134,36 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         
         refreshDisplayedData()
         
-        DispatchQueue.global().async {
-            if self.doRefreshData() {
-                NSLog("Refresh Data")
-                
-//                When these two processes successfully finished.
-                if self.refreshData() && self.refreshEvents() {
-                    let vc = self.storyboard?.instantiateViewController(withIdentifier: "courseFillController")
-                    self.present(vc!, animated: true, completion: nil)
-                    self.refreshDisplayedData()
-                }
-            } else {
-                NSLog("No refresh, version: %@", String(describing: userDefaults?.integer(forKey: "version")))
-                self.downloadLargeProfilePhoto()
-            }
+        if self.doRefreshData() && Reachability()!.isReachable {
+            NSLog("Refresh Data")
+            updateData()
+            
+        } else {
+            NSLog("No refresh, version: %@", String(describing: userDefaults?.integer(forKey: "version")))
+            self.downloadLargeProfilePhoto()
         }
+    }
+    
+    func updateData() {
+        let group = DispatchGroup()
+        
+        DispatchQueue.global().async(group: group, execute: {
+            self.refreshEvents()
+        })
+        
+        DispatchQueue.global().async(group: group, execute: {
+            self.refreshData()
+        })
+        
+        group.wait()
+        
+        if let vc = self.storyboard?.instantiateViewController(withIdentifier: "courseFillController") {
+            self.present(vc, animated: true, completion: nil)
+        } else {
+            presentErrorMessage(presentMessage: "Cannot find course fill page", layout: .StatusLine)
+        }
+        
+        self.refreshDisplayedData()
     }
     
     func refreshDisplayedData() {
@@ -221,48 +236,36 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         formatter.dateFormat = "yyyyMMdd"
         let refreshDate = userDefaults?.string(forKey: "refreshDate")
         let date = formatter.string(from: Date())
+        
+        guard refreshDate != date else {
+            return false
+        }
+        
         var refresh = false
         let semaphore = DispatchSemaphore.init(value: 0)
-        let dayCheckURL = "https://dwei.org/dataversion"
-        let url = NSURL(string: dayCheckURL)
-        let request = URLRequest(url: url! as URL)
-        let session = URLSession.shared
         
-        if refreshDate == date {
-            refresh = false
-        } else {
-            let task: URLSessionDataTask = session.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
-                NSLog("Done")
-
-                if error == nil {
-                    guard let nversion = String(data: data!, encoding: .utf8) else {
-                        return
-                    }
-                    guard let newVersion = Int(nversion) else { return }
-                    print("Latest version:", newVersion)
-                    if newVersion != version {
-                        refresh = true
-                    }
-                } else {
-                    DispatchQueue.main.async {
-                        //                    setup alert here
-                        let presentMessage = (error?.localizedDescription)!
-                        let view = MessageView.viewFromNib(layout: .StatusLine)
-                        view.configureTheme(.error)
-                        view.configureContent(body: presentMessage)
-                        var config = SwiftMessages.Config()
-                        config.presentationContext = .window(windowLevel: UIWindowLevelStatusBar)
-                        config.preferredStatusBarStyle = .lightContent
-                        SwiftMessages.show(config: config, view: view)
-                    }
-                    NSLog("error: %@", error!.localizedDescription)
+        provider.request(MyService.dataVersionCheck, completion: { result in
+            switch result {
+            case let .success(response):
+                guard let nversion = try? response.mapString() else {
+                    presentErrorMessage(presentMessage: "Version file", layout: .StatusLine)
+                    return
                 }
-                semaphore.signal()
-            })
-
-            task.resume()
-            semaphore.wait()
-        }
+                
+                guard let newVersion = Int(nversion) else { return }
+                print("Latest version:", newVersion)
+                if newVersion != version {
+                    refresh = true
+                }
+            case let .failure(error):
+                presentErrorMessage(presentMessage: error.localizedDescription, layout: .StatusLine)
+            }
+            
+            semaphore.signal()
+        })
+        
+        semaphore.wait()
+        
         return refresh
     }
 
@@ -503,37 +506,24 @@ extension Main: UITableViewDelegate, UITableViewDataSource {
         let date = NSDate()
         self.formatter.dateFormat = "yyyyMMdd"
         let eventDate = formatter.string(from: date as Date)
-        guard let events = eventData?[eventDate] as? NSMutableArray else { 
+        guard let events = eventData?[eventDate] as? Array<Dictionary<String, Any?>> else {
             return
         }
         
-//        排序Events
-        self.formatter.dateFormat = "HHmmss"
-        let currentTime = Int(formatter.string(from: Date()))
-        var eventToSort: [NSMutableDictionary] = []
 //        先加上All Day的， 然后将其余还未结束的加入eventToSort进行排序
-        for items in events {
-            let event = items as! NSMutableDictionary
-            if (event["isAllDay"] as? Int) == 1 {
-                self.listEvents.add(event)
-            } else {
-                let rowDict = items as! NSDictionary
-                if let tEnd = rowDict["tEnd"] as? Int {
-                    if tEnd > currentTime! {
-                        event["tEnd"] = tEnd
-                        eventToSort.append(event)
-                    }
-                }
-            }
-        }
+        let allDayEvents = events.filter({ $0["isAllDay"] as? Int == 1 })
+        self.listEvents.addObjects(from: allDayEvents)
         
+        self.formatter.dateFormat = "HHmmss"
+        let currentTime = Int(formatter.string(from: Date()))!
+        
+        //        排序用Events
+        let eventToSort = events.filter({ $0["tEnd"] as? Int ?? -1 > currentTime })
         let sortedEvents = eventToSort.sorted(by: {
             ($0["tEnd"] as! Int) < ($1["tEnd"] as! Int)
         })
         
-        for items in sortedEvents {
-            self.listEvents.add(items)
-        }
+        self.listEvents.addObjects(from: sortedEvents)
     }
     
     //    the number of the cell
@@ -582,7 +572,6 @@ extension Main: UITableViewDelegate, UITableViewDataSource {
             cell?.PeriodTime.text = startString + " - " + endString
         }
         return cell!
-//        }
     }
 }
 
@@ -591,102 +580,50 @@ extension Main: UITableViewDelegate, UITableViewDataSource {
 extension Main {
     //refresh data function
     //刷新Day和Event数据，并更新版本号
-    func refreshData() -> Bool {
-        var success = false
+    func refreshData() {
         let semaphore = DispatchSemaphore.init(value: 0)
-        let dayCheckURL = "https://dwei.org/data"
-        let url = NSURL(string: dayCheckURL)
-        let request = URLRequest(url: url! as URL)
-        let session = URLSession.shared
         
-//        检查Day数据
-        let task: URLSessionDataTask = session.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
-            NSLog("Done")
-            
-            if error == nil {
+        provider.request(MyService.getCalendarData, completion: { result in
+            switch result {
+            case let .success(response):
                 do {
-                    let resDict = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! NSDictionary
-                    let plistPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-                    let path = plistPath.appending("/Day.plist")
-                    resDict.write(toFile: path, atomically: true)
-                    success = true
-                    NSLog("Day Data refreshed.")
+                    guard let dayData = try response.mapJSON(failsOnEmptyData: false) as? Dictionary<String, Any> else {
+                        presentErrorMessage(presentMessage: "Incorrect file format for day data", layout: .StatusLine)
+                        return
+                    }
+                    
+                    let dayFile = userDocumentPath.appending("/Day.plist")
+                    
+                    print("Info: Day Data refreshed")
+                    NSDictionary(dictionary: dayData).write(toFile: dayFile, atomically: true)
                 } catch {
-                    NSLog("Data parsing failed")
+                    presentErrorMessage(presentMessage: error.localizedDescription, layout: .StatusLine)
                 }
-            } else {
-                DispatchQueue.main.async {
-                    let presentMessage = (error?.localizedDescription)!
-                    let view = MessageView.viewFromNib(layout: .StatusLine)
-                    view.configureTheme(.error)
-                    view.configureContent(body: presentMessage)
-                    var config = SwiftMessages.Config()
-                    config.presentationContext = .window(windowLevel: UIWindowLevelStatusBar)
-                    config.preferredStatusBarStyle = .lightContent
-                    SwiftMessages.show(config: config, view: view)
-                }
-                NSLog("error: %@", error!.localizedDescription)
-                NSLog("最外层的错误")
+            case let .failure(error):
+                presentErrorMessage(presentMessage: error.localizedDescription, layout: .StatusLine)
             }
+            
             semaphore.signal()
         })
         
-        task.resume()
         semaphore.wait()
-        
-        return success
     }
     
-    func refreshEvents() -> Bool {
-        var success = false
+    func refreshEvents() {
         let semaphore = DispatchSemaphore.init(value: 0)
-        let downloadLink = "https://dwei.org/events.plist"
-        let url = NSURL(string: downloadLink)
-        let request = URLRequest(url: url! as URL)
-        let session = URLSession.shared
-        //create request.
-        let downloadTask = session.downloadTask(with: request, completionHandler: { (location: URL?, response: URLResponse?, error: Error?) -> Void in
-            if error == nil {
-                //Temp location:
-                print("location:\(String(describing: location))")
-                let locationPath = location!.path
-                //Copy to User Directory
-                let photoPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-                let path = photoPath.appending("/Events.plist")
-                //Init FileManager
-                let fileManager = FileManager.default
-                if fileManager.fileExists(atPath: path) {
-                    do {
-                        try fileManager.removeItem(atPath: path)
-                    } catch {
-                        NSLog("File does not exist! (Which is impossible)")
-                    }
-                }
-                try! fileManager.moveItem(atPath: locationPath, toPath: path)
-                print("new location:\(path)")
-                success = true
-                NSLog("Day Data refreshed.")
-            } else {
-                DispatchQueue.main.async {
-                    let presentMessage = (error?.localizedDescription)!
-                    let view = MessageView.viewFromNib(layout: .StatusLine)
-                    view.configureTheme(.error)
-                    view.configureContent(body: presentMessage)
-                    var config = SwiftMessages.Config()
-                    config.presentationContext = .window(windowLevel: UIWindowLevelStatusBar)
-                    config.preferredStatusBarStyle = .lightContent
-                    SwiftMessages.show(config: config, view: view)
-                }
-                NSLog("error: %@", error!.localizedDescription)
-                NSLog("最外层的错误")
+        
+        provider.request(MyService.getCalendarEvent, completion: { result in
+            switch result {
+            case .success(_):
+                print("Info: event data refreshed")
+            case let .failure(error):
+                presentErrorMessage(presentMessage: error.localizedDescription, layout: .StatusLine)
             }
+            
             semaphore.signal()
         })
-        //使用resume方法启动任务
-        downloadTask.resume()
-        semaphore.wait()
         
-        return success
+        semaphore.wait()
     }
 }
 

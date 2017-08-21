@@ -188,7 +188,7 @@ extension topicDetailViewController {
         
         let dataTask = URLSession.shared.dataTask(with: URL(string: url)!, completionHandler: { (data, response, error) in
             guard error == nil else {
-                presentErrorMessage(presentMessage: error!.localizedDescription)
+                presentErrorMessage(presentMessage: error!.localizedDescription, layout: .StatusLine)
                 semaphore.signal()
                 return
             }
@@ -322,7 +322,7 @@ class topicDetailDescriptionCell: UITableViewCell {
                     DispatchQueue.main.async {
                         self.parentViewController!.navigationController?.cancelProgress()
                         let message = response.error!.localizedDescription + " Please check your internet connection."
-                        presentErrorMessage(presentMessage: message)
+                        presentErrorMessage(presentMessage: message, layout: .StatusLine)
                     }
                 }
             }
