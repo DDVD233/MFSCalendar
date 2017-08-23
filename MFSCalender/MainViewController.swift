@@ -133,14 +133,15 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         }
         
         refreshDisplayedData()
-        
-        if self.doRefreshData() && Reachability()!.isReachable {
-            NSLog("Refresh Data")
-            updateData()
-            
-        } else {
-            NSLog("No refresh, version: %@", String(describing: userDefaults?.integer(forKey: "version")))
-            self.downloadLargeProfilePhoto()
+        DispatchQueue.global().async {
+            if self.doRefreshData() && Reachability()!.isReachable {
+                NSLog("Refresh Data")
+                self.updateData()
+                
+            } else {
+                NSLog("No refresh, version: %@", String(describing: userDefaults?.integer(forKey: "version")))
+                self.downloadLargeProfilePhoto()
+            }
         }
     }
     

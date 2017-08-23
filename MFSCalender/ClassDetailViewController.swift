@@ -22,6 +22,8 @@ class classDetailViewController: UITableViewController, UIDocumentInteractionCon
     
     var syllabusList = [NSDictionary]()
     
+    var contentList = [String: [[String: Any?]]]()
+    
     @IBOutlet weak var teacherName: UILabel!
     @IBOutlet weak var roomNumber: UILabel!
     
@@ -108,6 +110,9 @@ class classDetailViewController: UITableViewController, UIDocumentInteractionCon
     }
     
     func refreshContent() {
+        guard loginAuthentication().success else {
+            return
+        }
         
         roomNumber.text = classObject?["roomNumber"] as? String ?? ""
         teacherName.text = classObject?["teacherName"] as? String ?? ""
@@ -120,6 +125,7 @@ class classDetailViewController: UITableViewController, UIDocumentInteractionCon
             }
             
             let sectionIdString = String(describing: sectionId)
+            let semaphore = DispatchSemaphore(value: 0)
             
             provider.request(.getPossibleContent(sectionId: sectionIdString), completion: {
                 (result) in
@@ -131,32 +137,91 @@ class classDetailViewController: UITableViewController, UIDocumentInteractionCon
                             return
                         }
                         
+                        self.avaliableInformation = ["Basic"]
+                        self.avaliableInformation += self.contentIDToName(inputData: json, sectionId: sectionIdString)
                     } catch {
                         presentErrorMessage(presentMessage: error.localizedDescription, layout: .StatusLine)
                     }
                 case let .failure(error):
                     presentErrorMessage(presentMessage: error.localizedDescription, layout: .StatusLine)
                 }
+                
+                semaphore.signal()
             })
             
-            if self.syllabusList.count > 0 && !self.avaliableInformation.contains("Syllabus") {
-                
-                self.avaliableInformation.append("Syllabus")
-                DispatchQueue.main.async {
-                    self.classDetailTable.reloadData()
-                }
-            } else {
-                DispatchQueue.main.async {
-                    self.classDetailTable.reloadData(with: .automatic)
-                }
+            semaphore.wait()
+            
+            let group = DispatchGroup()
+            for contentName in self.avaliableInformation {
+                DispatchQueue.global().async(group: group, execute: {
+                    let semaphore = DispatchSemaphore(value: 0)
+                    provider.request(MyService.getClassContentData(contentName: contentName, sectionId: sectionIdString), completion: { result in
+                        switch result {
+                        case let .success(response):
+                            do {
+                                let json = try response.mapJSON() as? Array<Dictionary<String, Any?>>
+                                self.contentList[contentName] = json
+                            } catch {
+                                presentErrorMessage(presentMessage: error.localizedDescription, layout: .StatusLine)
+                            }
+                        case let .failure(error):
+                            presentErrorMessage(presentMessage: error.localizedDescription, layout: .StatusLine)
+                        }
+                        semaphore.signal()
+                    })
+                    
+                    semaphore.wait()
+                })
             }
             
+            group.wait()
+            
             DispatchQueue.main.async {
-                self.classDetailTable.reloadData(with: .automatic)
+                self.classDetailTable.reloadData()
                 self.navigationController?.cancelProgress()
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
             }
         }
+    }
+    
+    func contentIDToName(inputData: Array<Dictionary<String, Any?>>, sectionId: String) -> Array<String> {
+        var contentNameList = [String]()
+        let semaphore = DispatchSemaphore(value: 0)
+        guard loginAuthentication().success else { return [] }
+        let url = "https://mfriends.myschoolapp.com/api/datadirect/GroupPossibleContentGet/?format=json&leadSectionId=\(sectionId)"
+        
+        Alamofire.request(url).response(completionHandler: { result in
+            print(JSON(result.data ?? Data()))
+            semaphore.signal()
+        })
+        
+//        provider.request(MyService.getContentList(sectionId: sectionId), completion: { result in
+//            switch result {
+//            case let .success(response):
+//                guard let json = try? response.mapJSON(failsOnEmptyData: false) as? Array<Dictionary<String, Any?>> else {
+//                    presentErrorMessage(presentMessage: "Incorrect json file", layout: .StatusLine)
+//                    semaphore.signal()
+//                    return
+//                }
+//                
+//                for items in inputData {
+//                    guard let contentId = items["ContentId"] as? Int else {
+//                        continue
+//                    }
+//                    
+//                    if let nameForTheContent = json?.filter({ $0["ContentId"] as? Int == contentId}).first?["Content"] as? String {
+//                        contentNameList.append(nameForTheContent)
+//                    }
+//                }
+//            case let .failure(error):
+//                presentErrorMessage(presentMessage: error.localizedDescription, layout: .StatusLine)
+//            }
+//            
+//            semaphore.signal()
+//        })
+        
+        semaphore.wait()
+        return contentNameList
     }
 }
 
@@ -176,10 +241,8 @@ extension classDetailViewController {
         switch avaliableInformation[section] {
         case "Basic":
             return 1
-        case "Syllabus":
-            return syllabusList.count
         default:
-            return 1
+            return contentList[avaliableInformation[section]]?.count ?? 0
         }
     }
     
@@ -199,15 +262,12 @@ extension classDetailViewController {
         return avaliableInformation[section]
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    }
-    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = classDetailTable.dequeueReusableCell(withIdentifier: "classOverviewTable", for: indexPath)
         let section = indexPath.section
         
         switch avaliableInformation[section] {
         case "Basic":
+            let cell = classDetailTable.dequeueReusableCell(withIdentifier: "classOverviewTable", for: indexPath)
             let sectionId = classObject?["leadsectionid"] as! Int
             let photoPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
             let path = photoPath.appending("/\(sectionId)_profile.png")
@@ -221,63 +281,72 @@ extension classDetailViewController {
             cell.addSubview(basicInformationView)
             cell.layoutSubviews()
         case "Syllabus":
-            let syllabusCell = classDetailTable.dequeueReusableCell(withIdentifier: "syllabusCell", for: indexPath) as! syllabusView
-            let syllabusItem = syllabusList[indexPath.row]
+            var cell = tableView.dequeueReusableCell(withIdentifier: "syllabusCell", for: indexPath) as! syllabusView
+        
+            handleCellData(cell: &cell, buttonTitleKey: "ShortDescription", textViewTextKey: "Description", indexPath: indexPath)
             
-            var htmlString = syllabusItem["Description"] as? String ?? ""
+            return cell
+        case "Link":
+            var cell = tableView.dequeueReusableCell(withIdentifier: "syllabusCell", for: indexPath) as! syllabusView
             
-            if !htmlString.isEmpty {
-                htmlString = "<html>" +
-                    "<head>" +
-                    "<style>" +
-                    "body {" +
-                    "font-family: 'Helvetica';" +
-                    "font-size:15px;" +
-                    "text-decoration:none;" +
-                    "}" +
-                    "</style>" +
-                    "</head>" +
-                    "<body>" +
-                        htmlString +
-                "</body></head></html>"
-            }
-            let htmlData = NSString(string: htmlString).data(using: String.Encoding.unicode.rawValue)
+            handleCellData(cell: &cell, buttonTitleKey: "ShortDescription", textViewTextKey: "Description", indexPath: indexPath)
             
-            if let attributedString = try? NSAttributedString(data: htmlData!, options: [NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType], documentAttributes: nil) {
-                syllabusCell.syllabusDescription.attributedText = attributedString
-            } else {
-                syllabusCell.syllabusDescription.text = htmlString
-            }
+            return cell
+        case "Announcement":
+            var cell = tableView.dequeueReusableCell(withIdentifier: "syllabusCell", for: indexPath) as! syllabusView
             
-            syllabusCell.attachmentQueryString = syllabusItem["AttachmentQueryString"] as? String ?? ""
-            syllabusCell.attachmentFileName = syllabusItem["Attachment"] as? String ?? ""
+            handleCellData(cell: &cell, buttonTitleKey: "Name", textViewTextKey: "Description", indexPath: indexPath)
             
-            syllabusCell.title.setTitle(syllabusItem["ShortDescription"] as? String ?? "", for: .normal)
+            return cell
+        case "download":
+            var cell = tableView.dequeueReusableCell(withIdentifier: "syllabusCell", for: indexPath) as! syllabusView
             
-            syllabusCell.syllabusDescription.isScrollEnabled = true
+            handleCellData(cell: &cell, buttonTitleKey: "Description", textViewTextKey: "LongDescription", indexPath: indexPath)
             
-            if syllabusCell.syllabusDescription.contentSize.height >= 200 {
-                syllabusCell.syllabusDescription.snp.makeConstraints({ (make) in
-                    syllabusCell.heightConstrant = make.height.equalTo(200).constraint
-                })
-                
-                syllabusCell.showMoreView.isHidden = false
-            } else {
-                syllabusCell.showMoreView.isHidden = true
-                syllabusCell.sizeToFit()
-            }
-            
-            syllabusCell.syllabusDescription.isScrollEnabled = false
-            
-            syllabusCell.selectionStyle = .none
-            //syllabusCell.parentViewController = self
-            
-            return syllabusCell
+            return cell
         default:
             break
         }
         
-        return cell
+        return UITableViewCell()
+    }
+    
+    func handleCellData(cell: inout syllabusView, buttonTitleKey: String, textViewTextKey: String, indexPath: IndexPath) {
+        let sectionName = avaliableInformation[indexPath.section]
+        guard let dictData = contentList[sectionName]?[indexPath.row] else {
+            return
+        }
+        
+        let htmlString = dictData[textViewTextKey] as? String ?? ""
+        
+        if !htmlString.isEmpty {
+            if let html = htmlString.convertToHtml() {
+                cell.syllabusDescription.attributedText = html
+            }
+        }
+        
+        cell.attachmentQueryString = dictData["AttachmentQueryString"] as? String ?? ""
+        cell.attachmentFileName = dictData["Attachment"] as? String ?? ""
+        cell.url = dictData["Url"] as? String
+        
+        cell.title.setTitle(dictData[buttonTitleKey] as? String ?? "", for: .normal)
+        
+        cell.syllabusDescription.isScrollEnabled = true
+        
+        if cell.syllabusDescription.contentSize.height >= 200 {
+            cell.syllabusDescription.snp.makeConstraints({ (make) in
+                cell.heightConstrant = make.height.equalTo(200).constraint
+            })
+            
+            cell.showMoreView.isHidden = false
+        } else {
+            cell.showMoreView.isHidden = true
+            cell.sizeToFit()
+        }
+    
+        cell.syllabusDescription.isScrollEnabled = false
+        
+        cell.selectionStyle = .none
     }
 }
 
@@ -445,6 +514,7 @@ class syllabusView: UITableViewCell {
     var attachmentQueryString: String? = nil
     var attachmentFileName: String? = nil
     var heightConstrant: Constraint? = nil
+    var url: String? = nil
     
     @IBOutlet var showMoreView: UIView!
     

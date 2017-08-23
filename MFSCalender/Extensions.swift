@@ -58,6 +58,30 @@ extension String {
     var utf8Encoded: Data {
         return self.data(using: .utf8)!
     }
+    
+    func convertToHtml() -> NSAttributedString? {
+        let htmlString = "<html>" +
+            "<head>" +
+            "<style>" +
+            "body {" +
+            "font-family: 'Helvetica';" +
+            "font-size:15px;" +
+            "text-decoration:none;" +
+            "}" +
+            "</style>" +
+            "</head>" +
+            "<body>" +
+            self +
+        "</body></head></html>"
+        
+        if let data = htmlString.data(using: .utf8, allowLossyConversion: true) {
+            if let formattedHtmlString = try? NSAttributedString(data: data, options: [NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType], documentAttributes: nil) {
+                return formattedHtmlString
+            }
+        }
+        
+        return nil
+    }
 }
 
 extension UIColor {

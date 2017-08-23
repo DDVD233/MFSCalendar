@@ -177,27 +177,49 @@ class homeworkViewController: UITableViewController {
         return self.listHomework.count
     }
     
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-//        TODO: 加入这周内容
-        let dueDateMDString = sections[section]
-        formatter.dateFormat = "yyyyMMdd"
-        guard let dueDate = formatter.date(from: dueDateMDString) else { return "Unknown" }
-        if dueDate.isToday {
-            return "Today"
-        } else if dueDate.isTomorrow {
-            return "Tomorrow"
-        } else {
-            return dueDate.string(format: .custom("EEEE, MMM d, yyyy"))
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if scrollView.contentOffset.y < 20 {
+            self.navigationItem.title = "Homework"
+        } else if let indexPath = tableView.indexPathsForVisibleRows?.first {
+            var dateString: String {
+                let dueDateMDString = self.sections[indexPath.section]
+                self.formatter.dateFormat = "yyyyMMdd"
+                guard let dueDate = self.formatter.date(from: dueDateMDString) else { return "Unknown" }
+                if dueDate.isToday {
+                    return "Today"
+                } else if dueDate.isTomorrow {
+                    return "Tomorrow"
+                } else {
+                    return dueDate.string(format: .custom("EEEE, MMM d, yyyy"))
+                }
+            }
+            self.navigationItem.title = dateString
         }
     }
     
-    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if let indexPath = tableView.indexPathsForVisibleRows?.first {
-            let header = tableView.headerView(forSection: indexPath.section)
-            if let headerTitle = header?.textLabel?.text {
-                self.navigationItem.title = headerTitle
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerView = tableView.dequeueReusableCell(withIdentifier: "homeworkTableHeader") as! homeworkTableHeader
+        
+        var dateString: String {
+            let dueDateMDString = self.sections[section]
+            self.formatter.dateFormat = "yyyyMMdd"
+            guard let dueDate = self.formatter.date(from: dueDateMDString) else { return "Unknown" }
+            if dueDate.isToday {
+                return "Today"
+            } else if dueDate.isTomorrow {
+                return "Tomorrow"
+            } else {
+                return dueDate.string(format: .custom("EEEE, MMM d, yyyy"))
             }
         }
+        headerView.titleLabel.text = dateString
+        headerView.selectionStyle = .none
+        
+        return headerView
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 23
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -214,8 +236,7 @@ class homeworkViewController: UITableViewController {
         }
         
         if let description = homework["short_description"] as? String {
-            let htmlDescription = NSString(string: description).data(using: String.Encoding.unicode.rawValue)
-            if let attributedString = try? NSAttributedString(data: htmlDescription!, options: [NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType], documentAttributes: nil) {
+            if let attributedString = description.convertToHtml() {
                 cell.shortDescription.attributedText = attributedString
             } else {
                 cell.shortDescription.text = description
@@ -334,7 +355,7 @@ class homeworkViewCell: UITableViewCell {
         
         var url: String? = nil
         
-        if userDefaults?.string(forKey: "username") == "testaccount" {
+        if userDefaults?.string(forKey: "username") != "testaccount" {
             url = "https://dwei.org/updateAssignmentStatus/" + assignmentId! + "/" + sectionId! + "/" + assignmentStatus!
         }
         
@@ -366,3 +387,9 @@ class homeworkViewCell: UITableViewCell {
         task.resume()
     }
 }
+
+class homeworkTableHeader: UITableViewCell {
+    @IBOutlet var titleLabel: UILabel!
+    
+}
+

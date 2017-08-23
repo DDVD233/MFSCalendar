@@ -91,7 +91,7 @@ extension topicDetailViewController: UITableViewDelegate, UITableViewDataSource 
         
         if let longDescription = topicObject["LongDescription"] as? String {
             if !longDescription.isEmpty {
-                if let htmlString = stringToHtml(string: longDescription) {
+                if let htmlString = longDescription.convertToHtml() {
                     cell.longDescription.attributedText = htmlString
                     cell.longDescription.sizeToFit()
                     cell.longDescription.isScrollEnabled = false

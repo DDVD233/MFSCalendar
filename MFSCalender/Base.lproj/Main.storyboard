@@ -322,10 +322,11 @@
         <scene sceneID="WEb-Ck-hsA">
             <objects>
                 <tableViewController id="rXz-aA-11j" customClass="homeworkViewController" customModule="MFSCalendar" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" allowsSelection="NO" rowHeight="80" sectionHeaderHeight="18" sectionFooterHeight="18" id="FPY-tO-elr">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" allowsSelection="NO" rowHeight="80" sectionHeaderHeight="18" sectionFooterHeight="1" id="FPY-tO-elr">
                         <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <inset key="scrollIndicatorInsets" minX="0.0" minY="10" maxX="0.0" maxY="0.0"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="homeworkViewCell" rowHeight="148" id="u8Y-xh-dW2" customClass="homeworkViewCell" customModule="MFSCalendar" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="55.5" width="375" height="148"/>
@@ -390,6 +391,7 @@
                                             <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                            <dataDetectorType key="dataDetectorTypes" link="YES"/>
                                         </textView>
                                     </subviews>
                                     <constraints>
@@ -414,6 +416,32 @@
                                     <outlet property="homeworkType" destination="19q-6s-urR" id="SMO-8w-HbZ"/>
                                     <outlet property="shortDescription" destination="ejU-Qj-EwQ" id="p0H-bd-7Zi"/>
                                     <outlet property="tagView" destination="fa7-oT-eer" id="tOU-hd-r2f"/>
+                                </connections>
+                            </tableViewCell>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="homeworkTableHeader" rowHeight="23" id="VfM-BH-6ZC" customClass="homeworkTableHeader" customModule="MFSCalendar" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="203.5" width="375" height="23"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="VfM-BH-6ZC" id="Y0Z-99-cOk">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="22.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vdw-R0-Gj3">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="22.5"/>
+                                            <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
+                                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <color key="backgroundColor" red="1" green="0.49327188729999999" blue="0.47399842739999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <constraints>
+                                        <constraint firstItem="Vdw-R0-Gj3" firstAttribute="top" secondItem="Y0Z-99-cOk" secondAttribute="top" id="1bj-aY-ZpW"/>
+                                        <constraint firstItem="Vdw-R0-Gj3" firstAttribute="leading" secondItem="Y0Z-99-cOk" secondAttribute="leading" id="80x-7g-ycS"/>
+                                        <constraint firstAttribute="bottom" secondItem="Vdw-R0-Gj3" secondAttribute="bottom" id="SCE-qu-Mc6"/>
+                                        <constraint firstAttribute="trailing" secondItem="Vdw-R0-Gj3" secondAttribute="trailing" id="hUj-9z-ELQ"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="titleLabel" destination="Vdw-R0-Gj3" id="KNk-YZ-NAb"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
