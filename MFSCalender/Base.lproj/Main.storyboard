@@ -1877,7 +1877,7 @@
                                                 <action selector="titleClicked:" destination="Oh2-LZ-JKF" eventType="touchUpInside" id="7ui-e9-6hg"/>
                                             </connections>
                                         </button>
-                                        <view alpha="0.5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SgT-wc-J7l">
+                                        <view hidden="YES" alpha="0.5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SgT-wc-J7l">
                                             <rect key="frame" x="0.0" y="187" width="375" height="29"/>
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AIg-f2-PPx">
@@ -1924,6 +1924,32 @@
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="112.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
+                            </tableViewCell>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="homeworkTableHeader" rowHeight="23" id="QOd-HR-lcr" customClass="homeworkTableHeader" customModule="MFSCalendar" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="385.5" width="375" height="23"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="QOd-HR-lcr" id="8Be-6e-fca">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="22.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tbc-8a-h4N">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="22.5"/>
+                                            <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
+                                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <color key="backgroundColor" red="1" green="0.49327188729999999" blue="0.47399842739999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <constraints>
+                                        <constraint firstAttribute="bottom" secondItem="tbc-8a-h4N" secondAttribute="bottom" id="gPV-sT-Lvp"/>
+                                        <constraint firstItem="tbc-8a-h4N" firstAttribute="top" secondItem="8Be-6e-fca" secondAttribute="top" id="l2A-8g-BcU"/>
+                                        <constraint firstAttribute="trailing" secondItem="tbc-8a-h4N" secondAttribute="trailing" id="ryP-ej-mwQ"/>
+                                        <constraint firstItem="tbc-8a-h4N" firstAttribute="leading" secondItem="8Be-6e-fca" secondAttribute="leading" id="ytU-v5-UFe"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="titleLabel" destination="tbc-8a-h4N" id="y4N-07-Qyz"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <sections/>

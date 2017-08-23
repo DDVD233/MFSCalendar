@@ -125,5 +125,15 @@ extension UITableView {
     }
 }
 
+extension Array where Element: Equatable {
+    
+    // Remove first collection element that is equal to the given `object`:
+    mutating func remove(object: Element) {
+        if let index = index(of: object) {
+            remove(at: index)
+        }
+    }
+}
+
 public let userDefaults = UserDefaults(suiteName: "group.org.dwei.MFSCalendar")
 public let userDocumentPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path

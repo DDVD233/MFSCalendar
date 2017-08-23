@@ -20,8 +20,6 @@ class classDetailViewController: UITableViewController, UIDocumentInteractionCon
     var classObject: NSDictionary? = nil
     var avaliableInformation = [String]()
     
-    var syllabusList = [NSDictionary]()
-    
     var contentList = [String: [[String: Any?]]]()
     
     @IBOutlet weak var teacherName: UILabel!
@@ -93,15 +91,6 @@ class classDetailViewController: UITableViewController, UIDocumentInteractionCon
             let fileManager = FileManager.default
             
             let syllabusPath = path.appending("/\(sectionId)_syllabus.plist")
-            
-            if fileManager.fileExists(atPath: syllabusPath) {
-                self.syllabusList = NSArray(contentsOfFile: syllabusPath) as! [NSDictionary]
-            }
-            
-            if self.syllabusList.count > 0 && !self.avaliableInformation.contains("Syllabus") {
-                
-                self.avaliableInformation.append("Syllabus")
-            }
         }
         
         DispatchQueue.main.async {
@@ -138,7 +127,11 @@ class classDetailViewController: UITableViewController, UIDocumentInteractionCon
                         }
                         
                         self.avaliableInformation = ["Basic"]
-                        self.avaliableInformation += self.contentIDToName(inputData: json, sectionId: sectionIdString)
+                        var contentNameList = self.contentIDToName(inputData: json, sectionId: sectionIdString)
+                        
+                        contentNameList.remove(object: "Photo")
+                        
+                        self.avaliableInformation += contentNameList
                     } catch {
                         presentErrorMessage(presentMessage: error.localizedDescription, layout: .StatusLine)
                     }
@@ -153,6 +146,10 @@ class classDetailViewController: UITableViewController, UIDocumentInteractionCon
             
             let group = DispatchGroup()
             for contentName in self.avaliableInformation {
+                guard contentName != "Basic" else {
+                    continue
+                }
+                
                 DispatchQueue.global().async(group: group, execute: {
                     let semaphore = DispatchSemaphore(value: 0)
                     provider.request(MyService.getClassContentData(contentName: contentName, sectionId: sectionIdString), completion: { result in
@@ -186,41 +183,26 @@ class classDetailViewController: UITableViewController, UIDocumentInteractionCon
     
     func contentIDToName(inputData: Array<Dictionary<String, Any?>>, sectionId: String) -> Array<String> {
         var contentNameList = [String]()
-        let semaphore = DispatchSemaphore(value: 0)
-        guard loginAuthentication().success else { return [] }
-        let url = "https://mfriends.myschoolapp.com/api/datadirect/GroupPossibleContentGet/?format=json&leadSectionId=\(sectionId)"
+        guard let filePath = Bundle.main.url(forResource: "GroupPossibleContent", withExtension: "plist") else {
+            presentErrorMessage(presentMessage: "Resource file missing.", layout: .StatusLine)
+            return []
+        }
         
-        Alamofire.request(url).response(completionHandler: { result in
-            print(JSON(result.data ?? Data()))
-            semaphore.signal()
-        })
+        guard let contentLUT = NSArray(contentsOf: filePath) as? Array<Dictionary<String, Any?>> else {
+            presentErrorMessage(presentMessage: "Resource file has incorrect format", layout: .StatusLine)
+            return []
+        }
         
-//        provider.request(MyService.getContentList(sectionId: sectionId), completion: { result in
-//            switch result {
-//            case let .success(response):
-//                guard let json = try? response.mapJSON(failsOnEmptyData: false) as? Array<Dictionary<String, Any?>> else {
-//                    presentErrorMessage(presentMessage: "Incorrect json file", layout: .StatusLine)
-//                    semaphore.signal()
-//                    return
-//                }
-//                
-//                for items in inputData {
-//                    guard let contentId = items["ContentId"] as? Int else {
-//                        continue
-//                    }
-//                    
-//                    if let nameForTheContent = json?.filter({ $0["ContentId"] as? Int == contentId}).first?["Content"] as? String {
-//                        contentNameList.append(nameForTheContent)
-//                    }
-//                }
-//            case let .failure(error):
-//                presentErrorMessage(presentMessage: error.localizedDescription, layout: .StatusLine)
-//            }
-//            
-//            semaphore.signal()
-//        })
+        for items in inputData {
+            guard let contentId = items["ContentId"] as? Int else {
+                continue
+            }
+            
+            if let nameForTheContent = contentLUT.filter({ $0["ContentId"] as? Int == contentId }).first?["Content"] as? String {
+                contentNameList.append(nameForTheContent)
+            }
+        }
         
-        semaphore.wait()
         return contentNameList
     }
 }
@@ -258,8 +240,16 @@ extension classDetailViewController {
         return UITableViewAutomaticDimension
     }
     
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return avaliableInformation[section]
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerView = tableView.dequeueReusableCell(withIdentifier: "homeworkTableHeader") as! homeworkTableHeader
+        
+        headerView.titleLabel.text = avaliableInformation[section]
+        
+        return headerView
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 23
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -298,7 +288,7 @@ extension classDetailViewController {
             handleCellData(cell: &cell, buttonTitleKey: "Name", textViewTextKey: "Description", indexPath: indexPath)
             
             return cell
-        case "download":
+        case "Download":
             var cell = tableView.dequeueReusableCell(withIdentifier: "syllabusCell", for: indexPath) as! syllabusView
             
             handleCellData(cell: &cell, buttonTitleKey: "Description", textViewTextKey: "LongDescription", indexPath: indexPath)
@@ -322,7 +312,10 @@ extension classDetailViewController {
         if !htmlString.isEmpty {
             if let html = htmlString.convertToHtml() {
                 cell.syllabusDescription.attributedText = html
+                cell.syllabusDescription.sizeToFit()
             }
+        } else {
+            cell.syllabusDescription.text = ""
         }
         
         cell.attachmentQueryString = dictData["AttachmentQueryString"] as? String ?? ""
@@ -331,20 +324,20 @@ extension classDetailViewController {
         
         cell.title.setTitle(dictData[buttonTitleKey] as? String ?? "", for: .normal)
         
-        cell.syllabusDescription.isScrollEnabled = true
-        
-        if cell.syllabusDescription.contentSize.height >= 200 {
-            cell.syllabusDescription.snp.makeConstraints({ (make) in
-                cell.heightConstrant = make.height.equalTo(200).constraint
-            })
-            
-            cell.showMoreView.isHidden = false
-        } else {
-            cell.showMoreView.isHidden = true
-            cell.sizeToFit()
-        }
-    
-        cell.syllabusDescription.isScrollEnabled = false
+//        cell.syllabusDescription.isScrollEnabled = true
+//        
+//        if cell.syllabusDescription.contentSize.height >= 200 {
+//            cell.syllabusDescription.snp.makeConstraints({ (make) in
+//                cell.heightConstrant = make.height.equalTo(200).constraint
+//            })
+//            
+//            cell.showMoreView.isHidden = false
+//        } else {
+//            cell.showMoreView.isHidden = true
+//            cell.sizeToFit()
+//        }
+//    
+//        cell.syllabusDescription.isScrollEnabled = false
         
         cell.selectionStyle = .none
     }
