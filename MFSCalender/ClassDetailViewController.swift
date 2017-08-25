@@ -14,11 +14,13 @@ import DGElasticPullToRefresh
 import Alamofire
 import M13ProgressSuite
 import SnapKit
+import SafariServices
 
 class classDetailViewController: UITableViewController, UIDocumentInteractionControllerDelegate {
     
     var classObject: NSDictionary? = nil
     var avaliableInformation = [String]()
+    var overrideHeader = [String: String]()
     
     var contentList = [String: [[String: Any?]]]()
     
@@ -81,16 +83,12 @@ class classDetailViewController: UITableViewController, UIDocumentInteractionCon
     }
     
     func loadContent() {
+        teacherName.text = classObject?["teacherName"] as? String
+        roomNumber.text = classObject?["roomNumber"] as? String
+        
         if (!teacherName.text!.isEmpty || !roomNumber.text!.isEmpty) && !avaliableInformation.contains("Basic") {
             //            其中一个不为空,且目前还没有这一项时
             avaliableInformation.append("Basic")
-        }
-        
-        if let sectionId = classObject?["leadsectionid"] as? Int {
-            let path = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-            let fileManager = FileManager.default
-            
-            let syllabusPath = path.appending("/\(sectionId)_syllabus.plist")
         }
         
         DispatchQueue.main.async {
@@ -200,6 +198,13 @@ class classDetailViewController: UITableViewController, UIDocumentInteractionCon
             
             if let nameForTheContent = contentLUT.filter({ $0["ContentId"] as? Int == contentId }).first?["Content"] as? String {
                 contentNameList.append(nameForTheContent)
+                if let settingString = items["GenericSettings"] as? String {
+                    if let setting = settingString.convertToDictionary() {
+                        if let thisOverrideHeader = setting["HeaderText"] as? String {
+                            overrideHeader[nameForTheContent] = thisOverrideHeader
+                        }
+                    }
+                }
             }
         }
         
@@ -243,13 +248,19 @@ extension classDetailViewController {
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = tableView.dequeueReusableCell(withIdentifier: "homeworkTableHeader") as! homeworkTableHeader
         
-        headerView.titleLabel.text = avaliableInformation[section]
+        let headerText = avaliableInformation[section]
+        
+        if overrideHeader[headerText] != nil {
+            headerView.titleLabel.text = overrideHeader[headerText]
+        } else {
+            headerView.titleLabel.text = headerText
+        }
         
         return headerView
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 23
+        return 46
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -270,6 +281,8 @@ extension classDetailViewController {
             basicInformationView.frame = CGRect(x: 0, y: 1, width: cell.frame.size.width, height: cell.frame.size.height - 2)
             cell.addSubview(basicInformationView)
             cell.layoutSubviews()
+            
+            return cell
         case "Syllabus":
             var cell = tableView.dequeueReusableCell(withIdentifier: "syllabusCell", for: indexPath) as! syllabusView
         
@@ -294,6 +307,18 @@ extension classDetailViewController {
             handleCellData(cell: &cell, buttonTitleKey: "Description", textViewTextKey: "LongDescription", indexPath: indexPath)
             
             return cell
+        case "Text":
+            var cell = tableView.dequeueReusableCell(withIdentifier: "syllabusCell", for: indexPath) as! syllabusView
+            
+            handleCellData(cell: &cell, buttonTitleKey: "Description", textViewTextKey: "LongText", indexPath: indexPath)
+            
+            return cell
+        case "Expectation":
+            var cell = tableView.dequeueReusableCell(withIdentifier: "syllabusCell", for: indexPath) as! syllabusView
+            
+            handleCellData(cell: &cell, buttonTitleKey: "", textViewTextKey: "ShortDescription", indexPath: indexPath)
+            
+            return cell
         default:
             break
         }
@@ -307,6 +332,33 @@ extension classDetailViewController {
             return
         }
         
+        cell.attachmentQueryString = dictData["AttachmentQueryString"] as? String
+        var attachmentFileName: String? {
+            if  dictData["Attachment"] is String {
+                return dictData["Attachment"] as? String
+            } else if dictData["FileName"] is String {
+                return dictData["FileName"] as? String
+            } else {
+               return nil
+            }
+        }
+        
+        cell.attachmentFileName = attachmentFileName
+        cell.directDownloadUrl = dictData["DownloadUrl"] as? String
+        
+        cell.url = dictData["Url"] as? String
+        
+        let titleString = dictData[buttonTitleKey] as? String ?? ""
+        cell.title.setTitle(titleString, for: .normal)
+        
+        if titleString.isEmpty {
+            cell.syllabusDescription.snp.makeConstraints({ make in
+                make.top.equalTo(cell.snp.topMargin).offset(5)
+            })
+        } else {
+            cell.syllabusDescription.snp.removeConstraints()
+        }
+        
         let htmlString = dictData[textViewTextKey] as? String ?? ""
         
         if !htmlString.isEmpty {
@@ -317,12 +369,6 @@ extension classDetailViewController {
         } else {
             cell.syllabusDescription.text = ""
         }
-        
-        cell.attachmentQueryString = dictData["AttachmentQueryString"] as? String ?? ""
-        cell.attachmentFileName = dictData["Attachment"] as? String ?? ""
-        cell.url = dictData["Url"] as? String
-        
-        cell.title.setTitle(dictData[buttonTitleKey] as? String ?? "", for: .normal)
         
 //        cell.syllabusDescription.isScrollEnabled = true
 //        
@@ -338,6 +384,12 @@ extension classDetailViewController {
 //        }
 //    
 //        cell.syllabusDescription.isScrollEnabled = false
+        
+        if cell.url == nil && cell.attachmentFileName == nil {
+            cell.title.isEnabled = false
+        } else {
+            cell.title.isEnabled = true
+        }
         
         cell.selectionStyle = .none
     }
@@ -508,12 +560,15 @@ class syllabusView: UITableViewCell {
     var attachmentFileName: String? = nil
     var heightConstrant: Constraint? = nil
     var url: String? = nil
+    var directDownloadUrl: String? = nil
     
     @IBOutlet var showMoreView: UIView!
     
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        syllabusDescription.delegate = self
+        title.setTitleColor(UIColor.darkGray, for: .disabled)
     }
     
     @IBAction func showMoreButtonClicked(_ sender: Any) {
@@ -535,6 +590,15 @@ class syllabusView: UITableViewCell {
             self.parentViewController!.navigationController?.setIndeterminate(true)
         }
         
+        if self.url != nil {
+            if let urlToOpen = URL(string: self.url!) {
+                let safariViewController = SFSafariViewController(url: urlToOpen)
+                parentViewController?.present(safariViewController, animated: true, completion: nil)
+            }
+            
+            return
+        }
+        
         guard !self.attachmentFileName!.isEmpty else {
             presentMessage(message: "There is no attachment.")
             self.parentViewController!.navigationController?.cancelProgress()
@@ -553,17 +617,18 @@ class syllabusView: UITableViewCell {
             return
         }
         
-        guard !(attachmentQueryString?.isEmpty)! else {
-            presentMessage(message: "The attachment cannot be found.")
-            self.parentViewController!.navigationController?.cancelProgress()
-            return
-        }
-        
         guard loginAuthentication().success else {
             return
         }
         
-        let url = "https://mfriends.myschoolapp.com/app/utilities/FileDownload.ashx?" + attachmentQueryString!
+        var url: String {
+            if directDownloadUrl != nil {
+                return "https://mfriends.myschoolapp.com" + directDownloadUrl!
+            }
+            
+            return "https://mfriends.myschoolapp.com/app/utilities/FileDownload.ashx?" + attachmentQueryString!
+        }
+        
         //        create request.
 //        Alamofire Test.
         let destination: DownloadRequest.DownloadFileDestination = { _, _ in
@@ -612,5 +677,22 @@ class syllabusView: UITableViewCell {
         view.button?.isHidden = true
         let config = SwiftMessages.Config()
         SwiftMessages.show(config: config, view: view)
+    }
+}
+
+extension syllabusView: UITextViewDelegate {
+    @available(iOS 10.0, *)
+    func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
+        
+        // Because the safari view controller no longer providing shared cookies between Safari, Safari View Controller instances, the app should use safari app to open links instead. (https://github.com/openid/AppAuth-iOS/issues/120)
+        if #available(iOS 11.0, *) {
+            return true
+        }
+        
+        let safariViewController = SFSafariViewController(url: URL)
+        
+        parentViewController?.present(safariViewController, animated: true, completion: nil)
+        
+        return false
     }
 }

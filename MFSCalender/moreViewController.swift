@@ -9,7 +9,8 @@
 import UIKit
 import UserNotifications
 import MessageUI
-import JBWebViewController
+import SafariServices
+import Down
 
 class moreViewController: UITableViewController {
     
@@ -40,14 +41,9 @@ class moreViewController: UITableViewController {
 extension moreViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 1 && indexPath.row == 2 {
-            let webViewController = JBWebViewController()
-            var request = URLRequest(url: URL(string:"https://mfriends.myschoolapp.com/app/student#resourceboard")!)
-            let (success, token, _) = loginAuthentication()
-            guard success else { return }
-            request.setValue("t=\(token)", forHTTPHeaderField: "Cookie")
-            request.httpShouldHandleCookies = true
-            webViewController.load(request)
-            webViewController.show()
+            let url = URL(string: "https://mfriends.myschoolapp.com/app/student#resourceboard")!
+            let safariPage = SFSafariViewController(url: url)
+            self.present(safariPage, animated: true, completion: nil)
         }
     }
 }
@@ -70,6 +66,28 @@ class profileViewController: UITableViewController {
 
 
 class aboutView:UITableViewController, MFMailComposeViewControllerDelegate {
+    @IBOutlet var dependenciesTextView: UITextView!
+    
+    override func viewDidAppear(_ animated: Bool) {
+        let podAckFile = Bundle.main.url(forResource: "Acknowledgements", withExtension: "markdown")!
+        let down = Down(markdownString: try! String(contentsOf: podAckFile))
+        tableView.estimatedRowHeight = 50
+        
+        if let attributedString = try? down.toAttributedString() {
+            dependenciesTextView.attributedText = attributedString
+            dependenciesTextView.isScrollEnabled = false
+            dependenciesTextView.sizeToFit()
+            tableView.reloadData()
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.section == 2 {
+            return UITableViewAutomaticDimension
+        } else {
+            return 44
+        }
+    }
     
     @IBAction func sendEmail(_ sender: Any) {
         let mailComposeViewController = configuredMailComposeViewController()
