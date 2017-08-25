@@ -1,10 +1,9 @@
 PODS:
   - Alamofire (4.5.0)
-  - ARChromeActivity (1.0.0)
-  - ARSafariActivity (0.0.1)
   - Crashlytics (3.8.4):
     - Fabric (~> 1.6.3)
   - DGElasticPullToRefresh (1.1)
+  - Down (0.3.4)
   - DZNEmptyDataSet (1.8.1)
   - Fabric (1.6.11)
   - Firebase/Core (4.0.3):
@@ -35,10 +34,7 @@ PODS:
   - GoogleToolboxForMac/NSData+zlib (2.1.1):
     - GoogleToolboxForMac/Defines (= 2.1.1)
   - GTMSessionFetcher/Core (1.1.10)
-  - JBWebViewController (1.0.8):
-    - ARChromeActivity (= 1.0.0)
-    - ARSafariActivity (= 0.0.1)
-    - NJKWebViewProgress (= 0.2.3)
+  - JSQWebViewController (5.0.0)
   - LTMorphingLabel (0.5.0)
   - M13Checkbox (3.1.3)
   - M13ProgressSuite (1.2.9)
@@ -47,13 +43,9 @@ PODS:
   - Moya/Core (8.0.5):
     - Alamofire (~> 4.1)
     - Result (~> 3.0)
-  - NJKWebViewProgress (0.2.3):
-    - NJKWebViewProgress/Core (= 0.2.3)
-    - NJKWebViewProgress/ProgressView (= 0.2.3)
-  - NJKWebViewProgress/Core (0.2.3)
-  - NJKWebViewProgress/ProgressView (0.2.3)
   - NVActivityIndicatorView (3.6.1)
   - Protobuf (3.3.0)
+  - RAMAnimatedTabBarController (2.2.0)
   - ReachabilitySwift (3)
   - Result (3.2.3)
   - SCLAlertView (0.7.0)
@@ -72,17 +64,19 @@ DEPENDENCIES:
   - Alamofire (~> 4.4)
   - Crashlytics
   - DGElasticPullToRefresh
+  - Down
   - DZNEmptyDataSet
   - Fabric
   - Firebase/Core
   - Firebase/Performance
   - FSCalendar
-  - JBWebViewController
+  - JSQWebViewController
   - LTMorphingLabel
   - M13Checkbox
   - M13ProgressSuite
   - Moya
   - NVActivityIndicatorView
+  - RAMAnimatedTabBarController
   - ReachabilitySwift
   - SCLAlertView
   - SDWebImage (~> 3.8)
@@ -96,10 +90,9 @@ DEPENDENCIES:
 
 SPEC CHECKSUMS:
   Alamofire: f28cdffd29de33a7bfa022cbd63ae95a27fae140
-  ARChromeActivity: 40d77445498fded9d32cbf4a41e8585766feffd6
-  ARSafariActivity: f2d5fb199772bc6dd78fcb2b5ea068d70f040847
   Crashlytics: 79e236942ca1e7fc641df1feb9a275360a78ab6a
   DGElasticPullToRefresh: 28f11a6026302a90f8ffebbc6e24748e584dddd3
+  Down: 3f35b61e51a603df3e9e7e0289b15752e72f82e6
   DZNEmptyDataSet: 9525833b9e68ac21c30253e1d3d7076cc828eaa7
   Fabric: 5911403591946b8228ab1c51d98f1d7137e863c6
   Firebase: 9e33fdfbca37cab635c693883caa90a4475b842b
@@ -110,14 +103,14 @@ SPEC CHECKSUMS:
   FSCalendar: a04b09f16f811bc92e82f3cf852a15225233b9d5
   GoogleToolboxForMac: 8e329f1b599f2512c6b10676d45736bcc2cbbeb0
   GTMSessionFetcher: 30d874b96d0d76028f61fbd122801e3f030d47db
-  JBWebViewController: fbec1603683f42a758bb632339b806205b1d8806
+  JSQWebViewController: 0461aa42612b221571556df61d9c09f080cb2eef
   LTMorphingLabel: bc170be74b219b7dae0e5543a44676d16da70ff7
   M13Checkbox: c132a7e0eb964731855eff67b883a0b21b7c0977
   M13ProgressSuite: ea9f7263e73e9215e6849dfa54e29ee0ad6a145c
   Moya: c37eec09a098ba9991b5a963b291fc5704bdb9ef
-  NJKWebViewProgress: f481fd424cb5ecc27eacae11b5397db92fba9a4d
   NVActivityIndicatorView: 9f52a7f84bf5c6a798722c450fe3c198e01c56ed
   Protobuf: d582fecf68201eac3d79ed61369ef45734394b9c
+  RAMAnimatedTabBarController: 4904a0ec08f2a4e935d0d3a5824551a77390b965
   ReachabilitySwift: f5b9bb30a0777fac8f09ce8b067e32faeb29bb64
   Result: 128640a6347e8d2ae48b142556739a2d13f90ce6
   SCLAlertView: 8a14ffc40590c619e183eed2298b854385f30be1
@@ -130,6 +123,6 @@ SPEC CHECKSUMS:
   UICircularProgressRing: 99419d03525be7b4ad29c0021e0fbb7d913b0030
   XLPagerTabStrip: 9be80a66c6b7d60306b2c0a6004965016d68f813
 
-PODFILE CHECKSUM: b4716fcd8e0802034ba27724db40a5577d0afbbe
+PODFILE CHECKSUM: 3059ab83e5e6fdbf5812bb7384429da664cd94ef
 
 COCOAPODS: 1.2.0

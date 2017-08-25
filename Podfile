@@ -1,6 +1,6 @@
 project 'MFSCalendar.xcodeproj'
 source 'https://github.com/CocoaPods/Specs.git'
-platform :ios, '10.0'
+platform :ios, '9.0'
 use_frameworks!
 
 
@@ -31,6 +31,12 @@ target 'MFSCalendar' do
     # pod 'IGListKit'
     pod 'M13ProgressSuite'
     pod 'SnapKit'
-    pod "JBWebViewController"
+    pod 'RAMAnimatedTabBarController'
+    pod 'JSQWebViewController'
+    pod 'Down'
 end
 
+post_install do | installer |
+  require 'fileutils'
+  FileUtils.cp_r('Pods/Target Support Files/Pods-MFSCalendar/Pods-MFSCalendar-acknowledgements.markdown', 'MFSCalender/Acknowledgements.markdown', :remove_destination => true)
+end
