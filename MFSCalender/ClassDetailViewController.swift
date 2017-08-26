@@ -20,6 +20,7 @@ class classDetailViewController: UITableViewController, UIDocumentInteractionCon
     
     var classObject: NSDictionary? = nil
     var avaliableInformation = [String]()
+    var sectionShouldShowMore = [String: Bool]()
     var overrideHeader = [String: String]()
     
     var contentList = [String: [[String: Any?]]]()
@@ -130,6 +131,10 @@ class classDetailViewController: UITableViewController, UIDocumentInteractionCon
                         contentNameList.remove(object: "Photo")
                         
                         self.avaliableInformation += contentNameList
+                        
+                        for contentName in self.avaliableInformation {
+                            self.sectionShouldShowMore[contentName] = false
+                        }
                     } catch {
                         presentErrorMessage(presentMessage: error.localizedDescription, layout: .StatusLine)
                     }
@@ -229,8 +234,28 @@ extension classDetailViewController {
         case "Basic":
             return 1
         default:
-            return contentList[avaliableInformation[section]]?.count ?? 0
+            let sectionName = avaliableInformation[section]
+            let contentCount = contentList[sectionName]?.count ?? 0
+            if (sectionShouldShowMore[sectionName] ?? false) {
+                return contentCount
+            } else {
+                return [2, contentCount].min()!
+            }
         }
+    }
+    
+    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        let sectionName = avaliableInformation[section]
+        
+        guard !(sectionShouldShowMore[avaliableInformation[section]] ?? true) else {
+            return nil
+        }
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "classTableShowMoreFooter") as! classTableShowMoreFooter
+        
+        cell.sectionName = sectionName
+        
+        return cell
     }
     
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -694,5 +719,22 @@ extension syllabusView: UITextViewDelegate {
         parentViewController?.present(safariViewController, animated: true, completion: nil)
         
         return false
+    }
+}
+
+class classTableShowMoreFooter: UITableViewCell {
+    var sectionName: String? = nil
+    
+    @IBAction func showMoreButtonClicked(_ sender: Any) {
+        guard sectionName != nil else {
+            return
+        }
+        
+        guard let parentViewControllerInstance = parentViewController as? classDetailViewController else {
+            return
+        }
+        
+        parentViewControllerInstance.sectionShouldShowMore[sectionName!] = true
+        parentViewControllerInstance.tableView.reloadData()
     }
 }

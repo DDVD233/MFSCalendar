@@ -1951,6 +1951,33 @@
                                     <outlet property="titleLabel" destination="tbc-8a-h4N" id="y4N-07-Qyz"/>
                                 </connections>
                             </tableViewCell>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="classTableShowMoreFooter" id="xnF-bW-bmc" userLabel="classTableShowMoreFooter" customClass="classTableShowMoreFooter" customModule="MFSCalendar" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="431.5" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="xnF-bW-bmc" id="VOq-QD-I8f">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FEh-ma-Zph">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                            <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                                            <state key="normal" title="Show More...">
+                                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            </state>
+                                            <connections>
+                                                <action selector="showMoreButtonClicked:" destination="xnF-bW-bmc" eventType="touchUpInside" id="jU3-IS-vIn"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
+                                    <color key="backgroundColor" red="1" green="0.49327188729999999" blue="0.47399842739999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <constraints>
+                                        <constraint firstAttribute="bottom" secondItem="FEh-ma-Zph" secondAttribute="bottom" id="Gu7-Y3-wNh"/>
+                                        <constraint firstItem="FEh-ma-Zph" firstAttribute="top" secondItem="VOq-QD-I8f" secondAttribute="top" id="Q7f-nx-Tia"/>
+                                        <constraint firstItem="FEh-ma-Zph" firstAttribute="leading" secondItem="VOq-QD-I8f" secondAttribute="leading" id="Y18-JM-cZy"/>
+                                        <constraint firstAttribute="trailing" secondItem="FEh-ma-Zph" secondAttribute="trailing" id="pHb-IS-JUQ"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                            </tableViewCell>
                         </prototypes>
                         <sections/>
                         <connections>
