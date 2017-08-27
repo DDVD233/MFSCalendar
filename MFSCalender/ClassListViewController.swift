@@ -111,7 +111,6 @@ extension classListController: UICollectionViewDataSource, UICollectionViewDeleg
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
         let row = indexPath.row
         var classObject: NSDictionary = [:]
         
@@ -125,6 +124,26 @@ extension classListController: UICollectionViewDataSource, UICollectionViewDeleg
         }
         
         userDefaults?.set(classObject["index"], forKey: "indexForCourseToPresent")
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didHighlightItemAt indexPath: IndexPath) {
+        let cell = collectionView.cellForItem(at: indexPath) as! classListViewCell
+        
+        cell.title.textColor = UIColor.gray
+        
+        UIView.animate(withDuration: 0.3, animations: {
+            cell.backgroundImage.transform = CGAffineTransform(scaleX: 1.3, y: 1.3)
+        }, completion: nil)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didUnhighlightItemAt indexPath: IndexPath) {
+        let cell = collectionView.cellForItem(at: indexPath) as! classListViewCell
+        
+        cell.title.textColor = UIColor.white
+        
+        UIView.animate(withDuration: 0.3, animations: {
+            cell.backgroundImage.transform = CGAffineTransform(scaleX: 1, y: 1)
+        }, completion: nil)
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {

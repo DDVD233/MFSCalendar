@@ -245,17 +245,29 @@ extension classDetailViewController {
     }
     
     override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        let sectionName = avaliableInformation[section]
-        
-        guard !(sectionShouldShowMore[avaliableInformation[section]] ?? true) else {
+        if !shouldDisplayFooterViewAt(section: section) {
             return nil
         }
+        
+        let sectionName = avaliableInformation[section]
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "classTableShowMoreFooter") as! classTableShowMoreFooter
         
         cell.sectionName = sectionName
         
         return cell
+    }
+    
+    func shouldDisplayFooterViewAt(section: Int) -> Bool {
+        let sectionName = avaliableInformation[section]
+        
+        if sectionShouldShowMore[sectionName] ?? true {
+            return false
+        } else if (contentList[sectionName]?.count ?? 0) < 3 {
+            return false
+        } else {
+            return true
+        }
     }
     
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -286,6 +298,14 @@ extension classDetailViewController {
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 46
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        if shouldDisplayFooterViewAt(section: section) {
+            return 86
+        } else {
+            return 40
+        }
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -395,22 +415,7 @@ extension classDetailViewController {
             cell.syllabusDescription.text = ""
         }
         
-//        cell.syllabusDescription.isScrollEnabled = true
-//        
-//        if cell.syllabusDescription.contentSize.height >= 200 {
-//            cell.syllabusDescription.snp.makeConstraints({ (make) in
-//                cell.heightConstrant = make.height.equalTo(200).constraint
-//            })
-//            
-//            cell.showMoreView.isHidden = false
-//        } else {
-//            cell.showMoreView.isHidden = true
-//            cell.sizeToFit()
-//        }
-//    
-//        cell.syllabusDescription.isScrollEnabled = false
-        
-        if cell.url == nil && cell.attachmentFileName == nil {
+        if (cell.url == nil && cell.attachmentFileName == nil) || cell.title.currentTitle!.isEmpty {
             cell.title.isEnabled = false
         } else {
             cell.title.isEnabled = true

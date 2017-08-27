@@ -446,8 +446,6 @@ extension Main: UICollectionViewDelegate, UICollectionViewDataSource, UICollecti
         let className = classData["className"] as? String
         let teacher = classData["teacherName"] as? String
         
-//        It is impossible to be nil.
-        let period = classData["period"] as! String
         if let roomNumber = classData["roomNumber"] as? String {
             if !roomNumber.isEmpty {
                 cell.roomNumber.text = "AT: " + roomNumber
@@ -455,6 +453,7 @@ extension Main: UICollectionViewDelegate, UICollectionViewDataSource, UICollecti
                 cell.roomNumber.text = nil
             }
         }
+        
         cell.teacher.text = teacher
         cell.className.text = className
         if row == 0 {
@@ -464,7 +463,9 @@ extension Main: UICollectionViewDelegate, UICollectionViewDataSource, UICollecti
         } else if className == "Lunch" {
             cell.period.text = "LUNCH"
         } else {
-            cell.period.text = "PERIOD " + period
+            if let period = classData["period"] as? Int {
+                cell.period.text = "PERIOD " + String(describing: period)
+            }
         }
         
         cell.homeworkView.isHidden = true
@@ -491,6 +492,7 @@ extension Main: UICollectionViewDelegate, UICollectionViewDataSource, UICollecti
                 cell.homeworkButton.setTitle(homeworkButtonText, for: .normal)
             }
         }
+        cell.index = classData["index"] as! Int
         
         return cell
     }

@@ -113,16 +113,16 @@ extension topicDetailViewController: UITableViewDelegate, UITableViewDataSource 
         
         if let url = topicObject["Url"] as? String {
             cell.url = url
-            cell.imageView?.image = UIImage(named: "Link")
+            cell.linkImage.image = UIImage(named: "Link")
         }
         
         if let filePath = topicObject["FilePath"] as? String, let fileName = topicObject["FileName"] as? String {
             cell.filePath = "https://mfriends.myschoolapp.com" + filePath
             cell.fileName = fileName
-            cell.imageView?.image = UIImage(named: "Download")
+            cell.linkImage.image = UIImage(named: "Download")
         }
         
-        cell.imageView?.contentMode = .scaleToFill
+        cell.linkImage.contentMode = .scaleToFill
         
         if cell.longDescription.text.isEmpty && (cell.link.titleLabel?.text ?? "").isEmpty {
             cell.isHidden = true
