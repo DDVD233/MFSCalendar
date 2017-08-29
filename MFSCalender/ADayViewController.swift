@@ -53,7 +53,7 @@ class ADay: UIViewController {
     }
 
     override func viewDidAppear(_ animated: Bool) {
-        
+
         if userDefaults?.bool(forKey: "reloadTable") != false {
             self.dataFetching()
             self.tableView.reloadData()
@@ -63,7 +63,7 @@ class ADay: UIViewController {
     }
 
     func dataFetching() {
-        
+
         let daySelected = userDefaults?.string(forKey: "daySelect")
         self.title = daySelected! + " Day"
         NSLog("Day: %@", daySelected!)
@@ -130,9 +130,9 @@ extension ADay: UITableViewDelegate, UITableViewDataSource {
         cell?.ClassName.text = rowDict["className"] as? String
         if let period = rowDict["period"] as? Int {
             cell?.PeriodNumber.text = String(describing: period)
-            
-            var meetTime:String = ""
-            
+
+            var meetTime: String = ""
+
             switch period {
             case 1: meetTime = "8:00 - 8:43"
             case 2: meetTime = "8:47 - 9:30"
@@ -144,10 +144,10 @@ extension ADay: UITableViewDelegate, UITableViewDataSource {
             case 8: meetTime = "14:27 - 15: 10"
             default: meetTime = "Error!"
             }
-            
+
             cell?.PeriodTime.text = meetTime
         }
-        
+
         let roomN = rowDict["roomNumber"] as? String
         cell?.RoomNumber.text = roomN
 
@@ -276,7 +276,7 @@ class AddClass: UITableViewController, UIPickerViewDelegate, UIPickerViewDataSou
                 if (classes["period"] as! String) == selectedPeriod {
                     periodExists = true
                     let alertController = UIAlertController(title: "Class exists",
-                                                            message: "The class already exists! Do you want to override the class?", preferredStyle: .alert)
+                            message: "The class already exists! Do you want to override the class?", preferredStyle: .alert)
                     let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
                     let okAction = UIAlertAction(title: "Yes", style: .default, handler: {
                         action in
@@ -288,15 +288,15 @@ class AddClass: UITableViewController, UIPickerViewDelegate, UIPickerViewDataSou
                     break
                 }
             }
-            
+
             if periodExists {
-                
+
             }
             let AddData = ["name": txtClassName.text!, "period": selectedPeriod, "room": roomNumber.text!]
             array?.add(AddData)
             NSLog(txtClassName.text!)
             array?.write(toFile: path, atomically: true)
-            
+
             userDefaults?.set(true, forKey: "reloadTable")
             dismiss(animated: true)
         }

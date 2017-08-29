@@ -17,50 +17,48 @@ import M13ProgressSuite
 
 
 class homeworkViewController: UITableViewController {
-    
-    
-    
-    
+
+
     @IBOutlet weak var homeworkTable: UITableView!
     var isUpdatingHomework = false
-    
+
     var listHomework = [String: Array<NSDictionary>]()
     var sections: [String] {
         return Array(self.listHomework.keys).sorted()
     }
-    
+
     let formatter = DateFormatter()
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         homeworkTable.rowHeight = UITableViewAutomaticDimension
         homeworkTable.estimatedRowHeight = 80
         homeworkTable.emptyDataSetSource = self
         homeworkTable.emptyDataSetDelegate = self
-        
+
 //        Remove the bottom 1px line on Navigation Bar
         self.navigationController?.navigationBar.barTintColor = UIColor(hexString: 0xFF7E79)
         self.navigationController?.navigationBar.isTranslucent = false
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
         self.navigationController?.navigationBar.shadowImage = UIImage()
-        
+
         let loadingview = DGElasticPullToRefreshLoadingViewCircle()
         loadingview.tintColor = UIColor.white
         homeworkTable.dg_addPullToRefreshWithActionHandler({ [weak self] () -> Void in
             self?.getHomework()
             self?.tableView.dg_stopLoading()
-            }, loadingView: loadingview)
+        }, loadingView: loadingview)
         homeworkTable.dg_setPullToRefreshFillColor(UIColor(hexString: 0xFF7E79))
         homeworkTable.dg_setPullToRefreshBackgroundColor(tableView.backgroundColor!)
-        
+
     }
-    
+
     override func viewDidAppear(_ animated: Bool) {
         DispatchQueue.global().async {
             self.getHomework()
         }
     }
-    
+
     func errorMessage(presentMessage: String) {
         let view = MessageView.viewFromNib(layout: .CardView)
         view.configureTheme(.error)
@@ -75,7 +73,7 @@ class homeworkViewController: UITableViewController {
         let config = SwiftMessages.Config()
         SwiftMessages.show(config: config, view: view)
     }
-    
+
     func getHomework() {
         isUpdatingHomework = true
         DispatchQueue.main.async {
@@ -85,16 +83,18 @@ class homeworkViewController: UITableViewController {
             self.navigationController?.setIndeterminate(true)
             self.tableView.reloadData()
         }
-        
-        guard let username = userDefaults?.string(forKey: "username") else { return }
-        var request = URLRequest(url: URL(string:"https://dwei.org/assignmentlist/")!)
-        
+
+        guard let username = userDefaults?.string(forKey: "username") else {
+            return
+        }
+        var request = URLRequest(url: URL(string: "https://dwei.org/assignmentlist/")!)
+
         let config = URLSessionConfiguration.default
         config.requestCachePolicy = .reloadIgnoringLocalCacheData
         config.urlCache = nil
-        
+
         let session = URLSession.init(configuration: config)
-        
+
         if username == "testaccount" {
             if loginAuthentication().success {
                 let formatter = DateFormatter()
@@ -102,7 +102,7 @@ class homeworkViewController: UITableViewController {
                 formatter.dateFormat = "M/d/yyyy"
                 let today = formatter.string(from: Date()).addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
                 let url = "https://mfriends.myschoolapp.com/api/DataDirect/AssignmentCenterAssignments/?format=json&filter=2&dateStart=\(today)&dateEnd=\(today)&persona=2"
-                request.url = URL(string:url)
+                request.url = URL(string: url)
             }
         }
         var originalData = [NSDictionary]()
@@ -114,7 +114,7 @@ class homeworkViewController: UITableViewController {
                         print(json)
                         originalData = json
                     }
-                    
+
                 } catch {
                     NSLog("Data parsing failed")
                     DispatchQueue.main.async {
@@ -130,23 +130,25 @@ class homeworkViewController: UITableViewController {
             }
             semaphore.signal()
         })
-        
+
         task.resume()
         semaphore.wait()
         manageDate(originalData: originalData)
-        
+
         DispatchQueue.main.async {
             self.isUpdatingHomework = false
             self.navigationController?.cancelProgress()
             self.tableView.reloadData()
         }
     }
-    
+
     func manageDate(originalData: Array<NSDictionary>) {
         var managedHomework = [String: Array<NSDictionary>]()
 //        Format: [DateDue(YearMonthDay): Array<HomeworkBelongToThatSection>]
         for homework in originalData {
-            guard let dueDateData = homework["date_due"] as? String else { return }
+            guard let dueDateData = homework["date_due"] as? String else {
+                return
+            }
             formatter.dateFormat = "M/d/yyyy hh:mm a"
             formatter.locale = Locale(identifier: "en_US")
             let dueDate = formatter.date(from: dueDateData)
@@ -163,20 +165,22 @@ class homeworkViewController: UITableViewController {
                 managedHomework[dueDateMDString] = homeworkArray
             }
         }
-        
+
         self.listHomework = managedHomework
     }
-    
+
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let homeworkInSection = self.listHomework[sections[section]] else { return 0 }
+        guard let homeworkInSection = self.listHomework[sections[section]] else {
+            return 0
+        }
         return homeworkInSection.count
     }
-    
+
     override func numberOfSections(in tableView: UITableView) -> Int {
         print(sections)
         return self.listHomework.count
     }
-    
+
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if scrollView.contentOffset.y < 20 {
             self.navigationItem.title = "Homework"
@@ -184,7 +188,9 @@ class homeworkViewController: UITableViewController {
             var dateString: String {
                 let dueDateMDString = self.sections[indexPath.section]
                 self.formatter.dateFormat = "yyyyMMdd"
-                guard let dueDate = self.formatter.date(from: dueDateMDString) else { return "Unknown" }
+                guard let dueDate = self.formatter.date(from: dueDateMDString) else {
+                    return "Unknown"
+                }
                 if dueDate.isToday {
                     return "Today"
                 } else if dueDate.isTomorrow {
@@ -196,14 +202,16 @@ class homeworkViewController: UITableViewController {
             self.navigationItem.title = dateString
         }
     }
-    
+
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = tableView.dequeueReusableCell(withIdentifier: "homeworkTableHeader") as! homeworkTableHeader
-        
+
         var dateString: String {
             let dueDateMDString = self.sections[section]
             self.formatter.dateFormat = "yyyyMMdd"
-            guard let dueDate = self.formatter.date(from: dueDateMDString) else { return "Unknown" }
+            guard let dueDate = self.formatter.date(from: dueDateMDString) else {
+                return "Unknown"
+            }
             if dueDate.isToday {
                 return "Today"
             } else if dueDate.isTomorrow {
@@ -214,27 +222,29 @@ class homeworkViewController: UITableViewController {
         }
         headerView.titleLabel.text = dateString
         headerView.selectionStyle = .none
-        
+
         return headerView
     }
-    
+
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 23
     }
-    
+
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "homeworkViewCell", for: indexPath) as! homeworkViewCell
-        
+
         let homeworkInSection = self.listHomework[sections[indexPath.section]]
-        guard let homework = homeworkInSection?[indexPath.row] else { return cell }
+        guard let homework = homeworkInSection?[indexPath.row] else {
+            return cell
+        }
         if let assignmentId = homework["assignment_id"] as? Int {
-            cell.assignmentId = String(describing:assignmentId)
+            cell.assignmentId = String(describing: assignmentId)
         }
-        
+
         if let sectionId = homework["section_id"] as? Int {
-            cell.sectionId = String(describing:sectionId)
+            cell.sectionId = String(describing: sectionId)
         }
-        
+
         if let description = homework["short_description"] as? String {
             if let attributedString = description.convertToHtml() {
                 cell.shortDescription.attributedText = attributedString
@@ -244,15 +254,15 @@ class homeworkViewController: UITableViewController {
         } else {
             cell.shortDescription.text = ""
         }
-        
+
         cell.shortDescription.sizeToFit()
         cell.layoutIfNeeded()
-        
+
         cell.homeworkClass.text = homework["groupname"] as? String
-        
+
         let homeworkType = homework["assignment_type"] as? String
         cell.homeworkType.text = homeworkType
-        
+
         if homeworkType != nil {
             switch homeworkType! {
             case "Homework":
@@ -269,7 +279,7 @@ class homeworkViewController: UITableViewController {
                 cell.tagView.backgroundColor = UIColor(hexString: 0x607D8B)
             }
         }
-        
+
         if let status = homework["assignment_status"] as? Int {
             switch status {
             case -1:
@@ -280,7 +290,7 @@ class homeworkViewController: UITableViewController {
                 cell.checkMark.setCheckState(.unchecked, animated: false)
             }
         }
-        
+
         cell.checkMark.tintColor = cell.tagView.backgroundColor
         return cell
     }
@@ -290,24 +300,24 @@ extension homeworkViewController: DZNEmptyDataSetSource {
     func image(forEmptyDataSet scrollView: UIScrollView!) -> UIImage! {
         return UIImage(named: "No_homework.png")?.imageResize(sizeChange: CGSize(width: 95, height: 95))
     }
-    
+
     func title(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
         let attr = [NSFontAttributeName: UIFont.preferredFont(forTextStyle: UIFontTextStyle.headline)]
-        
+
         var str = "There is no homework to display."
         if isUpdatingHomework {
             str = "Updating homework..."
         }
         return NSAttributedString(string: str, attributes: attr)
     }
-    
+
     func buttonTitle(forEmptyDataSet scrollView: UIScrollView!, for state: UIControlState) -> NSAttributedString! {
         if isUpdatingHomework {
             return NSAttributedString()
         }
-        
+
         let buttonTitleString = NSAttributedString(string: "Refresh...", attributes: [NSForegroundColorAttributeName: UIColor(hexString: 0xFF7E79)])
-        
+
         return buttonTitleString
     }
 }
@@ -325,25 +335,29 @@ class homeworkViewCell: UITableViewCell {
     @IBOutlet weak var homeworkType: UILabel!
     @IBOutlet weak var homeworkClass: UILabel!
     @IBOutlet weak var tagView: UIView!
-    
+
     @IBOutlet var shortDescription: UITextView!
-    
+
     var assignmentId: String?
     var sectionId: String?
-    
+
     override func awakeFromNib() {
         checkMark.stateChangeAnimation = .bounce(.fill)
         checkMark.boxLineWidth = 3
         checkMark.addTarget(self, action: #selector(checkDidChange), for: UIControlEvents.valueChanged)
-        
+
     }
-    
+
     func checkDidChange(checkMark: M13Checkbox) {
-        guard (assignmentId != nil) else { return }
-        guard (sectionId != nil) else { return }
-        
+        guard (assignmentId != nil) else {
+            return
+        }
+        guard (sectionId != nil) else {
+            return
+        }
+
         var assignmentStatus: String? = nil
-        
+
         switch checkMark.checkState {
         case .checked:
             assignmentStatus = "1"
@@ -352,19 +366,19 @@ class homeworkViewCell: UITableViewCell {
         default:
             NSLog("Something strange happened.")
         }
-        
+
         var url: String? = nil
-        
+
         if userDefaults?.string(forKey: "username") != "testaccount" {
             url = "https://dwei.org/updateAssignmentStatus/" + assignmentId! + "/" + sectionId! + "/" + assignmentStatus!
         }
-        
+
         let request = URLRequest(url: URL(string: url!)!)
         let session = URLSession.shared
-        
+
         let task: URLSessionDataTask = session.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
             if error == nil {
-                
+
             } else {
                 switch checkMark.checkState {
                 case .checked:
@@ -383,13 +397,13 @@ class homeworkViewCell: UITableViewCell {
                 SwiftMessages.show(config: config, view: view)
             }
         })
-        
+
         task.resume()
     }
 }
 
 class homeworkTableHeader: UITableViewCell {
     @IBOutlet var titleLabel: UILabel!
-    
+
 }
 

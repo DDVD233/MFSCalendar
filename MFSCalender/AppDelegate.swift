@@ -26,6 +26,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 
+    func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey: Any] = [:]) -> Bool {
+        if url.host == "classDetail", let indexString = url.query {
+            if let index = Int(indexString) {
+                userDefaults?.set(index, forKey: "indexForCourseToPresent")
+                let storyboard = UIStoryboard.init(name: "Main", bundle: nil)
+                let mainViewController = storyboard.instantiateInitialViewController()
+                let classDetailViewController = storyboard.instantiateViewController(withIdentifier: "classDetailViewController")
+                app.keyWindow?.rootViewController?.show(classDetailViewController, sender: mainViewController)
+                return true
+            }
+        }
+
+        return false
+    }
+
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
@@ -45,34 +60,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if visibleViewController?.restorationIdentifier == "Main" {
             visibleViewController?.viewDidAppear(true)
         }
-        
-        
+
+
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     }
-    
+
     func getVisibleViewController(_ rootViewController: UIViewController?) -> UIViewController? {
-        
+
         var rootVC = rootViewController
         if rootVC == nil {
             rootVC = UIApplication.shared.keyWindow?.rootViewController
         }
-        
+
         if rootVC == nil {
             return rootVC
         }
-        
+
         if let presented = rootVC {
             if presented.isKind(of: UINavigationController.self) {
                 let navigationController = presented as! UINavigationController
                 return navigationController.viewControllers.last!
             }
-            
+
             if presented.isKind(of: UITabBarController.self) {
                 let tabBarController = presented as! UITabBarController
                 print("2.", tabBarController.selectedViewController!)
                 return tabBarController.selectedViewController!
             }
-            
+
             return getVisibleViewController(presented)
         }
         return nil
@@ -117,7 +132,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }()
 
     // MARK: - Core Data Saving support
-    
+
     @available(iOS 10.0, *)
     func saveContext() {
         let context = persistentContainer.viewContext

@@ -19,7 +19,7 @@ enum MyService {
     case getPossibleContent(sectionId: String)
     case getContentList(sectionId: String)
     case getClassContentData(contentName: String, sectionId: String)
-    
+
     //Dwei
     case getCalendarData
     case getCalendarEvent
@@ -29,7 +29,7 @@ enum MyService {
 fileprivate let assetDir: URL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!
 
 extension MyService: TargetType {
-    
+
     var baseURL: URL {
         switch self {
         case .getCalendarData, .getCalendarEvent, .dataVersionCheck:
@@ -40,7 +40,7 @@ extension MyService: TargetType {
     }
     var path: String {
         switch self {
-        //myMFS
+                //myMFS
         case .downloadLargeProfilePhoto(let link):
             return "/\(link)"
         case .getProfile(let userID, _):
@@ -51,8 +51,8 @@ extension MyService: TargetType {
             return "/api/datadirect/GroupPossibleContentGet/"
         case .getClassContentData(let contentName, let sectionId):
             return "/api/\(contentName)/forsection/\(sectionId)/"
-            
-        // Dwei
+
+                // Dwei
         case .getCalendarData:
             return "/data"
         case .getCalendarEvent:
@@ -61,7 +61,7 @@ extension MyService: TargetType {
             return "/dataversion"
         }
     }
-    
+
     var assetName: String {
         switch self {
         case .downloadLargeProfilePhoto: return "/ProfilePhoto.png"
@@ -69,18 +69,18 @@ extension MyService: TargetType {
         default: return ""
         }
     }
-    
+
     var localLocation: URL {
         return assetDir.appendingPathComponent(assetName)
     }
-    
+
     var method: Moya.Method {
         switch self {
         default:
             return .get
         }
     }
-    
+
     var parameters: [String: Any]? {
         switch self {
         case .getProfile(_, let token):
@@ -94,7 +94,7 @@ extension MyService: TargetType {
         default: return nil
         }
     }
-    
+
     var parameterEncoding: ParameterEncoding {
         switch self {
         default:
@@ -103,15 +103,17 @@ extension MyService: TargetType {
 //        URLEncoding.queryString: Always sends parameters in URL, regardless of which HTTP method is used
         }
     }
-    
+
     var sampleData: Data {
         return Data()
     }
-    
+
     var downloadDestination: DownloadDestination {
-        return { _, _ in return (self.localLocation, .removePreviousFile) }
+        return { _, _ in
+            return (self.localLocation, .removePreviousFile)
+        }
     }
-    
+
     var task: Task {
         switch self {
         case .downloadLargeProfilePhoto:

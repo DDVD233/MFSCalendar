@@ -307,7 +307,7 @@
                         <color key="selectedImageTintColor" red="1" green="0.40000000600000002" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
                     </tabBar>
                     <connections>
-                        <segue destination="pL9-2o-whX" kind="relationship" relationship="viewControllers" id="zcV-MC-SIr"/>
+                        <segue destination="yTU-4p-yW1" kind="relationship" relationship="viewControllers" id="zcV-MC-SIr"/>
                         <segue destination="2Rt-XE-Yqg" kind="relationship" relationship="viewControllers" id="CMf-cl-qkQ"/>
                         <segue destination="rt2-9L-AaP" kind="relationship" relationship="viewControllers" id="HmT-L9-n9P"/>
                         <segue destination="Wod-VY-kcK" kind="relationship" relationship="viewControllers" id="PXW-mz-1cT"/>
@@ -826,16 +826,7 @@
                             <constraint firstAttribute="bottom" secondItem="U8A-Xp-bII" secondAttribute="bottom" id="cOI-xf-r8l"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Today" image="Today" selectedImage="TodaySelected" id="abE-uF-9cL">
-                        <inset key="imageInsets" minX="0.0" minY="2" maxX="0.0" maxY="-2"/>
-                    </tabBarItem>
-                    <navigationItem key="navigationItem" id="tZQ-co-LRg">
-                        <barButtonItem key="rightBarButtonItem" style="done" systemItem="refresh" id="BQi-Pp-Uff">
-                            <connections>
-                                <action selector="Refresh:" destination="pL9-2o-whX" id="bHn-PF-2JK"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" id="tZQ-co-LRg"/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <connections>
                         <outlet property="bottomView" destination="U8A-Xp-bII" id="393-Nd-LO0"/>
@@ -848,7 +839,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rQl-dB-ssM" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2740" y="133.5832083958021"/>
+            <point key="canvasLocation" x="3679.1999999999998" y="133.5832083958021"/>
         </scene>
         <!--Class Schedule-->
         <scene sceneID="Eub-9A-Pg9">
@@ -977,7 +968,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tfh-Lb-pgs" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="6336.2318840579719" y="-70.108695652173921"/>
+            <point key="canvasLocation" x="7274.3999999999996" y="-70.614692653673174"/>
         </scene>
         <!--A Day-->
         <scene sceneID="WGk-dm-FGj">
@@ -1102,7 +1093,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="51L-AM-Vws" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="7168.115942028986" y="-70.108695652173921"/>
+            <point key="canvasLocation" x="8106.3999999999996" y="-70.614692653673174"/>
         </scene>
         <!--Add a class-->
         <scene sceneID="uwf-Re-VIj">
@@ -1840,7 +1831,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="afk-Gd-Jni" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5428.985507246377" y="600.81521739130437"/>
+            <point key="canvasLocation" x="6388" y="134"/>
         </scene>
         <!--Class Detail-->
         <scene sceneID="zVU-pB-G5x">
@@ -2112,7 +2103,7 @@
                     </constraints>
                 </view>
             </objects>
-            <point key="canvasLocation" x="7895.1999999999998" y="560.86956521739137"/>
+            <point key="canvasLocation" x="8834.3999999999996" y="560.86956521739137"/>
         </scene>
         <!--Grade View Controller-->
         <scene sceneID="1iS-Gw-pKI">
@@ -2902,6 +2893,32 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0zO-Jq-5bh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2741" y="-561"/>
+        </scene>
+        <!--Today-->
+        <scene sceneID="Oho-cm-V6F">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="yTU-4p-yW1" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Today" image="Today" selectedImage="TodaySelected" id="abE-uF-9cL">
+                        <inset key="imageInsets" minX="0.0" minY="2" maxX="0.0" maxY="-2"/>
+                    </tabBarItem>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="Z8S-9D-IL4">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="barTintColor" red="1" green="0.49327188729999999" blue="0.47399842739999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        </textAttributes>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="pL9-2o-whX" kind="relationship" relationship="rootViewController" id="XKI-l3-d8i"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="mv9-RT-wkD" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2740" y="133.5832083958021"/>
         </scene>
     </scenes>
     <resources>

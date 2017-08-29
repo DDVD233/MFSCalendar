@@ -15,24 +15,24 @@ import SwiftyJSON
 import FirebasePerformance
 import Alamofire
 
-class courseFillController:UIViewController {
-    
+class courseFillController: UIViewController {
+
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
-    
+
     @IBOutlet weak var progressView: UICircularProgressRingView!
     @IBOutlet weak var topLabel: LTMorphingLabel!
     @IBOutlet weak var bottomLabel: LTMorphingLabel!
-    
+
     let trace = Performance.startTrace(name: "course fill trace")
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         trace?.start()
         progressView.font = UIFont.systemFont(ofSize: 40)
     }
-    
+
     override func viewDidAppear(_ animated: Bool) {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyyMMdd"
@@ -42,7 +42,7 @@ class courseFillController:UIViewController {
             NSLog("All Done!")
         }
     }
-    
+
 //    When they click "import courses".
     func importCourses() -> Bool {
         progressView.setProgress(value: 2, animationDuration: 0.1)
@@ -55,7 +55,7 @@ class courseFillController:UIViewController {
         }
         return true
     }
-    
+
     func fillSchedule() {
         progressView.setProgress(value: 33, animationDuration: 1) {
             self.clearData(day: "A")
@@ -65,16 +65,16 @@ class courseFillController:UIViewController {
             self.clearData(day: "E")
             self.clearData(day: "F")
             if self.createSchedule(fillLowPriority: 0) {
-                
+
                 self.progressView.setProgress(value: 66, animationDuration: 1) {
                     if self.createSchedule(fillLowPriority: 1) {
                         self.getProfilePhoto()
                         self.versionCheck()
                         self.progressView.setProgress(value: 100, animationDuration: 1) {
-                            
+
                             self.topLabel.text = "Success"
                             self.bottomLabel.text = "Successfully updated"
-                            
+
                             DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(5), execute: {
                                 self.dismiss(animated: true, completion: nil)
                                 self.trace?.stop()
@@ -94,10 +94,8 @@ class courseFillController:UIViewController {
             }
         }
     }
-    
-    
-    
-    
+
+
 //    func getCourse() -> Bool {
 //        let username = userDefaults?.string(forKey: "username")
 //        let password = userDefaults?.string(forKey: "password")
@@ -148,62 +146,62 @@ class courseFillController:UIViewController {
 //        semaphore.wait()
 //        return success
 //    }
-    
+
     func getProfilePhoto() {
         let path = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
         let coursePath = path.appending("/CourseList.plist")
-        
+
         guard let courseList = NSArray(contentsOfFile: coursePath) as? Array<Dictionary<String, Any>> else {
             return
         }
         let group = DispatchGroup()
         let queue = DispatchQueue.global()
-        
+
         for items in courseList {
             queue.async(group: group) {
                 guard let sectionIdInt = items["sectionid"] as? Int else {
                     return
                 }
-                
+
                 guard let leadSectionIdInt = items["leadsectionid"] as? Int else {
                     return
                 }
-                
+
                 let sectionId = String(sectionIdInt)
                 let leadSectionId = String(leadSectionIdInt)
-                
+
                 let photoLink = self.getProfilePhotoLink(sectionId: sectionId)
-                
+
                 guard !photoLink.isEmpty else {
                     NSLog("\(items["coursedescription"] as? String ?? "") has no photo.")
                     return
                 }
-                
+
                 let url = URL(string: photoLink)
-                
+
                 let downloadSemaphore = DispatchSemaphore.init(value: 0)
-                
+
                 let destination: DownloadRequest.DownloadFileDestination = { _, _ in
                     let path = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
                     let photoPath = path.appending("/\(leadSectionId)_profile.png")
-                    
+
                     let fileURL = URL(fileURLWithPath: photoPath)
                     print(fileURL)
-                    
+
                     downloadSemaphore.signal()
-                    
+
                     return (fileURL, [.removePreviousFile, .createIntermediateDirectories])
                 }
-                
+
                 Alamofire.download(url!, to: destination).resume()
-                
+
                 downloadSemaphore.wait()
             }
         }
-        
+
         group.wait()
     }
-    
+
     func getProfilePhotoLink(sectionId: String) -> String {
         guard loginAuthentication().success else {
             NSLog("Login failed")
@@ -214,14 +212,14 @@ class courseFillController:UIViewController {
         //create request.
         let request3 = URLRequest(url: url!)
         let semaphore = DispatchSemaphore(value: 0)
-        
+
         let config = URLSessionConfiguration.default
         config.requestCachePolicy = .reloadIgnoringLocalCacheData
         config.urlCache = nil
         var photolink = ""
-        
+
         let session = URLSession.init(configuration: config)
-        
+
         let dataTask = session.dataTask(with: request3, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
             if error == nil {
                 let json = JSON(data: data!)
@@ -249,7 +247,7 @@ class courseFillController:UIViewController {
         semaphore.wait()
         return photolink
     }
-    
+
     func newGetCourse() -> Bool {
         var success = false
         let semaphore = DispatchSemaphore.init(value: 0)
@@ -257,27 +255,27 @@ class courseFillController:UIViewController {
         let config = URLSessionConfiguration.default
         config.requestCachePolicy = .reloadIgnoringLocalCacheData
         config.urlCache = nil
-        
+
         let session = URLSession.init(configuration: config)
-        
+
         let (_, _, userId) = loginAuthentication()
-        
+
         guard let durationId = getDurationId() else {
             return false
         }
-        
+
         let urlString = "https://mfriends.myschoolapp.com/api/datadirect/ParentStudentUserAcademicGroupsGet?userId=\(userId)&schoolYearLabel=2016+-+2017&memberLevel=3&persona=2&durationList=\(durationId)"
-        
+
         let url = URL(string: urlString)
         let request = URLRequest(url: url!)
-        
+
         let downloadTask = session.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
             if error == nil {
                 guard var courseData = JSON(data: data!).arrayObject else {
                     semaphore.signal()
                     return
                 }
-                
+
                 for (index, item) in courseData.enumerated() {
                     var course = (item as! NSDictionary).mutableCopy() as! Dictionary<String, Any>
                     print(course)
@@ -291,11 +289,11 @@ class courseFillController:UIViewController {
                     }
                     courseData[index] = course
                 }
-                
+
                 let coursePath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
                 let path = coursePath.appending("/CourseList.plist")
                 print(path)
-                
+
                 NSArray(array: courseData).write(toFile: path, atomically: true)
                 success = true
             } else {
@@ -317,39 +315,41 @@ class courseFillController:UIViewController {
         semaphore.wait()
         return success
     }
-    
+
     func getDurationId() -> String? {
         let session = URLSession.shared
         let request = URLRequest(url: URL(string: "https://dwei.org/currentDurationId")!)
         var strReturn: String? = nil
         let semaphore = DispatchSemaphore.init(value: 0)
-        
+
         let task = session.dataTask(with: request, completionHandler: { (data, _, error) -> Void in
             if error == nil {
                 strReturn = String(data: data!, encoding: .utf8)
             }
             semaphore.signal()
         })
-        
+
         task.resume()
         semaphore.wait()
         return strReturn
     }
-    
+
     func fillAdditionalInformarion() {
         let coursePath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
         let path = coursePath.appending("/CourseList.plist")
         guard let courseList = NSMutableArray(contentsOfFile: path) as? Array<NSMutableDictionary> else {
             return
         }
-        
+
         let group = DispatchGroup()
         let queue = DispatchQueue.global()
         var filledCourse = [NSMutableDictionary]()
-        
+
         for course in courseList {
             queue.async(group: group) {
-                guard let courseName = course["className"] as? String else { return }
+                guard let courseName = course["className"] as? String else {
+                    return
+                }
                 print(courseName)
                 let teacherName = course["teacherName"] as? String
                 print(teacherName ?? "")
@@ -359,19 +359,19 @@ class courseFillController:UIViewController {
                 let url = URL(string: urlString)
                 let request = URLRequest(url: url!)
                 let session = URLSession.shared
-                
+
                 let downloadTask = session.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
                     if error == nil {
                         do {
                             let json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! Array<NSDictionary>
-                            
+
                             for infoToAdd in json {
                                 print(infoToAdd)
                                 let courseToAdd = course.mutableCopy() as! NSMutableDictionary
-                                courseToAdd.addEntries(from: infoToAdd as! [String : Any])
+                                courseToAdd.addEntries(from: infoToAdd as! [String: Any])
                                 filledCourse.append(courseToAdd)
                             }
-                            
+
                         } catch {
                             NSLog("Failed parsing the data")
                         }
@@ -394,59 +394,59 @@ class courseFillController:UIViewController {
                 semaphore.wait()
             }
         }
-        
+
         group.wait()
-        
+
         filledIndex(array: &filledCourse)
         NSArray(array: filledCourse).write(toFile: path, atomically: true)
     }
-    
-    func filledIndex( array: inout Array<NSMutableDictionary>) {
+
+    func filledIndex(array: inout Array<NSMutableDictionary>) {
         for (index, item) in array.enumerated() {
             item["index"] = index
             array[index] = item
         }
     }
-    
-    func clearData(day:String) {
+
+    func clearData(day: String) {
         let coursePath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
         let fileName = "/Class" + day + ".plist"
         let path = coursePath.appending(fileName)
         let blankArray = Array(repeating: [String: Any?](), count: 8)
         NSArray(array: blankArray).write(toFile: path, atomically: true)
     }
-    
-    func createSchedule(fillLowPriority:Int) -> Bool {
+
+    func createSchedule(fillLowPriority: Int) -> Bool {
         var success = false
         let coursePath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
         let path = coursePath.appending("/CourseList.plist")
         let coursesObject = NSMutableArray(contentsOfFile: path)!
-        var removeIndex:IndexSet = []
-        
+        var removeIndex: IndexSet = []
+
         let group = DispatchGroup()
         let queue = DispatchQueue.global()
-        
+
         for (index, items) in coursesObject.enumerated() {
             guard let courses = items as? NSMutableDictionary else {
                 continue
             }
-            
+
             guard let className = courses["className"] as? String else {
                 continue
             }
-            
+
             guard !className.contains("Break") else {
                 continue
             }
-            
+
             queue.async(group: group) {
-                
+
                 let lowPriority = courses["lowPriority"] as? Int ?? 0
-                
+
                 if lowPriority == fillLowPriority {
                     //                When the block is not empty
                     let semaphore = DispatchSemaphore.init(value: 0)
-                    var courseCheckURL:String? = nil
+                    var courseCheckURL: String? = nil
                     var classId = courses["id"] as! String
                     classId = classId.replacingOccurrences(of: " ", with: "%20")
                     print(classId)
@@ -458,7 +458,7 @@ class courseFillController:UIViewController {
                     success = false
                     //Task 1: Getting day data.
                     let task: URLSessionDataTask = session.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
-                        
+
                         if error == nil {
                             do {
                                 let resDict = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? NSArray
@@ -469,25 +469,25 @@ class courseFillController:UIViewController {
                                     guard let meetTime = items as? String else {
                                         continue
                                     }
-                                    
+
                                     guard !meetTime.isEmpty else {
                                         continue
                                     }
-                                    
-                                    let day = meetTime[0,0]
-                                    let period = Int(meetTime[1,1])! - 1
+
+                                    let day = meetTime[0, 0]
+                                    let period = Int(meetTime[1, 1])! - 1
                                     let fileName = "/Class" + day + ".plist"
                                     let path = plistPath.appending(fileName)
-                                    
+
                                     let classOfDay = NSMutableArray(contentsOfFile: path)
-                                    
+
                                     let classOfThePeriod = classOfDay?[period] as! NSDictionary
-                                    
+
                                     if classOfThePeriod.count == 0 {
                                         courses["period"] = period + 1
                                         classOfDay?[period] = courses
                                         classOfDay?.write(toFile: path, atomically: true)
-                                    } else if className.characters.count >= 10  && className[0,9] == "Study Hall" {
+                                    } else if className.characters.count >= 10 && className[0, 9] == "Study Hall" {
 //                                        It is possible that a study hall that the user doesn't take appear on the course list.
                                         removeIndex.insert(index)
                                     }
@@ -511,25 +511,26 @@ class courseFillController:UIViewController {
                         }
                         semaphore.signal()
                     })
-                    
+
                     task.resume()
                     semaphore.wait()
                 }
             }
         }
-        
+
         group.wait()
-        
-        
+
+
         if removeIndex.count != 0 {
             coursesObject.removeObjects(at: removeIndex)
             coursesObject.write(toFile: path, atomically: true)
         }
-        
+
         return success
     }
+
 //    Finish creating schedule
-    func fillStudyHall(letter:String) {
+    func fillStudyHall(letter: String) {
         let plistPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
         let fileName = "/Class" + letter + ".plist"
         let path = plistPath.appending(fileName)
@@ -540,19 +541,19 @@ class courseFillController:UIViewController {
                 let classes = items as! NSDictionary
                 let periodS = classes["period"] as! String
                 let period = Int(periodS)
-                if period == periodNumber  {
+                if period == periodNumber {
                     periodExists = true
                     break
                 }
             }
             if !(periodExists) {
-                let addData = ["name": "Free", "period": String(describing:periodNumber)]
+                let addData = ["name": "Free", "period": String(describing: periodNumber)]
                 listClasses?.add(addData)
             }
         }
         listClasses?.write(toFile: path, atomically: true)
     }
-    
+
     func versionCheck() {
         //version check.
         let semaphore = DispatchSemaphore.init(value: 0)
@@ -562,7 +563,7 @@ class courseFillController:UIViewController {
         let session = URLSession.shared
         let task: URLSessionDataTask = session.dataTask(with: versionRequest, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
             NSLog("Done")
-            
+
             if error == nil {
                 guard let version = String(data: data!, encoding: .utf8) else {
                     return
@@ -587,7 +588,7 @@ class courseFillController:UIViewController {
             }
             semaphore.signal()
         })
-        
+
         task.resume()
         semaphore.wait()
     }

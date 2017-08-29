@@ -13,10 +13,10 @@ import SafariServices
 import Down
 
 class moreViewController: UITableViewController {
-    
+
     @IBOutlet weak var profilePhoto: UIImageView!
     @IBOutlet weak var name: UILabel!
-    
+
     @IBOutlet weak var settingImage: UIImageView!
 
     override func viewDidLoad() {
@@ -25,12 +25,12 @@ class moreViewController: UITableViewController {
         let path = photoPath.appending("/ProfilePhoto.png")
         profilePhoto.image = UIImage(contentsOfFile: path)
         profilePhoto.contentMode = UIViewContentMode.scaleAspectFill
-        
+
         name.text = ""
         if let firstName = userDefaults?.string(forKey: "firstName") {
             name.text?.append(firstName + " ")
         }
-        
+
         if let lastName = userDefaults?.string(forKey: "lastName") {
             name.text?.append(lastName)
         }
@@ -65,14 +65,14 @@ class profileViewController: UITableViewController {
 }
 
 
-class aboutView:UITableViewController, MFMailComposeViewControllerDelegate {
+class aboutView: UITableViewController, MFMailComposeViewControllerDelegate {
     @IBOutlet var dependenciesTextView: UITextView!
-    
+
     override func viewDidAppear(_ animated: Bool) {
         let podAckFile = Bundle.main.url(forResource: "Acknowledgements", withExtension: "markdown")!
         let down = Down(markdownString: try! String(contentsOf: podAckFile))
         tableView.estimatedRowHeight = 50
-        
+
         if let attributedString = try? down.toAttributedString() {
             dependenciesTextView.attributedText = attributedString
             dependenciesTextView.isScrollEnabled = false
@@ -80,7 +80,7 @@ class aboutView:UITableViewController, MFMailComposeViewControllerDelegate {
             tableView.reloadData()
         }
     }
-    
+
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.section == 2 {
             return UITableViewAutomaticDimension
@@ -88,7 +88,7 @@ class aboutView:UITableViewController, MFMailComposeViewControllerDelegate {
             return 44
         }
     }
-    
+
     @IBAction func sendEmail(_ sender: Any) {
         let mailComposeViewController = configuredMailComposeViewController()
         if MFMailComposeViewController.canSendMail() {
@@ -97,25 +97,25 @@ class aboutView:UITableViewController, MFMailComposeViewControllerDelegate {
             self.showSendMailErrorAlert()
         }
     }
-    
+
     func configuredMailComposeViewController() -> MFMailComposeViewController {
         let mailComposerVC = MFMailComposeViewController()
         mailComposerVC.mailComposeDelegate = self // Extremely important to set the --mailComposeDelegate-- property, NOT the --delegate-- property
-        
+
         mailComposerVC.setToRecipients(["zjdavid.2003@gmail.com", "daiw@mfriends.org"])
         mailComposerVC.setSubject("Bug reports and suggestions")
         mailComposerVC.setMessageBody("", isHTML: false)
-        
+
         return mailComposerVC
     }
-    
+
     func showSendMailErrorAlert() {
         let sendMailErrorAlert = UIAlertController(title: "Could Not Send Email", message: "Your device could not send e-mail.  Please check e-mail configuration and try again.", preferredStyle: .alert)
         let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
         sendMailErrorAlert.addAction(okAction)
         self.present(sendMailErrorAlert, animated: true, completion: nil)
     }
-    
+
     // MARK: MFMailComposeViewControllerDelegate Method
     func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
         controller.dismiss(animated: true, completion: nil)
