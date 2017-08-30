@@ -13,6 +13,8 @@
 		E413AB121EE8A796001EB189 /* brush_pencil.png in Resources */ = {isa = PBXBuildFile; fileRef = E413AB111EE8A796001EB189 /* brush_pencil.png */; };
 		E413AB141EE8AF87001EB189 /* School_building.png in Resources */ = {isa = PBXBuildFile; fileRef = E413AB131EE8AF87001EB189 /* School_building.png */; };
 		E41DE2F81EFA4293001155E9 /* No_homework.png in Resources */ = {isa = PBXBuildFile; fileRef = E41DE2F71EFA4293001155E9 /* No_homework.png */; };
+		E42786881F568A5F00583D1E /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42786871F568A5F00583D1E /* AboutViewController.swift */; };
+		E427868A1F568EB100583D1E /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42786891F568EB100583D1E /* ProfileViewController.swift */; };
 		E440F1BC1EEA7F4E004AFD0B /* MoyaNetworkLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E440F1BB1EEA7F4E004AFD0B /* MoyaNetworkLayer.swift */; };
 		E445E73E1EAD8B7D00794560 /* MoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E445E73D1EAD8B7D00794560 /* MoreViewController.swift */; };
 		E44DCD921EB80E0600CEB68A /* School.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E44DCD911EB80E0600CEB68A /* School.jpg */; };
@@ -100,6 +102,8 @@
 		E413AB111EE8A796001EB189 /* brush_pencil.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = brush_pencil.png; sourceTree = "<group>"; };
 		E413AB131EE8AF87001EB189 /* School_building.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = School_building.png; sourceTree = "<group>"; };
 		E41DE2F71EFA4293001155E9 /* No_homework.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = No_homework.png; sourceTree = "<group>"; };
+		E42786871F568A5F00583D1E /* AboutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
+		E42786891F568EB100583D1E /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		E440F1BB1EEA7F4E004AFD0B /* MoyaNetworkLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MoyaNetworkLayer.swift; path = ../MoyaNetworkLayer.swift; sourceTree = "<group>"; };
 		E44484D71E13A105002C68D5 /* MFSCalender.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MFSCalender.entitlements; sourceTree = "<group>"; };
 		E445E73D1EAD8B7D00794560 /* MoreViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoreViewController.swift; sourceTree = "<group>"; };
@@ -196,6 +200,8 @@
 				E472A1611EFB72EA00EF5A74 /* SettingViewController.swift */,
 				E472A1631EFB735C00EF5A74 /* ClassListViewController.swift */,
 				E4E8B2191F1C5AF200913DAE /* GradeViewController.swift */,
+				E42786871F568A5F00583D1E /* AboutViewController.swift */,
+				E42786891F568EB100583D1E /* ProfileViewController.swift */,
 			);
 			name = "More View";
 			sourceTree = "<group>";
@@ -518,6 +524,7 @@
 				E4BD889A1F397BE80000FEF3 /* TopicDetailViewController.swift in Sources */,
 				E4B340041F0891AE00D6039A /* ClassPagerViewController.swift in Sources */,
 				E4CE439B1EAD0D51000D743B /* LoginViewController.swift in Sources */,
+				E427868A1F568EB100583D1E /* ProfileViewController.swift in Sources */,
 				E4F86B331DF0E20C00CAD72B /* MainViewController.swift in Sources */,
 				E4BD88981F383A060000FEF3 /* ClassTimetableViewController.swift in Sources */,
 				E4E8B21A1F1C5AF200913DAE /* GradeViewController.swift in Sources */,
@@ -530,6 +537,7 @@
 				E453F0D11EA137D900BCE58D /* CalendarViewController.swift in Sources */,
 				E4F8D4E41EF0DD2200F47525 /* HomeworkViewController.swift in Sources */,
 				E440F1BC1EEA7F4E004AFD0B /* MoyaNetworkLayer.swift in Sources */,
+				E42786881F568A5F00583D1E /* AboutViewController.swift in Sources */,
 				E4F86B311DF0E20C00CAD72B /* AppDelegate.swift in Sources */,
 				E472A1621EFB72EA00EF5A74 /* SettingViewController.swift in Sources */,
 			);
