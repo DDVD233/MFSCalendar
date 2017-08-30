@@ -8,6 +8,7 @@
 
 import UIKit
 import SafariServices
+import Alamofire
 
 class topicDetailViewController: UIViewController {
     let topicID = userDefaults?.integer(forKey: "topicID")

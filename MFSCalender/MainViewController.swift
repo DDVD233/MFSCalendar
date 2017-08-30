@@ -486,7 +486,7 @@ extension Main: UICollectionViewDelegate, UICollectionViewDataSource, UICollecti
         if let leadSectionId = classData["leadsectionid"] as? Int {
             print(listHomework)
             if let thisClassHomework = listHomework[String(leadSectionId)] {
-                cell.homeworkView.isHidden = false
+                // cell.homeworkView.isHidden = false
 
                 let numberOfHomework = thisClassHomework.count
 
