@@ -9,8 +9,6 @@
 import UIKit
 
 class profileViewController: UITableViewController {
-    @IBOutlet weak var firstName: UILabel!
-    @IBOutlet weak var lastName: UILabel!
     @IBOutlet weak var lockerNumber: UILabel!
     @IBOutlet var profilePhoto: UIImageView!
     @IBOutlet var profileName: UILabel!
