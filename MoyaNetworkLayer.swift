@@ -24,6 +24,7 @@ enum MyService {
     case getCalendarData
     case getCalendarEvent
     case dataVersionCheck
+    case meetTimeSearch(classId: String)
 }
 
 fileprivate let assetDir: URL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!
@@ -32,7 +33,7 @@ extension MyService: TargetType {
 
     var baseURL: URL {
         switch self {
-        case .getCalendarData, .getCalendarEvent, .dataVersionCheck:
+        case .getCalendarData, .getCalendarEvent, .dataVersionCheck, .meetTimeSearch:
             return URL(string: "https://dwei.org")!
         default:
             return URL(string: "https://mfriends.myschoolapp.com")!
@@ -59,6 +60,8 @@ extension MyService: TargetType {
             return "/events.plist"
         case .dataVersionCheck:
             return "/dataversion"
+        case .meetTimeSearch(let classId):
+            return "/searchbyid/" + classId
         }
     }
 
