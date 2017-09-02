@@ -27,6 +27,8 @@
 		E472A1641EFB735C00EF5A74 /* ClassListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E472A1631EFB735C00EF5A74 /* ClassListViewController.swift */; };
 		E484E6551EFA33260056F2D5 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E484E6541EFA33260056F2D5 /* Localizable.strings */; };
 		E484E6581EFA337F0056F2D5 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E484E65A1EFA337F0056F2D5 /* InfoPlist.strings */; };
+		E489F6C71F5A821E00F2269F /* ProjectPublicFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E489F6C61F5A821E00F2269F /* ProjectPublicFunctions.swift */; };
+		E489F6C81F5A825A00F2269F /* ProjectPublicFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E489F6C61F5A821E00F2269F /* ProjectPublicFunctions.swift */; };
 		E48D4DF01E61F275008B0A97 /* ADayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48D4DEF1E61F275008B0A97 /* ADayViewController.swift */; };
 		E48D4DFA1E61F5EC008B0A97 /* BlankArray.plist in Resources */ = {isa = PBXBuildFile; fileRef = E48D4DF91E61F5EC008B0A97 /* BlankArray.plist */; };
 		E48D4E021E61FC26008B0A97 /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E48D4E011E61FC26008B0A97 /* NotificationCenter.framework */; };
@@ -40,7 +42,7 @@
 		E4B340061F08942000D6039A /* ClassTopicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B340051F08942000D6039A /* ClassTopicViewController.swift */; };
 		E4B340081F0905EB00D6039A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E4B340071F0905EB00D6039A /* GoogleService-Info.plist */; };
 		E4B3400A1F0905F400D6039A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E4B340091F0905F400D6039A /* GoogleService-Info.plist */; };
-		E4BD88961F35973C0000FEF3 /* PublicFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BD88951F35973C0000FEF3 /* PublicFunctions.swift */; };
+		E4BD88961F35973C0000FEF3 /* TargetPublicFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BD88951F35973C0000FEF3 /* TargetPublicFunctions.swift */; };
 		E4BD88981F383A060000FEF3 /* ClassTimetableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BD88971F383A060000FEF3 /* ClassTimetableViewController.swift */; };
 		E4BD889A1F397BE80000FEF3 /* TopicDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BD88991F397BE80000FEF3 /* TopicDetailViewController.swift */; };
 		E4C46A2E1ED50CD3007F8F1A /* CourseFillViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C46A2D1ED50CD3007F8F1A /* CourseFillViewController.swift */; };
@@ -120,6 +122,7 @@
 		E484E6541EFA33260056F2D5 /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		E484E6591EFA337F0056F2D5 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E484E65B1EFA338B0056F2D5 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		E489F6C61F5A821E00F2269F /* ProjectPublicFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProjectPublicFunctions.swift; sourceTree = "<group>"; };
 		E48D4DEF1E61F275008B0A97 /* ADayViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ADayViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		E48D4DF91E61F5EC008B0A97 /* BlankArray.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = BlankArray.plist; sourceTree = "<group>"; };
 		E48D4DFF1E61FC25008B0A97 /* Class Schedule.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Class Schedule.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -135,7 +138,7 @@
 		E4B340051F08942000D6039A /* ClassTopicViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClassTopicViewController.swift; sourceTree = "<group>"; };
 		E4B340071F0905EB00D6039A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		E4B340091F0905F400D6039A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		E4BD88951F35973C0000FEF3 /* PublicFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PublicFunctions.swift; sourceTree = "<group>"; };
+		E4BD88951F35973C0000FEF3 /* TargetPublicFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TargetPublicFunctions.swift; sourceTree = "<group>"; };
 		E4BD88971F383A060000FEF3 /* ClassTimetableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClassTimetableViewController.swift; sourceTree = "<group>"; };
 		E4BD88991F397BE80000FEF3 /* TopicDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopicDetailViewController.swift; sourceTree = "<group>"; };
 		E4C46A2D1ED50CD3007F8F1A /* CourseFillViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CourseFillViewController.swift; sourceTree = "<group>"; };
@@ -248,6 +251,7 @@
 		E4F86B241DF0E20C00CAD72B = {
 			isa = PBXGroup;
 			children = (
+				E489F6C61F5A821E00F2269F /* ProjectPublicFunctions.swift */,
 				E4F86B2F1DF0E20C00CAD72B /* MFSCalendar */,
 				E48D4E031E61FC26008B0A97 /* Class Schedule Widget */,
 				E48D4E001E61FC26008B0A97 /* Frameworks */,
@@ -268,7 +272,6 @@
 		E4F86B2F1DF0E20C00CAD72B /* MFSCalendar */ = {
 			isa = PBXGroup;
 			children = (
-				E4BD88951F35973C0000FEF3 /* PublicFunctions.swift */,
 				E4CA1DAC1F5007C40061784A /* Acknowledgements.markdown */,
 				E45510EE1F4D6F09001CF9BE /* GroupPossibleContent.plist */,
 				E4B340071F0905EB00D6039A /* GoogleService-Info.plist */,
@@ -282,6 +285,7 @@
 				E4ADC9ED1E882172002A46F7 /* Extensions.swift */,
 				E4F8D4E31EF0DD2200F47525 /* HomeworkViewController.swift */,
 				E440F1BB1EEA7F4E004AFD0B /* MoyaNetworkLayer.swift */,
+				E4BD88951F35973C0000FEF3 /* TargetPublicFunctions.swift */,
 				E472A15E1EFB6F3C00EF5A74 /* More View */,
 				E4F86B341DF0E20C00CAD72B /* Main.storyboard */,
 				E4F86B3A1DF0E20C00CAD72B /* Assets.xcassets */,
@@ -567,6 +571,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E48D4E051E61FC26008B0A97 /* TodayViewController.swift in Sources */,
+				E489F6C81F5A825A00F2269F /* ProjectPublicFunctions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -585,13 +590,14 @@
 				E4BD88981F383A060000FEF3 /* ClassTimetableViewController.swift in Sources */,
 				E4E8B21A1F1C5AF200913DAE /* GradeViewController.swift in Sources */,
 				E4B340061F08942000D6039A /* ClassTopicViewController.swift in Sources */,
-				E4BD88961F35973C0000FEF3 /* PublicFunctions.swift in Sources */,
+				E4BD88961F35973C0000FEF3 /* TargetPublicFunctions.swift in Sources */,
 				E4ADC9EE1E882172002A46F7 /* Extensions.swift in Sources */,
 				E472A1601EFB6F8400EF5A74 /* ClassDetailViewController.swift in Sources */,
 				E445E73E1EAD8B7D00794560 /* MoreViewController.swift in Sources */,
 				E4C46A2E1ED50CD3007F8F1A /* CourseFillViewController.swift in Sources */,
 				E453F0D11EA137D900BCE58D /* CalendarViewController.swift in Sources */,
 				E4F8D4E41EF0DD2200F47525 /* HomeworkViewController.swift in Sources */,
+				E489F6C71F5A821E00F2269F /* ProjectPublicFunctions.swift in Sources */,
 				E440F1BC1EEA7F4E004AFD0B /* MoyaNetworkLayer.swift in Sources */,
 				E42786881F568A5F00583D1E /* AboutViewController.swift in Sources */,
 				E4F86B311DF0E20C00CAD72B /* AppDelegate.swift in Sources */,
