@@ -22,9 +22,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         FirebaseApp.configure()
         Fabric.with([Crashlytics.self])
+        logUser()
 //        MAThemeKit.setupTheme(withPrimaryColor: UIColor(hexString: 0xFF7E79), secondaryColor: UIColor.white, fontName: "System", lightStatusBar: true)
         return true
     }
+    
+    func logUser() {
+//        Crashlytics.sharedInstance().setUserEmail("user@fabric.io")
+//        Crashlytics.sharedInstance().setUserIdentifier("12345")
+        let firstName = userDefaults?.string(forKey: "firstName") ?? ""
+        let lastName = userDefaults?.string(forKey: "lastName") ?? ""
+        let fullName = firstName + lastName
+        Crashlytics.sharedInstance().setUserName(fullName)
+    }
+
 
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey: Any] = [:]) -> Bool {
         if url.host == "classDetail", let indexString = url.query {

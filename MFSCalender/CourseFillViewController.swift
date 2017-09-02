@@ -43,7 +43,6 @@ class courseFillController: UIViewController {
         }
     }
 
-//    When they click "import courses".
     func importCourses() -> Bool {
         progressView.setProgress(value: 2, animationDuration: 0.1)
         if self.newGetCourse() {
@@ -68,7 +67,7 @@ class courseFillController: UIViewController {
 
                 self.progressView.setProgress(value: 66, animationDuration: 1) {
                     if self.createSchedule(fillLowPriority: 1) {
-                        self.getProfilePhoto()
+//                        self.getProfilePhoto()
                         self.versionCheck()
                         self.progressView.setProgress(value: 100, animationDuration: 1) {
 
@@ -140,7 +139,8 @@ class courseFillController: UIViewController {
 
                     return (fileURL, [.removePreviousFile, .createIntermediateDirectories])
                 }
-
+                
+                
                 Alamofire.download(url!, to: destination).resume()
 
                 downloadSemaphore.wait()
@@ -403,27 +403,53 @@ class courseFillController: UIViewController {
                 }
                 
                 classId = classId.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+                let url = "https://dwei.org/searchbyid/" + classId
+                print(url)
                 
-                provider.request(MyService.meetTimeSearch(classId: classId), completion: { result in
-                    switch result {
-                    case let .success(response):
-                        do {
-                            guard let meetTimeList = try response.mapJSON() as? Array<String> else {
-                                semaphore.signal()
-                                return
-                            }
-                            
-                            removeIndex += self.writeScheduleToFile(meetTimeList: meetTimeList, course: &course, index: index)
-                            success = true
-                        } catch {
-                            presentErrorMessage(presentMessage: error.localizedDescription, layout: .StatusLine)
-                        }
-                    case let .failure(error):
-                        presentErrorMessage(presentMessage: error.localizedDescription, layout: .CardView)
+                let task = URLSession.shared.dataTask(with: URL(string: url)!, completionHandler: { (data, response, error) in
+                    guard error == nil else {
+                        presentErrorMessage(presentMessage: error!.localizedDescription, layout: .CardView)
+                        return
                     }
+                    
+                    do {
+                        guard let meetTimeList = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? Array<String> else {
+                            semaphore.signal()
+                            return
+                        }
+                        
+                        removeIndex += self.writeScheduleToFile(meetTimeList: meetTimeList, course: &course, index: index)
+                        success = true
+                    } catch {
+                        presentErrorMessage(presentMessage: error.localizedDescription, layout: .StatusLine)
+                    }
+                    
                     semaphore.signal()
                 })
                 
+                
+//                No idea why this does not work.
+//                provider.request(MyService.meetTimeSearch(classId: classId), completion: { result in
+//                    switch result {
+//                    case let .success(response):
+//                        do {
+//                            guard let meetTimeList = try response.mapJSON() as? Array<String> else {
+//                                semaphore.signal()
+//                                return
+//                            }
+//                            
+//                            removeIndex += self.writeScheduleToFile(meetTimeList: meetTimeList, course: &course, index: index)
+//                            success = true
+//                        } catch {
+//                            presentErrorMessage(presentMessage: error.localizedDescription, layout: .StatusLine)
+//                        }
+//                    case let .failure(error):
+//                        presentErrorMessage(presentMessage: error.localizedDescription, layout: .CardView)
+//                    }
+//                    semaphore.signal()
+//                })
+                
+                task.resume()
                 semaphore.wait()
             }
         }
@@ -432,7 +458,7 @@ class courseFillController: UIViewController {
 
 
         if !removeIndex.isEmpty {
-            coursesObject = coursesObject.enumerated().filter({ removeIndex.contains($0.offset) }).map({ $0.element })
+            coursesObject = coursesObject.enumerated().filter({ !removeIndex.contains($0.offset) }).map({ $0.element })
             NSArray(array: coursesObject).write(toFile: path, atomically: true)
         }
 
@@ -501,29 +527,50 @@ class courseFillController: UIViewController {
     func versionCheck() {
         let semaphore = DispatchSemaphore.init(value: 0)
         
-        provider.request(MyService.dataVersionCheck, completion: { result in
-            switch result {
-            case let .success(response):
-                guard let version = try? response.mapString() else {
-                    semaphore.signal()
-                    return
-                }
-                
-                guard let versionNumber = Int(version) else {
-                    semaphore.signal()
-                    return
-                }
-                
-                print("Version: ", versionNumber)
-                userDefaults?.set(versionNumber, forKey: "version")
-                NSLog("Data refreshed to %#", version)
-            case let .failure(error):
-                presentErrorMessage(presentMessage: error.localizedDescription, layout: .CardView)
+        let url = URL(string: "https://dwei.org/dataversion")!
+        
+        let task = URLSession.shared.dataTask(with: url, completionHandler: { (data, response, error) in
+            guard error ==  nil else {
+                presentErrorMessage(presentMessage: error!.localizedDescription, layout: .StatusLine)
+                semaphore.signal()
+                return
             }
+            
+            guard let version = String(data: data!, encoding: .utf8) else {
+                semaphore.signal()
+                return
+            }
+            
+            let versionNumber = Int(version)!
+            userDefaults?.set(versionNumber, forKey: "version")
+            NSLog("Data refreshed to %#", version)
             
             semaphore.signal()
         })
         
+//        provider.request(MyService.dataVersionCheck, completion: { result in
+//            switch result {
+//            case let .success(response):
+//                guard let version = try? response.mapString() else {
+//                    semaphore.signal()
+//                    return
+//                }
+//                
+//                guard let versionNumber = Int(version) else {
+//                    semaphore.signal()
+//                    return
+//                }
+//                
+//                print("Version: ", versionNumber)
+//                userDefaults?.set(versionNumber, forKey: "version")
+//                NSLog("Data refreshed to %#", version)
+//            case let .failure(error):
+//                presentErrorMessage(presentMessage: error.localizedDescription, layout: .CardView)
+//            }
+//            
+//            semaphore.signal()
+//        })
+        task.resume()
         semaphore.wait()
     }
 }
