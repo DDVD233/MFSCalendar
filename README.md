@@ -1,3 +1,5 @@
+![Top Image](/Images/TopImage.png)
+
 # MFSCalendar
 MFS Calendar is a calendar app designed exclusively for MFS. 
 
