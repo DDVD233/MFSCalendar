@@ -329,7 +329,7 @@ extension CalendarViewController: UITableViewDelegate, UITableViewDataSource {
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "eventTable", for: indexPath as IndexPath) as? customEventCell
             let row = indexPath.row
-            let rowDict = self.listEvents[row] as! NSDictionary
+            let rowDict = self.listEvents[row] as! Dictionary<String, Any?>
             let summary = rowDict["summary"] as? String
             cell?.ClassName.text = summary
             let letter = summary?.substring(to: (summary?.index(after: (summary?.startIndex)!))!)
@@ -344,28 +344,8 @@ extension CalendarViewController: UITableViewDelegate, UITableViewDataSource {
                     cell?.RoomNumber.text = "At: " + location
                 }
             }
-            if (rowDict["isAllDay"] as! Int) == 1 {
-                cell?.PeriodTime.text = "All Day"
-            } else {
-                let tEnd = String(describing: (rowDict["tEnd"] as! Int))
-                if (rowDict["tEnd"] as! Int) > 99999 {
-                    self.formatter.dateFormat = "HHmmss"
-                } else {
-                    self.formatter.dateFormat = "Hmmss"
-                }
-                let timeEnd = formatter.date(from: tEnd)
-                let tStart = String(describing: (rowDict["tStart"] as! Int))
-                if (rowDict["tStart"] as! Int) > 99999 {
-                    self.formatter.dateFormat = "HHmmss"
-                } else {
-                    self.formatter.dateFormat = "Hmmss"
-                }
-                let timeStart = formatter.date(from: tStart)
-                self.formatter.dateFormat = "h:mm a"
-                let startString = formatter.string(from: timeStart!)
-                let endString = formatter.string(from: timeEnd!)
-                cell?.PeriodTime.text = startString + " - " + endString
-            }
+            
+            cell?.PeriodTime.text = EventView().getTimeInterval(rowDict: rowDict)
             return cell!
         }
     }

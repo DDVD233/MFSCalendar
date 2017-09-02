@@ -553,7 +553,7 @@ extension Main: UITableViewDelegate, UITableViewDataSource {
 
         let cell = tableView.dequeueReusableCell(withIdentifier: "eventTableDash", for: indexPath as IndexPath) as? customEventCellDashboard
         let row = indexPath.row
-        let rowDict = self.listEvents[row] as! NSDictionary
+        let rowDict = self.listEvents[row] as! Dictionary<String, Any>
         let summary = rowDict["summary"] as? String
         cell?.ClassName.text = summary
 //        截取第一个字母作为cell左侧的字母
@@ -566,28 +566,7 @@ extension Main: UITableViewDelegate, UITableViewDataSource {
             cell?.RoomNumber.text = nil
         }
 
-        if (rowDict["isAllDay"] as! Int) == 1 {
-            cell?.PeriodTime.text = "All Day"
-        } else {
-            let tEnd = String(describing: (rowDict["tEnd"] as! Int))
-            if (rowDict["tEnd"] as! Int) > 99999 {
-                self.formatter.dateFormat = "HHmmss"
-            } else {
-                self.formatter.dateFormat = "Hmmss"
-            }
-            let timeEnd = formatter.date(from: tEnd)
-            let tStart = String(describing: (rowDict["tStart"] as! Int))
-            if (rowDict["tStart"] as! Int) > 99999 {
-                self.formatter.dateFormat = "HHmmss"
-            } else {
-                self.formatter.dateFormat = "Hmmss"
-            }
-            let timeStart = formatter.date(from: tStart)
-            self.formatter.dateFormat = "h:mm a"
-            let startString = formatter.string(from: timeStart!)
-            let endString = formatter.string(from: timeEnd!)
-            cell?.PeriodTime.text = startString + " - " + endString
-        }
+        cell?.PeriodTime.text = EventView().getTimeInterval(rowDict: rowDict)
         return cell!
     }
 }

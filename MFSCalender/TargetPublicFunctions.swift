@@ -164,11 +164,31 @@ class classView {
     }
 }
 
-//func removeNill(array: inout Array) {
-//    for items in array {
-//        if items == nil {
-//            array
-//        }
-//    }
-//}
+class EventView {
+    func getTimeInterval(rowDict: [String: Any?]) -> String {
+        let formatter = DateFormatter()
+        if (rowDict["isAllDay"] as! Int) == 1 {
+            return "All Day"
+        } else {
+            let tEnd = String(describing: (rowDict["tEnd"] as! Int))
+            if (rowDict["tEnd"] as! Int) > 99999 {
+                formatter.dateFormat = "HHmmss"
+            } else {
+                formatter.dateFormat = "Hmmss"
+            }
+            let timeEnd = formatter.date(from: tEnd)
+            let tStart = String(describing: (rowDict["tStart"] as! Int))
+            if (rowDict["tStart"] as! Int) > 99999 {
+                formatter.dateFormat = "HHmmss"
+            } else {
+                formatter.dateFormat = "Hmmss"
+            }
+            let timeStart = formatter.date(from: tStart)
+            formatter.dateFormat = "h:mm a"
+            let startString = formatter.string(from: timeStart!)
+            let endString = formatter.string(from: timeEnd!)
+            return startString + " - " + endString
+        }
+    }
+}
 
