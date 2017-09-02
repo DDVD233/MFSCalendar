@@ -415,50 +415,6 @@ extension classDetailViewController {
 }
 
 extension classDetailViewController {
-    func getProfilePhotoLink(sectionId: String) -> String {
-        guard loginAuthentication().success else {
-            return ""
-        }
-        let urlString = "https://mfriends.myschoolapp.com/api/media/sectionmediaget/\(sectionId)/?format=json&contentId=31&editMode=false&active=true&future=false&expired=false&contextLabelId=2"
-        let url = URL(string: urlString)
-        //create request.
-        let request3 = URLRequest(url: url!)
-        let semaphore = DispatchSemaphore(value: 0)
-
-        let config = URLSessionConfiguration.default
-        config.requestCachePolicy = .reloadIgnoringLocalCacheData
-        config.urlCache = nil
-        var photoLink = ""
-
-        let session = URLSession.init(configuration: config)
-
-        let dataTask = session.dataTask(with: request3, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
-            if error == nil {
-                let json = JSON(data: data!)
-                if let filePath = json[0]["FilenameUrl"].string {
-                    photoLink = "https:" + filePath
-                } else {
-                    NSLog("File path not found. Error code: 13")
-                }
-            } else {
-                DispatchQueue.main.async {
-                    let presentMessage = (error?.localizedDescription)! + " Please check your internet connection."
-                    let view = MessageView.viewFromNib(layout: .CardView)
-                    view.configureTheme(.error)
-                    let icon = "😱"
-                    view.configureContent(title: "Error!", body: presentMessage, iconText: icon)
-                    view.button?.isHidden = true
-                    let config = SwiftMessages.Config()
-                    SwiftMessages.show(config: config, view: view)
-                }
-            }
-            semaphore.signal()
-        })
-        //使用resume方法启动任务
-        dataTask.resume()
-        semaphore.wait()
-        return photoLink
-    }
 
     func getProfilePhoto(photoLink: String, sectionId: String) {
         let url = URL(string: photoLink)

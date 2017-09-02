@@ -117,7 +117,7 @@ class courseFillController: UIViewController {
                 let sectionId = String(sectionIdInt)
                 let leadSectionId = String(leadSectionIdInt)
 
-                let photoLink = self.getProfilePhotoLink(sectionId: sectionId)
+                let photoLink = classView().getProfilePhotoLink(sectionId: sectionId)
 
                 guard !photoLink.isEmpty else {
                     NSLog("\(items["coursedescription"] as? String ?? "") has no photo.")
@@ -148,52 +148,6 @@ class courseFillController: UIViewController {
         }
 
         group.wait()
-    }
-
-    func getProfilePhotoLink(sectionId: String) -> String {
-        guard loginAuthentication().success else {
-            NSLog("Login failed")
-            return ""
-        }
-        let urlString = "https://mfriends.myschoolapp.com/api/media/sectionmediaget/\(sectionId)/?format=json&contentId=31&editMode=false&active=true&future=false&expired=false&contextLabelId=2"
-        let url = URL(string: urlString)
-        //create request.
-        let request3 = URLRequest(url: url!)
-        let semaphore = DispatchSemaphore(value: 0)
-
-        let config = URLSessionConfiguration.default
-        config.requestCachePolicy = .reloadIgnoringLocalCacheData
-        config.urlCache = nil
-        var photolink = ""
-
-        let session = URLSession.init(configuration: config)
-
-        let dataTask = session.dataTask(with: request3, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
-            if error == nil {
-                let json = JSON(data: data!)
-                if let filePath = json[0]["FilenameUrl"].string {
-                    photolink = "https:" + filePath
-                } else {
-                    NSLog("File path not found. Error code: 13")
-                }
-            } else {
-                DispatchQueue.main.async {
-                    let presentMessage = (error?.localizedDescription)! + " Please check your internet connection."
-                    let view = MessageView.viewFromNib(layout: .CardView)
-                    view.configureTheme(.error)
-                    let icon = "😱"
-                    view.configureContent(title: "Error!", body: presentMessage, iconText: icon)
-                    view.button?.isHidden = true
-                    let config = SwiftMessages.Config()
-                    SwiftMessages.show(config: config, view: view)
-                }
-            }
-            semaphore.signal()
-        })
-        //使用resume方法启动任务
-        dataTask.resume()
-        semaphore.wait()
-        return photolink
     }
 
     func newGetCourse() -> Bool {

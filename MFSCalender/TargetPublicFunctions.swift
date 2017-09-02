@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftMessages
+import SwiftyJSON
 
 func areEqual<T:Equatable>(type: T.Type, a: Any?, b: Any?) -> Bool? {
     guard let a = a as? T, let b = b as? T else {
@@ -161,6 +162,44 @@ class classView {
         }
 
         return nil
+    }
+
+    func getProfilePhotoLink(sectionId: String) -> String {
+        guard loginAuthentication().success else {
+            return ""
+        }
+        let urlString = "https://mfriends.myschoolapp.com/api/media/sectionmediaget/\(sectionId)/?format=json&contentId=31&editMode=false&active=true&future=false&expired=false&contextLabelId=2"
+        let url = URL(string: urlString)
+        //create request.
+        let request3 = URLRequest(url: url!)
+        let semaphore = DispatchSemaphore(value: 0)
+
+        let config = URLSessionConfiguration.default
+        config.requestCachePolicy = .reloadIgnoringLocalCacheData
+        config.urlCache = nil
+        var photoLink = ""
+
+        let session = URLSession.init(configuration: config)
+
+        let dataTask = session.dataTask(with: request3, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
+            if error == nil {
+                let json = JSON(data: data!)
+                if let filePath = json[0]["FilenameUrl"].string {
+                    photoLink = "https:" + filePath
+                } else {
+                    NSLog("File path not found. Error code: 13")
+                }
+            } else {
+                DispatchQueue.main.async {
+                    presentErrorMessage(presentMessage: error!.localizedDescription, layout: .CardView)
+                }
+            }
+            semaphore.signal()
+        })
+        //使用resume方法启动任务
+        dataTask.resume()
+        semaphore.wait()
+        return photoLink
     }
 }
 
