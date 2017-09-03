@@ -69,7 +69,7 @@ class gradeViewController: UITableViewController {
 
         var cumGrade = ""
 
-        guard let durationId = getDurationId() else {
+        guard let durationId = NetworkOperations().getDurationId() else {
             return ""
         }
 
@@ -107,24 +107,6 @@ class gradeViewController: UITableViewController {
         dataTask.resume()
         semaphore.wait()
         return cumGrade
-    }
-
-    func getDurationId() -> String? {
-        let session = URLSession.shared
-        let request = URLRequest(url: URL(string: "https://dwei.org/currentDurationId")!)
-        var strReturn: String? = nil
-        let semaphore = DispatchSemaphore.init(value: 0)
-
-        let task = session.dataTask(with: request, completionHandler: { (data, _, error) -> Void in
-            if error == nil {
-                strReturn = String(data: data!, encoding: .utf8)
-            }
-            semaphore.signal()
-        })
-
-        task.resume()
-        semaphore.wait()
-        return strReturn
     }
 }
 
