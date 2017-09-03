@@ -25,7 +25,7 @@ class classTopicViewController: UIViewController {
         topicsCollectionView.dataSource = self
 
         DispatchQueue.global().async {
-            let classObject = classView().getTheClassToPresent() ?? [String: Any]()
+            let classObject = ClassView().getTheClassToPresent() ?? [String: Any]()
             self.leadSectionIdInt = classObject["leadsectionid"] as? Int ?? 0
 
             let fileManager = FileManager.default
@@ -59,7 +59,7 @@ class classTopicViewController: UIViewController {
         topicsCollectionView.dg_setPullToRefreshBackgroundColor(topicsCollectionView.backgroundColor!)
 
         DispatchQueue.global().async {
-            let classObject = classView().getTheClassToPresent() ?? [String: Any]()
+            let classObject = ClassView().getTheClassToPresent() ?? [String: Any]()
             self.leadSectionIdInt = classObject["leadsectionid"] as? Int ?? 0
             self.refreshTopics(leadSectionIdInt: self.leadSectionIdInt)
         }

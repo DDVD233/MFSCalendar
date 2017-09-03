@@ -283,49 +283,40 @@ extension CalendarViewController: UITableViewDelegate, UITableViewDataSource {
 
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if tableView == classView {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "classTable", for: indexPath as IndexPath) as? customCalendarCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "classTable", for: indexPath as IndexPath) as! customCalendarCell
 
             let row = indexPath.row
 
             let rowDict = self.listClasses[row] as! NSDictionary
 
-            cell?.ClassName.text = rowDict["className"] as? String
+            cell.ClassName.text = rowDict["className"] as? String
 
-            var meetTime: String? = nil
+            var meetTimeText = ""
 
             if let period = rowDict["period"] as? Int {
-                cell?.PeriodNumber.text = String(describing: period)
+                cell.PeriodNumber.text = String(describing: period)
 
-                switch period {
-                case 1: meetTime = "8:00 - 8:43"
-                case 2: meetTime = "8:47 - 9:30"
-                case 3: meetTime = "9:34 - 10:34"
-                case 4: meetTime = "10:44 - 11:27"
-                case 5: meetTime = "11:31 - 12:14"
-                case 6: meetTime = "12:14 - 12:57"
-                case 7: meetTime = "13:40 - 14:23"
-                case 8: meetTime = "14:27 - 15: 10"
-                default: meetTime = "Error!"
-                }
+                meetTimeText = ClassView().getMeetTime(period: period)
             }
 
-            let teacherName = rowDict["teacherName"] as? String
-            if teacherName != nil {
-                cell?.PeriodTime.text = meetTime! + "     Teacher: " + teacherName!
-            } else {
-                cell?.PeriodTime.text = meetTime!
+            
+            if let teacherName = rowDict["teacherName"] as? String {
+                meetTimeText += "     Teacher: " + teacherName
             }
+            
+            cell.PeriodTime.text = meetTimeText
+            
             if let roomNumber = rowDict["roomNumber"] as? String {
                 if !roomNumber.isEmpty {
-                    cell?.RoomNumber.text = "At: " + roomNumber
+                    cell.RoomNumber.text = "At: " + roomNumber
                 } else {
-                    cell?.RoomNumber.text = nil
+                    cell.RoomNumber.text = nil
                 }
             } else {
-                cell?.RoomNumber.text = nil
+                cell.RoomNumber.text = nil
             }
 
-            return cell!
+            return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "eventTable", for: indexPath as IndexPath) as? customEventCell
             let row = indexPath.row

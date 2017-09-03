@@ -18,7 +18,7 @@ import SafariServices
 
 class classDetailViewController: UITableViewController, UIDocumentInteractionControllerDelegate {
 
-    var classObject = classView().getTheClassToPresent() ?? [String: Any]()
+    var classObject = ClassView().getTheClassToPresent() ?? [String: Any]()
     var availableInformation = [String]()
     var sectionShouldShowMore = [String: Bool]()
     var overrideHeader = [String: String]()

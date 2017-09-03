@@ -64,7 +64,7 @@ class gradeViewController: UITableViewController {
 
         let userId = loginAuthentication().userId
 
-        let classObject = classView().getTheClassToPresent() ?? [String: Any]()
+        let classObject = ClassView().getTheClassToPresent() ?? [String: Any]()
         let leadSectionId = classObject["leadsectionid"] as? Int
 
         var cumGrade = ""

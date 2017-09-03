@@ -31,7 +31,7 @@ class classPagerViewController: ButtonBarPagerTabStripViewController, UIDocument
 //        Important: Settings should be called before viewDidLoad is called.
         super.viewDidLoad()
 
-        let classObject = classView().getTheClassToPresent() ?? [String: Any]()
+        let classObject = ClassView().getTheClassToPresent() ?? [String: Any]()
         self.title = classObject["className"] as? String
 
         self.navigationController?.navigationBar.barTintColor = UIColor(hexString: 0xFF7E79)

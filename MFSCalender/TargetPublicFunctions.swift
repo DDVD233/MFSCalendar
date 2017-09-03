@@ -147,7 +147,7 @@ public func presentErrorMessage(presentMessage: String, layout: MessageView.Layo
     }
 }
 
-class classView {
+class ClassView {
     func getTheClassToPresent() -> Dictionary<String, Any>? {
         let classPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
         let path = classPath.appending("/CourseList.plist")
@@ -202,6 +202,20 @@ class classView {
         dataTask.resume()
         semaphore.wait()
         return photoLink
+    }
+    
+    func getMeetTime(period: Int) -> String {
+        switch period {
+        case 1: return "8:00 - 8:43"
+        case 2: return "8:47 - 9:30"
+        case 3: return "9:34 - 10:34"
+        case 4: return "10:44 - 11:27"
+        case 5: return "11:31 - 12:14"
+        case 6: return "12:14 - 12:57"
+        case 7: return "13:40 - 14:23"
+        case 8: return "14:27 - 15: 10"
+        default: return "Error!"
+        }
     }
 }
 

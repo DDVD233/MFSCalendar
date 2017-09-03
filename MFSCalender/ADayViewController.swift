@@ -131,21 +131,7 @@ extension ADay: UITableViewDelegate, UITableViewDataSource {
         if let period = rowDict["period"] as? Int {
             cell?.PeriodNumber.text = String(describing: period)
 
-            var meetTime: String = ""
-
-            switch period {
-            case 1: meetTime = "8:00 - 8:43"
-            case 2: meetTime = "8:47 - 9:30"
-            case 3: meetTime = "9:34 - 10:34"
-            case 4: meetTime = "10:44 - 11:27"
-            case 5: meetTime = "11:31 - 12:14"
-            case 6: meetTime = "12:14 - 12:57"
-            case 7: meetTime = "13:40 - 14:23"
-            case 8: meetTime = "14:27 - 15: 10"
-            default: meetTime = "Error!"
-            }
-
-            cell?.PeriodTime.text = meetTime
+            cell?.PeriodTime.text = ClassView().getMeetTime(period: period)
         }
 
         let roomN = rowDict["roomNumber"] as? String

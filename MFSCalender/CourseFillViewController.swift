@@ -117,7 +117,7 @@ class courseFillController: UIViewController {
                 let sectionId = String(sectionIdInt)
                 let leadSectionId = String(leadSectionIdInt)
 
-                let photoLink = classView().getProfilePhotoLink(sectionId: sectionId)
+                let photoLink = ClassView().getProfilePhotoLink(sectionId: sectionId)
 
                 guard !photoLink.isEmpty else {
                     NSLog("\(items["coursedescription"] as? String ?? "") has no photo.")
