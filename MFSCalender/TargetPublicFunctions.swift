@@ -223,7 +223,8 @@ class EventView {
     let formatter = DateFormatter()
     
     func getTimeInterval(rowDict: [String: Any?]) -> String {
-        if (rowDict["isAllDay"] as! Int) == 1 {
+        let isAllDay = rowDict["isAllDay"] as! Int
+        if isAllDay == 1 {
             return "All Day"
         } else {
             let tEnd = rowDict["tEnd"] as! Int
