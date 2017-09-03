@@ -449,14 +449,7 @@ extension classDetailViewController {
                 print("new location:\(path)")
             } else {
                 DispatchQueue.main.async {
-                    let presentMessage = (error?.localizedDescription)! + " Please check your internet connection."
-                    let view = MessageView.viewFromNib(layout: .CardView)
-                    view.configureTheme(.error)
-                    let icon = "😱"
-                    view.configureContent(title: "Error!", body: presentMessage, iconText: icon)
-                    view.button?.isHidden = true
-                    let config = SwiftMessages.Config()
-                    SwiftMessages.show(config: config, view: view)
+                    presentErrorMessage(presentMessage: error!.localizedDescription, layout: .StatusLine)
                 }
             }
             semaphore.signal()
@@ -505,16 +498,7 @@ extension classDetailViewController {
                 let path = photoPath.appending("/\(sectionId)_syllabus.plist")
                 NSArray(array: arrayToWrite).write(toFile: path, atomically: true)
             } else {
-                DispatchQueue.main.async {
-                    let presentMessage = (error?.localizedDescription)! + " Please check your internet connection."
-                    let view = MessageView.viewFromNib(layout: .CardView)
-                    view.configureTheme(.error)
-                    let icon = "😱"
-                    view.configureContent(title: "Error!", body: presentMessage, iconText: icon)
-                    view.button?.isHidden = true
-                    let config = SwiftMessages.Config()
-                    SwiftMessages.show(config: config, view: view)
-                }
+                presentErrorMessage(presentMessage: error!.localizedDescription, layout: .StatusLine)
             }
             semaphore.signal()
         })

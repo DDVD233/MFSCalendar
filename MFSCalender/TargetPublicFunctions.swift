@@ -142,7 +142,9 @@ public func presentErrorMessage(presentMessage: String, layout: MessageView.Layo
     view.configureContent(title: "Error!", body: presentMessage, iconText: icon)
     view.button?.isHidden = true
     let config = SwiftMessages.Config()
-    SwiftMessages.show(config: config, view: view)
+    DispatchQueue.main.async {
+        SwiftMessages.show(config: config, view: view)
+    }
 }
 
 class classView {
