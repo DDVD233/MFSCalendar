@@ -158,5 +158,15 @@ extension Optional where Wrapped == String {
     }
 }
 
+extension Dictionary where Value == Any {
+    mutating func removeNil() {
+        for (key, value) in self {
+            if value is NSNull {
+                self[key] = ""
+            }
+        }
+    }
+}
+
 public let userDefaults = UserDefaults(suiteName: "group.org.dwei.MFSCalendar")
 public let userDocumentPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
