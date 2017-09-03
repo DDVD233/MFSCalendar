@@ -98,43 +98,36 @@ class classTopicViewController: UIViewController {
         let semaphore = DispatchSemaphore.init(value: 0)
 
         let task = session.dataTask(with: request, completionHandler: { (data, response, error) -> Void in
-            if error == nil {
-                do {
-                    if var json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? Array<Dictionary<String, Any>> {
-                        self.topicsList = json
-                        print(json)
-
-//                        Remove all the null values because plist file does not accept that.
-                        for (index, item) in json.enumerated() {
-                            var revisedTopic = item
-                            for (key, value) in item {
-                                if (value as? NSNull) == NSNull() {
-                                    revisedTopic[key] = ""
-                                }
-                            }
-
-                            json[index] = revisedTopic
-                        }
-
-                        let path = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-                        let topicPath = path.appending("/topics_\(String(leadSectionIdInt)).plist")
-                        NSArray(array: json).write(toFile: topicPath, atomically: true)
-                    }
-                } catch {
-                    NSLog("JSON parse failed")
-                }
-            } else {
-                DispatchQueue.main.async {
-                    let presentMessage = (error?.localizedDescription)! + " Please check your internet connection."
-                    let view = MessageView.viewFromNib(layout: .CardView)
-                    view.configureTheme(.error)
-                    let icon = "😱"
-                    view.configureContent(title: "Error!", body: presentMessage, iconText: icon)
-                    view.button?.isHidden = true
-                    let config = SwiftMessages.Config()
-                    SwiftMessages.show(config: config, view: view)
-                }
+            guard error == nil else {
+                presentErrorMessage(presentMessage: error!.localizedDescription, layout: .StatusLine)
+                semaphore.signal()
+                return
             }
+            
+            do {
+                guard var json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? Array<Dictionary<String, Any>> else {
+                    presentErrorMessage(presentMessage: "JSON data has incorrect format.", layout: .StatusLine)
+                    semaphore.signal()
+                    return
+                }
+                
+                self.topicsList = json
+                print(json)
+                
+                //                        Remove all the null values because plist file does not accept that.
+                for (index, dict) in json.enumerated() {
+                    var newDict = dict
+                    newDict.removeNil()
+                    json[index] = newDict
+                }
+                
+                let path = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
+                let topicPath = path.appending("/topics_\(String(leadSectionIdInt)).plist")
+                NSArray(array: json).write(toFile: topicPath, atomically: true)
+            } catch {
+                presentErrorMessage(presentMessage: error.localizedDescription, layout: .StatusLine)
+            }
+            
             semaphore.signal()
         })
 
