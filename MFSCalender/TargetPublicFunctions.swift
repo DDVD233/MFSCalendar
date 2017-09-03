@@ -220,29 +220,30 @@ class ClassView {
 }
 
 class EventView {
+    let formatter = DateFormatter()
+    
     func getTimeInterval(rowDict: [String: Any?]) -> String {
-        let formatter = DateFormatter()
         if (rowDict["isAllDay"] as! Int) == 1 {
             return "All Day"
         } else {
-            let tEnd = String(describing: (rowDict["tEnd"] as! Int))
-            if (rowDict["tEnd"] as! Int) > 99999 {
-                formatter.dateFormat = "HHmmss"
-            } else {
-                formatter.dateFormat = "Hmmss"
-            }
-            let timeEnd = formatter.date(from: tEnd)
-            let tStart = String(describing: (rowDict["tStart"] as! Int))
-            if (rowDict["tStart"] as! Int) > 99999 {
-                formatter.dateFormat = "HHmmss"
-            } else {
-                formatter.dateFormat = "Hmmss"
-            }
-            let timeStart = formatter.date(from: tStart)
+            let tEnd = rowDict["tEnd"] as! Int
+            updateFormatterFormat(time: tEnd)
+            let timeEnd = formatter.date(from: String(describing: tEnd))
+            let tStart = rowDict["tStart"] as! Int
+            updateFormatterFormat(time: tStart)
+            let timeStart = formatter.date(from: String(describing: tStart))
             formatter.dateFormat = "h:mm a"
             let startString = formatter.string(from: timeStart!)
             let endString = formatter.string(from: timeEnd!)
             return startString + " - " + endString
+        }
+    }
+    
+    private func updateFormatterFormat(time: Int) {
+        if time > 99999 {
+            formatter.dateFormat = "HHmmss"
+        } else {
+            formatter.dateFormat = "Hmmss"
         }
     }
 }
