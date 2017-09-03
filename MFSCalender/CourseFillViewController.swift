@@ -199,16 +199,7 @@ class courseFillController: UIViewController {
                 NSArray(array: courseData).write(toFile: path, atomically: true)
                 success = true
             } else {
-                DispatchQueue.main.async {
-                    let presentMessage = (error?.localizedDescription)! + " Please check your internet connection."
-                    let view = MessageView.viewFromNib(layout: .CardView)
-                    view.configureTheme(.error)
-                    let icon = "🤔"
-                    view.configureContent(title: "Error!", body: presentMessage, iconText: icon)
-                    view.button?.isHidden = true
-                    let config = SwiftMessages.Config()
-                    SwiftMessages.show(config: config, view: view)
-                }
+                presentErrorMessage(presentMessage: error!.localizedDescription, layout: .StatusLine)
             }
             semaphore.signal()
         })
@@ -260,16 +251,7 @@ class courseFillController: UIViewController {
                             NSLog("Failed parsing the data")
                         }
                     } else {
-                        DispatchQueue.main.async {
-                            let presentMessage = (error?.localizedDescription)! + " Please check your internet connection."
-                            let view = MessageView.viewFromNib(layout: .CardView)
-                            view.configureTheme(.error)
-                            let icon = "🤔"
-                            view.configureContent(title: "Error!", body: presentMessage, iconText: icon)
-                            view.button?.isHidden = true
-                            let config = SwiftMessages.Config()
-                            SwiftMessages.show(config: config, view: view)
-                        }
+                        presentErrorMessage(presentMessage: error!.localizedDescription, layout: .StatusLine)
                     }
                     semaphore.signal()
                 })
