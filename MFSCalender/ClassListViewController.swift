@@ -14,8 +14,8 @@ class classListController: UIViewController {
     @IBOutlet var classListCollectionView: UICollectionView!
     let path = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
 
-    var majorClasslist = [NSDictionary]()
-    var minorClassList = [NSDictionary]()
+    var majorClasslist = [[String: Any]]()
+    var minorClassList = [[String: Any]]()
 
 
     override func viewDidLoad() {
@@ -33,11 +33,11 @@ class classListController: UIViewController {
     func sortClasses(classList: NSArray) {
         let notImportantClasses = ["Study Hall", "Assembly", "Break", "1st Period Prep", "Advisor", "USCoun", "US Dean"]
 
-        majorClasslist = [NSDictionary]()
-        minorClassList = [NSDictionary]()
+        majorClasslist = []
+        minorClassList = []
 
         for items in classList {
-            let classObject = items as! NSMutableDictionary
+            var classObject = items as! [String: Any]
             var isMinorClass = false
 
             guard let className = classObject["className"] as? String else {
@@ -55,6 +55,17 @@ class classListController: UIViewController {
             if !isMinorClass {
                 majorClasslist.append(classObject)
             }
+        }
+    }
+    
+    func classObjectAt(indexPath: IndexPath) -> [String: Any] {
+        switch indexPath.section {
+        case 0:
+            return majorClasslist[indexPath.row]
+        case 1:
+            return minorClassList[indexPath.row]
+        default:
+            return [String: Any]()
         }
     }
 }
@@ -78,18 +89,9 @@ extension classListController: UICollectionViewDataSource, UICollectionViewDeleg
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "classListViewCell", for: indexPath) as! classListViewCell
 
-        let row = indexPath.row
+        var classObject = classObjectAt(indexPath: indexPath)
 
-        var classObject: NSDictionary = [:]
-
-        switch indexPath.section {
-        case 0:
-            classObject = majorClasslist[row]
-        case 1:
-            classObject = minorClassList[row]
-        default:
-            break
-        }
+        
 
         cell.title.text = classObject["className"] as? String
 
@@ -111,17 +113,7 @@ extension classListController: UICollectionViewDataSource, UICollectionViewDeleg
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let row = indexPath.row
-        var classObject: NSDictionary = [:]
-
-        switch indexPath.section {
-        case 0:
-            classObject = majorClasslist[row]
-        case 1:
-            classObject = minorClassList[row]
-        default:
-            break
-        }
+        var classObject = classObjectAt(indexPath: indexPath)
 
         userDefaults?.set(classObject["index"], forKey: "indexForCourseToPresent")
     }
