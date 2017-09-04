@@ -84,93 +84,99 @@ class classDetailViewController: UITableViewController, UIDocumentInteractionCon
         roomNumber.text = classObject["roomNumber"] as? String ?? ""
         teacherName.text = classObject["teacherName"] as? String ?? ""
 
-        if let sectionId = classObject["leadsectionid"] as? Int {
-            DispatchQueue.main.async {
-                self.navigationController?.showProgress()
-                self.navigationController?.setIndeterminate(true)
-                UIApplication.shared.isNetworkActivityIndicatorVisible = true
-            }
+        guard let sectionId = classObject["leadsectionid"] as? Int else {
+            return
+        }
 
-            let sectionIdString = String(describing: sectionId)
-            let semaphore = DispatchSemaphore(value: 0)
+        DispatchQueue.main.async {
+            self.navigationController?.showProgress()
+            self.navigationController?.setIndeterminate(true)
+            UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        }
 
-            provider.request(.getPossibleContent(sectionId: sectionIdString), completion: {
-                (result) in
-                switch result {
-                case let .success(response):
-                    do {
-                        guard let json = try JSONSerialization.jsonObject(with: response.data, options: .allowFragments) as? Array<Dictionary<String, Any?>> else {
-                            presentErrorMessage(presentMessage: "Internal error: Incorrect data format", layout: .StatusLine)
-                            return
-                        }
+        let sectionIdString = String(describing: sectionId)
+        let semaphore = DispatchSemaphore(value: 0)
 
-                        self.availableInformation = ["Basic"]
-                        var contentNameList = self.contentIDToName(inputData: json, sectionId: sectionIdString)
-
-                        contentNameList.remove(object: "Photo")
-
-                        self.availableInformation += contentNameList
-
-                        for contentName in self.availableInformation {
-                            self.sectionShouldShowMore[contentName] = false
-                        }
-                    } catch {
-                        presentErrorMessage(presentMessage: error.localizedDescription, layout: .StatusLine)
+        provider.request(.getPossibleContent(sectionId: sectionIdString), completion: {
+            (result) in
+            switch result {
+            case let .success(response):
+                do {
+                    guard let json = try JSONSerialization.jsonObject(with: response.data, options: .allowFragments) as? Array<Dictionary<String, Any?>> else {
+                        presentErrorMessage(presentMessage: "Internal error: Incorrect data format", layout: .StatusLine)
+                        return
                     }
-                case let .failure(error):
+
+                    self.availableInformation = ["Basic"]
+                    var contentNameList = self.contentIDToName(inputData: json, sectionId: sectionIdString)
+
+                    contentNameList.remove(object: "Photo")
+
+                    self.availableInformation += contentNameList
+
+                    for contentName in self.availableInformation {
+                        self.sectionShouldShowMore[contentName] = false
+                    }
+                } catch {
                     presentErrorMessage(presentMessage: error.localizedDescription, layout: .StatusLine)
                 }
+            case let .failure(error):
+                presentErrorMessage(presentMessage: error.localizedDescription, layout: .StatusLine)
+            }
 
-                semaphore.signal()
-            })
+            semaphore.signal()
+        })
 
-            semaphore.wait()
+        semaphore.wait()
 
-            let group = DispatchGroup()
-            for contentName in self.availableInformation {
-                guard contentName != "Basic" else {
-                    continue
-                }
+        downloadContentData()
 
-                DispatchQueue.global().async(group: group, execute: {
-                    let semaphore = DispatchSemaphore(value: 0)
-                    provider.request(MyService.getClassContentData(contentName: contentName, sectionId: sectionIdString), completion: { result in
-                        switch result {
-                        case let .success(response):
-                            do {
-                                guard let json = try response.mapJSON(failsOnEmptyData: true) as? Array<Dictionary<String, Any?>> else {
-                                    semaphore.signal()
-                                    return
-                                }
+        DispatchQueue.main.async {
+            self.classDetailTable.reloadData()
+            self.navigationController?.cancelProgress()
+            UIApplication.shared.isNetworkActivityIndicatorVisible = false
+        }
+    }
 
-                                guard !json.isEmpty else {
-                                    self.availableInformation.remove(object: contentName)
-                                    semaphore.signal()
-                                    return
-                                }
-                                self.contentList[contentName] = json
-                            } catch {
-                                self.availableInformation.remove(object: contentName)
-                                presentErrorMessage(presentMessage: error.localizedDescription, layout: .StatusLine)
+    func downloadContentData() {
+        let group = DispatchGroup()
+        for contentName in self.availableInformation {
+            guard contentName != "Basic" else {
+                continue
+            }
+
+            DispatchQueue.global().async(group: group, execute: {
+                let semaphore = DispatchSemaphore(value: 0)
+                provider.request(MyService.getClassContentData(contentName: contentName, sectionId: sectionIdString), completion: { result in
+                    switch result {
+                    case let .success(response):
+                        do {
+                            guard let json = try response.mapJSON(failsOnEmptyData: true) as? Array<Dictionary<String, Any?>> else {
+                                semaphore.signal()
+                                return
                             }
-                        case let .failure(error):
+
+                            guard !json.isEmpty else {
+                                self.availableInformation.remove(object: contentName)
+                                semaphore.signal()
+                                return
+                            }
+                            self.contentList[contentName] = json
+                        } catch {
+                            self.availableInformation.remove(object: contentName)
                             presentErrorMessage(presentMessage: error.localizedDescription, layout: .StatusLine)
                         }
-                        semaphore.signal()
-                    })
-
-                    semaphore.wait()
+                    case let .failure(error):
+                        presentErrorMessage(presentMessage: error.localizedDescription, layout: .StatusLine)
+                    }
+                    semaphore.signal()
                 })
-            }
 
-            group.wait()
-
-            DispatchQueue.main.async {
-                self.classDetailTable.reloadData()
-                self.navigationController?.cancelProgress()
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-            }
+                semaphore.wait()
+            })
         }
+
+        group.wait()
     }
 
     func contentIDToName(inputData: Array<Dictionary<String, Any?>>, sectionId: String) -> Array<String> {
