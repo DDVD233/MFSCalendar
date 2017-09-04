@@ -78,11 +78,8 @@ class TodayViewController: UIViewController, NCWidgetProviding, UITableViewDeleg
         formatter.dateFormat = "yyyyMMdd"
         let checkDate = formatter.string(from: date)
 
-        if dayDict?[checkDate] == nil {
-            dayOfSchool = "No School"
-        } else {
-            dayOfSchool = dayDict?[checkDate] as? String
-        }
+        dayOfSchool = dayDict?[checkDate] as? String ?? "No School"
+
         return dayOfSchool!
     }
 

@@ -390,11 +390,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         formatter.dateFormat = "yyyyMMdd"
         let checkDate = formatter.string(from: date as Date)
 
-        if dayDict?[checkDate] == nil {
-            dayOfSchool = "No School"
-        } else {
-            dayOfSchool = dayDict?[checkDate] as? String
-        }
+        dayOfSchool = dayDict?[checkDate] as? String ?? "No School"
         return dayOfSchool!
     }
 
