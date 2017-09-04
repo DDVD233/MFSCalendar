@@ -305,41 +305,14 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     }
 
     func periodCheck(day: String) {
-//        Clear all existing data
-        self.listClasses = []
-        let plistPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-        let fileName = "/Class" + day + ".plist"
-        let path = plistPath.appending(fileName)
-
         let timeFormatter = DateFormatter()
         timeFormatter.dateFormat = "HHmm"
 
-        let now = Int(timeFormatter.string(from: Date()))
+        let now = Int(timeFormatter.string(from: Date()))!
 
-        guard var allClasses = NSArray(contentsOfFile: path) as? Array<Dictionary<String, Any?>> else {
-            return
-        }
+        let currentPeriod = getCurrentPeriod(time: now)
 
-        let currentClass = getCurrentPeriod(time: now!)
-
-        let lunch = ["className": "Lunch", "roomNumber": "DH/C", "teacher": "", "period": "11"]
-
-        switch currentClass {
-        case 1...8:
-            self.listClasses = Array(allClasses[(currentClass - 1)...7])
-
-            if self.listClasses.count >= 2 { //Before lunch
-                self.listClasses.insert(lunch, at: 6 - currentClass)
-            }
-        case 11:
-            // At lunch
-
-            self.listClasses = Array(allClasses[6...7])
-
-            self.listClasses.insert(lunch, at: 0)
-        default:
-            self.listClasses = []
-        }
+        self.listClasses = getClassDataAt(period: currentPeriod, day: day)
     }
 
     func getHomework() {

@@ -62,3 +62,36 @@ func getCurrentPeriod(time: Int) -> Int {
     
     return currentClass!
 }
+
+func getClassDataAt(period: Int, day: String) -> [[String: Any]] {
+    var listClasses = [[String: Any]]()
+
+    let plistPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
+    let fileName = "/Class" + day + ".plist"
+    let path = plistPath.appending(fileName)
+
+    guard let allClasses = NSArray(contentsOfFile: path) as? Array<Dictionary<String, Any>> else {
+        return listClasses
+    }
+
+    let lunch = ["className": "Lunch", "roomNumber": "DH/C", "teacher": "", "period": 11] as [String: Any]
+    
+    switch period {
+    case 1...8:
+        listClasses = Array(allClasses[(period - 1)...7])
+        
+        if listClasses.count >= 2 { //Before lunch
+            listClasses.insert(lunch, at: 6 - period)
+        }
+    case 11:
+        // At lunch
+        
+        listClasses = Array(allClasses[6...7])
+        
+        listClasses.insert(lunch, at: 0)
+    default:
+        listClasses = []
+    }
+
+    return listClasses
+}

@@ -56,13 +56,6 @@ class TodayViewController: UIViewController, NCWidgetProviding, UITableViewDeleg
 
     func getAllClass() {
         let day = dayCheck()
-        let plistPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-        let fileName = "/Class" + day + ".plist"
-        let path = plistPath.appending(fileName)
-
-        guard let allClasses = NSArray(contentsOfFile: path) as? Array<Dictionary<String, Any>> else {
-            return
-        }
 
         let date = Date()
         let timeFormatter = DateFormatter()
@@ -70,24 +63,7 @@ class TodayViewController: UIViewController, NCWidgetProviding, UITableViewDeleg
         let now = Int(timeFormatter.string(from: date as Date) as String)!
         let currentPeriod = getCurrentPeriod(time: now)
 
-        let lunch = ["className": "Lunch", "roomNumber": "DH/C", "teacher": "", "period": 11] as [String: Any]
-
-        switch currentPeriod {
-        case 1...8:
-            self.listClasses = Array(allClasses[(currentPeriod - 1)...7])
-
-            if self.listClasses.count >= 2 { //Before lunch
-                self.listClasses.insert(lunch, at: 6 - currentPeriod)
-            }
-        case 11:
-            // At lunch
-
-            self.listClasses = Array(allClasses[6...7])
-
-            self.listClasses.insert(lunch, at: 0)
-        default:
-            self.listClasses = []
-        }
+        self.listClasses = getClassDataAt(period: currentPeriod, day: day)
 
         print(self.listClasses)
     }
