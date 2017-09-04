@@ -206,16 +206,12 @@ class CalendarViewController: UIViewController, UIScrollViewDelegate, DZNEmptyDa
         let plistPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
         let path = plistPath.appending("/Day.plist")
         let dayDict = NSDictionary(contentsOfFile: path)
-        var day: String? = nil
         self.formatter.dateFormat = "yyyyMMdd"
         let checkDate = self.formatter.string(from: checkDate)
-        if dayDict?[checkDate] == nil {
-            day = "No School"
-        } else {
-            day = dayDict?[checkDate] as? String
-        }
 
-        return day!
+        let day = dayDict?[checkDate] as? String ?? "No School"
+
+        return day
     }
 
     override func didReceiveMemoryWarning() {

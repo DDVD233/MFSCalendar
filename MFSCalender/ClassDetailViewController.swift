@@ -129,7 +129,7 @@ class classDetailViewController: UITableViewController, UIDocumentInteractionCon
 
         semaphore.wait()
 
-        downloadContentData()
+        downloadContentData(sectionId: sectionIdString)
 
         DispatchQueue.main.async {
             self.classDetailTable.reloadData()
@@ -138,7 +138,7 @@ class classDetailViewController: UITableViewController, UIDocumentInteractionCon
         }
     }
 
-    func downloadContentData() {
+    func downloadContentData(sectionId: String) {
         let group = DispatchGroup()
         for contentName in self.availableInformation {
             guard contentName != "Basic" else {
@@ -147,7 +147,7 @@ class classDetailViewController: UITableViewController, UIDocumentInteractionCon
 
             DispatchQueue.global().async(group: group, execute: {
                 let semaphore = DispatchSemaphore(value: 0)
-                provider.request(MyService.getClassContentData(contentName: contentName, sectionId: sectionIdString), completion: { result in
+                provider.request(MyService.getClassContentData(contentName: contentName, sectionId: sectionId), completion: { result in
                     switch result {
                     case let .success(response):
                         do {
