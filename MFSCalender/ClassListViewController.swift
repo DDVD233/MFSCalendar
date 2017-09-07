@@ -31,7 +31,7 @@ class classListController: UIViewController {
     }
 
     func sortClasses(classList: NSArray) {
-        let notImportantClasses = ["Study Hall", "Assembly", "Break", "1st Period Prep", "Advisor", "USCoun", "US Dean"]
+        let notImportantClasses = ["Study Hall", "Assembly", "Break", "1st Period Prep", "Advisor", "USCoun", "US Dean", "Lunch"]
 
         majorClasslist = []
         minorClassList = []
@@ -95,7 +95,7 @@ extension classListController: UICollectionViewDataSource, UICollectionViewDeleg
 
         cell.title.text = classObject["className"] as? String
 
-        if let sectionId = classObject["leadsectionid"] as? Int {
+        if let sectionId = classObject["sectionid"] as? Int {
             let imagePath = path.appending("/\(sectionId)_profile.png")
             if let backgroundImage = UIImage(contentsOfFile: imagePath) {
                 cell.backgroundImage.isHidden = false

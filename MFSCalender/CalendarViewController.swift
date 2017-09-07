@@ -354,7 +354,7 @@ extension CalendarViewController: FSCalendarDelegate, FSCalendarDataSource {
             return day
         }
     }
-
+    
     func calendar(_ calendar: FSCalendar, boundingRectWillChange bounds: CGRect, animated: Bool) {
         self.calendarHeightConstraint.constant = bounds.height
         if self.calendarView.scope == .month {
@@ -369,4 +369,15 @@ extension CalendarViewController: FSCalendarDelegate, FSCalendarDataSource {
         self.bottomScrollView.contentSize = CGSize(width: self.view.frame.size.width * 2, height: self.bottomScrollView.frame.size.height)
     }
 
+}
+
+extension CalendarViewController: FSCalendarDelegateAppearance {
+//    func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, titleDefaultColorFor date: Date) -> UIColor? {
+//        let day = self.checkDate(checkDate: date)
+//        if day == "No School" {
+//            return UIColor.red
+//        } else {
+//            return UIColor.black
+//        }
+//    }
 }

@@ -84,7 +84,7 @@ class classDetailViewController: UITableViewController, UIDocumentInteractionCon
         roomNumber.text = classObject["roomNumber"] as? String ?? ""
         teacherName.text = classObject["teacherName"] as? String ?? ""
 
-        guard let sectionId = classObject["leadsectionid"] as? Int else {
+        guard let sectionId = classObject["sectionid"] as? Int else {
             return
         }
 
@@ -309,7 +309,7 @@ extension classDetailViewController {
         switch availableInformation[section] {
         case "Basic":
             let cell = classDetailTable.dequeueReusableCell(withIdentifier: "classOverviewTable", for: indexPath)
-            let sectionId = classObject["leadsectionid"] as! Int
+            let sectionId = classObject["sectionid"] as! Int
             let photoPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
             let path = photoPath.appending("/\(sectionId)_profile.png")
             profileImageView.image = UIImage(contentsOfFile: path)

@@ -9,6 +9,7 @@
 import Foundation
 import SwiftMessages
 import SwiftyJSON
+import Alamofire
 
 func areEqual<T:Equatable>(type: T.Type, a: Any?, b: Any?) -> Bool? {
     guard let a = a as? T, let b = b as? T else {
@@ -267,5 +268,28 @@ class NetworkOperations {
         semaphore.wait()
         return strReturn
     }
+    
+//    func loginUsingPost() -> String? {
+////        let session = URLSession.shared
+////        let request = try! URLRequest(url: "https://mfriends.myschoolapp.com/api/SignIn", method: .post)
+////        reques
+////        
+////        let task = session.dataTask(with: )
+//        guard let password = userDefaults?.string(forKey: "password") else {
+//            return nil
+//        }
+//        let parameter = ["From":"", "Password": password, "Quiet": true, "InterfaceSource": "WebApp"] as [String : Any]
+//        
+//        let semaphore = DispatchSemaphore(value: 0)
+//        var cookie: String? = nil
+//        Alamofire.request("https://mfriends.myschoolapp.com/api/SignIn", method: .post, parameters: parameter, encoding: URLEncoding.httpBody).responseJSON(completionHandler: { response in
+//            cookie = response.response?.value(forKey: "Set-Cookie") as? String
+//            print(cookie)
+//            semaphore.signal()
+//        })
+//        
+//        semaphore.wait()
+//        return cookie
+//    }
 }
 

@@ -452,7 +452,7 @@ extension Main: UICollectionViewDelegate, UICollectionViewDataSource, UICollecti
         }
 
         cell.homeworkView.isHidden = true
-        if let leadSectionId = classData["leadsectionid"] as? Int {
+        if let leadSectionId = classData["sectionid"] as? Int {
             print(listHomework)
             if let thisClassHomework = listHomework[String(leadSectionId)] {
                 // cell.homeworkView.isHidden = false

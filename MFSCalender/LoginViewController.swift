@@ -12,6 +12,7 @@ import NVActivityIndicatorView
 import SCLAlertView
 import SkyFloatingLabelTextField
 import NotificationCenter
+import Crashlytics
 
 class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var loginView: UIView!
@@ -182,11 +183,15 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
                         userDefaults?.set(self.username.text, forKey: "username")
                         userDefaults?.set(self.password.text, forKey: "password")
                         userDefaults?.set(true, forKey: "didLogin")
+                        Answers.logLogin(withMethod: "Default", success: true, customAttributes: [:])
+                        
                         DispatchQueue.main.sync {
                             self.dismiss(animated: true, completion: nil)
                         }
                     }
                 }
+                
+                Answers.logLogin(withMethod: "Default", success: false, customAttributes: [:])
                 DispatchQueue.main.sync {
                     self.indicatorView.isHidden = true
                 }

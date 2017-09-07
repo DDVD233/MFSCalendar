@@ -29,7 +29,6 @@ class courseFillController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        trace?.start()
         progressView.font = UIFont.systemFont(ofSize: 40)
     }
 
@@ -67,7 +66,7 @@ class courseFillController: UIViewController {
 
                 self.progressView.setProgress(value: 66, animationDuration: 1) {
                     if self.createSchedule(fillLowPriority: 1) {
-//                        self.getProfilePhoto()
+                        self.getProfilePhoto()
                         self.versionCheck()
                         self.progressView.setProgress(value: 100, animationDuration: 1) {
 
@@ -109,20 +108,23 @@ class courseFillController: UIViewController {
                 guard let sectionIdInt = items["sectionid"] as? Int else {
                     return
                 }
-
-                guard let leadSectionIdInt = items["leadsectionid"] as? Int else {
+                
+                guard let photoURLPath = items["mostrecentgroupphoto"] as? String else {
+                    return
+                }
+                
+                guard loginAuthentication().success else {
+                    return
+                }
+                
+                guard !photoURLPath.isEmpty else {
+                    NSLog("\(items["coursedescription"] as? String ?? "") has no photo.")
                     return
                 }
 
                 let sectionId = String(sectionIdInt)
-                let leadSectionId = String(leadSectionIdInt)
 
-                let photoLink = ClassView().getProfilePhotoLink(sectionId: sectionId)
-
-                guard !photoLink.isEmpty else {
-                    NSLog("\(items["coursedescription"] as? String ?? "") has no photo.")
-                    return
-                }
+                let photoLink = "https://bbk12e1-cdn.myschoolcdn.com/736/photo/" + photoURLPath
 
                 let url = URL(string: photoLink)
 
@@ -130,7 +132,7 @@ class courseFillController: UIViewController {
 
                 let destination: DownloadRequest.DownloadFileDestination = { _, _ in
                     let path = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-                    let photoPath = path.appending("/\(leadSectionId)_profile.png")
+                    let photoPath = path.appending("/\(sectionId)_profile.png")
 
                     let fileURL = URL(fileURLWithPath: photoPath)
                     print(fileURL)
@@ -142,7 +144,6 @@ class courseFillController: UIViewController {
                 
                 
                 Alamofire.download(url!, to: destination).resume()
-
                 downloadSemaphore.wait()
             }
         }
@@ -166,7 +167,7 @@ class courseFillController: UIViewController {
             return false
         }
 
-        let urlString = "https://mfriends.myschoolapp.com/api/datadirect/ParentStudentUserAcademicGroupsGet?userId=\(userId)&schoolYearLabel=2016+-+2017&memberLevel=3&persona=2&durationList=\(durationId)"
+        let urlString = "https://mfriends.myschoolapp.com/api/datadirect/ParentStudentUserAcademicGroupsGet?userId=\(userId)&schoolYearLabel=2017+-+2018&memberLevel=3&persona=2&durationList=\(durationId)"
 
         let url = URL(string: urlString)
         let request = URLRequest(url: url!)
@@ -297,6 +298,8 @@ class courseFillController: UIViewController {
 
         for (index, items) in coursesObject.enumerated() {
             var course = items
+//            Rewrite!!!
+            success = true
 
             guard let className = course["className"] as? String else {
                 continue
@@ -322,7 +325,6 @@ class courseFillController: UIViewController {
                 
                 classId = classId.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
                 let url = "https://dwei.org/searchbyid/" + classId
-                print(url)
                 
                 let task = URLSession.shared.dataTask(with: URL(string: url)!, completionHandler: { (data, response, error) in
                     guard error == nil else {
@@ -335,6 +337,8 @@ class courseFillController: UIViewController {
                             semaphore.signal()
                             return
                         }
+                        
+                        print(meetTimeList)
                         
                         removeIndex += self.writeScheduleToFile(meetTimeList: meetTimeList, course: &course, index: index)
                         success = true

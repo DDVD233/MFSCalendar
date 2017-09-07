@@ -91,7 +91,7 @@ extension MyService: TargetType {
         case .getPossibleContent(let sectionId):
             return ["format": "json", "sectionId": sectionId, "associationId": "1", "pendingInd": "false"]
         case .getContentList(let sectionId):
-            return ["format": "json", "leadSectionId": sectionId]
+            return ["format": "json", "SectionId": sectionId]
         case .getClassContentData:
             return ["format": "json", "editMode": "false", "active": "true", "future": "false", "expired": "false", "contextLabelId": "2"]
         default: return nil

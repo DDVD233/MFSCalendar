@@ -168,5 +168,14 @@ extension Dictionary where Value == Any {
     }
 }
 
+extension Date {
+    struct Gregorian {
+        static let calendar = Calendar(identifier: .gregorian)
+    }
+    var startOfWeek: Date? {
+        return Gregorian.calendar.date(from: Gregorian.calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: self))
+    }
+}
+
 public let userDefaults = UserDefaults(suiteName: "group.org.dwei.MFSCalendar")
 public let userDocumentPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path

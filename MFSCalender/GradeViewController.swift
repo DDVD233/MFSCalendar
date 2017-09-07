@@ -65,7 +65,7 @@ class gradeViewController: UITableViewController {
         let userId = loginAuthentication().userId
 
         let classObject = ClassView().getTheClassToPresent() ?? [String: Any]()
-        let leadSectionId = classObject["leadsectionid"] as? Int
+        let leadSectionId = classObject["sectionid"] as? Int
 
         var cumGrade = ""
 
@@ -84,7 +84,7 @@ class gradeViewController: UITableViewController {
                 let json = JSON(data!)
 
                 for (_, subJson): (String, JSON) in json {
-                    if subJson["leadsectionid"].intValue == leadSectionId {
+                    if subJson["sectionid"].intValue == leadSectionId {
                         cumGrade = subJson["cumgrade"].stringValue
                         print("CumGrade: \(cumGrade)")
                     }

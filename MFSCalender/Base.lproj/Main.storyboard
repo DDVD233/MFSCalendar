@@ -417,16 +417,16 @@
                                     <outlet property="tagView" destination="fa7-oT-eer" id="tOU-hd-r2f"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="homeworkTableHeader" rowHeight="23" id="VfM-BH-6ZC" customClass="homeworkTableHeader" customModule="MFSCalendar" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="203.5" width="375" height="23"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="homeworkTableHeader" rowHeight="44" id="VfM-BH-6ZC" customClass="homeworkTableHeader" customModule="MFSCalendar" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="203.5" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="VfM-BH-6ZC" id="Y0Z-99-cOk">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="22.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vdw-R0-Gj3">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="22.5"/>
-                                            <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                            <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
                                         </label>

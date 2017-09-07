@@ -84,27 +84,22 @@ class homeworkViewController: UITableViewController {
             self.tableView.reloadData()
         }
 
-        guard let username = userDefaults?.string(forKey: "username") else {
-            return
-        }
-        var request = URLRequest(url: URL(string: "https://dwei.org/assignmentlist/")!)
-
         let config = URLSessionConfiguration.default
         config.requestCachePolicy = .reloadIgnoringLocalCacheData
         config.urlCache = nil
 
         let session = URLSession.init(configuration: config)
-
-        if username == "testaccount" {
-            if loginAuthentication().success {
-                let formatter = DateFormatter()
-                formatter.locale = Locale(identifier: "en_US")
-                formatter.dateFormat = "M/d/yyyy"
-                let today = formatter.string(from: Date()).addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-                let url = "https://mfriends.myschoolapp.com/api/DataDirect/AssignmentCenterAssignments/?format=json&filter=2&dateStart=\(today)&dateEnd=\(today)&persona=2"
-                request.url = URL(string: url)
-            }
+        guard loginAuthentication().success else {
+            return
         }
+        
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US")
+        formatter.dateFormat = "M/d/yyyy"
+        let today = formatter.string(from: Date()).addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+        let url = "https://mfriends.myschoolapp.com/api/DataDirect/AssignmentCenterAssignments/?format=json&filter=2&dateStart=\(today)&dateEnd=\(today)&persona=2"
+        let request = URLRequest(url: URL(string: url)!)
+        
         var originalData = [NSDictionary]()
         let semaphore = DispatchSemaphore.init(value: 0)
         let task: URLSessionDataTask = session.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
@@ -185,41 +180,37 @@ class homeworkViewController: UITableViewController {
         if scrollView.contentOffset.y < 20 {
             self.navigationItem.title = "Homework"
         } else if let indexPath = tableView.indexPathsForVisibleRows?.first {
-            var dateString: String {
-                let dueDateMDString = self.sections[indexPath.section]
-                self.formatter.dateFormat = "yyyyMMdd"
-                guard let dueDate = self.formatter.date(from: dueDateMDString) else {
-                    return "Unknown"
-                }
-                if dueDate.isToday {
-                    return "Today"
-                } else if dueDate.isTomorrow {
-                    return "Tomorrow"
-                } else {
-                    return dueDate.string(format: .custom("EEEE, MMM d, yyyy"))
-                }
-            }
+            let dateString = stringForHeaderInSection(section: indexPath.section)
             self.navigationItem.title = dateString
+        }
+    }
+    
+    func stringForHeaderInSection(section: Int) -> String {
+        let dueDateMDString = self.sections[section]
+        formatter.dateFormat = "yyyyMMdd"
+        guard let dueDate = formatter.date(from: dueDateMDString) else {
+            return "Unknown"
+        }
+        
+        if dueDate.isToday {
+            return "Today"
+        } else if dueDate.isTomorrow {
+            return "Tomorrow"
+        } else if dueDate.isBefore(date: Date().endOf(component: .weekOfYear), granularity: .day) {
+            let weekDay = dueDate.string(format: .custom("EEEE"))
+            return "This " + weekDay
+        } else if dueDate.isBefore(date: (Date() + 1.week).endOf(component: .weekOfYear), granularity: .day) {
+            let weekDay = dueDate.string(format: .custom("EEEE"))
+            return "Next " + weekDay
+        } else {
+            return dueDate.string(format: .custom("EEEE, MMM d, yyyy"))
         }
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = tableView.dequeueReusableCell(withIdentifier: "homeworkTableHeader") as! homeworkTableHeader
 
-        var dateString: String {
-            let dueDateMDString = self.sections[section]
-            self.formatter.dateFormat = "yyyyMMdd"
-            guard let dueDate = self.formatter.date(from: dueDateMDString) else {
-                return "Unknown"
-            }
-            if dueDate.isToday {
-                return "Today"
-            } else if dueDate.isTomorrow {
-                return "Tomorrow"
-            } else {
-                return dueDate.string(format: .custom("EEEE, MMM d, yyyy"))
-            }
-        }
+        let dateString = stringForHeaderInSection(section: section)
         headerView.titleLabel.text = dateString
         headerView.selectionStyle = .none
 
@@ -227,7 +218,7 @@ class homeworkViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 23
+        return 44
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

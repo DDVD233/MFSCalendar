@@ -35,6 +35,7 @@
 		E48D4E051E61FC26008B0A97 /* TodayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48D4E041E61FC26008B0A97 /* TodayViewController.swift */; };
 		E48D4E081E61FC26008B0A97 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E48D4E061E61FC26008B0A97 /* MainInterface.storyboard */; };
 		E48D4E0C1E61FC26008B0A97 /* Class Schedule.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = E48D4DFF1E61FC25008B0A97 /* Class Schedule.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		E49321881F5D32E800C65067 /* .travis.yml in Resources */ = {isa = PBXBuildFile; fileRef = E49321871F5D32E800C65067 /* .travis.yml */; };
 		E4A880BD1DF279BB00816AB7 /* MFS Logo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E4A880BC1DF279BB00816AB7 /* MFS Logo.jpg */; };
 		E4AAD1611EE8CC9E00E4E5EC /* bell.png in Resources */ = {isa = PBXBuildFile; fileRef = E4AAD1601EE8CC9E00E4E5EC /* bell.png */; };
 		E4ADC9EE1E882172002A46F7 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4ADC9ED1E882172002A46F7 /* Extensions.swift */; };
@@ -131,6 +132,7 @@
 		E48D4E071E61FC26008B0A97 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		E48D4E091E61FC26008B0A97 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E48D4E111E620698008B0A97 /* Class Schedule.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Class Schedule.entitlements"; sourceTree = "<group>"; };
+		E49321871F5D32E800C65067 /* .travis.yml */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; fileEncoding = 4; path = .travis.yml; sourceTree = "<group>"; };
 		E4A880BC1DF279BB00816AB7 /* MFS Logo.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "MFS Logo.jpg"; sourceTree = "<group>"; };
 		E4AAD1601EE8CC9E00E4E5EC /* bell.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bell.png; sourceTree = "<group>"; };
 		E4ADC9ED1E882172002A46F7 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
@@ -251,6 +253,7 @@
 		E4F86B241DF0E20C00CAD72B = {
 			isa = PBXGroup;
 			children = (
+				E49321871F5D32E800C65067 /* .travis.yml */,
 				E489F6C61F5A821E00F2269F /* ProjectPublicFunctions.swift */,
 				E4F86B2F1DF0E20C00CAD72B /* MFSCalendar */,
 				E48D4E031E61FC26008B0A97 /* Class Schedule Widget */,
@@ -424,6 +427,7 @@
 				E4A880BD1DF279BB00816AB7 /* MFS Logo.jpg in Resources */,
 				E4F0B3751EAD1BE900C923A8 /* dayPicker.plist in Resources */,
 				E4F86B3B1DF0E20C00CAD72B /* Assets.xcassets in Resources */,
+				E49321881F5D32E800C65067 /* .travis.yml in Resources */,
 				E413AB121EE8A796001EB189 /* brush_pencil.png in Resources */,
 				E413AB101EE89683001EB189 /* questionmark.png in Resources */,
 				E4EEFB131DF274EA00F199BE /* Images.xcassets in Resources */,

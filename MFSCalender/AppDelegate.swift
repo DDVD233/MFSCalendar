@@ -21,7 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         FirebaseApp.configure()
-        Fabric.with([Crashlytics.self])
+        Fabric.with([Crashlytics()])
         logUser()
 //        MAThemeKit.setupTheme(withPrimaryColor: UIColor(hexString: 0xFF7E79), secondaryColor: UIColor.white, fontName: "System", lightStatusBar: true)
         return true
