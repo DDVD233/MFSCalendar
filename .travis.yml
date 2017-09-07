@@ -1,3 +1,4 @@
+osx_image: xcode9
 language: swift
 xcode_project: MFSCalendar.xcworkspace # path to your xcodeproj folder
 xcode_scheme: MFSCalendar
