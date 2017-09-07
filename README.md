@@ -18,4 +18,4 @@ With MFS Calendar you can:
 If you need any help, please submit a issue or contact me through email: zjdavid.2003@gmail.com (personal) or daiw@mfriends.org (school).
 
 # Contribute
-All kinds of contribution are appreciated. If yocu want to improve the code or add functions, feel free to start a pull request.
+All kinds of contribution are appreciated. If you want to improve the code or add functions, feel free to start a pull request.
