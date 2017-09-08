@@ -305,7 +305,7 @@ class courseFillController: UIViewController {
                 continue
             }
             
-            guard !className.contains("Break") else {
+            guard !className.contains("Break") && !className.contains("Lunch") else {
                 continue
             }
 
@@ -413,7 +413,7 @@ class courseFillController: UIViewController {
                 classOfDay[period] = course
                 NSArray(array: classOfDay).write(toFile: path, atomically: true)
             } else if className.characters.count >= 10 && className[0, 9] == "Study Hall" {
-                //                                        It is possible that a study hall that the user doesn't take appear on the course list.
+                //         It is possible that a study hall that the user doesn't take appear on the course list.
                 removeIndex.append(index)
             }
         }
@@ -439,7 +439,7 @@ class courseFillController: UIViewController {
                 }
             }
             if !(periodExists) {
-                let addData = ["name": "Free", "period": String(describing: periodNumber)]
+                let addData = ["className": "Free", "period": periodNumber] as [String : Any]
                 listClasses?.add(addData)
             }
         }

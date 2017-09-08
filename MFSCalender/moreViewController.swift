@@ -9,6 +9,7 @@
 import UIKit
 import UserNotifications
 import SafariServices
+import JSQWebViewController
 
 class moreViewController: UITableViewController {
 
@@ -39,9 +40,19 @@ class moreViewController: UITableViewController {
 extension moreViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 1 && indexPath.row == 2 {
+            guard let cookie = NetworkOperations().loginUsingPost() else {
+                return
+            }
             let url = URL(string: "https://mfriends.myschoolapp.com/app/student#resourceboard")!
-            let safariPage = SFSafariViewController(url: url)
-            self.present(safariPage, animated: true, completion: nil)
+            
+            var request = URLRequest(url: url)
+            HTTPCookieStorage.shared.setCookies(cookie, for: url, mainDocumentURL: URL(string: "https://mfriends.myschoolapp.com"))
+            //request.addValue(cookie, forHTTPHeaderField: "cookie")
+            let cookies = HTTPCookieStorage.shared.cookies(for: url)
+            let headers = HTTPCookie.requestHeaderFields(with: cookies!)
+            request.allHTTPHeaderFields = headers
+            let webPage = WebViewController(urlRequest: request)
+            self.show(webPage, sender: self)
         }
     }
 }

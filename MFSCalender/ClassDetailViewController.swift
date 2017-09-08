@@ -44,7 +44,9 @@ class classDetailViewController: UITableViewController, UIDocumentInteractionCon
         let loadingView = DGElasticPullToRefreshLoadingViewCircle()
         loadingView.tintColor = UIColor.white
         classDetailTable.dg_addPullToRefreshWithActionHandler({ [weak self] () -> Void in
-            self?.refreshContent()
+            DispatchQueue.global().async {
+                self?.refreshContent()
+            }
             self?.tableView.dg_stopLoading()
         }, loadingView: loadingView)
         classDetailTable.dg_setPullToRefreshFillColor(UIColor(hexString: 0xFF7E79))
@@ -104,6 +106,7 @@ class classDetailViewController: UITableViewController, UIDocumentInteractionCon
                 do {
                     guard let json = try JSONSerialization.jsonObject(with: response.data, options: .allowFragments) as? Array<Dictionary<String, Any?>> else {
                         presentErrorMessage(presentMessage: "Internal error: Incorrect data format", layout: .StatusLine)
+                        semaphore.signal()
                         return
                     }
 

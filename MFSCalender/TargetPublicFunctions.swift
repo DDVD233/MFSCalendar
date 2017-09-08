@@ -207,14 +207,14 @@ class ClassView {
     
     func getMeetTime(period: Int) -> String {
         switch period {
-        case 1: return "8:00 - 8:43"
-        case 2: return "8:47 - 9:30"
-        case 3: return "9:34 - 10:34"
-        case 4: return "10:44 - 11:27"
-        case 5: return "11:31 - 12:14"
-        case 6: return "12:14 - 12:57"
-        case 7: return "13:40 - 14:23"
-        case 8: return "14:27 - 15: 10"
+        case 1: return "8:00AM - 8:42AM"
+        case 2: return "8:46AM - 9:28AM"
+        case 3: return "9:32AM - 10:32AM"
+        case 4: return "10:42AM - 11:24AM"
+        case 5: return "11:28AM - 12:10AM"
+        case 6: return "12:14PM - 12:56PM"
+        case 7: return "13:42PM - 14:23PM"
+        case 8: return "14:24PM - 15:10PM"
         default: return "Error!"
         }
     }
@@ -269,27 +269,35 @@ class NetworkOperations {
         return strReturn
     }
     
-//    func loginUsingPost() -> String? {
-////        let session = URLSession.shared
-////        let request = try! URLRequest(url: "https://mfriends.myschoolapp.com/api/SignIn", method: .post)
-////        reques
-////        
-////        let task = session.dataTask(with: )
-//        guard let password = userDefaults?.string(forKey: "password") else {
-//            return nil
-//        }
-//        let parameter = ["From":"", "Password": password, "Quiet": true, "InterfaceSource": "WebApp"] as [String : Any]
-//        
-//        let semaphore = DispatchSemaphore(value: 0)
-//        var cookie: String? = nil
-//        Alamofire.request("https://mfriends.myschoolapp.com/api/SignIn", method: .post, parameters: parameter, encoding: URLEncoding.httpBody).responseJSON(completionHandler: { response in
-//            cookie = response.response?.value(forKey: "Set-Cookie") as? String
-//            print(cookie)
-//            semaphore.signal()
-//        })
-//        
-//        semaphore.wait()
-//        return cookie
-//    }
+    func loginUsingPost() -> [HTTPCookie]? {
+        guard let password = userDefaults?.string(forKey: "password"), let username = userDefaults?.string(forKey: "username") else {
+            return nil
+        }
+        
+        let parameter = ["From":"", "Password": password, "Username": username, "InterfaceSource": "WebApp"]
+        print(parameter)
+        let jsonData = try! JSONSerialization.data(withJSONObject: parameter, options: .prettyPrinted)
+        
+        let session = URLSession.shared
+        var request = try! URLRequest(url: "https://mfriends.myschoolapp.com/api/SignIn", method: .post)
+        request.httpBody = jsonData
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        let semaphore = DispatchSemaphore(value: 0)
+        var cookie = [HTTPCookie]()
+        
+        let task = session.dataTask(with: request, completionHandler: {(data, response, error) in
+            let json = try! JSONSerialization.jsonObject(with: data!, options: .allowFragments)
+            print(json)
+            if let thisResponse = response as? HTTPURLResponse {
+                cookie = HTTPCookie.cookies(withResponseHeaderFields: thisResponse.allHeaderFields as! [String : String], for: thisResponse.url!)
+                print(cookie ?? "nil")
+                semaphore.signal()
+            }
+        })
+        
+        task.resume()
+        semaphore.wait()
+        return cookie
+    }
 }
 

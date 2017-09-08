@@ -18,6 +18,8 @@ class customCell: UITableViewCell {
 
     @IBOutlet weak var PeriodTime: UILabel!
 
+    @IBOutlet var teachersName: UILabel!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
     }
@@ -29,6 +31,8 @@ class customCell: UITableViewCell {
 }
 
 class ADay: UIViewController {
+    
+    var daySelected: String? = nil
 
     @IBOutlet weak var tableView: UITableView!
 
@@ -40,16 +44,16 @@ class ADay: UIViewController {
         dataFetching()
         self.tableView.separatorStyle = .none
 
-        if !UIAccessibilityIsReduceTransparencyEnabled() {
-            self.view.backgroundColor = UIColor(patternImage: #imageLiteral(resourceName:"background.png"))
-            let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
-            let blurEffectView = UIVisualEffectView(effect: blurEffect)
-            //always fill the view
-            blurEffectView.frame = self.view.bounds
-            blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-
-            self.view.insertSubview(blurEffectView, at: 0)
-        }
+//        if !UIAccessibilityIsReduceTransparencyEnabled() {
+//            self.view.backgroundColor = UIColor(patternImage: #imageLiteral(resourceName:"background.png"))
+//            let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
+//            let blurEffectView = UIVisualEffectView(effect: blurEffect)
+//            //always fill the view
+//            blurEffectView.frame = self.view.bounds
+//            blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+//
+//            self.view.insertSubview(blurEffectView, at: 0)
+//        }
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -63,8 +67,10 @@ class ADay: UIViewController {
     }
 
     func dataFetching() {
-
-        let daySelected = userDefaults?.string(forKey: "daySelect")
+        guard daySelected != nil else {
+            return
+        }
+        
         self.title = daySelected! + " Day"
         NSLog("Day: %@", daySelected!)
         let plistPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
@@ -91,33 +97,6 @@ extension ADay: UITableViewDelegate, UITableViewDataSource {
         return self.listClasses.count
     }
 
-    override func setEditing(_ editing: Bool, animated: Bool) {
-        super.setEditing(editing, animated: animated)
-        self.tableView.setEditing(editing, animated: true)
-    }
-
-
-    //    Icon Setup
-    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
-        return .delete
-    }
-
-    //    Delete Rows
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        NSLog("Rows", self.listClasses.count)
-        let IndexPaths = NSArray(array: [indexPath])
-        let plistPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-        let path = plistPath.appending("/ClassA.plist")
-        self.listClasses.removeObject(at: indexPath.row)
-        NSLog("Rows", self.listClasses.count)
-        self.listClasses.write(toFile: path, atomically: false)
-        self.tableView.deleteRows(at: IndexPaths as! [IndexPath], with: .fade)
-    }
-
-    @IBAction func Edit(_ sender: Any) {
-        setEditing(true, animated: true)
-    }
-
 
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
@@ -136,6 +115,8 @@ extension ADay: UITableViewDelegate, UITableViewDataSource {
 
         let roomN = rowDict["roomNumber"] as? String
         cell?.RoomNumber.text = roomN
+        
+        cell?.teachersName.text = rowDict["teacherName"] as? String
 
         return cell!
     }

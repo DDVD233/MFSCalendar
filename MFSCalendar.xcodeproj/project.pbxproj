@@ -133,6 +133,7 @@
 		E48D4E091E61FC26008B0A97 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E48D4E111E620698008B0A97 /* Class Schedule.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Class Schedule.entitlements"; sourceTree = "<group>"; };
 		E49321871F5D32E800C65067 /* .travis.yml */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; fileEncoding = 4; path = .travis.yml; sourceTree = "<group>"; };
+		E49754A91F6323AC002A00A3 /* TimeTableParentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeTableParentViewController.swift; sourceTree = "<group>"; };
 		E4A880BC1DF279BB00816AB7 /* MFS Logo.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "MFS Logo.jpg"; sourceTree = "<group>"; };
 		E4AAD1601EE8CC9E00E4E5EC /* bell.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bell.png; sourceTree = "<group>"; };
 		E4ADC9ED1E882172002A46F7 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
@@ -195,6 +196,7 @@
 		E472A15E1EFB6F3C00EF5A74 /* More View */ = {
 			isa = PBXGroup;
 			children = (
+				E49754A91F6323AC002A00A3 /* TimeTableParentViewController.swift */,
 				E4BD88991F397BE80000FEF3 /* TopicDetailViewController.swift */,
 				E48D4DEF1E61F275008B0A97 /* ADayViewController.swift */,
 				E4BD88971F383A060000FEF3 /* ClassTimetableViewController.swift */,

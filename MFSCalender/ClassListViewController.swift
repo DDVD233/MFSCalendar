@@ -31,7 +31,7 @@ class classListController: UIViewController {
     }
 
     func sortClasses(classList: NSArray) {
-        let notImportantClasses = ["Study Hall", "Assembly", "Break", "1st Period Prep", "Advisor", "USCoun", "US Dean", "Lunch"]
+        let notImportantClasses = ["Study Hall", "Assembly", "Break", "1st Period Prep", "Advisor", "USCoun", "US Dean", "Lunch", "Capstone"]
 
         majorClasslist = []
         minorClassList = []

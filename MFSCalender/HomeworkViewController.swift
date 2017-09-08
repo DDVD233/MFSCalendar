@@ -35,6 +35,7 @@ class homeworkViewController: UITableViewController {
         homeworkTable.estimatedRowHeight = 80
         homeworkTable.emptyDataSetSource = self
         homeworkTable.emptyDataSetDelegate = self
+        homeworkTable.delegate = self
 
 //        Remove the bottom 1px line on Navigation Bar
         self.navigationController?.navigationBar.barTintColor = UIColor(hexString: 0xFF7E79)
@@ -186,10 +187,14 @@ class homeworkViewController: UITableViewController {
     }
     
     func stringForHeaderInSection(section: Int) -> String {
+        guard sections.count > sections.count else {
+            return ""
+        }
+        
         let dueDateMDString = self.sections[section]
         formatter.dateFormat = "yyyyMMdd"
         guard let dueDate = formatter.date(from: dueDateMDString) else {
-            return "Unknown"
+            return ""
         }
         
         if dueDate.isToday {
@@ -212,13 +217,15 @@ class homeworkViewController: UITableViewController {
 
         let dateString = stringForHeaderInSection(section: section)
         headerView.titleLabel.text = dateString
-        headerView.selectionStyle = .none
-
         return headerView
     }
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 44
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("Row selected")
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -228,14 +235,14 @@ class homeworkViewController: UITableViewController {
         guard let homework = homeworkInSection?[indexPath.row] else {
             return cell
         }
-        if let assignmentId = homework["assignment_id"] as? Int {
-            cell.assignmentId = String(describing: assignmentId)
+        if let assignmentIndexId = homework["assignment_index_id"] as? Int {
+            cell.assignmentIndexId = String(describing: assignmentIndexId)
         }
 
         if let sectionId = homework["section_id"] as? Int {
             cell.sectionId = String(describing: sectionId)
         }
-
+        
         if let description = homework["short_description"] as? String {
             if let attributedString = description.convertToHtml() {
                 cell.shortDescription.attributedText = attributedString
@@ -329,67 +336,79 @@ class homeworkViewCell: UITableViewCell {
 
     @IBOutlet var shortDescription: UITextView!
 
-    var assignmentId: String?
+    @IBOutlet var activityIndicator: UIActivityIndicatorView!
+    var assignmentIndexId: String?
     var sectionId: String?
 
     override func awakeFromNib() {
         checkMark.stateChangeAnimation = .bounce(.fill)
         checkMark.boxLineWidth = 3
         checkMark.addTarget(self, action: #selector(checkDidChange), for: UIControlEvents.valueChanged)
-
+        activityIndicator.isHidden = true
+    }
+    
+    func tapped(_ sender: UITapGestureRecognizer) {
+        print("tapped!")
     }
 
     func checkDidChange(checkMark: M13Checkbox) {
-        guard (assignmentId != nil) else {
-            return
-        }
-        guard (sectionId != nil) else {
-            return
-        }
-
-        var assignmentStatus: String? = nil
-
-        switch checkMark.checkState {
-        case .checked:
-            assignmentStatus = "1"
-        case .unchecked:
-            assignmentStatus = "-1"
-        default:
-            NSLog("Something strange happened.")
-        }
-
-        var url: String? = nil
-
-        if userDefaults?.string(forKey: "username") != "testaccount" {
-            url = "https://dwei.org/updateAssignmentStatus/" + assignmentId! + "/" + sectionId! + "/" + assignmentStatus!
-        }
-
-        let request = URLRequest(url: URL(string: url!)!)
-        let session = URLSession.shared
-
-        let task: URLSessionDataTask = session.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
-            if error == nil {
-
-            } else {
-                switch checkMark.checkState {
-                case .checked:
-                    checkMark.setCheckState(.unchecked, animated: false)
-                case .unchecked:
-                    checkMark.setCheckState(.checked, animated: false)
-                default:
-                    break
-                }
-                let presentMessage = error!.localizedDescription + "Please check your internet connection"
-                let view = MessageView.viewFromNib(layout: .CardView)
-                view.configureTheme(.error)
-                view.configureContent(title: "Error!", body: presentMessage)
-                view.button?.isHidden = true
-                let config = SwiftMessages.Config()
-                SwiftMessages.show(config: config, view: view)
+        DispatchQueue.global().async {
+            guard (self.assignmentIndexId != nil) else {
+                return
             }
-        })
-
-        task.resume()
+            guard (self.sectionId != nil) else {
+                return
+            }
+            
+            var assignmentStatus: String? = nil
+            switch self.checkMark.checkState {
+            case .checked:
+                assignmentStatus = "1"
+            case .unchecked:
+                assignmentStatus = "-1"
+            default:
+                NSLog("Something strange happened.")
+                return
+            }
+            
+            
+            let url = "https://mfriends.myschoolapp.com/api/assignment2/assignmentstatusupdate/?format=json&assignmentIndexId=\(self.assignmentIndexId!)&assignmentStatus=\(assignmentStatus!)"
+            
+            let json = ["assignmentIndexId": self.assignmentIndexId!, "assignmentStatus": assignmentStatus!]
+            guard let jsonData = try? JSONSerialization.data(withJSONObject: json) else {
+                return
+            }
+            
+            DispatchQueue.main.async {
+                self.activityIndicator.isHidden = false
+                self.activityIndicator.startAnimating()
+            }
+            var request = try! URLRequest(url: URL(string: url)!, method: .post)
+            request.httpBody = jsonData
+            let session = URLSession.shared
+            
+            let task: URLSessionDataTask = session.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
+                DispatchQueue.main.async {
+                    self.activityIndicator.isHidden = true
+                    self.activityIndicator.stopAnimating()
+                }
+                if error == nil {
+                    
+                } else {
+                    switch checkMark.checkState {
+                    case .checked:
+                        checkMark.setCheckState(.unchecked, animated: false)
+                    case .unchecked:
+                        checkMark.setCheckState(.checked, animated: false)
+                    default:
+                        break
+                    }
+                    presentErrorMessage(presentMessage: error!.localizedDescription, layout: .StatusLine)
+                }
+            })
+            
+            task.resume()
+        }
     }
 }
 
