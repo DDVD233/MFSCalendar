@@ -18,7 +18,7 @@ target 'MFSCalendar' do
   pod 'SwiftDate', '~> 4.0'
   pod 'DGElasticPullToRefresh'
   pod 'ReachabilitySwift'
-  pod 'XLPagerTabStrip', '~> 7.0'
+  pod 'XLPagerTabStrip'
   pod 'Firebase/Core'
   pod 'Firebase/Performance'
   pod 'Fabric'

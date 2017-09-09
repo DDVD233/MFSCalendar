@@ -7,6 +7,9 @@
 //
 
 import UIKit
+import XLPagerTabStrip
+import SnapKit
+import DZNEmptyDataSet
 
 class customCell: UITableViewCell {
 
@@ -30,48 +33,35 @@ class customCell: UITableViewCell {
 
 }
 
-class ADay: UIViewController {
+class ADay: UIViewController, IndicatorInfoProvider {
     
     var daySelected: String? = nil
 
     @IBOutlet weak var tableView: UITableView!
 
-    var listClasses: NSMutableArray = []
+    var listClasses = [[String: Any]]()
 
     override func viewDidLoad() {
         // Do any additional setup after loading the view, typically from a nib.
         super.viewDidLoad()
         dataFetching()
         self.tableView.separatorStyle = .none
-
-//        if !UIAccessibilityIsReduceTransparencyEnabled() {
-//            self.view.backgroundColor = UIColor(patternImage: #imageLiteral(resourceName:"background.png"))
-//            let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
-//            let blurEffectView = UIVisualEffectView(effect: blurEffect)
-//            //always fill the view
-//            blurEffectView.frame = self.view.bounds
-//            blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-//
-//            self.view.insertSubview(blurEffectView, at: 0)
-//        }
+        tableView.emptyDataSetSource = self
     }
-
-    override func viewDidAppear(_ animated: Bool) {
-
-        if userDefaults?.bool(forKey: "reloadTable") != false {
-            self.dataFetching()
-            self.tableView.reloadData()
-            userDefaults?.set(false, forKey: "reloadTable")
-            NSLog("table reloaded")
-        }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        self.dataFetching()
     }
 
     func dataFetching() {
         guard daySelected != nil else {
+            self.listClasses = []
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
             return
         }
         
-        self.title = daySelected! + " Day"
         NSLog("Day: %@", daySelected!)
         let plistPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
         let fileName = "/Class" + daySelected! + ".plist"
@@ -79,16 +69,30 @@ class ADay: UIViewController {
         let path = plistPath.appending(fileName)
         NSLog(path)
 
-        self.listClasses = NSMutableArray(contentsOfFile: path)!
+        self.listClasses = NSArray(contentsOfFile: path)! as! [[String: Any]]
         print(listClasses)
+        
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    
 
     @IBAction func unWindSegueBack(segue: UIStoryboardSegue) {
+    }
+    
+    func indicatorInfo(for pagerTabStripController: PagerTabStripViewController) -> IndicatorInfo {
+        if daySelected != nil {
+            return IndicatorInfo(title: daySelected! + " Day")
+        } else {
+            return IndicatorInfo(title: "")
+        }
     }
 }
 
@@ -104,7 +108,7 @@ extension ADay: UITableViewDelegate, UITableViewDataSource {
 
         let row = indexPath.row
 
-        let rowDict = self.listClasses[row] as! NSDictionary
+        let rowDict = self.listClasses[row] 
 
         cell?.ClassName.text = rowDict["className"] as? String
         if let period = rowDict["period"] as? Int {
@@ -119,6 +123,33 @@ extension ADay: UITableViewDelegate, UITableViewDataSource {
         cell?.teachersName.text = rowDict["teacherName"] as? String
 
         return cell!
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let rowDict = self.listClasses[indexPath.row] 
+        guard let index = rowDict["index"] as? Int else {
+            return
+        }
+        
+        userDefaults?.set(index, forKey: "indexForCourseToPresent")
+        
+        let classDetailViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "classDetailViewController")
+        tableView.deselectRow(at: indexPath, animated: true)
+        self.show(classDetailViewController, sender: self)
+    }
+}
+
+extension ADay: DZNEmptyDataSetSource {
+    func title(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
+        let attr = [NSFontAttributeName: UIFont.preferredFont(forTextStyle: UIFontTextStyle.headline)]
+        let str = "There is no class on this day."
+        self.tableView.separatorStyle = .none
+        return NSAttributedString(string: str, attributes: attr)
+    }
+    
+    func image(forEmptyDataSet scrollView: UIScrollView!) -> UIImage! {
+        let image = UIImage(named: "brush_pencil.png")?.imageResize(sizeChange: CGSize(width: 85, height: 85))
+        return image
     }
 }
 

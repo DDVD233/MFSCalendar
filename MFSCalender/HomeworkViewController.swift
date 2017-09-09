@@ -187,7 +187,7 @@ class homeworkViewController: UITableViewController {
     }
     
     func stringForHeaderInSection(section: Int) -> String {
-        guard sections.count > sections.count else {
+        guard sections.count >= section + 1 else {
             return ""
         }
         
@@ -287,6 +287,11 @@ class homeworkViewController: UITableViewController {
             default:
                 cell.checkMark.setCheckState(.unchecked, animated: false)
             }
+        }
+        
+        if homework["has_grade"] as? Bool == true {
+            cell.checkMark.setCheckState(.checked, animated: true)
+            cell.checkMark.isEnabled = false
         }
 
         cell.checkMark.tintColor = cell.tagView.backgroundColor
@@ -393,7 +398,7 @@ class homeworkViewCell: UITableViewCell {
                     self.activityIndicator.stopAnimating()
                 }
                 if error == nil {
-                    
+                    print(try? JSONSerialization.jsonObject(with: data!, options: .allowFragments))
                 } else {
                     switch checkMark.checkState {
                     case .checked:

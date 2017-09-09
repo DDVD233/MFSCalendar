@@ -63,8 +63,10 @@ class courseFillController: UIViewController {
             self.clearData(day: "E")
             self.clearData(day: "F")
             if self.createSchedule(fillLowPriority: 0) {
-
                 self.progressView.setProgress(value: 66, animationDuration: 1) {
+                    for alphabet in "ABCDEF".characters {
+                        self.fillStudyHall(letter: String(alphabet))
+                    }
                     if self.createSchedule(fillLowPriority: 1) {
                         self.getProfilePhoto()
                         self.versionCheck()
@@ -426,24 +428,14 @@ class courseFillController: UIViewController {
         let plistPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
         let fileName = "/Class" + letter + ".plist"
         let path = plistPath.appending(fileName)
-        let listClasses = NSMutableArray(contentsOfFile: path)
+        var listClasses = NSArray(contentsOfFile: path) as! [[String: Any]]
         for periodNumber in 1...8 {
-            var periodExists = false
-            for items in listClasses! {
-                let classes = items as! NSDictionary
-                let periodS = classes["period"] as! String
-                let period = Int(periodS)
-                if period == periodNumber {
-                    periodExists = true
-                    break
-                }
-            }
-            if !(periodExists) {
+            if listClasses.filter({ $0["period"] as? Int == periodNumber }).count == 0 {
                 let addData = ["className": "Free", "period": periodNumber] as [String : Any]
-                listClasses?.add(addData)
+                listClasses[periodNumber - 1] = addData
             }
         }
-        listClasses?.write(toFile: path, atomically: true)
+        NSArray(array: listClasses).write(toFile: path, atomically: true)
     }
 
     func versionCheck() {

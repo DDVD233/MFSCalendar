@@ -56,8 +56,6 @@ class CalendarViewController: UIViewController, UIScrollViewDelegate, DZNEmptyDa
         return .lightContent
     }
 
-    @IBOutlet weak var classView: UITableView!
-
     @IBOutlet weak var bottomScrollView: UIScrollView!
     @IBOutlet weak var pageControl: UIPageControl!
 
@@ -75,6 +73,8 @@ class CalendarViewController: UIViewController, UIScrollViewDelegate, DZNEmptyDa
     var listClasses: NSMutableArray = []
     var listEvents: NSMutableArray = []
     var dayOfSchool: String? = nil
+    
+    let classViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier :"timeTableViewController") as! ADay
 
     fileprivate lazy var scopeGesture: UIPanGestureRecognizer = {
         [unowned self] in
@@ -90,16 +90,11 @@ class CalendarViewController: UIViewController, UIScrollViewDelegate, DZNEmptyDa
         self.backButton.title = "Collapse"
         self.navigationItem.title = "Classes"
         self.view.addGestureRecognizer(self.scopeGesture)
-
-        self.classView.panGestureRecognizer.require(toFail: self.scopeGesture)
         self.eventView.panGestureRecognizer.require(toFail: self.scopeGesture)
+        classViewController.view.addGestureRecognizer(scopeGesture)
+        classViewController.tableView.panGestureRecognizer.require(toFail: self.scopeGesture)
 
         self.bottomScrollView.contentSize = CGSize(width: self.view.frame.size.width * 2, height: self.bottomScrollView.frame.size.height)
-
-        self.classView.delegate = self
-        self.classView.dataSource = self
-        self.classView.emptyDataSetSource = self
-        self.classView.emptyDataSetDelegate = self
         self.eventView.delegate = self
         self.eventView.dataSource = self
         self.eventView.emptyDataSetDelegate = self
@@ -107,11 +102,14 @@ class CalendarViewController: UIViewController, UIScrollViewDelegate, DZNEmptyDa
         self.calendarView.delegate = self
         self.calendarView.dataSource = self
         self.bottomScrollView.delegate = self
+        
+        addChildViewController(classViewController)
     }
 
     override func viewDidAppear(_ animated: Bool) {
-        self.classView.frame = CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: self.bottomScrollView.frame.size.height)
-        self.bottomScrollView.addSubview(classView)
+        classViewController.view.frame = CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: self.bottomScrollView.frame.size.height)
+        
+        self.bottomScrollView.addSubview(classViewController.view)
 
         self.eventView.frame = CGRect(x: self.view.frame.size.width, y: 0, width: self.view.frame.size.width, height: self.bottomScrollView.frame.size.height)
         self.bottomScrollView.addSubview(eventView)
@@ -141,7 +139,7 @@ class CalendarViewController: UIViewController, UIScrollViewDelegate, DZNEmptyDa
     }
 
     func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        var shouldBegin = self.classView.contentOffset.y <= -self.classView.contentInset.top
+        var shouldBegin = classViewController.tableView.contentOffset.y <= -classViewController.tableView.contentInset.top
         if !shouldBegin {
             shouldBegin = self.eventView.contentOffset.y <= -self.eventView.contentInset.top
         }
@@ -159,26 +157,15 @@ class CalendarViewController: UIViewController, UIScrollViewDelegate, DZNEmptyDa
     }
 
     func title(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
-        var str = ""
         let attr = [NSFontAttributeName: UIFont.preferredFont(forTextStyle: UIFontTextStyle.headline)]
-        if scrollView == classView {
-            str = "There is no class on this day."
-            self.classView.separatorStyle = .none
-        } else if scrollView == eventView {
-            str = "There is no event on this day."
-            self.eventView.separatorStyle = .none
-        }
+        let str = "There is no event on this day."
+        self.eventView.separatorStyle = .none
 
         return NSAttributedString(string: str, attributes: attr)
     }
 
     func image(forEmptyDataSet scrollView: UIScrollView!) -> UIImage! {
-        var image: UIImage? = nil
-        if scrollView == classView {
-            image = UIImage(named: "brush_pencil.png")?.imageResize(sizeChange: CGSize(width: 85, height: 85))
-        } else if scrollView == eventView {
-            image = UIImage(named: "School_building.png")?.imageResize(sizeChange: CGSize(width: 95, height: 95))
-        }
+        let image = UIImage(named: "School_building.png")?.imageResize(sizeChange: CGSize(width: 95, height: 95))
 
         return image
     }
@@ -223,25 +210,34 @@ class CalendarViewController: UIViewController, UIScrollViewDelegate, DZNEmptyDa
 extension CalendarViewController: UITableViewDelegate, UITableViewDataSource {
 
     func dataFetching() {
-        if let checkDate = self.calendarView.selectedDates.first {
-            self.dayOfSchool = self.checkDate(checkDate: checkDate)
+        guard let checkDate = self.calendarView.selectedDates.first else {
+            return
         }
-
-        if (self.dayOfSchool == "No School") || (self.dayOfSchool == nil) {
-            self.listClasses = []
-            self.classView.reloadData(with: .automatic)
-            self.classView.reloadData()
+        
+        self.dayOfSchool = self.checkDate(checkDate: checkDate)
+        if self.dayOfSchool != "No School" {
+            classViewController.daySelected = self.dayOfSchool
         } else {
-            self.classView.separatorStyle = .singleLine
-            let plistPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-            let fileName = "/Class" + self.dayOfSchool! + ".plist"
-            let path = plistPath.appending(fileName)
-
-            self.listClasses = NSMutableArray(contentsOfFile: path)!
-
-            self.classView.reloadData(with: .automatic)
-            self.classView.reloadData()
+            classViewController.daySelected = nil
         }
+        
+        classViewController.dataFetching()
+
+//        if (self.dayOfSchool == "No School") || (self.dayOfSchool == nil) {
+//            self.listClasses = []
+//            self.classView.reloadData(with: .automatic)
+//            self.classView.reloadData()
+//        } else {
+//            self.classView.separatorStyle = .singleLine
+//            let plistPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
+//            let fileName = "/Class" + self.dayOfSchool! + ".plist"
+//            let path = plistPath.appending(fileName)
+//
+//            self.listClasses = NSMutableArray(contentsOfFile: path)!
+//
+//            self.classView.reloadData(with: .automatic)
+//            self.classView.reloadData()
+//        }
     }
 
     func eventDataFetching() {
@@ -269,72 +265,29 @@ extension CalendarViewController: UITableViewDelegate, UITableViewDataSource {
 
     //    the number of the cell
     func tableView(_ tableView: UITableView, numberOfRowsInSection selection: Int) -> Int {
-        if tableView == self.classView {
-            return self.listClasses.count
-        } else {
-            return self.listEvents.count
-        }
+        return self.listEvents.count
     }
 
 
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if tableView == classView {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "classTable", for: indexPath as IndexPath) as! customCalendarCell
-
-            let row = indexPath.row
-
-            let rowDict = self.listClasses[row] as! NSDictionary
-
-            cell.ClassName.text = rowDict["className"] as? String
-
-            var meetTimeText = ""
-
-            if let period = rowDict["period"] as? Int {
-                cell.PeriodNumber.text = String(describing: period)
-
-                meetTimeText = ClassView().getMeetTime(period: period)
-            }
-
-            
-            if let teacherName = rowDict["teacherName"] as? String {
-                meetTimeText += "     Teacher: " + teacherName
-            }
-            
-            cell.PeriodTime.text = meetTimeText
-            
-            if let roomNumber = rowDict["roomNumber"] as? String {
-                if !roomNumber.isEmpty {
-                    cell.RoomNumber.text = "At: " + roomNumber
-                } else {
-                    cell.RoomNumber.text = nil
-                }
+        let cell = tableView.dequeueReusableCell(withIdentifier: "eventTable", for: indexPath as IndexPath) as? customEventCell
+        let row = indexPath.row
+        let rowDict = self.listEvents[row] as! Dictionary<String, Any?>
+        let summary = rowDict["summary"] as? String
+        cell?.ClassName.text = summary
+        let letter = summary?.substring(to: (summary?.index(after: (summary?.startIndex)!))!)
+        cell?.PeriodNumber.text = letter!
+        if rowDict["location"] != nil {
+            let location = rowDict["location"] as! String
+            if location.hasSuffix("place fields") || location.hasSuffix("Place Fields") {
+                cell?.RoomNumber.text = nil
             } else {
-                cell.RoomNumber.text = nil
+                cell?.RoomNumber.text = "At: " + location
             }
-
-            return cell
-        } else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "eventTable", for: indexPath as IndexPath) as? customEventCell
-            let row = indexPath.row
-            let rowDict = self.listEvents[row] as! Dictionary<String, Any?>
-            let summary = rowDict["summary"] as? String
-            cell?.ClassName.text = summary
-            let letter = summary?.substring(to: (summary?.index(after: (summary?.startIndex)!))!)
-            cell?.PeriodNumber.text = letter!
-            if rowDict["location"] != nil {
-                let location = rowDict["location"] as! String
-                //这里有问题啊啊啊啊啊啊
-//                ???什么问题啊没看见
-                if location.hasSuffix("place fields") || location.hasSuffix("Place Fields") {
-                    cell?.RoomNumber.text = nil
-                } else {
-                    cell?.RoomNumber.text = "At: " + location
-                }
-            }
-            
-            cell?.PeriodTime.text = EventView().getTimeInterval(rowDict: rowDict)
-            return cell!
         }
+        
+        cell?.PeriodTime.text = EventView().getTimeInterval(rowDict: rowDict)
+        return cell!
     }
 }
 
@@ -363,7 +316,8 @@ extension CalendarViewController: FSCalendarDelegate, FSCalendarDataSource {
             self.backButton.title = "Expand"
         }
         self.view.layoutIfNeeded()
-        self.classView.frame.size.height = self.bottomScrollView.frame.height
+        //self.classView.frame.size.height = self.bottomScrollView.frame.height
+        
         self.eventView.frame.size.height = self.bottomScrollView.frame.height
 
         self.bottomScrollView.contentSize = CGSize(width: self.view.frame.size.width * 2, height: self.bottomScrollView.frame.size.height)

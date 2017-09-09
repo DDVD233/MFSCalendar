@@ -310,6 +310,7 @@
                         <segue destination="yTU-4p-yW1" kind="relationship" relationship="viewControllers" id="zcV-MC-SIr"/>
                         <segue destination="2Rt-XE-Yqg" kind="relationship" relationship="viewControllers" id="CMf-cl-qkQ"/>
                         <segue destination="rt2-9L-AaP" kind="relationship" relationship="viewControllers" id="HmT-L9-n9P"/>
+                        <segue destination="VRo-TY-UmQ" kind="relationship" relationship="viewControllers" id="NNJ-2s-Uk4"/>
                         <segue destination="Wod-VY-kcK" kind="relationship" relationship="viewControllers" id="PXW-mz-1cT"/>
                     </connections>
                 </tabBarController>
@@ -858,10 +859,10 @@
             </objects>
             <point key="canvasLocation" x="3679.1999999999998" y="133.5832083958021"/>
         </scene>
-        <!--View Controller-->
+        <!--Time Table Parent View Controller-->
         <scene sceneID="F3g-hO-I3z">
             <objects>
-                <viewController id="cms-Bk-Fk5" sceneMemberID="viewController">
+                <viewController automaticallyAdjustsScrollViewInsets="NO" id="cms-Bk-Fk5" customClass="timeTableParentViewController" customModule="MFSCalendar" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="4Wd-Xf-sle"/>
                         <viewControllerLayoutGuide type="bottom" id="Zai-sz-y0B"/>
@@ -869,140 +870,32 @@
                     <view key="view" contentMode="scaleToFill" id="HSb-Qg-f9c">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0G6-Pu-kkp">
+                                <rect key="frame" x="0.0" y="64" width="375" height="554"/>
+                            </scrollView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="0G6-Pu-kkp" firstAttribute="leading" secondItem="HSb-Qg-f9c" secondAttribute="leading" id="5LJ-i1-6Ct"/>
+                            <constraint firstItem="Zai-sz-y0B" firstAttribute="top" secondItem="0G6-Pu-kkp" secondAttribute="bottom" id="7nr-9L-azt"/>
+                            <constraint firstItem="0G6-Pu-kkp" firstAttribute="top" secondItem="4Wd-Xf-sle" secondAttribute="bottom" id="hEH-zU-Afg"/>
+                            <constraint firstAttribute="trailing" secondItem="0G6-Pu-kkp" secondAttribute="trailing" id="qzo-47-nM4"/>
+                        </constraints>
                     </view>
+                    <navigationItem key="navigationItem" id="uuS-vV-Kjc"/>
+                    <connections>
+                        <outlet property="containerView" destination="0G6-Pu-kkp" id="0S8-jI-9BE"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xEx-ia-MRd" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="7302" y="-762"/>
-        </scene>
-        <!--Class Schedule-->
-        <scene sceneID="Eub-9A-Pg9">
-            <objects>
-                <viewController id="zfV-c9-BkE" customClass="ClassSchedule" customModule="MFSCalendar" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="5wh-3f-bv4"/>
-                        <viewControllerLayoutGuide type="bottom" id="Vz9-PD-qHW"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="Fth-Jv-CST">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RJU-dt-e0e">
-                                <rect key="frame" x="18" y="237" width="168" height="134"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.0" green="1" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="19"/>
-                                <state key="normal" title="C Day">
-                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                </state>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                        <real key="value" value="10"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <action selector="cDayButton:" destination="zfV-c9-BkE" eventType="touchUpInside" id="qKH-fg-jGd"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yZf-of-U6r">
-                                <rect key="frame" x="18" y="378" width="168" height="134"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.40000000600000002" green="0.40000000600000002" blue="1" alpha="0.65303938356164382" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="19"/>
-                                <state key="normal" title="E Day">
-                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                </state>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                        <real key="value" value="10"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <action selector="eDayButton:" destination="zfV-c9-BkE" eventType="touchUpInside" id="6Jh-Yb-cby"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kbn-37-iay">
-                                <rect key="frame" x="189" y="237" width="168" height="134"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.0" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="19"/>
-                                <state key="normal" title="D Day">
-                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                </state>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                        <real key="value" value="10"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <action selector="dDayButton:" destination="zfV-c9-BkE" eventType="touchUpInside" id="MpA-0B-HQQ"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9dN-zf-WST">
-                                <rect key="frame" x="189" y="378" width="168" height="134"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="0.5" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="19"/>
-                                <state key="normal" title="F Day">
-                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                </state>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                        <real key="value" value="10"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <action selector="fDayButton:" destination="zfV-c9-BkE" eventType="touchUpInside" id="1r1-BL-dOE"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GJS-xc-Hn4">
-                                <rect key="frame" x="189" y="95" width="168" height="134"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="1" green="0.50196081400000003" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="19"/>
-                                <state key="normal" title="B Day">
-                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                </state>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                        <real key="value" value="10"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <action selector="bDayButton:" destination="zfV-c9-BkE" eventType="touchUpInside" id="leO-SI-CZz"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JZV-wr-l61">
-                                <rect key="frame" x="18" y="95" width="168" height="134"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.40000000600000002" green="0.80000001190000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                <state key="normal" title="A Day">
-                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                </state>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                        <real key="value" value="10"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <action selector="aDayButton:" destination="zfV-c9-BkE" eventType="touchUpInside" id="eI3-2t-OGE"/>
-                                </connections>
-                            </button>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <navigationItem key="navigationItem" title="Class Schedule" id="fhi-Y6-YrP"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="tfh-Lb-pgs" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="7274.3999999999996" y="-70.614692653673174"/>
+            <point key="canvasLocation" x="3680.8000000000002" y="-1336.2818590704649"/>
         </scene>
         <!--A Day-->
         <scene sceneID="WGk-dm-FGj">
             <objects>
-                <viewController id="gvr-uh-bJE" customClass="ADay" customModule="MFSCalendar" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="timeTableViewController" automaticallyAdjustsScrollViewInsets="NO" id="gvr-uh-bJE" customClass="ADay" customModule="MFSCalendar" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="U2c-P6-dGa"/>
                         <viewControllerLayoutGuide type="bottom" id="PnE-TR-PaA"/>
@@ -1011,12 +904,12 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="tableView" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="122" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="ZNY-P5-9Jd">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="tableView" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="122" sectionHeaderHeight="64" sectionFooterHeight="49" translatesAutoresizingMaskIntoConstraints="NO" id="ZNY-P5-9Jd">
                                 <rect key="frame" x="0.0" y="20" width="375" height="603"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="CellIdentifier" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="cellIdentifier" rowHeight="122" id="o6K-WJ-izp" userLabel="ClassA1" customClass="customCell" customModule="MFSCalendar" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="375" height="122"/>
+                                        <rect key="frame" x="0.0" y="64" width="375" height="122"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="o6K-WJ-izp" id="Bq6-of-LJK">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="121.5"/>
@@ -1143,7 +1036,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="51L-AM-Vws" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="8106.3999999999996" y="-70.614692653673174"/>
+            <point key="canvasLocation" x="4575.1999999999998" y="-1336.2818590704649"/>
         </scene>
         <!--Calender-->
         <scene sceneID="8hJ-ls-6yL">
@@ -1227,98 +1120,11 @@
                         <outlet property="bottomScrollView" destination="3nJ-HW-HKL" id="G5v-u3-xl3"/>
                         <outlet property="calendarHeightConstraint" destination="o7H-31-jVt" id="vuR-fi-CYg"/>
                         <outlet property="calendarView" destination="Rj8-l0-2iy" id="upA-TS-Fdg"/>
-                        <outlet property="classView" destination="lSD-Ah-jUH" id="FqX-uX-2Aq"/>
                         <outlet property="eventView" destination="uy9-OK-bFC" id="QYz-4k-2Yq"/>
                         <outlet property="pageControl" destination="OIu-gb-RIU" id="vCJ-7B-orI"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="k5C-IO-qBZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="80" sectionHeaderHeight="1" sectionFooterHeight="1" id="lSD-Ah-jUH">
-                    <rect key="frame" x="0.0" y="0.0" width="414" height="348"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    <gestureRecognizers/>
-                    <prototypes>
-                        <tableViewCell clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="classTable" id="OPC-rS-wlw" customClass="customCalendarCell" customModule="MFSCalendar" customModuleProvider="target">
-                            <rect key="frame" x="0.0" y="1" width="414" height="80"/>
-                            <autoresizingMask key="autoresizingMask"/>
-                            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="OPC-rS-wlw" id="sWa-Jg-0cz">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="79.5"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8kX-tc-Rc7">
-                                        <rect key="frame" x="0.0" y="1" width="3" height="78"/>
-                                        <color key="backgroundColor" red="0.50196081400000003" green="0.25098040700000002" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="3" id="Y3L-WS-bhx"/>
-                                        </constraints>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                <real key="value" value="1"/>
-                                            </userDefinedRuntimeAttribute>
-                                        </userDefinedRuntimeAttributes>
-                                    </view>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="N" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nFd-9B-0Re">
-                                        <rect key="frame" x="8" y="18" width="45" height="45"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="45" id="58t-e1-RtE"/>
-                                            <constraint firstAttribute="width" constant="45" id="e39-P4-O0K"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" type="system" weight="thin" pointSize="63"/>
-                                        <color key="textColor" red="1" green="0.40000000600000002" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" alignment="top" spacing="-5" translatesAutoresizingMaskIntoConstraints="NO" id="lw0-O1-0Vo">
-                                        <rect key="frame" x="61" y="14" width="325" height="51.5"/>
-                                        <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="className" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="f6N-Kw-cor">
-                                                <rect key="frame" x="0.0" y="0.0" width="87.5" height="20.5"/>
-                                                <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
-                                                <nil key="textColor"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="time" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0eM-nu-ywn">
-                                                <rect key="frame" x="0.0" y="15.5" width="26.5" height="20.5"/>
-                                                <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
-                                                <nil key="textColor"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Room" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rLY-eg-ZMM">
-                                                <rect key="frame" x="0.0" y="31" width="44.5" height="20.5"/>
-                                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                                                <nil key="textColor"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                        </subviews>
-                                    </stackView>
-                                </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstItem="8kX-tc-Rc7" firstAttribute="top" secondItem="sWa-Jg-0cz" secondAttribute="top" constant="1" id="5SR-wc-mW9"/>
-                                    <constraint firstItem="lw0-O1-0Vo" firstAttribute="leading" secondItem="nFd-9B-0Re" secondAttribute="trailing" constant="8" id="E4d-bo-upW"/>
-                                    <constraint firstItem="lw0-O1-0Vo" firstAttribute="centerY" secondItem="sWa-Jg-0cz" secondAttribute="centerY" id="Ic5-Ta-Ojj"/>
-                                    <constraint firstAttribute="bottom" secondItem="8kX-tc-Rc7" secondAttribute="bottom" constant="1" id="Kzx-s0-qR2"/>
-                                    <constraint firstItem="8kX-tc-Rc7" firstAttribute="leading" secondItem="sWa-Jg-0cz" secondAttribute="leading" id="caJ-n3-mrH"/>
-                                    <constraint firstItem="nFd-9B-0Re" firstAttribute="leading" secondItem="8kX-tc-Rc7" secondAttribute="trailing" constant="5" id="oB3-I4-762"/>
-                                    <constraint firstAttribute="trailingMargin" secondItem="lw0-O1-0Vo" secondAttribute="trailing" constant="20" id="r63-ds-8es"/>
-                                    <constraint firstItem="nFd-9B-0Re" firstAttribute="centerY" secondItem="sWa-Jg-0cz" secondAttribute="centerY" id="r9g-9p-WOj"/>
-                                </constraints>
-                            </tableViewCellContentView>
-                            <connections>
-                                <outlet property="ClassName" destination="f6N-Kw-cor" id="Kgr-iV-9sx"/>
-                                <outlet property="PeriodNumber" destination="nFd-9B-0Re" id="GzH-Iu-xjx"/>
-                                <outlet property="PeriodTime" destination="0eM-nu-ywn" id="kIX-AW-kLO"/>
-                                <outlet property="RoomNumber" destination="rLY-eg-ZMM" id="lx2-EF-QKg"/>
-                            </connections>
-                        </tableViewCell>
-                    </prototypes>
-                    <connections>
-                        <outlet property="dataSource" destination="QUz-Th-8ul" id="wRb-s3-kXv"/>
-                        <outlet property="delegate" destination="QUz-Th-8ul" id="wml-4B-k78"/>
-                        <outlet property="emptyDataSetDelegate" destination="QUz-Th-8ul" id="nY2-28-ovc"/>
-                        <outlet property="emptyDataSetSource" destination="QUz-Th-8ul" id="kAs-69-cq5"/>
-                    </connections>
-                </tableView>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="80" sectionHeaderHeight="1" sectionFooterHeight="1" id="uy9-OK-bFC">
                     <rect key="frame" x="0.0" y="0.0" width="414" height="348"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -1512,9 +1318,6 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
-                                        <connections>
-                                            <segue destination="cms-Bk-Fk5" kind="show" id="vT6-tD-Sgz"/>
-                                        </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" textLabel="Ggz-tG-oSa" style="IBUITableViewCellStyleDefault" id="4gs-KZ-ffH">
                                         <rect key="frame" x="0.0" y="241" width="375" height="45"/>
@@ -2762,7 +2565,7 @@
         <scene sceneID="90T-Fs-8NC">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="rt2-9L-AaP" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Calendar" image="Calendar" id="Ga6-gg-IQU">
+                    <tabBarItem key="tabBarItem" title="Calendar" image="CalendarUnselected" selectedImage="Calendar" id="Ga6-gg-IQU">
                         <inset key="imageInsets" minX="0.0" minY="3" maxX="0.0" maxY="-3"/>
                     </tabBarItem>
                     <toolbarItems/>
@@ -2788,7 +2591,9 @@
         <scene sceneID="YKL-WX-RcU">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="2Rt-XE-Yqg" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Homework" image="homework" id="bSa-Cf-LM5"/>
+                    <tabBarItem key="tabBarItem" title="Homework" image="Homework" selectedImage="HomeworkSelected" id="bSa-Cf-LM5">
+                        <inset key="imageInsets" minX="0.0" minY="3" maxX="0.0" maxY="-3"/>
+                    </tabBarItem>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" translucent="NO" id="0NX-nu-npG">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -2830,14 +2635,41 @@
             </objects>
             <point key="canvasLocation" x="2740" y="133.5832083958021"/>
         </scene>
+        <!--Timetable-->
+        <scene sceneID="i2X-G5-YHe">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="VRo-TY-UmQ" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Timetable" image="Timetable" selectedImage="TimetableSelected" id="4oN-GM-rFw">
+                        <inset key="imageInsets" minX="0.0" minY="3" maxX="0.0" maxY="-3"/>
+                    </tabBarItem>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" barStyle="black" id="PmC-os-GLY">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="barTintColor" red="1" green="0.49327188729999999" blue="0.47399842739999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="cms-Bk-Fk5" kind="relationship" relationship="rootViewController" id="AcH-xL-B76"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="5n0-Po-jPc" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2741.5999999999999" y="-1336.2818590704649"/>
+        </scene>
     </scenes>
     <resources>
         <image name="Calendar" width="25" height="25"/>
+        <image name="CalendarUnselected" width="25" height="25"/>
+        <image name="Homework" width="25" height="25"/>
+        <image name="HomeworkSelected" width="25" height="25"/>
         <image name="MFS Logo.jpg" width="300" height="300"/>
         <image name="School.jpg" width="1080" height="1921"/>
         <image name="Settings" width="28" height="28"/>
+        <image name="Timetable" width="25" height="25"/>
+        <image name="TimetableSelected" width="25" height="25"/>
         <image name="Today" width="25" height="25"/>
         <image name="TodaySelected" width="25" height="25"/>
-        <image name="homework" width="25" height="25"/>
     </resources>
 </document>

@@ -21,7 +21,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Homework" image="homework" id="879-k8-qhx"/>
+                    <tabBarItem key="tabBarItem" title="Homework" image="Homework" id="879-k8-qhx"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="e27-45-d2D" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -62,7 +62,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Calendar" image="Calendar" id="vcF-LL-9cP">
+                    <tabBarItem key="tabBarItem" title="Calendar" image="CalendarUnselected" id="vcF-LL-9cP">
                         <inset key="imageInsets" minX="0.0" minY="1" maxX="0.0" maxY="-1"/>
                     </tabBarItem>
                 </viewController>
@@ -89,6 +89,25 @@
             </objects>
             <point key="canvasLocation" x="2600" y="1158"/>
         </scene>
+        <!--Timetable-->
+        <scene sceneID="WBl-Fc-Hyr">
+            <objects>
+                <viewController id="ySI-Cw-FyH" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="rSm-ux-MXW"/>
+                        <viewControllerLayoutGuide type="bottom" id="JLD-SL-jn3"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="RSm-bN-QwV">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Timetable" image="Timetable" id="Inl-Se-UAq"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="HYQ-VO-lDG" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1894" y="1675"/>
+        </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="Bfz-0L-XAJ">
             <objects>
@@ -106,6 +125,7 @@
                         <segue destination="Ihz-Zz-enP" kind="relationship" relationship="viewControllers" id="1dX-C8-VAu"/>
                         <segue destination="X3R-pZ-w0S" kind="relationship" relationship="viewControllers" id="byF-NX-WBW"/>
                         <segue destination="0JE-Ee-5nK" kind="relationship" relationship="viewControllers" id="pGX-Az-Aab"/>
+                        <segue destination="ySI-Cw-FyH" kind="relationship" relationship="viewControllers" id="bnh-Ma-uXz"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8o1-Er-pMO" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -114,9 +134,10 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Calendar" width="25" height="25"/>
+        <image name="CalendarUnselected" width="25" height="25"/>
+        <image name="Homework" width="25" height="25"/>
+        <image name="Timetable" width="25" height="25"/>
         <image name="Today" width="25" height="25"/>
         <image name="TodaySelected" width="25" height="25"/>
-        <image name="homework" width="25" height="25"/>
     </resources>
 </document>

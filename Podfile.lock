@@ -86,7 +86,7 @@ DEPENDENCIES:
   - SwiftMessages
   - SwiftyJSON
   - UICircularProgressRing
-  - XLPagerTabStrip (~> 7.0)
+  - XLPagerTabStrip
 
 SPEC CHECKSUMS:
   Alamofire: f28cdffd29de33a7bfa022cbd63ae95a27fae140
@@ -123,6 +123,6 @@ SPEC CHECKSUMS:
   UICircularProgressRing: 99419d03525be7b4ad29c0021e0fbb7d913b0030
   XLPagerTabStrip: 9be80a66c6b7d60306b2c0a6004965016d68f813
 
-PODFILE CHECKSUM: 4d0057fb6ffcbdfd87227d2ed9778682a253bb04
+PODFILE CHECKSUM: 5d6dc37bba4b3c3fc26e307a3471e23d177fa75c
 
 COCOAPODS: 1.2.0
