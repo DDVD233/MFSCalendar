@@ -22,7 +22,7 @@ class homeworkViewController: UITableViewController {
     @IBOutlet weak var homeworkTable: UITableView!
     var isUpdatingHomework = false
 
-    var listHomework = [String: Array<NSDictionary>]()
+    var listHomework = [String: [[String: Any]]]()
     var sections: [String] {
         return Array(self.listHomework.keys).sorted()
     }
@@ -101,18 +101,19 @@ class homeworkViewController: UITableViewController {
         let url = "https://mfriends.myschoolapp.com/api/DataDirect/AssignmentCenterAssignments/?format=json&filter=2&dateStart=\(today)&dateEnd=\(today)&persona=2"
         let request = URLRequest(url: URL(string: url)!)
         
-        var originalData = [NSDictionary]()
+        var originalData = [[String:Any]]()
         let semaphore = DispatchSemaphore.init(value: 0)
         let task: URLSessionDataTask = session.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
             if error == nil {
                 do {
-                    if let json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? Array<NSDictionary> {
+                    if let json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? [[String: Any]] {
                         print(json)
                         originalData = json
                     }
 
                 } catch {
                     NSLog("Data parsing failed")
+                    // print(String(data: data!, encoding: .utf8))
                     DispatchQueue.main.async {
                         let presentMessage = "The server is not returning the right data. Please contact David."
                         self.errorMessage(presentMessage: presentMessage)
@@ -138,8 +139,8 @@ class homeworkViewController: UITableViewController {
         }
     }
 
-    func manageDate(originalData: Array<NSDictionary>) {
-        var managedHomework = [String: Array<NSDictionary>]()
+    func manageDate(originalData: [[String: Any]]) {
+        var managedHomework = [String: [[String: Any]]]()
 //        Format: [DateDue(YearMonthDay): Array<HomeworkBelongToThatSection>]
         for homework in originalData {
             guard let dueDateData = homework["date_due"] as? String else {
@@ -225,7 +226,26 @@ class homeworkViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("Row selected")
+        let homeworkInSection = self.listHomework[sections[indexPath.section]]
+        guard let homework = homeworkInSection?[indexPath.row] else {
+            return
+        }
+        
+        guard (homework["long_description"] as? String).existsAndNotEmpty() else {
+            return
+        }
+        
+        guard let assignmentID = homework["assignment_index_id"] as? Int else {
+            return
+        }
+        
+        userDefaults?.set(assignmentID, forKey: "indexIdForAssignmentToPresent")
+        
+        guard let viewController = storyboard?.instantiateViewController(withIdentifier: "homeworkDetailViewController") else {
+            return
+        }
+        
+        show(viewController, sender: self)
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -239,9 +259,9 @@ class homeworkViewController: UITableViewController {
             cell.assignmentIndexId = String(describing: assignmentIndexId)
         }
 
-        if let sectionId = homework["section_id"] as? Int {
-            cell.sectionId = String(describing: sectionId)
-        }
+//        if let sectionId = homework["section_id"] as? Int {
+//            cell.sectionId = String(describing: sectionId)
+//        }
         
         if let description = homework["short_description"] as? String {
             if let attributedString = description.convertToHtml() {
@@ -258,40 +278,29 @@ class homeworkViewController: UITableViewController {
 
         cell.homeworkClass.text = homework["groupname"] as? String
 
-        let homeworkType = homework["assignment_type"] as? String
+        let homeworkType = homework["assignment_type"] as? String ?? ""
         cell.homeworkType.text = homeworkType
 
-        if homeworkType != nil {
-            switch homeworkType! {
-            case "Homework":
-                cell.tagView.backgroundColor = UIColor(hexString: 0xF44336)
-            case "Quiz":
-                cell.tagView.backgroundColor = UIColor(hexString: 0x2196F3)
-            case "Test":
-                cell.tagView.backgroundColor = UIColor(hexString: 0x3F51B5)
-            case "Project":
-                cell.tagView.backgroundColor = UIColor(hexString: 0xFF9800)
-            case "Classwork":
-                cell.tagView.backgroundColor = UIColor(hexString: 0x795548)
-            default:
-                cell.tagView.backgroundColor = UIColor(hexString: 0x607D8B)
-            }
-        }
+        cell.tagView.backgroundColor = HomeworkView().colorForTheType(type: homeworkType)
 
         if let status = homework["assignment_status"] as? Int {
-            switch status {
-            case -1:
-                cell.checkMark.setCheckState(.unchecked, animated: false)
-            case 1:
-                cell.checkMark.setCheckState(.checked, animated: false)
-            default:
-                cell.checkMark.setCheckState(.unchecked, animated: false)
-            }
+            let checkState = HomeworkView().checkStateFor(status: status)
+            cell.checkMark.setCheckState(checkState, animated: false)
         }
         
         if homework["has_grade"] as? Bool == true {
-            cell.checkMark.setCheckState(.checked, animated: true)
+            cell.checkMark.setCheckState(.checked, animated: false)
             cell.checkMark.isEnabled = false
+        }
+        
+        if (homework["long_description"] as? String).existsAndNotEmpty() {
+            cell.selectionStyle = .default
+            cell.accessoryType = .disclosureIndicator
+            cell.shortDescription.isSelectable = false
+        } else {
+            cell.selectionStyle = .none
+            cell.accessoryType = .none
+            cell.shortDescription.isSelectable = true
         }
 
         cell.checkMark.tintColor = cell.tagView.backgroundColor
@@ -343,25 +352,24 @@ class homeworkViewCell: UITableViewCell {
 
     @IBOutlet var activityIndicator: UIActivityIndicatorView!
     var assignmentIndexId: String?
-    var sectionId: String?
 
     override func awakeFromNib() {
         checkMark.stateChangeAnimation = .bounce(.fill)
         checkMark.boxLineWidth = 3
         checkMark.addTarget(self, action: #selector(checkDidChange), for: UIControlEvents.valueChanged)
         activityIndicator.isHidden = true
-    }
-    
-    func tapped(_ sender: UITapGestureRecognizer) {
-        print("tapped!")
+        let shortDescriptionString = shortDescription.attributedText.string
+        
+        if shortDescriptionString.contains("http://") || shortDescriptionString.contains("https://") {
+            shortDescription.isUserInteractionEnabled = true
+        } else {
+            shortDescription.isUserInteractionEnabled = false
+        }
     }
 
     func checkDidChange(checkMark: M13Checkbox) {
         DispatchQueue.global().async {
             guard (self.assignmentIndexId != nil) else {
-                return
-            }
-            guard (self.sectionId != nil) else {
                 return
             }
             
@@ -376,43 +384,28 @@ class homeworkViewCell: UITableViewCell {
                 return
             }
             
-            
-            let url = "https://mfriends.myschoolapp.com/api/assignment2/assignmentstatusupdate/?format=json&assignmentIndexId=\(self.assignmentIndexId!)&assignmentStatus=\(assignmentStatus!)"
-            
-            let json = ["assignmentIndexId": self.assignmentIndexId!, "assignmentStatus": assignmentStatus!]
-            guard let jsonData = try? JSONSerialization.data(withJSONObject: json) else {
-                return
-            }
-            
             DispatchQueue.main.async {
                 self.activityIndicator.isHidden = false
                 self.activityIndicator.startAnimating()
             }
-            var request = try! URLRequest(url: URL(string: url)!, method: .post)
-            request.httpBody = jsonData
-            let session = URLSession.shared
             
-            let task: URLSessionDataTask = session.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
-                DispatchQueue.main.async {
-                    self.activityIndicator.isHidden = true
-                    self.activityIndicator.stopAnimating()
+            do {
+                try HomeworkView().updateAssignmentStatus(assignmentIndexId: self.assignmentIndexId!, assignmentStatus: assignmentStatus!)
+            } catch {
+                switch checkMark.checkState {
+                case .checked:
+                    checkMark.setCheckState(.unchecked, animated: false)
+                case .unchecked:
+                    checkMark.setCheckState(.checked, animated: false)
+                default:
+                    break
                 }
-                if error == nil {
-                    print(try? JSONSerialization.jsonObject(with: data!, options: .allowFragments))
-                } else {
-                    switch checkMark.checkState {
-                    case .checked:
-                        checkMark.setCheckState(.unchecked, animated: false)
-                    case .unchecked:
-                        checkMark.setCheckState(.checked, animated: false)
-                    default:
-                        break
-                    }
-                    presentErrorMessage(presentMessage: error!.localizedDescription, layout: .StatusLine)
-                }
-            })
+            }
             
-            task.resume()
+            DispatchQueue.main.async {
+                self.activityIndicator.isHidden = true
+                self.activityIndicator.stopAnimating()
+            }
         }
     }
 }

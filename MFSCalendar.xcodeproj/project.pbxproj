@@ -50,6 +50,7 @@
 		E4CE43991EAC36F3000D743B /* BlankDictionary.plist in Resources */ = {isa = PBXBuildFile; fileRef = E4CE43981EAC36F3000D743B /* BlankDictionary.plist */; };
 		E4CE439B1EAD0D51000D743B /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CE439A1EAD0D51000D743B /* LoginViewController.swift */; };
 		E4D3A1AE1E123D0200F709DC /* periodPicker.plist in Resources */ = {isa = PBXBuildFile; fileRef = E4D3A1AD1E123D0200F709DC /* periodPicker.plist */; };
+		E4DAB5B11F6386640013D943 /* HomeworkDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4DAB5B01F6386640013D943 /* HomeworkDetailViewController.swift */; };
 		E4E8B21A1F1C5AF200913DAE /* GradeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E8B2191F1C5AF200913DAE /* GradeViewController.swift */; };
 		E4EEFB131DF274EA00F199BE /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4EEFB121DF274EA00F199BE /* Images.xcassets */; };
 		E4F0B3751EAD1BE900C923A8 /* dayPicker.plist in Resources */ = {isa = PBXBuildFile; fileRef = E4F0B3741EAD1BE900C923A8 /* dayPicker.plist */; };
@@ -145,6 +146,7 @@
 		E4CE43981EAC36F3000D743B /* BlankDictionary.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = BlankDictionary.plist; sourceTree = "<group>"; };
 		E4CE439A1EAD0D51000D743B /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		E4D3A1AD1E123D0200F709DC /* periodPicker.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = periodPicker.plist; sourceTree = "<group>"; };
+		E4DAB5B01F6386640013D943 /* HomeworkDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeworkDetailViewController.swift; sourceTree = "<group>"; };
 		E4E8B2191F1C5AF200913DAE /* GradeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GradeViewController.swift; sourceTree = "<group>"; };
 		E4EEFB121DF274EA00F199BE /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		E4F0B3741EAD1BE900C923A8 /* dayPicker.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = dayPicker.plist; sourceTree = "<group>"; };
@@ -283,6 +285,7 @@
 				E453F0D01EA137D900BCE58D /* CalendarViewController.swift */,
 				E4ADC9ED1E882172002A46F7 /* Extensions.swift */,
 				E4F8D4E31EF0DD2200F47525 /* HomeworkViewController.swift */,
+				E4DAB5B01F6386640013D943 /* HomeworkDetailViewController.swift */,
 				E440F1BB1EEA7F4E004AFD0B /* MoyaNetworkLayer.swift */,
 				E4BD88951F35973C0000FEF3 /* TargetPublicFunctions.swift */,
 				E472A15E1EFB6F3C00EF5A74 /* More View */,
@@ -601,6 +604,7 @@
 				E42786881F568A5F00583D1E /* AboutViewController.swift in Sources */,
 				E4F86B311DF0E20C00CAD72B /* AppDelegate.swift in Sources */,
 				E472A1621EFB72EA00EF5A74 /* SettingViewController.swift in Sources */,
+				E4DAB5B11F6386640013D943 /* HomeworkDetailViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

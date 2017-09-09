@@ -10,6 +10,7 @@ import Foundation
 import SwiftMessages
 import SwiftyJSON
 import Alamofire
+import M13Checkbox
 
 func areEqual<T:Equatable>(type: T.Type, a: Any?, b: Any?) -> Bool? {
     guard let a = a as? T, let b = b as? T else {
@@ -250,6 +251,72 @@ class EventView {
     }
 }
 
+enum CustomError: Error {
+    case NetworkError
+}
+
+class HomeworkView {
+    func colorForTheType(type: String) -> UIColor {
+        switch type {
+        case "Homework":
+            return UIColor(hexString: 0xF44336)
+        case "Quiz":
+            return UIColor(hexString: 0x2196F3)
+        case "Test":
+            return UIColor(hexString: 0x3F51B5)
+        case "Project":
+            return UIColor(hexString: 0xFF9800)
+        case "Classwork":
+            return UIColor(hexString: 0x795548)
+        default:
+            return UIColor(hexString: 0x607D8B)
+        }
+    }
+    
+    func checkStateFor(status: Int) -> M13Checkbox.CheckState {
+        switch status {
+        case -1:
+            return .unchecked
+        case 1:
+            return .checked
+        default:
+            return .unchecked
+        }
+    }
+    
+    func updateAssignmentStatus(assignmentIndexId: String, assignmentStatus: String) throws {
+        var success = true
+        let url = "https://mfriends.myschoolapp.com/api/assignment2/assignmentstatusupdate/?format=json&assignmentIndexId=\(assignmentIndexId)&assignmentStatus=\(assignmentStatus)"
+        
+        let json = ["assignmentIndexId": assignmentIndexId, "assignmentStatus": assignmentStatus]
+        guard let jsonData = try? JSONSerialization.data(withJSONObject: json) else {
+            return
+        }
+        
+        var request = try! URLRequest(url: URL(string: url)!, method: .post)
+        request.httpBody = jsonData
+        let session = URLSession.shared
+        let semaphore = DispatchSemaphore(value: 0)
+        
+        let task: URLSessionDataTask = session.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
+            if error == nil {
+            } else {
+                success = false
+                presentErrorMessage(presentMessage: error!.localizedDescription, layout: .StatusLine)
+            }
+            
+            semaphore.signal()
+        })
+        
+        task.resume()
+        semaphore.wait()
+        
+        guard success else {
+            throw CustomError.NetworkError
+        }
+    }
+}
+
 class NetworkOperations {
     func getDurationId() -> String? {
         let session = URLSession.shared
@@ -290,7 +357,6 @@ class NetworkOperations {
             print(json)
             if let thisResponse = response as? HTTPURLResponse {
                 cookie = HTTPCookie.cookies(withResponseHeaderFields: thisResponse.allHeaderFields as! [String : String], for: thisResponse.url!)
-                print(cookie ?? "nil")
                 semaphore.signal()
             }
         })
