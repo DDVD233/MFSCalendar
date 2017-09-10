@@ -16,7 +16,7 @@ import M13ProgressSuite
 import SnapKit
 import SafariServices
 
-class classDetailViewController: UITableViewController, UIDocumentInteractionControllerDelegate {
+class classDetailViewController: UITableViewController {
 
     var classObject = ClassView().getTheClassToPresent() ?? [String: Any]()
     var availableInformation = [String]()
@@ -35,6 +35,7 @@ class classDetailViewController: UITableViewController, UIDocumentInteractionCon
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         DispatchQueue.global().async {
             self.loadContent()
         }

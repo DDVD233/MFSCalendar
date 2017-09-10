@@ -22,6 +22,10 @@ class profileViewController: UITableViewController {
         super.viewDidLoad()
         setupHeaders()
         getProfileInformation()
+        
+        if let navigationBar = self.navigationController?.navigationBar {
+            navigationBar.removeBottomLine()
+        }
     }
     
     func setupHeaders() {

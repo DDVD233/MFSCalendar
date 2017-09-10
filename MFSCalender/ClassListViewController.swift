@@ -9,7 +9,7 @@
 import UIKit
 
 
-class classListController: UIViewController {
+class classListController: UIViewController, UIViewControllerPreviewingDelegate {
 
     @IBOutlet var classListCollectionView: UICollectionView!
     let path = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
@@ -27,6 +27,10 @@ class classListController: UIViewController {
         let path = classPath.appending("/CourseList.plist")
         if let classList = NSArray(contentsOfFile: path) {
             sortClasses(classList: classList)
+        }
+        
+        if self.traitCollection.forceTouchCapability == .available {
+            registerForPreviewing(with: self, sourceView: classListCollectionView)
         }
     }
 
@@ -117,6 +121,26 @@ extension classListController: UICollectionViewDataSource, UICollectionViewDeleg
 
         userDefaults?.set(classObject["index"], forKey: "indexForCourseToPresent")
     }
+    
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
+        guard let indexPath = classListCollectionView.indexPathForItem(at: location) else {
+            return nil
+        }
+        
+        if let cell = classListCollectionView.cellForItem(at: indexPath) {
+           previewingContext.sourceRect = cell.frame
+        }
+        
+        var classObject = classObjectAt(indexPath: indexPath)
+        userDefaults?.set(classObject["index"], forKey: "indexForCourseToPresent")
+        
+        let vc = storyboard?.instantiateViewController(withIdentifier: "classDetailViewController")
+        return vc
+    }
+    
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
+        show(viewControllerToCommit, sender: self)
+    }
 
     func collectionView(_ collectionView: UICollectionView, didHighlightItemAt indexPath: IndexPath) {
         let cell = collectionView.cellForItem(at: indexPath) as! classListViewCell
@@ -169,6 +193,9 @@ class classListViewCell: UICollectionViewCell {
     @IBOutlet var title: UILabel!
 
     @IBOutlet var darkCover: UIView!
+    
+    @IBOutlet var contentRect: UIView!
+    
 }
 
 class classListHeaderViewCell: UICollectionReusableView {

@@ -1354,7 +1354,7 @@
             <objects>
                 <tableViewController id="ABn-Yn-rrm" customClass="moreViewController" customModule="MFSCalendar" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="45" sectionHeaderHeight="18" sectionFooterHeight="18" id="734-Hu-3Ab">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -1519,7 +1519,7 @@
             <objects>
                 <tableViewController title="Profile" id="laA-fL-7Hp" userLabel="User" customClass="profileViewController" customModule="MFSCalendar" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="none" rowHeight="54" sectionHeaderHeight="18" sectionFooterHeight="18" id="NVa-XU-jiU">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <view key="tableHeaderView" contentMode="scaleToFill" id="Cas-gW-rbA">
@@ -1542,7 +1542,7 @@
                                     </constraints>
                                 </imageView>
                             </subviews>
-                            <color key="backgroundColor" red="0.93735629320000002" green="0.58783215280000001" blue="0.56157112119999997" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                            <color key="backgroundColor" red="0.93669247627258301" green="0.5197761058807373" blue="0.48973745107650757" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                             <constraints>
                                 <constraint firstAttribute="trailing" secondItem="zxu-Y2-pWy" secondAttribute="trailing" constant="30" id="4BE-IF-cEr"/>
                                 <constraint firstItem="zxu-Y2-pWy" firstAttribute="top" secondItem="t1M-1y-hXA" secondAttribute="bottom" constant="15" id="8h5-bF-wQY"/>
@@ -1891,7 +1891,7 @@
                     </constraints>
                 </view>
             </objects>
-            <point key="canvasLocation" x="8834.3999999999996" y="560.86956521739137"/>
+            <point key="canvasLocation" x="9420" y="883"/>
         </scene>
         <!--Grade View Controller-->
         <scene sceneID="1iS-Gw-pKI">
@@ -2166,11 +2166,11 @@
                         <viewControllerLayoutGuide type="bottom" id="Zxt-55-9mI"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="0ij-qO-CCd">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" keyboardDismissMode="onDrag" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="ehm-J2-isg">
-                                <rect key="frame" x="0.0" y="64" width="375" height="554"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="554"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <inset key="scrollIndicatorInsets" minX="0.0" minY="0.0" maxX="0.0" maxY="40"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="5" minimumInteritemSpacing="0.0" id="bxO-jB-csl">
@@ -2235,6 +2235,7 @@
                                         </constraints>
                                         <connections>
                                             <outlet property="backgroundImage" destination="MPh-mY-5Tl" id="pTu-Op-YCA"/>
+                                            <outlet property="contentRect" destination="bkC-jf-eGH" id="jXm-Os-gcx"/>
                                             <outlet property="darkCover" destination="M14-iD-dte" id="J3D-QF-fKd"/>
                                             <outlet property="title" destination="cP4-ar-7rX" id="9G7-Tl-kZ4"/>
                                             <segue destination="8Ug-j0-Kmo" kind="show" id="Jqr-L9-jqB"/>
@@ -2298,14 +2299,14 @@
                         <viewControllerLayoutGuide type="bottom" id="WF9-7e-KiY"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Q9W-Xa-F4s">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="B87-2s-mYC">
-                                <rect key="frame" x="0.0" y="114" width="375" height="553"/>
+                                <rect key="frame" x="0.0" y="50" width="375" height="553"/>
                             </scrollView>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="TKU-xe-hs3" customClass="ButtonBarView" customModule="XLPagerTabStrip">
-                                <rect key="frame" x="0.0" y="64" width="375" height="50"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="50"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="NFo-dn-ysE"/>
@@ -2344,7 +2345,7 @@
             <objects>
                 <tableViewController title="Settings" id="XRE-Nj-Rag" customClass="settingViewController" customModule="MFSCalendar" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="qtr-Lw-dXe">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -2393,7 +2394,7 @@
             <objects>
                 <tableViewController title="About" id="3kg-Bk-lvv" customClass="aboutView" customModule="MFSCalendar" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="BL3-4k-nFQ">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -2628,7 +2629,7 @@
                 <navigationController storyboardIdentifier="moreViewNavigationController" automaticallyAdjustsScrollViewInsets="NO" id="Wod-VY-kcK" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" systemItem="more" id="nHY-1U-imv"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="oQ5-0I-mSm">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" barStyle="black" translucent="NO" id="oQ5-0I-mSm">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
