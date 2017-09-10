@@ -612,10 +612,10 @@ class syllabusView: UITableViewCell {
             return (fileURL, [.removePreviousFile, .createIntermediateDirectories])
         }
 
-
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
         Alamofire.download(url, to: destination).response { response in
 //            print(response)
-
+            UIApplication.shared.isNetworkActivityIndicatorVisible = false
             if response.error == nil {
 
                 NSLog("Attempting to open file: \(self.attachmentFileName!)")

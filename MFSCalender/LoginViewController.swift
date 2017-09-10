@@ -25,6 +25,7 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet var bottomLayoutConstraint: NSLayoutConstraint!
 
+    @IBOutlet var logoPhoto: UIImageView!
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
@@ -93,12 +94,15 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
             if (endFrame?.origin.y)! >= UIScreen.main.bounds.size.height {
                 self.bottomLayoutConstraint?.constant = 0.0
             } else {
-                self.bottomLayoutConstraint?.constant = endFrame!.size.height + 60
+                self.bottomLayoutConstraint?.constant = endFrame!.size.height + 15
             }
             UIView.animate(withDuration: duration,
                     delay: TimeInterval(0),
                     options: animationCurve,
-                    animations: { self.view.layoutIfNeeded() },
+                    animations: {
+                        self.logoPhoto.isHidden = true
+                        self.view.layoutIfNeeded()
+                    },
                     completion: nil)
         }
     }
@@ -113,7 +117,10 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
             UIView.animate(withDuration: duration,
                     delay: TimeInterval(0),
                     options: animationCurve,
-                    animations: { self.view.layoutIfNeeded() },
+                    animations: {
+                        self.logoPhoto.isHidden = false
+                        self.view.layoutIfNeeded()
+                    },
                     completion: nil)
         }
     }

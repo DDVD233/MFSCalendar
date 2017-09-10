@@ -81,6 +81,7 @@ class homeworkViewController: UITableViewController, UIViewControllerPreviewingD
     func getHomework() {
         isUpdatingHomework = true
         DispatchQueue.main.async {
+            UIApplication.shared.isNetworkActivityIndicatorVisible = true
             self.navigationController?.showProgress()
             self.navigationController?.setPrimaryColor(UIColor(hexString: 0xFF7E79))
             self.navigationController?.setSecondaryColor(UIColor.white)
@@ -135,6 +136,7 @@ class homeworkViewController: UITableViewController, UIViewControllerPreviewingD
 
         DispatchQueue.main.async {
             self.isUpdatingHomework = false
+            UIApplication.shared.isNetworkActivityIndicatorVisible = false
             self.navigationController?.cancelProgress()
             self.tableView.reloadData()
         }

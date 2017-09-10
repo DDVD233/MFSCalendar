@@ -44,6 +44,7 @@ class courseFillController: UIViewController {
     }
     
     func importCourse() {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
         guard self.newGetCourse() else {
             viewDismiss()
             return
@@ -89,6 +90,7 @@ class courseFillController: UIViewController {
     func viewDismiss() {
         userDefaults?.set(true, forKey: "courseInitialized")
         self.trace?.stop()
+        UIApplication.shared.isNetworkActivityIndicatorVisible = false
         self.dismiss(animated: true)
     }
 
