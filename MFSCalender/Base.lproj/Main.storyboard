@@ -274,21 +274,22 @@
                             <constraint firstItem="ucy-L9-EOf" firstAttribute="leading" secondItem="cl3-lE-9rl" secondAttribute="leading" id="8Fe-qB-Fek"/>
                             <constraint firstItem="ucy-L9-EOf" firstAttribute="top" secondItem="cl3-lE-9rl" secondAttribute="top" id="H0U-K6-4Ha"/>
                             <constraint firstItem="8Lz-Go-b0R" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="cl3-lE-9rl" secondAttribute="leadingMargin" constant="5" id="IOF-Ch-XOX"/>
-                            <constraint firstItem="man-7L-6qb" firstAttribute="top" relation="greaterThanOrEqual" secondItem="8Lz-Go-b0R" secondAttribute="bottom" constant="5" id="KnF-ZL-LtT"/>
+                            <constraint firstItem="man-7L-6qb" firstAttribute="top" relation="greaterThanOrEqual" secondItem="8Lz-Go-b0R" secondAttribute="bottom" priority="900" constant="30" id="KnF-ZL-LtT"/>
                             <constraint firstItem="8Lz-Go-b0R" firstAttribute="centerX" secondItem="cl3-lE-9rl" secondAttribute="centerX" id="O23-5m-URH"/>
                             <constraint firstAttribute="trailing" secondItem="ucy-L9-EOf" secondAttribute="trailing" id="QUd-qm-c99"/>
                             <constraint firstItem="man-7L-6qb" firstAttribute="top" secondItem="ucy-L9-EOf" secondAttribute="bottom" id="RU3-LM-jyr"/>
                             <constraint firstAttribute="trailing" secondItem="uOJ-oA-YYS" secondAttribute="trailing" id="Ws7-E5-nMH"/>
                             <constraint firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="8Lz-Go-b0R" secondAttribute="trailing" constant="5" id="l2I-Eo-15G"/>
-                            <constraint firstItem="8Lz-Go-b0R" firstAttribute="top" relation="greaterThanOrEqual" secondItem="vb2-hT-1uS" secondAttribute="bottom" constant="5" id="oQs-6S-OJ5"/>
+                            <constraint firstItem="8Lz-Go-b0R" firstAttribute="top" relation="greaterThanOrEqual" secondItem="vb2-hT-1uS" secondAttribute="bottom" constant="20" id="oQs-6S-OJ5"/>
                             <constraint firstItem="man-7L-6qb" firstAttribute="top" secondItem="uOJ-oA-YYS" secondAttribute="bottom" id="peR-qt-odP"/>
-                            <constraint firstItem="8Lz-Go-b0R" firstAttribute="centerY" secondItem="cl3-lE-9rl" secondAttribute="centerY" id="tb7-vr-Dmc"/>
+                            <constraint firstItem="8Lz-Go-b0R" firstAttribute="centerY" secondItem="cl3-lE-9rl" secondAttribute="centerY" priority="750" id="tb7-vr-Dmc"/>
                             <constraint firstItem="uOJ-oA-YYS" firstAttribute="leading" secondItem="cl3-lE-9rl" secondAttribute="leading" id="tdi-Q5-Y9w"/>
                             <constraint firstItem="uOJ-oA-YYS" firstAttribute="top" secondItem="cl3-lE-9rl" secondAttribute="top" id="vtS-vZ-yWr"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="NVIndicator" destination="0Dl-Zn-wee" id="9b5-ye-EfW"/>
+                        <outlet property="bottomLayoutConstraint" destination="KnF-ZL-LtT" id="VMm-7v-ytW"/>
                         <outlet property="indicatorView" destination="cP5-ob-YKv" id="6yR-eP-WgS"/>
                         <outlet property="loginView" destination="8Lz-Go-b0R" id="CvA-BE-hgt"/>
                         <outlet property="password" destination="EPk-aJ-Rux" id="d3e-5i-XhE"/>

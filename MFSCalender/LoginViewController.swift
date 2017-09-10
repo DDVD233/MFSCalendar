@@ -22,8 +22,8 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
 
     @IBOutlet weak var indicatorView: UIView!
     @IBOutlet weak var NVIndicator: NVActivityIndicatorView!
-
-    @IBOutlet weak var bottomLayoutConstraint: NSLayoutConstraint!
+    
+    @IBOutlet var bottomLayoutConstraint: NSLayoutConstraint!
 
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -66,16 +66,21 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
 
 
     override func viewDidAppear(_ animated: Bool) {
-        let loginNotice = SCLAlertView()
-        loginNotice.addButton("Go to myMFS website", action: {
-            if #available(iOS 10.0, *) {
-                UIApplication.shared.open(URL(string: "https://mfriends.myschoolapp.com/app/#login")!, options: [:], completionHandler: nil)
-            } else {
-                UIApplication.shared.openURL(URL(string: "https://mfriends.myschoolapp.com/app/#login")!)
-                // Fallback on earlier versions
-            }
-        })
-        loginNotice.showInfo("Welcome", subTitle: "Welcome to MFS Calendar. Please use your myMFS account to log in.", animationStyle: .bottomToTop)
+        let isFirstTimeLogin = userDefaults?.bool(forKey: "isFirstTimeLogin") ?? true
+        if isFirstTimeLogin {
+            let loginNotice = SCLAlertView()
+            loginNotice.addButton("Go to myMFS website", action: {
+                if #available(iOS 10.0, *) {
+                    UIApplication.shared.open(URL(string: "https://mfriends.myschoolapp.com/app/#login")!, options: [:], completionHandler: nil)
+                } else {
+                    UIApplication.shared.openURL(URL(string: "https://mfriends.myschoolapp.com/app/#login")!)
+                    // Fallback on earlier versions
+                }
+            })
+            loginNotice.showInfo("Welcome", subTitle: "Welcome to MFS Calendar. Please use your myMFS account to log in.", animationStyle: .bottomToTop)
+            
+            userDefaults?.set(false, forKey: "isFirstTimeLogin")
+        }
     }
 
     func keyboardNotification(notification: NSNotification) {
@@ -88,7 +93,7 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
             if (endFrame?.origin.y)! >= UIScreen.main.bounds.size.height {
                 self.bottomLayoutConstraint?.constant = 0.0
             } else {
-                self.bottomLayoutConstraint?.constant = (endFrame?.size.height)! + 60
+                self.bottomLayoutConstraint?.constant = endFrame!.size.height + 60
             }
             UIView.animate(withDuration: duration,
                     delay: TimeInterval(0),
@@ -104,7 +109,7 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
             let animationCurveRawNSN = userInfo[UIKeyboardAnimationCurveUserInfoKey] as? NSNumber
             let animationCurveRaw = animationCurveRawNSN?.uintValue ?? UIViewAnimationOptions.curveEaseInOut.rawValue
             let animationCurve: UIViewAnimationOptions = UIViewAnimationOptions(rawValue: animationCurveRaw)
-            self.bottomLayoutConstraint?.constant = 220
+            self.bottomLayoutConstraint?.constant = 20
             UIView.animate(withDuration: duration,
                     delay: TimeInterval(0),
                     options: animationCurve,
