@@ -190,6 +190,11 @@ extension CalendarViewController: FSCalendarDelegate, FSCalendarDataSource {
             generator.prepare()
             generator.impactOccurred()
         }
+        
+        DispatchQueue.main.async {
+            self.reloadPagerTabStripView()
+        }
+        
         let _ = self.checkDate(checkDate: date)
         dataFetching()
         eventDataFetching()
