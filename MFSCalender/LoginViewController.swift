@@ -262,6 +262,11 @@ extension firstTimeLaunchController {
                     if let lastName = resDict["LastName"] as? String {
                         userDefaults?.set(lastName, forKey: "lastName")
                     }
+                    
+                    if let email = resDict["Email"] as? String {
+                        userDefaults?.set(email, forKey: "email")
+                        
+                    }
 
                     if let photo = resDict["ProfilePhoto"] as? NSDictionary {
                         if let photolink = photo["ThumbFilenameUrl"] as? String {
@@ -277,7 +282,7 @@ extension firstTimeLaunchController {
                         userDefaults?.set(lockerNumber, forKey: "lockerNumber")
                     }
                     if let lockerPassword = resDict["LockerCombo"] as? String {
-                        userDefaults?.set(lockerPassword, forKey: "lockerPassword")
+                        userDefaults?.set(lockerPassword, forKey: "lockerCombination")
                     }
                     success = true
 

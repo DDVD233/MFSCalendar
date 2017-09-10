@@ -9,14 +9,22 @@
 import UIKit
 
 class profileViewController: UITableViewController {
-    @IBOutlet weak var lockerNumber: UILabel!
     @IBOutlet var profilePhoto: UIImageView!
     @IBOutlet var profileName: UILabel!
     @IBOutlet var headerView: UIView!
     
+    var contentList = [String: Any]()
+    var contentKey: [String] {
+        return Array(contentList.keys).sorted(by: { $0 < $1 })
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        setupHeaders()
+        getProfileInformation()
+    }
+    
+    func setupHeaders() {
         let photoPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
         let path = photoPath.appending("/ProfilePhoto.png")
         profilePhoto.image = UIImage(contentsOfFile: path)
@@ -26,38 +34,48 @@ class profileViewController: UITableViewController {
         let firstName = userDefaults?.string(forKey: "firstName") ?? ""
         let lastName = userDefaults?.string(forKey: "lastName") ?? ""
         profileName.text = firstName + " " + lastName
-        
-        lockerNumber.text = userDefaults?.string(forKey: "lockerNumber")
     }
     
-//    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-//        if scrollView.contentOffset.y < 0 {
-//            let height = -scrollView.contentOffset.y + 215
-//            headerView.frame = CGRect(x: 0, y: scrollView.contentOffset.y, width: view.frame.width, height: height)
-//            UIView.commitAnimations()
-//        }
-//    }
-}
-
-class UserProfileViewController: UIViewController {
-    
-    @IBOutlet var headerView: UIView!
-    @IBOutlet var tableView: UITableView!
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    func getProfileInformation() {
+        let infoList = ["firstName", "lastName", "email", "lockerNumber", "lockerCombination"]
         
-        tableView.delegate = self
-        tableView.dataSource = self
+        for key in infoList {
+            if let value = userDefaults?.value(forKey: key) {
+                contentList[key] = value
+            }
+        }
+        
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
     }
 }
 
-extension UserProfileViewController: UITableViewDelegate, UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+extension profileViewController {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return contentList.count
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return UITableViewCell()
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "profileTableCell", for: indexPath) as! profileTableCell
+        var key = contentKey[indexPath.row]
+        guard let value = contentList[key] as? String else {
+            return cell
+        }
+        
+        key.capitalizeFirstLetter()
+        key.separatedByUpperCase()
+        
+        cell.key.text = key
+        cell.value.text = value
+        
+        cell.selectionStyle = .none
+        
+        return cell
     }
+}
+
+class profileTableCell: UITableViewCell {
+    @IBOutlet var value: UILabel!
+    @IBOutlet var key: UILabel!
 }

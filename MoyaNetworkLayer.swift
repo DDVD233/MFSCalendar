@@ -119,7 +119,7 @@ extension MyService: TargetType {
 
     var task: Task {
         switch self {
-        case .downloadLargeProfilePhoto:
+        case .downloadLargeProfilePhoto, .getCalendarEvent:
             return .download(.request(downloadDestination))
         default:
             return .request

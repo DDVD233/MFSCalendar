@@ -147,10 +147,13 @@ class classDetailViewController: UITableViewController, UIDocumentInteractionCon
             guard contentName != "Basic" else {
                 continue
             }
+            
+            // Bug fix
+            let contentNameRemovedWhitespace = contentName.replacingOccurrences(of: " ", with: "")
 
             DispatchQueue.global().async(group: group, execute: {
                 let semaphore = DispatchSemaphore(value: 0)
-                provider.request(MyService.getClassContentData(contentName: contentName, sectionId: sectionId), completion: { result in
+                provider.request(MyService.getClassContentData(contentName: contentNameRemovedWhitespace, sectionId: sectionId), completion: { result in
                     switch result {
                     case let .success(response):
                         do {
@@ -356,10 +359,10 @@ extension classDetailViewController {
             handleCellData(cell: &cell, buttonTitleKey: "Description", textViewTextKey: "LongText", indexPath: indexPath)
 
             return cell
-        case "Expectation":
+        case "Expectation", "Grading Rubric":
             var cell = tableView.dequeueReusableCell(withIdentifier: "syllabusCell", for: indexPath) as! syllabusView
 
-            handleCellData(cell: &cell, buttonTitleKey: "", textViewTextKey: "ShortDescription", indexPath: indexPath)
+            handleCellData(cell: &cell, buttonTitleKey: "ShortDescription", textViewTextKey: "Description", indexPath: indexPath)
 
             return cell
         default:
@@ -412,8 +415,8 @@ extension classDetailViewController {
         } else {
             cell.syllabusDescription.text = ""
         }
-
-        if (cell.url == nil && cell.attachmentFileName == nil) || cell.title.currentTitle!.isEmpty {
+        
+        if ((!cell.url.existsAndNotEmpty() && !cell.attachmentFileName.existsAndNotEmpty())) || cell.title.currentTitle!.isEmpty {
             cell.title.isEnabled = false
         } else {
             cell.title.isEnabled = true
@@ -559,6 +562,9 @@ class syllabusView: UITableViewCell {
         }
 
         if self.url != nil {
+            if !self.url!.contains("http://") {
+                self.url = "http://" + self.url!
+            }
             if let urlToOpen = URL(string: self.url!) {
                 let safariViewController = SFSafariViewController(url: urlToOpen)
                 parentViewController?.present(safariViewController, animated: true, completion: nil)

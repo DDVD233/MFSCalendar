@@ -60,10 +60,6 @@ class homeworKDetailViewController: UIViewController {
             self.tableView.reloadData()
         }
     }
-    
-    func loadContents(dict: [String: Any]) {
-        
-    }
 }
 
 extension homeworKDetailViewController: UITableViewDelegate, UITableViewDataSource {
@@ -72,7 +68,7 @@ extension homeworKDetailViewController: UITableViewDelegate, UITableViewDataSour
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return contentList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -100,6 +96,8 @@ extension homeworKDetailViewController: UITableViewDelegate, UITableViewDataSour
         
         let assignmentType = contentObject["assignmentType"] as? String ?? ""
         cell.checkBox.tintColor = HomeworkView().colorForTheType(type: assignmentType)
+        
+        cell.selectionStyle = .none
         
         return cell
     }

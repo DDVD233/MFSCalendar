@@ -16,7 +16,7 @@ import DGElasticPullToRefresh
 import M13ProgressSuite
 
 
-class homeworkViewController: UITableViewController {
+class homeworkViewController: UITableViewController, UIViewControllerPreviewingDelegate {
 
 
     @IBOutlet weak var homeworkTable: UITableView!
@@ -38,10 +38,9 @@ class homeworkViewController: UITableViewController {
         homeworkTable.delegate = self
 
 //        Remove the bottom 1px line on Navigation Bar
-        self.navigationController?.navigationBar.barTintColor = UIColor(hexString: 0xFF7E79)
-        self.navigationController?.navigationBar.isTranslucent = false
-        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
-        self.navigationController?.navigationBar.shadowImage = UIImage()
+        if let navigationBar = self.navigationController?.navigationBar {
+            navigationBar.removeBottomLine()
+        }
 
         let loadingview = DGElasticPullToRefreshLoadingViewCircle()
         loadingview.tintColor = UIColor.white
@@ -51,6 +50,10 @@ class homeworkViewController: UITableViewController {
         }, loadingView: loadingview)
         homeworkTable.dg_setPullToRefreshFillColor(UIColor(hexString: 0xFF7E79))
         homeworkTable.dg_setPullToRefreshBackgroundColor(tableView.backgroundColor!)
+        
+        if self.traitCollection.forceTouchCapability == .available {
+            registerForPreviewing(with: self, sourceView: homeworkTable)
+        }
 
     }
 
@@ -107,13 +110,11 @@ class homeworkViewController: UITableViewController {
             if error == nil {
                 do {
                     if let json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? [[String: Any]] {
-                        print(json)
                         originalData = json
                     }
 
                 } catch {
                     NSLog("Data parsing failed")
-                    // print(String(data: data!, encoding: .utf8))
                     DispatchQueue.main.async {
                         let presentMessage = "The server is not returning the right data. Please contact David."
                         self.errorMessage(presentMessage: presentMessage)
@@ -174,7 +175,6 @@ class homeworkViewController: UITableViewController {
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        print(sections)
         return self.listHomework.count
     }
 
@@ -225,27 +225,53 @@ class homeworkViewController: UITableViewController {
         return 44
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func detailViewControllerOf(indexPath: IndexPath) -> UIViewController? {
         let homeworkInSection = self.listHomework[sections[indexPath.section]]
         guard let homework = homeworkInSection?[indexPath.row] else {
-            return
+            return nil
         }
         
         guard (homework["long_description"] as? String).existsAndNotEmpty() else {
-            return
+            return nil
         }
         
         guard let assignmentID = homework["assignment_index_id"] as? Int else {
-            return
+            return nil
         }
         
         userDefaults?.set(assignmentID, forKey: "indexIdForAssignmentToPresent")
         
         guard let viewController = storyboard?.instantiateViewController(withIdentifier: "homeworkDetailViewController") else {
-            return
+            return nil
         }
         
-        show(viewController, sender: self)
+        return viewController
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if let viewController = detailViewControllerOf(indexPath: indexPath) {
+            show(viewController, sender: self)
+        }
+    }
+    
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
+        guard let indexPath = homeworkTable.indexPathForRow(at: location) else {
+            return nil
+        }
+        
+        if let cell = homeworkTable.cellForRow(at: indexPath) {
+            previewingContext.sourceRect = cell.frame
+        }
+        
+        if let viewController = detailViewControllerOf(indexPath: indexPath) {
+            return viewController
+        } else {
+            return nil
+        }
+    }
+    
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
+        show(viewControllerToCommit, sender: self)
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -304,6 +330,11 @@ class homeworkViewController: UITableViewController {
         }
 
         cell.checkMark.tintColor = cell.tagView.backgroundColor
+        
+//        if self.traitCollection.forceTouchCapability == .available {
+//            registerForPreviewing(with: self, sourceView: cell)
+//        }
+        
         return cell
     }
 }

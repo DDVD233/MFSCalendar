@@ -95,7 +95,29 @@ extension String {
 
         return nil
     }
+    
+    func capitalizingFirstLetter() -> String {
+        let first = String(characters.prefix(1)).capitalized
+        let other = String(characters.dropFirst())
+        return first + other
+    }
+    
+    mutating func capitalizeFirstLetter() {
+        self = self.capitalizingFirstLetter()
+    }
+    
+    mutating func separatedByUpperCase() {
+        let splited = self.characters.splitBefore(separator: { $0.isUpperCase }).map{String($0)}
+        
+        self = ""
+        for string in splited {
+            self += string
+            self += " "
+        }
+    }
 }
+
+
 
 extension UIColor {
     public convenience init(hexString: UInt32, alpha: CGFloat = 1.0) {
@@ -175,6 +197,43 @@ extension Date {
     var startOfWeek: Date? {
         return Gregorian.calendar.date(from: Gregorian.calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: self))
     }
+}
+
+extension Sequence {
+    func splitBefore(
+        separator isSeparator: (Iterator.Element) throws -> Bool
+        ) rethrows -> [AnySequence<Iterator.Element>] {
+        var result: [AnySequence<Iterator.Element>] = []
+        var subSequence: [Iterator.Element] = []
+        
+        var iterator = self.makeIterator()
+        while let element = iterator.next() {
+            if try isSeparator(element) {
+                if !subSequence.isEmpty {
+                    result.append(AnySequence(subSequence))
+                }
+                subSequence = [element]
+            }
+            else {
+                subSequence.append(element)
+            }
+        }
+        result.append(AnySequence(subSequence))
+        return result
+    }
+}
+
+extension UINavigationBar {
+    func removeBottomLine() {
+        self.barTintColor = UIColor(hexString: 0xFF7E79)
+        self.isTranslucent = false
+        self.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
+        self.shadowImage = UIImage()
+    }
+}
+
+extension Character {
+    var isUpperCase: Bool { return String(self) == String(self).uppercased() }
 }
 
 public let userDefaults = UserDefaults(suiteName: "group.org.dwei.MFSCalendar")

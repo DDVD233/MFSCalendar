@@ -195,8 +195,6 @@
 			isa = PBXGroup;
 			children = (
 				E4BD88991F397BE80000FEF3 /* TopicDetailViewController.swift */,
-				E48D4DEF1E61F275008B0A97 /* ADayViewController.swift */,
-				E4BD88971F383A060000FEF3 /* ClassTimetableViewController.swift */,
 				E4B340051F08942000D6039A /* ClassTopicViewController.swift */,
 				E445E73D1EAD8B7D00794560 /* MoreViewController.swift */,
 				E472A15F1EFB6F8400EF5A74 /* ClassDetailViewController.swift */,
@@ -288,6 +286,8 @@
 				E4DAB5B01F6386640013D943 /* HomeworkDetailViewController.swift */,
 				E440F1BB1EEA7F4E004AFD0B /* MoyaNetworkLayer.swift */,
 				E4BD88951F35973C0000FEF3 /* TargetPublicFunctions.swift */,
+				E48D4DEF1E61F275008B0A97 /* ADayViewController.swift */,
+				E4BD88971F383A060000FEF3 /* ClassTimetableViewController.swift */,
 				E472A15E1EFB6F3C00EF5A74 /* More View */,
 				E4F86B341DF0E20C00CAD72B /* Main.storyboard */,
 				E4F86B3A1DF0E20C00CAD72B /* Assets.xcassets */,

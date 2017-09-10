@@ -73,6 +73,7 @@ class CalendarViewController: UIViewController, UIScrollViewDelegate, DZNEmptyDa
     var listClasses: NSMutableArray = []
     var listEvents: NSMutableArray = []
     var dayOfSchool: String? = nil
+    var isFirstTimeLoad = true
     
     let classViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier :"timeTableViewController") as! ADay
 
@@ -107,16 +108,20 @@ class CalendarViewController: UIViewController, UIScrollViewDelegate, DZNEmptyDa
     }
 
     override func viewDidAppear(_ animated: Bool) {
-        classViewController.view.frame = CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: self.bottomScrollView.frame.size.height)
-        
-        self.bottomScrollView.addSubview(classViewController.view)
-
-        self.eventView.frame = CGRect(x: self.view.frame.size.width, y: 0, width: self.view.frame.size.width, height: self.bottomScrollView.frame.size.height)
-        self.bottomScrollView.addSubview(eventView)
-
-        self.calendarView.select(Date())
-        dataFetching()
-        eventDataFetching()
+        if isFirstTimeLoad {
+            classViewController.view.frame = CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: self.bottomScrollView.frame.size.height)
+            self.bottomScrollView.addSubview(classViewController.view)
+            
+            self.eventView.frame = CGRect(x: self.view.frame.size.width, y: 0, width: self.view.frame.size.width, height: self.bottomScrollView.frame.size.height)
+            self.bottomScrollView.addSubview(eventView)
+            
+            self.calendarView.select(Date())
+            
+            dataFetching()
+            eventDataFetching()
+            
+            isFirstTimeLoad = false
+        }
     }
 
     @IBAction func expandButton(_ sender: Any) {
@@ -182,11 +187,6 @@ class CalendarViewController: UIViewController, UIScrollViewDelegate, DZNEmptyDa
                 self.navigationItem.title = "Events"
             }
         }
-    }
-
-    @IBAction func changePage(_ sender: Any) {
-        let x = CGFloat(self.pageControl.currentPage) * self.bottomScrollView.frame.size.width
-        self.bottomScrollView.setContentOffset(CGPoint(x: x, y: 0), animated: true)
     }
 
     func checkDate(checkDate: Date) -> String {

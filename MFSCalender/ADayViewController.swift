@@ -37,9 +37,10 @@ class ADay: UIViewController, IndicatorInfoProvider {
     
     var daySelected: String? = nil
 
-    @IBOutlet weak var tableView: UITableView!
-
+    @IBOutlet var tableView: UITableView!
+    
     var listClasses = [[String: Any]]()
+    var previewController: UIViewControllerPreviewing? = nil
 
     override func viewDidLoad() {
         // Do any additional setup after loading the view, typically from a nib.
@@ -47,10 +48,20 @@ class ADay: UIViewController, IndicatorInfoProvider {
         dataFetching()
         self.tableView.separatorStyle = .none
         tableView.emptyDataSetSource = self
+        if let navigationBar = self.navigationController?.navigationBar {
+            navigationBar.removeBottomLine()
+        }
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         self.dataFetching()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        if self.traitCollection.forceTouchCapability == .available {
+            previewController = registerForPreviewing(with: self, sourceView: tableView)
+        }
     }
 
     func dataFetching() {
@@ -96,7 +107,7 @@ class ADay: UIViewController, IndicatorInfoProvider {
     }
 }
 
-extension ADay: UITableViewDelegate, UITableViewDataSource {
+extension ADay: UITableViewDelegate, UITableViewDataSource, UIViewControllerPreviewingDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection selection: Int) -> Int {
         return self.listClasses.count
     }
@@ -121,8 +132,42 @@ extension ADay: UITableViewDelegate, UITableViewDataSource {
         cell?.RoomNumber.text = roomN
         
         cell?.teachersName.text = rowDict["teacherName"] as? String
+        
+        if rowDict["index"] != nil {
+            cell?.selectionStyle = .default
+            cell?.accessoryType = .disclosureIndicator
+        } else {
+            cell?.selectionStyle = .none
+           // cell?.accessoryType = .none
+        }
 
         return cell!
+    }
+    
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
+        print(location)
+        guard let indexPath = tableView.indexPathForRow(at: location) else {
+            return nil
+        }
+        
+        if let cell = tableView.cellForRow(at: indexPath) {
+            previewingContext.sourceRect = cell.frame
+        }
+        
+        let rowDict = self.listClasses[indexPath.row]
+        guard let index = rowDict["index"] as? Int else {
+            return nil
+        }
+        
+        userDefaults?.set(index, forKey: "indexForCourseToPresent")
+        
+        let classDetailViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "classDetailViewController")
+        
+        return classDetailViewController
+    }
+    
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
+        show(viewControllerToCommit, sender: self)
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

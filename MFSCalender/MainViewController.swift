@@ -84,6 +84,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     var listClasses = [[String: Any?]]()
     var listHomework = [String: Array<Dictionary<String, Any?>>]()
 //    Format: {Lead_Section_ID: [Homework]}
+    var isVisible = true
 
     let reachability = Reachability()!
 
@@ -122,6 +123,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
 
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.setNavigationBarHidden(true, animated: false)
+        isVisible = true
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -150,10 +152,26 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
                 self.downloadLargeProfilePhoto()
             }
         }
+        
+        DispatchQueue.global().async {
+            self.autoRefreshContents()
+        }
+    }
+    
+    func autoRefreshContents() {
+        while isVisible {
+            DispatchQueue.global().async {
+                self.refreshDisplayedData()
+            }
+            print("Content refreshed")
+            
+            sleep(5)
+        }
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         navigationController?.setNavigationBarHidden(false, animated: false)
+        isVisible = false
     }
 
     func updateData() {
@@ -189,13 +207,13 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         }
 
 //        Put time-taking process here.
-        DispatchQueue.global().async {
-            self.getHomework()
-
-            DispatchQueue.main.async {
-                self.classView.reloadData()
-            }
-        }
+//        DispatchQueue.global().async {
+//            self.getHomework()
+//
+//            DispatchQueue.main.async {
+//                self.classView.reloadData()
+//            }
+//        }
     }
 
     func downloadLargeProfilePhoto() {
@@ -289,8 +307,21 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         var dayText: String? = nil
         let date = Date()
         let formatter = DateFormatter()
-        formatter.dateFormat = "MMMM d, yyyy."
-        let today = formatter.string(from: date as Date)
+        formatter.dateFormat = "EEEE, MMMM d."
+        //MMMM d, yyyy
+        var today = formatter.string(from: date)
+        let labelAttributes = [NSFontAttributeName:
+            UIFont.init(name: dateLabel.font.fontName, size: dateLabel.font.pointSize) ?? UIFont()]
+        if NSString(string: today).size(attributes: labelAttributes).width > dateLabel.bounds.size.width {
+            formatter.dateFormat = "EEEE, MMM d."
+            today = formatter.string(from: date)
+        }
+        
+        if NSString(string: today).size(attributes: labelAttributes).width > dateLabel.bounds.size.width {
+            formatter.dateFormat = "EE, MMM d."
+            today = formatter.string(from: date)
+        }
+        
         DispatchQueue.main.async {
             if day == "No School" {
                 self.dayLabel.text = "No school today,"
@@ -299,6 +330,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
                 self.dayLabel.text = "Today is " + dayText! + ","
             }
             self.welcomeLabel.text = "Welcome back, " + (userDefaults?.string(forKey: "firstName"))! + "!"
+            
             self.dateLabel.text = today
         }
 

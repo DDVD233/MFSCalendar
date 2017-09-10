@@ -37,62 +37,59 @@ class courseFillController: UIViewController {
         formatter.dateFormat = "yyyyMMdd"
         let date = formatter.string(from: Date())
         userDefaults?.set(date, forKey: "refreshDate")
-        if importCourses() {
-            NSLog("All Done!")
+        
+        DispatchQueue.global().async {
+            self.importCourse()
         }
     }
-
-    func importCourses() -> Bool {
-        progressView.setProgress(value: 2, animationDuration: 0.1)
-        if self.newGetCourse() {
-            fillAdditionalInformarion()
-            fillSchedule()
-        } else {
-            self.dismiss(animated: true)
-            userDefaults?.set(true, forKey: "courseInitialized")
+    
+    func importCourse() {
+        guard self.newGetCourse() else {
+            viewDismiss()
+            return
         }
-        return true
+        
+        fillAdditionalInformarion()
+        setProgressTo(value: 33)
+        
+        for alphabet in "ABCDEF".characters {
+            clearData(day: String(alphabet))
+        }
+        guard createSchedule(fillLowPriority: 0) else {
+            viewDismiss()
+            return
+        }
+        setProgressTo(value: 66)
+        
+        guard createSchedule(fillLowPriority: 1) else {
+            return
+        }
+        for alphabet in "ABCDEF".characters {
+            self.fillStudyHall(letter: String(alphabet))
+        }
+        getProfilePhoto()
+        versionCheck()
+        setProgressTo(value: 100)
+        DispatchQueue.main.async {
+            self.topLabel.text = "Success"
+            self.bottomLabel.text = "Successfully updated"
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2), execute: {
+            self.viewDismiss()
+        })
     }
-
-    func fillSchedule() {
-        progressView.setProgress(value: 33, animationDuration: 1) {
-            self.clearData(day: "A")
-            self.clearData(day: "B")
-            self.clearData(day: "C")
-            self.clearData(day: "D")
-            self.clearData(day: "E")
-            self.clearData(day: "F")
-            if self.createSchedule(fillLowPriority: 0) {
-                self.progressView.setProgress(value: 66, animationDuration: 1) {
-                    for alphabet in "ABCDEF".characters {
-                        self.fillStudyHall(letter: String(alphabet))
-                    }
-                    if self.createSchedule(fillLowPriority: 1) {
-                        self.getProfilePhoto()
-                        self.versionCheck()
-                        self.progressView.setProgress(value: 100, animationDuration: 1) {
-
-                            self.topLabel.text = "Success"
-                            self.bottomLabel.text = "Successfully updated"
-
-                            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(5), execute: {
-                                self.dismiss(animated: true, completion: nil)
-                                self.trace?.stop()
-                            })
-                        }
-                        NSLog("Success Filling schedules")
-                        userDefaults?.set(true, forKey: "courseInitialized")
-                    } else {
-                        self.dismiss(animated: true)
-                        self.trace?.stop()
-                    }
-                }
-            } else {
-                userDefaults?.set(true, forKey: "courseInitialized")
-                self.dismiss(animated: true)
-                self.trace?.stop()
-            }
+    
+    func setProgressTo(value: CGFloat) {
+        DispatchQueue.main.async {
+            self.progressView.setProgress(value: value, animationDuration: 1)
         }
+    }
+    
+    func viewDismiss() {
+        userDefaults?.set(true, forKey: "courseInitialized")
+        self.trace?.stop()
+        self.dismiss(animated: true)
     }
 
     func getProfilePhoto() {
