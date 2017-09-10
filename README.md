@@ -3,6 +3,7 @@
 # MFSCalendar
 
 [![codebeat badge](https://codebeat.co/badges/9ff43823-034c-4356-9eb2-9705691de185)](https://codebeat.co/projects/github-com-zjdavid-mfscalendar-master)
+[![Build Status](https://travis-ci.org/zjdavid/MFSCalendar.svg?branch=master)](https://travis-ci.org/zjdavid/MFSCalendar)
 
 MFS Calendar is a calendar app designed exclusively for MFS. 
 
