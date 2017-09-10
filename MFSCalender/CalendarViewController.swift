@@ -221,23 +221,12 @@ extension CalendarViewController: UITableViewDelegate, UITableViewDataSource {
             classViewController.daySelected = nil
         }
         
-        classViewController.dataFetching()
-
-//        if (self.dayOfSchool == "No School") || (self.dayOfSchool == nil) {
-//            self.listClasses = []
-//            self.classView.reloadData(with: .automatic)
-//            self.classView.reloadData()
-//        } else {
-//            self.classView.separatorStyle = .singleLine
-//            let plistPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-//            let fileName = "/Class" + self.dayOfSchool! + ".plist"
-//            let path = plistPath.appending(fileName)
-//
-//            self.listClasses = NSMutableArray(contentsOfFile: path)!
-//
-//            self.classView.reloadData(with: .automatic)
-//            self.classView.reloadData()
-//        }
+        if classViewController.tableView.visibleCells.count > 0 {
+            classViewController.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
+        }
+        DispatchQueue.main.async {
+            self.classViewController.dataFetching()
+        }
     }
 
     func eventDataFetching() {
