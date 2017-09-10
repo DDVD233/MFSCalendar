@@ -43,6 +43,10 @@ class aboutView: UITableViewController, MFMailComposeViewControllerDelegate {
         }
     }
     
+    @IBAction func openGithub(_ sender: Any) {
+        UIApplication.shared.openURL(URL(string: "https://github.com/zjdavid/MFSCalendar")!)
+    }
+    
     func configuredMailComposeViewController() -> MFMailComposeViewController {
         let mailComposerVC = MFMailComposeViewController()
         mailComposerVC.mailComposeDelegate = self // Extremely important to set the --mailComposeDelegate-- property, NOT the --delegate-- property

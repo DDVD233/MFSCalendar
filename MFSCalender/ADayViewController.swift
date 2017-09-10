@@ -102,7 +102,7 @@ class ADay: UIViewController, IndicatorInfoProvider {
         if daySelected != nil {
             return IndicatorInfo(title: daySelected! + " Day")
         } else {
-            return IndicatorInfo(title: "")
+            return IndicatorInfo(title: "Classes")
         }
     }
 }

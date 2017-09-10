@@ -80,7 +80,7 @@ func getClassDataAt(period: Int, day: String) -> [[String: Any]] {
     case 1...8:
         listClasses = Array(allClasses[(period - 1)...7])
         
-        if listClasses.count >= 2 { //Before lunch
+        if listClasses.count > 2 { //Before lunch
             listClasses.insert(lunch, at: 6 - period)
         }
     case 11:

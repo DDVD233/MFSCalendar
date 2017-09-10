@@ -101,15 +101,15 @@ class TodayViewController: UIViewController, NCWidgetProviding, UITableViewDeleg
         let PeriodNumberInt = rowDict["period"] as! Int
 
         switch PeriodNumberInt {
-        case 1: cell?.classTime.text = "8:00AM - 8:43AM"
-        case 2: cell?.classTime.text = "8:47AM - 9:30AM"
-        case 3: cell?.classTime.text = "9:34AM - 10:34AM"
-        case 4: cell?.classTime.text = "10:44AM - 11:27AM"
-        case 5: cell?.classTime.text = "11:31AM - 12:14PM"
-        case 6: cell?.classTime.text = "12:14PM - 12:57PM"
-        case 11: cell?.classTime.text = "1:00PM - 1:40PM"
-        case 7: cell?.classTime.text = "1:40PM - 2:23PM"
-        case 8: cell?.classTime.text = "2:27PM - 3:10PM"
+        case 1: cell?.classTime.text = "8:00AM - 8:42AM"
+        case 2: cell?.classTime.text = "8:46AM - 9:28AM"
+        case 3: cell?.classTime.text = "9:32AM - 10:32AM"
+        case 4: cell?.classTime.text = "10:42AM - 11:24AM"
+        case 5: cell?.classTime.text = "11:28AM - 12:10PM"
+        case 6: cell?.classTime.text = "12:14PM - 12:56PM"
+        case 11: cell?.classTime.text = "12:56PM - 1:38PM"
+        case 7: cell?.classTime.text = "1:42PM - 2:24PM"
+        case 8: cell?.classTime.text = "2:28PM - 3:10PM"
         default: cell?.classTime.text = "Not Found"
         }
 

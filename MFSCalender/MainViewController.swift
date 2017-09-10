@@ -87,6 +87,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     var isVisible = true
 
     let reachability = Reachability()!
+    var screenWidth = UIScreen.main.bounds.width
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -442,11 +443,19 @@ extension Main: UICollectionViewDelegate, UICollectionViewDataSource, UICollecti
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
-
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = (Float(UIScreen.main.bounds.size.width) - 40) / 2
+        var width = (Float(screenWidth) - 40) / 2
+        if screenWidth > 414 {
+            width = Float(screenWidth) / Float(Int(screenWidth / 187))
+        }
         let size = CGSize(width: Double(width), height: 151.0)
         return size
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        screenWidth = size.width
+        classView.reloadData()
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
