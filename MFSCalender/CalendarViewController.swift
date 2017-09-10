@@ -185,6 +185,11 @@ class CalendarViewController: TwitterPagerTabStripViewController, DZNEmptyDataSe
 
 extension CalendarViewController: FSCalendarDelegate, FSCalendarDataSource {
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
+        if #available(iOS 10.0, *) {
+            let generator = UIImpactFeedbackGenerator(style: .medium)
+            generator.prepare()
+            generator.impactOccurred()
+        }
         let _ = self.checkDate(checkDate: date)
         dataFetching()
         eventDataFetching()

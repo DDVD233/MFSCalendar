@@ -401,6 +401,12 @@ class homeworkViewCell: UITableViewCell {
     }
 
     func checkDidChange(checkMark: M13Checkbox) {
+        if #available(iOS 10.0, *) {
+            let generator = UIImpactFeedbackGenerator(style: .medium)
+            generator.prepare()
+            generator.impactOccurred()
+        }
+        
         DispatchQueue.global().async {
             guard (self.assignmentIndexId != nil) else {
                 return

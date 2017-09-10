@@ -130,6 +130,11 @@ class homeworkDetailViewCell: UITableViewCell {
     }
     
     func checkDidChange() {
+        if #available(iOS 10.0, *) {
+            let generator = UIImpactFeedbackGenerator(style: .medium)
+            generator.prepare()
+            generator.impactOccurred()
+        }
         DispatchQueue.global().async {
             guard (self.assignmentIndexID != nil) else {
                 return
