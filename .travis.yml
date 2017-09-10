@@ -3,4 +3,4 @@ language: swift
 xcode_project: MFSCalendar.xcworkspace # path to your xcodeproj folder
 xcode_scheme: MFSCalendar
 before install:
-- pod update
+- gem install cocoapods --pre --no-rdoc --no-ri --no-document --quiet
