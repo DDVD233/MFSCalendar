@@ -10,14 +10,14 @@ import Foundation
 
 func getCurrentPeriod(time: Int) -> Int {
     let Period1Start = 800
-    let Period2Start = 847
-    let Period3Start = 934
-    let Period4Start = 1044
-    let Period5Start = 1131
+    let Period2Start = 846
+    let Period3Start = 932
+    let Period4Start = 1042
+    let Period5Start = 1128
     let Period6Start = 1214
-    let LunchStart = 1300
-    let Period7Start = 1340
-    let Period8Start = 1427
+    let LunchStart = 1256
+    let Period7Start = 1342
+    let Period8Start = 1428
     let Period8End = 1510
     var currentClass: Int? = nil
     
@@ -81,7 +81,7 @@ func getClassDataAt(period: Int, day: String) -> [[String: Any]] {
         listClasses = Array(allClasses[(period - 1)...7])
         
         if listClasses.count > 2 { //Before lunch
-            listClasses.insert(lunch, at: 6 - period)
+            listClasses.insert(lunch, at: 7 - period)
         }
     case 11:
         // At lunch

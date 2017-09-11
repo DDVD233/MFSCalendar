@@ -16,7 +16,7 @@ import M13ProgressSuite
 import SnapKit
 import SafariServices
 
-class classDetailViewController: UITableViewController {
+class classDetailViewController: UITableViewController, UIDocumentInteractionControllerDelegate {
 
     var classObject = ClassView().getTheClassToPresent() ?? [String: Any]()
     var availableInformation = [String]()
@@ -635,7 +635,9 @@ class syllabusView: UITableViewCell {
         let documentController = UIDocumentInteractionController.init(url: fileUrl)
 
 
-        documentController.delegate = parentViewController! as? UIDocumentInteractionControllerDelegate
+        if let delegate = parentViewController! as? classDetailViewController {
+            documentController.delegate = delegate
+        }
 
         DispatchQueue.main.async {
             self.parentViewController!.navigationController?.cancelProgress()

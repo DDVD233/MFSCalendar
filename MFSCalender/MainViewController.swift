@@ -80,9 +80,10 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     @IBOutlet weak var bottomView: UIView!
 
     let formatter = DateFormatter()
-    var listEvents: NSMutableArray = []
+    var listEvents = [[String: Any]]()
     var listClasses = [[String: Any?]]()
     var listHomework = [String: Array<Dictionary<String, Any?>>]()
+    var timer: Timer? = nil
 //    Format: {Lead_Section_ID: [Homework]}
     var isVisible = true
 
@@ -111,11 +112,8 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         }
         if (userDefaults?.bool(forKey: "didLogin") == true) && (userDefaults?.bool(forKey: "courseInitialized") == true) {
 
-            DispatchQueue.global().async {
-                self.refreshDisplayedData()
-            }
-
             NSLog("Already Logged in.")
+            //timer = Timer.scheduledTimer(timeInterval: , target: self, selector: #selector(autoRefreshContents), userInfo: nil, repeats: true)
         } else {
             print("Cannot initialize data because the user did not logged in")
         }
@@ -153,21 +151,13 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
                 self.downloadLargeProfilePhoto()
             }
         }
-        
-        DispatchQueue.global().async {
-            self.autoRefreshContents()
-        }
     }
     
     func autoRefreshContents() {
-        while isVisible {
-            DispatchQueue.global().async {
-                self.refreshDisplayedData()
-            }
-            print("Content refreshed")
-            
-            sleep(5)
+        DispatchQueue.global().async {
+            self.refreshDisplayedData()
         }
+        print("Content refreshed")
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -530,16 +520,16 @@ extension Main: UITableViewDelegate, UITableViewDataSource {
         let fileName = "/Events.plist"
         let path = plistPath.appending(fileName)
         let eventData = NSMutableDictionary(contentsOfFile: path)
-        let date = NSDate()
+        let date = Date()
         self.formatter.dateFormat = "yyyyMMdd"
-        let eventDate = formatter.string(from: date as Date)
-        guard let events = eventData?[eventDate] as? Array<Dictionary<String, Any?>> else {
+        let eventDate = formatter.string(from: date)
+        guard let events = eventData?[eventDate] as? Array<Dictionary<String, Any>> else {
             return
         }
 
 //        先加上All Day的， 然后将其余还未结束的加入eventToSort进行排序
         let allDayEvents = events.filter({ $0["isAllDay"] as? Int == 1 })
-        self.listEvents.addObjects(from: allDayEvents)
+        self.listEvents += allDayEvents
 
         self.formatter.dateFormat = "HHmmss"
         let currentTime = Int(formatter.string(from: Date()))!
@@ -549,35 +539,38 @@ extension Main: UITableViewDelegate, UITableViewDataSource {
         let sortedEvents = eventToSort.sorted(by: {
             ($0["tEnd"] as! Int) < ($1["tEnd"] as! Int)
         })
-
-        self.listEvents.addObjects(from: sortedEvents)
+        
+        self.listEvents += sortedEvents
     }
 
     //    the number of the cell
     func tableView(_ tableView: UITableView, numberOfRowsInSection selection: Int) -> Int {
+        print(listEvents.count)
         return self.listEvents.count
     }
 
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-
-        let cell = tableView.dequeueReusableCell(withIdentifier: "eventTableDash", for: indexPath as IndexPath) as? customEventCellDashboard
+        let cell = tableView.dequeueReusableCell(withIdentifier: "eventTableDash", for: indexPath as IndexPath) as! customEventCellDashboard
         let row = indexPath.row
-        let rowDict = self.listEvents[row] as! Dictionary<String, Any>
+        guard self.listEvents.count >= row + 1 else {
+            return cell
+        }
+        let rowDict = self.listEvents[row]
         let summary = rowDict["summary"] as? String
-        cell?.ClassName.text = summary
+        cell.ClassName.text = summary
 //        截取第一个字母作为cell左侧的字母
         let letter = summary?.substring(to: (summary?.index(after: (summary?.startIndex)!))!)
-        cell?.PeriodNumber.text = letter!
+        cell.PeriodNumber.text = letter!
 
         if rowDict["location"] != nil {
-            cell?.RoomNumber.text = "At: " + (rowDict["location"] as! String)
+            cell.RoomNumber.text = "At: " + (rowDict["location"] as! String)
         } else {
-            cell?.RoomNumber.text = nil
+            cell.RoomNumber.text = nil
         }
 
-        cell?.PeriodTime.text = EventView().getTimeInterval(rowDict: rowDict)
-        return cell!
+        cell.PeriodTime.text = EventView().getTimeInterval(rowDict: rowDict)
+        return cell
     }
 }
 

@@ -14,15 +14,18 @@ import SwiftDate
 import DZNEmptyDataSet
 import DGElasticPullToRefresh
 import M13ProgressSuite
+import XLPagerTabStrip
 
 
-class homeworkViewController: UITableViewController, UIViewControllerPreviewingDelegate {
+class homeworkViewController: UITableViewController, UIViewControllerPreviewingDelegate, IndicatorInfoProvider {
 
 
     @IBOutlet weak var homeworkTable: UITableView!
     var isUpdatingHomework = false
 
     var listHomework = [String: [[String: Any]]]()
+    var daySelected: Date? = Date()
+    var filter = 2
     var sections: [String] {
         return Array(self.listHomework.keys).sorted()
     }
@@ -79,6 +82,10 @@ class homeworkViewController: UITableViewController, UIViewControllerPreviewingD
     }
 
     func getHomework() {
+        guard daySelected != nil else {
+            return
+        }
+        
         isUpdatingHomework = true
         DispatchQueue.main.async {
             UIApplication.shared.isNetworkActivityIndicatorVisible = true
@@ -92,7 +99,7 @@ class homeworkViewController: UITableViewController, UIViewControllerPreviewingD
         let config = URLSessionConfiguration.default
         config.requestCachePolicy = .reloadIgnoringLocalCacheData
         config.urlCache = nil
-
+        
         let session = URLSession.init(configuration: config)
         guard loginAuthentication().success else {
             return
@@ -101,8 +108,8 @@ class homeworkViewController: UITableViewController, UIViewControllerPreviewingD
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "en_US")
         formatter.dateFormat = "M/d/yyyy"
-        let today = formatter.string(from: Date()).addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-        let url = "https://mfriends.myschoolapp.com/api/DataDirect/AssignmentCenterAssignments/?format=json&filter=2&dateStart=\(today)&dateEnd=\(today)&persona=2"
+        let daySelectedString = formatter.string(from: daySelected!).addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+        let url = "https://mfriends.myschoolapp.com/api/DataDirect/AssignmentCenterAssignments/?format=json&filter=\(String(describing: filter))&dateStart=\(daySelectedString)&dateEnd=\(daySelectedString)&persona=2"
         let request = URLRequest(url: URL(string: url)!)
         
         var originalData = [[String:Any]]()
@@ -216,6 +223,7 @@ class homeworkViewController: UITableViewController, UIViewControllerPreviewingD
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard filter == 2 else { return nil }
         let headerView = tableView.dequeueReusableCell(withIdentifier: "homeworkTableHeader") as! homeworkTableHeader
 
         let dateString = stringForHeaderInSection(section: section)
@@ -224,7 +232,11 @@ class homeworkViewController: UITableViewController, UIViewControllerPreviewingD
     }
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 44
+        if filter == 2 {
+            return 44
+        } else {
+            return 0
+        }
     }
     
     func detailViewControllerOf(indexPath: IndexPath) -> UIViewController? {
@@ -278,11 +290,20 @@ class homeworkViewController: UITableViewController, UIViewControllerPreviewingD
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "homeworkViewCell", for: indexPath) as! homeworkViewCell
-
-        let homeworkInSection = self.listHomework[sections[indexPath.section]]
-        guard let homework = homeworkInSection?[indexPath.row] else {
+        guard sections.count >= indexPath.section + 1 else {
             return cell
         }
+        let sectionHeader = sections[indexPath.section]
+        
+        guard let homeworkInSection = self.listHomework[sectionHeader] else {
+            return cell
+        }
+        
+        guard homeworkInSection.count >= indexPath.row + 1 else {
+            return cell
+        }
+        let homework = homeworkInSection[indexPath.row]
+        
         if let assignmentIndexId = homework["assignment_index_id"] as? Int {
             cell.assignmentIndexId = String(describing: assignmentIndexId)
         }
@@ -338,6 +359,10 @@ class homeworkViewController: UITableViewController, UIViewControllerPreviewingD
 //        }
         
         return cell
+    }
+    
+    func indicatorInfo(for pagerTabStripController: PagerTabStripViewController) -> IndicatorInfo {
+        return IndicatorInfo(title: "Homework")
     }
 }
 

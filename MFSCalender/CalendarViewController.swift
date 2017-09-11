@@ -71,6 +71,7 @@ class CalendarViewController: TwitterPagerTabStripViewController, DZNEmptyDataSe
     
     let classViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier :"timeTableViewController") as! ADay
     let eventViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier :"eventViewController") as! eventViewController
+    let homeworkViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier :"homeworkViewController") as! homeworkViewController
 
     fileprivate lazy var scopeGesture: UIPanGestureRecognizer = {
         [unowned self] in
@@ -89,17 +90,20 @@ class CalendarViewController: TwitterPagerTabStripViewController, DZNEmptyDataSe
         eventViewController.eventView.panGestureRecognizer.require(toFail: self.scopeGesture)
         classViewController.view.addGestureRecognizer(scopeGesture)
         classViewController.tableView.panGestureRecognizer.require(toFail: self.scopeGesture)
+        homeworkViewController.view.addGestureRecognizer(scopeGesture)
+        homeworkViewController.homeworkTable.panGestureRecognizer.require(toFail: self.scopeGesture)
         self.calendarView.select(Date())
         
         dataFetching()
         eventDataFetching()
+        homeworkDataFetching()
         
         self.calendarView.delegate = self
         self.calendarView.dataSource = self
     }
     
     override func viewControllers(for pagerTabStripController: PagerTabStripViewController) -> [UIViewController] {
-        return [classViewController, eventViewController]
+        return [classViewController, homeworkViewController, eventViewController]
     }
 
     @IBAction func expandButton(_ sender: Any) {
@@ -118,14 +122,16 @@ class CalendarViewController: TwitterPagerTabStripViewController, DZNEmptyDataSe
         let _ = self.checkDate(checkDate: Date())
         self.dataFetching()
         self.eventDataFetching()
+        self.homeworkDataFetching()
 //        Crashlytics.sharedInstance().crash()
     }
 
     func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        var shouldBegin = classViewController.tableView.contentOffset.y <= -classViewController.tableView.contentInset.top
-        if !shouldBegin {
-            shouldBegin = eventViewController.eventView.contentOffset.y <= -eventViewController.eventView.contentInset.top
-        }
+        let shouldBegin =
+            (classViewController.tableView.contentOffset.y <= -classViewController.tableView.contentInset.top) ||
+            (eventViewController.eventView.contentOffset.y <= -eventViewController.eventView.contentInset.top) ||
+            (homeworkViewController.homeworkTable.contentOffset.y <= -homeworkViewController.homeworkTable.contentInset.top)
+        
         if shouldBegin {
             let velocity = self.scopeGesture.velocity(in: self.view)
 //            往上拉->日历拉长。
@@ -173,6 +179,16 @@ class CalendarViewController: TwitterPagerTabStripViewController, DZNEmptyDataSe
         eventViewController.selectedDate = selectedDate
         eventViewController.eventDataFetching()
     }
+    
+    func homeworkDataFetching() {
+        let selectedDate = self.calendarView.selectedDates.first
+        homeworkViewController.daySelected = selectedDate
+        homeworkViewController.filter = 1
+        
+        DispatchQueue.global().async {
+            self.homeworkViewController.getHomework()
+        }
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -198,6 +214,7 @@ extension CalendarViewController: FSCalendarDelegate, FSCalendarDataSource {
         let _ = self.checkDate(checkDate: date)
         dataFetching()
         eventDataFetching()
+        homeworkDataFetching()
     }
 
     func calendar(_ calendar: FSCalendar, subtitleFor date: Date) -> String? {
@@ -216,6 +233,7 @@ extension CalendarViewController: FSCalendarDelegate, FSCalendarDataSource {
         } else {
             self.backButton.title = "Expand"
         }
+        
         self.view.layoutIfNeeded()
         //self.classView.frame.size.height = self.bottomScrollView.frame.height
     }
