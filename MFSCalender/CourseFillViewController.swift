@@ -317,7 +317,7 @@ class courseFillController: UIViewController {
                     return
                 }
 
-                //                When the block is not empty
+                //When the block is not empty
                 let semaphore = DispatchSemaphore.init(value: 0)
                 guard var classId = course["id"] as? String else {
                     presentErrorMessage(presentMessage: "Course ID not found", layout: .StatusLine)
@@ -349,28 +349,6 @@ class courseFillController: UIViewController {
                     
                     semaphore.signal()
                 })
-                
-                
-//                No idea why this does not work.
-//                provider.request(MyService.meetTimeSearch(classId: classId), completion: { result in
-//                    switch result {
-//                    case let .success(response):
-//                        do {
-//                            guard let meetTimeList = try response.mapJSON() as? Array<String> else {
-//                                semaphore.signal()
-//                                return
-//                            }
-//                            
-//                            removeIndex += self.writeScheduleToFile(meetTimeList: meetTimeList, course: &course, index: index)
-//                            success = true
-//                        } catch {
-//                            presentErrorMessage(presentMessage: error.localizedDescription, layout: .StatusLine)
-//                        }
-//                    case let .failure(error):
-//                        presentErrorMessage(presentMessage: error.localizedDescription, layout: .CardView)
-//                    }
-//                    semaphore.signal()
-//                })
                 
                 task.resume()
                 semaphore.wait()

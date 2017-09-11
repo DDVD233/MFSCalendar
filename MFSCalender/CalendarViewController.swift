@@ -73,25 +73,10 @@ class CalendarViewController: TwitterPagerTabStripViewController, DZNEmptyDataSe
     let eventViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier :"eventViewController") as! eventViewController
     let homeworkViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier :"homeworkViewController") as! homeworkViewController
 
-    fileprivate lazy var scopeGesture: UIPanGestureRecognizer = {
-        [unowned self] in
-        let panGesture = UIPanGestureRecognizer(target: self.calendarView, action: #selector(self.calendarView.handleScopeGesture(_:)))
-        panGesture.delegate = self
-        panGesture.minimumNumberOfTouches = 1
-        panGesture.maximumNumberOfTouches = 2
-        return panGesture
-    }()
-
     override func viewDidLoad() {
         super.viewDidLoad()
         self.backButton.title = "Collapse"
-        self.view.addGestureRecognizer(self.scopeGesture)
-        eventViewController.view.addGestureRecognizer(scopeGesture)
-        eventViewController.eventView.panGestureRecognizer.require(toFail: self.scopeGesture)
-        classViewController.view.addGestureRecognizer(scopeGesture)
-        classViewController.tableView.panGestureRecognizer.require(toFail: self.scopeGesture)
-        homeworkViewController.view.addGestureRecognizer(scopeGesture)
-        homeworkViewController.homeworkTable.panGestureRecognizer.require(toFail: self.scopeGesture)
+        addScopeGesture()
         self.calendarView.select(Date())
         
         dataFetching()
@@ -100,6 +85,29 @@ class CalendarViewController: TwitterPagerTabStripViewController, DZNEmptyDataSe
         
         self.calendarView.delegate = self
         self.calendarView.dataSource = self
+    }
+    
+    func addScopeGesture() {
+        let viewArray = [self, classViewController, eventViewController, homeworkViewController]
+        for viewController in viewArray {
+            let scopeGesture: UIPanGestureRecognizer = {
+                [unowned self] in
+                let panGesture = UIPanGestureRecognizer(target: self.calendarView, action: #selector(self.calendarView.handleScopeGesture(_:)))
+                panGesture.delegate = self
+                panGesture.minimumNumberOfTouches = 1
+                panGesture.maximumNumberOfTouches = 2
+                return panGesture
+                }()
+            viewController.view.addGestureRecognizer(scopeGesture)
+            
+            if let thisViewController = viewController as? ADay {
+                thisViewController.tableView.panGestureRecognizer.require(toFail: scopeGesture)
+            } else if let thisViewController = viewController as? eventViewController {
+                thisViewController.eventView.panGestureRecognizer.require(toFail: scopeGesture)
+            } else if let thisViewController = viewController as? homeworkViewController {
+                thisViewController.homeworkTable.panGestureRecognizer.require(toFail: scopeGesture)
+            }
+        }
     }
     
     override func viewControllers(for pagerTabStripController: PagerTabStripViewController) -> [UIViewController] {
@@ -128,12 +136,10 @@ class CalendarViewController: TwitterPagerTabStripViewController, DZNEmptyDataSe
 
     func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         let shouldBegin =
-            (classViewController.tableView.contentOffset.y <= -classViewController.tableView.contentInset.top) ||
-            (eventViewController.eventView.contentOffset.y <= -eventViewController.eventView.contentInset.top) ||
-            (homeworkViewController.homeworkTable.contentOffset.y <= -homeworkViewController.homeworkTable.contentInset.top)
-        
+            ((classViewController.tableView.contentOffset.y <= -classViewController.tableView.contentInset.top) ||
+            (eventViewController.eventView.contentOffset.y <= -eventViewController.eventView.contentInset.top)) || (homeworkViewController.homeworkTable.contentOffset.y <= -homeworkViewController.homeworkTable.contentInset.top)
         if shouldBegin {
-            let velocity = self.scopeGesture.velocity(in: self.view)
+            let velocity = (gestureRecognizer as! UIPanGestureRecognizer).velocity(in: self.view)
 //            往上拉->日历拉长。
             switch self.calendarView.scope {
             case .month:

@@ -44,15 +44,17 @@ class homeworkViewController: UITableViewController, UIViewControllerPreviewingD
         if let navigationBar = self.navigationController?.navigationBar {
             navigationBar.removeBottomLine()
         }
-
-        let loadingview = DGElasticPullToRefreshLoadingViewCircle()
-        loadingview.tintColor = UIColor.white
-        homeworkTable.dg_addPullToRefreshWithActionHandler({ [weak self] () -> Void in
-            self?.getHomework()
-            self?.tableView.dg_stopLoading()
-        }, loadingView: loadingview)
-        homeworkTable.dg_setPullToRefreshFillColor(UIColor(hexString: 0xFF7E79))
-        homeworkTable.dg_setPullToRefreshBackgroundColor(tableView.backgroundColor!)
+        
+        if filter == 2 {
+            let loadingview = DGElasticPullToRefreshLoadingViewCircle()
+            loadingview.tintColor = UIColor.white
+            homeworkTable.dg_addPullToRefreshWithActionHandler({ [weak self] () -> Void in
+                self?.getHomework()
+                self?.tableView.dg_stopLoading()
+                }, loadingView: loadingview)
+            homeworkTable.dg_setPullToRefreshFillColor(UIColor(hexString: 0xFF7E79))
+            homeworkTable.dg_setPullToRefreshBackgroundColor(tableView.backgroundColor!)
+        }
         
         if self.traitCollection.forceTouchCapability == .available {
             registerForPreviewing(with: self, sourceView: homeworkTable)
