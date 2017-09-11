@@ -36,7 +36,8 @@ public func loginAuthentication() -> (success: Bool, token: String, userId: Stri
     if let loginDate = userDefaults?.object(forKey: "loginTime") as? Date {
         let now = Date()
         let timeInterval = Int(now.timeIntervalSince(loginDate))
-        if timeInterval < 1200 {
+        
+        if (timeInterval < 600) && (timeInterval > 0) {
             success = true
             token = userDefaults?.string(forKey: "token")
             userID = userDefaults?.string(forKey: "userID")
