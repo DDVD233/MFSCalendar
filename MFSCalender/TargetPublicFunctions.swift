@@ -11,6 +11,7 @@ import SwiftMessages
 import SwiftyJSON
 import Alamofire
 import M13Checkbox
+import SafariServices
 
 func areEqual<T:Equatable>(type: T.Type, a: Any?, b: Any?) -> Bool? {
     guard let a = a as? T, let b = b as? T else {
@@ -365,6 +366,64 @@ class NetworkOperations {
         task.resume()
         semaphore.wait()
         return cookie
+    }
+    
+    func downloadFile(url: URL, withName fileName: String) -> (filePath: URL?, error: Error?) {
+        let semaphore = DispatchSemaphore(value: 0)
+        
+        let attachmentPath = userDocumentPath + "/" + fileName
+        var returnURL: URL? = nil
+        var networkError: Error? = nil
+        let destination: DownloadRequest.DownloadFileDestination = { _, _ in
+            let fileURL = URL(fileURLWithPath: attachmentPath)
+            print(fileURL)
+            
+            return (fileURL, [.removePreviousFile, .createIntermediateDirectories])
+        }
+        
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        let queue = DispatchQueue(label: "com.cnoon.response-queue", qos: .utility, attributes: [.concurrent])
+        Alamofire.download(url, to: destination).response(queue: queue, completionHandler: { response in
+            UIApplication.shared.isNetworkActivityIndicatorVisible = false
+            
+            if response.error == nil {
+            
+            NSLog("Attempting to open file: \(fileName)")
+            returnURL = URL(fileURLWithPath: attachmentPath)
+            } else {
+            networkError = response.error
+            }
+            
+            semaphore.signal()
+        })
+        
+        semaphore.wait()
+        
+        return (returnURL, networkError)
+    }
+    
+    func openFile(fileUrl: URL, from viewController: UIViewController) {
+        let documentController = UIDocumentInteractionController.init(url: fileUrl)
+        
+        if let delegate = viewController as? UIDocumentInteractionControllerDelegate {
+            documentController.delegate = delegate
+        }
+        
+        DispatchQueue.main.async {
+            viewController.navigationController?.cancelProgress()
+            documentController.presentPreview(animated: true)
+        }
+        
+    }
+    
+    func openLink(url: inout String, from viewController: UIViewController) {
+        if !url.contains("http://") {
+            url = "http://" + url
+        }
+        if let urlToOpen = URL(string: url) {
+            let safariViewController = SFSafariViewController(url: urlToOpen)
+            viewController.present(safariViewController, animated: true, completion: nil)
+        }
     }
 }
 

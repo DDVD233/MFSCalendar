@@ -274,12 +274,8 @@ class topicDetailDescriptionCell: UITableViewCell {
 
     @IBAction func linkButtonClicked(_ sender: Any) {
         if url != nil {
-            let safariController = SFSafariViewController(url: URL(string: url!)!)
-            if let rootViewController = self.parentViewController?.navigationController {
-                rootViewController.present(safariController, animated: true, completion: nil)
-            }
+            NetworkOperations().openLink(url: &url!, from: parentViewController!)
         } else if filePath != nil && fileName != nil {
-
             DispatchQueue.main.async {
                 self.parentViewController!.navigationController?.showProgress()
                 self.parentViewController!.navigationController?.setIndeterminate(true)
@@ -293,7 +289,7 @@ class topicDetailDescriptionCell: UITableViewCell {
             if fileManager.fileExists(atPath: attachmentPath) {
                 //          Open the existing attachment.
                 NSLog("Attempting to open file: \(fileName!)")
-                openFile(fileUrl: URL(fileURLWithPath: attachmentPath))
+                NetworkOperations().openFile(fileUrl: URL(fileURLWithPath: attachmentPath), from: parentViewController!)
                 return
             }
 
@@ -302,42 +298,20 @@ class topicDetailDescriptionCell: UITableViewCell {
             }
 
             let url = filePath! + fileName!
-            //        create request.
-            //        Alamofire Test.
-            let destination: DownloadRequest.DownloadFileDestination = { _, _ in
-                let fileURL = URL(fileURLWithPath: attachmentPath)
-                print(fileURL)
-
-                return (fileURL, [.removePreviousFile, .createIntermediateDirectories])
+            
+            let (fileURL, error) = NetworkOperations().downloadFile(url: URL(string: url)!, withName: fileName!)
+            DispatchQueue.main.async {
+                self.parentViewController!.navigationController?.cancelProgress()
             }
-
-
-            Alamofire.download(url, to: destination).response { response in
-
-                if response.error == nil {
-
-                    NSLog("Attempting to open file: \(self.fileName!)")
-                    self.openFile(fileUrl: URL(fileURLWithPath: attachmentPath))
-                } else {
-                    DispatchQueue.main.async {
-                        self.parentViewController!.navigationController?.cancelProgress()
-                        let message = response.error!.localizedDescription + " Please check your internet connection."
-                        presentErrorMessage(presentMessage: message, layout: .StatusLine)
-                    }
-                }
+            
+            guard error == nil else {
+                presentErrorMessage(presentMessage: error!.localizedDescription, layout: .CardView)
+                return
+            }
+            
+            if fileURL != nil {
+                NetworkOperations().openFile(fileUrl: fileURL!, from: parentViewController!)
             }
         }
-    }
-
-    func openFile(fileUrl: URL) {
-        let documentController = UIDocumentInteractionController.init(url: fileUrl)
-
-        documentController.delegate = parentViewController! as? UIDocumentInteractionControllerDelegate
-
-        DispatchQueue.main.async {
-            self.parentViewController!.navigationController?.cancelProgress()
-            documentController.presentPreview(animated: true)
-        }
-
     }
 }

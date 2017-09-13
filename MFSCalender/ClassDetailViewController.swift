@@ -563,19 +563,12 @@ class syllabusView: UITableViewCell {
         }
 
         if self.url != nil {
-            if !self.url!.contains("http://") {
-                self.url = "http://" + self.url!
-            }
-            if let urlToOpen = URL(string: self.url!) {
-                let safariViewController = SFSafariViewController(url: urlToOpen)
-                parentViewController?.present(safariViewController, animated: true, completion: nil)
-            }
-
+            NetworkOperations().openLink(url: &self.url!, from: parentViewController!)
             return
         }
 
         guard !self.attachmentFileName!.isEmpty else {
-            presentMessage(message: "There is no attachment.")
+            presentErrorMessage(presentMessage: "There is no attachment.", layout: .CardView)
             self.parentViewController!.navigationController?.cancelProgress()
             return
         }
@@ -588,7 +581,7 @@ class syllabusView: UITableViewCell {
         if fileManager.fileExists(atPath: attachmentPath) {
 //          Open the existing attachment.
             NSLog("Attempting to open file: \(self.attachmentFileName!)")
-            openFile(fileUrl: URL(fileURLWithPath: attachmentPath))
+            NetworkOperations().openFile(fileUrl:  URL(fileURLWithPath: attachmentPath), from: parentViewController!)
             return
         }
 
@@ -604,56 +597,20 @@ class syllabusView: UITableViewCell {
             return "https://mfriends.myschoolapp.com/app/utilities/FileDownload.ashx?" + attachmentQueryString!
         }
 
-        //        create request.
-//        Alamofire Test.
-        let destination: DownloadRequest.DownloadFileDestination = { _, _ in
-            let fileURL = URL(fileURLWithPath: attachmentPath)
-            print(fileURL)
-
-            return (fileURL, [.removePreviousFile, .createIntermediateDirectories])
-        }
-
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        Alamofire.download(url, to: destination).response { response in
-//            print(response)
-            UIApplication.shared.isNetworkActivityIndicatorVisible = false
-            if response.error == nil {
-
-                NSLog("Attempting to open file: \(self.attachmentFileName!)")
-                self.openFile(fileUrl: URL(fileURLWithPath: attachmentPath))
-            } else {
-                DispatchQueue.main.async {
-                    self.parentViewController!.navigationController?.cancelProgress()
-                    let message = response.error!.localizedDescription + " Please check your internet connection."
-                    self.presentMessage(message: message)
-                }
-            }
-        }
-    }
-
-    func openFile(fileUrl: URL) {
-        let documentController = UIDocumentInteractionController.init(url: fileUrl)
-
-
-        if let delegate = parentViewController! as? classDetailViewController {
-            documentController.delegate = delegate
-        }
-
+        let (filePath, error) = NetworkOperations().downloadFile(url: URL(string: url)!, withName: attachmentFileName!)
+        
         DispatchQueue.main.async {
             self.parentViewController!.navigationController?.cancelProgress()
-            documentController.presentPreview(animated: true)
         }
-
-    }
-
-    func presentMessage(message: String) {
-        let view = MessageView.viewFromNib(layout: .CardView)
-        view.configureTheme(.error)
-        let icon = "😱"
-        view.configureContent(title: "Error!", body: message, iconText: icon)
-        view.button?.isHidden = true
-        let config = SwiftMessages.Config()
-        SwiftMessages.show(config: config, view: view)
+        
+        guard error == nil else {
+            presentErrorMessage(presentMessage: error!.localizedDescription, layout: .StatusLine)
+            return
+        }
+        
+        if filePath != nil {
+            NetworkOperations().openFile(fileUrl: filePath!, from: parentViewController!)
+        }
     }
 }
 

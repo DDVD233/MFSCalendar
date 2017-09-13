@@ -303,12 +303,12 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         var today = formatter.string(from: date)
         let labelAttributes = [NSFontAttributeName:
             UIFont.init(name: dateLabel.font.fontName, size: dateLabel.font.pointSize) ?? UIFont()]
-        if NSString(string: today).size(attributes: labelAttributes).width > dateLabel.bounds.size.width {
+        if NSString(string: today).size(attributes: labelAttributes).width > dateLabel.bounds.size.width - 10 {
             formatter.dateFormat = "EEEE, MMM d."
             today = formatter.string(from: date)
         }
         
-        if NSString(string: today).size(attributes: labelAttributes).width > dateLabel.bounds.size.width {
+        if NSString(string: today).size(attributes: labelAttributes).width > dateLabel.bounds.size.width - 10 {
             formatter.dateFormat = "EE, MMM d."
             today = formatter.string(from: date)
         }

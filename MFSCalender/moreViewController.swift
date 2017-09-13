@@ -11,7 +11,7 @@ import UserNotifications
 import SafariServices
 import JSQWebViewController
 
-class moreViewController: UITableViewController {
+class moreViewController: UITableViewController, UIDocumentInteractionControllerDelegate {
 
     @IBOutlet weak var profilePhoto: UIImageView!
     @IBOutlet weak var name: UILabel!
@@ -34,25 +34,61 @@ class moreViewController: UITableViewController {
             name.text?.append(lastName)
         }
     }
-
+    
+    func documentInteractionControllerViewControllerForPreview(_ controller: UIDocumentInteractionController) -> UIViewController {
+        return self
+    }
 }
 
 extension moreViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.section == 1 && indexPath.row == 2 {
-            guard let cookie = NetworkOperations().loginUsingPost() else {
+        if indexPath.section == 1 && indexPath.row == 1 {
+            guard loginAuthentication().success else {
                 return
             }
-            let url = URL(string: "https://mfriends.myschoolapp.com/app/student#resourceboard")!
             
-            var request = URLRequest(url: url)
-            HTTPCookieStorage.shared.setCookies(cookie, for: url, mainDocumentURL: URL(string: "https://mfriends.myschoolapp.com"))
-            //request.addValue(cookie, forHTTPHeaderField: "cookie")
-            let cookies = HTTPCookieStorage.shared.cookies(for: url)
-            let headers = HTTPCookie.requestHeaderFields(with: cookies!)
-            request.allHTTPHeaderFields = headers
-            let webPage = WebViewController(urlRequest: request)
-            self.show(webPage, sender: self)
+            let requestURL = URL(string: "https://mfriends.myschoolapp.com/api/resourceboardcontainer/usercontainersget/?personaId=2&dateMask=0&levels=1151")!
+            let semaphore = DispatchSemaphore(value: 0)
+            DispatchQueue.main.async {
+                self.navigationController?.showProgress()
+                self.navigationController?.setIndeterminate(true)
+            }
+            
+            let task = URLSession.shared.dataTask(with: requestURL, completionHandler: { (data, response, error) in
+                self.navigationController?.cancelProgress()
+                guard error == nil else {
+                    presentErrorMessage(presentMessage: error!.localizedDescription, layout: .CardView)
+                    return
+                }
+                
+                do {
+                    guard let json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? [[String: Any]] else {
+                        presentErrorMessage(presentMessage: "Internal error: incorrect data format", layout: .StatusLine)
+                        return
+                    }
+                    
+                    guard let lunchObject = json.filter({ $0["ShortDescription"] as? String == "What's For Lunch?" }).first else {
+                        presentErrorMessage(presentMessage: "Cannot find lunch menu", layout: .StatusLine)
+                        return
+                    }
+                    
+                    guard let lunchUrl = lunchObject["Url"] as? String else {
+                        return
+                    }
+                    
+                    let (fileName, _) = NetworkOperations().downloadFile(url: URL(string: lunchUrl)!, withName: "LunchMenu.pdf")
+                    if fileName != nil {
+                        NetworkOperations().openFile(fileUrl: fileName!, from: self)
+                    }
+                } catch {
+                    presentErrorMessage(presentMessage: error.localizedDescription, layout: .StatusLine)
+                }
+                
+                semaphore.signal()
+            })
+            
+            task.resume()
+            semaphore.wait()
         }
     }
 }
