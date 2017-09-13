@@ -63,6 +63,9 @@ class homeworkViewController: UITableViewController, UIViewControllerPreviewingD
     }
 
     override func viewDidAppear(_ animated: Bool) {
+        if filter == 2 {
+            daySelected = Date()
+        }
         DispatchQueue.global().async {
             self.getHomework()
         }
