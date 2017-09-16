@@ -37,10 +37,7 @@ class courseFillController: UIViewController {
         formatter.dateFormat = "yyyyMMdd"
         let date = formatter.string(from: Date())
         userDefaults?.set(date, forKey: "refreshDate")
-        
-        DispatchQueue.global().async {
-            self.importCourse()
-        }
+        self.importCourse()
     }
     
     func importCourse() {

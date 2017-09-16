@@ -9,7 +9,7 @@
 import UIKit
 import XLPagerTabStrip
 
-class timeTableParentViewController: TwitterPagerTabStripViewController {
+class timeTableParentViewController: SegmentedPagerTabStripViewController {
     override public func viewControllers(for pagerTabStripController: PagerTabStripViewController) -> [UIViewController] {
         var arrayToReturn = [UIViewController]()
         for alphabet in "ABCDEF".characters {
