@@ -146,7 +146,7 @@ extension classTopicViewController: UICollectionViewDelegate, UICollectionViewDa
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let viewSize = UIScreen.main.bounds.size.width / 2
+        let viewSize = Layout().squareSize()
         return CGSize(width: viewSize, height: viewSize)
     }
 
