@@ -39,7 +39,7 @@
 		E4AAD1611EE8CC9E00E4E5EC /* bell.png in Resources */ = {isa = PBXBuildFile; fileRef = E4AAD1601EE8CC9E00E4E5EC /* bell.png */; };
 		E4ADC9EE1E882172002A46F7 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4ADC9ED1E882172002A46F7 /* Extensions.swift */; };
 		E4B340041F0891AE00D6039A /* ClassPagerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B340031F0891AE00D6039A /* ClassPagerViewController.swift */; };
-		E4B340061F08942000D6039A /* ClassTopicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B340051F08942000D6039A /* ClassTopicViewController.swift */; };
+		E4B340061F08942000D6039A /* classTopicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B340051F08942000D6039A /* classTopicViewController.swift */; };
 		E4B340081F0905EB00D6039A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E4B340071F0905EB00D6039A /* GoogleService-Info.plist */; };
 		E4B3400A1F0905F400D6039A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E4B340091F0905F400D6039A /* GoogleService-Info.plist */; };
 		E4BD88961F35973C0000FEF3 /* TargetPublicFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BD88951F35973C0000FEF3 /* TargetPublicFunctions.swift */; };
@@ -135,7 +135,7 @@
 		E4AAD1601EE8CC9E00E4E5EC /* bell.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bell.png; sourceTree = "<group>"; };
 		E4ADC9ED1E882172002A46F7 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		E4B340031F0891AE00D6039A /* ClassPagerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClassPagerViewController.swift; sourceTree = "<group>"; };
-		E4B340051F08942000D6039A /* ClassTopicViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClassTopicViewController.swift; sourceTree = "<group>"; };
+		E4B340051F08942000D6039A /* classTopicViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = classTopicViewController.swift; sourceTree = "<group>"; };
 		E4B340071F0905EB00D6039A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		E4B340091F0905F400D6039A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		E4BD88951F35973C0000FEF3 /* TargetPublicFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TargetPublicFunctions.swift; sourceTree = "<group>"; };
@@ -195,7 +195,7 @@
 			isa = PBXGroup;
 			children = (
 				E4BD88991F397BE80000FEF3 /* TopicDetailViewController.swift */,
-				E4B340051F08942000D6039A /* ClassTopicViewController.swift */,
+				E4B340051F08942000D6039A /* classTopicViewController.swift */,
 				E445E73D1EAD8B7D00794560 /* MoreViewController.swift */,
 				E472A15F1EFB6F8400EF5A74 /* ClassDetailViewController.swift */,
 				E4B340031F0891AE00D6039A /* ClassPagerViewController.swift */,
@@ -591,7 +591,7 @@
 				E4F86B331DF0E20C00CAD72B /* MainViewController.swift in Sources */,
 				E4BD88981F383A060000FEF3 /* ClassTimetableViewController.swift in Sources */,
 				E4E8B21A1F1C5AF200913DAE /* GradeViewController.swift in Sources */,
-				E4B340061F08942000D6039A /* ClassTopicViewController.swift in Sources */,
+				E4B340061F08942000D6039A /* classTopicViewController.swift in Sources */,
 				E4BD88961F35973C0000FEF3 /* TargetPublicFunctions.swift in Sources */,
 				E4ADC9EE1E882172002A46F7 /* Extensions.swift in Sources */,
 				E472A1601EFB6F8400EF5A74 /* ClassDetailViewController.swift in Sources */,
