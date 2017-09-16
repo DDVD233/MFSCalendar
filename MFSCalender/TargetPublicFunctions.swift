@@ -427,3 +427,17 @@ class NetworkOperations {
     }
 }
 
+class Layout {
+    func squareSize() -> CGFloat {
+        let screenWidth = UIScreen.main.bounds.size.width
+        var viewSize = screenWidth / 2
+        if screenWidth > 453 {
+            print(Int(screenWidth))
+            let numberOfItems = Int(screenWidth / 151)
+            viewSize = screenWidth / CGFloat(numberOfItems)
+        }
+        
+        return viewSize
+    }
+}
+

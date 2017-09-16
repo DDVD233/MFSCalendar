@@ -177,13 +177,7 @@ extension classListController: UICollectionViewDataSource, UICollectionViewDeleg
 
 extension classListController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let screenWidth = UIScreen.main.bounds.size.width
-        var viewSize = screenWidth / 2
-        if screenWidth > 453 {
-            print(Int(screenWidth))
-            let numberOfItems = Int(screenWidth / 151)
-            viewSize = screenWidth / CGFloat(numberOfItems)
-        }
+        let viewSize = Layout().squareSize()
         return CGSize(width: viewSize, height: viewSize)
     }
 }
