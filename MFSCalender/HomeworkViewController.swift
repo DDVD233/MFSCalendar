@@ -16,6 +16,7 @@ import DGElasticPullToRefresh
 import M13ProgressSuite
 import XLPagerTabStrip
 import Alamofire
+import Crashlytics
 
 
 class homeworkViewController: UITableViewController, UIViewControllerPreviewingDelegate, IndicatorInfoProvider, UIDocumentPickerDelegate {
@@ -58,8 +59,10 @@ class homeworkViewController: UITableViewController, UIViewControllerPreviewingD
             homeworkTable.dg_setPullToRefreshBackgroundColor(tableView.backgroundColor!)
         }
         
-        if self.traitCollection.forceTouchCapability == .available {
-            registerForPreviewing(with: self, sourceView: homeworkTable)
+        if #available(iOS 9.0, *) {
+            if self.traitCollection.forceTouchCapability == .available {
+                registerForPreviewing(with: self, sourceView: homeworkTable)
+            }
         }
 
     }
@@ -166,6 +169,8 @@ class homeworkViewController: UITableViewController, UIViewControllerPreviewingD
             self.navigationController?.cancelProgress()
             self.tableView.reloadData()
         }
+        
+        Answers.logContentView(withName: "Homework", contentType: "Homework", contentId: "1", customAttributes: nil)
     }
 
     func manageDate(originalData: [[String: Any]]) {
@@ -288,6 +293,7 @@ class homeworkViewController: UITableViewController, UIViewControllerPreviewingD
         }
     }
     
+    @available(iOS 9.0, *)
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
         guard let indexPath = homeworkTable.indexPathForRow(at: location) else {
             return nil

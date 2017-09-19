@@ -12,6 +12,7 @@ import SwiftyJSON
 import Alamofire
 import M13Checkbox
 import SafariServices
+import JSQWebViewController
 
 func areEqual<T:Equatable>(type: T.Type, a: Any?, b: Any?) -> Bool? {
     guard let a = a as? T, let b = b as? T else {
@@ -421,8 +422,13 @@ class NetworkOperations {
             url = "http://" + url
         }
         if let urlToOpen = URL(string: url) {
-            let safariViewController = SFSafariViewController(url: urlToOpen)
-            viewController.present(safariViewController, animated: true, completion: nil)
+            if #available(iOS 9.0, *) {
+                let safariViewController = SFSafariViewController(url: urlToOpen)
+                viewController.present(safariViewController, animated: true, completion: nil)
+            } else {
+                let webViewController = WebViewController(url: urlToOpen)
+                viewController.show(webViewController, sender: viewController)
+            }
         }
     }
 }

@@ -9,6 +9,7 @@
 import UIKit
 import M13Checkbox
 import SafariServices
+import JSQWebViewController
 
 class homeworKDetailViewController: UIViewController, SFSafariViewControllerDelegate {
     
@@ -129,10 +130,15 @@ extension homeworKDetailViewController: UITableViewDelegate, UITableViewDataSour
         
         if let linkList = assignmentList2["LinkItems"] as? [[String: Any]] {
             if let link = linkList[indexPath.row]["Url"] as? String {
-                let safari = SFSafariViewController(url: URL(string: link)!)
-                safari.delegate = self
-                
-                present(safari, animated: true, completion: nil)
+                if #available(iOS 9.0, *) {
+                    let safari = SFSafariViewController(url: URL(string: link)!)
+                    safari.delegate = self
+                    present(safari, animated: true, completion: nil)
+                } else {
+                    let webView = WebViewController(url: URL(string: link)!)
+                    self.show(webView, sender: self)
+                    // Fallback on earlier versions
+                }
             }
         }
     }

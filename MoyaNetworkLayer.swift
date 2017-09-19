@@ -30,6 +30,10 @@ enum MyService {
 fileprivate let assetDir: URL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!
 
 extension MyService: TargetType {
+    var headers: [String : String]? {
+        return nil
+    }
+    
 
     var baseURL: URL {
         switch self {
@@ -120,9 +124,9 @@ extension MyService: TargetType {
     var task: Task {
         switch self {
         case .downloadLargeProfilePhoto, .getCalendarEvent:
-            return .download(.request(downloadDestination))
+            return .downloadDestination(downloadDestination)
         default:
-            return .request
+            return .requestParameters(parameters: parameters ?? [:], encoding: parameterEncoding)
         }
     }
 }

@@ -29,8 +29,10 @@ class classListController: UIViewController, UIViewControllerPreviewingDelegate 
             sortClasses(classList: classList)
         }
         
-        if self.traitCollection.forceTouchCapability == .available {
-            registerForPreviewing(with: self, sourceView: classListCollectionView)
+        if #available(iOS 9.0, *) {
+            if self.traitCollection.forceTouchCapability == .available {
+                registerForPreviewing(with: self, sourceView: classListCollectionView)
+            }
         }
     }
 
@@ -122,6 +124,7 @@ extension classListController: UICollectionViewDataSource, UICollectionViewDeleg
         userDefaults?.set(classObject["index"], forKey: "indexForCourseToPresent")
     }
     
+    @available(iOS 9.0, *)
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
         guard let indexPath = classListCollectionView.indexPathForItem(at: location) else {
             return nil

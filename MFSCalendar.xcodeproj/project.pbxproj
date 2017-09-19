@@ -117,17 +117,16 @@
 		E472A15F1EFB6F8400EF5A74 /* ClassDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClassDetailViewController.swift; sourceTree = "<group>"; };
 		E472A1611EFB72EA00EF5A74 /* SettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		E472A1631EFB735C00EF5A74 /* ClassListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClassListViewController.swift; sourceTree = "<group>"; };
-		E484E6511EFA2FF20056F2D5 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = "zh-Hans"; path = "zh-Hans.lproj/MainInterface.storyboard"; sourceTree = "<group>"; };
 		E484E6541EFA33260056F2D5 /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		E484E6591EFA337F0056F2D5 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E484E65B1EFA338B0056F2D5 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		E489F6C61F5A821E00F2269F /* ProjectPublicFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProjectPublicFunctions.swift; sourceTree = "<group>"; };
+		E48C89E61F71A8EA00D01B61 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		E48D4DEF1E61F275008B0A97 /* ADayViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ADayViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		E48D4DF91E61F5EC008B0A97 /* BlankArray.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = BlankArray.plist; sourceTree = "<group>"; };
 		E48D4DFF1E61FC25008B0A97 /* Class Schedule.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Class Schedule.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E48D4E011E61FC26008B0A97 /* NotificationCenter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationCenter.framework; path = System/Library/Frameworks/NotificationCenter.framework; sourceTree = SDKROOT; };
 		E48D4E041E61FC26008B0A97 /* TodayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = TodayViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		E48D4E071E61FC26008B0A97 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		E48D4E091E61FC26008B0A97 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E48D4E111E620698008B0A97 /* Class Schedule.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Class Schedule.entitlements"; sourceTree = "<group>"; };
 		E49321871F5D32E800C65067 /* .travis.yml */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; fileEncoding = 4; path = .travis.yml; sourceTree = "<group>"; };
@@ -634,8 +633,7 @@
 		E48D4E061E61FC26008B0A97 /* MainInterface.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				E48D4E071E61FC26008B0A97 /* Base */,
-				E484E6511EFA2FF20056F2D5 /* zh-Hans */,
+				E48C89E61F71A8EA00D01B61 /* Base */,
 			);
 			name = MainInterface.storyboard;
 			sourceTree = "<group>";
@@ -667,7 +665,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Class Schedule/Class Schedule.entitlements";
 				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				INFOPLIST_FILE = "Class Schedule/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.dwei.ClassSchedule;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -685,7 +683,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Class Schedule/Class Schedule.entitlements";
 				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				INFOPLIST_FILE = "Class Schedule/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.dwei.ClassSchedule;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -813,7 +811,7 @@
 				CODE_SIGN_ENTITLEMENTS = MFSCalender/MFSCalender.entitlements;
 				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				INFOPLIST_FILE = MFSCalender/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.dwei;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -831,7 +829,7 @@
 				CODE_SIGN_ENTITLEMENTS = MFSCalender/MFSCalender.entitlements;
 				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				INFOPLIST_FILE = MFSCalender/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.dwei;
 				PRODUCT_NAME = "$(TARGET_NAME)";

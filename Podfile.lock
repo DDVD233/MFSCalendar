@@ -1,26 +1,28 @@
 PODS:
-  - Alamofire (4.5.0)
-  - Crashlytics (3.8.4):
+  - Alamofire (4.5.1)
+  - Crashlytics (3.8.6):
     - Fabric (~> 1.6.3)
   - DGElasticPullToRefresh (1.1)
   - Down (0.3.4)
   - DZNEmptyDataSet (1.8.1)
-  - Fabric (1.6.11)
-  - Firebase/Core (4.0.3):
-    - FirebaseAnalytics (= 4.0.2)
-    - FirebaseCore (= 4.0.3)
-  - Firebase/Performance (4.0.3):
+  - Fabric (1.6.13)
+  - Firebase/Core (4.1.1):
+    - FirebaseAnalytics (= 4.0.3)
+    - FirebaseCore (= 4.0.6)
+  - Firebase/Performance (4.1.1):
     - Firebase/Core
-    - FirebasePerformance (= 1.0.3)
-  - FirebaseAnalytics (4.0.2):
+    - FirebasePerformance (= 1.0.4)
+  - FirebaseAnalytics (4.0.3):
     - FirebaseCore (~> 4.0)
     - FirebaseInstanceID (~> 2.0)
     - GoogleToolboxForMac/NSData+zlib (~> 2.1)
-  - FirebaseCore (4.0.3):
+    - nanopb (~> 0.3)
+  - FirebaseCore (4.0.6):
     - GoogleToolboxForMac/NSData+zlib (~> 2.1)
-  - FirebaseInstanceID (2.0.0):
+    - nanopb (~> 0.3)
+  - FirebaseInstanceID (2.0.2):
     - FirebaseCore (~> 4.0)
-  - FirebasePerformance (1.0.3):
+  - FirebasePerformance (1.0.4):
     - FirebaseAnalytics (~> 4.0)
     - FirebaseInstanceID (~> 2.0)
     - GoogleToolboxForMac/Logger (~> 2.1)
@@ -33,32 +35,38 @@ PODS:
     - GoogleToolboxForMac/Defines (= 2.1.1)
   - GoogleToolboxForMac/NSData+zlib (2.1.1):
     - GoogleToolboxForMac/Defines (= 2.1.1)
-  - GTMSessionFetcher/Core (1.1.10)
+  - GTMSessionFetcher/Core (1.1.11)
   - JSQWebViewController (5.0.0)
-  - LTMorphingLabel (0.5.0)
+  - LTMorphingLabel (0.5.3)
   - M13Checkbox (3.1.3)
   - M13ProgressSuite (1.2.9)
-  - Moya (8.0.5):
-    - Moya/Core (= 8.0.5)
-  - Moya/Core (8.0.5):
+  - Moya (9.0.0):
+    - Moya/Core (= 9.0.0)
+  - Moya/Core (9.0.0):
     - Alamofire (~> 4.1)
     - Result (~> 3.0)
-  - NVActivityIndicatorView (3.6.1)
-  - Protobuf (3.3.0)
-  - RAMAnimatedTabBarController (2.2.0)
+  - nanopb (0.3.8):
+    - nanopb/decode (= 0.3.8)
+    - nanopb/encode (= 0.3.8)
+  - nanopb/decode (0.3.8)
+  - nanopb/encode (0.3.8)
+  - NVActivityIndicatorView (3.7.0):
+    - NVActivityIndicatorView/Presenter (= 3.7.0)
+  - NVActivityIndicatorView/Presenter (3.7.0)
+  - Protobuf (3.4.0)
   - ReachabilitySwift (3)
   - Result (3.2.3)
   - SCLAlertView (0.7.0)
   - SDWebImage (3.8.2):
     - SDWebImage/Core (= 3.8.2)
   - SDWebImage/Core (3.8.2)
-  - SkyFloatingLabelTextField (3.1.0)
-  - SnapKit (3.2.0)
+  - SkyFloatingLabelTextField (3.2.0)
+  - SnapKit (4.0.0)
   - Spring (1.0.3)
-  - SwiftDate (4.1.2)
-  - SwiftMessages (3.4.0)
+  - SwiftDate (4.4.1)
+  - SwiftMessages (3.5.1)
   - SwiftyJSON (3.1.4)
-  - UICircularProgressRing (1.6.1)
+  - UICircularProgressRing (1.7.2)
   - XLPagerTabStrip (7.0.0)
 
 DEPENDENCIES:
@@ -77,7 +85,6 @@ DEPENDENCIES:
   - M13ProgressSuite
   - Moya
   - NVActivityIndicatorView
-  - RAMAnimatedTabBarController
   - ReachabilitySwift
   - SCLAlertView
   - SDWebImage (~> 3.8)
@@ -101,41 +108,41 @@ CHECKOUT OPTIONS:
     :git: https://github.com/MengTo/Spring.git
 
 SPEC CHECKSUMS:
-  Alamofire: f28cdffd29de33a7bfa022cbd63ae95a27fae140
-  Crashlytics: 79e236942ca1e7fc641df1feb9a275360a78ab6a
+  Alamofire: 2d95912bf4c34f164fdfc335872e8c312acaea4a
+  Crashlytics: 95d05f4e4c19a771250c4bd9ce344d996de32bbf
   DGElasticPullToRefresh: 28f11a6026302a90f8ffebbc6e24748e584dddd3
   Down: 3f35b61e51a603df3e9e7e0289b15752e72f82e6
   DZNEmptyDataSet: 9525833b9e68ac21c30253e1d3d7076cc828eaa7
-  Fabric: 5911403591946b8228ab1c51d98f1d7137e863c6
-  Firebase: 9e33fdfbca37cab635c693883caa90a4475b842b
-  FirebaseAnalytics: ad41720e3e67fc63fbe3d2948d3e26932a8de311
-  FirebaseCore: c709067051de07bdaffdc4e735cd7299a23c463a
-  FirebaseInstanceID: 9fbf536668f4d3f0880e7438456dabd1376e294b
-  FirebasePerformance: 36bdb0500213b459ae991766801d5dc5399ff231
+  Fabric: 2fb5676bc811af011a04513451f463dac6803206
+  Firebase: 052c0de688fc87b414996eea13e223dd9fee3fa2
+  FirebaseAnalytics: 76f754d37ca5b04f36856729b6af3ca0152d1069
+  FirebaseCore: 28def3c643989c97ea5a69ea5000f5fa9902b9fd
+  FirebaseInstanceID: c4c7fca62c7b7330caee5da04f19a37ea37bb1c1
+  FirebasePerformance: f1ba9ac64960f958434171877f06a0d7021b45a7
   FSCalendar: a04b09f16f811bc92e82f3cf852a15225233b9d5
   GoogleToolboxForMac: 8e329f1b599f2512c6b10676d45736bcc2cbbeb0
-  GTMSessionFetcher: 30d874b96d0d76028f61fbd122801e3f030d47db
+  GTMSessionFetcher: 5ad62e8200fa00ed011fe5e08d27fef72c5b1429
   JSQWebViewController: 0461aa42612b221571556df61d9c09f080cb2eef
-  LTMorphingLabel: bc170be74b219b7dae0e5543a44676d16da70ff7
+  LTMorphingLabel: b85b6c1c5d0c4203e22f8d3dca722546f67b8410
   M13Checkbox: c132a7e0eb964731855eff67b883a0b21b7c0977
   M13ProgressSuite: ea9f7263e73e9215e6849dfa54e29ee0ad6a145c
-  Moya: c37eec09a098ba9991b5a963b291fc5704bdb9ef
-  NVActivityIndicatorView: 9f52a7f84bf5c6a798722c450fe3c198e01c56ed
-  Protobuf: d582fecf68201eac3d79ed61369ef45734394b9c
-  RAMAnimatedTabBarController: 4904a0ec08f2a4e935d0d3a5824551a77390b965
+  Moya: cf5e6ee93af526532f92614004b8ad2ea60fd845
+  nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
+  NVActivityIndicatorView: d3738df7e2e476aca0ba6bf32a8c9fbcfc33d64b
+  Protobuf: 03eef2ee0b674770735cf79d9c4d3659cf6908e8
   ReachabilitySwift: f5b9bb30a0777fac8f09ce8b067e32faeb29bb64
   Result: 128640a6347e8d2ae48b142556739a2d13f90ce6
   SCLAlertView: 8a14ffc40590c619e183eed2298b854385f30be1
   SDWebImage: 098e97e6176540799c27e804c96653ee0833d13c
-  SkyFloatingLabelTextField: 26a92ad407044dd5a7c3e4e348738ff0991514fe
-  SnapKit: 1ca44df72cfa543218d177cb8aab029d10d86ea7
+  SkyFloatingLabelTextField: 4e2d2f7160af660ed1da6bb9d0027b5c474b4b79
+  SnapKit: a42d492c16e80209130a3379f73596c3454b7694
   Spring: 3f02b5dc3308572ef177b3cad0fa7bbc4b0706f7
-  SwiftDate: 2dfdebd4f67ae71c9c3e2413ee3c56947f302858
-  SwiftMessages: e20aa1557fde1525ea369361bec4943cc0d08e7c
+  SwiftDate: a70a534d4feed03b2a2b575e36bef82dc2286a8d
+  SwiftMessages: ea0184c801030e52674c603896812c392c129248
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
-  UICircularProgressRing: 99419d03525be7b4ad29c0021e0fbb7d913b0030
+  UICircularProgressRing: 733ba68896727d8e658c4bf9a6a1093290396e15
   XLPagerTabStrip: 9be80a66c6b7d60306b2c0a6004965016d68f813
 
-PODFILE CHECKSUM: ac488349a889640fa2eca362b634c486fb86bf76
+PODFILE CHECKSUM: ed493abd76c3ad97c1751d75aeda21ad56aeb3f5
 
 COCOAPODS: 1.2.0

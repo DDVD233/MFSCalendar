@@ -59,10 +59,13 @@ class ADay: UIViewController, IndicatorInfoProvider {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        if self.traitCollection.forceTouchCapability == .available {
-            previewController = registerForPreviewing(with: self, sourceView: tableView)
+        if #available(iOS 9.0, *) {
+            if self.traitCollection.forceTouchCapability == .available {
+                previewController = registerForPreviewing(with: self, sourceView: tableView)
+            }
         }
     }
+    
 
     func dataFetching() {
         guard daySelected != nil else {
@@ -144,6 +147,7 @@ extension ADay: UITableViewDelegate, UITableViewDataSource, UIViewControllerPrev
         return cell!
     }
     
+    @available(iOS 9.0, *)
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
         print(location)
         guard let indexPath = tableView.indexPathForRow(at: location) else {
