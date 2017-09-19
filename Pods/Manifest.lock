@@ -1,0 +1,148 @@
+PODS:
+  - Alamofire (4.5.1)
+  - Crashlytics (3.8.6):
+    - Fabric (~> 1.6.3)
+  - DGElasticPullToRefresh (1.1)
+  - Down (0.3.4)
+  - DZNEmptyDataSet (1.8.1)
+  - Fabric (1.6.13)
+  - Firebase/Core (4.1.1):
+    - FirebaseAnalytics (= 4.0.3)
+    - FirebaseCore (= 4.0.6)
+  - Firebase/Performance (4.1.1):
+    - Firebase/Core
+    - FirebasePerformance (= 1.0.4)
+  - FirebaseAnalytics (4.0.3):
+    - FirebaseCore (~> 4.0)
+    - FirebaseInstanceID (~> 2.0)
+    - GoogleToolboxForMac/NSData+zlib (~> 2.1)
+    - nanopb (~> 0.3)
+  - FirebaseCore (4.0.6):
+    - GoogleToolboxForMac/NSData+zlib (~> 2.1)
+    - nanopb (~> 0.3)
+  - FirebaseInstanceID (2.0.2):
+    - FirebaseCore (~> 4.0)
+  - FirebasePerformance (1.0.4):
+    - FirebaseAnalytics (~> 4.0)
+    - FirebaseInstanceID (~> 2.0)
+    - GoogleToolboxForMac/Logger (~> 2.1)
+    - GoogleToolboxForMac/NSData+zlib (~> 2.1)
+    - GTMSessionFetcher/Core (~> 1.1)
+    - Protobuf (~> 3.1)
+  - FSCalendar (2.7.9)
+  - GoogleToolboxForMac/Defines (2.1.1)
+  - GoogleToolboxForMac/Logger (2.1.1):
+    - GoogleToolboxForMac/Defines (= 2.1.1)
+  - GoogleToolboxForMac/NSData+zlib (2.1.1):
+    - GoogleToolboxForMac/Defines (= 2.1.1)
+  - GTMSessionFetcher/Core (1.1.11)
+  - JSQWebViewController (5.0.0)
+  - LTMorphingLabel (0.5.3)
+  - M13Checkbox (3.1.3)
+  - M13ProgressSuite (1.2.9)
+  - Moya (9.0.0):
+    - Moya/Core (= 9.0.0)
+  - Moya/Core (9.0.0):
+    - Alamofire (~> 4.1)
+    - Result (~> 3.0)
+  - nanopb (0.3.8):
+    - nanopb/decode (= 0.3.8)
+    - nanopb/encode (= 0.3.8)
+  - nanopb/decode (0.3.8)
+  - nanopb/encode (0.3.8)
+  - NVActivityIndicatorView (3.7.0):
+    - NVActivityIndicatorView/Presenter (= 3.7.0)
+  - NVActivityIndicatorView/Presenter (3.7.0)
+  - Protobuf (3.4.0)
+  - ReachabilitySwift (3)
+  - Result (3.2.3)
+  - SCLAlertView (0.7.0)
+  - SDWebImage (3.8.2):
+    - SDWebImage/Core (= 3.8.2)
+  - SDWebImage/Core (3.8.2)
+  - SkyFloatingLabelTextField (3.2.0)
+  - SnapKit (4.0.0)
+  - Spring (1.0.3)
+  - SwiftDate (4.4.1)
+  - SwiftMessages (3.5.1)
+  - SwiftyJSON (3.1.4)
+  - UICircularProgressRing (1.7.2)
+  - XLPagerTabStrip (7.0.0)
+
+DEPENDENCIES:
+  - Alamofire (~> 4.4)
+  - Crashlytics
+  - DGElasticPullToRefresh
+  - Down
+  - DZNEmptyDataSet
+  - Fabric
+  - Firebase/Core
+  - Firebase/Performance
+  - FSCalendar
+  - JSQWebViewController
+  - LTMorphingLabel
+  - M13Checkbox
+  - M13ProgressSuite
+  - Moya
+  - NVActivityIndicatorView
+  - ReachabilitySwift
+  - SCLAlertView
+  - SDWebImage (~> 3.8)
+  - SkyFloatingLabelTextField
+  - SnapKit
+  - Spring (from `https://github.com/MengTo/Spring.git`, branch `swift3`)
+  - SwiftDate (~> 4.0)
+  - SwiftMessages
+  - SwiftyJSON
+  - UICircularProgressRing
+  - XLPagerTabStrip
+
+EXTERNAL SOURCES:
+  Spring:
+    :branch: swift3
+    :git: https://github.com/MengTo/Spring.git
+
+CHECKOUT OPTIONS:
+  Spring:
+    :commit: 8201b5c93bd7ebdf4cd18160bcde1e6e88c2be64
+    :git: https://github.com/MengTo/Spring.git
+
+SPEC CHECKSUMS:
+  Alamofire: 2d95912bf4c34f164fdfc335872e8c312acaea4a
+  Crashlytics: 95d05f4e4c19a771250c4bd9ce344d996de32bbf
+  DGElasticPullToRefresh: 28f11a6026302a90f8ffebbc6e24748e584dddd3
+  Down: 3f35b61e51a603df3e9e7e0289b15752e72f82e6
+  DZNEmptyDataSet: 9525833b9e68ac21c30253e1d3d7076cc828eaa7
+  Fabric: 2fb5676bc811af011a04513451f463dac6803206
+  Firebase: 052c0de688fc87b414996eea13e223dd9fee3fa2
+  FirebaseAnalytics: 76f754d37ca5b04f36856729b6af3ca0152d1069
+  FirebaseCore: 28def3c643989c97ea5a69ea5000f5fa9902b9fd
+  FirebaseInstanceID: c4c7fca62c7b7330caee5da04f19a37ea37bb1c1
+  FirebasePerformance: f1ba9ac64960f958434171877f06a0d7021b45a7
+  FSCalendar: a04b09f16f811bc92e82f3cf852a15225233b9d5
+  GoogleToolboxForMac: 8e329f1b599f2512c6b10676d45736bcc2cbbeb0
+  GTMSessionFetcher: 5ad62e8200fa00ed011fe5e08d27fef72c5b1429
+  JSQWebViewController: 0461aa42612b221571556df61d9c09f080cb2eef
+  LTMorphingLabel: b85b6c1c5d0c4203e22f8d3dca722546f67b8410
+  M13Checkbox: c132a7e0eb964731855eff67b883a0b21b7c0977
+  M13ProgressSuite: ea9f7263e73e9215e6849dfa54e29ee0ad6a145c
+  Moya: cf5e6ee93af526532f92614004b8ad2ea60fd845
+  nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
+  NVActivityIndicatorView: d3738df7e2e476aca0ba6bf32a8c9fbcfc33d64b
+  Protobuf: 03eef2ee0b674770735cf79d9c4d3659cf6908e8
+  ReachabilitySwift: f5b9bb30a0777fac8f09ce8b067e32faeb29bb64
+  Result: 128640a6347e8d2ae48b142556739a2d13f90ce6
+  SCLAlertView: 8a14ffc40590c619e183eed2298b854385f30be1
+  SDWebImage: 098e97e6176540799c27e804c96653ee0833d13c
+  SkyFloatingLabelTextField: 4e2d2f7160af660ed1da6bb9d0027b5c474b4b79
+  SnapKit: a42d492c16e80209130a3379f73596c3454b7694
+  Spring: 3f02b5dc3308572ef177b3cad0fa7bbc4b0706f7
+  SwiftDate: a70a534d4feed03b2a2b575e36bef82dc2286a8d
+  SwiftMessages: ea0184c801030e52674c603896812c392c129248
+  SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
+  UICircularProgressRing: 733ba68896727d8e658c4bf9a6a1093290396e15
+  XLPagerTabStrip: 9be80a66c6b7d60306b2c0a6004965016d68f813
+
+PODFILE CHECKSUM: ed493abd76c3ad97c1751d75aeda21ad56aeb3f5
+
+COCOAPODS: 1.2.0
