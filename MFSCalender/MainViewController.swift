@@ -49,6 +49,9 @@ class classViewCell: UICollectionViewCell {
     @IBOutlet var homeworkButton: UIButton!
 
     @IBOutlet var classViewButton: UIButton!
+    
+    @IBOutlet var endTimeButton: UILabel!
+    
 
     @IBAction func classViewButtonClicked(_ sender: Any) {
         guard index != nil else {
@@ -63,6 +66,11 @@ class classViewCell: UICollectionViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
+        endTimeButton.isHidden = true
+    }
+    
+    func updateTimer() {
+        
     }
 }
 
@@ -78,6 +86,8 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     @IBOutlet weak var eventView: UITableView!
     @IBOutlet weak var classView: UICollectionView!
     @IBOutlet weak var bottomView: UIView!
+    @IBOutlet var eventViewLarge: UIView!
+    @IBOutlet var eventBottomLayoutConstraint: NSLayoutConstraint!
 
     let formatter = DateFormatter()
     var listEvents = [[String: Any]]()
@@ -106,6 +116,15 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         self.eventView.emptyDataSetDelegate = self
         self.eventView.emptyDataSetSource = self
         self.eventView.separatorStyle = .singleLine
+        
+        if #available(iOS 11, *) {
+            eventBottomLayoutConstraint.isActive = true
+        } else {
+            eventBottomLayoutConstraint.isActive = false
+            eventViewLarge.snp.makeConstraints({ make in
+                make.bottom.equalTo(self.bottomLayoutGuide.snp.top).offset(-10)
+            })
+        }
 
         if userDefaults?.object(forKey: "firstName") == nil {
             userDefaults?.set(false, forKey: "didLogin")

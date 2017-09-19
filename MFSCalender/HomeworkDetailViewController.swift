@@ -111,7 +111,15 @@ extension homeworKDetailViewController: UITableViewDelegate, UITableViewDataSour
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        if section == 0 {
+            return 1
+        } else {
+            if let linkList = assignmentList2["LinkItems"] as? [[String: Any]] {
+                return linkList.count
+            }
+            
+            return 0
+        }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -120,7 +128,7 @@ extension homeworKDetailViewController: UITableViewDelegate, UITableViewDataSour
         }
         
         if let linkList = assignmentList2["LinkItems"] as? [[String: Any]] {
-            if let link = linkList[0]["Url"] as? String {
+            if let link = linkList[indexPath.row]["Url"] as? String {
                 let safari = SFSafariViewController(url: URL(string: link)!)
                 safari.delegate = self
                 
