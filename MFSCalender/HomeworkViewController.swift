@@ -15,9 +15,10 @@ import DZNEmptyDataSet
 import DGElasticPullToRefresh
 import M13ProgressSuite
 import XLPagerTabStrip
+import Alamofire
 
 
-class homeworkViewController: UITableViewController, UIViewControllerPreviewingDelegate, IndicatorInfoProvider {
+class homeworkViewController: UITableViewController, UIViewControllerPreviewingDelegate, IndicatorInfoProvider, UIDocumentPickerDelegate {
 
 
     @IBOutlet weak var homeworkTable: UITableView!
@@ -34,6 +35,7 @@ class homeworkViewController: UITableViewController, UIViewControllerPreviewingD
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        setLargeTitle()
         homeworkTable.rowHeight = UITableViewAutomaticDimension
         homeworkTable.estimatedRowHeight = 80
         homeworkTable.emptyDataSetSource = self
@@ -60,6 +62,18 @@ class homeworkViewController: UITableViewController, UIViewControllerPreviewingD
             registerForPreviewing(with: self, sourceView: homeworkTable)
         }
 
+    }
+    
+    func setLargeTitle() {
+//        if #available(iOS 11.0, *) {
+//            self.navigationController?.navigationBar.prefersLargeTitles = true
+//            self.navigationController?.navigationBar.backgroundColor = UIColor(hexString: 0xFF7E79)
+//            self.navigationController?.setBackgroundColor(UIColor(hexString: 0xFF7E79))
+//            guard let statusBar = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar") as? UIView else { return }
+//
+//            statusBar.backgroundColor = UIColor(hexString: 0xFF7E79)
+//            UIApplication.shared.statusBarStyle = .lightContent
+//        }
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -254,11 +268,12 @@ class homeworkViewController: UITableViewController, UIViewControllerPreviewingD
             return nil
         }
         
-        guard let assignmentID = homework["assignment_index_id"] as? Int else {
+        guard let assignmentIndexID = homework["assignment_index_id"] as? Int, let assignmentID = homework["assignment_id"] as? Int else {
             return nil
         }
         
-        userDefaults?.set(assignmentID, forKey: "indexIdForAssignmentToPresent")
+        userDefaults?.set(assignmentIndexID, forKey: "indexIdForAssignmentToPresent")
+        userDefaults?.set(assignmentID, forKey: "idForAssignmentToPresent")
         
         guard let viewController = storyboard?.instantiateViewController(withIdentifier: "homeworkDetailViewController") else {
             return nil
@@ -312,10 +327,6 @@ class homeworkViewController: UITableViewController, UIViewControllerPreviewingD
         if let assignmentIndexId = homework["assignment_index_id"] as? Int {
             cell.assignmentIndexId = String(describing: assignmentIndexId)
         }
-
-//        if let sectionId = homework["section_id"] as? Int {
-//            cell.sectionId = String(describing: sectionId)
-//        }
         
         if let description = homework["short_description"] as? String {
             if let attributedString = description.convertToHtml() {
@@ -342,6 +353,14 @@ class homeworkViewController: UITableViewController, UIViewControllerPreviewingD
             cell.checkMark.setCheckState(checkState, animated: false)
         }
         
+        if cell.checkMark.checkState == .unchecked && homework["drop_box_ind"] as? Bool == true {
+            cell.checkMark.isHidden = true
+            cell.submitButton.isHidden = false
+        } else {
+            cell.checkMark.isHidden = false
+            cell.submitButton.isHidden = true
+        }
+        
         if homework["has_grade"] as? Bool == true {
             cell.checkMark.setCheckState(.checked, animated: false)
             cell.checkMark.isEnabled = false
@@ -359,15 +378,19 @@ class homeworkViewController: UITableViewController, UIViewControllerPreviewingD
 
         cell.checkMark.tintColor = cell.tagView.backgroundColor
         
-//        if self.traitCollection.forceTouchCapability == .available {
-//            registerForPreviewing(with: self, sourceView: cell)
-//        }
-        
         return cell
     }
     
     func indicatorInfo(for pagerTabStripController: PagerTabStripViewController) -> IndicatorInfo {
         return IndicatorInfo(title: "Homework")
+    }
+    
+    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentAt url: URL) {
+        print("picked")
+    }
+    
+    func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
+        print("Cancelled")
     }
 }
 
@@ -405,12 +428,12 @@ extension homeworkViewController: DZNEmptyDataSetDelegate {
     }
 }
 
-class homeworkViewCell: UITableViewCell {
+class homeworkViewCell: UITableViewCell, UIDocumentPickerDelegate {
     @IBOutlet weak var checkMark: M13Checkbox!
     @IBOutlet weak var homeworkType: UILabel!
     @IBOutlet weak var homeworkClass: UILabel!
     @IBOutlet weak var tagView: UIView!
-
+    @IBOutlet var submitButton: UIButton!
     @IBOutlet var shortDescription: UITextView!
 
     @IBOutlet var activityIndicator: UIActivityIndicatorView!
@@ -429,7 +452,49 @@ class homeworkViewCell: UITableViewCell {
             shortDescription.isUserInteractionEnabled = false
         }
     }
-
+    
+    @IBAction func submit(_ sender: Any) {
+        let documentPicker = UIDocumentPickerViewController(documentTypes: ["public.content"], in: .import)
+        documentPicker.delegate = self
+        parentViewController!.present(documentPicker, animated: true, completion: nil)
+    }
+    
+    func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
+        print("cancelled")
+    }
+    
+    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+        guard loginAuthentication().success else {
+            return
+        }
+        let fileURL = urls[0]
+        let queue = DispatchQueue.global()
+        Alamofire.upload(fileURL, to: "https://mfriends.myschoolapp.com/app/utilities/FileTransferHandler.ashx").responseJSON(queue: queue, options: .allowFragments, completionHandler: { response in
+            if let jsonList = response.result.value as? [[String: Any]] {
+                print(jsonList)
+                guard !jsonList.isEmpty else {
+                    return
+                }
+                let json = jsonList[0]
+                self.confirmSubmission(json: json)
+            }
+        })
+    }
+    
+    func confirmSubmission(json: [String: Any]) {
+        let studentId = loginAuthentication().userId
+        guard let name = json["name"] as? String, let originalName = json["original_name"] as? String, let size = json["size"] as? Int else {
+            return
+        }
+        let parameters = ["StudentUserId": studentId,
+                          "AssignmentIndexId": assignmentIndexId ?? "",
+                          "ReadyInd": 1,
+                          "files":[["Name": name, "FullPath": originalName, "Size": size]]] as [String : Any]
+        Alamofire.request("https://mfriends.myschoolapp.com/api/assignment2/DropBoxSave?format=json", method: .post, parameters: parameters).responseJSON(queue: DispatchQueue.global(), options: .allowFragments, completionHandler: { response in
+            
+        })
+    }
+    
     func checkDidChange(checkMark: M13Checkbox) {
         if #available(iOS 10.0, *) {
             let generator = UIImpactFeedbackGenerator(style: .medium)

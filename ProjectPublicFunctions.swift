@@ -75,10 +75,24 @@ func getClassDataAt(period: Int, day: String) -> [[String: Any]] {
     }
 
     let lunch = ["className": "Lunch", "roomNumber": "DH/C", "teacher": "", "period": 11] as [String: Any]
+    let meetingForWorship = ["className": "Meeting For Worship", "roomNumber": "Meeting House", "teacher": "", "period": 4] as [String: Any]
     
     switch period {
     case 1...8:
         listClasses = Array(allClasses[(period - 1)...7])
+        
+        if listClasses.count >= 5 {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "EE"
+            let day = dateFormatter.string(from: Date())
+            if day == "Wed" {
+//                currentClass == 1 -> index = 3
+//                currentClass == 2 -> index = 2
+//                currentClass == 3 -> index = 1
+//                currentClass == 4 -> index = 0
+                listClasses[4 - period] = meetingForWorship
+            }
+        }
         
         if listClasses.count > 2 { //Before lunch
             listClasses.insert(lunch, at: 7 - period)
