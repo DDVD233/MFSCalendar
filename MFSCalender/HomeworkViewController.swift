@@ -349,8 +349,13 @@ class homeworkViewController: UITableViewController, UIViewControllerPreviewingD
 
         cell.homeworkClass.text = homework["groupname"] as? String
 
-        let homeworkType = homework["assignment_type"] as? String ?? ""
-        cell.homeworkType.text = homeworkType
+        let homeworkType = homework["assignment_type"] as? String ?? "N/A"
+        if homeworkType.isEmpty {
+            cell.tagView.isHidden = true
+        } else {
+            cell.tagView.isHidden = false
+            cell.homeworkType.text = homeworkType
+        }
 
         cell.tagView.backgroundColor = HomeworkView().colorForTheType(type: homeworkType)
 
@@ -477,6 +482,7 @@ class homeworkViewCell: UITableViewCell, UIDocumentPickerDelegate {
         let queue = DispatchQueue.global()
         Alamofire.upload(fileURL, to: "https://mfriends.myschoolapp.com/app/utilities/FileTransferHandler.ashx").responseJSON(queue: queue, options: .allowFragments, completionHandler: { response in
             if let jsonList = response.result.value as? [[String: Any]] {
+                print(response.result.value ?? "None")
                 print(jsonList)
                 guard !jsonList.isEmpty else {
                     return

@@ -262,17 +262,19 @@ class HomeworkView {
     func colorForTheType(type: String) -> UIColor {
         switch type {
         case "Homework":
-            return UIColor(hexString: 0xF44336)
+            return UIColor(hexString: 0xF44336) // Red 500
         case "Quiz":
-            return UIColor(hexString: 0x2196F3)
+            return UIColor(hexString: 0x2196F3) // Light Blue 500
         case "Test":
-            return UIColor(hexString: 0x3F51B5)
+            return UIColor(hexString: 0x3F51B5) // Blue 500
         case "Project":
-            return UIColor(hexString: 0xFF9800)
+            return UIColor(hexString: 0xFF9800) // Orange 500
         case "Classwork":
-            return UIColor(hexString: 0x795548)
+            return UIColor(hexString: 0x795548) // Brown 500
+        case "Communicative Skills":
+            return UIColor(hexString: 0x43A047) // Green 600
         default:
-            return UIColor(hexString: 0x607D8B)
+            return UIColor(hexString: 0x607D8B) // Grey 500
         }
     }
     
