@@ -4289,9 +4289,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				F0B89DE0DF4D5162721A2E6D4DF90173 /* DownView.bundle in Resources */,
+				732E62248C363923F19C6FC1F74F6682 /* case_fold_switch.inc in Resources */,
 				5573627DA426B1A30EBC4E98B207452B /* module.modulemap in Resources */,
 				38365B1A126010AA21B9A705ED9CCCD4 /* COPYING in Resources */,
-				732E62248C363923F19C6FC1F74F6682 /* case_fold_switch.inc in Resources */,
 				0F64B23D9904DFC77C5513BB5EA2886E /* entities.inc in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4390,7 +4390,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				93A9E42B1AC366DE0C60808A398A68C4 /* blocks.c in Sources */,
-				CA07CEEA9D5D75B8B48C737ABEB1E2E9 /* buffer.c in Sources */,
 				BBD11D8A0E7C1A4FC07FA889EDB027CE /* cmark.c in Sources */,
 				C8BAA54ED7FE81AEFB3BA2299A66DFDF /* cmark_ctype.c in Sources */,
 				88A0F9D1470E5D1D5C10723E10C81BB8 /* commonmark.c in Sources */,
@@ -4407,6 +4406,7 @@
 				D5479E397369DA8085EA4291027D62FA /* DownRenderable.swift in Sources */,
 				BACEEB874A535FE4B64D39F3DBB74790 /* DownView.swift in Sources */,
 				DFEF2EBF68AD63A4DA83E4CF01AC7ABB /* DownXMLRenderable.swift in Sources */,
+				CA07CEEA9D5D75B8B48C737ABEB1E2E9 /* buffer.c in Sources */,
 				3037910322ADD371A4C5A9218EAFC531 /* houdini_href_e.c in Sources */,
 				F85B279E312FDDF0B2E11F42C514CD6E /* houdini_html_e.c in Sources */,
 				E12C229ABEAB8018F86CCD501616A09F /* houdini_html_u.c in Sources */,
@@ -4414,12 +4414,12 @@
 				33E1DB411CBD2E221B309FE689340093 /* inlines.c in Sources */,
 				82340BB3A58177854A4364F01B44088F /* iterator.c in Sources */,
 				F85BDA0E4C4E15968384FB7FE541A3BB /* latex.c in Sources */,
-				D54976471972C6DD61C91C034B666785 /* man.c in Sources */,
 				36A295017095C778F1296D132282EC32 /* node.c in Sources */,
 				B6E0AA48ADC7D5ED555961E71411122E /* NSAttributedString+HTML.swift in Sources */,
 				951640EF5BBA4737B5E2F208A6E2E80F /* references.c in Sources */,
 				C656A0F2D73CD84C3A688E7499208022 /* render.c in Sources */,
 				3E08904CB9D51FDA05340C2D4A3E273E /* scanners.c in Sources */,
+				D54976471972C6DD61C91C034B666785 /* man.c in Sources */,
 				5402847DFAC6368CEA4841664F11FF59 /* String+ToHTML.swift in Sources */,
 				5861F23CA3CF0E55F57F601FB16CA85E /* utf8.c in Sources */,
 				BC7A568BC83DF09A0B4112A341520ADD /* xml.c in Sources */,
@@ -5452,7 +5452,7 @@
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -6598,7 +6598,7 @@
 				PRODUCT_NAME = Moya;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
