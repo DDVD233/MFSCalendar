@@ -314,7 +314,6 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
 
     func setupTheHeader() {
         let day = dayCheck()
-        var dayText: String? = nil
         let date = Date()
         let formatter = DateFormatter()
         formatter.dateFormat = "EEEE, MMMM d."
@@ -336,10 +335,9 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
             if day == "No School" {
                 self.dayLabel.text = "No school today,"
             } else {
-                dayText = day + " Day"
-                self.dayLabel.text = "Today is " + dayText! + ","
+                self.dayLabel.text = "Today is " + day + " Day,"
             }
-            self.welcomeLabel.text = "Welcome back, " + (userDefaults?.string(forKey: "firstName"))! + "!"
+            self.welcomeLabel.text = "Welcome back, " + (userDefaults?.string(forKey: "firstName") ?? "") + "!"
             
             self.dateLabel.text = today
         }
@@ -424,15 +422,17 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
 
     func dayCheck() -> String {
         var dayOfSchool: String? = nil
-        let date = NSDate()
+        let date = Date()
         let formatter = DateFormatter()
         let plistPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
         let path = plistPath.appending("/Day.plist")
-        let dayDict = NSDictionary(contentsOfFile: path)
+        guard let dayDict = NSDictionary(contentsOfFile: path) as? [String: String] else {
+            return "No School"
+        }
         formatter.dateFormat = "yyyyMMdd"
-        let checkDate = formatter.string(from: date as Date)
+        let checkDate = formatter.string(from: date)
 
-        dayOfSchool = dayDict?[checkDate] as? String ?? "No School"
+        dayOfSchool = dayDict[checkDate] ?? "No School"
         return dayOfSchool!
     }
 
@@ -546,17 +546,17 @@ extension Main: UITableViewDelegate, UITableViewDataSource {
             return
         }
 
-//        先加上All Day的， 然后将其余还未结束的加入eventToSort进行排序
+//        Add all day events first
         let allDayEvents = events.filter({ $0["isAllDay"] as? Int == 1 })
         self.listEvents += allDayEvents
 
         self.formatter.dateFormat = "HHmmss"
-        let currentTime = Int(formatter.string(from: Date()))!
+        let currentTime = Int(formatter.string(from: Date())) ?? 0
 
-        //        排序用Events
+        //        Sort the event from earliest to latest
         let eventToSort = events.filter({ $0["tEnd"] as? Int ?? -1 > currentTime })
         let sortedEvents = eventToSort.sorted(by: {
-            ($0["tEnd"] as! Int) < ($1["tEnd"] as! Int)
+            ($0["tEnd"] as? Int ?? 0) < ($1["tEnd"] as? Int ?? 0)
         })
         
         self.listEvents += sortedEvents
@@ -578,7 +578,7 @@ extension Main: UITableViewDelegate, UITableViewDataSource {
         let rowDict = self.listEvents[row]
         let summary = rowDict["summary"] as? String
         cell.ClassName.text = summary
-//        截取第一个字母作为cell左侧的字母
+//        Use the first letter as the letter on the left side of the cell
         let letter = summary?.substring(to: (summary?.index(after: (summary?.startIndex)!))!)
         cell.PeriodNumber.text = letter!
 
@@ -595,7 +595,7 @@ extension Main: UITableViewDelegate, UITableViewDataSource {
 
 
 extension Main {
-    //refresh data function
+    //Refresh day data and event data. Update version number.
     //刷新Day和Event数据，并更新版本号
     func refreshData() {
         let semaphore = DispatchSemaphore.init(value: 0)
@@ -643,13 +643,3 @@ extension Main {
         semaphore.wait()
     }
 }
-
-
-
-
-
-
-
-
-
-

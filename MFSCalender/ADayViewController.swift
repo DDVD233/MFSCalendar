@@ -83,7 +83,9 @@ class ADay: UIViewController, IndicatorInfoProvider {
         let path = plistPath.appending(fileName)
         NSLog(path)
 
-        self.listClasses = NSArray(contentsOfFile: path)! as! [[String: Any]]
+        if let data = NSArray(contentsOfFile: path) as? [[String: Any]] {
+            self.listClasses = data
+        }
         print(listClasses)
         
         DispatchQueue.main.async {

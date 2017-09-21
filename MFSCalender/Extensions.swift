@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Crashlytics
 
 extension UIView {
     @IBInspectable var cornerRadius: CGFloat {
@@ -73,6 +74,7 @@ extension String {
     }
 
     func convertToHtml() -> NSAttributedString? {
+        CLSLogv("String to convert to HTML: %@", getVaList([self]))
         let htmlString = "<html>" +
                 "<head>" +
                 "<style>" +

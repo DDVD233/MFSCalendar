@@ -34,6 +34,7 @@
 		E48D4E051E61FC26008B0A97 /* TodayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48D4E041E61FC26008B0A97 /* TodayViewController.swift */; };
 		E48D4E081E61FC26008B0A97 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E48D4E061E61FC26008B0A97 /* MainInterface.storyboard */; };
 		E48D4E0C1E61FC26008B0A97 /* Class Schedule.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = E48D4DFF1E61FC25008B0A97 /* Class Schedule.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		E48F15531F745BF400A36904 /* MFSCalendarTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48F15521F745BF400A36904 /* MFSCalendarTests.swift */; };
 		E49321881F5D32E800C65067 /* .travis.yml in Resources */ = {isa = PBXBuildFile; fileRef = E49321871F5D32E800C65067 /* .travis.yml */; };
 		E4A880BD1DF279BB00816AB7 /* MFS Logo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E4A880BC1DF279BB00816AB7 /* MFS Logo.jpg */; };
 		E4AAD1611EE8CC9E00E4E5EC /* bell.png in Resources */ = {isa = PBXBuildFile; fileRef = E4AAD1601EE8CC9E00E4E5EC /* bell.png */; };
@@ -70,6 +71,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = E48D4DFE1E61FC25008B0A97;
 			remoteInfo = "Class Schedule";
+		};
+		E48F15551F745BF400A36904 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E4F86B251DF0E20C00CAD72B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E4F86B2C1DF0E20C00CAD72B;
+			remoteInfo = MFSCalendar;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -129,6 +137,9 @@
 		E48D4E041E61FC26008B0A97 /* TodayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = TodayViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		E48D4E091E61FC26008B0A97 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E48D4E111E620698008B0A97 /* Class Schedule.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Class Schedule.entitlements"; sourceTree = "<group>"; };
+		E48F15501F745BF400A36904 /* MFSCalendarTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MFSCalendarTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E48F15521F745BF400A36904 /* MFSCalendarTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MFSCalendarTests.swift; sourceTree = "<group>"; };
+		E48F15541F745BF400A36904 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E49321871F5D32E800C65067 /* .travis.yml */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; fileEncoding = 4; path = .travis.yml; sourceTree = "<group>"; };
 		E4A880BC1DF279BB00816AB7 /* MFS Logo.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "MFS Logo.jpg"; sourceTree = "<group>"; };
 		E4AAD1601EE8CC9E00E4E5EC /* bell.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bell.png; sourceTree = "<group>"; };
@@ -167,6 +178,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				E48D4E021E61FC26008B0A97 /* NotificationCenter.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E48F154D1F745BF400A36904 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -229,6 +247,15 @@
 			path = "Class Schedule";
 			sourceTree = "<group>";
 		};
+		E48F15511F745BF400A36904 /* MFSCalendarTests */ = {
+			isa = PBXGroup;
+			children = (
+				E48F15521F745BF400A36904 /* MFSCalendarTests.swift */,
+				E48F15541F745BF400A36904 /* Info.plist */,
+			);
+			path = MFSCalendarTests;
+			sourceTree = "<group>";
+		};
 		E4EA9D7B1DF225FB0021A823 /* Images */ = {
 			isa = PBXGroup;
 			children = (
@@ -252,6 +279,7 @@
 				E489F6C61F5A821E00F2269F /* ProjectPublicFunctions.swift */,
 				E4F86B2F1DF0E20C00CAD72B /* MFSCalendar */,
 				E48D4E031E61FC26008B0A97 /* Class Schedule Widget */,
+				E48F15511F745BF400A36904 /* MFSCalendarTests */,
 				E48D4E001E61FC26008B0A97 /* Frameworks */,
 				E4F86B2E1DF0E20C00CAD72B /* Products */,
 				43D13B9644E33F1664727760 /* Pods */,
@@ -263,6 +291,7 @@
 			children = (
 				E4F86B2D1DF0E20C00CAD72B /* MFSCalendar.app */,
 				E48D4DFF1E61FC25008B0A97 /* Class Schedule.appex */,
+				E48F15501F745BF400A36904 /* MFSCalendarTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -325,6 +354,24 @@
 			productReference = E48D4DFF1E61FC25008B0A97 /* Class Schedule.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
+		E48F154F1F745BF400A36904 /* MFSCalendarTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E48F15571F745BF400A36904 /* Build configuration list for PBXNativeTarget "MFSCalendarTests" */;
+			buildPhases = (
+				E48F154C1F745BF400A36904 /* Sources */,
+				E48F154D1F745BF400A36904 /* Frameworks */,
+				E48F154E1F745BF400A36904 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E48F15561F745BF400A36904 /* PBXTargetDependency */,
+			);
+			name = MFSCalendarTests;
+			productName = MFSCalendarTests;
+			productReference = E48F15501F745BF400A36904 /* MFSCalendarTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		E4F86B2C1DF0E20C00CAD72B /* MFSCalendar */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = E4F86B421DF0E20C00CAD72B /* Build configuration list for PBXNativeTarget "MFSCalendar" */;
@@ -355,7 +402,7 @@
 		E4F86B251DF0E20C00CAD72B /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0830;
+				LastSwiftUpdateCheck = 0900;
 				LastUpgradeCheck = 0900;
 				ORGANIZATIONNAME = David;
 				TargetAttributes = {
@@ -368,6 +415,12 @@
 								enabled = 1;
 							};
 						};
+					};
+					E48F154F1F745BF400A36904 = {
+						CreatedOnToolsVersion = 9.0;
+						DevelopmentTeam = HWH6G9P2V2;
+						ProvisioningStyle = Automatic;
+						TestTargetID = E4F86B2C1DF0E20C00CAD72B;
 					};
 					E4F86B2C1DF0E20C00CAD72B = {
 						CreatedOnToolsVersion = 8.1;
@@ -406,6 +459,7 @@
 			targets = (
 				E4F86B2C1DF0E20C00CAD72B /* MFSCalendar */,
 				E48D4DFE1E61FC25008B0A97 /* Class Schedule */,
+				E48F154F1F745BF400A36904 /* MFSCalendarTests */,
 			);
 		};
 /* End PBXProject section */
@@ -416,6 +470,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				E48D4E081E61FC26008B0A97 /* MainInterface.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E48F154E1F745BF400A36904 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -579,6 +640,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E48F154C1F745BF400A36904 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E48F15531F745BF400A36904 /* MFSCalendarTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E4F86B291DF0E20C00CAD72B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -617,6 +686,11 @@
 			isa = PBXTargetDependency;
 			target = E48D4DFE1E61FC25008B0A97 /* Class Schedule */;
 			targetProxy = E48D4E0A1E61FC26008B0A97 /* PBXContainerItemProxy */;
+		};
+		E48F15561F745BF400A36904 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E4F86B2C1DF0E20C00CAD72B /* MFSCalendar */;
+			targetProxy = E48F15551F745BF400A36904 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -690,6 +764,51 @@
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		E48F15581F745BF400A36904 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = HWH6G9P2V2;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = MFSCalendarTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = org.dwei.MFSCalendarTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MFSCalendar.app/MFSCalendar";
+			};
+			name = Debug;
+		};
+		E48F15591F745BF400A36904 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = HWH6G9P2V2;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = MFSCalendarTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = org.dwei.MFSCalendarTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MFSCalendar.app/MFSCalendar";
 			};
 			name = Release;
 		};
@@ -846,6 +965,15 @@
 			buildConfigurations = (
 				E48D4E0E1E61FC26008B0A97 /* Debug */,
 				E48D4E0F1E61FC26008B0A97 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E48F15571F745BF400A36904 /* Build configuration list for PBXNativeTarget "MFSCalendarTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E48F15581F745BF400A36904 /* Debug */,
+				E48F15591F745BF400A36904 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

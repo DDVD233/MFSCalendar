@@ -465,6 +465,8 @@ class homeworkViewCell: UITableViewCell, UIDocumentPickerDelegate {
     }
     
     @IBAction func submit(_ sender: Any) {
+        presentErrorMessage(presentMessage: "Sorry, this isn't ready. I'm still working on that.", layout: .CardView)
+        return
         let documentPicker = UIDocumentPickerViewController(documentTypes: ["public.content"], in: .import)
         documentPicker.delegate = self
         parentViewController!.present(documentPicker, animated: true, completion: nil)

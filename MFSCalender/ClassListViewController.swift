@@ -64,14 +64,22 @@ class classListController: UIViewController, UIViewControllerPreviewingDelegate 
         }
     }
     
-    func classObjectAt(indexPath: IndexPath) -> [String: Any] {
+    func classObjectAt(indexPath: IndexPath) -> [String: Any]? {
         switch indexPath.section {
         case 0:
-            return majorClasslist[indexPath.row]
+            if majorClasslist.indices.contains(indexPath.row) {
+                return majorClasslist[indexPath.row]
+            } else {
+                return nil
+            }
         case 1:
-            return minorClassList[indexPath.row]
+            if minorClassList.indices.contains(indexPath.row) {
+                return minorClassList[indexPath.row]
+            } else {
+                return nil
+            }
         default:
-            return [String: Any]()
+            return nil
         }
     }
 }
@@ -95,9 +103,9 @@ extension classListController: UICollectionViewDataSource, UICollectionViewDeleg
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "classListViewCell", for: indexPath) as! classListViewCell
 
-        var classObject = classObjectAt(indexPath: indexPath)
-
-        
+        guard var classObject = classObjectAt(indexPath: indexPath) else {
+            return cell
+        }
 
         cell.title.text = classObject["className"] as? String
 
@@ -119,7 +127,7 @@ extension classListController: UICollectionViewDataSource, UICollectionViewDeleg
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        var classObject = classObjectAt(indexPath: indexPath)
+        guard var classObject = classObjectAt(indexPath: indexPath) else { return }
 
         userDefaults?.set(classObject["index"], forKey: "indexForCourseToPresent")
     }
@@ -134,7 +142,7 @@ extension classListController: UICollectionViewDataSource, UICollectionViewDeleg
            previewingContext.sourceRect = cell.frame
         }
         
-        var classObject = classObjectAt(indexPath: indexPath)
+        guard var classObject = classObjectAt(indexPath: indexPath) else { return nil }
         userDefaults?.set(classObject["index"], forKey: "indexForCourseToPresent")
         
         let vc = storyboard?.instantiateViewController(withIdentifier: "classDetailViewController")
