@@ -140,6 +140,7 @@ class homeworkViewController: UITableViewController, UIViewControllerPreviewingD
             if error == nil {
                 do {
                     if let json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? [[String: Any]] {
+                        print(json)
                         originalData = json
                     }
 
@@ -184,7 +185,6 @@ class homeworkViewController: UITableViewController, UIViewControllerPreviewingD
             formatter.locale = Locale(identifier: "en_US")
             let dueDate = formatter.date(from: dueDateData)
             formatter.locale = Locale.current
-//            Let it crash
             formatter.dateFormat = "yyyyMMdd"
             if dueDate != nil {
                 let dueDateMDString = formatter.string(from: dueDate!)
@@ -194,6 +194,8 @@ class homeworkViewController: UITableViewController, UIViewControllerPreviewingD
                 }
                 homeworkArray?.append(homework)
                 managedHomework[dueDateMDString] = homeworkArray
+            } else {
+                print("No duedate is found")
             }
         }
 

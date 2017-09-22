@@ -136,8 +136,8 @@ class CalendarViewController: TwitterPagerTabStripViewController, DZNEmptyDataSe
 
     func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         let shouldBegin =
-            ((classViewController.tableView.contentOffset.y <= -classViewController.tableView.contentInset.top) ||
-            (eventViewController.eventView.contentOffset.y <= -eventViewController.eventView.contentInset.top)) || (homeworkViewController.homeworkTable.contentOffset.y <= -homeworkViewController.homeworkTable.contentInset.top)
+            ((classViewController.tableView.contentOffset.y <= -classViewController.tableView.contentInset.top) &&
+            (eventViewController.eventView.contentOffset.y <= -eventViewController.eventView.contentInset.top)) && (homeworkViewController.homeworkTable.contentOffset.y <= -homeworkViewController.homeworkTable.contentInset.top)
         if shouldBegin {
             let velocity = (gestureRecognizer as! UIPanGestureRecognizer).velocity(in: self.view)
 //            往上拉->日历拉长。
