@@ -131,7 +131,8 @@ class homeworkViewController: UITableViewController, UIViewControllerPreviewingD
         formatter.locale = Locale(identifier: "en_US")
         formatter.dateFormat = "M/d/yyyy"
         let daySelectedString = formatter.string(from: daySelected!).addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-        let url = "https://mfriends.myschoolapp.com/api/DataDirect/AssignmentCenterAssignments/?format=json&filter=\(String(describing: filter))&dateStart=\(daySelectedString)&dateEnd=\(daySelectedString)&persona=2"
+        let dayEndString = filter == 2 ? formatter.string(from: daySelected! + 1.month).addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)! : daySelectedString
+        let url = "https://mfriends.myschoolapp.com/api/DataDirect/AssignmentCenterAssignments/?format=json&filter=\(String(describing: filter))&dateStart=\(daySelectedString)&dateEnd=\(dayEndString)&persona=2"
         let request = URLRequest(url: URL(string: url)!)
         
         var originalData = [[String:Any]]()
@@ -140,7 +141,6 @@ class homeworkViewController: UITableViewController, UIViewControllerPreviewingD
             if error == nil {
                 do {
                     if let json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? [[String: Any]] {
-                        print(json)
                         originalData = json
                     }
 

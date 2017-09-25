@@ -66,8 +66,6 @@ class classDetailViewController: UITableViewController, UIDocumentInteractionCon
     }
 
     func loadContent() {
-        teacherName.text = classObject["teacherName"] as? String
-        roomNumber.text = classObject["roomNumber"] as? String
 
         if teacherName.text.existsAndNotEmpty() || roomNumber.text.existsAndNotEmpty() && !availableInformation.contains("Basic") {
             //            其中一个不为空,且目前还没有这一项时
@@ -76,6 +74,8 @@ class classDetailViewController: UITableViewController, UIDocumentInteractionCon
 
         DispatchQueue.main.async {
             self.classDetailTable.reloadData()
+            self.teacherName.text = self.classObject["teacherName"] as? String
+            self.roomNumber.text = self.classObject["roomNumber"] as? String
         }
     }
 
