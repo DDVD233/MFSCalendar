@@ -387,7 +387,6 @@ class NetworkOperations {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         let queue = DispatchQueue(label: "com.cnoon.response-queue", qos: .utility, attributes: [.concurrent])
         Alamofire.download(url, to: destination).response(queue: queue, completionHandler: { response in
-            UIApplication.shared.isNetworkActivityIndicatorVisible = false
             
             if response.error == nil {
             
@@ -401,6 +400,10 @@ class NetworkOperations {
         })
         
         semaphore.wait()
+        
+        DispatchQueue.main.async {
+            UIApplication.shared.isNetworkActivityIndicatorVisible = false
+        }
         
         return (returnURL, networkError)
     }

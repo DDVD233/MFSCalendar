@@ -185,7 +185,6 @@ extension ADay: UITableViewDelegate, UITableViewDataSource, UIViewControllerPrev
         userDefaults?.set(index, forKey: "indexForCourseToPresent")
         
         let classDetailViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "classDetailViewController")
-        tableView.deselectRow(at: indexPath, animated: true)
         self.show(classDetailViewController, sender: self)
     }
 }

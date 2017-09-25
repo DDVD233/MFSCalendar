@@ -36,9 +36,7 @@ class classDetailViewController: UITableViewController, UIDocumentInteractionCon
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        DispatchQueue.global().async {
-            self.loadContent()
-        }
+        self.loadContent()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -71,21 +69,21 @@ class classDetailViewController: UITableViewController, UIDocumentInteractionCon
             //            其中一个不为空,且目前还没有这一项时
             availableInformation.append("Basic")
         }
-
-        DispatchQueue.main.async {
-            self.classDetailTable.reloadData()
-            self.teacherName.text = self.classObject["teacherName"] as? String
-            self.roomNumber.text = self.classObject["roomNumber"] as? String
-        }
+        
+        self.classDetailTable.reloadData()
+        self.teacherName.text = self.classObject["teacherName"] as? String
+        self.roomNumber.text = self.classObject["roomNumber"] as? String
     }
 
     func refreshContent() {
         guard loginAuthentication().success else {
             return
         }
-
-        roomNumber.text = classObject["roomNumber"] as? String ?? ""
-        teacherName.text = classObject["teacherName"] as? String ?? ""
+        
+        DispatchQueue.main.async {
+            self.roomNumber.text = self.classObject["roomNumber"] as? String ?? ""
+            self.teacherName.text = self.classObject["teacherName"] as? String ?? ""
+        }
 
         guard let sectionId = classObject["sectionid"] as? Int else {
             return

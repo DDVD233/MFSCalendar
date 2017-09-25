@@ -271,9 +271,9 @@ class homeworkViewController: UITableViewController, UIViewControllerPreviewingD
             return nil
         }
         
-        guard (homework["long_description"] as? String).existsAndNotEmpty() else {
-            return nil
-        }
+//        guard (homework["long_description"] as? String).existsAndNotEmpty() else {
+//            return nil
+//        }
         
         guard let assignmentIndexID = homework["assignment_index_id"] as? Int, let assignmentID = homework["assignment_id"] as? Int else {
             return nil
@@ -379,15 +379,15 @@ class homeworkViewController: UITableViewController, UIViewControllerPreviewingD
             cell.checkMark.isEnabled = false
         }
         
-        if (homework["long_description"] as? String).existsAndNotEmpty() {
-            cell.selectionStyle = .default
-            cell.accessoryType = .disclosureIndicator
-            cell.shortDescription.isSelectable = false
-        } else {
-            cell.selectionStyle = .none
-            cell.accessoryType = .none
-            cell.shortDescription.isSelectable = true
-        }
+//        if (homework["long_description"] as? String).existsAndNotEmpty() {
+        cell.selectionStyle = .default
+        cell.accessoryType = .disclosureIndicator
+        cell.shortDescription.isSelectable = false
+//        } else {
+//            cell.selectionStyle = .none
+//            cell.accessoryType = .none
+//            cell.shortDescription.isSelectable = true
+//        }
 
         cell.checkMark.tintColor = cell.tagView.backgroundColor
         
