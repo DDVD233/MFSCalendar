@@ -571,7 +571,7 @@
                                                 <constraint firstItem="1KA-YK-mcy" firstAttribute="centerY" secondItem="e6M-mh-1eo" secondAttribute="centerY" id="hZO-VF-jgG"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="lVi-dq-L3q" secondAttribute="trailing" constant="10" id="nXa-A6-D7Q"/>
                                                 <constraint firstItem="I6b-o6-SKT" firstAttribute="leading" secondItem="e6M-mh-1eo" secondAttribute="leadingMargin" constant="10" id="oVK-1k-IEV"/>
-                                                <constraint firstItem="lVi-dq-L3q" firstAttribute="top" secondItem="eeP-8y-lLA" secondAttribute="bottom" constant="8" id="slX-lD-geC"/>
+                                                <constraint firstItem="lVi-dq-L3q" firstAttribute="top" relation="greaterThanOrEqual" secondItem="eeP-8y-lLA" secondAttribute="bottom" constant="8" id="slX-lD-geC"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
