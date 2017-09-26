@@ -73,14 +73,15 @@ extension String {
         return self.data(using: .utf8)!
     }
 
-    func convertToHtml() -> NSAttributedString? {
+    func convertToHtml(attribute: String = "Default") -> NSAttributedString? {
+        let font = UIFont.systemFont(ofSize: 15).fontName
         CLSLogv("String to convert to HTML: %@", getVaList([self]))
         let htmlString = "<html>" +
                 "<head>" +
                 "<style>" +
                 "body {" +
-                "font-family: 'Helvetica';" +
-                "font-size:15px;" +
+                "font-family: '\(font)';" +
+                "font-size:16px;" +
                 "text-decoration:none;" +
                 "}" +
                 "</style>" +
@@ -88,7 +89,7 @@ extension String {
                 "<body>" +
                 self +
                 "</body></head></html>"
-
+        
         if let data = htmlString.data(using: .utf8, allowLossyConversion: true) {
             if let formattedHtmlString = try? NSAttributedString(data: data, options: [NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType], documentAttributes: nil) {
                 return formattedHtmlString
