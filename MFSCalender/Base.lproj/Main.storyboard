@@ -384,7 +384,6 @@
                                             <constraints>
                                                 <constraint firstItem="19q-6s-urR" firstAttribute="centerY" secondItem="fa7-oT-eer" secondAttribute="centerY" id="O4u-iM-A9z"/>
                                                 <constraint firstAttribute="height" constant="17" id="OeD-Hj-Xbt"/>
-                                                <constraint firstItem="19q-6s-urR" firstAttribute="centerX" secondItem="fa7-oT-eer" secondAttribute="centerX" id="aKl-ph-Hda"/>
                                                 <constraint firstAttribute="trailing" secondItem="19q-6s-urR" secondAttribute="trailing" constant="7" id="mdx-Se-ZcA"/>
                                                 <constraint firstItem="19q-6s-urR" firstAttribute="leading" secondItem="fa7-oT-eer" secondAttribute="leading" constant="7" id="om8-Su-WnP"/>
                                             </constraints>
@@ -949,6 +948,7 @@
                                                                 <constraint firstItem="JNj-nw-gIh" firstAttribute="leading" secondItem="9Fo-fi-YE8" secondAttribute="leading" constant="5" id="bFq-1d-kz1"/>
                                                                 <constraint firstItem="uqj-Bb-Yyn" firstAttribute="leading" secondItem="9Fo-fi-YE8" secondAttribute="leading" constant="5" id="bPw-YK-jJi"/>
                                                                 <constraint firstItem="L1A-eY-tem" firstAttribute="leading" secondItem="9Fo-fi-YE8" secondAttribute="leading" id="br0-j0-A2A"/>
+                                                                <constraint firstItem="OpM-9h-Bap" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="9Fo-fi-YE8" secondAttribute="leading" constant="1" id="cjF-qa-rgz"/>
                                                                 <constraint firstItem="uqj-Bb-Yyn" firstAttribute="top" secondItem="8aP-qU-odK" secondAttribute="bottom" constant="10" id="gtS-T6-rnA"/>
                                                                 <constraint firstAttribute="trailing" secondItem="l4m-jp-B4s" secondAttribute="trailing" constant="5" id="m2d-Xf-AIx"/>
                                                                 <constraint firstAttribute="bottom" secondItem="JNj-nw-gIh" secondAttribute="bottom" constant="5" id="pHE-m6-BUU"/>
@@ -2561,6 +2561,7 @@
                                                 <constraint firstItem="RRC-aI-PNR" firstAttribute="leading" secondItem="EE4-Mt-nPy" secondAttribute="leadingMargin" constant="13" id="21S-Ca-8UR"/>
                                                 <constraint firstItem="RRC-aI-PNR" firstAttribute="centerY" secondItem="EE4-Mt-nPy" secondAttribute="centerY" id="CBb-Oh-vEd"/>
                                                 <constraint firstItem="Zoq-dN-cof" firstAttribute="centerY" secondItem="EE4-Mt-nPy" secondAttribute="centerY" id="EFy-UE-3eb"/>
+                                                <constraint firstItem="Zoq-dN-cof" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="RRC-aI-PNR" secondAttribute="trailing" constant="20" id="mwm-k0-z8e"/>
                                                 <constraint firstAttribute="trailing" secondItem="Zoq-dN-cof" secondAttribute="trailing" constant="32" id="niL-OK-k7x"/>
                                             </constraints>
                                         </tableViewCellContentView>
