@@ -1758,7 +1758,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="rDN-Pd-9AE">
-                                            <rect key="frame" x="28" y="48" width="319" height="160.5"/>
+                                            <rect key="frame" x="8" y="48" width="359" height="160.5"/>
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda. hfieruhafuheaoubcvuaiebrvbcuiasbbvbhadbvjhbjhsbchj iudcuaesfiouhuefawubfueiaw</string>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -1798,12 +1798,12 @@
                                         </view>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="rDN-Pd-9AE" firstAttribute="leading" secondItem="UJX-u0-vj1" secondAttribute="leadingMargin" constant="20" id="CbO-Pg-SiM"/>
+                                        <constraint firstItem="rDN-Pd-9AE" firstAttribute="leading" secondItem="UJX-u0-vj1" secondAttribute="leadingMargin" id="CbO-Pg-SiM"/>
                                         <constraint firstAttribute="bottomMargin" secondItem="rDN-Pd-9AE" secondAttribute="bottom" id="Gv4-F0-dK0"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="jxe-La-Ofp" secondAttribute="trailing" constant="20" id="N5o-mf-FL4"/>
                                         <constraint firstItem="SgT-wc-J7l" firstAttribute="leading" secondItem="UJX-u0-vj1" secondAttribute="leading" id="Ojv-k6-BGy"/>
                                         <constraint firstItem="jxe-La-Ofp" firstAttribute="top" secondItem="UJX-u0-vj1" secondAttribute="topMargin" constant="10" id="Ym5-Nr-Mjq"/>
-                                        <constraint firstAttribute="trailingMargin" secondItem="rDN-Pd-9AE" secondAttribute="trailing" constant="20" id="a56-hO-ouW"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="rDN-Pd-9AE" secondAttribute="trailing" id="a56-hO-ouW"/>
                                         <constraint firstAttribute="trailing" secondItem="SgT-wc-J7l" secondAttribute="trailing" id="imS-sT-mrv"/>
                                         <constraint firstAttribute="bottom" secondItem="SgT-wc-J7l" secondAttribute="bottom" id="mLG-59-ZLh"/>
                                         <constraint firstItem="jxe-La-Ofp" firstAttribute="leading" secondItem="UJX-u0-vj1" secondAttribute="leadingMargin" constant="20" id="saG-6E-YjH"/>
