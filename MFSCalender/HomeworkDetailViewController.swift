@@ -261,10 +261,10 @@ extension homeworKDetailViewController: UITableViewDelegate, UITableViewDataSour
                 if let shortDescription = contentObject["title"] as? String {
                     cell.title.text = shortDescription.replacingOccurrences(of: "<[^>]+>", with: "", options: .regularExpression, range: nil)
                 }
-                if let longDescription = contentObject["description"] as? String {
-                    if let attributedText = longDescription.convertToHtml() {
-                        cell.textView.attributedText = attributedText
-                    }
+                
+                let longDescription = contentObject["description"] as? String ?? ""
+                if let attributedText = longDescription.convertToHtml() {
+                    cell.textView.attributedText = attributedText
                 }
                 
                 if let assigmentStatus = contentObject["assignmentStatus"] as? Int {

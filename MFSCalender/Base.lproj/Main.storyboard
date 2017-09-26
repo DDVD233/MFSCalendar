@@ -501,10 +501,10 @@
             </objects>
             <point key="canvasLocation" x="3636" y="-562.66866566716647"/>
         </scene>
-        <!--HomeworK Detail View Controller-->
+        <!--Assignment Detail-->
         <scene sceneID="Xx1-Mi-tVW">
             <objects>
-                <viewController storyboardIdentifier="homeworkDetailViewController" id="Loo-xY-UXg" customClass="homeworKDetailViewController" customModule="MFSCalendar" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="homeworkDetailViewController" title="Assignment Detail" id="Loo-xY-UXg" customClass="homeworKDetailViewController" customModule="MFSCalendar" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="tGU-Hj-b8Y"/>
                         <viewControllerLayoutGuide type="bottom" id="u5n-60-mRH"/>
