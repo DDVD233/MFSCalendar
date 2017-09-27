@@ -13,6 +13,7 @@ import Alamofire
 import M13Checkbox
 import SafariServices
 import JSQWebViewController
+import Kanna
 
 func areEqual<T:Equatable>(type: T.Type, a: Any?, b: Any?) -> Bool? {
     guard let a = a as? T, let b = b as? T else {
@@ -20,6 +21,24 @@ func areEqual<T:Equatable>(type: T.Type, a: Any?, b: Any?) -> Bool? {
     }
 
     return a == b
+}
+
+public func getRequestVerification() {
+    let url = URL(string: "https://mfriends.myschoolapp.com/app#login")!
+    let semaphore = DispatchSemaphore.init(value: 0)
+    let task = URLSession.shared.dataTask(with: url, completionHandler: {(data, response, error) in
+        semaphore.signal()
+    })
+    
+    task.resume()
+    semaphore.wait()
+    
+    loginAuthentication()
+    
+    let htmlReqUrl = URL(string: "https://mfriends.myschoolapp.com/app/student")!
+    let task2 = URLSession.shared.dataTask(with: htmlReqUrl, completionHandler: { (data, response, error) in
+        
+    })
 }
 
 public func loginAuthentication() -> (success: Bool, token: String, userId: String) {
@@ -38,7 +57,7 @@ public func loginAuthentication() -> (success: Bool, token: String, userId: Stri
     if let loginDate = userDefaults?.object(forKey: "loginTime") as? Date {
         let now = Date()
         let timeInterval = Int(now.timeIntervalSince(loginDate))
-        
+
         if (timeInterval < 600) && (timeInterval > 0) {
             success = true
             token = userDefaults?.string(forKey: "token")
@@ -80,6 +99,7 @@ public func loginAuthentication() -> (success: Bool, token: String, userId: Stri
                     if (resDict["ErrorType"] as! String) == "UNAUTHORIZED_ACCESS" {
                         token = "Incorrect password"
                     }
+                    
                 } else {
                     //                      When authentication is success.
                     success = true
@@ -88,6 +108,7 @@ public func loginAuthentication() -> (success: Bool, token: String, userId: Stri
                     userDefaults?.set(token, forKey: "token")
                     userDefaults?.set(userID, forKey: "userID")
                     userDefaults?.set(Date(), forKey: "loginTime")
+                    //print(HTTPCookieStorage.shared.cookies(for: response!.url!))
                 }
             } catch {
                 NSLog("Data parsing failed")
@@ -293,18 +314,21 @@ class HomeworkView {
         var success = true
         let url = "https://mfriends.myschoolapp.com/api/assignment2/assignmentstatusupdate/?format=json&assignmentIndexId=\(assignmentIndexId)&assignmentStatus=\(assignmentStatus)"
         
-        let json = ["assignmentIndexId": assignmentIndexId, "assignmentStatus": assignmentStatus]
+        let json = ["assignmentIndexId": Int(assignmentIndexId)!, "assignmentStatus": assignmentStatus] as [String : Any]
         guard let jsonData = try? JSONSerialization.data(withJSONObject: json) else {
             return
         }
         
         var request = try! URLRequest(url: URL(string: url)!, method: .post)
         request.httpBody = jsonData
-        let session = URLSession.shared
+        let config = URLSessionConfiguration.default
+        config.requestCachePolicy = .reloadIgnoringLocalCacheData
+        let session = URLSession(configuration: config)
         let semaphore = DispatchSemaphore(value: 0)
         
         let task: URLSessionDataTask = session.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
             if error == nil {
+                print(try? JSONSerialization.jsonObject(with: data!, options: .allowFragments))
             } else {
                 success = false
                 presentErrorMessage(presentMessage: error!.localizedDescription, layout: .StatusLine)

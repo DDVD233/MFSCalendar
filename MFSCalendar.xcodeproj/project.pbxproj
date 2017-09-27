@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2BCF9150A2DD2CB6E6386CEF /* Pods_MFSCalendar.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E48F15A81F74687200A36904 /* Pods_MFSCalendar.framework */; };
 		9616020D2678949E980D3631 /* Pods_MFSCalendar.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C9307D95D24FE30AFAEDD40 /* Pods_MFSCalendar.framework */; };
 		E413AB0E1EE89441001EB189 /* Achievement.png in Resources */ = {isa = PBXBuildFile; fileRef = E413AB0D1EE89441001EB189 /* Achievement.png */; };
 		E413AB101EE89683001EB189 /* questionmark.png in Resources */ = {isa = PBXBuildFile; fileRef = E413AB0F1EE89683001EB189 /* questionmark.png */; };
@@ -44,7 +45,6 @@
 		E4B340081F0905EB00D6039A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E4B340071F0905EB00D6039A /* GoogleService-Info.plist */; };
 		E4B3400A1F0905F400D6039A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E4B340091F0905F400D6039A /* GoogleService-Info.plist */; };
 		E4B6F4C11F746AE600F56C4D /* MFSCalendarUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48F15601F7467D900A36904 /* MFSCalendarUITests.swift */; };
-		E4B6F4C21F746AF400F56C4D /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E48F15621F7467D900A36904 /* Info.plist */; };
 		E4BD88961F35973C0000FEF3 /* TargetPublicFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BD88951F35973C0000FEF3 /* TargetPublicFunctions.swift */; };
 		E4BD88981F383A060000FEF3 /* ClassTimetableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BD88971F383A060000FEF3 /* ClassTimetableViewController.swift */; };
 		E4BD889A1F397BE80000FEF3 /* TopicDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BD88991F397BE80000FEF3 /* TopicDetailViewController.swift */; };
@@ -240,6 +240,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9616020D2678949E980D3631 /* Pods_MFSCalendar.framework in Frameworks */,
+				2BCF9150A2DD2CB6E6386CEF /* Pods_MFSCalendar.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -595,7 +596,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E4B6F4C21F746AF400F56C4D /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

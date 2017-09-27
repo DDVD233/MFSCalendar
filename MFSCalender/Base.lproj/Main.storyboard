@@ -1559,12 +1559,29 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" textLabel="uUU-mV-IiJ" style="IBUITableViewCellStyleDefault" id="LWv-RG-M6P">
+                                        <rect key="frame" x="0.0" y="241" width="375" height="45"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="LWv-RG-M6P" id="mgp-ag-nj8">
+                                            <rect key="frame" x="0.0" y="0.0" width="342" height="44.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Resources" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="uUU-mV-IiJ">
+                                                    <rect key="frame" x="16" y="0.0" width="324" height="44.5"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
                                 </cells>
                             </tableViewSection>
                             <tableViewSection id="7eg-PV-V26">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" textLabel="yFC-Qw-ON8" imageView="Xil-f0-1CM" style="IBUITableViewCellStyleDefault" id="Y2I-CI-QeI">
-                                        <rect key="frame" x="0.0" y="277" width="375" height="45"/>
+                                        <rect key="frame" x="0.0" y="322" width="375" height="45"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Y2I-CI-QeI" id="7zq-bO-pLX">
                                             <rect key="frame" x="0.0" y="0.0" width="342" height="44.5"/>
@@ -1598,7 +1615,7 @@
                             <tableViewSection id="qqU-aU-5Sh">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" textLabel="EYo-Ni-xA0" style="IBUITableViewCellStyleDefault" id="ESU-jj-XGJ">
-                                        <rect key="frame" x="0.0" y="358" width="375" height="45"/>
+                                        <rect key="frame" x="0.0" y="403" width="375" height="45"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ESU-jj-XGJ" id="xqj-yk-ycG">
                                             <rect key="frame" x="0.0" y="0.0" width="342" height="44.5"/>

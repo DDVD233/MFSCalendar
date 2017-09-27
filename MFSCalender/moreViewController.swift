@@ -89,6 +89,16 @@ extension moreViewController {
             
             task.resume()
             semaphore.wait()
+        } else if indexPath.section == 1 && indexPath.row == 2 {
+            let token = loginAuthentication().token
+            let url = URL(string: "https://mfriends.myschoolapp.com/app/student#resourceboard")!
+            var request = URLRequest(url: url)
+            
+            let webView = WebViewController(urlRequest: request)
+            request.setValue("t=\(token)", forHTTPHeaderField: "Cookie")
+            self.show(webView, sender: self)
         }
     }
+    
+    
 }

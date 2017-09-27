@@ -32,6 +32,7 @@ target 'MFSCalendar' do
   pod 'JSQWebViewController'
   pod 'Down'
   pod 'Spring', :git => 'https://github.com/MengTo/Spring.git', :branch => 'swift3'
+  pod 'Kanna', '~> 2.1.0'
 end
 
 post_install do |installer|

@@ -346,6 +346,9 @@ class homeworkDetailViewCell: UITableViewCell {
             generator.impactOccurred()
         }
         DispatchQueue.global().async {
+            guard loginAuthentication().success else {
+                return
+            }
             guard (self.assignmentIndexID != nil) else {
                 return
             }
