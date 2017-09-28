@@ -303,7 +303,7 @@ class HomeworkView {
         switch status {
         case -1:
             return .unchecked
-        case 1:
+        case 1, 4:
             return .checked
         default:
             return .unchecked
