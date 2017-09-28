@@ -84,7 +84,7 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
         }
     }
 
-    func keyboardNotification(notification: NSNotification) {
+    @objc func keyboardNotification(notification: NSNotification) {
         if let userInfo = notification.userInfo {
             let endFrame = (userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
             let duration: TimeInterval = (userInfo[UIKeyboardAnimationDurationUserInfoKey] as? NSNumber)?.doubleValue ?? 0
@@ -107,7 +107,7 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
         }
     }
 
-    func keyboardHide(notification: NSNotification) {
+    @objc func keyboardHide(notification: NSNotification) {
         if let userInfo = notification.userInfo {
             let duration: TimeInterval = (userInfo[UIKeyboardAnimationDurationUserInfoKey] as? NSNumber)?.doubleValue ?? 0
             let animationCurveRawNSN = userInfo[UIKeyboardAnimationCurveUserInfoKey] as? NSNumber
@@ -126,7 +126,7 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
     }
 
     func errorMessage(presentMessage: String) {
-        let view = MessageView.viewFromNib(layout: .CardView)
+        let view = MessageView.viewFromNib(layout: .cardView)
         view.configureTheme(.error)
         var icon: String? = nil
         if presentMessage == "The username/password is incorrect. Please check your spelling." {
@@ -149,7 +149,7 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
         return textField.resignFirstResponder()
     }
 
-    func wrongPassword(button: UIButton!) {
+    @objc func wrongPassword(button: UIButton!) {
         print("Password?")
         if #available(iOS 10.0, *) {
             UIApplication.shared.open(URL(string: "https://mfriends.myschoolapp.com/app/#login/request")!, options: [:], completionHandler: nil)
@@ -250,7 +250,7 @@ extension firstTimeLaunchController {
             case let .success(response):
                 do {
                     guard let resDict = try response.mapJSON() as? Dictionary<String, Any?> else {
-                        presentErrorMessage(presentMessage: "Internal error: incorrect file format.", layout: .CardView)
+                        presentErrorMessage(presentMessage: "Internal error: incorrect file format.", layout: .cardView)
 
                         return
                     }
@@ -260,7 +260,7 @@ extension firstTimeLaunchController {
                         print("Login Error!")
                         if (resDict["ErrorType"] as! String) == "UNAUTHORIZED_ACCESS" {
                             DispatchQueue.main.async {
-                                presentErrorMessage(presentMessage: "The username/password is incorrect. Please check your spelling.", layout: .CardView)
+                                presentErrorMessage(presentMessage: "The username/password is incorrect. Please check your spelling.", layout: .cardView)
                             }
                         }
 
@@ -305,7 +305,7 @@ extension firstTimeLaunchController {
                     }
                 }
             case let .failure(error):
-                presentErrorMessage(presentMessage: error.localizedDescription, layout: .CardView)
+                presentErrorMessage(presentMessage: error.localizedDescription, layout: .cardView)
             }
 
             semaphore.signal()
@@ -375,7 +375,7 @@ extension firstTimeLaunchController {
                     resDict.write(toFile: path, atomically: true)
                     success = true
                 } catch {
-                    presentErrorMessage(presentMessage: error.localizedDescription, layout: MessageView.Layout.StatusLine)
+                    presentErrorMessage(presentMessage: error.localizedDescription, layout: MessageView.Layout.statusLine)
                     NSLog("Day Data: Data parsing failed")
                 }
             case let .failure(error):

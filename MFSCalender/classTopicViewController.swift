@@ -99,14 +99,14 @@ class classTopicViewController: UIViewController {
 
         let task = session.dataTask(with: request, completionHandler: { (data, response, error) -> Void in
             guard error == nil else {
-                presentErrorMessage(presentMessage: error!.localizedDescription, layout: .StatusLine)
+                presentErrorMessage(presentMessage: error!.localizedDescription, layout: .statusLine)
                 semaphore.signal()
                 return
             }
             
             do {
                 guard var json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? Array<Dictionary<String, Any>> else {
-                    presentErrorMessage(presentMessage: "JSON data has incorrect format.", layout: .StatusLine)
+                    presentErrorMessage(presentMessage: "JSON data has incorrect format.", layout: .statusLine)
                     semaphore.signal()
                     return
                 }
@@ -125,7 +125,7 @@ class classTopicViewController: UIViewController {
                 let topicPath = path.appending("/topics_\(String(leadSectionIdInt)).plist")
                 NSArray(array: json).write(toFile: topicPath, atomically: true)
             } catch {
-                presentErrorMessage(presentMessage: error.localizedDescription, layout: .StatusLine)
+                presentErrorMessage(presentMessage: error.localizedDescription, layout: .statusLine)
             }
             
             semaphore.signal()

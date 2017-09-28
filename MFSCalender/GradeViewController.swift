@@ -92,7 +92,7 @@ class gradeViewController: UITableViewController {
             } else {
                 DispatchQueue.main.async {
                     let presentMessage = error!.localizedDescription + " Please check your internet connection."
-                    let view = MessageView.viewFromNib(layout: .CardView)
+                    let view = MessageView.viewFromNib(layout: .cardView)
                     view.configureTheme(.error)
                     let icon = "😱"
                     view.configureContent(title: "Error!", body: presentMessage, iconText: icon)

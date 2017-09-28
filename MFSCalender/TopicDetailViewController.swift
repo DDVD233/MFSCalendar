@@ -148,7 +148,7 @@ extension topicDetailViewController: UITableViewDelegate, UITableViewDataSource 
                 "</body></head></html>"
 
         if let data = htmlString.data(using: .utf8, allowLossyConversion: true) {
-            if let formattedHtmlString = try? NSAttributedString(data: data, options: [NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType], documentAttributes: nil) {
+            if let formattedHtmlString = try? NSAttributedString(data: data, options: [.documentType: NSAttributedString.DocumentType.html, .characterEncoding: String.Encoding.utf8.rawValue], documentAttributes: nil) {
                 return formattedHtmlString
             }
         }
@@ -188,7 +188,7 @@ extension topicDetailViewController {
 
         let dataTask = URLSession.shared.dataTask(with: URL(string: url)!, completionHandler: { (data, response, error) in
             guard error == nil else {
-                presentErrorMessage(presentMessage: error!.localizedDescription, layout: .StatusLine)
+                presentErrorMessage(presentMessage: error!.localizedDescription, layout: .statusLine)
                 semaphore.signal()
                 return
             }
@@ -305,7 +305,7 @@ class topicDetailDescriptionCell: UITableViewCell {
             }
             
             guard error == nil else {
-                presentErrorMessage(presentMessage: error!.localizedDescription, layout: .CardView)
+                presentErrorMessage(presentMessage: error!.localizedDescription, layout: .cardView)
                 return
             }
             

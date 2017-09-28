@@ -57,18 +57,18 @@ extension moreViewController {
             let task = URLSession.shared.dataTask(with: requestURL, completionHandler: { (data, response, error) in
                 self.navigationController?.cancelProgress()
                 guard error == nil else {
-                    presentErrorMessage(presentMessage: error!.localizedDescription, layout: .CardView)
+                    presentErrorMessage(presentMessage: error!.localizedDescription, layout: .cardView)
                     return
                 }
                 
                 do {
                     guard let json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? [[String: Any]] else {
-                        presentErrorMessage(presentMessage: "Internal error: incorrect data format", layout: .StatusLine)
+                        presentErrorMessage(presentMessage: "Internal error: incorrect data format", layout: .statusLine)
                         return
                     }
                     
                     guard let lunchObject = json.filter({ $0["ShortDescription"] as? String == "What's For Lunch?" }).first else {
-                        presentErrorMessage(presentMessage: "Cannot find lunch menu", layout: .StatusLine)
+                        presentErrorMessage(presentMessage: "Cannot find lunch menu", layout: .statusLine)
                         return
                     }
                     
@@ -81,7 +81,7 @@ extension moreViewController {
                         NetworkOperations().openFile(fileUrl: fileName!, from: self)
                     }
                 } catch {
-                    presentErrorMessage(presentMessage: error.localizedDescription, layout: .StatusLine)
+                    presentErrorMessage(presentMessage: error.localizedDescription, layout: .statusLine)
                 }
                 
                 semaphore.signal()

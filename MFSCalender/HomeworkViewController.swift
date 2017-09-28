@@ -89,7 +89,7 @@ class homeworkViewController: UITableViewController, UIViewControllerPreviewingD
     }
 
     func errorMessage(presentMessage: String) {
-        let view = MessageView.viewFromNib(layout: .CardView)
+        let view = MessageView.viewFromNib(layout: .cardView)
         view.configureTheme(.error)
         var icon: String? = nil
         if presentMessage == "The username/password is incorrect. Please check your spelling." {
@@ -413,7 +413,7 @@ extension homeworkViewController: DZNEmptyDataSetSource {
     }
 
     func title(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
-        let attr = [NSFontAttributeName: UIFont.preferredFont(forTextStyle: UIFontTextStyle.headline)]
+        let attr = [NSAttributedStringKey.font: UIFont.preferredFont(forTextStyle: UIFontTextStyle.headline)]
 
         var str = "There is no homework to display."
         if isUpdatingHomework {
@@ -427,7 +427,7 @@ extension homeworkViewController: DZNEmptyDataSetSource {
             return NSAttributedString()
         }
 
-        let buttonTitleString = NSAttributedString(string: "Refresh...", attributes: [NSForegroundColorAttributeName: UIColor(hexString: 0xFF7E79)])
+        let buttonTitleString = NSAttributedString(string: "Refresh...", attributes: [NSAttributedStringKey.foregroundColor: UIColor(hexString: 0xFF7E79)])
 
         return buttonTitleString
     }
@@ -467,7 +467,7 @@ class homeworkViewCell: UITableViewCell, UIDocumentPickerDelegate {
     }
     
     @IBAction func submit(_ sender: Any) {
-        presentErrorMessage(presentMessage: "Sorry, this isn't ready. I'm still working on that.", layout: .CardView)
+        presentErrorMessage(presentMessage: "Sorry, this isn't ready. I'm still working on that.", layout: .cardView)
         return
         let documentPicker = UIDocumentPickerViewController(documentTypes: ["public.content"], in: .import)
         documentPicker.delegate = self
@@ -511,7 +511,7 @@ class homeworkViewCell: UITableViewCell, UIDocumentPickerDelegate {
         })
     }
     
-    func checkDidChange(checkMark: M13Checkbox) {
+    @objc func checkDidChange(checkMark: M13Checkbox) {
         if #available(iOS 10.0, *) {
             let generator = UIImpactFeedbackGenerator(style: .medium)
             generator.prepare()

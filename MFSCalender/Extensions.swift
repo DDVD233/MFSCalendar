@@ -57,7 +57,7 @@ extension String {
             let startIndex = self.index(self.startIndex, offsetBy: r.lowerBound)
             let endIndex = self.index(self.startIndex, offsetBy: r.upperBound + 1)
 
-            return self[Range(uncheckedBounds: (startIndex, endIndex))]
+            return String(self[Range(uncheckedBounds: (startIndex, endIndex))])
         }
     }
 
@@ -65,7 +65,7 @@ extension String {
         get {
             let startIndex = self.index(self.startIndex, offsetBy: start)
             let endIndex = self.index(self.startIndex, offsetBy: end + 1)
-            return self[Range(uncheckedBounds: (startIndex, endIndex))]
+            return String(self[Range(uncheckedBounds: (startIndex, endIndex))])
         }
     }
 
@@ -91,7 +91,7 @@ extension String {
                 "</body></head></html>"
         
         if let data = htmlString.data(using: .utf8, allowLossyConversion: true) {
-            if let formattedHtmlString = try? NSAttributedString(data: data, options: [NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType], documentAttributes: nil) {
+            if let formattedHtmlString = try? NSAttributedString(data: data, options: [.documentType: NSAttributedString.DocumentType.html, .characterEncoding: String.Encoding.utf8.rawValue], documentAttributes: nil) {
                 return formattedHtmlString
             }
         }

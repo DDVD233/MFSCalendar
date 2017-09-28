@@ -258,7 +258,7 @@ class eventViewController: UIViewController, DZNEmptyDataSetSource, DZNEmptyData
     }
     
     func title(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
-        let attr = [NSFontAttributeName: UIFont.preferredFont(forTextStyle: UIFontTextStyle.headline)]
+        let attr = [NSAttributedStringKey.font: UIFont.preferredFont(forTextStyle: UIFontTextStyle.headline)]
         let str = "There is no event on this day."
         self.eventView.separatorStyle = .none
         
@@ -311,10 +311,12 @@ extension eventViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "eventTable", for: indexPath as IndexPath) as? customEventCell
         let row = indexPath.row
         let rowDict = self.listEvents[row] as! Dictionary<String, Any?>
-        let summary = rowDict["summary"] as? String
+        guard let summary = rowDict["summary"] as? String else {
+            return UITableViewCell()
+        }
         cell?.ClassName.text = summary
-        let letter = summary?.substring(to: (summary?.index(after: (summary?.startIndex)!))!)
-        cell?.PeriodNumber.text = letter!
+        let letter = String(describing: summary[...summary.index(after: summary.startIndex)])
+        cell?.PeriodNumber.text = letter
         if rowDict["location"] != nil {
             let location = rowDict["location"] as! String
             if location.hasSuffix("place fields") || location.hasSuffix("Place Fields") {

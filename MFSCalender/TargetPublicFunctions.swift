@@ -23,23 +23,23 @@ func areEqual<T:Equatable>(type: T.Type, a: Any?, b: Any?) -> Bool? {
     return a == b
 }
 
-public func getRequestVerification() {
-    let url = URL(string: "https://mfriends.myschoolapp.com/app#login")!
-    let semaphore = DispatchSemaphore.init(value: 0)
-    let task = URLSession.shared.dataTask(with: url, completionHandler: {(data, response, error) in
-        semaphore.signal()
-    })
-    
-    task.resume()
-    semaphore.wait()
-    
-    loginAuthentication()
-    
-    let htmlReqUrl = URL(string: "https://mfriends.myschoolapp.com/app/student")!
-    let task2 = URLSession.shared.dataTask(with: htmlReqUrl, completionHandler: { (data, response, error) in
-        
-    })
-}
+//public func getRequestVerification() {
+//    let url = URL(string: "https://mfriends.myschoolapp.com/app#login")!
+//    let semaphore = DispatchSemaphore.init(value: 0)
+//    let task = URLSession.shared.dataTask(with: url, completionHandler: {(data, response, error) in
+//        semaphore.signal()
+//    })
+//    
+//    task.resume()
+//    semaphore.wait()
+//    
+//    loginAuthentication()
+//    
+//    let htmlReqUrl = URL(string: "https://mfriends.myschoolapp.com/app/student")!
+//    let task2 = URLSession.shared.dataTask(with: htmlReqUrl, completionHandler: { (data, response, error) in
+//        
+//    })
+//}
 
 public func loginAuthentication() -> (success: Bool, token: String, userId: String) {
 
@@ -219,7 +219,7 @@ class ClassView {
                 }
             } else {
                 DispatchQueue.main.async {
-                    presentErrorMessage(presentMessage: error!.localizedDescription, layout: .CardView)
+                    presentErrorMessage(presentMessage: error!.localizedDescription, layout: .cardView)
                 }
             }
             semaphore.signal()
@@ -328,10 +328,10 @@ class HomeworkView {
         
         let task: URLSessionDataTask = session.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
             if error == nil {
-                print(try? JSONSerialization.jsonObject(with: data!, options: .allowFragments))
+                //print(try? JSONSerialization.jsonObject(with: data!, options: .allowFragments))
             } else {
                 success = false
-                presentErrorMessage(presentMessage: error!.localizedDescription, layout: .StatusLine)
+                presentErrorMessage(presentMessage: error!.localizedDescription, layout: .statusLine)
             }
             
             semaphore.signal()

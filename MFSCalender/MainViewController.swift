@@ -200,7 +200,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         if let vc = self.storyboard?.instantiateViewController(withIdentifier: "courseFillController") {
             self.present(vc, animated: true, completion: nil)
         } else {
-            presentErrorMessage(presentMessage: "Cannot find course fill page", layout: .StatusLine)
+            presentErrorMessage(presentMessage: "Cannot find course fill page", layout: .statusLine)
         }
 
         self.refreshDisplayedData()
@@ -243,13 +243,13 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
 
     func title(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
         var str: String? = ""
-        var attrs: [String: Any] = [NSFontAttributeName: UIFont.preferredFont(forTextStyle: UIFontTextStyle.headline)]
+        var attrs: [NSAttributedStringKey: Any] = [NSAttributedStringKey.font: UIFont.preferredFont(forTextStyle: UIFontTextStyle.headline)]
         if scrollView == classView {
             str = "No more classes for today!"
         } else if scrollView == eventView {
             self.eventView.separatorStyle = .none
             str = "No more events for today!"
-            attrs = [NSFontAttributeName: UIFont.preferredFont(forTextStyle: UIFontTextStyle.headline), NSForegroundColorAttributeName: UIColor.white]
+            attrs = [NSAttributedStringKey.font: UIFont.preferredFont(forTextStyle: UIFontTextStyle.headline), NSAttributedStringKey.foregroundColor: UIColor.white]
         }
 
         return NSAttributedString(string: str!, attributes: attrs)
@@ -288,7 +288,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
             switch result {
             case let .success(response):
                 guard let nversion = try? response.mapString() else {
-                    presentErrorMessage(presentMessage: "Version file", layout: .StatusLine)
+                    presentErrorMessage(presentMessage: "Version file", layout: .statusLine)
                     return
                 }
 
@@ -300,7 +300,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
                     refresh = true
                 }
             case let .failure(error):
-                presentErrorMessage(presentMessage: error.localizedDescription, layout: .StatusLine)
+                presentErrorMessage(presentMessage: error.localizedDescription, layout: .statusLine)
             }
 
             semaphore.signal()
@@ -319,14 +319,14 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         formatter.dateFormat = "EEEE, MMMM d."
         //MMMM d, yyyy
         var today = formatter.string(from: date)
-        let labelAttributes = [NSFontAttributeName:
+        let labelAttributes = [NSAttributedStringKey.font:
             UIFont.init(name: dateLabel.font.fontName, size: dateLabel.font.pointSize) ?? UIFont()]
-        if NSString(string: today).size(attributes: labelAttributes).width > dateLabel.bounds.size.width - 10 {
+        if NSString(string: today).size(withAttributes: labelAttributes).width > dateLabel.bounds.size.width - 10 {
             formatter.dateFormat = "EEEE, MMM d."
             today = formatter.string(from: date)
         }
         
-        if NSString(string: today).size(attributes: labelAttributes).width > dateLabel.bounds.size.width - 10 {
+        if NSString(string: today).size(withAttributes: labelAttributes).width > dateLabel.bounds.size.width - 10 {
             formatter.dateFormat = "EE, MMM d."
             today = formatter.string(from: date)
         }
@@ -576,11 +576,13 @@ extension Main: UITableViewDelegate, UITableViewDataSource {
             return cell
         }
         let rowDict = self.listEvents[row]
-        let summary = rowDict["summary"] as? String
+        guard let summary = rowDict["summary"] as? String else {
+            return UITableViewCell()
+        }
         cell.ClassName.text = summary
 //        Use the first letter as the letter on the left side of the cell
-        let letter = summary?.substring(to: (summary?.index(after: (summary?.startIndex)!))!)
-        cell.PeriodNumber.text = letter!
+        let letter = String(describing: summary[...summary.index(after: summary.startIndex)])
+        cell.PeriodNumber.text = letter
 
         if rowDict["location"] != nil {
             cell.RoomNumber.text = "At: " + (rowDict["location"] as! String)
@@ -605,7 +607,7 @@ extension Main {
             case let .success(response):
                 do {
                     guard let dayData = try response.mapJSON(failsOnEmptyData: false) as? Dictionary<String, Any> else {
-                        presentErrorMessage(presentMessage: "Incorrect file format for day data", layout: .StatusLine)
+                        presentErrorMessage(presentMessage: "Incorrect file format for day data", layout: .statusLine)
                         return
                     }
 
@@ -614,10 +616,10 @@ extension Main {
                     print("Info: Day Data refreshed")
                     NSDictionary(dictionary: dayData).write(toFile: dayFile, atomically: true)
                 } catch {
-                    presentErrorMessage(presentMessage: error.localizedDescription, layout: .StatusLine)
+                    presentErrorMessage(presentMessage: error.localizedDescription, layout: .statusLine)
                 }
             case let .failure(error):
-                presentErrorMessage(presentMessage: error.localizedDescription, layout: .StatusLine)
+                presentErrorMessage(presentMessage: error.localizedDescription, layout: .statusLine)
             }
 
             semaphore.signal()
@@ -634,7 +636,7 @@ extension Main {
             case .success(_):
                 print("Info: event data refreshed")
             case let .failure(error):
-                presentErrorMessage(presentMessage: error.localizedDescription, layout: .StatusLine)
+                presentErrorMessage(presentMessage: error.localizedDescription, layout: .statusLine)
             }
 
             semaphore.signal()

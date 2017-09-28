@@ -42,7 +42,7 @@ class homeworKDetailViewController: UIViewController, SFSafariViewControllerDele
         
         let task = URLSession.shared.dataTask(with: url, completionHandler: { (data, response, error) in
             guard error == nil else {
-                presentErrorMessage(presentMessage: error!.localizedDescription, layout: .CardView)
+                presentErrorMessage(presentMessage: error!.localizedDescription, layout: .cardView)
                 semaphore.signal()
                 return
             }
@@ -51,7 +51,7 @@ class homeworKDetailViewController: UIViewController, SFSafariViewControllerDele
                     self.contentList = json
                 }
             } catch {
-                presentErrorMessage(presentMessage: error.localizedDescription, layout: .CardView)
+                presentErrorMessage(presentMessage: error.localizedDescription, layout: .cardView)
             }
             semaphore.signal()
         })
@@ -75,19 +75,19 @@ class homeworKDetailViewController: UIViewController, SFSafariViewControllerDele
         
         let task = URLSession.shared.dataTask(with: URL(string: url)!, completionHandler: { (data, response, error) in
             guard error == nil else {
-                presentErrorMessage(presentMessage: error!.localizedDescription, layout: .CardView)
+                presentErrorMessage(presentMessage: error!.localizedDescription, layout: .cardView)
                 return
             }
             
             do {
                 guard let json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? [String: Any] else {
-                    presentErrorMessage(presentMessage: "Incorrect file format", layout: .StatusLine)
+                    presentErrorMessage(presentMessage: "Incorrect file format", layout: .statusLine)
                     return
                 }
                 
                 self.assignmentList2 = json
             } catch {
-                presentErrorMessage(presentMessage: error.localizedDescription, layout: .StatusLine)
+                presentErrorMessage(presentMessage: error.localizedDescription, layout: .statusLine)
             }
             
             semaphore.signal()
@@ -162,12 +162,12 @@ extension homeworKDetailViewController: UITableViewDelegate, UITableViewDataSour
             }
             
             guard let course = courseList.filter({ ($0["className"] as? String) == courseName }).first else {
-                presentErrorMessage(presentMessage: "Course not found", layout: .StatusLine)
+                presentErrorMessage(presentMessage: "Course not found", layout: .statusLine)
                 return
             }
             
             guard let index = course["index"] as? Int else {
-                presentErrorMessage(presentMessage: "Course index not found", layout: .StatusLine)
+                presentErrorMessage(presentMessage: "Course index not found", layout: .statusLine)
                 return
             }
             
@@ -210,19 +210,19 @@ extension homeworKDetailViewController: UITableViewDelegate, UITableViewDataSour
     
     func openFile(row: Int) {
         guard let downloadList = assignmentList2["DownloadItems"] as? [[String: Any]] else {
-            presentErrorMessage(presentMessage: "No attachment is found.", layout: .StatusLine)
+            presentErrorMessage(presentMessage: "No attachment is found.", layout: .statusLine)
             return
         }
         
         guard downloadList.indices.contains(row) else {
-            presentErrorMessage(presentMessage: "No attachment is found.", layout: .StatusLine)
+            presentErrorMessage(presentMessage: "No attachment is found.", layout: .statusLine)
             return
         }
         
         let downloadObject = downloadList[row]
         
         guard let url = downloadObject["DownloadUrl"] as? String, let fileName = downloadObject["FriendlyFileName"] as? String else {
-            presentErrorMessage(presentMessage: "No attachment is found.", layout: .StatusLine)
+            presentErrorMessage(presentMessage: "No attachment is found.", layout: .statusLine)
             return
         }
         
@@ -230,12 +230,12 @@ extension homeworKDetailViewController: UITableViewDelegate, UITableViewDataSour
         let (filePath, error) = NetworkOperations().downloadFile(url: downloadUrl, withName: fileName)
         
         guard error == nil else {
-            presentErrorMessage(presentMessage: error!.localizedDescription, layout: .StatusLine)
+            presentErrorMessage(presentMessage: error!.localizedDescription, layout: .statusLine)
             return
         }
         
         guard filePath != nil else {
-            presentErrorMessage(presentMessage: "Attachment cannot be downloaded", layout: .StatusLine)
+            presentErrorMessage(presentMessage: "Attachment cannot be downloaded", layout: .statusLine)
             return
         }
         
@@ -339,7 +339,7 @@ class homeworkDetailViewCell: UITableViewCell {
         checkBox.addTarget(self, action: #selector(checkDidChange), for: UIControlEvents.valueChanged)
     }
     
-    func checkDidChange() {
+    @objc func checkDidChange() {
         if #available(iOS 10.0, *) {
             let generator = UIImpactFeedbackGenerator(style: .medium)
             generator.prepare()

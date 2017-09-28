@@ -191,7 +191,7 @@ extension ADay: UITableViewDelegate, UITableViewDataSource, UIViewControllerPrev
 
 extension ADay: DZNEmptyDataSetSource {
     func title(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
-        let attr = [NSFontAttributeName: UIFont.preferredFont(forTextStyle: UIFontTextStyle.headline)]
+        let attr = [NSAttributedStringKey.font: UIFont.preferredFont(forTextStyle: UIFontTextStyle.headline)]
         let str = "There is no class on this day."
         self.tableView.separatorStyle = .none
         return NSAttributedString(string: str, attributes: attr)

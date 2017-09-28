@@ -198,7 +198,7 @@ class courseFillController: UIViewController {
                 NSArray(array: courseData).write(toFile: path, atomically: true)
                 success = true
             } else {
-                presentErrorMessage(presentMessage: error!.localizedDescription, layout: .StatusLine)
+                presentErrorMessage(presentMessage: error!.localizedDescription, layout: .statusLine)
             }
             semaphore.signal()
         })
@@ -250,7 +250,7 @@ class courseFillController: UIViewController {
                             NSLog("Failed parsing the data")
                         }
                     } else {
-                        presentErrorMessage(presentMessage: error!.localizedDescription, layout: .StatusLine)
+                        presentErrorMessage(presentMessage: error!.localizedDescription, layout: .statusLine)
                     }
                     semaphore.signal()
                 })
@@ -317,7 +317,7 @@ class courseFillController: UIViewController {
                 //When the block is not empty
                 let semaphore = DispatchSemaphore.init(value: 0)
                 guard var classId = course["id"] as? String else {
-                    presentErrorMessage(presentMessage: "Course ID not found", layout: .StatusLine)
+                    presentErrorMessage(presentMessage: "Course ID not found", layout: .statusLine)
                     return
                 }
                 
@@ -326,7 +326,7 @@ class courseFillController: UIViewController {
                 
                 let task = URLSession.shared.dataTask(with: URL(string: url)!, completionHandler: { (data, response, error) in
                     guard error == nil else {
-                        presentErrorMessage(presentMessage: error!.localizedDescription, layout: .CardView)
+                        presentErrorMessage(presentMessage: error!.localizedDescription, layout: .cardView)
                         return
                     }
                     
@@ -341,7 +341,7 @@ class courseFillController: UIViewController {
                         removeIndex += self.writeScheduleToFile(meetTimeList: meetTimeList, course: &course, index: index)
                         success = true
                     } catch {
-                        presentErrorMessage(presentMessage: error.localizedDescription, layout: .StatusLine)
+                        presentErrorMessage(presentMessage: error.localizedDescription, layout: .statusLine)
                     }
                     
                     semaphore.signal()
@@ -419,7 +419,7 @@ class courseFillController: UIViewController {
         
         let task = URLSession.shared.dataTask(with: url, completionHandler: { (data, response, error) in
             guard error ==  nil else {
-                presentErrorMessage(presentMessage: error!.localizedDescription, layout: .StatusLine)
+                presentErrorMessage(presentMessage: error!.localizedDescription, layout: .statusLine)
                 semaphore.signal()
                 return
             }

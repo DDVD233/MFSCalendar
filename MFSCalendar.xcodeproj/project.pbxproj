@@ -25,8 +25,8 @@
 		E472A1601EFB6F8400EF5A74 /* ClassDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E472A15F1EFB6F8400EF5A74 /* ClassDetailViewController.swift */; };
 		E472A1621EFB72EA00EF5A74 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E472A1611EFB72EA00EF5A74 /* SettingViewController.swift */; };
 		E472A1641EFB735C00EF5A74 /* ClassListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E472A1631EFB735C00EF5A74 /* ClassListViewController.swift */; };
+		E4765E171F7D74AF009F60F0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E484E65A1EFA337F0056F2D5 /* InfoPlist.strings */; };
 		E484E6551EFA33260056F2D5 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E484E6541EFA33260056F2D5 /* Localizable.strings */; };
-		E484E6581EFA337F0056F2D5 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E484E65A1EFA337F0056F2D5 /* InfoPlist.strings */; };
 		E489F6C71F5A821E00F2269F /* ProjectPublicFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E489F6C61F5A821E00F2269F /* ProjectPublicFunctions.swift */; };
 		E489F6C81F5A825A00F2269F /* ProjectPublicFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E489F6C61F5A821E00F2269F /* ProjectPublicFunctions.swift */; };
 		E48D4DF01E61F275008B0A97 /* ADayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48D4DEF1E61F275008B0A97 /* ADayViewController.swift */; };
@@ -603,6 +603,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E4765E171F7D74AF009F60F0 /* InfoPlist.strings in Resources */,
 				E4CA1DAE1F50097D0061784A /* Acknowledgements.markdown in Resources */,
 				E4F86B3E1DF0E20C00CAD72B /* LaunchScreen.storyboard in Resources */,
 				E4A880BD1DF279BB00816AB7 /* MFS Logo.jpg in Resources */,
@@ -615,7 +616,6 @@
 				E4F86B361DF0E20C00CAD72B /* Main.storyboard in Resources */,
 				E45510EF1F4D6F09001CF9BE /* GroupPossibleContent.plist in Resources */,
 				E4D3A1AE1E123D0200F709DC /* periodPicker.plist in Resources */,
-				E484E6581EFA337F0056F2D5 /* InfoPlist.strings in Resources */,
 				E44DCD921EB80E0600CEB68A /* School.jpg in Resources */,
 				E413AB141EE8AF87001EB189 /* School_building.png in Resources */,
 				E4CE43991EAC36F3000D743B /* BlankDictionary.plist in Resources */,
@@ -876,7 +876,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.dwei.ClassSchedule;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -894,7 +894,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.dwei.ClassSchedule;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -1109,7 +1109,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.dwei;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -1127,7 +1127,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.dwei;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

@@ -104,7 +104,7 @@ class classDetailViewController: UITableViewController, UIDocumentInteractionCon
             case let .success(response):
                 do {
                     guard let json = try JSONSerialization.jsonObject(with: response.data, options: .allowFragments) as? Array<Dictionary<String, Any?>> else {
-                        presentErrorMessage(presentMessage: "Internal error: Incorrect data format", layout: .StatusLine)
+                        presentErrorMessage(presentMessage: "Internal error: Incorrect data format", layout: .statusLine)
                         semaphore.signal()
                         return
                     }
@@ -120,10 +120,10 @@ class classDetailViewController: UITableViewController, UIDocumentInteractionCon
                         self.sectionShouldShowMore[contentName] = false
                     }
                 } catch {
-                    presentErrorMessage(presentMessage: error.localizedDescription, layout: .StatusLine)
+                    presentErrorMessage(presentMessage: error.localizedDescription, layout: .statusLine)
                 }
             case let .failure(error):
-                presentErrorMessage(presentMessage: error.localizedDescription, layout: .StatusLine)
+                presentErrorMessage(presentMessage: error.localizedDescription, layout: .statusLine)
             }
 
             semaphore.signal()
@@ -169,10 +169,10 @@ class classDetailViewController: UITableViewController, UIDocumentInteractionCon
                             self.contentList[contentName] = json
                         } catch {
                             self.availableInformation.remove(object: contentName)
-                            presentErrorMessage(presentMessage: error.localizedDescription, layout: .StatusLine)
+                            presentErrorMessage(presentMessage: error.localizedDescription, layout: .statusLine)
                         }
                     case let .failure(error):
-                        presentErrorMessage(presentMessage: error.localizedDescription, layout: .StatusLine)
+                        presentErrorMessage(presentMessage: error.localizedDescription, layout: .statusLine)
                     }
                     semaphore.signal()
                 })
@@ -187,12 +187,12 @@ class classDetailViewController: UITableViewController, UIDocumentInteractionCon
     func contentIDToName(inputData: Array<Dictionary<String, Any?>>, sectionId: String) -> Array<String> {
         var contentNameList = [String]()
         guard let filePath = Bundle.main.url(forResource: "GroupPossibleContent", withExtension: "plist") else {
-            presentErrorMessage(presentMessage: "Resource file missing.", layout: .StatusLine)
+            presentErrorMessage(presentMessage: "Resource file missing.", layout: .statusLine)
             return []
         }
 
         guard let contentLUT = NSArray(contentsOf: filePath) as? Array<Dictionary<String, Any?>> else {
-            presentErrorMessage(presentMessage: "Resource file has incorrect format", layout: .StatusLine)
+            presentErrorMessage(presentMessage: "Resource file has incorrect format", layout: .statusLine)
             return []
         }
 
@@ -460,7 +460,7 @@ extension classDetailViewController {
                 print("new location:\(path)")
             } else {
                 DispatchQueue.main.async {
-                    presentErrorMessage(presentMessage: error!.localizedDescription, layout: .StatusLine)
+                    presentErrorMessage(presentMessage: error!.localizedDescription, layout: .statusLine)
                 }
             }
             semaphore.signal()
@@ -509,7 +509,7 @@ extension classDetailViewController {
                 let path = photoPath.appending("/\(sectionId)_syllabus.plist")
                 NSArray(array: arrayToWrite).write(toFile: path, atomically: true)
             } else {
-                presentErrorMessage(presentMessage: error!.localizedDescription, layout: .StatusLine)
+                presentErrorMessage(presentMessage: error!.localizedDescription, layout: .statusLine)
             }
             semaphore.signal()
         })
@@ -566,7 +566,7 @@ class syllabusView: UITableViewCell {
         }
 
         guard !self.attachmentFileName!.isEmpty else {
-            presentErrorMessage(presentMessage: "There is no attachment.", layout: .CardView)
+            presentErrorMessage(presentMessage: "There is no attachment.", layout: .cardView)
             self.parentViewController!.navigationController?.cancelProgress()
             return
         }
@@ -602,7 +602,7 @@ class syllabusView: UITableViewCell {
         }
         
         guard error == nil else {
-            presentErrorMessage(presentMessage: error!.localizedDescription, layout: .StatusLine)
+            presentErrorMessage(presentMessage: error!.localizedDescription, layout: .statusLine)
             return
         }
         
