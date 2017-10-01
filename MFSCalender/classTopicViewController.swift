@@ -11,6 +11,7 @@ import XLPagerTabStrip
 import SwiftMessages
 import SDWebImage
 import DGElasticPullToRefresh
+import DZNEmptyDataSet
 
 class classTopicViewController: UIViewController {
     @IBOutlet var topicsCollectionView: UICollectionView!
@@ -23,6 +24,8 @@ class classTopicViewController: UIViewController {
         super.viewDidLoad()
         topicsCollectionView.delegate = self
         topicsCollectionView.dataSource = self
+        topicsCollectionView.emptyDataSetSource = self
+        topicsCollectionView.emptyDataSetDelegate = self
 
         DispatchQueue.global().async {
             let classObject = ClassView().getTheClassToPresent() ?? [String: Any]()
@@ -188,6 +191,18 @@ extension classTopicViewController: UICollectionViewDelegate, UICollectionViewDa
 extension classTopicViewController: IndicatorInfoProvider {
     func indicatorInfo(for pagerTabStripController: PagerTabStripViewController) -> IndicatorInfo {
         return IndicatorInfo(title: "TOPICS")
+    }
+}
+
+extension classTopicViewController: DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
+    func image(forEmptyDataSet scrollView: UIScrollView!) -> UIImage! {
+        return UIImage(named: "Topic")
+    }
+    
+    func title(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
+        let attr = [NSAttributedStringKey.font: UIFont.preferredFont(forTextStyle: UIFontTextStyle.headline)]
+        let str = "There is no topic to display."
+        return NSAttributedString(string: str, attributes: attr)
     }
 }
 

@@ -115,7 +115,7 @@ class homeworkViewController: UITableViewController, UIViewControllerPreviewingD
             self.navigationController?.setPrimaryColor(UIColor(hexString: 0xFF7E79))
             self.navigationController?.setSecondaryColor(UIColor.white)
             self.navigationController?.setIndeterminate(true)
-            self.tableView.reloadData()
+            self.tableView.reloadEmptyDataSet()
         }
 
         let config = URLSessionConfiguration.default
@@ -266,14 +266,9 @@ class homeworkViewController: UITableViewController, UIViewControllerPreviewingD
     }
     
     func detailViewControllerOf(indexPath: IndexPath) -> UIViewController? {
-        let homeworkInSection = self.listHomework[sections[indexPath.section]]
-        guard let homework = homeworkInSection?[indexPath.row] else {
+        guard let homework = dataForCell(at: indexPath) else {
             return nil
         }
-        
-//        guard (homework["long_description"] as? String).existsAndNotEmpty() else {
-//            return nil
-//        }
         
         guard let assignmentIndexID = homework["assignment_index_id"] as? Int, let assignmentID = homework["assignment_id"] as? Int else {
             return nil
@@ -315,22 +310,30 @@ class homeworkViewController: UITableViewController, UIViewControllerPreviewingD
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
         show(viewControllerToCommit, sender: self)
     }
-
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "homeworkViewCell", for: indexPath) as! homeworkViewCell
+    
+    func dataForCell(at indexPath: IndexPath) -> [String: Any]? {
         guard sections.count >= indexPath.section + 1 else {
-            return cell
+            return nil
         }
         let sectionHeader = sections[indexPath.section]
         
         guard let homeworkInSection = self.listHomework[sectionHeader] else {
-            return cell
+            return nil
         }
         
         guard homeworkInSection.count >= indexPath.row + 1 else {
-            return cell
+            return nil
         }
         let homework = homeworkInSection[indexPath.row]
+        
+        return homework
+    }
+
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "homeworkViewCell", for: indexPath) as! homeworkViewCell
+        guard let homework = dataForCell(at: indexPath) else {
+            return cell
+        }
         
         if let assignmentIndexId = homework["assignment_index_id"] as? Int {
             cell.assignmentIndexId = String(describing: assignmentIndexId)
@@ -556,7 +559,17 @@ class homeworkViewCell: UITableViewCell, UIDocumentPickerDelegate {
                 self.activityIndicator.isHidden = true
                 self.activityIndicator.stopAnimating()
             }
+            
+            self.refreshData()
         }
+    }
+    
+    func refreshData() {
+        guard let homeworkVC = self.parentViewController as? homeworkViewController else {
+            return
+        }
+        
+        homeworkVC.getHomework()
     }
 }
 

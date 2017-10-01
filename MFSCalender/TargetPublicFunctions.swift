@@ -408,7 +408,10 @@ class NetworkOperations {
             return (fileURL, [.removePreviousFile, .createIntermediateDirectories])
         }
         
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        DispatchQueue.main.async {
+            UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        }
+        
         let queue = DispatchQueue(label: "com.cnoon.response-queue", qos: .utility, attributes: [.concurrent])
         Alamofire.download(url, to: destination).response(queue: queue, completionHandler: { response in
             
