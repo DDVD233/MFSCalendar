@@ -22,17 +22,13 @@ extension UIView {
 
     var parentViewController: UIViewController? {
         var parentResponder: UIResponder? = self
-        var parentViewController: UIViewController? = nil
-        DispatchQueue.main.sync {
-            while parentResponder != nil {
-                parentResponder = parentResponder!.next
-                if parentResponder is UIViewController {
-                    parentViewController = (parentResponder as! UIViewController)
-                    return
-                }
+        while parentResponder != nil {
+            parentResponder = parentResponder!.next
+            if let viewController = parentResponder as? UIViewController {
+                return viewController
             }
         }
-        return parentViewController
+        return nil
     }
 }
 

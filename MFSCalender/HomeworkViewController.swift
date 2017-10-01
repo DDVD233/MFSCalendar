@@ -36,7 +36,6 @@ class homeworkViewController: UITableViewController, UIViewControllerPreviewingD
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setLargeTitle()
         homeworkTable.rowHeight = UITableViewAutomaticDimension
         homeworkTable.estimatedRowHeight = 80
         homeworkTable.emptyDataSetSource = self
@@ -44,9 +43,7 @@ class homeworkViewController: UITableViewController, UIViewControllerPreviewingD
         homeworkTable.delegate = self
 
 //        Remove the bottom 1px line on Navigation Bar
-        if let navigationBar = self.navigationController?.navigationBar {
-            navigationBar.removeBottomLine()
-        }
+//
         
         if filter == 2 {
             let loadingview = DGElasticPullToRefreshLoadingViewCircle()
@@ -59,24 +56,20 @@ class homeworkViewController: UITableViewController, UIViewControllerPreviewingD
             homeworkTable.dg_setPullToRefreshBackgroundColor(tableView.backgroundColor!)
         }
         
+        if #available(iOS 11.0, *) {
+            setLargeTitle(on: self)
+        } else {
+            if let navigationBar = self.navigationController?.navigationBar {
+                navigationBar.removeBottomLine()
+            }
+        }
+        
         if #available(iOS 9.0, *) {
             if self.traitCollection.forceTouchCapability == .available {
                 registerForPreviewing(with: self, sourceView: homeworkTable)
             }
         }
 
-    }
-    
-    func setLargeTitle() {
-//        if #available(iOS 11.0, *) {
-//            self.navigationController?.navigationBar.prefersLargeTitles = true
-//            self.navigationController?.navigationBar.backgroundColor = UIColor(hexString: 0xFF7E79)
-//            self.navigationController?.setBackgroundColor(UIColor(hexString: 0xFF7E79))
-//            guard let statusBar = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar") as? UIView else { return }
-//
-//            statusBar.backgroundColor = UIColor(hexString: 0xFF7E79)
-//            UIApplication.shared.statusBarStyle = .lightContent
-//        }
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -142,6 +135,9 @@ class homeworkViewController: UITableViewController, UIViewControllerPreviewingD
                 do {
                     if let json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? [[String: Any]] {
                         originalData = json
+                        for items in json {
+                            print(items)
+                        }
                     }
 
                 } catch {

@@ -34,6 +34,10 @@ class classListController: UIViewController, UIViewControllerPreviewingDelegate 
                 registerForPreviewing(with: self, sourceView: classListCollectionView)
             }
         }
+        
+        if #available(iOS 11.0, *) {
+            setLargeTitle(on: self)
+        }
     }
 
     func sortClasses(classList: NSArray) {
