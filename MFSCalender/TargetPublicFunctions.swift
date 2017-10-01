@@ -459,7 +459,7 @@ class NetworkOperations {
     }
     
     func openLink(url: inout String, from viewController: UIViewController) {
-        if !url.contains("http://") {
+        if !url.contains("http") {
             url = "http://" + url
         }
         if let urlToOpen = URL(string: url) {

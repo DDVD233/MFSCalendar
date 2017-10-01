@@ -12,6 +12,13 @@ import MessageUI
 
 class aboutView: UITableViewController, MFMailComposeViewControllerDelegate {
     @IBOutlet var dependenciesTextView: UITextView!
+    @IBOutlet var buildVersion: UILabel!
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        let buildVersionText = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? ""
+        buildVersion.text = "Build " + buildVersionText
+    }
     
     override func viewDidAppear(_ animated: Bool) {
         let podAckFile = Bundle.main.url(forResource: "Acknowledgements", withExtension: "markdown")!

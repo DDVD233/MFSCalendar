@@ -26,6 +26,7 @@
 		E472A1621EFB72EA00EF5A74 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E472A1611EFB72EA00EF5A74 /* SettingViewController.swift */; };
 		E472A1641EFB735C00EF5A74 /* ClassListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E472A1631EFB735C00EF5A74 /* ClassListViewController.swift */; };
 		E4765E171F7D74AF009F60F0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E484E65A1EFA337F0056F2D5 /* InfoPlist.strings */; };
+		E47DA48A1F81A091005FA2FC /* AppLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = E47DA4891F819F3A005FA2FC /* AppLogo.png */; };
 		E484E6551EFA33260056F2D5 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E484E6541EFA33260056F2D5 /* Localizable.strings */; };
 		E489F6C71F5A821E00F2269F /* ProjectPublicFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E489F6C61F5A821E00F2269F /* ProjectPublicFunctions.swift */; };
 		E489F6C81F5A825A00F2269F /* ProjectPublicFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E489F6C61F5A821E00F2269F /* ProjectPublicFunctions.swift */; };
@@ -134,6 +135,7 @@
 		E472A15F1EFB6F8400EF5A74 /* ClassDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClassDetailViewController.swift; sourceTree = "<group>"; };
 		E472A1611EFB72EA00EF5A74 /* SettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		E472A1631EFB735C00EF5A74 /* ClassListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClassListViewController.swift; sourceTree = "<group>"; };
+		E47DA4891F819F3A005FA2FC /* AppLogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AppLogo.png; sourceTree = "<group>"; };
 		E484E6541EFA33260056F2D5 /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		E484E6591EFA337F0056F2D5 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E484E65B1EFA338B0056F2D5 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
@@ -344,6 +346,7 @@
 		E4EA9D7B1DF225FB0021A823 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				E47DA4891F819F3A005FA2FC /* AppLogo.png */,
 				E41DE2F71EFA4293001155E9 /* No_homework.png */,
 				E4AAD1601EE8CC9E00E4E5EC /* bell.png */,
 				E413AB131EE8AF87001EB189 /* School_building.png */,
@@ -603,6 +606,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E47DA48A1F81A091005FA2FC /* AppLogo.png in Resources */,
 				E4765E171F7D74AF009F60F0 /* InfoPlist.strings in Resources */,
 				E4CA1DAE1F50097D0061784A /* Acknowledgements.markdown in Resources */,
 				E4F86B3E1DF0E20C00CAD72B /* LaunchScreen.storyboard in Resources */,
