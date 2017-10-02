@@ -161,7 +161,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
 
         refreshDisplayedData()
         DispatchQueue.global().async {
-            if self.doRefreshData() && Reachability()!.isReachable {
+            if self.doRefreshData() && (Reachability()?.isReachable ?? false) {
                 NSLog("Refresh Data")
                 self.updateData()
 

@@ -225,13 +225,20 @@ class courseFillController: UIViewController {
                     return
                 }
                 print(courseName)
-                let teacherName = course["teacherName"] as? String
-                print(teacherName ?? "")
-                var urlString = "https://dwei.org/getAdditionalInformation/\(courseName)/\(teacherName ?? "None")"
-                urlString = urlString.replace(target: " ", withString: "+")
+                let teacherName = course["teacherName"] as? String ?? ""
+                print(teacherName)
+                // var urlString = "https://dwei.org/getAdditionalInformation/\(courseName)/\(teacherName ?? "None")"
+                let urlString = "https://dwei.org/getAdditionalInformation"
+                let courseInfo = ["courseName": courseName, "teacherName": teacherName]
+                guard let json = try? JSONSerialization.data(withJSONObject: courseInfo, options: .prettyPrinted) else {
+                    return
+                }
+                // urlString = urlString.replace(target: " ", withString: "+")
                 let semaphore = DispatchSemaphore.init(value: 0)
                 let url = URL(string: urlString)
-                let request = URLRequest(url: url!)
+                var request = URLRequest(url: url!)
+                request.httpMethod = "POST"
+                request.httpBody = json
                 let session = URLSession.shared
 
                 let downloadTask = session.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
@@ -247,6 +254,7 @@ class courseFillController: UIViewController {
                             }
 
                         } catch {
+                            print(String(data: data!, encoding: .utf8))
                             NSLog("Failed parsing the data")
                         }
                     } else {

@@ -186,7 +186,7 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
         } else {
 //Global Async Begins................
             DispatchQueue.global().async(execute: {
-                DispatchQueue.main.sync {
+                DispatchQueue.main.async {
                     self.indicatorView.isHidden = false
                     self.NVIndicator.startAnimating()
                 }
@@ -204,7 +204,7 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
                 }
                 
                 Answers.logLogin(withMethod: "Default", success: false, customAttributes: [:])
-                DispatchQueue.main.sync {
+                DispatchQueue.main.async {
                     self.indicatorView.isHidden = true
                 }
 
@@ -244,17 +244,17 @@ extension firstTimeLaunchController {
         let token = userDefaults?.string(forKey: "token")
         let userID = userDefaults?.string(forKey: "userID")
         var success: Bool = false
-
-        provider.request(MyService.getProfile(userID: userID!, token: token!), completion: { result in
+        
+        provider.request(MyService.getProfile(userID: userID!, token: token!), callbackQueue: DispatchQueue.global(), completion: { result in
             switch result {
             case let .success(response):
                 do {
                     guard let resDict = try response.mapJSON() as? Dictionary<String, Any?> else {
                         presentErrorMessage(presentMessage: "Internal error: incorrect file format.", layout: .cardView)
-
+                        semaphore.signal()
                         return
                     }
-
+                    
                     guard resDict["Error"] == nil else {
                         //                        When error occured.
                         print("Login Error!")
@@ -263,14 +263,15 @@ extension firstTimeLaunchController {
                                 presentErrorMessage(presentMessage: "The username/password is incorrect. Please check your spelling.", layout: .cardView)
                             }
                         }
-
+                        
+                        semaphore.signal()
                         return
                     }
-
+                    
                     if let firstName = resDict["FirstName"] as? String {
                         userDefaults?.set(firstName, forKey: "firstName")
                     }
-
+                    
                     if let lastName = resDict["LastName"] as? String {
                         userDefaults?.set(lastName, forKey: "lastName")
                     }
@@ -279,17 +280,17 @@ extension firstTimeLaunchController {
                         userDefaults?.set(email, forKey: "email")
                         
                     }
-
+                    
                     if let photo = resDict["ProfilePhoto"] as? NSDictionary {
                         if let photolink = photo["ThumbFilenameUrl"] as? String {
                             userDefaults?.set(photolink, forKey: "photoLink")
                             self.downloadSmallProfilePhoto(photoLink: photolink)
                         }
-
+                        
                         let largePhotoLink = photo["LargeFilenameUrl"] as? String
                         userDefaults?.set(largePhotoLink, forKey: "largePhotoLink")
                     }
-
+                    
                     if let lockerNumber = resDict["LockerNbr"] as? String {
                         userDefaults?.set(lockerNumber, forKey: "lockerNumber")
                     }
@@ -297,7 +298,7 @@ extension firstTimeLaunchController {
                         userDefaults?.set(lockerPassword, forKey: "lockerCombination")
                     }
                     success = true
-
+                    
                 } catch {
                     NSLog("Data parsing failed")
                     DispatchQueue.main.async {
@@ -307,7 +308,7 @@ extension firstTimeLaunchController {
             case let .failure(error):
                 presentErrorMessage(presentMessage: error.localizedDescription, layout: .cardView)
             }
-
+            
             semaphore.signal()
         })
 
@@ -317,12 +318,13 @@ extension firstTimeLaunchController {
     }
 
     func downloadSmallProfilePhoto(photoLink: String) {
-        let semaphore = DispatchSemaphore(value: 0)
+        // let semaphore = DispatchSemaphore(value: 0)
 
         let urlString = "https://mfriends.myschoolapp.com" + photoLink
         let url = URL(string: urlString)
         //create request.
-        let request3 = URLRequest(url: url!)
+        var request3 = URLRequest(url: url!)
+        request3.timeoutInterval = 5
         let downloadTask = URLSession.shared.downloadTask(with: request3, completionHandler: { (location: URL?, response: URLResponse?, error: Error?) -> Void in
             if error == nil {
                 //Temp location:
@@ -349,12 +351,12 @@ extension firstTimeLaunchController {
                     self.errorMessage(presentMessage: presentMessage)
                 }
             }
-            semaphore.signal()
+            // semaphore.signal()
         })
 
         //使用resume方法启动任务
         downloadTask.resume()
-        semaphore.wait()
+        // semaphore.wait()
     }
 
     //Get calendar's day data.
