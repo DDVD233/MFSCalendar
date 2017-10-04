@@ -303,6 +303,10 @@ class HomeworkView {
             return UIColor(hexString: 0x795548) // Brown 500
         case "Communicative Skills":
             return UIColor(hexString: 0x43A047) // Green 600
+        case "Lab":
+            return UIColor(hexString: 0x5D4037) // Brown 700
+        case "Writing":
+            return UIColor(hexString: 0xA1887F) // Brown 300
         default:
             return UIColor(hexString: 0x607D8B) // Grey 500
         }

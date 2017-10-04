@@ -27,7 +27,8 @@ class classDetailViewController: UITableViewController, UIDocumentInteractionCon
 
     @IBOutlet weak var teacherName: UILabel!
     @IBOutlet weak var roomNumber: UILabel!
-
+    @IBOutlet var courseName: UILabel!
+    
     @IBOutlet var basicInformationView: UIView!
     @IBOutlet var classDetailTable: UITableView!
 
@@ -65,14 +66,27 @@ class classDetailViewController: UITableViewController, UIDocumentInteractionCon
 
     func loadContent() {
 
-        if teacherName.text.existsAndNotEmpty() || roomNumber.text.existsAndNotEmpty() && !availableInformation.contains("Basic") {
-            //            其中一个不为空,且目前还没有这一项时
-            availableInformation.append("Basic")
-        }
+//        if teacherName.text.existsAndNotEmpty() || roomNumber.text.existsAndNotEmpty() && !availableInformation.contains("Basic") {
+//            //            其中一个不为空,且目前还没有这一项时
+//            availableInformation.append("Basic")
+//        }
+        
+        configureBasicInfoView()
         
         self.classDetailTable.reloadData()
-        self.teacherName.text = self.classObject["teacherName"] as? String
-        self.roomNumber.text = self.classObject["roomNumber"] as? String
+    }
+    
+    func configureBasicInfoView() {
+        let sectionId = classObject["sectionid"] as! Int
+        let photoPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
+        let path = photoPath.appending("/\(sectionId)_profile.png")
+        profileImageView.image = UIImage(contentsOfFile: path)
+        profileImageView.contentMode = UIViewContentMode.scaleAspectFill
+        profileImageView.clipsToBounds = true
+        
+        self.teacherName.text = self.classObject["teacherName"] as? String ?? ""
+        self.roomNumber.text = self.classObject["roomNumber"] as? String ?? ""
+        self.courseName.text = self.classObject["className"] as? String ?? ""
     }
 
     func refreshContent() {
@@ -81,8 +95,7 @@ class classDetailViewController: UITableViewController, UIDocumentInteractionCon
         }
         
         DispatchQueue.main.async {
-            self.roomNumber.text = self.classObject["roomNumber"] as? String ?? ""
-            self.teacherName.text = self.classObject["teacherName"] as? String ?? ""
+            self.configureBasicInfoView()
         }
 
         guard let sectionId = classObject["sectionid"] as? Int else {
@@ -109,7 +122,7 @@ class classDetailViewController: UITableViewController, UIDocumentInteractionCon
                         return
                     }
 
-                    self.availableInformation = ["Basic"]
+                    self.availableInformation = []
                     var contentNameList = self.contentIDToName(inputData: json, sectionId: sectionIdString)
 
                     contentNameList.remove(object: "Photo")
@@ -276,7 +289,7 @@ extension classDetailViewController {
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if availableInformation[indexPath.section] == "Basic" {
-            return 130
+            return 170
         }
 
         return UITableViewAutomaticDimension
@@ -297,7 +310,12 @@ extension classDetailViewController {
     }
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 46
+        switch availableInformation[section] {
+        case "Basic":
+            return 0
+        default:
+            return 46
+        }
     }
 
     override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
@@ -323,7 +341,7 @@ extension classDetailViewController {
 
             cell.selectionStyle = .none
 
-            basicInformationView.frame = CGRect(x: 0, y: 1, width: cell.frame.size.width, height: cell.frame.size.height - 2)
+            basicInformationView.frame = CGRect(x: 0, y: 0, width: cell.frame.size.width, height: cell.frame.size.height)
             cell.addSubview(basicInformationView)
             cell.layoutSubviews()
 
