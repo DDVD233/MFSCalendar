@@ -315,7 +315,7 @@ extension eventViewController: UITableViewDelegate, UITableViewDataSource {
             return UITableViewCell()
         }
         cell?.ClassName.text = summary
-        let letter = String(describing: summary[...summary.index(after: summary.startIndex)])
+        let letter = String(describing: summary[...summary.startIndex])
         cell?.PeriodNumber.text = letter
         if rowDict["location"] != nil {
             let location = rowDict["location"] as! String

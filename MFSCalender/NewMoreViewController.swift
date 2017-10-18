@@ -8,6 +8,7 @@
 
 import UIKit
 import SCLAlertView
+import Alamofire
 
 class NewMoreViewController: UICollectionViewController  {
     override func viewDidLoad() {
@@ -100,9 +101,7 @@ extension NewMoreViewController {
             case 1:
                 getLunchMenu()
             case 2:
-                break
-                //let serviceHour = getServiceHour()
-                //presentServiceHourView(hour: String(describing: serviceHour))
+                self.serviceHour()
             case 3:
                 if let cell = collectionView.cellForItem(at: indexPath) {
                     logout(sender: cell)
@@ -117,37 +116,91 @@ extension NewMoreViewController {
         }
     }
     
+    func serviceHour() {
+        if userDefaults?.string(forKey: "servicePassword") != nil {
+            var serviceHour = 999
+            serviceHour = self.getServiceHour()
+            let serviceHourString = serviceHour > 990 ? "Error" : String(describing: serviceHour)
+            self.presentServiceHourView(hour: serviceHourString)
+        } else {
+            self.presentServiceHourLoginView()
+        }
+    }
+    
+    //    996: Data not received/incorrect format
+    //    997: Username/password Not found
+    //    998: Server internal error. Csrf_middleware_token not found
+    //    999: Incorrect username/password
     func getServiceHour() -> Int {
         guard let username = userDefaults?.string(forKey: "serviceUsername"), let password = userDefaults?.string(forKey: "servicePassword") else {
             //presentServiceLoginView()
-            return 0
+            return 997
         }
+        
         
         let url = URL(string: "https://dwei.org/serviceHour/\(username)/\(password)")!
         var serviceHour: Int? = nil
         let semaphore = DispatchSemaphore(value: 0)
-        
-        let shTask = URLSession.shared.dataTask(with: url, completionHandler: { (data, response, error) in
-            guard error == nil else {
-                presentErrorMessage(presentMessage: error!.localizedDescription, layout: .cardView)
+        Alamofire.request(url).response(queue: DispatchQueue.global(), completionHandler: { (result) in
+            guard result.error == nil else {
+                presentErrorMessage(presentMessage: result.error!.localizedDescription, layout: .cardView)
+                semaphore.signal()
                 return
             }
             
-            guard let serviceHourString = String(data: data!, encoding: .utf8) else {
+            guard let serviceHourString = String(data: result.data!, encoding: .utf8) else {
                 presentErrorMessage(presentMessage: "Incorrect data format", layout: .statusLine)
+                semaphore.signal()
                 return
             }
             
             serviceHour = Int(serviceHourString)
+            semaphore.signal()
         })
         
-        return 0
+        semaphore.wait()
+        return serviceHour ?? 996
+    }
+    
+    func presentServiceHourLoginView() {
+        let appearance = SCLAlertView.SCLAppearance(shouldAutoDismiss: false)
+        
+        let loginView = SCLAlertView(appearance: appearance)
+        let username = loginView.addTextField("Username")
+        if userDefaults!.string(forKey: "serviceUsername").existsAndNotEmpty() {
+            username.text = userDefaults?.string(forKey: "serviceUsername")
+        }
+        
+        let password = loginView.addTextField("Password")
+        password.isSecureTextEntry = true
+        
+        loginView.addButton("Login") {
+            userDefaults?.set(username.text, forKey: "serviceUsername")
+            userDefaults?.set(password.text, forKey: "servicePassword")
+            
+            let hour = self.getServiceHour()
+            switch hour {
+            case 999:
+                presentErrorMessage(presentMessage: "Login failed. Your username/password maybe incorrect.", layout: .cardView)
+                userDefaults?.set(nil, forKey: "servicePassword")
+            case 996, 998:
+                presentErrorMessage(presentMessage: "Login failed. Server internal error. Please try again later.", layout: .cardView)
+                userDefaults?.set(nil, forKey: "servicePassword")
+            default:
+                loginView.hideView()
+            }
+        }
+        
+        loginView.showInfo("Log in to Mobileserve", subTitle: "Please use your Mobileserve account to login.", closeButtonTitle: "Cancel", animationStyle: .bottomToTop)
     }
     
     func presentServiceHourView(hour: String) {
         let appearance = SCLAlertView.SCLAppearance(kTitleFont: UIFont.boldSystemFont(ofSize: 35),
                                                     kTextFont: UIFont(name: "HelveticaNeue", size: 17)!)
         let alertView = SCLAlertView(appearance: appearance)
+        alertView.addButton("Log Out") {
+            userDefaults?.set(nil, forKey: "servicePassword")
+        }
         alertView.showInfo(hour, subTitle: "TOTAL SERVICE HOURS", animationStyle: .bottomToTop)
     }
     

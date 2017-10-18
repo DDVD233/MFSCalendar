@@ -581,7 +581,7 @@ extension Main: UITableViewDelegate, UITableViewDataSource {
         }
         cell.ClassName.text = summary
 //        Use the first letter as the letter on the left side of the cell
-        let letter = String(describing: summary[...summary.index(after: summary.startIndex)])
+        let letter = String(describing: summary[...summary.startIndex])
         cell.PeriodNumber.text = letter
 
         if rowDict["location"] != nil {
