@@ -458,6 +458,7 @@
 				E48D4DFB1E61FC25008B0A97 /* Sources */,
 				E48D4DFC1E61FC25008B0A97 /* Frameworks */,
 				E48D4DFD1E61FC25008B0A97 /* Resources */,
+				E465A32B1F96F698000303D6 /* Build Auto Increment */,
 			);
 			buildRules = (
 			);
@@ -517,6 +518,7 @@
 				38B39BD1028F8E29BE39F059 /* [CP] Embed Pods Frameworks */,
 				FF0356DEF6547DA2CDAA0F62 /* [CP] Copy Pods Resources */,
 				E4B3400B1F090A8A00D6039A /* ShellScript */,
+				E465A32A1F96F645000303D6 /* Build Auto Increment */,
 			);
 			buildRules = (
 			);
@@ -753,6 +755,34 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
+		};
+		E465A32A1F96F645000303D6 /* Build Auto Increment */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Build Auto Increment";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "buildNumber=$(/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"${PROJECT_DIR}/${INFOPLIST_FILE}\")\nbuildNumber=$(($buildNumber + 1))\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"${PROJECT_DIR}/${INFOPLIST_FILE}\"";
+		};
+		E465A32B1F96F698000303D6 /* Build Auto Increment */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Build Auto Increment";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "buildNumber=$(/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"${PROJECT_DIR}/${INFOPLIST_FILE}\")\nbuildNumber=$(($buildNumber + 1))\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"${PROJECT_DIR}/${INFOPLIST_FILE}\"";
 		};
 		E4B3400B1F090A8A00D6039A /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
