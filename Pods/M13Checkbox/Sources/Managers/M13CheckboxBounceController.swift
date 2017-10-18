@@ -76,7 +76,7 @@ internal class M13CheckboxBounceController: M13CheckboxController {
             "fillColor": NSNull(),
             "path": NSNull(),
             "lineWidth": NSNull()
-        ] as [String: CAAction]
+        ]
         
         // Setup the unselected box layer
         unselectedBoxLayer.lineCap = kCALineCapRound

@@ -80,7 +80,7 @@ class classDetailViewController: UITableViewController, UIDocumentInteractionCon
         let sectionId = classObject["sectionid"] as! Int
         let photoPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
         let path = photoPath.appending("/\(sectionId)_profile.png")
-        profileImageView.image = UIImage(contentsOfFile: path)
+        profileImageView.image = UIImage(contentsOfFile: path) ?? UIImage(named: "CourseBackground.jpg")!
         profileImageView.contentMode = UIViewContentMode.scaleAspectFill
         profileImageView.clipsToBounds = true
         
@@ -335,7 +335,7 @@ extension classDetailViewController {
             let sectionId = classObject["sectionid"] as! Int
             let photoPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
             let path = photoPath.appending("/\(sectionId)_profile.png")
-            profileImageView.image = UIImage(contentsOfFile: path)
+            profileImageView.image = UIImage(contentsOfFile: path) ?? UIImage(named: "CourseBackground.jpg")!
             profileImageView.contentMode = UIViewContentMode.scaleAspectFill
             profileImageView.clipsToBounds = true
 

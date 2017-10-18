@@ -479,14 +479,11 @@ class NetworkOperations {
 }
 
 class Layout {
-    func squareSize() -> CGFloat {
+    func squareSize(estimatedWidth: Int = 150) -> CGFloat {
         let screenWidth = UIScreen.main.bounds.size.width
-        var viewSize = screenWidth / 2
-        if screenWidth > 453 {
-            print(Int(screenWidth))
-            let numberOfItems = Int(screenWidth / 151)
-            viewSize = screenWidth / CGFloat(numberOfItems)
-        }
+        print(Int(screenWidth))
+        let numberOfItems = Int(screenWidth / CGFloat(estimatedWidth))
+        let viewSize = screenWidth / CGFloat(numberOfItems)
         
         return viewSize
     }

@@ -26,6 +26,13 @@ class profileViewController: UITableViewController {
         if let navigationBar = self.navigationController?.navigationBar {
             navigationBar.removeBottomLine()
         }
+        
+//        let stretchyHeader = GSKStretchyHeaderView.init(frame: CGRect(x: 0, y: 0, width: UIScreen().bounds.width, height: 240))
+//        headerView.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: 240)
+//        stretchyHeader.minimumContentHeight = 0
+//        stretchyHeader.maximumContentHeight = 300
+//        stretchyHeader.contentView.addSubview(headerView)
+//        tableView.addSubview(headerView)
     }
     
     func setupHeaders() {

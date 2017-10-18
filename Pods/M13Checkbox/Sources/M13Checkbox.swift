@@ -28,7 +28,7 @@ open class M13Checkbox: UIControl {
     - Checked: A checkmark is shown.
     - Mixed: A dash is shown.
     */
-    public enum CheckState: String, RawRepresentable {
+    public enum CheckState: String {
         /// No check is shown.
         case unchecked = "Unchecked"
         /// A checkmark is shown.
@@ -43,7 +43,7 @@ open class M13Checkbox: UIControl {
      - Square: The box is square with optional rounded corners.
      - Circle: The box is a circle.
      */
-    public enum BoxType: String, RawRepresentable {
+    public enum BoxType: String {
         /// The box is a circle.
         case circle = "Circle"
         /// The box is square with optional rounded corners.
@@ -56,7 +56,7 @@ open class M13Checkbox: UIControl {
      - Checkmark: The mark is a standard checkmark.
      - Radio: The mark is a radio style fill.
      */
-    public enum MarkType: String, RawRepresentable {
+    public enum MarkType: String {
         /// The mark is a standard checkmark.
         case checkmark = "Checkmark"
         /// The mark is a radio style fill.
@@ -94,43 +94,30 @@ open class M13Checkbox: UIControl {
             switch rawValue {
             case "Stroke":
                 self = .stroke
-                break
             case "Fill":
                 self = .fill
-                break
             case "BounceStroke":
                 self = .bounce(.stroke)
-                break
             case "BounceFill":
                 self = .bounce(.fill)
-                break
             case "ExpandStroke":
                 self = .expand(.stroke)
-                break
             case "ExpandFill":
                 self = .expand(.fill)
-                break
             case "FlatStroke":
                 self = .flat(.stroke)
-                break
             case "FlatFill":
                 self = .flat(.fill)
-                break
             case "Spiral":
                 self = .spiral
-                break
             case "FadeStroke":
                 self = .fade(.stroke)
-                break
             case "FadeFill":
                 self = .fade(.fill)
-                break
             case "DotStroke":
                 self = .dot(.stroke)
-                break
             case "DotFill":
                 self = .dot(.fill)
-                break
             default:
                 return nil
             }
@@ -228,7 +215,7 @@ open class M13Checkbox: UIControl {
     
     /// The manager that manages display and animations of the checkbox.
     /// The default animation is a stroke.
-    fileprivate var controller: M13CheckboxController = M13CheckboxStrokeController()
+    fileprivate var controller: M13CheckboxController = DefaultValues.controller
     
     //----------------------------
     // MARK: - Initalization
@@ -251,7 +238,7 @@ open class M13Checkbox: UIControl {
             layer.addSublayer(aLayer)
         }
         controller.tintColor = tintColor
-        controller.resetLayersForState(.unchecked)
+        controller.resetLayersForState(DefaultValues.checkState)
         
         let longPressGesture = M13CheckboxGestureRecognizer(target: self, action: #selector(M13Checkbox.handleLongPress(_:)))
         addGestureRecognizer(longPressGesture)
@@ -358,7 +345,7 @@ open class M13Checkbox: UIControl {
     }
     
     /// The type of animation to preform when changing from the unchecked state to any other state.
-    open var stateChangeAnimation: Animation = .stroke {
+    open var stateChangeAnimation: Animation = DefaultValues.animation {
         didSet {
             
             // Remove the sublayers
@@ -408,7 +395,7 @@ open class M13Checkbox: UIControl {
     // MARK: - UIControl
     //----------------------------
     
-    func handleLongPress(_ sender: UILongPressGestureRecognizer) {
+    @objc func handleLongPress(_ sender: UILongPressGestureRecognizer) {
         if sender.state == .began || sender.state == .changed {
             isSelected = true
         } else {
@@ -456,7 +443,7 @@ open class M13Checkbox: UIControl {
     }
     
     /// The type of mark to display.
-    @IBInspectable open var markType: MarkType {
+    open var markType: MarkType {
         get {
             return controller.markType
         }

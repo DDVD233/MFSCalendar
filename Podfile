@@ -2,6 +2,7 @@ project 'MFSCalendar.xcodeproj'
 source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '8.0'
 use_frameworks!
+# Main 
 
 
 target 'MFSCalendar' do
@@ -9,13 +10,13 @@ target 'MFSCalendar' do
   pod 'NVActivityIndicatorView'
   pod 'UICircularProgressRing'
   pod 'SCLAlertView'
-  pod 'SkyFloatingLabelTextField'
+  pod 'SkyFloatingLabelTextField', :git => 'https://github.com/Skyscanner/SkyFloatingLabelTextField.git', :branch => 'master'
   pod 'DZNEmptyDataSet'
   pod 'FSCalendar'
   pod 'LTMorphingLabel'
   pod 'SwiftyJSON'
   pod 'M13Checkbox'
-  pod 'SwiftDate', '~> 4.0'
+  pod 'SwiftDate'
   pod 'DGElasticPullToRefresh'
   pod 'ReachabilitySwift'
   pod 'XLPagerTabStrip'
@@ -23,16 +24,17 @@ target 'MFSCalendar' do
   pod 'Firebase/Performance'
   pod 'Fabric'
   pod 'Crashlytics'
-  pod 'Alamofire', '~> 4.4'
-  pod 'SDWebImage', '~>3.8'
+  pod 'Alamofire'
+  pod 'SDWebImage'
   pod 'Moya'
-  # pod 'IGListKit'
   pod 'M13ProgressSuite'
   pod 'SnapKit'
   pod 'JSQWebViewController'
-  pod 'Down'
-  pod 'Spring', :git => 'https://github.com/MengTo/Spring.git', :branch => 'swift3'
-  pod 'Kanna', '~> 2.1.0'
+  pod 'Down', :git => 'https://github.com/iwasrobbed/Down.git', :branch => 'master'
+
+  pod 'Spring', :git => 'https://github.com/MengTo/Spring.git', :branch => 'swift4'
+  pod 'Kanna', :git => 'https://github.com/tid-kijyun/Kanna.git', :branch => 'feature/v4.0.0'
+  # pod 'GSKStretchyHeaderView'
 end
 
 post_install do |installer|

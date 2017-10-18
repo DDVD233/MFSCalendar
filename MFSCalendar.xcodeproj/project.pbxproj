@@ -16,6 +16,7 @@
 		E41DE2F81EFA4293001155E9 /* No_homework.png in Resources */ = {isa = PBXBuildFile; fileRef = E41DE2F71EFA4293001155E9 /* No_homework.png */; };
 		E42786881F568A5F00583D1E /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42786871F568A5F00583D1E /* AboutViewController.swift */; };
 		E427868A1F568EB100583D1E /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42786891F568EB100583D1E /* ProfileViewController.swift */; };
+		E436EDC41F96E3AF00395DA5 /* MenuService.png in Resources */ = {isa = PBXBuildFile; fileRef = E436EDC31F96E3A000395DA5 /* MenuService.png */; };
 		E440F1BC1EEA7F4E004AFD0B /* MoyaNetworkLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E440F1BB1EEA7F4E004AFD0B /* MoyaNetworkLayer.swift */; };
 		E445E73E1EAD8B7D00794560 /* MoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E445E73D1EAD8B7D00794560 /* MoreViewController.swift */; };
 		E44DCD921EB80E0600CEB68A /* School.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E44DCD911EB80E0600CEB68A /* School.jpg */; };
@@ -30,6 +31,7 @@
 		E484E6551EFA33260056F2D5 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E484E6541EFA33260056F2D5 /* Localizable.strings */; };
 		E489F6C71F5A821E00F2269F /* ProjectPublicFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E489F6C61F5A821E00F2269F /* ProjectPublicFunctions.swift */; };
 		E489F6C81F5A825A00F2269F /* ProjectPublicFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E489F6C61F5A821E00F2269F /* ProjectPublicFunctions.swift */; };
+		E48B85A91F96691D000DC288 /* NewMoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48B85A81F96691D000DC288 /* NewMoreViewController.swift */; };
 		E48D4DF01E61F275008B0A97 /* ADayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48D4DEF1E61F275008B0A97 /* ADayViewController.swift */; };
 		E48D4DFA1E61F5EC008B0A97 /* BlankArray.plist in Resources */ = {isa = PBXBuildFile; fileRef = E48D4DF91E61F5EC008B0A97 /* BlankArray.plist */; };
 		E48D4E021E61FC26008B0A97 /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E48D4E011E61FC26008B0A97 /* NotificationCenter.framework */; };
@@ -38,6 +40,11 @@
 		E48D4E0C1E61FC26008B0A97 /* Class Schedule.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = E48D4DFF1E61FC25008B0A97 /* Class Schedule.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		E48F15531F745BF400A36904 /* MFSCalendarTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48F15521F745BF400A36904 /* MFSCalendarTests.swift */; };
 		E49321881F5D32E800C65067 /* .travis.yml in Resources */ = {isa = PBXBuildFile; fileRef = E49321871F5D32E800C65067 /* .travis.yml */; };
+		E495229C1F96CD6900C17A83 /* MenuAbout.png in Resources */ = {isa = PBXBuildFile; fileRef = E49522981F96C4A900C17A83 /* MenuAbout.png */; };
+		E495229D1F96CD6900C17A83 /* MenuCourses.png in Resources */ = {isa = PBXBuildFile; fileRef = E49522991F96C4AA00C17A83 /* MenuCourses.png */; };
+		E495229E1F96CD6900C17A83 /* MenuLogout.png in Resources */ = {isa = PBXBuildFile; fileRef = E495229B1F96C4AB00C17A83 /* MenuLogout.png */; };
+		E495229F1F96CD6900C17A83 /* MenuLunch.png in Resources */ = {isa = PBXBuildFile; fileRef = E495229A1F96C4AB00C17A83 /* MenuLunch.png */; };
+		E49522A11F96DFA200C17A83 /* Arrowhead-Right.png in Resources */ = {isa = PBXBuildFile; fileRef = E49522A01F96DF3900C17A83 /* Arrowhead-Right.png */; };
 		E4A880BD1DF279BB00816AB7 /* MFS Logo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E4A880BC1DF279BB00816AB7 /* MFS Logo.jpg */; };
 		E4AAD1611EE8CC9E00E4E5EC /* bell.png in Resources */ = {isa = PBXBuildFile; fileRef = E4AAD1601EE8CC9E00E4E5EC /* bell.png */; };
 		E4ADC9EE1E882172002A46F7 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4ADC9ED1E882172002A46F7 /* Extensions.swift */; };
@@ -65,6 +72,7 @@
 		E4F86B3B1DF0E20C00CAD72B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4F86B3A1DF0E20C00CAD72B /* Assets.xcassets */; };
 		E4F86B3E1DF0E20C00CAD72B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E4F86B3C1DF0E20C00CAD72B /* LaunchScreen.storyboard */; };
 		E4F8D4E41EF0DD2200F47525 /* HomeworkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F8D4E31EF0DD2200F47525 /* HomeworkViewController.swift */; };
+		E4FB5A8B1F96E82400D7FED1 /* CourseBackground.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E4FB5A8A1F96E81000D7FED1 /* CourseBackground.jpg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -125,6 +133,7 @@
 		E41DE2F71EFA4293001155E9 /* No_homework.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = No_homework.png; sourceTree = "<group>"; };
 		E42786871F568A5F00583D1E /* AboutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
 		E42786891F568EB100583D1E /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		E436EDC31F96E3A000395DA5 /* MenuService.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MenuService.png; sourceTree = "<group>"; };
 		E440F1BB1EEA7F4E004AFD0B /* MoyaNetworkLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MoyaNetworkLayer.swift; path = ../MoyaNetworkLayer.swift; sourceTree = "<group>"; };
 		E44484D71E13A105002C68D5 /* MFSCalender.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MFSCalender.entitlements; sourceTree = "<group>"; };
 		E445E73D1EAD8B7D00794560 /* MoreViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoreViewController.swift; sourceTree = "<group>"; };
@@ -140,6 +149,7 @@
 		E484E6591EFA337F0056F2D5 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E484E65B1EFA338B0056F2D5 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		E489F6C61F5A821E00F2269F /* ProjectPublicFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProjectPublicFunctions.swift; sourceTree = "<group>"; };
+		E48B85A81F96691D000DC288 /* NewMoreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewMoreViewController.swift; sourceTree = "<group>"; };
 		E48C89E61F71A8EA00D01B61 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		E48D4DEF1E61F275008B0A97 /* ADayViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ADayViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		E48D4DF91E61F5EC008B0A97 /* BlankArray.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = BlankArray.plist; sourceTree = "<group>"; };
@@ -183,6 +193,11 @@
 		E48F15B41F74687200A36904 /* UICircularProgressRing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = UICircularProgressRing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E48F15B51F74687200A36904 /* XLPagerTabStrip.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = XLPagerTabStrip.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E49321871F5D32E800C65067 /* .travis.yml */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; fileEncoding = 4; path = .travis.yml; sourceTree = "<group>"; };
+		E49522981F96C4A900C17A83 /* MenuAbout.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MenuAbout.png; sourceTree = "<group>"; };
+		E49522991F96C4AA00C17A83 /* MenuCourses.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MenuCourses.png; sourceTree = "<group>"; };
+		E495229A1F96C4AB00C17A83 /* MenuLunch.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MenuLunch.png; sourceTree = "<group>"; };
+		E495229B1F96C4AB00C17A83 /* MenuLogout.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MenuLogout.png; sourceTree = "<group>"; };
+		E49522A01F96DF3900C17A83 /* Arrowhead-Right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Arrowhead-Right.png"; sourceTree = "<group>"; };
 		E4A880BC1DF279BB00816AB7 /* MFS Logo.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "MFS Logo.jpg"; sourceTree = "<group>"; };
 		E4AAD1601EE8CC9E00E4E5EC /* bell.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bell.png; sourceTree = "<group>"; };
 		E4ADC9ED1E882172002A46F7 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
@@ -211,6 +226,7 @@
 		E4F86B3D1DF0E20C00CAD72B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E4F86B3F1DF0E20C00CAD72B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E4F8D4E31EF0DD2200F47525 /* HomeworkViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeworkViewController.swift; sourceTree = "<group>"; };
+		E4FB5A8A1F96E81000D7FED1 /* CourseBackground.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = CourseBackground.jpg; sourceTree = "<group>"; };
 		F67135CC47E915B369ECF057 /* Pods-MFSCalendar.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MFSCalendar.release.xcconfig"; path = "Pods/Target Support Files/Pods-MFSCalendar/Pods-MFSCalendar.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -271,6 +287,7 @@
 				E4E8B2191F1C5AF200913DAE /* GradeViewController.swift */,
 				E42786871F568A5F00583D1E /* AboutViewController.swift */,
 				E42786891F568EB100583D1E /* ProfileViewController.swift */,
+				E48B85A81F96691D000DC288 /* NewMoreViewController.swift */,
 			);
 			name = "More View";
 			sourceTree = "<group>";
@@ -346,6 +363,13 @@
 		E4EA9D7B1DF225FB0021A823 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				E4FB5A8A1F96E81000D7FED1 /* CourseBackground.jpg */,
+				E436EDC31F96E3A000395DA5 /* MenuService.png */,
+				E49522A01F96DF3900C17A83 /* Arrowhead-Right.png */,
+				E49522981F96C4A900C17A83 /* MenuAbout.png */,
+				E49522991F96C4AA00C17A83 /* MenuCourses.png */,
+				E495229B1F96C4AB00C17A83 /* MenuLogout.png */,
+				E495229A1F96C4AB00C17A83 /* MenuLunch.png */,
 				E47DA4891F819F3A005FA2FC /* AppLogo.png */,
 				E41DE2F71EFA4293001155E9 /* No_homework.png */,
 				E4AAD1601EE8CC9E00E4E5EC /* bell.png */,
@@ -606,6 +630,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E4FB5A8B1F96E82400D7FED1 /* CourseBackground.jpg in Resources */,
+				E436EDC41F96E3AF00395DA5 /* MenuService.png in Resources */,
+				E49522A11F96DFA200C17A83 /* Arrowhead-Right.png in Resources */,
+				E495229C1F96CD6900C17A83 /* MenuAbout.png in Resources */,
+				E495229D1F96CD6900C17A83 /* MenuCourses.png in Resources */,
+				E495229E1F96CD6900C17A83 /* MenuLogout.png in Resources */,
+				E495229F1F96CD6900C17A83 /* MenuLunch.png in Resources */,
 				E47DA48A1F81A091005FA2FC /* AppLogo.png in Resources */,
 				E4765E171F7D74AF009F60F0 /* InfoPlist.strings in Resources */,
 				E4CA1DAE1F50097D0061784A /* Acknowledgements.markdown in Resources */,
@@ -802,6 +833,7 @@
 				E453F0D11EA137D900BCE58D /* CalendarViewController.swift in Sources */,
 				E4F8D4E41EF0DD2200F47525 /* HomeworkViewController.swift in Sources */,
 				E489F6C71F5A821E00F2269F /* ProjectPublicFunctions.swift in Sources */,
+				E48B85A91F96691D000DC288 /* NewMoreViewController.swift in Sources */,
 				E440F1BC1EEA7F4E004AFD0B /* MoyaNetworkLayer.swift in Sources */,
 				E42786881F568A5F00583D1E /* AboutViewController.swift in Sources */,
 				E4F86B311DF0E20C00CAD72B /* AppDelegate.swift in Sources */,

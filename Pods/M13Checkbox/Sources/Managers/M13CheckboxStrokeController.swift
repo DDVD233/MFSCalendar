@@ -48,7 +48,7 @@ internal class M13CheckboxStrokeController: M13CheckboxController {
             "fillColor": NSNull(),
             "path": NSNull(),
             "lineWidth": NSNull()
-        ] as [String: CAAction]
+        ]
         
         // Setup the unselected box layer
         unselectedBoxLayer.lineCap = kCALineCapRound

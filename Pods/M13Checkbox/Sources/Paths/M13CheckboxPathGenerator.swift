@@ -33,7 +33,7 @@ internal class M13CheckboxPathGenerator {
     var cornerRadius: CGFloat = 3.0
     
     /// The box type to create.
-    var boxType: M13Checkbox.BoxType = .circle
+    var boxType: M13Checkbox.BoxType = DefaultValues.boxType
     
     //----------------------------
     // MARK: - Box Paths
@@ -61,8 +61,8 @@ internal class M13CheckboxPathGenerator {
         // Create a circle that starts in the top right hand corner.
         return UIBezierPath(arcCenter: CGPoint(x: size / 2.0, y: size / 2.0),
                             radius: radius,
-                            startAngle: CGFloat(-Double.pi / 2),
-                            endAngle: CGFloat((2 * Double.pi) - Double.pi / 2), 
+                            startAngle: -(CGFloat.pi / 2),
+                            endAngle: CGFloat((2 * Double.pi) - (Double.pi / 2)),
                             clockwise: true)
     }
     
@@ -100,20 +100,20 @@ internal class M13CheckboxPathGenerator {
         if cornerRadius != 0 {
             path.addArc(withCenter: tr,
                         radius: cornerRadius,
-                        startAngle: CGFloat(-Double.pi / 2),
+                        startAngle: -(CGFloat.pi / 2),
                         endAngle: 0.0,
                         clockwise: true)
         }
         // Right side.
         let brXCr: CGFloat = br.x + cornerRadius
         path.addLine(to: CGPoint(x: brXCr, y: br.y))
-         
+        
         // Bottom right arc.
         if cornerRadius != 0 {
             path.addArc(withCenter: br,
                         radius: cornerRadius,
                         startAngle: 0.0,
-                        endAngle: CGFloat(Double.pi / 2),
+                        endAngle: CGFloat.pi / 2,
                         clockwise: true)
         }
         // Bottom side.
@@ -123,8 +123,8 @@ internal class M13CheckboxPathGenerator {
         if cornerRadius != 0 {
             path.addArc(withCenter: bl,
                         radius: cornerRadius,
-                        startAngle: CGFloat(Double.pi / 2),
-                        endAngle: CGFloat(Double.pi),
+                        startAngle: CGFloat.pi / 2,
+                        endAngle: CGFloat.pi,
                         clockwise: true)
         }
         
@@ -135,8 +135,8 @@ internal class M13CheckboxPathGenerator {
         if cornerRadius != 0 {
             path.addArc(withCenter: tl,
                         radius: cornerRadius,
-                        startAngle: CGFloat(Double.pi),
-                        endAngle: CGFloat(Double.pi + Double.pi / 2),
+                        startAngle: CGFloat.pi,
+                        endAngle: CGFloat(Double.pi + (Double.pi / 2)),
                         clockwise: true)
         }
         path.close()

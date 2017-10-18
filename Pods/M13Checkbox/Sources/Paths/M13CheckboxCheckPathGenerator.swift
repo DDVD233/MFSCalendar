@@ -216,7 +216,7 @@ internal class M13CheckboxCheckPathGenerator: M13CheckboxPathGenerator {
         if cornerRadius != 0 {
             path.addArc(withCenter: tr,
                         radius: cornerRadius,
-                        startAngle: CGFloat(-Double.pi / 4),
+                        startAngle: -(CGFloat.pi / 4),
                         endAngle: 0.0,
                         clockwise: true)
         }
@@ -229,7 +229,7 @@ internal class M13CheckboxCheckPathGenerator: M13CheckboxPathGenerator {
             path.addArc(withCenter: br,
                         radius: cornerRadius,
                         startAngle: 0.0,
-                        endAngle: CGFloat(Double.pi / 2), 
+                        endAngle: CGFloat.pi / 2,
                         clockwise: true)
         }
         // Bottom side.
@@ -239,8 +239,8 @@ internal class M13CheckboxCheckPathGenerator: M13CheckboxPathGenerator {
         if cornerRadius != 0 {
             path.addArc(withCenter: bl,
                         radius: cornerRadius,
-                        startAngle: CGFloat(Double.pi / 2),
-                        endAngle: CGFloat(Double.pi),
+                        startAngle: CGFloat.pi / 2,
+                        endAngle: CGFloat.pi,
                         clockwise: true)
         }
         // Left side.
@@ -250,8 +250,8 @@ internal class M13CheckboxCheckPathGenerator: M13CheckboxPathGenerator {
         if cornerRadius != 0 {
             path.addArc(withCenter: tl,
                         radius: cornerRadius,
-                        startAngle: CGFloat(Double.pi),
-                        endAngle: CGFloat(Double.pi + Double.pi / 2),
+                        startAngle: CGFloat.pi,
+                        endAngle: CGFloat(CGFloat.pi + (CGFloat.pi / 2)),
                         clockwise: true)
         }
         // Top side.
@@ -261,8 +261,8 @@ internal class M13CheckboxCheckPathGenerator: M13CheckboxPathGenerator {
         if cornerRadius != 0 {
             path.addArc(withCenter: tr,
                         radius: cornerRadius,
-                        startAngle: CGFloat(Double.pi + Double.pi / 2),
-                        endAngle: CGFloat(Double.pi + Double.pi / 2 + Double.pi / 4),
+                        startAngle: CGFloat(CGFloat.pi + (CGFloat.pi / 2)),
+                        endAngle: CGFloat(CGFloat.pi + (CGFloat.pi / 2) + (CGFloat.pi / 4)),
                         clockwise: true)
         }
         path.close()
