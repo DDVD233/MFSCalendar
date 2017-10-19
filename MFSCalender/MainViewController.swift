@@ -319,24 +319,24 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
 
     func setupTheHeader() {
         let day = dayCheck()
-        let date = Date()
-        let formatter = DateFormatter()
-        formatter.dateFormat = "EEEE, MMMM d."
-        //MMMM d, yyyy
-        var today = formatter.string(from: date)
-        let labelAttributes = [NSAttributedStringKey.font:
-            UIFont.init(name: dateLabel.font.fontName, size: dateLabel.font.pointSize) ?? UIFont()]
-        if NSString(string: today).size(withAttributes: labelAttributes).width > dateLabel.bounds.size.width - 10 {
-            formatter.dateFormat = "EEEE, MMM d."
-            today = formatter.string(from: date)
-        }
-        
-        if NSString(string: today).size(withAttributes: labelAttributes).width > dateLabel.bounds.size.width - 10 {
-            formatter.dateFormat = "EE, MMM d."
-            today = formatter.string(from: date)
-        }
         
         DispatchQueue.main.async {
+            let date = Date()
+            let formatter = DateFormatter()
+            formatter.dateFormat = "EEEE, MMMM d."
+            //MMMM d, yyyy
+            var today = formatter.string(from: date)
+            let labelAttributes = [NSAttributedStringKey.font:
+                UIFont.init(name: self.dateLabel.font.fontName, size: self.dateLabel.font.pointSize) ?? UIFont()]
+            if NSString(string: today).size(withAttributes: labelAttributes).width > self.dateLabel.bounds.size.width - 10 {
+                formatter.dateFormat = "EEEE, MMM d."
+                today = formatter.string(from: date)
+            }
+            
+            if NSString(string: today).size(withAttributes: labelAttributes).width > self.dateLabel.bounds.size.width - 10 {
+                formatter.dateFormat = "EE, MMM d."
+                today = formatter.string(from: date)
+            }
             if day == "No School" {
                 self.dayLabel.text = "No school today,"
             } else {

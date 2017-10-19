@@ -216,7 +216,7 @@ extension NewMoreViewController {
     }
     
     func presentServiceHourView(hour: String) {
-        let appearance = SCLAlertView.SCLAppearance(kTitleFont: UIFont.boldSystemFont(ofSize: 35),
+        let appearance = SCLAlertView.SCLAppearance(kTitleFont: UIFont.boldSystemFont(ofSize: 40),
                                                     kTextFont: UIFont(name: "HelveticaNeue", size: 17)!)
         let alertView = SCLAlertView(appearance: appearance)
         alertView.addButton("Log Out") {
