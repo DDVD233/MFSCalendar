@@ -17,7 +17,8 @@ class aboutView: UITableViewController, MFMailComposeViewControllerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         let buildVersionText = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? ""
-        buildVersion.text = "Build " + buildVersionText
+        let versionText = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
+        buildVersion.text = "Version " + versionText + " (" + buildVersionText + ")"
     }
     
     override func viewDidAppear(_ animated: Bool) {

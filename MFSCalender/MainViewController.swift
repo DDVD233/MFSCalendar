@@ -10,7 +10,7 @@ import UIKit
 import SwiftMessages
 import UserNotifications
 import DZNEmptyDataSet
-import ReachabilitySwift
+import Reachability
 import SwiftDate
 
 
@@ -161,7 +161,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
 
         refreshDisplayedData()
         DispatchQueue.global().async {
-            if (Reachability()?.isReachable ?? false) {
+            if Reachability()?.connection != .none {
                 NSLog("Refresh Data")
                 self.updateData()
                 
@@ -232,7 +232,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     }
 
     func downloadLargeProfilePhoto() {
-        if reachability.isReachableViaWiFi && userDefaults?.bool(forKey: "didDownloadFullSizeImage") == false {
+        if reachability.connection == .wifi && userDefaults?.bool(forKey: "didDownloadFullSizeImage") == false {
             if let largeFileLink = userDefaults?.string(forKey: "largePhotoLink") {
                 provider.request(.downloadLargeProfilePhoto(link: largeFileLink), completion: { result in
                     switch result {
