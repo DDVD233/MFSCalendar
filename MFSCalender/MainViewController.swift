@@ -116,8 +116,6 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         self.eventView.emptyDataSetSource = self
         self.eventView.separatorStyle = .singleLine
         
-        //classViewFlowLayout.estimatedItemSize = CGSize(width: 181, height: 151)
-        
         if #available(iOS 11, *) {
             eventBottomLayoutConstraint.isActive = true
         } else {
@@ -163,10 +161,13 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
 
         refreshDisplayedData()
         DispatchQueue.global().async {
-            if self.doRefreshData() && (Reachability()?.isReachable ?? false) {
+            if (Reachability()?.isReachable ?? false) {
                 NSLog("Refresh Data")
                 self.updateData()
-
+                
+                if self.doRefreshData() {
+                    self.presentCourseFillView()
+                }
             } else {
                 NSLog("No refresh, version: %@", String(describing: userDefaults?.integer(forKey: "version")))
                 self.downloadLargeProfilePhoto()
@@ -199,13 +200,15 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
 
         group.wait()
 
+        self.refreshDisplayedData()
+    }
+    
+    func presentCourseFillView() {
         if let vc = self.storyboard?.instantiateViewController(withIdentifier: "courseFillController") {
             self.present(vc, animated: true, completion: nil)
         } else {
             presentErrorMessage(presentMessage: "Cannot find course fill page", layout: .statusLine)
         }
-
-        self.refreshDisplayedData()
     }
 
     func refreshDisplayedData() {

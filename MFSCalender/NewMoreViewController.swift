@@ -317,7 +317,7 @@ extension NewMoreViewController: UICollectionViewDelegateFlowLayout {
         if indexPath.section == 0 {
             return CGSize(width: screenWidth, height: 120)
         } else {
-            let viewSize = Layout().squareSize(estimatedWidth: 100) - 4
+            let viewSize = Layout().squareSize(estimatedWidth: 120) - 4
             return CGSize(width: viewSize, height: viewSize)
         }
     }

@@ -37,11 +37,16 @@ class courseFillController: UIViewController {
         formatter.dateFormat = "yyyyMMdd"
         let date = formatter.string(from: Date())
         userDefaults?.set(date, forKey: "refreshDate")
-        self.importCourse()
+        DispatchQueue.global().async {
+            self.importCourse()
+        }
     }
     
     func importCourse() {
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        DispatchQueue.main.async {
+            UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        }
+        
         guard self.newGetCourse() else {
             viewDismiss()
             return
@@ -69,6 +74,7 @@ class courseFillController: UIViewController {
         versionCheck()
         setProgressTo(value: 100)
         DispatchQueue.main.async {
+            UIApplication.shared.isNetworkActivityIndicatorVisible = true
             self.topLabel.text = "Success"
             self.bottomLabel.text = "Successfully updated"
         }
@@ -254,7 +260,8 @@ class courseFillController: UIViewController {
                             }
 
                         } catch {
-                            print(String(data: data!, encoding: .utf8))
+                            
+                            print(String(data: data!, encoding: .utf8) as Any)
                             NSLog("Failed parsing the data")
                         }
                     } else {
