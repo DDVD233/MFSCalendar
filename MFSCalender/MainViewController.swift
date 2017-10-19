@@ -50,8 +50,6 @@ class classViewCell: UICollectionViewCell {
 
     @IBOutlet var classViewButton: UIButton!
     
-    @IBOutlet var endTimeButton: UILabel!
-    
 
     @IBAction func classViewButtonClicked(_ sender: Any) {
         guard index != nil else {
@@ -66,7 +64,6 @@ class classViewCell: UICollectionViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        endTimeButton.isHidden = true
     }
     
     func updateTimer() {
@@ -88,7 +85,9 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     @IBOutlet weak var bottomView: UIView!
     @IBOutlet var eventViewLarge: UIView!
     @IBOutlet var eventBottomLayoutConstraint: NSLayoutConstraint!
-
+    @IBOutlet var classViewFlowLayout: UICollectionViewFlowLayout!
+    @IBOutlet var classViewHeightConstraint: NSLayoutConstraint!
+    
     let formatter = DateFormatter()
     var listEvents = [[String: Any]]()
     var listClasses = [[String: Any?]]()
@@ -116,6 +115,8 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         self.eventView.emptyDataSetDelegate = self
         self.eventView.emptyDataSetSource = self
         self.eventView.separatorStyle = .singleLine
+        
+        //classViewFlowLayout.estimatedItemSize = CGSize(width: 181, height: 151)
         
         if #available(iOS 11, *) {
             eventBottomLayoutConstraint.isActive = true
@@ -145,6 +146,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     }
 
     override func viewDidAppear(_ animated: Bool) {
+        //classViewHeightConstraint.constant = classView.contentSize.height
 
 //        Add "== true" to prevent force unwrap.
         guard userDefaults?.bool(forKey: "didLogin") == true else {
@@ -454,11 +456,11 @@ extension Main: UICollectionViewDelegate, UICollectionViewDataSource, UICollecti
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        var width = (Float(screenWidth) - 40) / 2
+        var width = (Float(screenWidth) - 30) / 2
         if screenWidth > 414 {
             width = Float(screenWidth) / Float(Int(screenWidth / 187))
         }
-        let size = CGSize(width: Double(width), height: 151.0)
+        let size = CGSize(width: Double(width), height: 155.0)
         return size
     }
     

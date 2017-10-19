@@ -15,6 +15,7 @@ import Alamofire
 import M13ProgressSuite
 import SnapKit
 import SafariServices
+import SVProgressHUD
 
 class classDetailViewController: UITableViewController, UIDocumentInteractionControllerDelegate {
 
@@ -105,6 +106,7 @@ class classDetailViewController: UITableViewController, UIDocumentInteractionCon
         DispatchQueue.main.async {
             self.navigationController?.showProgress()
             self.navigationController?.setIndeterminate(true)
+            SVProgressHUD.show()
             UIApplication.shared.isNetworkActivityIndicatorVisible = true
         }
 
@@ -149,6 +151,7 @@ class classDetailViewController: UITableViewController, UIDocumentInteractionCon
         DispatchQueue.main.async {
             self.classDetailTable.reloadData()
             self.navigationController?.cancelProgress()
+            SVProgressHUD.dismiss()
             UIApplication.shared.isNetworkActivityIndicatorVisible = false
         }
     }
@@ -573,50 +576,69 @@ class syllabusView: UITableViewCell {
 
 
     @IBAction func titleClicked(_ sender: Any) {
+        DispatchQueue.global().async {
+            self.openContent()
+        }
+    }
+    
+    func openContent() {
         DispatchQueue.main.async {
             self.parentViewController!.navigationController?.showProgress()
+            SVProgressHUD.show()
             self.parentViewController!.navigationController?.setIndeterminate(true)
         }
-
+        
         if self.url != nil {
             NetworkOperations().openLink(url: &self.url!, from: parentViewController!)
+            DispatchQueue.main.async {
+                self.parentViewController!.navigationController?.cancelProgress()
+                SVProgressHUD.dismiss()
+            }
             return
         }
-
+        
         guard !self.attachmentFileName!.isEmpty else {
             presentErrorMessage(presentMessage: "There is no attachment.", layout: .cardView)
-            self.parentViewController!.navigationController?.cancelProgress()
+            DispatchQueue.main.async {
+                self.parentViewController!.navigationController?.cancelProgress()
+                SVProgressHUD.dismiss()
+            }
             return
         }
-
+        
         let path = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
         let attachmentPath = path + "/" + self.attachmentFileName!
         NSLog("AttachmentPath: \(attachmentPath)")
         //Init FileManager
         let fileManager = FileManager.default
         if fileManager.fileExists(atPath: attachmentPath) {
-//          Open the existing attachment.
+            //          Open the existing attachment.
             NSLog("Attempting to open file: \(self.attachmentFileName!)")
             NetworkOperations().openFile(fileUrl:  URL(fileURLWithPath: attachmentPath), from: parentViewController!)
+            DispatchQueue.main.async {
+                self.parentViewController!.navigationController?.cancelProgress()
+                SVProgressHUD.dismiss()
+            }
             return
         }
-
+        
         guard loginAuthentication().success else {
             return
         }
-
+        
         var url: String {
             if directDownloadUrl != nil {
                 return "https://mfriends.myschoolapp.com" + directDownloadUrl!
             }
-
+            
             return "https://mfriends.myschoolapp.com/app/utilities/FileDownload.ashx?" + attachmentQueryString!
         }
-
+        
         let (filePath, error) = NetworkOperations().downloadFile(url: URL(string: url)!, withName: attachmentFileName!)
         
         DispatchQueue.main.async {
             self.parentViewController!.navigationController?.cancelProgress()
+            SVProgressHUD.dismiss()
         }
         
         guard error == nil else {

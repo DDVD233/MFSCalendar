@@ -63,6 +63,7 @@ PODS:
   - SkyFloatingLabelTextField (3.2.0)
   - SnapKit (4.0.0)
   - Spring (1.0.3)
+  - SVProgressHUD (2.2.1)
   - SwiftDate (4.4.1)
   - SwiftMessages (4.0.0)
   - SwiftyJSON (3.1.4)
@@ -92,6 +93,7 @@ DEPENDENCIES:
   - SkyFloatingLabelTextField (from `https://github.com/Skyscanner/SkyFloatingLabelTextField.git`, branch `master`)
   - SnapKit
   - Spring (from `https://github.com/MengTo/Spring.git`, branch `swift4`)
+  - SVProgressHUD
   - SwiftDate
   - SwiftMessages
   - SwiftyJSON
@@ -157,12 +159,13 @@ SPEC CHECKSUMS:
   SkyFloatingLabelTextField: 33ac1c1be76a3100d24c1084df34e7cf78c0ad7b
   SnapKit: a42d492c16e80209130a3379f73596c3454b7694
   Spring: 3f02b5dc3308572ef177b3cad0fa7bbc4b0706f7
+  SVProgressHUD: db27c54e6e18bc903341661fc9feb55e04905cc4
   SwiftDate: a70a534d4feed03b2a2b575e36bef82dc2286a8d
   SwiftMessages: cd565e0e7d095584be1770c012c6b5be4183b5ee
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
   UICircularProgressRing: 5aca63423d913dc967661370e94e2af0770dd9cd
   XLPagerTabStrip: d1ab378af0923320ec0b5eab11d7b2f803d31261
 
-PODFILE CHECKSUM: 616ee4b80b1899b271f58bf4c31db017bc868897
+PODFILE CHECKSUM: f82df9fcc9fd9bd7e958354df83141569a1f0a90
 
 COCOAPODS: 1.2.0

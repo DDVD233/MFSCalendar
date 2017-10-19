@@ -12,6 +12,7 @@ import SwiftMessages
 import SDWebImage
 import DGElasticPullToRefresh
 import DZNEmptyDataSet
+import SVProgressHUD
 
 class classTopicViewController: UIViewController {
     @IBOutlet var topicsCollectionView: UICollectionView!
@@ -80,12 +81,14 @@ class classTopicViewController: UIViewController {
         DispatchQueue.main.async {
             self.navigationController?.showProgress()
             self.navigationController?.setIndeterminate(true)
+            SVProgressHUD.show()
         }
 
         self.getTopics(leadSectionIdInt: leadSectionIdInt)
         DispatchQueue.main.async {
             self.topicsCollectionView.reloadData()
             self.navigationController?.cancelProgress()
+            SVProgressHUD.dismiss()
         }
     }
 

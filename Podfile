@@ -34,6 +34,7 @@ target 'MFSCalendar' do
 
   pod 'Spring', :git => 'https://github.com/MengTo/Spring.git', :branch => 'swift4'
   pod 'Kanna', :git => 'https://github.com/tid-kijyun/Kanna.git', :branch => 'feature/v4.0.0'
+  pod 'SVProgressHUD'
   # pod 'GSKStretchyHeaderView'
 end
 

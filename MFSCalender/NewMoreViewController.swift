@@ -8,6 +8,7 @@
 
 import UIKit
 import SCLAlertView
+import SVProgressHUD
 import Alamofire
 
 class NewMoreViewController: UICollectionViewController  {
@@ -88,6 +89,7 @@ extension NewMoreViewController {
 // Delegate
 extension NewMoreViewController {
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
         if indexPath.section == 0 {
             if let profileVC = storyboard?.instantiateViewController(withIdentifier: "profile") {
                 show(profileVC, sender: self)
@@ -99,9 +101,13 @@ extension NewMoreViewController {
                     show(courseVC, sender: self)
                 }
             case 1:
-                getLunchMenu()
+                DispatchQueue.global().async {
+                    self.getLunchMenu()
+                }
             case 2:
-                self.serviceHour()
+                DispatchQueue.global().async {
+                    self.serviceHour()
+                }
             case 3:
                 if let cell = collectionView.cellForItem(at: indexPath) {
                     logout(sender: cell)
@@ -121,9 +127,13 @@ extension NewMoreViewController {
             var serviceHour = 999
             serviceHour = self.getServiceHour()
             let serviceHourString = serviceHour > 990 ? "Error" : String(describing: serviceHour)
-            self.presentServiceHourView(hour: serviceHourString)
+            DispatchQueue.main.async {
+                self.presentServiceHourView(hour: serviceHourString)
+            }
         } else {
-            self.presentServiceHourLoginView()
+            DispatchQueue.main.async {
+                self.presentServiceHourLoginView()
+            }
         }
     }
     
@@ -141,6 +151,11 @@ extension NewMoreViewController {
         let url = URL(string: "https://dwei.org/serviceHour/\(username)/\(password)")!
         var serviceHour: Int? = nil
         let semaphore = DispatchSemaphore(value: 0)
+        DispatchQueue.main.async {
+            UIApplication.shared.isNetworkActivityIndicatorVisible = true
+            SVProgressHUD.show()
+        }
+        
         Alamofire.request(url).response(queue: DispatchQueue.global(), completionHandler: { (result) in
             guard result.error == nil else {
                 presentErrorMessage(presentMessage: result.error!.localizedDescription, layout: .cardView)
@@ -159,6 +174,12 @@ extension NewMoreViewController {
         })
         
         semaphore.wait()
+        
+        DispatchQueue.main.async {
+            UIApplication.shared.isNetworkActivityIndicatorVisible = false
+            SVProgressHUD.dismiss()
+        }
+        
         return serviceHour ?? 996
     }
     
@@ -201,20 +222,22 @@ extension NewMoreViewController {
         alertView.addButton("Log Out") {
             userDefaults?.set(nil, forKey: "servicePassword")
         }
+        
         alertView.showInfo(hour, subTitle: "TOTAL SERVICE HOURS", animationStyle: .bottomToTop)
     }
     
     func getLunchMenu() {
+        DispatchQueue.main.async {
+            UIApplication.shared.isNetworkActivityIndicatorVisible = true
+            SVProgressHUD.show()
+        }
+        
         guard loginAuthentication().success else {
             return
         }
         
         let requestURL = URL(string: "https://mfriends.myschoolapp.com/api/resourceboardcontainer/usercontainersget/?personaId=2&dateMask=0&levels=1151")!
         let semaphore = DispatchSemaphore(value: 0)
-        DispatchQueue.main.async {
-            self.navigationController?.showProgress()
-            self.navigationController?.setIndeterminate(true)
-        }
         
         let task = URLSession.shared.dataTask(with: requestURL, completionHandler: { (data, response, error) in
             self.navigationController?.cancelProgress()
@@ -251,6 +274,11 @@ extension NewMoreViewController {
         
         task.resume()
         semaphore.wait()
+        
+        DispatchQueue.main.async {
+            UIApplication.shared.isNetworkActivityIndicatorVisible = false
+            SVProgressHUD.dismiss()
+        }
     }
     
     func logout(sender: UIView) {

@@ -9,6 +9,7 @@
 import UIKit
 import SafariServices
 import Alamofire
+import SVProgressHUD
 
 class topicDetailViewController: UIViewController {
     let topicID = userDefaults?.integer(forKey: "topicID")
@@ -173,6 +174,7 @@ extension topicDetailViewController {
         DispatchQueue.main.async {
             self.navigationController?.showProgress()
             self.navigationController?.setIndeterminate(true)
+            SVProgressHUD.show()
         }
 
         guard loginAuthentication().success else {
@@ -215,6 +217,7 @@ extension topicDetailViewController {
         DispatchQueue.main.async {
             self.topicDetailTable.reloadData()
             self.navigationController?.cancelProgress()
+            SVProgressHUD.dismiss()
         }
     }
 
@@ -273,14 +276,21 @@ class topicDetailDescriptionCell: UITableViewCell {
     }
 
     @IBAction func linkButtonClicked(_ sender: Any) {
+        DispatchQueue.global().async {
+            self.openContent()
+        }
+    }
+    
+    func openContent() {
         if url != nil {
             NetworkOperations().openLink(url: &url!, from: parentViewController!)
         } else if filePath != nil && fileName != nil {
             DispatchQueue.main.async {
                 self.parentViewController!.navigationController?.showProgress()
                 self.parentViewController!.navigationController?.setIndeterminate(true)
+                SVProgressHUD.show()
             }
-
+            
             let path = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
             let attachmentPath = path.appending("/" + fileName!)
             NSLog("AttachmentPath: \(attachmentPath)")
@@ -292,16 +302,17 @@ class topicDetailDescriptionCell: UITableViewCell {
                 NetworkOperations().openFile(fileUrl: URL(fileURLWithPath: attachmentPath), from: parentViewController!)
                 return
             }
-
+            
             guard loginAuthentication().success else {
                 return
             }
-
+            
             let url = filePath! + fileName!
             
             let (fileURL, error) = NetworkOperations().downloadFile(url: URL(string: url)!, withName: fileName!)
             DispatchQueue.main.async {
                 self.parentViewController!.navigationController?.cancelProgress()
+                SVProgressHUD.dismiss()
             }
             
             guard error == nil else {
