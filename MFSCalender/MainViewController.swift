@@ -135,6 +135,12 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         } else {
             print("Cannot initialize data because the user did not logged in")
         }
+        
+        if Reachability()?.connection == .wifi {
+            DispatchQueue.global().async {
+                self.updateData()
+            }
+        }
         // Do any additional setup after loading the view, typically from a nib.
     }
 
@@ -161,16 +167,23 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
 
         refreshDisplayedData()
         DispatchQueue.global().async {
-            if Reachability()?.connection != .none {
+            if Reachability()?.connection != .none && self.doRefreshData() {
                 NSLog("Refresh Data")
-                self.updateData()
-                
-                if self.doRefreshData() {
-                    self.presentCourseFillView()
-                }
+                self.presentCourseFillView()
             } else {
                 NSLog("No refresh, version: %@", String(describing: userDefaults?.integer(forKey: "version")))
                 self.downloadLargeProfilePhoto()
+            }
+        }
+        
+        if userDefaults?.bool(forKey: "doPresentServiceView") == true {
+            self.tabBarController?.selectedIndex = 4
+        }
+        
+        if userDefaults?.bool(forKey: "didShowMobileServe") != true {
+            userDefaults?.set(true, forKey: "didShowMobileServe")
+            if let mobileServeIntro = storyboard?.instantiateViewController(withIdentifier: "mobileServeIntro") {
+                self.present(mobileServeIntro, animated: true)
             }
         }
     }

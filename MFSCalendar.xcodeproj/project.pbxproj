@@ -45,6 +45,8 @@
 		E495229E1F96CD6900C17A83 /* MenuLogout.png in Resources */ = {isa = PBXBuildFile; fileRef = E495229B1F96C4AB00C17A83 /* MenuLogout.png */; };
 		E495229F1F96CD6900C17A83 /* MenuLunch.png in Resources */ = {isa = PBXBuildFile; fileRef = E495229A1F96C4AB00C17A83 /* MenuLunch.png */; };
 		E49522A11F96DFA200C17A83 /* Arrowhead-Right.png in Resources */ = {isa = PBXBuildFile; fileRef = E49522A01F96DF3900C17A83 /* Arrowhead-Right.png */; };
+		E49E53401F990524003011A6 /* MSIntro.png in Resources */ = {isa = PBXBuildFile; fileRef = E49E533F1F990507003011A6 /* MSIntro.png */; };
+		E49E53421F995156003011A6 /* MobileServeIntroViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E49E53411F995156003011A6 /* MobileServeIntroViewController.swift */; };
 		E4A880BD1DF279BB00816AB7 /* MFS Logo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E4A880BC1DF279BB00816AB7 /* MFS Logo.jpg */; };
 		E4AAD1611EE8CC9E00E4E5EC /* bell.png in Resources */ = {isa = PBXBuildFile; fileRef = E4AAD1601EE8CC9E00E4E5EC /* bell.png */; };
 		E4ADC9EE1E882172002A46F7 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4ADC9ED1E882172002A46F7 /* Extensions.swift */; };
@@ -198,6 +200,8 @@
 		E495229A1F96C4AB00C17A83 /* MenuLunch.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MenuLunch.png; sourceTree = "<group>"; };
 		E495229B1F96C4AB00C17A83 /* MenuLogout.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MenuLogout.png; sourceTree = "<group>"; };
 		E49522A01F96DF3900C17A83 /* Arrowhead-Right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Arrowhead-Right.png"; sourceTree = "<group>"; };
+		E49E533F1F990507003011A6 /* MSIntro.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MSIntro.png; sourceTree = "<group>"; };
+		E49E53411F995156003011A6 /* MobileServeIntroViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileServeIntroViewController.swift; sourceTree = "<group>"; };
 		E4A880BC1DF279BB00816AB7 /* MFS Logo.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "MFS Logo.jpg"; sourceTree = "<group>"; };
 		E4AAD1601EE8CC9E00E4E5EC /* bell.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bell.png; sourceTree = "<group>"; };
 		E4ADC9ED1E882172002A46F7 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
@@ -285,6 +289,7 @@
 				E472A1611EFB72EA00EF5A74 /* SettingViewController.swift */,
 				E472A1631EFB735C00EF5A74 /* ClassListViewController.swift */,
 				E4E8B2191F1C5AF200913DAE /* GradeViewController.swift */,
+				E49E53411F995156003011A6 /* MobileServeIntroViewController.swift */,
 				E42786871F568A5F00583D1E /* AboutViewController.swift */,
 				E42786891F568EB100583D1E /* ProfileViewController.swift */,
 				E48B85A81F96691D000DC288 /* NewMoreViewController.swift */,
@@ -363,6 +368,7 @@
 		E4EA9D7B1DF225FB0021A823 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				E49E533F1F990507003011A6 /* MSIntro.png */,
 				E4FB5A8A1F96E81000D7FED1 /* CourseBackground.jpg */,
 				E436EDC31F96E3A000395DA5 /* MenuService.png */,
 				E49522A01F96DF3900C17A83 /* Arrowhead-Right.png */,
@@ -632,6 +638,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E49E53401F990524003011A6 /* MSIntro.png in Resources */,
 				E4FB5A8B1F96E82400D7FED1 /* CourseBackground.jpg in Resources */,
 				E436EDC41F96E3AF00395DA5 /* MenuService.png in Resources */,
 				E49522A11F96DFA200C17A83 /* Arrowhead-Right.png in Resources */,
@@ -853,6 +860,7 @@
 				E427868A1F568EB100583D1E /* ProfileViewController.swift in Sources */,
 				E4F86B331DF0E20C00CAD72B /* MainViewController.swift in Sources */,
 				E4BD88981F383A060000FEF3 /* ClassTimetableViewController.swift in Sources */,
+				E49E53421F995156003011A6 /* MobileServeIntroViewController.swift in Sources */,
 				E4E8B21A1F1C5AF200913DAE /* GradeViewController.swift in Sources */,
 				E4B340061F08942000D6039A /* classTopicViewController.swift in Sources */,
 				E4BD88961F35973C0000FEF3 /* TargetPublicFunctions.swift in Sources */,

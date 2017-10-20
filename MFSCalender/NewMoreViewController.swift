@@ -15,6 +15,16 @@ class NewMoreViewController: UICollectionViewController  {
     override func viewDidLoad() {
         super.viewDidLoad()
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        if userDefaults?.bool(forKey: "doPresentServiceView") == true {
+            userDefaults?.set(false, forKey: "doPresentServiceView")
+            DispatchQueue.global().async {
+                self.serviceHour()
+            }
+        }
+    }
 }
 
 // Data Source
