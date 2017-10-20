@@ -37,7 +37,7 @@ extension NewMoreViewController {
         if section == 0 {
             return 1
         } else {
-            return 5
+            return 6
         }
     }
     
@@ -85,6 +85,9 @@ extension NewMoreViewController {
             case 4:
                 cell.nameLabel.text = "About"
                 cell.imageView.image = UIImage(named: "MenuAbout.png")
+            case 5:
+                cell.nameLabel.text = "DON'T TOUCH"
+                cell.imageView.image = UIImage(named: "MenuWarning.png")
             default:
                 break
             }
@@ -98,6 +101,16 @@ extension NewMoreViewController {
 
 // Delegate
 extension NewMoreViewController {
+    override func collectionView(_ collectionView: UICollectionView, didHighlightItemAt indexPath: IndexPath) {
+        let cell = collectionView.cellForItem(at: indexPath) as! MenuCollectionCell
+        cell.view.backgroundColor = UIColor(hexString: 0xF0F0F0)
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, didUnhighlightItemAt indexPath: IndexPath) {
+        let cell = collectionView.cellForItem(at: indexPath) as! MenuCollectionCell
+        cell.view.backgroundColor = UIColor.white
+    }
+    
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         if indexPath.section == 0 {
@@ -126,6 +139,9 @@ extension NewMoreViewController {
                 if let infoVC = storyboard?.instantiateViewController(withIdentifier: "about") {
                     show(infoVC, sender: self)
                 }
+            case 5:
+                userDefaults?.set(false, forKey: "didShowMobileServe")
+                self.tabBarController?.selectedIndex = 0
             default:
                 break
             }
@@ -347,4 +363,6 @@ class ProfileCollectionCell: UICollectionViewCell {
 class MenuCollectionCell: UICollectionViewCell {
     @IBOutlet var imageView: UIImageView!
     @IBOutlet var nameLabel: UILabel!
+    @IBOutlet var view: UIView!
+    
 }
