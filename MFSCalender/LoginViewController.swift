@@ -268,12 +268,12 @@ extension firstTimeLaunchController {
                         return
                     }
                     
-                    if let firstName = resDict["FirstName"] as? String {
+                    if let firstName = resDict["FirstName"] as? String, let lastName = resDict["LastName"] as? String {
                         userDefaults?.set(firstName, forKey: "firstName")
-                    }
-                    
-                    if let lastName = resDict["LastName"] as? String {
                         userDefaults?.set(lastName, forKey: "lastName")
+                        if firstName == "Wei" && lastName == "Dai" {
+                            userDefaults?.set(true, forKey: "isDev")
+                        }
                     }
                     
                     if let email = resDict["Email"] as? String {

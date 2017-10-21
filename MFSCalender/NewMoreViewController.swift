@@ -37,7 +37,11 @@ extension NewMoreViewController {
         if section == 0 {
             return 1
         } else {
-            return 6
+            if userDefaults?.bool(forKey: "isDev") == true {
+                return 6
+            } else {
+                return 5
+            }
         }
     }
     
@@ -102,13 +106,19 @@ extension NewMoreViewController {
 // Delegate
 extension NewMoreViewController {
     override func collectionView(_ collectionView: UICollectionView, didHighlightItemAt indexPath: IndexPath) {
-        let cell = collectionView.cellForItem(at: indexPath) as! MenuCollectionCell
-        cell.view.backgroundColor = UIColor(hexString: 0xF0F0F0)
+        if let cell = collectionView.cellForItem(at: indexPath) as? MenuCollectionCell {
+            cell.view.backgroundColor = UIColor(hexString: 0xF0F0F0)
+        } else if let cell = collectionView.cellForItem(at: indexPath) as? ProfileCollectionCell {
+            cell.view.backgroundColor = UIColor(hexString: 0xF0F0F0)
+        }
     }
     
     override func collectionView(_ collectionView: UICollectionView, didUnhighlightItemAt indexPath: IndexPath) {
-        let cell = collectionView.cellForItem(at: indexPath) as! MenuCollectionCell
-        cell.view.backgroundColor = UIColor.white
+        if let cell = collectionView.cellForItem(at: indexPath) as? MenuCollectionCell {
+            cell.view.backgroundColor = UIColor.white
+        } else if let cell = collectionView.cellForItem(at: indexPath) as? ProfileCollectionCell {
+            cell.view.backgroundColor = UIColor.white
+        }
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -358,6 +368,7 @@ extension NewMoreViewController: UIDocumentInteractionControllerDelegate {
 class ProfileCollectionCell: UICollectionViewCell {
     @IBOutlet var imageView: UIImageView!
     @IBOutlet var nameLabel: UILabel!
+    @IBOutlet var view: UIView!
 }
 
 class MenuCollectionCell: UICollectionViewCell {
