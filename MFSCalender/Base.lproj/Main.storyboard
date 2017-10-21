@@ -109,7 +109,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" editable="NO" text="MFS Calendar now supports MobileServe" textAlignment="center" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="f7u-Pk-F51">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" editable="NO" text="MFS Calendar now supports MobileServe!" textAlignment="center" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="f7u-Pk-F51">
                                 <rect key="frame" x="16" y="40" width="343" height="100"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
@@ -144,8 +144,8 @@
                                     <action selector="login:" destination="9zZ-IH-ocl" eventType="touchUpInside" id="4XU-Pv-Hoa"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Login using your mobileserve account to check your total service hour." textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="emS-Zt-K2o">
-                                <rect key="frame" x="40.5" y="140" width="294" height="70"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You can login using your mobileserve account to check your total service hour. Wanna try it out?" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="emS-Zt-K2o">
+                                <rect key="frame" x="44" y="140" width="287.5" height="70"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="70" id="AZF-bO-vRN"/>
                                 </constraints>
@@ -1643,7 +1643,7 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zxu-Y2-pWy">
-                                    <rect key="frame" x="30" y="166" width="315" height="19"/>
+                                    <rect key="frame" x="166" y="166" width="43.5" height="19"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="19" id="JFt-ki-w15"/>
                                     </constraints>
@@ -1660,14 +1660,14 @@
                             </subviews>
                             <color key="backgroundColor" red="0.93669247627258301" green="0.5197761058807373" blue="0.48973745107650757" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                             <constraints>
-                                <constraint firstAttribute="trailing" secondItem="zxu-Y2-pWy" secondAttribute="trailing" constant="30" id="4BE-IF-cEr"/>
+                                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="zxu-Y2-pWy" secondAttribute="trailing" constant="30" id="4BE-IF-cEr"/>
                                 <constraint firstItem="zxu-Y2-pWy" firstAttribute="top" secondItem="t1M-1y-hXA" secondAttribute="bottom" constant="15" id="8h5-bF-wQY"/>
                                 <constraint firstAttribute="bottom" secondItem="zxu-Y2-pWy" secondAttribute="bottom" constant="30" id="FGe-wI-VT8"/>
                                 <constraint firstItem="zxu-Y2-pWy" firstAttribute="centerX" secondItem="Cas-gW-rbA" secondAttribute="centerX" id="HDf-VG-LUE"/>
                                 <constraint firstAttribute="height" constant="215" id="Rau-Ce-i3k"/>
                                 <constraint firstItem="t1M-1y-hXA" firstAttribute="top" secondItem="Cas-gW-rbA" secondAttribute="top" constant="15" id="Sxd-7e-uZw"/>
                                 <constraint firstItem="t1M-1y-hXA" firstAttribute="centerX" secondItem="Cas-gW-rbA" secondAttribute="centerX" id="i7G-fE-EEc"/>
-                                <constraint firstItem="zxu-Y2-pWy" firstAttribute="leading" secondItem="Cas-gW-rbA" secondAttribute="leading" constant="30" id="nUY-ch-Ui5"/>
+                                <constraint firstItem="zxu-Y2-pWy" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Cas-gW-rbA" secondAttribute="leading" constant="30" id="nUY-ch-Ui5"/>
                             </constraints>
                         </view>
                         <prototypes>

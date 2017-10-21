@@ -297,6 +297,11 @@ extension firstTimeLaunchController {
                     if let lockerPassword = resDict["LockerCombo"] as? String {
                         userDefaults?.set(lockerPassword, forKey: "lockerCombination")
                     }
+                    
+                    if let _ = resDict["StudentInfo"] as? [String: Any] {
+                        userDefaults?.set(true, forKey: "isStudent")
+                    }
+                    
                     success = true
                     
                 } catch {
