@@ -68,6 +68,7 @@ PODS:
   - SwiftMessages (4.0.0)
   - SwiftyJSON (3.1.4)
   - UICircularProgressRing (1.7.4)
+  - UrbanAirship-iOS-SDK (8.6.0)
   - XLPagerTabStrip (8.0.0)
 
 DEPENDENCIES:
@@ -98,6 +99,7 @@ DEPENDENCIES:
   - SwiftMessages
   - SwiftyJSON
   - UICircularProgressRing
+  - UrbanAirship-iOS-SDK
   - XLPagerTabStrip
 
 EXTERNAL SOURCES:
@@ -164,8 +166,9 @@ SPEC CHECKSUMS:
   SwiftMessages: cd565e0e7d095584be1770c012c6b5be4183b5ee
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
   UICircularProgressRing: 5aca63423d913dc967661370e94e2af0770dd9cd
+  UrbanAirship-iOS-SDK: 1a2837473096ca63d86f11cadb4710d993237186
   XLPagerTabStrip: d1ab378af0923320ec0b5eab11d7b2f803d31261
 
-PODFILE CHECKSUM: f82df9fcc9fd9bd7e958354df83141569a1f0a90
+PODFILE CHECKSUM: 6b034492452f10ba355c3a0b51df7b31fa09d5ec
 
 COCOAPODS: 1.2.0

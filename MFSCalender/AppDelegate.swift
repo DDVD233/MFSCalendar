@@ -11,6 +11,7 @@ import CoreData
 import Firebase
 import Fabric
 import Crashlytics
+import AirshipKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -23,7 +24,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FirebaseApp.configure()
         Fabric.with([Crashlytics()])
         logUser()
-//        MAThemeKit.setupTheme(withPrimaryColor: UIColor(hexString: 0xFF7E79), secondaryColor: UIColor.white, fontName: "System", lightStatusBar: true)
+        
+        UAirship.takeOff()
+        UAirship.push().userPushNotificationsEnabled = true
+        UAirship.push().defaultPresentationOptions = [.alert, .badge, .sound]
+        if userDefaults?.bool(forKey: "isDev") == true {
+            UAirship.push().addTag("developer")
+        }
+        
+        if let firstName = userDefaults?.string(forKey: "firstName"), let lastName = userDefaults?.string(forKey: "lastName") {
+            UAirship.namedUser().identifier = firstName + " " + lastName
+        }
+        print("Channel ID: " + (UAPush().channelID ?? "None"))
         return true
     }
     

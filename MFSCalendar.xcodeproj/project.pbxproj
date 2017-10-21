@@ -19,6 +19,7 @@
 		E436EDC41F96E3AF00395DA5 /* MenuService.png in Resources */ = {isa = PBXBuildFile; fileRef = E436EDC31F96E3A000395DA5 /* MenuService.png */; };
 		E440F1BC1EEA7F4E004AFD0B /* MoyaNetworkLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E440F1BB1EEA7F4E004AFD0B /* MoyaNetworkLayer.swift */; };
 		E445E73E1EAD8B7D00794560 /* MoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E445E73D1EAD8B7D00794560 /* MoreViewController.swift */; };
+		E44632501F9BB020004F8E2E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E4F86B3C1DF0E20C00CAD72B /* LaunchScreen.storyboard */; };
 		E44DCD921EB80E0600CEB68A /* School.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E44DCD911EB80E0600CEB68A /* School.jpg */; };
 		E453F0D11EA137D900BCE58D /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E453F0D01EA137D900BCE58D /* CalendarViewController.swift */; };
 		E45476EB1E8B3607004466D0 /* th-menu2.png in Resources */ = {isa = PBXBuildFile; fileRef = E45476EA1E8B3607004466D0 /* th-menu2.png */; };
@@ -66,6 +67,7 @@
 		E4D3A1AE1E123D0200F709DC /* periodPicker.plist in Resources */ = {isa = PBXBuildFile; fileRef = E4D3A1AD1E123D0200F709DC /* periodPicker.plist */; };
 		E4DAB5B11F6386640013D943 /* HomeworkDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4DAB5B01F6386640013D943 /* HomeworkDetailViewController.swift */; };
 		E4E8B21A1F1C5AF200913DAE /* GradeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E8B2191F1C5AF200913DAE /* GradeViewController.swift */; };
+		E4EBD9961F9BAAED0046CAD1 /* AirshipConfig.plist in Resources */ = {isa = PBXBuildFile; fileRef = E4EBD9951F9BAAED0046CAD1 /* AirshipConfig.plist */; };
 		E4EEFB131DF274EA00F199BE /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4EEFB121DF274EA00F199BE /* Images.xcassets */; };
 		E4F0B3751EAD1BE900C923A8 /* dayPicker.plist in Resources */ = {isa = PBXBuildFile; fileRef = E4F0B3741EAD1BE900C923A8 /* dayPicker.plist */; };
 		E4F86B311DF0E20C00CAD72B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F86B301DF0E20C00CAD72B /* AppDelegate.swift */; };
@@ -73,7 +75,6 @@
 		E4F86B361DF0E20C00CAD72B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E4F86B341DF0E20C00CAD72B /* Main.storyboard */; };
 		E4F86B391DF0E20C00CAD72B /* MFSCalender.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E4F86B371DF0E20C00CAD72B /* MFSCalender.xcdatamodeld */; };
 		E4F86B3B1DF0E20C00CAD72B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4F86B3A1DF0E20C00CAD72B /* Assets.xcassets */; };
-		E4F86B3E1DF0E20C00CAD72B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E4F86B3C1DF0E20C00CAD72B /* LaunchScreen.storyboard */; };
 		E4F8D4E41EF0DD2200F47525 /* HomeworkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F8D4E31EF0DD2200F47525 /* HomeworkViewController.swift */; };
 		E4FB5A8B1F96E82400D7FED1 /* CourseBackground.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E4FB5A8A1F96E81000D7FED1 /* CourseBackground.jpg */; };
 /* End PBXBuildFile section */
@@ -221,6 +222,7 @@
 		E4D3A1AD1E123D0200F709DC /* periodPicker.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = periodPicker.plist; sourceTree = "<group>"; };
 		E4DAB5B01F6386640013D943 /* HomeworkDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeworkDetailViewController.swift; sourceTree = "<group>"; };
 		E4E8B2191F1C5AF200913DAE /* GradeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GradeViewController.swift; sourceTree = "<group>"; };
+		E4EBD9951F9BAAED0046CAD1 /* AirshipConfig.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = AirshipConfig.plist; sourceTree = "<group>"; };
 		E4EEFB121DF274EA00F199BE /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		E4F0B3741EAD1BE900C923A8 /* dayPicker.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = dayPicker.plist; sourceTree = "<group>"; };
 		E4F86B2D1DF0E20C00CAD72B /* MFSCalendar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MFSCalendar.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -422,6 +424,7 @@
 		E4F86B2F1DF0E20C00CAD72B /* MFSCalendar */ = {
 			isa = PBXGroup;
 			children = (
+				E4EBD9951F9BAAED0046CAD1 /* AirshipConfig.plist */,
 				E4CA1DAC1F5007C40061784A /* Acknowledgements.markdown */,
 				E45510EE1F4D6F09001CF9BE /* GroupPossibleContent.plist */,
 				E4B340071F0905EB00D6039A /* GoogleService-Info.plist */,
@@ -580,10 +583,10 @@
 								enabled = 1;
 							};
 							com.apple.BackgroundModes = {
-								enabled = 0;
+								enabled = 1;
 							};
 							com.apple.Push = {
-								enabled = 0;
+								enabled = 1;
 							};
 							com.apple.iCloud = {
 								enabled = 1;
@@ -641,6 +644,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E44632501F9BB020004F8E2E /* LaunchScreen.storyboard in Resources */,
 				E4775A411F9A5022002170C7 /* MenuWarning.png in Resources */,
 				E49E53401F990524003011A6 /* MSIntro.png in Resources */,
 				E4FB5A8B1F96E82400D7FED1 /* CourseBackground.jpg in Resources */,
@@ -649,11 +653,11 @@
 				E495229C1F96CD6900C17A83 /* MenuAbout.png in Resources */,
 				E495229D1F96CD6900C17A83 /* MenuCourses.png in Resources */,
 				E495229E1F96CD6900C17A83 /* MenuLogout.png in Resources */,
+				E4EBD9961F9BAAED0046CAD1 /* AirshipConfig.plist in Resources */,
 				E495229F1F96CD6900C17A83 /* MenuLunch.png in Resources */,
 				E47DA48A1F81A091005FA2FC /* AppLogo.png in Resources */,
 				E4765E171F7D74AF009F60F0 /* InfoPlist.strings in Resources */,
 				E4CA1DAE1F50097D0061784A /* Acknowledgements.markdown in Resources */,
-				E4F86B3E1DF0E20C00CAD72B /* LaunchScreen.storyboard in Resources */,
 				E4A880BD1DF279BB00816AB7 /* MFS Logo.jpg in Resources */,
 				E4F0B3751EAD1BE900C923A8 /* dayPicker.plist in Resources */,
 				E4F86B3B1DF0E20C00CAD72B /* Assets.xcassets in Resources */,

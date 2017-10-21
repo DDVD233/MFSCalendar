@@ -929,9 +929,9 @@
                                                                     </userDefinedRuntimeAttributes>
                                                                 </view>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="N" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="706-YK-2Ak">
-                                                                    <rect key="frame" x="13" y="17" width="45" height="45"/>
+                                                                    <rect key="frame" x="13" y="17" width="50" height="45"/>
                                                                     <constraints>
-                                                                        <constraint firstAttribute="width" relation="lessThanOrEqual" constant="45" id="QXk-9Y-htB"/>
+                                                                        <constraint firstAttribute="width" constant="50" id="QXk-9Y-htB"/>
                                                                         <constraint firstAttribute="height" constant="45" id="g2j-d3-GL0"/>
                                                                     </constraints>
                                                                     <fontDescription key="fontDescription" type="system" weight="thin" pointSize="63"/>
@@ -939,7 +939,7 @@
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="260" text="className" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsLetterSpacingToFitWidth="YES" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="I2L-GZ-T8l">
-                                                                    <rect key="frame" x="66" y="13" width="251" height="21"/>
+                                                                    <rect key="frame" x="71" y="13" width="246" height="21"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="height" constant="21" id="5us-kH-rEx"/>
                                                                     </constraints>
@@ -948,7 +948,7 @@
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="time" textAlignment="natural" lineBreakMode="characterWrap" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qQu-jk-mfR">
-                                                                    <rect key="frame" x="66" y="29" width="241" height="21"/>
+                                                                    <rect key="frame" x="71" y="29" width="236" height="21"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="height" constant="21" id="0JF-0K-7YX"/>
                                                                     </constraints>
@@ -957,7 +957,7 @@
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Room" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uU7-ur-obC">
-                                                                    <rect key="frame" x="66" y="45" width="241" height="21"/>
+                                                                    <rect key="frame" x="71" y="45" width="236" height="21"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="height" constant="21" id="h7M-Ac-kp0"/>
                                                                     </constraints>
@@ -1546,7 +1546,7 @@
                                                     <rect key="frame" x="8" y="18" width="50" height="45"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="45" id="D8w-NL-o4e"/>
-                                                        <constraint firstAttribute="width" relation="lessThanOrEqual" constant="50" id="JgD-Kb-uEc"/>
+                                                        <constraint firstAttribute="width" constant="50" id="JgD-Kb-uEc"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" weight="thin" pointSize="63"/>
                                                     <color key="textColor" red="1" green="0.40000000600000002" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>

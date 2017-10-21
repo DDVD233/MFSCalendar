@@ -35,9 +35,9 @@ class classListController: UIViewController, UIViewControllerPreviewingDelegate 
             }
         }
         
-        if #available(iOS 11.0, *) {
-            setLargeTitle(on: self)
-        }
+//        if #available(iOS 11.0, *) {
+//            setLargeTitle(on: self)
+//        }
     }
 
     func sortClasses(classList: NSArray) {

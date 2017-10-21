@@ -116,6 +116,7 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "$BUILT_PRODUCTS_DIR/SwiftMessages/SwiftMessages.framework"
   install_framework "$BUILT_PRODUCTS_DIR/SwiftyJSON/SwiftyJSON.framework"
   install_framework "$BUILT_PRODUCTS_DIR/UICircularProgressRing/UICircularProgressRing.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/UrbanAirship-iOS-SDK/AirshipKit.framework"
   install_framework "$BUILT_PRODUCTS_DIR/XLPagerTabStrip/XLPagerTabStrip.framework"
   install_framework "$BUILT_PRODUCTS_DIR/nanopb/nanopb.framework"
 fi
@@ -147,6 +148,7 @@ if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "$BUILT_PRODUCTS_DIR/SwiftMessages/SwiftMessages.framework"
   install_framework "$BUILT_PRODUCTS_DIR/SwiftyJSON/SwiftyJSON.framework"
   install_framework "$BUILT_PRODUCTS_DIR/UICircularProgressRing/UICircularProgressRing.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/UrbanAirship-iOS-SDK/AirshipKit.framework"
   install_framework "$BUILT_PRODUCTS_DIR/XLPagerTabStrip/XLPagerTabStrip.framework"
   install_framework "$BUILT_PRODUCTS_DIR/nanopb/nanopb.framework"
 fi

@@ -43,9 +43,9 @@ func areEqual<T:Equatable>(type: T.Type, a: Any?, b: Any?) -> Bool? {
 
 @available(iOS 11.0, *)
 func setLargeTitle(on viewController: UIViewController) {
+    viewController.navigationController?.navigationBar.prefersLargeTitles = true
+    viewController.navigationController?.navigationBar.barTintColor = UIColor(hexString: 0xFF7E79)
     //viewController.navigationItem.largeTitleDisplayMode = .never
-//    viewController.navigationController?.navigationBar.prefersLargeTitles = true
-//    viewController.navigationController?.navigationBar.backgroundColor = UIColor(hexString: 0xFF7E79)
 //    viewController.navigationController?.setBackgroundColor(UIColor(hexString: 0xFF7E79))
     
 }
