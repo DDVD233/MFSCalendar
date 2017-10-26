@@ -52,10 +52,10 @@ func setLargeTitle(on viewController: UIViewController) {
 
 public func loginAuthentication() -> (success: Bool, token: String, userId: String) {
 
-    guard let usernameText = userDefaults?.string(forKey: "username") else {
+    guard let usernameText = Preferences().username else {
         return (false, "Username Not Found", "")
     }
-    guard let passwordText = userDefaults?.string(forKey: "password") else {
+    guard let passwordText = Preferences().password else {
         return (false, "Password Not Found", "")
     }
 
@@ -63,14 +63,14 @@ public func loginAuthentication() -> (success: Bool, token: String, userId: Stri
     var userID: String? = ""
     var success: Bool = false
 
-    if let loginDate = userDefaults?.object(forKey: "loginTime") as? Date {
+    if let loginDate = Preferences().loginTime {
         let now = Date()
         let timeInterval = Int(now.timeIntervalSince(loginDate))
 
         if (timeInterval < 600) && (timeInterval > 0) {
             success = true
-            token = userDefaults?.string(forKey: "token")
-            userID = userDefaults?.string(forKey: "userID")
+            token = Preferences().token
+            userID = Preferences().password
 
             addLoginCookie(token: token!)
 
@@ -114,9 +114,9 @@ public func loginAuthentication() -> (success: Bool, token: String, userId: Stri
                     success = true
                     token = resDict["Token"] as? String
                     userID = String(describing: resDict["UserId"]!)
-                    userDefaults?.set(token, forKey: "token")
-                    userDefaults?.set(userID, forKey: "userID")
-                    userDefaults?.set(Date(), forKey: "loginTime")
+                    Preferences().token = token
+                    Preferences().userID = userID
+                    Preferences().loginTime = Date()
                     //print(HTTPCookieStorage.shared.cookies(for: response!.url!))
                 }
             } catch {
@@ -190,9 +190,7 @@ class ClassView {
             return nil
         }
 
-        guard let index = userDefaults?.integer(forKey: "indexForCourseToPresent") else {
-            return nil
-        }
+        let index = Preferences().indexForCourseToPresent
 
         if let thisClassObject = classList.filter({ $0["index"] as! Int == index }).first {
             return thisClassObject
@@ -379,7 +377,7 @@ class NetworkOperations {
     }
     
     func loginUsingPost() -> [HTTPCookie]? {
-        guard let password = userDefaults?.string(forKey: "password"), let username = userDefaults?.string(forKey: "username") else {
+        guard let password = Preferences().password, let username = Preferences().username else {
             return nil
         }
         

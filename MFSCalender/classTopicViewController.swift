@@ -181,8 +181,8 @@ extension classTopicViewController: UICollectionViewDelegate, UICollectionViewDa
         let topicObject = topicsList[indexPath.row]
 
         if let topicID = topicObject["TopicID"] as? Int, let topicIndexID = topicObject["TopicIndexID"] as? Int {
-            userDefaults?.set(topicID, forKey: "topicID")
-            userDefaults?.set(topicIndexID, forKey: "topicIndexID")
+            Preferences().topicID = topicID
+            Preferences().topicIndexID = topicIndexID
         }
 
         if let topicDetailViewController = storyboard?.instantiateViewController(withIdentifier: "topicDetailViewController") {

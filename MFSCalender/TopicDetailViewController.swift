@@ -12,8 +12,8 @@ import Alamofire
 import SVProgressHUD
 
 class topicDetailViewController: UIViewController {
-    let topicID = userDefaults?.integer(forKey: "topicID")
-    let topicIndexID = userDefaults?.integer(forKey: "topicIndexID")
+    let topicID = Preferences().topicID
+    let topicIndexID = Preferences().topicIndexID
 
     var topicData = [[String: Any?]]()
 
@@ -182,8 +182,8 @@ extension topicDetailViewController {
             return
         }
 
-        let topicIDString = String(describing: topicID!)
-        let topicIndexIDString = String(describing: topicIndexID!)
+        let topicIDString = String(describing: topicID)
+        let topicIndexIDString = String(describing: topicIndexID)
 
         let url = "https://mfriends.myschoolapp.com/api/datadirect/topiccontentget/\(topicIDString)/?format=json&index_id=\(topicIndexIDString)&id=\(topicIndexIDString)"
         let semaphore = DispatchSemaphore.init(value: 0)

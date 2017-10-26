@@ -132,8 +132,8 @@ extension classListController: UICollectionViewDataSource, UICollectionViewDeleg
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard var classObject = classObjectAt(indexPath: indexPath) else { return }
-
-        userDefaults?.set(classObject["index"], forKey: "indexForCourseToPresent")
+        
+        Preferences().indexForCourseToPresent = classObject["index"] as? Int ?? 0
     }
     
     @available(iOS 9.0, *)
@@ -147,7 +147,7 @@ extension classListController: UICollectionViewDataSource, UICollectionViewDeleg
         }
         
         guard var classObject = classObjectAt(indexPath: indexPath) else { return nil }
-        userDefaults?.set(classObject["index"], forKey: "indexForCourseToPresent")
+        Preferences().indexForCourseToPresent = classObject["index"] as? Int ?? 0
         
         let vc = storyboard?.instantiateViewController(withIdentifier: "classDetailViewController")
         return vc

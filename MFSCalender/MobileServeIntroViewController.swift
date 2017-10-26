@@ -18,7 +18,7 @@ class MobileServeViewController: UIViewController {
     }
     
     @IBAction func login(_ sender: Any) {
-        userDefaults?.set(true, forKey: "doPresentServiceView")
+        Preferences().doPresentServiceView = true
         dismiss(animated: true, completion: nil)
     }
     

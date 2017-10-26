@@ -25,25 +25,40 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Fabric.with([Crashlytics()])
         logUser()
         
+        setPushNotification()
+        
+        return true
+    }
+    
+    func setPushNotification() {
         UAirship.takeOff()
         UAirship.push().userPushNotificationsEnabled = true
         UAirship.push().defaultPresentationOptions = [.alert, .badge, .sound]
-        if userDefaults?.bool(forKey: "isDev") == true {
+        if Preferences().isDev {
             UAirship.push().addTag("developer")
         }
         
-        if let firstName = userDefaults?.string(forKey: "firstName"), let lastName = userDefaults?.string(forKey: "lastName") {
+        if let firstName = Preferences().firstName, let lastName = Preferences().lastName {
             UAirship.namedUser().identifier = firstName + " " + lastName
         }
+        
+        let classPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
+        let path = classPath.appending("/CourseList.plist")
+        if let classList = NSArray(contentsOfFile: path) as? [[String: Any]] {
+            for classes in classList {
+                if let classID = classes["id"] as? String {
+                    UAirship.push().addTags([classID], group: "registeredClass")
+                }
+            }
+        }
         print("Channel ID: " + (UAPush().channelID ?? "None"))
-        return true
     }
     
     func logUser() {
 //        Crashlytics.sharedInstance().setUserEmail("user@fabric.io")
 //        Crashlytics.sharedInstance().setUserIdentifier("12345")
-        let firstName = userDefaults?.string(forKey: "firstName") ?? ""
-        let lastName = userDefaults?.string(forKey: "lastName") ?? ""
+        let firstName = Preferences().firstName ?? ""
+        let lastName = Preferences().lastName ?? ""
         let fullName = firstName + lastName
         Crashlytics.sharedInstance().setUserName(fullName)
     }
@@ -52,7 +67,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey: Any] = [:]) -> Bool {
         if url.host == "classDetail", let indexString = url.query {
             if let index = Int(indexString) {
-                userDefaults?.set(index, forKey: "indexForCourseToPresent")
+                Preferences().indexForCourseToPresent = index
                 let storyboard = UIStoryboard.init(name: "Main", bundle: nil)
                 let mainViewController = storyboard.instantiateInitialViewController()
                 let classDetailViewController = storyboard.instantiateViewController(withIdentifier: "classDetailViewController")

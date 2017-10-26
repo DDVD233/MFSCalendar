@@ -34,6 +34,7 @@
 		E489F6C71F5A821E00F2269F /* ProjectPublicFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E489F6C61F5A821E00F2269F /* ProjectPublicFunctions.swift */; };
 		E489F6C81F5A825A00F2269F /* ProjectPublicFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E489F6C61F5A821E00F2269F /* ProjectPublicFunctions.swift */; };
 		E48B85A91F96691D000DC288 /* NewMoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48B85A81F96691D000DC288 /* NewMoreViewController.swift */; };
+		E48CE0981F9FA6BB007B53D0 /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48CE0971F9FA6BB007B53D0 /* UserDefaults.swift */; };
 		E48D4DF01E61F275008B0A97 /* ADayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48D4DEF1E61F275008B0A97 /* ADayViewController.swift */; };
 		E48D4DFA1E61F5EC008B0A97 /* BlankArray.plist in Resources */ = {isa = PBXBuildFile; fileRef = E48D4DF91E61F5EC008B0A97 /* BlankArray.plist */; };
 		E48D4E021E61FC26008B0A97 /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E48D4E011E61FC26008B0A97 /* NotificationCenter.framework */; };
@@ -156,6 +157,7 @@
 		E489F6C61F5A821E00F2269F /* ProjectPublicFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProjectPublicFunctions.swift; sourceTree = "<group>"; };
 		E48B85A81F96691D000DC288 /* NewMoreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewMoreViewController.swift; sourceTree = "<group>"; };
 		E48C89E61F71A8EA00D01B61 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
+		E48CE0971F9FA6BB007B53D0 /* UserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaults.swift; sourceTree = "<group>"; };
 		E48D4DEF1E61F275008B0A97 /* ADayViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ADayViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		E48D4DF91E61F5EC008B0A97 /* BlankArray.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = BlankArray.plist; sourceTree = "<group>"; };
 		E48D4DFF1E61FC25008B0A97 /* Class Schedule.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Class Schedule.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -409,6 +411,7 @@
 				43D13B9644E33F1664727760 /* Pods */,
 			);
 			sourceTree = "<group>";
+			usesTabs = 0;
 		};
 		E4F86B2E1DF0E20C00CAD72B /* Products */ = {
 			isa = PBXGroup;
@@ -442,6 +445,7 @@
 				E4BD88951F35973C0000FEF3 /* TargetPublicFunctions.swift */,
 				E48D4DEF1E61F275008B0A97 /* ADayViewController.swift */,
 				E4BD88971F383A060000FEF3 /* ClassTimetableViewController.swift */,
+				E48CE0971F9FA6BB007B53D0 /* UserDefaults.swift */,
 				E472A15E1EFB6F3C00EF5A74 /* More View */,
 				E4F86B341DF0E20C00CAD72B /* Main.storyboard */,
 				E4F86B3A1DF0E20C00CAD72B /* Assets.xcassets */,
@@ -882,6 +886,7 @@
 				E48B85A91F96691D000DC288 /* NewMoreViewController.swift in Sources */,
 				E440F1BC1EEA7F4E004AFD0B /* MoyaNetworkLayer.swift in Sources */,
 				E42786881F568A5F00583D1E /* AboutViewController.swift in Sources */,
+				E48CE0981F9FA6BB007B53D0 /* UserDefaults.swift in Sources */,
 				E4F86B311DF0E20C00CAD72B /* AppDelegate.swift in Sources */,
 				E472A1621EFB72EA00EF5A74 /* SettingViewController.swift in Sources */,
 				E4DAB5B11F6386640013D943 /* HomeworkDetailViewController.swift in Sources */,

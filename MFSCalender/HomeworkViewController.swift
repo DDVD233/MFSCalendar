@@ -270,8 +270,8 @@ class homeworkViewController: UITableViewController, UIViewControllerPreviewingD
             return nil
         }
         
-        userDefaults?.set(assignmentIndexID, forKey: "indexIdForAssignmentToPresent")
-        userDefaults?.set(assignmentID, forKey: "idForAssignmentToPresent")
+        Preferences().indexIdForAssignmentToPresent = assignmentIndexID
+        Preferences().idForAssignmentToPresent = assignmentID
         
         guard let viewController = storyboard?.instantiateViewController(withIdentifier: "homeworkDetailViewController") else {
             return nil

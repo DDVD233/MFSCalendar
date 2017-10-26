@@ -27,9 +27,7 @@ class homeworKDetailViewController: UIViewController, SFSafariViewControllerDele
     }
     
     func getTheHomeworkToPresent() {
-        guard let assignmentIndexID = userDefaults?.integer(forKey: "indexIdForAssignmentToPresent") else {
-            return
-        }
+        let assignmentIndexID = Preferences().indexIdForAssignmentToPresent
         
         let (success, _, userId) = loginAuthentication()
         
@@ -66,9 +64,9 @@ class homeworKDetailViewController: UIViewController, SFSafariViewControllerDele
     }
     
     func getLinksToPresent() {
-        guard let assignmentID = userDefaults?.integer(forKey: "idForAssignmentToPresent") else {
-            return
-        }
+        let assignmentID = Preferences().idForAssignmentToPresent
+        
+        guard assignmentID != nil else { return }
         
         let url = "https://mfriends.myschoolapp.com/api/assignment2/read/\(String(describing: assignmentID))/?format=json"
         let semaphore = DispatchSemaphore(value: 0)
@@ -171,7 +169,7 @@ extension homeworKDetailViewController: UITableViewDelegate, UITableViewDataSour
                 return
             }
             
-            userDefaults?.set(index, forKey: "indexForCourseToPresent")
+            Preferences().indexForCourseToPresent = index
             
             let classDetailViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "classDetailViewController")
             self.show(classDetailViewController, sender: self)
@@ -253,9 +251,8 @@ extension homeworKDetailViewController: UITableViewDelegate, UITableViewDataSour
                 let cell = tableView.dequeueReusableCell(withIdentifier: "homeworkDetailViewCell", for: indexPath) as! homeworkDetailViewCell
                 let contentObject = contentList[0]
                 
-                if let assignmentIndexID = userDefaults?.integer(forKey: "indexIdForAssignmentToPresent") {
-                    cell.assignmentIndexID = String(describing: assignmentIndexID)
-                }
+                let assignmentIndexID = Preferences().indexIdForAssignmentToPresent
+                cell.assignmentIndexID = String(describing: assignmentIndexID)
                 
                 
                 if let shortDescription = contentObject["title"] as? String {

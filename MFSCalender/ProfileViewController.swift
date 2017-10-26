@@ -42,8 +42,8 @@ class profileViewController: UITableViewController {
         profilePhoto.contentMode = UIViewContentMode.scaleAspectFill
         profilePhoto.cornerRadius = profilePhoto.frame.size.width / 2
         
-        let firstName = userDefaults?.string(forKey: "firstName") ?? ""
-        let lastName = userDefaults?.string(forKey: "lastName") ?? ""
+        let firstName = Preferences().firstName ?? ""
+        let lastName = Preferences().lastName ?? ""
         profileName.text = firstName + " " + lastName
     }
     
@@ -51,7 +51,7 @@ class profileViewController: UITableViewController {
         let infoList = ["firstName", "lastName", "email", "lockerNumber", "lockerCombination"]
         
         for key in infoList {
-            if let value = userDefaults?.value(forKey: key) {
+            if let value = userDefaults.value(forKey: key) {
                 contentList[key] = value
             }
         }

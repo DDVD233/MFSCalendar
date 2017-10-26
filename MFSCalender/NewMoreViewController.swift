@@ -18,8 +18,8 @@ class NewMoreViewController: UICollectionViewController  {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
-        if userDefaults?.bool(forKey: "doPresentServiceView") == true {
-            userDefaults?.set(false, forKey: "doPresentServiceView")
+        if Preferences().doPresentServiceView {
+            Preferences().doPresentServiceView = false
             DispatchQueue.global().async {
                 self.serviceHour()
             }
@@ -37,7 +37,7 @@ extension NewMoreViewController {
         if section == 0 {
             return 1
         } else {
-            if userDefaults?.bool(forKey: "isDev") == true {
+            if Preferences().isDev {
                 return 6
             } else {
                 return 5
@@ -57,11 +57,11 @@ extension NewMoreViewController {
             cell.imageView.contentMode = UIViewContentMode.scaleAspectFill
             
             cell.nameLabel.text = ""
-            if let firstName = userDefaults?.string(forKey: "firstName") {
+            if let firstName = Preferences().firstName {
                 cell.nameLabel.text?.append(firstName + " ")
             }
             
-            if let lastName = userDefaults?.string(forKey: "lastName") {
+            if let lastName = Preferences().lastName {
                 cell.nameLabel.text?.append(lastName)
             }
             
@@ -150,7 +150,7 @@ extension NewMoreViewController {
                     show(infoVC, sender: self)
                 }
             case 5:
-                userDefaults?.set(false, forKey: "didShowMobileServe")
+                userDefaults.set(false, forKey: "didShowMobileServe")
                 self.tabBarController?.selectedIndex = 0
             default:
                 break
@@ -159,7 +159,7 @@ extension NewMoreViewController {
     }
     
     func serviceHour() {
-        if userDefaults?.string(forKey: "servicePassword") != nil {
+        if Preferences().servicePassword != nil {
             var serviceHour = 999
             serviceHour = self.getServiceHour()
             let serviceHourString = serviceHour > 990 ? "Error" : String(describing: serviceHour)
@@ -178,7 +178,7 @@ extension NewMoreViewController {
     //    998: Server internal error. Csrf_middleware_token not found
     //    999: Incorrect username/password
     func getServiceHour() -> Int {
-        guard let username = userDefaults?.string(forKey: "serviceUsername"), let password = userDefaults?.string(forKey: "servicePassword") else {
+        guard let username = Preferences().serviceUsername, let password = Preferences().servicePassword else {
             //presentServiceLoginView()
             return 997
         }
@@ -224,25 +224,25 @@ extension NewMoreViewController {
         
         let loginView = SCLAlertView(appearance: appearance)
         let username = loginView.addTextField("Username")
-        if userDefaults!.string(forKey: "serviceUsername").existsAndNotEmpty() {
-            username.text = userDefaults?.string(forKey: "serviceUsername")
+        if Preferences().serviceUsername.existsAndNotEmpty() {
+            username.text = Preferences().username
         }
         
         let password = loginView.addTextField("Password")
         password.isSecureTextEntry = true
         
         loginView.addButton("Login") {
-            userDefaults?.set(username.text, forKey: "serviceUsername")
-            userDefaults?.set(password.text, forKey: "servicePassword")
+            Preferences().serviceUsername = username.text
+            Preferences().servicePassword = password.text
             
             let hour = self.getServiceHour()
             switch hour {
             case 999:
                 presentErrorMessage(presentMessage: "Login failed. Your username/password maybe incorrect.", layout: .cardView)
-                userDefaults?.set(nil, forKey: "servicePassword")
+                Preferences().servicePassword = nil
             case 996, 998:
                 presentErrorMessage(presentMessage: "Login failed. Server internal error. Please try again later.", layout: .cardView)
-                userDefaults?.set(nil, forKey: "servicePassword")
+                Preferences().servicePassword = nil
             default:
                 loginView.hideView()
             }
@@ -256,7 +256,7 @@ extension NewMoreViewController {
                                                     kTextFont: UIFont(name: "HelveticaNeue", size: 17)!)
         let alertView = SCLAlertView(appearance: appearance)
         alertView.addButton("Log Out") {
-            userDefaults?.set(nil, forKey: "servicePassword")
+            Preferences().servicePassword = nil
         }
         
         alertView.showInfo(hour, subTitle: "TOTAL SERVICE HOURS", animationStyle: .bottomToTop)
@@ -326,12 +326,13 @@ extension NewMoreViewController {
         
         let logOutAction = UIAlertAction(title: "Log Out", style: .default) { (alertAction) -> Void in
             NSLog("Logged Out")
-            userDefaults?.set(false, forKey: "didLogin")
-            userDefaults?.set(false, forKey: "courseInitialized")
-            userDefaults?.removeObject(forKey: "firstName")
-            userDefaults?.removeObject(forKey: "lastName")
-            userDefaults?.removeObject(forKey: "lockerNumber")
-            userDefaults?.removeObject(forKey: "lockerPassword")
+            let preferences = Preferences()
+            preferences.didLogin = false
+            preferences.courseInitialized = false
+            preferences.firstName = nil
+            preferences.lastName = nil
+            preferences.lockerNumber = nil
+            preferences.lockerCombination = nil
             let vc = self.storyboard?.instantiateViewController(withIdentifier: "MainTab")
             self.present(vc!, animated: false, completion: nil)
         }

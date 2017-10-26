@@ -55,7 +55,7 @@ class classViewCell: UICollectionViewCell {
         guard index != nil else {
             return
         }
-        userDefaults?.set(index!, forKey: "indexForCourseToPresent")
+        Preferences().indexForCourseToPresent = index!
         let classDetailViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "classDetailViewController")
         if parentViewController != nil {
             parentViewController!.show(classDetailViewController, sender: parentViewController)
@@ -125,10 +125,10 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
             })
         }
 
-        if userDefaults?.object(forKey: "firstName") == nil {
-            userDefaults?.set(false, forKey: "didLogin")
+        if Preferences().firstName == nil {
+            Preferences().didLogin = false
         }
-        if (userDefaults?.bool(forKey: "didLogin") == true) && (userDefaults?.bool(forKey: "courseInitialized") == true) {
+        if Preferences().didLogin && Preferences().courseInitialized {
 
             NSLog("Already Logged in.")
             //timer = Timer.scheduledTimer(timeInterval: , target: self, selector: #selector(autoRefreshContents), userInfo: nil, repeats: true)
@@ -153,13 +153,13 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         //classViewHeightConstraint.constant = classView.contentSize.height
 
 //        Add "== true" to prevent force unwrap.
-        guard userDefaults?.bool(forKey: "didLogin") == true else {
+        guard Preferences().didLogin else {
             let vc = self.storyboard?.instantiateViewController(withIdentifier: "ftController") as! firstTimeLaunchController
             self.present(vc, animated: true, completion: nil)
             return
         }
 
-        guard userDefaults?.bool(forKey: "courseInitialized") == true else {
+        guard Preferences().courseInitialized else {
             let vc = self.storyboard?.instantiateViewController(withIdentifier: "courseFillController")
             self.present(vc!, animated: true, completion: nil)
             return
@@ -171,17 +171,17 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
                 NSLog("Refresh Data")
                 self.presentCourseFillView()
             } else {
-                NSLog("No refresh, version: %@", String(describing: userDefaults?.integer(forKey: "version")))
+                NSLog("No refresh, version: %@", String(describing: Preferences().version))
                 self.downloadLargeProfilePhoto()
             }
         }
         
-        if userDefaults?.bool(forKey: "doPresentServiceView") == true {
+        if Preferences().doPresentServiceView {
             self.tabBarController?.selectedIndex = 4
         }
         
-        if userDefaults?.bool(forKey: "didShowMobileServe") != true && userDefaults?.bool(forKey: "isStudent") == true {
-            userDefaults?.set(true, forKey: "didShowMobileServe")
+        if userDefaults.bool(forKey: "didShowMobileServe") && Preferences().isStudent {
+            userDefaults.set(true, forKey: "didShowMobileServe")
             if let mobileServeIntro = storyboard?.instantiateViewController(withIdentifier: "mobileServeIntro") {
                 self.present(mobileServeIntro, animated: true)
             }
@@ -245,12 +245,12 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     }
 
     func downloadLargeProfilePhoto() {
-        if reachability.connection == .wifi && userDefaults?.bool(forKey: "didDownloadFullSizeImage") == false {
-            if let largeFileLink = userDefaults?.string(forKey: "largePhotoLink") {
+        if reachability.connection == .wifi && !userDefaults.bool(forKey: "didDownloadFullSizeImage") {
+            if let largeFileLink = userDefaults.string(forKey: "largePhotoLink") {
                 provider.request(.downloadLargeProfilePhoto(link: largeFileLink), completion: { result in
                     switch result {
                     case .success(_):
-                        userDefaults?.set(true, forKey: "didDownloadFullSizeImage")
+                        userDefaults.set(true, forKey: "didDownloadFullSizeImage")
                     case let .failure(error):
                         NSLog("Failed downloading large profile photo because: \(error)")
                     }
@@ -286,13 +286,13 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     func doRefreshData() -> Bool {
 
 //        当版本号不存在时，默认更新数据
-        guard let version = userDefaults?.integer(forKey: "version") else {
-            return true
-        }
+        let version = Preferences().version
+        
+        guard version != 0 else { return true }
 
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyyMMdd"
-        let refreshDate = userDefaults?.string(forKey: "refreshDate")
+        let refreshDate = Preferences().refreshDate
         let date = formatter.string(from: Date())
 
         guard refreshDate != date else {
@@ -355,7 +355,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
             } else {
                 self.dayLabel.text = "Today is " + day + " Day,"
             }
-            self.welcomeLabel.text = "Welcome back, " + (userDefaults?.string(forKey: "firstName") ?? "") + "!"
+            self.welcomeLabel.text = "Welcome back, " + (Preferences().firstName ?? "") + "!"
             
             self.dateLabel.text = today
         }
@@ -376,7 +376,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     func getHomework() {
         self.listHomework = [String: Array<Dictionary<String, Any?>>]()
 
-        guard let username = userDefaults?.string(forKey: "username") else {
+        guard let username = Preferences().username else {
             return
         }
         var request = URLRequest(url: URL(string: "https://dwei.org/assignmentlist/")!)

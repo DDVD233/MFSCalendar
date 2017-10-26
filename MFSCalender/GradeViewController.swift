@@ -58,6 +58,13 @@ class gradeViewController: UITableViewController {
     override func viewWillDisappear(_ animated: Bool) {
         tableView.dg_removePullToRefresh()
     }
+    
+    func getGradeDetail() {
+        guard loginAuthentication().success else { return }
+        
+        let url = "https://mfriends.myschoolapp.com/api/datadirect/GradeBookPerformanceAssignmentStudentList/?sectionId=70183794&markingPeriodId=5196&studentUserId=4264152"
+        
+    }
 
     func getcumGrade() -> String {
 

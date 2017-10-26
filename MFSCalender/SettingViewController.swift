@@ -53,14 +53,13 @@ class settingViewController: UITableViewController, UIActionSheetDelegate {
         
         let logOutAction = UIAlertAction(title: "Log Out", style: .default) { (alertAction) -> Void in
             NSLog("Logged Out")
-            userDefaults?.set(false, forKey: "didLogin")
-            userDefaults?.set(false, forKey: "courseInitialized")
-            //            userDefaults?.removeObject(forKey: "username")
-            //            userDefaults?.removeObject(forKey: "password")
-            userDefaults?.removeObject(forKey: "firstName")
-            userDefaults?.removeObject(forKey: "lastName")
-            userDefaults?.removeObject(forKey: "lockerNumber")
-            userDefaults?.removeObject(forKey: "lockerPassword")
+            let preferences = Preferences()
+            preferences.didLogin = false
+            preferences.courseInitialized = false
+            preferences.firstName = nil
+            preferences.lastName = nil
+            preferences.lockerNumber = nil
+            preferences.lockerCombination = nil
             let vc = self.storyboard?.instantiateViewController(withIdentifier: "MainTab")
             self.present(vc!, animated: false, completion: nil)
         }

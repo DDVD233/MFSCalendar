@@ -240,5 +240,5 @@ extension Character {
     var isUpperCase: Bool { return String(self) == String(self).uppercased() }
 }
 
-public let userDefaults = UserDefaults(suiteName: "group.org.dwei.MFSCalendar")
+public let userDefaults = UserDefaults(suiteName: "group.org.dwei.MFSCalendar")!
 public let userDocumentPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path

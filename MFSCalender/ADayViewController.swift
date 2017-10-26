@@ -165,7 +165,7 @@ extension ADay: UITableViewDelegate, UITableViewDataSource, UIViewControllerPrev
             return nil
         }
         
-        userDefaults?.set(index, forKey: "indexForCourseToPresent")
+        Preferences().indexForCourseToPresent = index
         
         let classDetailViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "classDetailViewController")
         
@@ -182,7 +182,7 @@ extension ADay: UITableViewDelegate, UITableViewDataSource, UIViewControllerPrev
             return
         }
         
-        userDefaults?.set(index, forKey: "indexForCourseToPresent")
+        Preferences().indexForCourseToPresent = index
         
         let classDetailViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "classDetailViewController")
         self.show(classDetailViewController, sender: self)

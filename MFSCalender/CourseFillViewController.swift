@@ -36,7 +36,7 @@ class courseFillController: UIViewController {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyyMMdd"
         let date = formatter.string(from: Date())
-        userDefaults?.set(date, forKey: "refreshDate")
+        Preferences().refreshDate = date
         DispatchQueue.global().async {
             self.importCourse()
         }
@@ -91,7 +91,7 @@ class courseFillController: UIViewController {
     }
     
     func viewDismiss() {
-        userDefaults?.set(true, forKey: "courseInitialized")
+        Preferences().courseInitialized = true
         self.trace?.stop()
         UIApplication.shared.isNetworkActivityIndicatorVisible = false
         self.dismiss(animated: true)
@@ -445,7 +445,7 @@ class courseFillController: UIViewController {
             }
             
             let versionNumber = Int(version)!
-            userDefaults?.set(versionNumber, forKey: "version")
+            Preferences().version = versionNumber
             NSLog("Data refreshed to %#", version)
             
             semaphore.signal()

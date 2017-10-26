@@ -44,8 +44,8 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
         self.username.delegate = self
         self.password.delegate = self
 
-        self.username.text = userDefaults?.string(forKey: "username")
-        self.password.text = userDefaults?.string(forKey: "password")
+        self.username.text = Preferences().username
+        self.password.text = Preferences().password
 
 //        self.username.placeholder = "Username"
 //        self.username.title = "Username"
@@ -67,7 +67,7 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
 
 
     override func viewDidAppear(_ animated: Bool) {
-        let isFirstTimeLogin = userDefaults?.bool(forKey: "isFirstTimeLogin") ?? true
+        let isFirstTimeLogin = Preferences().isFirstTimeLogin
         if isFirstTimeLogin {
             let loginNotice = SCLAlertView()
             loginNotice.addButton("Go to myMFS website", action: {
@@ -80,7 +80,7 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
             })
             loginNotice.showInfo("Welcome", subTitle: "Welcome to MFS Calendar. Please use your myMFS account to log in.", animationStyle: .bottomToTop)
             
-            userDefaults?.set(false, forKey: "isFirstTimeLogin")
+            Preferences().isFirstTimeLogin = false
         }
     }
 
@@ -166,19 +166,15 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
         if (self.username.text?.isEmpty)! || (self.password.text?.isEmpty)! {
 
         } else if self.username.text == "testaccount" && self.password.text == "test" {
-            userDefaults?.set(self.username.text, forKey: "username")
-            userDefaults?.set(self.password.text, forKey: "password")
-            userDefaults?.set("David", forKey: "firstName")
-            userDefaults?.set("Dai", forKey: "lastName")
-            userDefaults?.set("77", forKey: "lockerNumber")
-            userDefaults?.set("233", forKey: "lockerPassword")
+            Preferences().username = self.username.text
+            Preferences().password = self.password.text
             DispatchQueue.global().async(execute: {
                 DispatchQueue.main.sync {
                     self.indicatorView.isHidden = false
                     self.NVIndicator.startAnimating()
                 }
                 if self.initDayData() && self.getEvent() && self.versionCheck() {
-                    userDefaults?.set(true, forKey: "didLogin")
+                    Preferences().didLogin = true
                     self.dismiss(animated: true, completion: nil)
                 }
                 self.indicatorView.isHidden = true
@@ -192,9 +188,9 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
                 }
                 if self.authentication() {
                     if self.getProfile() && self.initDayData() && self.getEvent() && self.versionCheck() {
-                        userDefaults?.set(self.username.text, forKey: "username")
-                        userDefaults?.set(self.password.text, forKey: "password")
-                        userDefaults?.set(true, forKey: "didLogin")
+                        Preferences().username = self.username.text
+                        Preferences().password = self.password.text
+                        Preferences().didLogin = true
                         Answers.logLogin(withMethod: "Default", success: true, customAttributes: [:])
                         
                         DispatchQueue.main.sync {
@@ -223,15 +219,15 @@ extension firstTimeLaunchController {
         guard let password = self.password.text else {
             return false
         }
-        userDefaults?.set(username, forKey: "username")
-        userDefaults?.set(password, forKey: "password")
+        Preferences().username = username
+        Preferences().password = password
         let (success, token, _) = loginAuthentication()
         if token == "Incorrect password" {
             self.errorMessage(presentMessage: "The username/password is incorrect. Please check your spelling.")
         } else if !success {
             self.errorMessage(presentMessage: token)
         } else {
-            userDefaults?.set(token, forKey: "token")
+            Preferences().token = token
             return true
         }
 
@@ -241,8 +237,8 @@ extension firstTimeLaunchController {
     func getProfile() -> Bool {
 
         let semaphore = DispatchSemaphore.init(value: 0)
-        let token = userDefaults?.string(forKey: "token")
-        let userID = userDefaults?.string(forKey: "userID")
+        let token = Preferences().token
+        let userID = Preferences().userID
         var success: Bool = false
         
         provider.request(MyService.getProfile(userID: userID!, token: token!), callbackQueue: DispatchQueue.global(), completion: { result in
@@ -269,37 +265,36 @@ extension firstTimeLaunchController {
                     }
                     
                     if let firstName = resDict["FirstName"] as? String, let lastName = resDict["LastName"] as? String {
-                        userDefaults?.set(firstName, forKey: "firstName")
-                        userDefaults?.set(lastName, forKey: "lastName")
+                        Preferences().firstName = firstName
+                        Preferences().lastName = lastName
                         if firstName == "Wei" && lastName == "Dai" {
-                            userDefaults?.set(true, forKey: "isDev")
+                            Preferences().isDev = true
                         }
                     }
                     
                     if let email = resDict["Email"] as? String {
-                        userDefaults?.set(email, forKey: "email")
-                        
+                        Preferences().email = email
                     }
                     
                     if let photo = resDict["ProfilePhoto"] as? NSDictionary {
                         if let photolink = photo["ThumbFilenameUrl"] as? String {
-                            userDefaults?.set(photolink, forKey: "photoLink")
+                            userDefaults.set(photolink, forKey: "photoLink")
                             self.downloadSmallProfilePhoto(photoLink: photolink)
                         }
                         
                         let largePhotoLink = photo["LargeFilenameUrl"] as? String
-                        userDefaults?.set(largePhotoLink, forKey: "largePhotoLink")
+                        userDefaults.set(largePhotoLink, forKey: "largePhotoLink")
                     }
                     
                     if let lockerNumber = resDict["LockerNbr"] as? String {
-                        userDefaults?.set(lockerNumber, forKey: "lockerNumber")
+                        Preferences().lockerNumber = lockerNumber
                     }
                     if let lockerPassword = resDict["LockerCombo"] as? String {
-                        userDefaults?.set(lockerPassword, forKey: "lockerCombination")
+                        Preferences().lockerCombination = lockerPassword
                     }
                     
                     if let _ = resDict["StudentInfo"] as? [String: Any] {
-                        userDefaults?.set(true, forKey: "isStudent")
+                        Preferences().isStudent = true
                     }
                     
                     success = true
@@ -349,7 +344,7 @@ extension firstTimeLaunchController {
                 }
                 try! fileManager.moveItem(atPath: locationPath, toPath: path)
                 print("new location:\(path)")
-                userDefaults?.set(false, forKey: "didDownloadFullSizeImage")
+                userDefaults.set(false, forKey: "didDownloadFullSizeImage")
             } else {
                 DispatchQueue.main.async {
                     let presentMessage = error!.localizedDescription + " Please check your internet connection."
@@ -433,7 +428,7 @@ extension firstTimeLaunchController {
                 }
                 let versionNumber = Int(version)
                 print("Version: %@", versionNumber!)
-                userDefaults?.set(versionNumber, forKey: "version")
+                Preferences().version = versionNumber!
                 success = true
             case let .failure(error):
                 DispatchQueue.main.async {
