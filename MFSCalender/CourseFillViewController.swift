@@ -172,6 +172,7 @@ class courseFillController: UIViewController {
         }
 
         let urlString = "https://mfriends.myschoolapp.com/api/datadirect/ParentStudentUserAcademicGroupsGet?userId=\(userId)&schoolYearLabel=2017+-+2018&memberLevel=3&persona=2&durationList=\(durationId)"
+        print(urlString)
 
         let url = URL(string: urlString)
         let request = URLRequest(url: url!)
@@ -182,6 +183,8 @@ class courseFillController: UIViewController {
                     semaphore.signal()
                     return
                 }
+                
+                print(courseData)
 
                 for (index, item) in courseData.enumerated() {
                     var course = (item as! NSDictionary).mutableCopy() as! Dictionary<String, Any>
@@ -251,6 +254,7 @@ class courseFillController: UIViewController {
                     if error == nil {
                         do {
                             let json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! Array<NSDictionary>
+                            print(json)
 
                             for infoToAdd in json {
                                 print(infoToAdd)

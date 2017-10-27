@@ -180,7 +180,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
             self.tabBarController?.selectedIndex = 4
         }
         
-        if userDefaults.bool(forKey: "didShowMobileServe") && Preferences().isStudent {
+        if !userDefaults.bool(forKey: "didShowMobileServe") && Preferences().isStudent {
             userDefaults.set(true, forKey: "didShowMobileServe")
             if let mobileServeIntro = storyboard?.instantiateViewController(withIdentifier: "mobileServeIntro") {
                 self.present(mobileServeIntro, animated: true)

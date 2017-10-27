@@ -36,6 +36,7 @@ class homeworKDetailViewController: UIViewController, SFSafariViewControllerDele
         }
         
         let url = URL(string: "https://mfriends.myschoolapp.com/api/datadirect/AssignmentStudentDetail?format=json&studentId=\(userId)&AssignmentIndexId=\(assignmentIndexID)")!
+        print(url)
         let semaphore = DispatchSemaphore(value: 0)
         
         let task = URLSession.shared.dataTask(with: url, completionHandler: { (data, response, error) in
@@ -245,10 +246,13 @@ extension homeworKDetailViewController: UITableViewDelegate, UITableViewDataSour
         case "Detail":
             if indexPath.row == 0 {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "simpleCell", for: indexPath)
-                cell.textLabel?.text = contentList[0]["sectionName"] as? String
+                if contentList.count > 0 {
+                    cell.textLabel?.text = contentList[0]["sectionName"] as? String
+                }
                 return cell
             } else {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "homeworkDetailViewCell", for: indexPath) as! homeworkDetailViewCell
+                guard contentList.count > 0 else { return cell }
                 let contentObject = contentList[0]
                 
                 let assignmentIndexID = Preferences().indexIdForAssignmentToPresent

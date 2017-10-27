@@ -70,7 +70,7 @@ public func loginAuthentication() -> (success: Bool, token: String, userId: Stri
         if (timeInterval < 600) && (timeInterval > 0) {
             success = true
             token = Preferences().token
-            userID = Preferences().password
+            userID = Preferences().userID
 
             addLoginCookie(token: token!)
 
@@ -111,6 +111,7 @@ public func loginAuthentication() -> (success: Bool, token: String, userId: Stri
                     
                 } else {
                     //                      When authentication is success.
+                    print(resDict)
                     success = true
                     token = resDict["Token"] as? String
                     userID = String(describing: resDict["UserId"]!)
