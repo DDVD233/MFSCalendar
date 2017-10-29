@@ -2031,9 +2031,6 @@
                                         </view>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Cumulative Grade" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ws8-Ti-aCJ">
                                             <rect key="frame" x="114.5" y="240.5" width="146" height="21"/>
-                                            <constraints>
-                                                <constraint firstAttribute="height" constant="21" id="lC8-47-h8w"/>
-                                            </constraints>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                             <color key="textColor" red="0.0" green="0.73721532879999996" blue="0.66840856479999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
@@ -2041,9 +2038,9 @@
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="ws8-Ti-aCJ" firstAttribute="top" secondItem="zdr-19-Y3d" secondAttribute="bottom" constant="10" id="8dt-EA-AJ0"/>
-                                        <constraint firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="ws8-Ti-aCJ" secondAttribute="trailing" constant="20" id="HVn-UF-S0O"/>
+                                        <constraint firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="ws8-Ti-aCJ" secondAttribute="trailing" constant="10" id="HVn-UF-S0O"/>
                                         <constraint firstItem="zdr-19-Y3d" firstAttribute="centerX" secondItem="h5l-4E-Czr" secondAttribute="centerX" id="IfE-se-IN2"/>
-                                        <constraint firstItem="ws8-Ti-aCJ" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="h5l-4E-Czr" secondAttribute="leadingMargin" constant="20" id="ahF-9E-p9R"/>
+                                        <constraint firstItem="ws8-Ti-aCJ" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="h5l-4E-Czr" secondAttribute="leadingMargin" constant="10" id="ahF-9E-p9R"/>
                                         <constraint firstItem="ws8-Ti-aCJ" firstAttribute="centerX" secondItem="h5l-4E-Czr" secondAttribute="centerX" id="mNh-cO-0A1"/>
                                         <constraint firstItem="zdr-19-Y3d" firstAttribute="top" secondItem="h5l-4E-Czr" secondAttribute="topMargin" constant="10" id="oCH-Zt-f3P"/>
                                         <constraint firstAttribute="bottomMargin" secondItem="ws8-Ti-aCJ" secondAttribute="bottom" constant="10" id="zFp-6e-SUp"/>
@@ -2051,6 +2048,101 @@
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="cumGradeProgressRing" destination="zdr-19-Y3d" id="8GU-vs-Q60"/>
+                                </connections>
+                            </tableViewCell>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="gray" indentationWidth="10" reuseIdentifier="gradeDetail" rowHeight="49" id="qB1-u1-vOG" customClass="gradeDetailCell" customModule="MFSCalendar" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="335.5" width="375" height="49"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="qB1-u1-vOG" id="Q3y-nQ-AI5">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="48.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qav-cm-dna">
+                                            <rect key="frame" x="169" y="13" width="36" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="arN-ek-zeF">
+                                            <rect key="frame" x="13" y="13" width="45" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Grade" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="reN-G7-IAC">
+                                            <rect key="frame" x="315" y="13" width="47" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="reN-G7-IAC" firstAttribute="centerY" secondItem="Q3y-nQ-AI5" secondAttribute="centerY" id="4cA-5u-gji"/>
+                                        <constraint firstAttribute="bottomMargin" relation="greaterThanOrEqual" secondItem="arN-ek-zeF" secondAttribute="bottom" constant="6.5" id="Cvi-OS-kTT"/>
+                                        <constraint firstItem="qav-cm-dna" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="arN-ek-zeF" secondAttribute="trailing" constant="5" id="DZW-xp-gWu"/>
+                                        <constraint firstItem="qav-cm-dna" firstAttribute="centerY" secondItem="Q3y-nQ-AI5" secondAttribute="centerY" id="FTa-wH-21s"/>
+                                        <constraint firstItem="arN-ek-zeF" firstAttribute="centerY" secondItem="Q3y-nQ-AI5" secondAttribute="centerY" id="Zhe-Za-c14"/>
+                                        <constraint firstItem="arN-ek-zeF" firstAttribute="top" relation="greaterThanOrEqual" secondItem="Q3y-nQ-AI5" secondAttribute="topMargin" constant="5" id="cA4-gq-2fG"/>
+                                        <constraint firstItem="reN-G7-IAC" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="qav-cm-dna" secondAttribute="trailing" constant="5" id="g2m-8E-JGu"/>
+                                        <constraint firstItem="reN-G7-IAC" firstAttribute="trailing" secondItem="Q3y-nQ-AI5" secondAttribute="trailingMargin" constant="-5" id="hJN-0r-wSa"/>
+                                        <constraint firstItem="arN-ek-zeF" firstAttribute="leading" secondItem="Q3y-nQ-AI5" secondAttribute="leadingMargin" constant="5" id="oom-Dz-WaZ"/>
+                                        <constraint firstItem="qav-cm-dna" firstAttribute="centerX" secondItem="Q3y-nQ-AI5" secondAttribute="centerX" id="tW4-pl-wVu"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="date" destination="qav-cm-dna" id="8Bw-um-Nu0"/>
+                                    <outlet property="grade" destination="reN-G7-IAC" id="hoZ-tm-IPG"/>
+                                    <outlet property="name" destination="arN-ek-zeF" id="dYU-g7-9u4"/>
+                                </connections>
+                            </tableViewCell>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="tableHeader" rowHeight="44" id="EVe-45-aoX" customClass="homeworkTableHeader" customModule="MFSCalendar" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="384.5" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="EVe-45-aoX" id="qif-yM-rg8">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nJx-v6-03Q">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                            <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <color key="backgroundColor" red="1" green="0.49327188729999999" blue="0.47399842739999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <constraints>
+                                        <constraint firstItem="nJx-v6-03Q" firstAttribute="top" secondItem="qif-yM-rg8" secondAttribute="top" id="35C-21-QB5"/>
+                                        <constraint firstAttribute="trailing" secondItem="nJx-v6-03Q" secondAttribute="trailing" id="Aax-X2-DHZ"/>
+                                        <constraint firstItem="nJx-v6-03Q" firstAttribute="leading" secondItem="qif-yM-rg8" secondAttribute="leading" id="RBB-wL-owY"/>
+                                        <constraint firstAttribute="bottom" secondItem="nJx-v6-03Q" secondAttribute="bottom" id="dKL-PQ-PTy"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="titleLabel" destination="nJx-v6-03Q" id="bkx-KC-Bv9"/>
+                                </connections>
+                            </tableViewCell>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="chartsView" rowHeight="280" id="beY-tN-BE0" customClass="gradeBarChartCell" customModule="MFSCalendar" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="428.5" width="375" height="280"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="beY-tN-BE0" id="1eY-nf-0dt">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="279.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RdL-Ih-uqj" customClass="BarChartView" customModule="Charts">
+                                            <rect key="frame" x="0.0" y="8" width="375" height="264"/>
+                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </view>
+                                    </subviews>
+                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <constraints>
+                                        <constraint firstAttribute="bottomMargin" secondItem="RdL-Ih-uqj" secondAttribute="bottom" id="JXJ-Dz-DRS"/>
+                                        <constraint firstItem="RdL-Ih-uqj" firstAttribute="leading" secondItem="1eY-nf-0dt" secondAttribute="leading" id="WlH-5I-cDz"/>
+                                        <constraint firstItem="RdL-Ih-uqj" firstAttribute="top" secondItem="1eY-nf-0dt" secondAttribute="topMargin" id="ere-Re-Vzg"/>
+                                        <constraint firstAttribute="trailing" secondItem="RdL-Ih-uqj" secondAttribute="trailing" id="lDV-rc-a0e"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="chartView" destination="RdL-Ih-uqj" id="vmM-bs-e6w"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -2062,7 +2154,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="g1B-BB-Gl3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="6774" y="1253"/>
+            <point key="canvasLocation" x="6773.6000000000004" y="1252.6236881559221"/>
         </scene>
         <!--Class Topic View Controller-->
         <scene sceneID="pDN-vR-dIX">

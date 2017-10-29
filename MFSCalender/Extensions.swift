@@ -240,5 +240,18 @@ extension Character {
     var isUpperCase: Bool { return String(self) == String(self).uppercased() }
 }
 
+public extension Sequence {
+    func group<U: Hashable>(by key: (Iterator.Element) -> U) -> [U:[Iterator.Element]] {
+        var categories: [U: [Iterator.Element]] = [:]
+        for element in self {
+            let key = key(element)
+            if case nil = categories[key]?.append(element) {
+                categories[key] = [element]
+            }
+        }
+        return categories
+    }
+}
+
 public let userDefaults = UserDefaults(suiteName: "group.org.dwei.MFSCalendar")!
 public let userDocumentPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path

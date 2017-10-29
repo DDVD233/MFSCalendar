@@ -1,5 +1,8 @@
 PODS:
   - Alamofire (4.5.1)
+  - Charts (3.0.4):
+    - Charts/Core (= 3.0.4)
+  - Charts/Core (3.0.4)
   - Crashlytics (3.9.0):
     - Fabric (~> 1.7.0)
   - DGElasticPullToRefresh (1.1)
@@ -73,6 +76,7 @@ PODS:
 
 DEPENDENCIES:
   - Alamofire
+  - Charts
   - Crashlytics
   - DGElasticPullToRefresh
   - Down (from `https://github.com/iwasrobbed/Down.git`, branch `master`)
@@ -132,6 +136,7 @@ CHECKOUT OPTIONS:
 
 SPEC CHECKSUMS:
   Alamofire: 2d95912bf4c34f164fdfc335872e8c312acaea4a
+  Charts: 0705898046257443f0afbbc3179f4b67507b6e48
   Crashlytics: 64aad5dd97249dd3ff94b979fea140144590cdd3
   DGElasticPullToRefresh: 28f11a6026302a90f8ffebbc6e24748e584dddd3
   Down: 159cbf38cdf0e97d2f2f74909811f6c0f8ffe618
@@ -169,6 +174,6 @@ SPEC CHECKSUMS:
   UrbanAirship-iOS-SDK: 1a2837473096ca63d86f11cadb4710d993237186
   XLPagerTabStrip: d1ab378af0923320ec0b5eab11d7b2f803d31261
 
-PODFILE CHECKSUM: 6b034492452f10ba355c3a0b51df7b31fa09d5ec
+PODFILE CHECKSUM: 97cfe9c1a05aed42753b3f2018e32646368c94c1
 
 COCOAPODS: 1.2.0

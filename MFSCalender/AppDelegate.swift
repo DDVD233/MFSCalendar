@@ -25,7 +25,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Fabric.with([Crashlytics()])
         logUser()
         
-        setPushNotification()
+        //setPushNotification()
         
         return true
     }

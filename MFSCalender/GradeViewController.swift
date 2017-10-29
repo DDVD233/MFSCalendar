@@ -13,9 +13,18 @@ import SwiftyJSON
 import SwiftMessages
 import DGElasticPullToRefresh
 import SVProgressHUD
+import Alamofire
+import Charts
 
 class gradeViewController: UITableViewController {
-    var classObject: NSDictionary? = nil
+    var classObject = [String: Any]()
+    var gradeList = [[String: Any]]()
+    var groupedGradeList = [String: [[String: Any]]]()
+    var groupedGradeKeys: [String] {
+        return Array(groupedGradeList.keys)
+    }
+    
+    let dateFormatter = DateFormatter()
 
     var cumGrade: Float = 0
 
@@ -37,6 +46,11 @@ class gradeViewController: UITableViewController {
         tableView.dg_setPullToRefreshFillColor(UIColor(hexString: 0xFF7E79))
         tableView.dg_setPullToRefreshBackgroundColor(tableView.backgroundColor!)
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        self.animate()
+    }
 
     func refreshView() {
         DispatchQueue.main.async {
@@ -44,15 +58,25 @@ class gradeViewController: UITableViewController {
             self.navigationController?.setIndeterminate(true)
             SVProgressHUD.show()
         }
-
+        
+        classObject = ClassView().getTheClassToPresent() ?? [String: Any]()
         cumGrade = Float(getcumGrade()) ?? 0
+        getGradeDetail()
 
         DispatchQueue.main.async {
             self.navigationController?.cancelProgress()
             SVProgressHUD.dismiss()
-            let cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as! cumGradeCell
-            cell.cumGradeProgressRing.setProgress(value: CGFloat(self.cumGrade), animationDuration: 1.0)
+            self.tableView.reloadData()
         }
+    }
+    
+    func animate() {
+        let cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as! cumGradeCell
+        cell.cumGradeProgressRing.setProgress(value: CGFloat(self.cumGrade), animationDuration: 1.0)
+        
+//        if let chartCell = self.tableView.cellForRow(at: IndexPath(row: 1, section: 0)) as? gradeBarChartCell {
+//            print(chartCell.chartView.data)
+//        }
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -61,9 +85,59 @@ class gradeViewController: UITableViewController {
     
     func getGradeDetail() {
         guard loginAuthentication().success else { return }
+        let userID = loginAuthentication().userId
+        guard let sectionID = classObject["sectionid"] as? Int else { return }
         
-        let url = "https://mfriends.myschoolapp.com/api/datadirect/GradeBookPerformanceAssignmentStudentList/?sectionId=70183794&markingPeriodId=5196&studentUserId=4264152"
+        let url = "https://mfriends.myschoolapp.com/api/datadirect/GradeBookPerformanceAssignmentStudentList/?sectionId=\(String(describing: sectionID))&markingPeriodId=5196&studentUserId=\(userID)"
         
+        let semaphore = DispatchSemaphore(value: 0)
+        
+        Alamofire.request(url).response(queue: DispatchQueue.global(), completionHandler: { result in
+            if result.error == nil {
+                do {
+                    if let json = try JSONSerialization.jsonObject(with: result.data!, options: .allowFragments) as? [[String: Any]] {
+                        self.gradeList = json
+                    }
+                } catch {
+                    presentErrorMessage(presentMessage: error.localizedDescription, layout: .statusLine)
+                }
+            }
+            
+            semaphore.signal()
+        })
+        
+        semaphore.wait()
+        classifyGradeData()
+    }
+    
+    func classifyGradeData() {
+        guard gradeList.count > 0 else { return }
+        
+        for (index, gradeObject) in gradeList.enumerated() {
+            var gradeWithDate = gradeObject
+            if let dateDueString = gradeObject["DateDue"] as? String {
+                dateFormatter.dateFormat = "M/dd/yyyy h:mm a"
+                if let dateDue = dateFormatter.date(from: dateDueString) {
+                    gradeWithDate["DateDue"] = dateDue
+                }
+            }
+            
+            gradeList[index] = gradeWithDate
+        }
+        
+        gradeList.sort(by: {
+            ($0["DateDue"] as? Date ?? Date()).compare($1["DateDue"] as? Date ?? Date()) == .orderedAscending
+        })
+        
+        for (index, grade) in gradeList.enumerated() {
+            var gradeWithIndex = grade
+            gradeWithIndex["index"] = index
+            gradeList[index] = gradeWithIndex
+        }
+        
+        let groupedData = gradeList.group(by: { $0["AssignmentType"] as? String ?? "" })
+        print(groupedData)
+        groupedGradeList = groupedData
     }
 
     func getcumGrade() -> String {
@@ -74,7 +148,6 @@ class gradeViewController: UITableViewController {
 
         let userId = loginAuthentication().userId
 
-        let classObject = ClassView().getTheClassToPresent() ?? [String: Any]()
         let leadSectionId = classObject["sectionid"] as? Int
 
         var cumGrade = ""
@@ -123,42 +196,176 @@ class gradeViewController: UITableViewController {
 extension gradeViewController {
 //    UITableviewDelegate and UITableviewDataSource
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return 1 + groupedGradeKeys.count
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        if section == 0 {
+            return 2
+        } else {
+            if !groupedGradeKeys.indices.contains(section - 1) {
+                return 0
+            }
+            return groupedGradeList[groupedGradeKeys[section - 1]]?.count ?? 0
+        }
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath.section {
         case 0:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cumGrade", for: indexPath) as! cumGradeCell
-            cell.cumGradeProgressRing.value = CGFloat(cumGrade)
-            print(cumGrade)
-
-            cell.selectionStyle = .none
-
-            return cell
+            switch indexPath.row {
+            case 0:
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cumGrade", for: indexPath) as! cumGradeCell
+                cell.cumGradeProgressRing.value = CGFloat(cumGrade)
+                print(cumGrade)
+                
+                cell.selectionStyle = .none
+                
+                return cell
+            case 1:
+                let cell = self.tableView.dequeueReusableCell(withIdentifier: "chartsView") as! gradeBarChartCell
+                
+                cell.chartView.delegate = self
+                cell.chartView.drawBarShadowEnabled = false
+                cell.chartView.maxVisibleCount = 60
+                //cell.chartView.xAxis.labelPosition = .bottom
+                cell.chartView.chartDescription?.text = ""
+                cell.chartView.rightAxis.enabled = false
+                cell.chartView.xAxis.enabled = false
+                
+                cell.chartView.drawValueAboveBarEnabled = true
+                
+                let yAxisFormatter = NumberFormatter()
+                yAxisFormatter.minimumFractionDigits = 0
+                yAxisFormatter.maximumFractionDigits = 1
+                yAxisFormatter.positiveSuffix = " %"
+                
+                let yAxis = cell.chartView.leftAxis
+                yAxis.labelFont = UIFont.systemFont(ofSize: 10)
+                yAxis.labelCount = 6
+                yAxis.valueFormatter = DefaultAxisValueFormatter(formatter: yAxisFormatter)
+                yAxis.labelPosition = .outsideChart
+                yAxis.spaceTop = 0.15
+                yAxis.axisMinimum = 0
+                
+                let legend = cell.chartView.legend
+                legend.horizontalAlignment = .left
+                legend.verticalAlignment = .bottom
+                legend.orientation = .horizontal
+                legend.xEntrySpace = 4.0
+                
+                guard !gradeList.isEmpty else { break }
+                
+                if cell.chartView.data?.dataSetCount != groupedGradeKeys.count {
+                    for assignmentType in groupedGradeKeys {
+                        guard let gradeListOfThisType = groupedGradeList[assignmentType] else { continue }
+                        var yValues = [BarChartDataEntry]()
+                        for grade in gradeListOfThisType {
+                            guard let gradePercent = grade["AssignmentPercentage"] as? Double else {
+                                continue
+                            }
+                            let dataEntry = BarChartDataEntry(x: Double(grade["index"] as! Int), y: gradePercent)
+                            yValues.append(dataEntry)
+                        }
+                        
+                        let dataSet = BarChartDataSet(values: yValues, label: assignmentType)
+                        dataSet.setColor(HomeworkView().colorForTheType(type: assignmentType), alpha: 0.7)
+                        
+                        if let data = cell.chartView.data {
+                            data.addDataSet(dataSet)
+                        } else {
+                            let data = BarChartData(dataSet: dataSet)
+                            //data.setValueFont(UIFont.systemFont(ofSize: 10))
+                            
+                            cell.chartView.data = data
+                        }
+                    }
+                    
+                    cell.chartView.data?.notifyDataChanged()
+                    cell.chartView.notifyDataSetChanged()
+                }
+                
+                cell.chartView.noDataText = "No grade data is found."
+                
+                return cell
+            default:
+                break
+            }
         default:
-            break
+            let cell = tableView.dequeueReusableCell(withIdentifier: "gradeDetail", for: indexPath) as! gradeDetailCell
+            
+            // The section begins at 1, while the array index begins at 0.
+            let section = indexPath.section - 1
+            guard groupedGradeKeys.indices.contains(section) else { break }
+            guard let gradeInSection = groupedGradeList[groupedGradeKeys[section]] else { break }
+            
+            let row = indexPath.row
+            guard gradeInSection.indices.contains(indexPath.row) else { break }
+            let gradeObject = gradeInSection[row]
+            
+            let name = gradeObject["AssignmentShortDescription"] as? String ?? ""
+            cell.name.attributedText = name.convertToHtml()
+            
+            cell.date.text = ""
+            if let dateDue = gradeObject["DateDue"] as? Date {
+                dateFormatter.dateFormat = "MMM d"
+                
+                let dateToDisplay = dateFormatter.string(from: dateDue)
+                cell.date.text = dateToDisplay
+            }
+            
+            if let points = gradeObject["Points"] as? String, let maxPoints = gradeObject["MaxPoints"] as? Int {
+                cell.grade.text = points + "/" + String(describing: maxPoints)
+            }
+            
+            return cell
         }
 
-        let defaultCell = tableView.dequeueReusableCell(withIdentifier: "cumGrade", for: indexPath)
-        return defaultCell
+        return UITableViewCell()
     }
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 280
-    }
-
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        switch section {
-        case 0:
-            return "Cumulative Grade"
-        default:
-            return ""
+        if indexPath.section == 0 {
+            return 280
+        } else {
+            return UITableViewAutomaticDimension
         }
+    }
+    
+    override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 49
+    }
+    
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let view = tableView.dequeueReusableCell(withIdentifier: "tableHeader") as! homeworkTableHeader
+        
+        if section == 0 {
+            view.titleLabel.text = "Overview"
+        } else {
+            view.titleLabel.text = groupedGradeKeys[section - 1]
+        }
+        
+        return view
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 44
+    }
+}
+
+extension gradeViewController: ChartViewDelegate {
+    func chartValueSelected(_ chartView: ChartViewBase, entry: ChartDataEntry, highlight: Highlight) {
+        chartView.highlightValue(nil)
+        let masterIndex = Int(entry.x)
+        let gradeObject = gradeList[masterIndex]
+        guard let assignmentType = gradeObject["AssignmentType"] as? String else { return }
+        let sectionIndex = Int(groupedGradeKeys.index(of: assignmentType) ?? 0) + 1
+        
+        guard let gradeInSection = groupedGradeList[assignmentType] else { return }
+        guard let rowArrayIndex = gradeInSection.index(where: { $0["index"] as? Int == masterIndex }) else { return }
+        let rowIndex = Int(rowArrayIndex)
+        
+        tableView.selectRow(at: IndexPath(row: rowIndex, section: sectionIndex), animated: true, scrollPosition: .middle)
     }
 }
 
@@ -169,8 +376,6 @@ extension gradeViewController: IndicatorInfoProvider {
 }
 
 class cumGradeCell: UITableViewCell {
-
-
     @IBOutlet var cumGradeProgressRing: UICircularProgressRingView!
 
     var cumGrade: Float? = nil
@@ -179,5 +384,21 @@ class cumGradeCell: UITableViewCell {
         super.awakeFromNib()
 
         cumGradeProgressRing.font = UIFont.boldSystemFont(ofSize: 32)
+    }
+}
+
+class gradeDetailCell: UITableViewCell {
+    @IBOutlet var date: UILabel!
+    @IBOutlet var name: UILabel!
+    @IBOutlet var grade: UILabel!
+}
+
+class gradeBarChartCell: UITableViewCell {
+    @IBOutlet var chartView: BarChartView!
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
+        chartView.animate(xAxisDuration: 3.0, yAxisDuration: 3.0)
     }
 }
