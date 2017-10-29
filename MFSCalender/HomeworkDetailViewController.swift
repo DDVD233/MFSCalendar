@@ -24,6 +24,9 @@ class homeworKDetailViewController: UIViewController, SFSafariViewControllerDele
         
         getTheHomeworkToPresent()
         getLinksToPresent()
+        if #available(iOS 11.0, *) {
+            disableLargeTitle(on: self)
+        }
     }
     
     func getTheHomeworkToPresent() {
@@ -66,8 +69,6 @@ class homeworKDetailViewController: UIViewController, SFSafariViewControllerDele
     
     func getLinksToPresent() {
         let assignmentID = Preferences().idForAssignmentToPresent
-        
-        guard assignmentID != nil else { return }
         
         let url = "https://mfriends.myschoolapp.com/api/assignment2/read/\(String(describing: assignmentID))/?format=json"
         let semaphore = DispatchSemaphore(value: 0)

@@ -50,6 +50,12 @@ func setLargeTitle(on viewController: UIViewController) {
     
 }
 
+@available(iOS 11.0, *)
+func disableLargeTitle(on viewController: UIViewController) {
+    viewController.navigationController?.navigationBar.prefersLargeTitles = false
+    viewController.navigationController?.navigationBar.barTintColor = UIColor(hexString: 0xFF7E79)
+}
+
 public func loginAuthentication() -> (success: Bool, token: String, userId: String) {
 
     guard let usernameText = Preferences().username else {

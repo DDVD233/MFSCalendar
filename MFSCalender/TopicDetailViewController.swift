@@ -161,15 +161,6 @@ extension topicDetailViewController: UITableViewDelegate, UITableViewDataSource 
 extension topicDetailViewController {
 //    Network
     func getTopicDetailData() {
-        guard topicID != nil else {
-            NSLog("TopicID not found!")
-            return
-        }
-
-        guard topicIndexID != nil else {
-            NSLog("Topic index ID not found!")
-            return
-        }
 
         DispatchQueue.main.async {
             self.navigationController?.showProgress()
