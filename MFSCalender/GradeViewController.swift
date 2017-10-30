@@ -88,9 +88,19 @@ class gradeViewController: UITableViewController {
         }
         
         classObject = ClassView().getTheClassToPresent() ?? [String: Any]()
-        cumGrade = Float(getcumGrade()) ?? 0
-        getGradeDetail()
-
+        
+        let group = DispatchGroup()
+        
+        DispatchQueue.global().async(group: group, execute: {
+            self.cumGrade = Float(self.getcumGrade()) ?? 0
+        })
+        
+        DispatchQueue.global().async(group: group, execute: {
+            self.getGradeDetail()
+        })
+        
+        group.wait()
+        
         DispatchQueue.main.async {
             self.navigationController?.cancelProgress()
             SVProgressHUD.dismiss()
@@ -413,6 +423,7 @@ extension gradeViewController {
             quarterButton.snp.makeConstraints({ make in
                 make.trailing.equalTo(view.snp.trailingMargin).offset(-10)
                 make.height.equalTo(view.titleLabel.snp.height)
+                make.centerY.equalTo(view.snp.centerY)
             })
                 
              quarterButton.addTarget(self, action: #selector(changeQuarter(sender:)), for: .touchUpInside)
