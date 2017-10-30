@@ -15,6 +15,14 @@ import DGElasticPullToRefresh
 import SVProgressHUD
 import Alamofire
 import Charts
+import SnapKit
+
+enum Quarters {
+    case first
+    case second
+    case third
+    case forth
+}
 
 class gradeViewController: UITableViewController {
     var classObject = [String: Any]()
@@ -25,6 +33,7 @@ class gradeViewController: UITableViewController {
     }
     
     let dateFormatter = DateFormatter()
+    var quarterSelected: Quarters = .first
 
     var cumGrade: Float = 0
 
@@ -51,6 +60,25 @@ class gradeViewController: UITableViewController {
         super.viewDidAppear(true)
         self.animate()
     }
+    
+    @objc func changeQuarter(sender: UIButton) {
+        switch quarterSelected {
+        case .first:
+            quarterSelected = .second
+            sender.setTitle("2nd Quarter", for: .normal)
+        case .second:
+            quarterSelected = .third
+            sender.setTitle("3rd Quarter", for: .normal)
+        case .third:
+            quarterSelected = .forth
+            sender.setTitle("4th Quarter", for: .normal)
+        case .forth:
+            quarterSelected = .first
+            sender.setTitle("1st Quarter", for: .normal)
+        }
+        
+        refreshView()
+    }
 
     func refreshView() {
         DispatchQueue.main.async {
@@ -71,8 +99,10 @@ class gradeViewController: UITableViewController {
     }
     
     func animate() {
-        let cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as! cumGradeCell
-        cell.cumGradeProgressRing.setProgress(value: CGFloat(self.cumGrade), animationDuration: 1.0)
+        
+        if let cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? cumGradeCell {
+            cell.cumGradeProgressRing.setProgress(value: CGFloat(self.cumGrade), animationDuration: 1.0)
+        }
         
 //        if let chartCell = self.tableView.cellForRow(at: IndexPath(row: 1, section: 0)) as? gradeBarChartCell {
 //            print(chartCell.chartView.data)
@@ -88,16 +118,29 @@ class gradeViewController: UITableViewController {
         let userID = loginAuthentication().userId
         guard let sectionID = classObject["sectionid"] as? Int else { return }
         
-        let url = "https://mfriends.myschoolapp.com/api/datadirect/GradeBookPerformanceAssignmentStudentList/?sectionId=\(String(describing: sectionID))&markingPeriodId=5196&studentUserId=\(userID)"
+        var markingPeriodID: String {
+            switch quarterSelected {
+            case .first:
+                return "5196"
+            case .second:
+                return "5197"
+            case .third:
+                return "5198"
+            case .forth:
+                return "5199"
+            }
+        }
+        
+        let url = "https://mfriends.myschoolapp.com/api/datadirect/GradeBookPerformanceAssignmentStudentList/?sectionId=\(String(describing: sectionID))&markingPeriodId=\(markingPeriodID)&studentUserId=\(userID)"
         
         let semaphore = DispatchSemaphore(value: 0)
         
         Alamofire.request(url).response(queue: DispatchQueue.global(), completionHandler: { result in
             if result.error == nil {
                 do {
-                    if let json = try JSONSerialization.jsonObject(with: result.data!, options: .allowFragments) as? [[String: Any]] {
-                        self.gradeList = json
-                    }
+                    let json = try JSONSerialization.jsonObject(with: result.data!, options: .allowFragments) as? [[String: Any]] ?? [[String: Any]]()
+                    
+                    self.gradeList = json
                 } catch {
                     presentErrorMessage(presentMessage: error.localizedDescription, layout: .statusLine)
                 }
@@ -111,6 +154,7 @@ class gradeViewController: UITableViewController {
     }
     
     func classifyGradeData() {
+        groupedGradeList = [:]
         guard gradeList.count > 0 else { return }
         
         for (index, gradeObject) in gradeList.enumerated() {
@@ -152,8 +196,17 @@ class gradeViewController: UITableViewController {
 
         var cumGrade = ""
 
-        guard let durationId = NetworkOperations().getDurationId() else {
-            return ""
+        var durationId: String {
+            switch quarterSelected {
+            case .first:
+                return "90656"
+            case .second:
+                return "90657"
+            case .third:
+                return "90658"
+            case .forth:
+                return "90659"
+            }
         }
 
         let session = URLSession.shared
@@ -314,6 +367,7 @@ extension gradeViewController {
                 cell.date.text = dateToDisplay
             }
             
+            cell.grade.text = ""
             if let points = gradeObject["Points"] as? String, let maxPoints = gradeObject["MaxPoints"] as? Int {
                 cell.grade.text = points + "/" + String(describing: maxPoints)
             }
@@ -341,6 +395,27 @@ extension gradeViewController {
         
         if section == 0 {
             view.titleLabel.text = "Overview"
+            let quarterButton = UIButton()
+            
+            switch quarterSelected {
+            case .first:
+                quarterButton.setTitle("1st Quarter", for: .normal)
+            case .second:
+                quarterButton.setTitle("2nd Quarter", for: .normal)
+            case .third:
+                quarterButton.setTitle("3rd Quarter", for: .normal)
+            case .forth:
+                quarterButton.setTitle("4th Quarter", for: .normal)
+            }
+            
+            view.addSubview(quarterButton)
+            quarterButton.titleLabel?.font = UIFont.systemFont(ofSize: 15)
+            quarterButton.snp.makeConstraints({ make in
+                make.trailing.equalTo(view.snp.trailingMargin).offset(-10)
+                make.height.equalTo(view.titleLabel.snp.height)
+            })
+                
+             quarterButton.addTarget(self, action: #selector(changeQuarter(sender:)), for: .touchUpInside)
         } else {
             view.titleLabel.text = groupedGradeKeys[section - 1]
         }
