@@ -10,6 +10,7 @@ import UIKit
 import M13Checkbox
 import SafariServices
 import JSQWebViewController
+import SVProgressHUD
 
 class homeworKDetailViewController: UIViewController, SFSafariViewControllerDelegate, UIDocumentInteractionControllerDelegate {
     
@@ -22,10 +23,40 @@ class homeworKDetailViewController: UIViewController, SFSafariViewControllerDele
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        getTheHomeworkToPresent()
-        getLinksToPresent()
         if #available(iOS 11.0, *) {
             disableLargeTitle(on: self)
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        DispatchQueue.global().async {
+            self.getContents()
+        }
+    }
+    
+    func getContents() {
+        DispatchQueue.main.async {
+            UIApplication.shared.isNetworkActivityIndicatorVisible = true
+            SVProgressHUD.show()
+        }
+        
+        let group = DispatchGroup()
+        
+        DispatchQueue.global().async(group: group) {
+            self.getTheHomeworkToPresent()
+        }
+        
+        DispatchQueue.global().async(group: group) {
+            self.getLinksToPresent()
+        }
+        
+        group.wait()
+        
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+            UIApplication.shared.isNetworkActivityIndicatorVisible = false
+            SVProgressHUD.dismiss()
         }
     }
     
@@ -60,11 +91,6 @@ class homeworKDetailViewController: UIViewController, SFSafariViewControllerDele
         
         task.resume()
         semaphore.wait()
-        
-        
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
-        }
     }
     
     func getLinksToPresent() {
@@ -96,10 +122,6 @@ class homeworKDetailViewController: UIViewController, SFSafariViewControllerDele
         task.resume()
         semaphore.wait()
         checkIfLinksAndDownloadsExists()
-        
-        DispatchQueue.main.async {
-             self.tableView.reloadData()
-        }
     }
     
     func checkIfLinksAndDownloadsExists() {
