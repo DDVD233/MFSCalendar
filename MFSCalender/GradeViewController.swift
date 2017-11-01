@@ -443,6 +443,7 @@ extension gradeViewController: ChartViewDelegate {
     func chartValueSelected(_ chartView: ChartViewBase, entry: ChartDataEntry, highlight: Highlight) {
         chartView.highlightValue(nil)
         let masterIndex = Int(entry.x)
+        guard gradeList.indices.contains(masterIndex) else { return }
         let gradeObject = gradeList[masterIndex]
         guard let assignmentType = gradeObject["AssignmentType"] as? String else { return }
         let sectionIndex = Int(groupedGradeKeys.index(of: assignmentType) ?? 0) + 1
