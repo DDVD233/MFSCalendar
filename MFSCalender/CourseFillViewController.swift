@@ -55,7 +55,7 @@ class courseFillController: UIViewController {
         fillAdditionalInformarion()
         setProgressTo(value: 33)
         
-        for alphabet in "ABCDEF".characters {
+        for alphabet in "ABCDEF" {
             clearData(day: String(alphabet))
         }
         guard createSchedule(fillLowPriority: 0) else {
@@ -67,7 +67,7 @@ class courseFillController: UIViewController {
         guard createSchedule(fillLowPriority: 1) else {
             return
         }
-        for alphabet in "ABCDEF".characters {
+        for alphabet in "ABCDEF" {
             self.fillStudyHall(letter: String(alphabet))
         }
         getProfilePhoto()
@@ -407,7 +407,7 @@ class courseFillController: UIViewController {
                 course["period"] = period + 1
                 classOfDay[period] = course
                 NSArray(array: classOfDay).write(toFile: path, atomically: true)
-            } else if className.characters.count >= 10 && className[0, 9] == "Study Hall" {
+            } else if className.count >= 10 && className[0, 9] == "Study Hall" {
                 //         It is possible that a study hall that the user doesn't take appear on the course list.
                 removeIndex.append(index)
             }

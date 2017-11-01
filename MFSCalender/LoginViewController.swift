@@ -161,51 +161,51 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
 
     //When you click "Log in".
     @IBAction func done(_ sender: Any) {
-
-        self.wrongPassword.isHidden = true
-        if (self.username.text?.isEmpty)! || (self.password.text?.isEmpty)! {
-
-        } else if self.username.text == "testaccount" && self.password.text == "test" {
-            Preferences().username = self.username.text
-            Preferences().password = self.password.text
-            DispatchQueue.global().async(execute: {
-                DispatchQueue.main.sync {
-                    self.indicatorView.isHidden = false
-                    self.NVIndicator.startAnimating()
-                }
-                if self.initDayData() && self.getEvent() && self.versionCheck() {
-                    Preferences().didLogin = true
-                    self.dismiss(animated: true, completion: nil)
-                }
-                self.indicatorView.isHidden = true
-            })
-        } else {
-//Global Async Begins................
-            DispatchQueue.global().async(execute: {
-                DispatchQueue.main.async {
-                    self.indicatorView.isHidden = false
-                    self.NVIndicator.startAnimating()
-                }
-                if self.authentication() {
-                    if self.getProfile() && self.initDayData() && self.getEvent() && self.versionCheck() {
-                        Preferences().username = self.username.text
-                        Preferences().password = self.password.text
-                        Preferences().didLogin = true
-                        Answers.logLogin(withMethod: "Default", success: true, customAttributes: [:])
-                        
-                        DispatchQueue.main.sync {
-                            self.dismiss(animated: true, completion: nil)
-                        }
-                    }
-                }
-                
-                Answers.logLogin(withMethod: "Default", success: false, customAttributes: [:])
-                DispatchQueue.main.async {
-                    self.indicatorView.isHidden = true
-                }
-
-            })
-//Global Async Ends...........
+        guard self.username.text.existsAndNotEmpty() && self.password.text.existsAndNotEmpty() else { return }
+        
+        DispatchQueue.global().async {
+            self.login()
+        }
+    }
+    
+    func login() {
+        DispatchQueue.main.async {
+            self.indicatorView.isHidden = false
+            self.NVIndicator.startAnimating()
+        }
+        
+        guard self.authentication() else {
+            Answers.logLogin(withMethod: "Default", success: false, customAttributes: [:])
+            return
+        }
+        
+        Preferences().didLogin = true
+        
+        let group = DispatchGroup()
+        
+        DispatchQueue.global().async(group: group) {
+            self.getProfile()
+        }
+        
+        DispatchQueue.global().async(group: group) {
+            self.initDayData()
+        }
+        
+        DispatchQueue.global().async(group: group) {
+            self.getEvent()
+        }
+        
+        DispatchQueue.global().async(group: group) {
+            self.versionCheck()
+        }
+        
+        group.wait()
+        
+        Answers.logLogin(withMethod: "Default", success: true, customAttributes: [:])
+        
+        DispatchQueue.main.async {
+            self.indicatorView.isHidden = true
+            self.dismiss(animated: true, completion: nil)
         }
     }
 }
@@ -213,12 +213,17 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
 extension firstTimeLaunchController {
 
     func authentication() -> Bool {
-        guard let username = self.username.text else {
+        var username: String? = nil
+        var password: String? = nil
+        DispatchQueue.main.sync {
+            username = self.username.text
+            password = self.password.text
+        }
+        
+        guard username.existsAndNotEmpty() && password.existsAndNotEmpty() else {
             return false
         }
-        guard let password = self.password.text else {
-            return false
-        }
+        
         Preferences().username = username
         Preferences().password = password
         let (success, token, _) = loginAuthentication()
@@ -234,12 +239,11 @@ extension firstTimeLaunchController {
         return false
     }
 
-    func getProfile() -> Bool {
+    func getProfile() {
 
         let semaphore = DispatchSemaphore.init(value: 0)
         let token = Preferences().token
         let userID = Preferences().userID
-        var success: Bool = false
         
         provider.request(MyService.getProfile(userID: userID!, token: token!), callbackQueue: DispatchQueue.global(), completion: { result in
             switch result {
@@ -297,8 +301,6 @@ extension firstTimeLaunchController {
                         Preferences().isStudent = true
                     }
                     
-                    success = true
-                    
                 } catch {
                     NSLog("Data parsing failed")
                     DispatchQueue.main.async {
@@ -313,8 +315,6 @@ extension firstTimeLaunchController {
         })
 
         semaphore.wait()
-
-        return success
     }
 
     func downloadSmallProfilePhoto(photoLink: String) {
@@ -360,8 +360,7 @@ extension firstTimeLaunchController {
     }
 
     //Get calendar's day data.
-    func initDayData() -> Bool {
-        var success = false
+    func initDayData() {
         let semaphore = DispatchSemaphore.init(value: 0)
 
         //Task 1: Getting day data.
@@ -375,7 +374,6 @@ extension firstTimeLaunchController {
                     let plistPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
                     let path = plistPath.appending("/Day.plist")
                     resDict.write(toFile: path, atomically: true)
-                    success = true
                 } catch {
                     presentErrorMessage(presentMessage: error.localizedDescription, layout: MessageView.Layout.statusLine)
                     NSLog("Day Data: Data parsing failed")
@@ -391,18 +389,15 @@ extension firstTimeLaunchController {
         })
 
         semaphore.wait()
-
-        return success
     }
 
-    func getEvent() -> Bool {
-        var success = false
+    func getEvent() {
         let semaphore = DispatchSemaphore.init(value: 0)
 
         provider.request(.getCalendarEvent, completion: { result in
             switch result {
             case .success(_):
-                success = true
+                break
             case let .failure(error):
                 DispatchQueue.main.async {
                     let presentMessage = error.localizedDescription + " Please check your internet connection."
@@ -413,11 +408,9 @@ extension firstTimeLaunchController {
         })
 
         semaphore.wait()
-        return success
     }
 
-    func versionCheck() -> Bool {
-        var success = false
+    func versionCheck() {
         let semaphore = DispatchSemaphore.init(value: 0)
 
         provider.request(MyService.dataVersionCheck, completion: { result in
@@ -429,7 +422,6 @@ extension firstTimeLaunchController {
                 let versionNumber = Int(version)
                 print("Version: %@", versionNumber!)
                 Preferences().version = versionNumber!
-                success = true
             case let .failure(error):
                 DispatchQueue.main.async {
                     let presentMessage = error.localizedDescription + " Please check your internet connection."
@@ -441,7 +433,6 @@ extension firstTimeLaunchController {
         })
 
         semaphore.wait()
-        return success
     }
 }
 

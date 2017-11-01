@@ -12,7 +12,7 @@ import XLPagerTabStrip
 class timeTableParentViewController: SegmentedPagerTabStripViewController {
     override public func viewControllers(for pagerTabStripController: PagerTabStripViewController) -> [UIViewController] {
         var arrayToReturn = [UIViewController]()
-        for alphabet in "ABCDEF".characters {
+        for alphabet in "ABCDEF" {
             let viewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier :"timeTableViewController") as! ADay
             
             viewController.daySelected = String(alphabet)

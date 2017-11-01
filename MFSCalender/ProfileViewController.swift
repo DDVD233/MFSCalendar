@@ -86,6 +86,28 @@ extension profileViewController {
     }
 }
 
+fileprivate extension String {
+    func capitalizingFirstLetter() -> String {
+        let first = String(self[self.startIndex]).capitalized
+        let other = String(self.dropFirst())
+        return first + other
+    }
+    
+    mutating func capitalizeFirstLetter() {
+        self = self.capitalizingFirstLetter()
+    }
+    
+    mutating func separatedByUpperCase() {
+        let splited = self.splitBefore(separator: { $0.isUpperCase }).map{String($0)}
+        
+        self = ""
+        for string in splited {
+            self += string
+            self += " "
+        }
+    }
+}
+
 class profileTableCell: UITableViewCell {
     @IBOutlet var value: UILabel!
     @IBOutlet var key: UILabel!

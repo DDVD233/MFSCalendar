@@ -10,6 +10,7 @@ import UIKit
 import SCLAlertView
 import SVProgressHUD
 import Alamofire
+import Crashlytics
 
 class NewMoreViewController: UICollectionViewController  {
     override func viewDidLoad() {
@@ -179,12 +180,13 @@ extension NewMoreViewController {
     //    999: Incorrect username/password
     func getServiceHour() -> Int {
         guard let username = Preferences().serviceUsername, let password = Preferences().servicePassword else {
-            //presentServiceLoginView()
             return 997
         }
         
         
-        let url = URL(string: "https://dwei.org/serviceHour/\(username)/\(password)")!
+        let url = "https://dwei.org/serviceHour/\(username)/\(password)".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+        Crashlytics.sharedInstance().setObjectValue(url, forKey: "MobileServe_URL")
+        
         var serviceHour: Int? = nil
         let semaphore = DispatchSemaphore(value: 0)
         DispatchQueue.main.async {

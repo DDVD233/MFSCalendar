@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2BCF9150A2DD2CB6E6386CEF /* Pods_MFSCalendar.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E48F15A81F74687200A36904 /* Pods_MFSCalendar.framework */; };
 		9616020D2678949E980D3631 /* Pods_MFSCalendar.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C9307D95D24FE30AFAEDD40 /* Pods_MFSCalendar.framework */; };
 		E413AB0E1EE89441001EB189 /* Achievement.png in Resources */ = {isa = PBXBuildFile; fileRef = E413AB0D1EE89441001EB189 /* Achievement.png */; };
 		E413AB101EE89683001EB189 /* questionmark.png in Resources */ = {isa = PBXBuildFile; fileRef = E413AB0F1EE89683001EB189 /* questionmark.png */; };
@@ -268,7 +267,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				9616020D2678949E980D3631 /* Pods_MFSCalendar.framework in Frameworks */,
-				2BCF9150A2DD2CB6E6386CEF /* Pods_MFSCalendar.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -553,7 +551,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0900;
-				LastUpgradeCheck = 0900;
+				LastUpgradeCheck = 0910;
 				ORGANIZATIONNAME = David;
 				TargetAttributes = {
 					E48D4DFE1E61FC25008B0A97 = {

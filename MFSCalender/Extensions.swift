@@ -99,26 +99,6 @@ extension String {
 
         return nil
     }
-    
-    func capitalizingFirstLetter() -> String {
-        let first = String(characters.prefix(1)).capitalized
-        let other = String(characters.dropFirst())
-        return first + other
-    }
-    
-    mutating func capitalizeFirstLetter() {
-        self = self.capitalizingFirstLetter()
-    }
-    
-    mutating func separatedByUpperCase() {
-        let splited = self.characters.splitBefore(separator: { $0.isUpperCase }).map{String($0)}
-        
-        self = ""
-        for string in splited {
-            self += string
-            self += " "
-        }
-    }
 }
 
 
