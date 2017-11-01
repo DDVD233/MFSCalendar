@@ -109,26 +109,35 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if rootVC == nil {
             rootVC = UIApplication.shared.keyWindow?.rootViewController
         }
-
-        if rootVC == nil {
+        
+        if (rootVC?.presentedViewController == nil) && ((rootVC as? UITabBarController)?.selectedViewController == nil) {
             return rootVC
         }
-
-        if let presented = rootVC {
-            if presented.isKind(of: UINavigationController.self) {
-                let navigationController = presented as! UINavigationController
-                return navigationController.viewControllers.last!
-            }
-
-            if presented.isKind(of: UITabBarController.self) {
-                let tabBarController = presented as! UITabBarController
-                print("2.", tabBarController.selectedViewController!)
-                return tabBarController.selectedViewController!
-            }
-
-            return getVisibleViewController(presented)
+        
+        if let presented = rootVC?.presentedViewController {
+            return getSubViewController(presented: presented)
+        } else if let presented = (rootVC as? UITabBarController)?.selectedViewController {
+            return getSubViewController(presented: presented)
         }
         return nil
+    }
+    
+    func getSubViewController(presented: UIViewController) -> UIViewController? {
+        if presented.isKind(of: UINavigationController.self) {
+            let navigationController = presented as! UINavigationController
+            return navigationController.viewControllers.last!
+        }
+        
+        if presented.isKind(of: UITabBarController.self) {
+            let tabBarController = presented as! UITabBarController
+            if tabBarController.selectedViewController!.isKind(of: UINavigationController.self) {
+                return getVisibleViewController(tabBarController.selectedViewController)
+            } else {
+                return tabBarController
+            }
+        }
+        
+        return getVisibleViewController(presented)
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
