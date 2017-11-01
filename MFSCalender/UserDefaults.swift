@@ -112,10 +112,10 @@ public class Preferences {
     
     public var serviceUsername: String? {
         get {
-            return userDefaults.string(forKey: "servicePassword" )
+            return userDefaults.string(forKey: "serviceUsername" )
         }
         set(value) {
-            userDefaults.set(value, forKey: "servicePassword" )
+            userDefaults.set(value, forKey: "serviceUsername" )
         }
     }
 

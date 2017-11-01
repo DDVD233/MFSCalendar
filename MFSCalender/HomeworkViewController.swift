@@ -467,10 +467,10 @@ class homeworkViewCell: UITableViewCell, UIDocumentPickerDelegate {
     
     @IBAction func submit(_ sender: Any) {
         presentErrorMessage(presentMessage: "Sorry, this isn't ready. I'm still working on that.", layout: .cardView)
-        return
-        let documentPicker = UIDocumentPickerViewController(documentTypes: ["public.content"], in: .import)
-        documentPicker.delegate = self
-        parentViewController!.present(documentPicker, animated: true, completion: nil)
+//        return
+//        let documentPicker = UIDocumentPickerViewController(documentTypes: ["public.content"], in: .import)
+//        documentPicker.delegate = self
+//        parentViewController!.present(documentPicker, animated: true, completion: nil)
     }
     
     func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {

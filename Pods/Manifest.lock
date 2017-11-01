@@ -3,16 +3,16 @@ PODS:
   - Charts (3.0.4):
     - Charts/Core (= 3.0.4)
   - Charts/Core (3.0.4)
-  - Crashlytics (3.9.0):
-    - Fabric (~> 1.7.0)
+  - Crashlytics (3.9.3):
+    - Fabric (~> 1.7.2)
   - DGElasticPullToRefresh (1.1)
-  - Down (0.4.1)
+  - Down (0.4.2)
   - DZNEmptyDataSet (1.8.1)
-  - Fabric (1.7.0)
-  - Firebase/Core (4.4.0):
+  - Fabric (1.7.2)
+  - Firebase/Core (4.5.0):
     - FirebaseAnalytics (= 4.0.4)
-    - FirebaseCore (= 4.0.9)
-  - Firebase/Performance (4.4.0):
+    - FirebaseCore (= 4.0.10)
+  - Firebase/Performance (4.5.0):
     - Firebase/Core
     - FirebasePerformance (= 1.0.6)
   - FirebaseAnalytics (4.0.4):
@@ -20,7 +20,7 @@ PODS:
     - FirebaseInstanceID (~> 2.0)
     - GoogleToolboxForMac/NSData+zlib (~> 2.1)
     - nanopb (~> 0.3)
-  - FirebaseCore (4.0.9):
+  - FirebaseCore (4.0.10):
     - GoogleToolboxForMac/NSData+zlib (~> 2.1)
     - nanopb (~> 0.3)
   - FirebaseInstanceID (2.0.5)
@@ -43,9 +43,9 @@ PODS:
   - LTMorphingLabel (0.5.5)
   - M13Checkbox (3.2.1)
   - M13ProgressSuite (1.2.9)
-  - Moya (9.0.0):
-    - Moya/Core (= 9.0.0)
-  - Moya/Core (9.0.0):
+  - Moya (10.0.0):
+    - Moya/Core (= 10.0.0)
+  - Moya/Core (10.0.0):
     - Alamofire (~> 4.1)
     - Result (~> 3.0)
   - nanopb (0.3.8):
@@ -60,18 +60,18 @@ PODS:
   - ReachabilitySwift (4.1.0)
   - Result (3.2.4)
   - SCLAlertView (0.7.0)
-  - SDWebImage (4.1.2):
-    - SDWebImage/Core (= 4.1.2)
-  - SDWebImage/Core (4.1.2)
+  - SDWebImage (4.2.0):
+    - SDWebImage/Core (= 4.2.0)
+  - SDWebImage/Core (4.2.0)
   - SkyFloatingLabelTextField (3.2.1)
   - SnapKit (4.0.0)
   - Spring (1.0.3)
   - SVProgressHUD (2.2.2)
-  - SwiftDate (4.4.1)
+  - SwiftDate (4.4.2)
   - SwiftMessages (4.0.0)
   - SwiftyJSON (3.1.4)
   - UICircularProgressRing (1.7.4)
-  - UrbanAirship-iOS-SDK (8.6.0)
+  - UrbanAirship-iOS-SDK (8.6.2)
   - XLPagerTabStrip (8.0.0)
 
 DEPENDENCIES:
@@ -122,10 +122,10 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   Down:
-    :commit: 789fa2184bf7aae36b6aebd623e4df9004f67915
+    :commit: eb4e820a8ca67a2e834d75b4fff9d702e673ea1c
     :git: https://github.com/iwasrobbed/Down.git
   Kanna:
-    :commit: 9091f84ed0e39b7fa8536da98a1812c3456bc4e3
+    :commit: 58e3513d20cd16fe8b9ff16b5a2b481fcd643499
     :git: https://github.com/tid-kijyun/Kanna.git
   SkyFloatingLabelTextField:
     :commit: 624c43fe3b1b08282a180f3938be6c9b708fcd1c
@@ -137,14 +137,14 @@ CHECKOUT OPTIONS:
 SPEC CHECKSUMS:
   Alamofire: 2d95912bf4c34f164fdfc335872e8c312acaea4a
   Charts: 0705898046257443f0afbbc3179f4b67507b6e48
-  Crashlytics: 64aad5dd97249dd3ff94b979fea140144590cdd3
+  Crashlytics: dbb07d01876c171c5ccbdf7826410380189e452c
   DGElasticPullToRefresh: 28f11a6026302a90f8ffebbc6e24748e584dddd3
-  Down: 159cbf38cdf0e97d2f2f74909811f6c0f8ffe618
+  Down: 55a4bbd0b9507f63a6536a3a45afdf70d3b1e07d
   DZNEmptyDataSet: 9525833b9e68ac21c30253e1d3d7076cc828eaa7
-  Fabric: e6be012366472553807dada21243c5ab8d904151
-  Firebase: 3e92884a63e8f76d107c43a67d2ab9071e1eda10
+  Fabric: 9cd6a848efcf1b8b07497e0b6a2e7d336353ba15
+  Firebase: d83d287bdb6b1c78320561482706d1fcfc8ddfc1
   FirebaseAnalytics: 722b53c7b32bfc7806b06e0093a2f5180d4f2c5a
-  FirebaseCore: ebe73f64302705e693b1de9919a76edbdd17a19d
+  FirebaseCore: da5e8e372cb6046212739a4d81e42d32c22907cc
   FirebaseInstanceID: f2b688c66b972f30d7fa9f5f9f91455454a03b47
   FirebasePerformance: fa032c27e229eb8c1a8638918793fe2e47465205
   FSCalendar: a04b09f16f811bc92e82f3cf852a15225233b9d5
@@ -155,23 +155,23 @@ SPEC CHECKSUMS:
   LTMorphingLabel: 86464e41c3394dbf1ad098442ed4dcf8891ba975
   M13Checkbox: 12376f5b128189432508c240e4a36dc945ab7e4e
   M13ProgressSuite: ea9f7263e73e9215e6849dfa54e29ee0ad6a145c
-  Moya: cf5e6ee93af526532f92614004b8ad2ea60fd845
+  Moya: adb58b0f4e58430db43cc6e2f6ebab1836501186
   nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
   NVActivityIndicatorView: 54c9b93b6f25a4f467512680c0c90c09a1095cf2
   Protobuf: 03eef2ee0b674770735cf79d9c4d3659cf6908e8
   ReachabilitySwift: 6849231cd4e06559f3b9ef4a97a0a0f96d41e09f
   Result: d2d07204ce72856f1fd9130bbe42c35a7b0fea10
   SCLAlertView: 8a14ffc40590c619e183eed2298b854385f30be1
-  SDWebImage: cb6f9f266a9977741efcbc21e618e8be3734c774
+  SDWebImage: b1189fd85365c18434270a11a5cad13a1e848d53
   SkyFloatingLabelTextField: b7535a46194e81bee73acb4e37a6a49b16454133
   SnapKit: a42d492c16e80209130a3379f73596c3454b7694
   Spring: 3f02b5dc3308572ef177b3cad0fa7bbc4b0706f7
   SVProgressHUD: 59b2d3dabacbd051576d21d32293ca7228dc18b0
-  SwiftDate: a70a534d4feed03b2a2b575e36bef82dc2286a8d
+  SwiftDate: 131cf2f09b390f0a07f0099e36005ffe2fbf4c7e
   SwiftMessages: cd565e0e7d095584be1770c012c6b5be4183b5ee
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
   UICircularProgressRing: 5aca63423d913dc967661370e94e2af0770dd9cd
-  UrbanAirship-iOS-SDK: 1a2837473096ca63d86f11cadb4710d993237186
+  UrbanAirship-iOS-SDK: c33d4e95d890313e02248c58c93b787d89f72328
   XLPagerTabStrip: d1ab378af0923320ec0b5eab11d7b2f803d31261
 
 PODFILE CHECKSUM: 97cfe9c1a05aed42753b3f2018e32646368c94c1

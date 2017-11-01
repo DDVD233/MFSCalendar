@@ -474,10 +474,14 @@ class NetworkOperations {
         if let urlToOpen = URL(string: url) {
             if #available(iOS 9.0, *) {
                 let safariViewController = SFSafariViewController(url: urlToOpen)
-                viewController.present(safariViewController, animated: true, completion: nil)
+                DispatchQueue.main.async {
+                    viewController.present(safariViewController, animated: true, completion: nil)
+                }
             } else {
-                let webViewController = WebViewController(url: urlToOpen)
-                viewController.show(webViewController, sender: viewController)
+                DispatchQueue.main.async {
+                    let webViewController = WebViewController(url: urlToOpen)
+                    viewController.show(webViewController, sender: viewController)
+                }
             }
         }
     }

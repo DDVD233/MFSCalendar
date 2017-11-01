@@ -220,12 +220,14 @@ extension NewMoreViewController {
     }
     
     func presentServiceHourLoginView() {
-        let appearance = SCLAlertView.SCLAppearance(shouldAutoDismiss: false)
+        let appearance = SCLAlertView.SCLAppearance(shouldAutoDismiss: true)
         
         let loginView = SCLAlertView(appearance: appearance)
         let username = loginView.addTextField("Username")
+        username.autocorrectionType = .no
+        username.autocapitalizationType = .none
         if Preferences().serviceUsername.existsAndNotEmpty() {
-            username.text = Preferences().username
+            username.text = Preferences().serviceUsername
         }
         
         let password = loginView.addTextField("Password")

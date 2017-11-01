@@ -290,6 +290,11 @@ class topicDetailDescriptionCell: UITableViewCell {
             if fileManager.fileExists(atPath: attachmentPath) {
                 //          Open the existing attachment.
                 NSLog("Attempting to open file: \(fileName!)")
+                DispatchQueue.main.async {
+                    self.parentViewController!.navigationController?.cancelProgress()
+                    SVProgressHUD.dismiss()
+                }
+                
                 NetworkOperations().openFile(fileUrl: URL(fileURLWithPath: attachmentPath), from: parentViewController!)
                 return
             }

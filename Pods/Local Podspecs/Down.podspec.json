@@ -1,7 +1,7 @@
 {
   "name": "Down",
   "summary": "Blazing fast Markdown rendering in Swift, built upon cmark.",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "homepage": "https://github.com/iwasrobbed/Down",
   "license": {
     "type": "MIT",
@@ -12,7 +12,7 @@
   },
   "source": {
     "git": "https://github.com/iwasrobbed/Down.git",
-    "tag": "v0.4.1"
+    "tag": "v0.4.2"
   },
   "source_files": [
     "Source/{cmark,Enums & Options,Extensions,Renderers}/**",
