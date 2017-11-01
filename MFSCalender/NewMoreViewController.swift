@@ -179,13 +179,13 @@ extension NewMoreViewController {
     //    998: Server internal error. Csrf_middleware_token not found
     //    999: Incorrect username/password
     func getServiceHour() -> Int {
-        guard let username = Preferences().serviceUsername, let password = Preferences().servicePassword else {
+        guard let username = Preferences().serviceUsername?.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed), let password = Preferences().servicePassword?.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) else {
             return 997
         }
         
-        
-        let url = "https://dwei.org/serviceHour/\(username)/\(password)".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+        let url = "https://dwei.org/serviceHour/\(username)/\(password)"
         Crashlytics.sharedInstance().setObjectValue(url, forKey: "MobileServe_URL")
+        print(url)
         
         var serviceHour: Int? = nil
         let semaphore = DispatchSemaphore(value: 0)
