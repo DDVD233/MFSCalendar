@@ -366,7 +366,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         let timeFormatter = DateFormatter()
         timeFormatter.dateFormat = "HHmm"
 
-        let now = Int(timeFormatter.string(from: Date()))!
+        guard let now = Int(timeFormatter.string(from: Date())) else { return }
 
         let currentPeriod = getCurrentPeriod(time: now)
 

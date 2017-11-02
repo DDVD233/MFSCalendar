@@ -16,6 +16,7 @@ import SVProgressHUD
 import Alamofire
 import Charts
 import SnapKit
+import Crashlytics
 
 enum Quarters {
     case first
@@ -59,6 +60,7 @@ class gradeViewController: UITableViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         self.animate()
+        Answers.logContentView(withName: "Grade", contentType: "Grade", contentId: "2", customAttributes: nil)
     }
     
     @objc func changeQuarter(sender: UIButton) {
