@@ -13,10 +13,10 @@ import M13Checkbox
 import SwiftDate
 import DZNEmptyDataSet
 import DGElasticPullToRefresh
-import M13ProgressSuite
 import XLPagerTabStrip
 import Alamofire
 import Crashlytics
+import M13ProgressSuite
 
 
 class homeworkViewController: UITableViewController, UIViewControllerPreviewingDelegate, IndicatorInfoProvider, UIDocumentPickerDelegate {
@@ -217,6 +217,33 @@ class homeworkViewController: UITableViewController, UIViewControllerPreviewingD
             self.navigationItem.title = dateString
         }
     }
+    
+    override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        if scrollView.panGestureRecognizer.translation(in: scrollView).y < 0{
+            changeTabBar(hidden: true, animated: true)
+        }
+        else{
+            changeTabBar(hidden: false, animated: true)
+        }
+    }
+    
+    func changeTabBar(hidden:Bool, animated: Bool){
+//        guard var tabBar = self.tabBarController?.tabBar else { return }
+//        if tabBar.isHidden == hidden{ return }
+//        let frame = tabBar.frame
+//        let offset = (hidden ? frame.size.height : -frame.size.height)
+//        let duration:TimeInterval = (animated ? 0.5 : 0.0)
+//        tabBar.isHidden = false
+//        UIView.animate(withDuration: duration,
+//                                   animations: {tabBar.frame = CGRectOffset(frame, 0, offset)
+//                                    CGRectOffS
+//        },
+//                                   completion: {
+//                                    print($0)
+//                                    if $0 {tabBar?.hidden = hidden}
+//        })
+    }
+
     
     func stringForHeaderInSection(section: Int) -> String {
         guard sections.count >= section + 1 else {

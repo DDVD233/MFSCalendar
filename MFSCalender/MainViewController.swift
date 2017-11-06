@@ -128,6 +128,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         if Preferences().firstName == nil {
             Preferences().didLogin = false
         }
+        
         if Preferences().didLogin && Preferences().courseInitialized {
 
             NSLog("Already Logged in.")
@@ -169,10 +170,11 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         DispatchQueue.global().async {
             if Reachability()?.connection != .none && self.doRefreshData() {
                 NSLog("Refresh Data")
-                self.presentCourseFillView()
+                DispatchQueue.main.async {
+                    self.presentCourseFillView()
+                }
             } else {
                 NSLog("No refresh, version: %@", String(describing: Preferences().version))
-                self.downloadLargeProfilePhoto()
             }
         }
         
@@ -214,6 +216,14 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         group.wait()
 
         self.refreshDisplayedData()
+        
+        DispatchQueue.global().async {
+            ClassView().getProfilePhoto()
+        }
+        
+        DispatchQueue.global().async {
+            self.downloadLargeProfilePhoto()
+        }
     }
     
     func presentCourseFillView() {
@@ -245,7 +255,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     }
 
     func downloadLargeProfilePhoto() {
-        if reachability.connection == .wifi && !userDefaults.bool(forKey: "didDownloadFullSizeImage") {
+        if reachability.connection == .wifi {
             if let largeFileLink = userDefaults.string(forKey: "largePhotoLink") {
                 provider.request(.downloadLargeProfilePhoto(link: largeFileLink), completion: { result in
                     switch result {
@@ -292,12 +302,12 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
 
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyyMMdd"
-        let refreshDate = Preferences().refreshDate
-        let date = formatter.string(from: Date())
+        //let refreshDate = Preferences().refreshDate
+        //let date = formatter.string(from: Date())
 
-        guard refreshDate != date else {
-            return false
-        }
+        //guard refreshDate != date else {
+        //    return false
+        //}
 
         var refresh = false
         let semaphore = DispatchSemaphore.init(value: 0)
@@ -306,7 +316,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
             switch result {
             case let .success(response):
                 guard let nversion = try? response.mapString() else {
-                    presentErrorMessage(presentMessage: "Version file", layout: .statusLine)
+                    presentErrorMessage(presentMessage: "Version file nout found", layout: .statusLine)
                     return
                 }
 

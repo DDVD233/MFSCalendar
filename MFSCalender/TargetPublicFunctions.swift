@@ -190,6 +190,64 @@ public func presentErrorMessage(presentMessage: String, layout: MessageView.Layo
 }
 
 class ClassView {
+    func getProfilePhoto() {
+        let path = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
+        let coursePath = path.appending("/CourseList.plist")
+        
+        guard let courseList = NSArray(contentsOfFile: coursePath) as? Array<Dictionary<String, Any>> else {
+            return
+        }
+        let group = DispatchGroup()
+        let queue = DispatchQueue.global()
+        
+        for items in courseList {
+            queue.async(group: group) {
+                guard let sectionIdInt = items["sectionid"] as? Int else {
+                    return
+                }
+                
+                guard let photoURLPath = items["mostrecentgroupphoto"] as? String else {
+                    return
+                }
+                
+                guard loginAuthentication().success else {
+                    return
+                }
+                
+                guard !photoURLPath.isEmpty else {
+                    NSLog("\(items["coursedescription"] as? String ?? "") has no photo.")
+                    return
+                }
+                
+                let sectionId = String(sectionIdInt)
+                
+                let photoLink = "https://bbk12e1-cdn.myschoolcdn.com/736/photo/" + photoURLPath
+                
+                let url = URL(string: photoLink)
+                
+                let downloadSemaphore = DispatchSemaphore.init(value: 0)
+                
+                let destination: DownloadRequest.DownloadFileDestination = { _, _ in
+                    let path = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
+                    let photoPath = path.appending("/\(sectionId)_profile.png")
+                    
+                    let fileURL = URL(fileURLWithPath: photoPath)
+                    print(fileURL)
+                    
+                    downloadSemaphore.signal()
+                    
+                    return (fileURL, [.removePreviousFile, .createIntermediateDirectories])
+                }
+                
+                
+                Alamofire.download(url!, to: destination).resume()
+                downloadSemaphore.wait()
+            }
+        }
+        
+        group.wait()
+    }
+    
     func getTheClassToPresent() -> Dictionary<String, Any>? {
         let classPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
         let path = classPath.appending("/CourseList.plist")
