@@ -202,7 +202,7 @@ class ClassView {
         
         for items in courseList {
             queue.async(group: group) {
-                guard let sectionIdInt = items["sectionid"] as? Int else {
+                guard let sectionIdInt = items["leadsectionid"] as? Int else {
                     return
                 }
                 

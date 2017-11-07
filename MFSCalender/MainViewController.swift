@@ -101,6 +101,11 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+//        if Preferences().isiPhoneX {
+//            hidesBottomBarWhenPushed = true
+//        } else {
+//            hidesBottomBarWhenPushed = false
+//        }
         self.bottomView.layer.shadowColor = UIColor.black.cgColor
         self.bottomView.layer.shadowOpacity = 0.15
         self.bottomView.layer.shadowOffset = CGSize.zero
@@ -530,7 +535,7 @@ extension Main: UICollectionViewDelegate, UICollectionViewDataSource, UICollecti
         }
 
         cell.homeworkView.isHidden = true
-        if let leadSectionId = classData["sectionid"] as? Int {
+        if let leadSectionId = classData["leadsectionid"] as? Int {
             print(listHomework)
             if let thisClassHomework = listHomework[String(leadSectionId)] {
                 // cell.homeworkView.isHidden = false

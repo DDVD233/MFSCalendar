@@ -78,7 +78,7 @@ class classDetailViewController: UITableViewController, UIDocumentInteractionCon
     }
     
     func configureBasicInfoView() {
-        let sectionId = classObject["sectionid"] as! Int
+        let sectionId = classObject["leadsectionid"] as! Int
         let photoPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
         let path = photoPath.appending("/\(sectionId)_profile.png")
         profileImageView.image = UIImage(contentsOfFile: path) ?? UIImage(named: "CourseBackground.jpg")!
@@ -99,7 +99,7 @@ class classDetailViewController: UITableViewController, UIDocumentInteractionCon
             self.configureBasicInfoView()
         }
 
-        guard let sectionId = classObject["sectionid"] as? Int else {
+        guard let sectionId = classObject["leadsectionid"] as? Int else {
             return
         }
 
@@ -335,7 +335,7 @@ extension classDetailViewController {
         switch availableInformation[section] {
         case "Basic":
             let cell = classDetailTable.dequeueReusableCell(withIdentifier: "classOverviewTable", for: indexPath)
-            let sectionId = classObject["sectionid"] as! Int
+            let sectionId = classObject["leadsectionid"] as! Int
             let photoPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
             let path = photoPath.appending("/\(sectionId)_profile.png")
             profileImageView.image = UIImage(contentsOfFile: path) ?? UIImage(named: "CourseBackground.jpg")!

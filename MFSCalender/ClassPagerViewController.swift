@@ -10,6 +10,7 @@ import UIKit
 import XLPagerTabStrip
 
 class classPagerViewController: ButtonBarPagerTabStripViewController, UIDocumentInteractionControllerDelegate {
+    
 
     override func viewDidLoad() {
         settings.style.buttonBarMinimumLineSpacing = 0

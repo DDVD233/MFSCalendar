@@ -15,6 +15,11 @@ import Crashlytics
 class NewMoreViewController: UICollectionViewController  {
     override func viewDidLoad() {
         super.viewDidLoad()
+//        if Preferences().isiPhoneX {
+//            hidesBottomBarWhenPushed = true
+//        } else {
+//            hidesBottomBarWhenPushed = false
+//        }
     }
     
     override func viewDidAppear(_ animated: Bool) {

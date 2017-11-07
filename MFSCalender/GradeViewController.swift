@@ -46,10 +46,12 @@ class gradeViewController: UITableViewController {
             }
         }
     }
+    
     @IBOutlet var cumGradeProgressRing: UICircularProgressRingView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        cumGradeProgressRing.font = UIFont.boldSystemFont(ofSize: 32)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -197,7 +199,7 @@ class gradeViewController: UITableViewController {
     func getGradeDetail() {
         guard loginAuthentication().success else { return }
         let userID = loginAuthentication().userId
-        guard let sectionID = classObject["sectionid"] as? Int else { return }
+        guard let sectionID = classObject["leadsectionid"] as? Int else { return }
         
         var markingPeriodID: String {
             switch quarterSelected {
@@ -273,7 +275,7 @@ class gradeViewController: UITableViewController {
 
         let userId = loginAuthentication().userId
 
-        let leadSectionId = classObject["sectionid"] as? Int
+        let leadSectionId = classObject["leadsectionid"] as? Int
 
         var cumGrade = ""
 
@@ -301,7 +303,7 @@ class gradeViewController: UITableViewController {
                 let json = JSON(data!)
 
                 for (_, subJson): (String, JSON) in json {
-                    if subJson["sectionid"].intValue == leadSectionId {
+                    if subJson["leadsectionid"].intValue == leadSectionId {
                         cumGrade = subJson["cumgrade"].stringValue
                         print("CumGrade: \(cumGrade)")
                     }

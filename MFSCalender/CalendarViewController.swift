@@ -74,6 +74,11 @@ class CalendarViewController: TwitterPagerTabStripViewController, DZNEmptyDataSe
     let homeworkViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier :"homeworkViewController") as! homeworkViewController
 
     override func viewDidLoad() {
+//        if Preferences().isiPhoneX {
+//            hidesBottomBarWhenPushed = true
+//        } else {
+//            hidesBottomBarWhenPushed = false
+//        }
         super.viewDidLoad()
         self.backButton.title = "Collapse"
         addScopeGesture()

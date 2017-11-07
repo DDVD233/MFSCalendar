@@ -24,6 +24,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FirebaseApp.configure()
         Fabric.with([Crashlytics()])
         logUser()
+        if (UIDevice().userInterfaceIdiom == .phone) && (UIScreen.main.nativeBounds.height == 2436) {
+            Preferences().isiPhoneX = true
+        }
         
         //setPushNotification()
         

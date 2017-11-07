@@ -2003,7 +2003,7 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zdr-19-Y3d" customClass="UICircularProgressRingView" customModule="UICircularProgressRing">
-                                    <rect key="frame" x="28" y="48" width="141.5" height="141"/>
+                                    <rect key="frame" x="92" y="18" width="191.5" height="191"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
                                         <constraint firstAttribute="width" secondItem="zdr-19-Y3d" secondAttribute="height" multiplier="1:1" id="fHE-ef-jeF"/>
@@ -2031,28 +2031,27 @@
                                     </userDefinedRuntimeAttributes>
                                 </view>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Cumulative Grade" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ws8-Ti-aCJ">
-                                    <rect key="frame" x="25.5" y="199" width="146.5" height="21"/>
+                                    <rect key="frame" x="114.5" y="219" width="146.5" height="21"/>
                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                     <color key="textColor" red="1" green="0.49327188729999999" blue="0.47399842739999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="epQ-km-Dst" customClass="BarChartView" customModule="Charts">
-                                    <rect key="frame" x="175" y="28" width="188" height="212"/>
+                                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="epQ-km-Dst" customClass="BarChartView" customModule="Charts">
+                                    <rect key="frame" x="289" y="28" width="74" height="212"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </view>
                             </subviews>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
                                 <constraint firstItem="epQ-km-Dst" firstAttribute="top" secondItem="B9X-hL-g2o" secondAttribute="top" constant="28" id="1bO-Aa-hMw"/>
+                                <constraint firstItem="zdr-19-Y3d" firstAttribute="centerX" secondItem="B9X-hL-g2o" secondAttribute="centerX" id="3Wn-TN-wBw"/>
                                 <constraint firstAttribute="bottom" secondItem="epQ-km-Dst" secondAttribute="bottom" constant="28" id="BcH-uO-Ygq"/>
                                 <constraint firstItem="ws8-Ti-aCJ" firstAttribute="centerX" secondItem="zdr-19-Y3d" secondAttribute="centerX" id="JKj-8c-LCU"/>
-                                <constraint firstItem="zdr-19-Y3d" firstAttribute="leading" secondItem="B9X-hL-g2o" secondAttribute="leadingMargin" constant="20" id="KvA-RV-Wyr"/>
-                                <constraint firstItem="zdr-19-Y3d" firstAttribute="top" secondItem="B9X-hL-g2o" secondAttribute="topMargin" constant="40" id="NMi-7A-cgA"/>
-                                <constraint firstAttribute="bottomMargin" secondItem="ws8-Ti-aCJ" secondAttribute="bottom" constant="40" id="c5x-3c-dBS"/>
+                                <constraint firstItem="zdr-19-Y3d" firstAttribute="top" secondItem="B9X-hL-g2o" secondAttribute="topMargin" constant="10" id="NMi-7A-cgA"/>
+                                <constraint firstAttribute="bottomMargin" secondItem="ws8-Ti-aCJ" secondAttribute="bottom" constant="20" id="c5x-3c-dBS"/>
                                 <constraint firstAttribute="trailing" secondItem="epQ-km-Dst" secondAttribute="trailing" constant="12" id="eMm-fh-m20"/>
                                 <constraint firstItem="ws8-Ti-aCJ" firstAttribute="top" secondItem="zdr-19-Y3d" secondAttribute="bottom" constant="10" id="ifs-I1-MRK"/>
                                 <constraint firstItem="epQ-km-Dst" firstAttribute="leading" secondItem="zdr-19-Y3d" secondAttribute="trailing" constant="5.5" id="kVL-EE-7eh"/>
-                                <constraint firstItem="ws8-Ti-aCJ" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="B9X-hL-g2o" secondAttribute="leadingMargin" constant="10" id="scj-pa-jHz"/>
                                 <constraint firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="ws8-Ti-aCJ" secondAttribute="trailing" constant="10" id="z1b-gC-sOk"/>
                             </constraints>
                         </view>
@@ -2356,7 +2355,7 @@
         <!--Course List-->
         <scene sceneID="BuE-oZ-M9F">
             <objects>
-                <viewController storyboardIdentifier="courseList" title="Course List" automaticallyAdjustsScrollViewInsets="NO" hidesBottomBarWhenPushed="YES" id="0RJ-yP-WMX" customClass="classListController" customModule="MFSCalendar" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="courseList" title="Course List" automaticallyAdjustsScrollViewInsets="NO" id="0RJ-yP-WMX" customClass="classListController" customModule="MFSCalendar" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="H3v-0I-48l"/>
                         <viewControllerLayoutGuide type="bottom" id="Zxt-55-9mI"/>
@@ -2489,7 +2488,7 @@
         <!--Class Information-->
         <scene sceneID="fHt-qn-dU1">
             <objects>
-                <viewController storyboardIdentifier="classDetailViewController" title="Class Information" automaticallyAdjustsScrollViewInsets="NO" hidesBottomBarWhenPushed="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="8Ug-j0-Kmo" customClass="classPagerViewController" customModule="MFSCalendar" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="classDetailViewController" title="Class Information" automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" id="8Ug-j0-Kmo" customClass="classPagerViewController" customModule="MFSCalendar" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="0Ga-5R-Df4"/>
                         <viewControllerLayoutGuide type="bottom" id="WF9-7e-KiY"/>

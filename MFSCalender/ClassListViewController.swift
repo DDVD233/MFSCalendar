@@ -113,7 +113,8 @@ extension classListController: UICollectionViewDataSource, UICollectionViewDeleg
 
         cell.title.text = classObject["className"] as? String
 
-        if let sectionId = classObject["sectionid"] as? Int {
+        if let sectionId = classObject["leadsectionid"] as? Int {
+            print(sectionId)
             let imagePath = path.appending("/\(sectionId)_profile.png")
             if let backgroundImage = UIImage(contentsOfFile: imagePath) {
                 cell.backgroundImage.isHidden = false

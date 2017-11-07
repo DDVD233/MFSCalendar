@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		9616020D2678949E980D3631 /* Pods_MFSCalendar.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C9307D95D24FE30AFAEDD40 /* Pods_MFSCalendar.framework */; };
+		A81D57C8AAC5C7709E22D1CB /* Pods_MFSCalendar.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E48F15A81F74687200A36904 /* Pods_MFSCalendar.framework */; };
 		E413AB0E1EE89441001EB189 /* Achievement.png in Resources */ = {isa = PBXBuildFile; fileRef = E413AB0D1EE89441001EB189 /* Achievement.png */; };
 		E413AB101EE89683001EB189 /* questionmark.png in Resources */ = {isa = PBXBuildFile; fileRef = E413AB0F1EE89683001EB189 /* questionmark.png */; };
 		E413AB121EE8A796001EB189 /* brush_pencil.png in Resources */ = {isa = PBXBuildFile; fileRef = E413AB111EE8A796001EB189 /* brush_pencil.png */; };
@@ -267,6 +268,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9616020D2678949E980D3631 /* Pods_MFSCalendar.framework in Frameworks */,
+				A81D57C8AAC5C7709E22D1CB /* Pods_MFSCalendar.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -8,6 +8,7 @@
 
 import UIKit
 import Crashlytics
+import Kanna
 
 extension UIView {
     @IBInspectable var cornerRadius: CGFloat {

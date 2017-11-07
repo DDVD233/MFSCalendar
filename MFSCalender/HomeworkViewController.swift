@@ -135,9 +135,6 @@ class homeworkViewController: UITableViewController, UIViewControllerPreviewingD
                 do {
                     if let json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? [[String: Any]] {
                         originalData = json
-                        for items in json {
-                            print(items)
-                        }
                     }
 
                 } catch {
@@ -196,6 +193,7 @@ class homeworkViewController: UITableViewController, UIViewControllerPreviewingD
         }
 
         self.listHomework = managedHomework
+        //print("[test]" + String(describing: self.listHomework))
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

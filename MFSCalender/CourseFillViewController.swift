@@ -26,6 +26,7 @@ class courseFillController: UIViewController {
     @IBOutlet weak var bottomLabel: LTMorphingLabel!
 
     let trace = Performance.startTrace(name: "course fill trace")
+    let baseURL = "https://dwei.org"
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -180,7 +181,7 @@ class courseFillController: UIViewController {
                 let teacherName = course["teacherName"] as? String ?? ""
                 print(teacherName)
                 // var urlString = "https://dwei.org/getAdditionalInformation/\(courseName)/\(teacherName ?? "None")"
-                let urlString = "https://dwei.org/getAdditionalInformation"
+                let urlString = self.baseURL + "/getAdditionalInformation"
                 let courseInfo = ["courseName": courseName, "teacherName": teacherName]
                 guard let json = try? JSONSerialization.data(withJSONObject: courseInfo, options: .prettyPrinted) else {
                     return
@@ -284,7 +285,7 @@ class courseFillController: UIViewController {
                 }
                 
                 classId = classId.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-                let url = "https://dwei.org/searchbyid/" + classId
+                let url = self.baseURL + "/searchbyid/" + classId
                 
                 let task = URLSession.shared.dataTask(with: URL(string: url)!, completionHandler: { (data, response, error) in
                     guard error == nil else {
@@ -377,7 +378,7 @@ class courseFillController: UIViewController {
     func versionCheck() {
         let semaphore = DispatchSemaphore.init(value: 0)
         
-        let url = URL(string: "https://dwei.org/dataversion")!
+        let url = URL(string: baseURL + "/dataversion")!
         
         let task = URLSession.shared.dataTask(with: url, completionHandler: { (data, response, error) in
             guard error ==  nil else {

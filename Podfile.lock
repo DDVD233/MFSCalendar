@@ -60,10 +60,10 @@ PODS:
   - ReachabilitySwift (4.1.0)
   - Result (3.2.4)
   - SCLAlertView (0.7.0)
-  - SDWebImage (4.2.0):
-    - SDWebImage/Core (= 4.2.0)
-  - SDWebImage/Core (4.2.0)
-  - SkyFloatingLabelTextField (3.2.1)
+  - SDWebImage (4.2.1):
+    - SDWebImage/Core (= 4.2.1)
+  - SDWebImage/Core (4.2.1)
+  - SkyFloatingLabelTextField (3.3.0)
   - SnapKit (4.0.0)
   - Spring (1.0.3)
   - SVProgressHUD (2.2.2)
@@ -128,7 +128,7 @@ CHECKOUT OPTIONS:
     :commit: 58e3513d20cd16fe8b9ff16b5a2b481fcd643499
     :git: https://github.com/tid-kijyun/Kanna.git
   SkyFloatingLabelTextField:
-    :commit: 624c43fe3b1b08282a180f3938be6c9b708fcd1c
+    :commit: f07ba2479db2490f195d066140417a4c587efad8
     :git: https://github.com/Skyscanner/SkyFloatingLabelTextField.git
   Spring:
     :commit: b65cb00a1adc7e810e2ad10b174b840b6d520ac3
@@ -162,8 +162,8 @@ SPEC CHECKSUMS:
   ReachabilitySwift: 6849231cd4e06559f3b9ef4a97a0a0f96d41e09f
   Result: d2d07204ce72856f1fd9130bbe42c35a7b0fea10
   SCLAlertView: 8a14ffc40590c619e183eed2298b854385f30be1
-  SDWebImage: b1189fd85365c18434270a11a5cad13a1e848d53
-  SkyFloatingLabelTextField: b7535a46194e81bee73acb4e37a6a49b16454133
+  SDWebImage: 1fa4c9edf525b744f002db89f3f5a38b3cd4c541
+  SkyFloatingLabelTextField: 85e2f1f719a68fb674bd223f501818dbfa10ab62
   SnapKit: a42d492c16e80209130a3379f73596c3454b7694
   Spring: 3f02b5dc3308572ef177b3cad0fa7bbc4b0706f7
   SVProgressHUD: 59b2d3dabacbd051576d21d32293ca7228dc18b0

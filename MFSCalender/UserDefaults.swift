@@ -219,6 +219,15 @@ public class Preferences {
         }
     }
     
+    public var isiPhoneX: Bool {
+        get {
+            return userDefaults.bool(forKey: "isiPhoneX" )
+        }
+        set(value) {
+            userDefaults.set(value, forKey: "isiPhoneX" )
+        }
+    }
+    
     public var courseInitialized: Bool {
         get {
             return userDefaults.bool(forKey: "courseInitialized" )
