@@ -11,13 +11,9 @@ import NotificationCenter
 
 
 class customCellWidget: UITableViewCell {
-
     @IBOutlet weak var className: UILabel!
-
     @IBOutlet weak var classRoom: UILabel!
-
     @IBOutlet weak var classTime: UILabel!
-
     @IBOutlet weak var periodNumber: UILabel!
 
     override func awakeFromNib() {
@@ -36,6 +32,7 @@ class TodayViewController: UIViewController, NCWidgetProviding, UITableViewDeleg
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        let start = DispatchTime.now()
         getAllClass()
 
         if listClasses.count == 0 {
@@ -50,6 +47,10 @@ class TodayViewController: UIViewController, NCWidgetProviding, UITableViewDeleg
         if #available(iOSApplicationExtension 10.0, *) {
             self.extensionContext?.widgetLargestAvailableDisplayMode = .expanded
         }
+        let end = DispatchTime.now()
+        
+        let interval = Double(end.uptimeNanoseconds - start.uptimeNanoseconds) / 1_000_000_000
+        print("Load Time: \(interval) seconds.")
         // Do any additional setup after loading the view, typically from a nib.
     }
 
@@ -145,7 +146,6 @@ class TodayViewController: UIViewController, NCWidgetProviding, UITableViewDeleg
                 self.view.layoutIfNeeded()
             })
         } else if activeDisplayMode == .expanded {
-            self.preferredContentSize = maxSize
             print("Change to expanded")
             let height = self.listClasses.count * 55
             print(self.listClasses.count)
