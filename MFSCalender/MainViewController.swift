@@ -92,9 +92,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     var listEvents = [[String: Any]]()
     var listClasses = [[String: Any?]]()
     var listHomework = [String: Array<Dictionary<String, Any?>>]()
-    var timer: Timer? = nil
 //    Format: {Lead_Section_ID: [Homework]}
-    var isVisible = true
 
     let reachability = Reachability()!
     var screenWidth = UIScreen.main.bounds.width
@@ -152,7 +150,6 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
 
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.setNavigationBarHidden(true, animated: false)
-        isVisible = true
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -193,18 +190,24 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
                 self.present(mobileServeIntro, animated: true)
             }
         }
+        
+//        DispatchQueue.global().async {
+//            self.autoRefreshContents()
+//        }
     }
     
     func autoRefreshContents() {
-        DispatchQueue.global().async {
-            self.refreshDisplayedData()
+        while isViewLoaded && view.window != nil {
+            DispatchQueue.global().async {
+                self.refreshDisplayedData()
+            }
+            print("Content refreshed")
+            sleep(1)
         }
-        print("Content refreshed")
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         navigationController?.setNavigationBarHidden(false, animated: false)
-        isVisible = false
     }
 
     func updateData() {
@@ -219,8 +222,10 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         })
 
         group.wait()
-
-        self.refreshDisplayedData()
+        
+        if isViewLoaded && (view.window != nil) {
+            refreshDisplayedData()
+        }
         
         DispatchQueue.global().async {
             ClassView().getProfilePhoto()
@@ -242,9 +247,9 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     func refreshDisplayedData() {
         eventDataFetching()
         periodCheck(day: dayCheck())
-        setupTheHeader()
 
         DispatchQueue.main.async {
+            self.setupTheHeader()
             self.classView.reloadData()
             self.eventView.reloadData()
         }
@@ -348,32 +353,30 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     func setupTheHeader() {
         let day = dayCheck()
         
-        DispatchQueue.main.async {
-            let date = Date()
-            let formatter = DateFormatter()
-            formatter.dateFormat = "EEEE, MMMM d."
-            //MMMM d, yyyy
-            var today = formatter.string(from: date)
-            let labelAttributes = [NSAttributedStringKey.font:
-                UIFont.init(name: self.dateLabel.font.fontName, size: self.dateLabel.font.pointSize) ?? UIFont()]
-            if NSString(string: today).size(withAttributes: labelAttributes).width > self.dateLabel.bounds.size.width - 10 {
-                formatter.dateFormat = "EEEE, MMM d."
-                today = formatter.string(from: date)
-            }
-            
-            if NSString(string: today).size(withAttributes: labelAttributes).width > self.dateLabel.bounds.size.width - 10 {
-                formatter.dateFormat = "EE, MMM d."
-                today = formatter.string(from: date)
-            }
-            if day == "No School" {
-                self.dayLabel.text = "No school today,"
-            } else {
-                self.dayLabel.text = "Today is " + day + " Day,"
-            }
-            self.welcomeLabel.text = "Welcome back, " + (Preferences().firstName ?? "") + "!"
-            
-            self.dateLabel.text = today
+        let date = Date()
+        let formatter = DateFormatter()
+        formatter.dateFormat = "EEEE, MMMM d."
+        //MMMM d, yyyy
+        var today = formatter.string(from: date)
+        let labelAttributes = [NSAttributedStringKey.font:
+            UIFont.init(name: self.dateLabel.font.fontName, size: self.dateLabel.font.pointSize) ?? UIFont()]
+        if NSString(string: today).size(withAttributes: labelAttributes).width > self.dateLabel.bounds.size.width - 10 {
+            formatter.dateFormat = "EEEE, MMM d."
+            today = formatter.string(from: date)
         }
+        
+        if NSString(string: today).size(withAttributes: labelAttributes).width > self.dateLabel.bounds.size.width - 10 {
+            formatter.dateFormat = "EE, MMM d."
+            today = formatter.string(from: date)
+        }
+        if day == "No School" {
+            self.dayLabel.text = "No school today,"
+        } else {
+            self.dayLabel.text = "Today is " + day + " Day,"
+        }
+        self.welcomeLabel.text = "Welcome back, " + (Preferences().firstName ?? "") + "!"
+        
+        self.dateLabel.text = today
 
     }
 
