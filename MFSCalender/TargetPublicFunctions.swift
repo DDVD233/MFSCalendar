@@ -321,19 +321,19 @@ class EventView {
     let formatter = DateFormatter()
     
     func getTimeInterval(rowDict: [String: Any?]) -> String {
-        let isAllDay = rowDict["isAllDay"] as! Int
+        let isAllDay = rowDict["isAllDay"] as? Int ?? 0
         if isAllDay == 1 {
             return "All Day"
         } else {
             let tEnd = rowDict["tEnd"] as! Int
             updateFormatterFormat(time: tEnd)
-            let timeEnd = formatter.date(from: String(describing: tEnd))
+            guard let timeEnd = formatter.date(from: String(describing: tEnd)) else { return "" }
             let tStart = rowDict["tStart"] as! Int
             updateFormatterFormat(time: tStart)
-            let timeStart = formatter.date(from: String(describing: tStart))
+            guard let timeStart = formatter.date(from: String(describing: tStart)) else { return "" }
             formatter.dateFormat = "h:mm a"
-            let startString = formatter.string(from: timeStart!)
-            let endString = formatter.string(from: timeEnd!)
+            let startString = formatter.string(from: timeStart)
+            let endString = formatter.string(from: timeEnd)
             return startString + " - " + endString
         }
     }

@@ -9,6 +9,7 @@
 import XCTest
 
 class MFSCalendarUITests: XCTestCase {
+    let app = XCUIApplication()
         
     override func setUp() {
         super.setUp()
@@ -16,12 +17,10 @@ class MFSCalendarUITests: XCTestCase {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         
         // In UI tests it is usually best to stop immediately when a failure occurs.
-        continueAfterFailure = false
+        continueAfterFailure = true
         // UI tests must launch the application that they test. Doing this in setup will make sure it happens for each test method.
-        let app = XCUIApplication()
-        app.launchArguments = ["--Reset"]
+        app.launchArguments = ["UITEST"]
         app.launch()
-
         // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
     }
     
@@ -31,22 +30,28 @@ class MFSCalendarUITests: XCTestCase {
     }
     
     func testExample() {
-        let app = XCUIApplication()
-        let passwordSecureTextField = app.secureTextFields["Password"]
-        passwordSecureTextField.tap()
-        passwordSecureTextField.typeText("torsan89")
-        app.buttons["LOG IN"].tap()
         
-        let tabBarsQuery = app.tabBars
-        tabBarsQuery.buttons["Homework"].tap()
-        tabBarsQuery.buttons["Calendar"].tap()
-        tabBarsQuery.buttons["Timetable"].tap()
-        app.navigationBars["MFSCalendar.timeTableParentView"]/*@START_MENU_TOKEN@*/.buttons["F Day"]/*[[".staticTexts.buttons[\"F Day\"]",".buttons[\"F Day\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
-        tabBarsQuery.buttons["More"].tap()
-        app.tables/*@START_MENU_TOKEN@*/.staticTexts["My Courses"]/*[[".cells.staticTexts[\"My Courses\"]",".staticTexts[\"My Courses\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
-        app.navigationBars["Course List"].buttons["Me"].tap()
+//        let app = app2
+//        let usernameTextField = app.textFields["Username"]
+//        usernameTextField.tap()
+//        usernameTextField.typeText("")
+//        usernameTextField.typeText("WeiD")
+//
+//        let passwordSecureTextField = app.secureTextFields["Password"]
+//        passwordSecureTextField.tap()
+//        passwordSecureTextField.tap()
+//        passwordSecureTextField.typeText("torsan89")
+//        app.buttons["LOG IN"].tap()
+//        app.tabBars.buttons["Homework"].tap()
+//        app.tables.children(matching: .cell).element(boundBy: 0).children(matching: .textView).element.tap()
+//
+//        let app2 = app
+//        app2.tables/*@START_MENU_TOKEN@*/.buttons["More Info"]/*[[".cells.buttons[\"More Info\"]",".buttons[\"More Info\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+//        app2.collectionViews/*@START_MENU_TOKEN@*/.staticTexts["TOPICS"]/*[[".cells.staticTexts[\"TOPICS\"]",".staticTexts[\"TOPICS\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+//        app.children(matching: .window).element(boundBy: 0).children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .collectionView).element.tap()
+//
         
-        
+                
         // Use recording to get started writing UI tests.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
     }

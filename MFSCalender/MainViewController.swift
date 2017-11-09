@@ -207,6 +207,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     }
 
     override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(true)
         navigationController?.setNavigationBarHidden(false, animated: false)
     }
 
