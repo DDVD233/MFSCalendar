@@ -165,10 +165,10 @@
 		E48D4E041E61FC26008B0A97 /* TodayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = TodayViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		E48D4E091E61FC26008B0A97 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E48D4E111E620698008B0A97 /* Class Schedule.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Class Schedule.entitlements"; sourceTree = "<group>"; };
-		E48F15501F745BF400A36904 /* MFSCalendarTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MFSCalendarTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E48F15501F745BF400A36904 /* MFSMobileTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MFSMobileTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E48F15521F745BF400A36904 /* MFSCalendarTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MFSCalendarTests.swift; sourceTree = "<group>"; };
 		E48F15541F745BF400A36904 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		E48F155E1F7467D900A36904 /* MFSCalendarUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MFSCalendarUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E48F155E1F7467D900A36904 /* MFSMobileUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MFSMobileUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E48F15601F7467D900A36904 /* MFSCalendarUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MFSCalendarUITests.swift; sourceTree = "<group>"; };
 		E48F15621F7467D900A36904 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E48F159A1F74687200A36904 /* Alamofire.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Alamofire.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -227,7 +227,7 @@
 		E4EBD9951F9BAAED0046CAD1 /* AirshipConfig.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = AirshipConfig.plist; sourceTree = "<group>"; };
 		E4EEFB121DF274EA00F199BE /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		E4F0B3741EAD1BE900C923A8 /* dayPicker.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = dayPicker.plist; sourceTree = "<group>"; };
-		E4F86B2D1DF0E20C00CAD72B /* MFSCalendar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MFSCalendar.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E4F86B2D1DF0E20C00CAD72B /* MFSMobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MFSMobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4F86B301DF0E20C00CAD72B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E4F86B321DF0E20C00CAD72B /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = MainViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		E4F86B351DF0E20C00CAD72B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -416,10 +416,10 @@
 		E4F86B2E1DF0E20C00CAD72B /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				E4F86B2D1DF0E20C00CAD72B /* MFSCalendar.app */,
+				E4F86B2D1DF0E20C00CAD72B /* MFSMobile.app */,
 				E48D4DFF1E61FC25008B0A97 /* Class Schedule.appex */,
-				E48F15501F745BF400A36904 /* MFSCalendarTests.xctest */,
-				E48F155E1F7467D900A36904 /* MFSCalendarUITests.xctest */,
+				E48F15501F745BF400A36904 /* MFSMobileTests.xctest */,
+				E48F155E1F7467D900A36904 /* MFSMobileUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -485,9 +485,9 @@
 			productReference = E48D4DFF1E61FC25008B0A97 /* Class Schedule.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
-		E48F154F1F745BF400A36904 /* MFSCalendarTests */ = {
+		E48F154F1F745BF400A36904 /* MFSMobileTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E48F15571F745BF400A36904 /* Build configuration list for PBXNativeTarget "MFSCalendarTests" */;
+			buildConfigurationList = E48F15571F745BF400A36904 /* Build configuration list for PBXNativeTarget "MFSMobileTests" */;
 			buildPhases = (
 				E48F154C1F745BF400A36904 /* Sources */,
 				E48F154D1F745BF400A36904 /* Frameworks */,
@@ -498,14 +498,14 @@
 			dependencies = (
 				E48F15561F745BF400A36904 /* PBXTargetDependency */,
 			);
-			name = MFSCalendarTests;
+			name = MFSMobileTests;
 			productName = MFSCalendarTests;
-			productReference = E48F15501F745BF400A36904 /* MFSCalendarTests.xctest */;
+			productReference = E48F15501F745BF400A36904 /* MFSMobileTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		E48F155D1F7467D900A36904 /* MFSCalendarUITests */ = {
+		E48F155D1F7467D900A36904 /* MFSMobileUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E48F15651F7467D900A36904 /* Build configuration list for PBXNativeTarget "MFSCalendarUITests" */;
+			buildConfigurationList = E48F15651F7467D900A36904 /* Build configuration list for PBXNativeTarget "MFSMobileUITests" */;
 			buildPhases = (
 				E48F155A1F7467D900A36904 /* Sources */,
 				E48F155B1F7467D900A36904 /* Frameworks */,
@@ -516,14 +516,14 @@
 			dependencies = (
 				E48F15641F7467D900A36904 /* PBXTargetDependency */,
 			);
-			name = MFSCalendarUITests;
+			name = MFSMobileUITests;
 			productName = MFSCalendarUITests;
-			productReference = E48F155E1F7467D900A36904 /* MFSCalendarUITests.xctest */;
+			productReference = E48F155E1F7467D900A36904 /* MFSMobileUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
-		E4F86B2C1DF0E20C00CAD72B /* MFSCalendar */ = {
+		E4F86B2C1DF0E20C00CAD72B /* MFSMobile */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E4F86B421DF0E20C00CAD72B /* Build configuration list for PBXNativeTarget "MFSCalendar" */;
+			buildConfigurationList = E4F86B421DF0E20C00CAD72B /* Build configuration list for PBXNativeTarget "MFSMobile" */;
 			buildPhases = (
 				C00B6DBCAB10894AA9BA0467 /* [CP] Check Pods Manifest.lock */,
 				E4F86B291DF0E20C00CAD72B /* Sources */,
@@ -541,9 +541,9 @@
 			dependencies = (
 				E48D4E0B1E61FC26008B0A97 /* PBXTargetDependency */,
 			);
-			name = MFSCalendar;
+			name = MFSMobile;
 			productName = MFSCalender;
-			productReference = E4F86B2D1DF0E20C00CAD72B /* MFSCalendar.app */;
+			productReference = E4F86B2D1DF0E20C00CAD72B /* MFSMobile.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -599,7 +599,7 @@
 					};
 				};
 			};
-			buildConfigurationList = E4F86B281DF0E20C00CAD72B /* Build configuration list for PBXProject "MFSCalendar" */;
+			buildConfigurationList = E4F86B281DF0E20C00CAD72B /* Build configuration list for PBXProject "MFSMobile" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -613,10 +613,10 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				E4F86B2C1DF0E20C00CAD72B /* MFSCalendar */,
+				E4F86B2C1DF0E20C00CAD72B /* MFSMobile */,
 				E48D4DFE1E61FC25008B0A97 /* Class Schedule */,
-				E48F154F1F745BF400A36904 /* MFSCalendarTests */,
-				E48F155D1F7467D900A36904 /* MFSCalendarUITests */,
+				E48F154F1F745BF400A36904 /* MFSMobileTests */,
+				E48F155D1F7467D900A36904 /* MFSMobileUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -903,12 +903,12 @@
 		};
 		E48F15561F745BF400A36904 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = E4F86B2C1DF0E20C00CAD72B /* MFSCalendar */;
+			target = E4F86B2C1DF0E20C00CAD72B /* MFSMobile */;
 			targetProxy = E48F15551F745BF400A36904 /* PBXContainerItemProxy */;
 		};
 		E48F15641F7467D900A36904 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = E4F86B2C1DF0E20C00CAD72B /* MFSCalendar */;
+			target = E4F86B2C1DF0E20C00CAD72B /* MFSMobile */;
 			targetProxy = E48F15631F7467D900A36904 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -1005,7 +1005,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MFSCalendar.app/MFSCalendar";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MFSMobile.app/MFSMobile";
 			};
 			name = Debug;
 		};
@@ -1027,7 +1027,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MFSCalendar.app/MFSCalendar";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MFSMobile.app/MFSMobile";
 			};
 			name = Release;
 		};
@@ -1190,7 +1190,7 @@
 			baseConfigurationReference = B710C5F6924F68DB86B70E20 /* Pods-MFSCalendar.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-Plan D";
 				CODE_SIGN_ENTITLEMENTS = MFSCalender/MFSCalender.entitlements;
 				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				INFOPLIST_FILE = MFSCalender/Info.plist;
@@ -1208,7 +1208,7 @@
 			baseConfigurationReference = F67135CC47E915B369ECF057 /* Pods-MFSCalendar.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-Plan D";
 				CODE_SIGN_ENTITLEMENTS = MFSCalender/MFSCalender.entitlements;
 				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				INFOPLIST_FILE = MFSCalender/Info.plist;
@@ -1233,7 +1233,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E48F15571F745BF400A36904 /* Build configuration list for PBXNativeTarget "MFSCalendarTests" */ = {
+		E48F15571F745BF400A36904 /* Build configuration list for PBXNativeTarget "MFSMobileTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E48F15581F745BF400A36904 /* Debug */,
@@ -1242,7 +1242,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E48F15651F7467D900A36904 /* Build configuration list for PBXNativeTarget "MFSCalendarUITests" */ = {
+		E48F15651F7467D900A36904 /* Build configuration list for PBXNativeTarget "MFSMobileUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E48F15661F7467D900A36904 /* Debug */,
@@ -1251,7 +1251,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E4F86B281DF0E20C00CAD72B /* Build configuration list for PBXProject "MFSCalendar" */ = {
+		E4F86B281DF0E20C00CAD72B /* Build configuration list for PBXProject "MFSMobile" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E4F86B401DF0E20C00CAD72B /* Debug */,
@@ -1260,7 +1260,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E4F86B421DF0E20C00CAD72B /* Build configuration list for PBXNativeTarget "MFSCalendar" */ = {
+		E4F86B421DF0E20C00CAD72B /* Build configuration list for PBXNativeTarget "MFSMobile" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E4F86B431DF0E20C00CAD72B /* Debug */,

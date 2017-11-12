@@ -94,7 +94,6 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     var listHomework = [String: Array<Dictionary<String, Any?>>]()
 //    Format: {Lead_Section_ID: [Homework]}
 
-    let reachability = Reachability()!
     var screenWidth = UIScreen.main.bounds.width
 
     override func viewDidLoad() {
@@ -155,16 +154,22 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     override func viewDidAppear(_ animated: Bool) {
         //classViewHeightConstraint.constant = classView.contentSize.height
 
-//        Add "== true" to prevent force unwrap.
         guard Preferences().didLogin else {
-            let vc = self.storyboard?.instantiateViewController(withIdentifier: "ftController") as! firstTimeLaunchController
-            self.present(vc, animated: true, completion: nil)
+            if let vc = self.storyboard?.instantiateViewController(withIdentifier: "ftController") as? firstTimeLaunchController {
+                if isViewLoaded && view.window != nil {
+                    self.present(vc, animated: true, completion: nil)
+                }
+            }
             return
         }
 
         guard Preferences().courseInitialized else {
-            let vc = self.storyboard?.instantiateViewController(withIdentifier: "courseFillController")
-            self.present(vc!, animated: true, completion: nil)
+            if let vc = self.storyboard?.instantiateViewController(withIdentifier: "courseFillController") {
+                if isViewLoaded && view.window != nil {
+                    self.present(vc, animated: true, completion: nil)
+                }
+                
+            }
             return
         }
 
@@ -187,7 +192,9 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         if !userDefaults.bool(forKey: "didShowMobileServe") && Preferences().isStudent {
             userDefaults.set(true, forKey: "didShowMobileServe")
             if let mobileServeIntro = storyboard?.instantiateViewController(withIdentifier: "mobileServeIntro") {
-                self.present(mobileServeIntro, animated: true)
+                if isViewLoaded && view.window != nil {
+                    self.present(mobileServeIntro, animated: true)
+                }
             }
         }
         
@@ -239,7 +246,9 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     
     func presentCourseFillView() {
         if let vc = self.storyboard?.instantiateViewController(withIdentifier: "courseFillController") {
-            self.present(vc, animated: true, completion: nil)
+            if isViewLoaded && view.window != nil {
+                self.present(vc, animated: true, completion: nil)
+            }
         } else {
             presentErrorMessage(presentMessage: "Cannot find course fill page", layout: .statusLine)
         }
@@ -266,7 +275,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     }
 
     func downloadLargeProfilePhoto() {
-        if reachability.connection == .wifi {
+        if Reachability()?.connection == .wifi {
             if let largeFileLink = userDefaults.string(forKey: "largePhotoLink") {
                 provider.request(.downloadLargeProfilePhoto(link: largeFileLink), completion: { result in
                     switch result {
