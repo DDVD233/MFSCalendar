@@ -523,13 +523,13 @@ extension Main: UICollectionViewDelegate, UICollectionViewDataSource, UICollecti
         let row = indexPath.row
         let classData = listClasses[row]
         let className = classData["className"] as? String
-        let teacher = classData["teacherName"] as? String
+        let teacher = classData["teacherName"] as? String ?? ""
 
         if let roomNumber = classData["roomNumber"] as? String {
             if !roomNumber.isEmpty {
                 cell.roomNumber.text = "AT: " + roomNumber
             } else {
-                cell.roomNumber.text = nil
+                cell.roomNumber.text = ""
             }
         }
 

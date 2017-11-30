@@ -40,7 +40,7 @@ class gradeViewController: UITableViewController {
     
 
     var cumGrade: Float = 0 {
-        willSet {
+        didSet {
             DispatchQueue.main.async {
                 self.cumGradeProgressRing.setProgress(value: CGFloat(self.cumGrade), animationDuration: 1.0)
             }
@@ -92,6 +92,7 @@ class gradeViewController: UITableViewController {
         }
         
         refreshView()
+        animate()
     }
 
     func refreshView() {
@@ -185,10 +186,12 @@ class gradeViewController: UITableViewController {
     }
     
     func animate() {
-        cumGradeProgressRing.setProgress(value: CGFloat(self.cumGrade), animationDuration: 1.0)
-        
+//        cumGradeProgressRing.setProgress(value: CGFloat(self.cumGrade), animationDuration: 1.0)
+//        
+//        
 //        if let chartCell = self.tableView.cellForRow(at: IndexPath(row: 1, section: 0)) as? gradeBarChartCell {
-//            print(chartCell.chartView.data)
+//            chartCell.chartView.animate(yAxisDuration: 2)
+//            //print(chartCell.chartView.data)
 //        }
     }
 
@@ -385,6 +388,7 @@ extension gradeViewController {
                 guard !gradeList.isEmpty else { break }
                 
                 if cell.chartView.data?.dataSetCount != groupedGradeKeys.count {
+                    cell.chartView.data = nil
                     for assignmentType in groupedGradeKeys {
                         guard let gradeListOfThisType = groupedGradeList[assignmentType] else { continue }
                         var yValues = [BarChartDataEntry]()

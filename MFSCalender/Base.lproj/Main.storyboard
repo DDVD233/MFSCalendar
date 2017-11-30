@@ -15,7 +15,7 @@
         <!--Course Fill Controller-->
         <scene sceneID="vOk-zv-vpp">
             <objects>
-                <viewController storyboardIdentifier="courseFillController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="ktX-bn-vcC" customClass="courseFillController" customModule="MFSCalendar" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="courseFillController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="ktX-bn-vcC" customClass="courseFillController" customModule="MFSMobile" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="wiW-ry-Cpr"/>
                         <viewControllerLayoutGuide type="bottom" id="rnH-ia-Zy7"/>
@@ -100,7 +100,7 @@
         <!--Mobile Serve View Controller-->
         <scene sceneID="PlD-jk-5k5">
             <objects>
-                <viewController id="9zZ-IH-ocl" customClass="MobileServeViewController" customModule="MFSCalendar" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="9zZ-IH-ocl" customClass="MobileServeViewController" customModule="MFSMobile" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="G20-SJ-Zzk"/>
                         <viewControllerLayoutGuide type="bottom" id="sSI-6N-N06"/>
@@ -202,7 +202,7 @@
         <!--Mobile Serve Register-->
         <scene sceneID="nOq-gK-Zc7">
             <objects>
-                <viewController storyboardIdentifier="MSRegisterRequest" id="O5O-kv-yeS" customClass="MobileServeRegister" customModule="MFSCalendar" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MSRegisterRequest" id="O5O-kv-yeS" customClass="MobileServeRegister" customModule="MFSMobile" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="C4u-Mh-Bol"/>
                         <viewControllerLayoutGuide type="bottom" id="dNE-I5-kBc"/>
@@ -290,7 +290,7 @@
         <!--First Time Launch Controller-->
         <scene sceneID="f5n-8T-sEc">
             <objects>
-                <viewController storyboardIdentifier="ftController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="vao-er-1v4" customClass="firstTimeLaunchController" customModule="MFSCalendar" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ftController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="vao-er-1v4" customClass="firstTimeLaunchController" customModule="MFSMobile" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="vb2-hT-1uS"/>
                         <viewControllerLayoutGuide type="bottom" id="man-7L-6qb"/>
@@ -525,14 +525,14 @@
         <!--Homework-->
         <scene sceneID="WEb-Ck-hsA">
             <objects>
-                <tableViewController storyboardIdentifier="homeworkViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="rXz-aA-11j" customClass="homeworkViewController" customModule="MFSCalendar" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="homeworkViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="rXz-aA-11j" customClass="homeworkViewController" customModule="MFSMobile" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="80" sectionHeaderHeight="18" sectionFooterHeight="1" id="FPY-tO-elr">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <inset key="scrollIndicatorInsets" minX="0.0" minY="10" maxX="0.0" maxY="0.0"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="homeworkViewCell" rowHeight="155" id="u8Y-xh-dW2" customClass="homeworkViewCell" customModule="MFSCalendar" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="homeworkViewCell" rowHeight="155" id="u8Y-xh-dW2" customClass="homeworkViewCell" customModule="MFSMobile" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="55.5" width="375" height="155"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="u8Y-xh-dW2" id="PIy-Jx-do0">
@@ -654,7 +654,7 @@
                                     <outlet property="tagView" destination="fa7-oT-eer" id="tOU-hd-r2f"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="homeworkTableHeader" rowHeight="44" id="VfM-BH-6ZC" customClass="homeworkTableHeader" customModule="MFSCalendar" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="homeworkTableHeader" rowHeight="44" id="VfM-BH-6ZC" customClass="homeworkTableHeader" customModule="MFSMobile" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="210.5" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="VfM-BH-6ZC" id="Y0Z-99-cOk">
@@ -698,7 +698,7 @@
         <!--Assignment Detail-->
         <scene sceneID="Xx1-Mi-tVW">
             <objects>
-                <viewController storyboardIdentifier="homeworkDetailViewController" title="Assignment Detail" id="Loo-xY-UXg" customClass="homeworKDetailViewController" customModule="MFSCalendar" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="homeworkDetailViewController" title="Assignment Detail" id="Loo-xY-UXg" customClass="homeworKDetailViewController" customModule="MFSMobile" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="tGU-Hj-b8Y"/>
                         <viewControllerLayoutGuide type="bottom" id="u5n-60-mRH"/>
@@ -711,7 +711,7 @@
                                 <rect key="frame" x="0.0" y="20" width="375" height="647"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="homeworkDetailViewCell" rowHeight="291" id="yF1-9G-Z0k" customClass="homeworkDetailViewCell" customModule="MFSCalendar" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="homeworkDetailViewCell" rowHeight="291" id="yF1-9G-Z0k" customClass="homeworkDetailViewCell" customModule="MFSMobile" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="55.5" width="375" height="291"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="yF1-9G-Z0k" id="e6M-mh-1eo">
@@ -818,7 +818,7 @@
         <!--Main-->
         <scene sceneID="dva-wW-yh1">
             <objects>
-                <viewController storyboardIdentifier="Main" title="Main" useStoryboardIdentifierAsRestorationIdentifier="YES" id="pL9-2o-whX" userLabel="Main" customClass="Main" customModule="MFSCalendar" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Main" title="Main" useStoryboardIdentifierAsRestorationIdentifier="YES" id="pL9-2o-whX" userLabel="Main" customClass="Main" customModule="MFSMobile" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="etv-sL-pG7"/>
                         <viewControllerLayoutGuide type="bottom" id="y0D-Z9-iiy"/>
@@ -914,7 +914,7 @@
                                                 <color key="separatorColor" red="1" green="0.7998471328771648" blue="0.50447591145833326" alpha="1" colorSpace="calibratedRGB"/>
                                                 <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 <prototypes>
-                                                    <tableViewCell clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="eventTableDash" id="4EP-aC-Nqw" customClass="customEventCellDashboard" customModule="MFSCalendar" customModuleProvider="target">
+                                                    <tableViewCell clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="eventTableDash" id="4EP-aC-Nqw" customClass="customEventCellDashboard" customModule="MFSMobile" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="1" width="335" height="80"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="4EP-aC-Nqw" id="e6v-lZ-Add">
@@ -1034,7 +1034,7 @@
                                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         </collectionViewFlowLayout>
                                         <cells>
-                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="classViewCell" id="QqS-YB-yDB" customClass="classViewCell" customModule="MFSCalendar" customModuleProvider="target">
+                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="classViewCell" id="QqS-YB-yDB" customClass="classViewCell" customModule="MFSMobile" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="2" width="181" height="151"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -1220,7 +1220,7 @@
         <!--Time Table Parent View Controller-->
         <scene sceneID="F3g-hO-I3z">
             <objects>
-                <viewController automaticallyAdjustsScrollViewInsets="NO" id="cms-Bk-Fk5" customClass="timeTableParentViewController" customModule="MFSCalendar" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController automaticallyAdjustsScrollViewInsets="NO" id="cms-Bk-Fk5" customClass="timeTableParentViewController" customModule="MFSMobile" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="4Wd-Xf-sle"/>
                         <viewControllerLayoutGuide type="bottom" id="Zai-sz-y0B"/>
@@ -1264,7 +1264,7 @@
         <!--A Day-->
         <scene sceneID="WGk-dm-FGj">
             <objects>
-                <viewController storyboardIdentifier="timeTableViewController" automaticallyAdjustsScrollViewInsets="NO" id="gvr-uh-bJE" customClass="ADay" customModule="MFSCalendar" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="timeTableViewController" automaticallyAdjustsScrollViewInsets="NO" id="gvr-uh-bJE" customClass="ADay" customModule="MFSMobile" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="U2c-P6-dGa"/>
                         <viewControllerLayoutGuide type="bottom" id="PnE-TR-PaA"/>
@@ -1277,7 +1277,7 @@
                                 <rect key="frame" x="0.0" y="20" width="375" height="647"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="CellIdentifier" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="cellIdentifier" rowHeight="122" id="o6K-WJ-izp" userLabel="ClassA1" customClass="customCell" customModule="MFSCalendar" customModuleProvider="target">
+                                    <tableViewCell opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="CellIdentifier" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="cellIdentifier" rowHeight="122" id="o6K-WJ-izp" userLabel="ClassA1" customClass="customCell" customModule="MFSMobile" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="64" width="375" height="122"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="o6K-WJ-izp" id="Bq6-of-LJK">
@@ -1435,7 +1435,7 @@
         <!--Calender-->
         <scene sceneID="8hJ-ls-6yL">
             <objects>
-                <viewController id="QUz-Th-8ul" userLabel="Calender" customClass="CalendarViewController" customModule="MFSCalendar" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="QUz-Th-8ul" userLabel="Calender" customClass="CalendarViewController" customModule="MFSMobile" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="E1w-9L-wQ7"/>
                         <viewControllerLayoutGuide type="bottom" id="Omy-wF-ACe"/>
@@ -1514,7 +1514,7 @@
         <!--Empty Data Set Delegate-->
         <scene sceneID="Cip-L5-clG">
             <objects>
-                <viewController storyboardIdentifier="eventViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="LFJ-Qg-M2F" customClass="eventViewController" customModule="MFSCalendar" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="eventViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="LFJ-Qg-M2F" customClass="eventViewController" customModule="MFSMobile" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="UAC-yw-rNy"/>
                         <viewControllerLayoutGuide type="bottom" id="gRq-KA-fGw"/>
@@ -1528,7 +1528,7 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <gestureRecognizers/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="eventTable" id="xE8-0J-TfC" customClass="customEventCell" customModule="MFSCalendar" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="eventTable" id="xE8-0J-TfC" customClass="customEventCell" customModule="MFSMobile" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="1" width="375" height="80"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="xE8-0J-TfC" id="wwR-mz-cHe">
@@ -1638,7 +1638,7 @@
         <!--User-->
         <scene sceneID="hZ8-dz-bXo">
             <objects>
-                <tableViewController storyboardIdentifier="profile" title="Profile" id="laA-fL-7Hp" userLabel="User" customClass="profileViewController" customModule="MFSCalendar" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="profile" title="Profile" id="laA-fL-7Hp" userLabel="User" customClass="profileViewController" customModule="MFSMobile" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="none" rowHeight="54" sectionHeaderHeight="18" sectionFooterHeight="18" id="NVa-XU-jiU">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1676,7 +1676,7 @@
                             </constraints>
                         </view>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="profileTableCell" rowHeight="54" id="2Ov-W5-wzA" customClass="profileTableCell" customModule="MFSCalendar" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="profileTableCell" rowHeight="54" id="2Ov-W5-wzA" customClass="profileTableCell" customModule="MFSMobile" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="270.5" width="375" height="54"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="2Ov-W5-wzA" id="gna-E3-Eft">
@@ -1743,7 +1743,7 @@
         <!--Class Detail-->
         <scene sceneID="zVU-pB-G5x">
             <objects>
-                <tableViewController storyboardIdentifier="overview" title="Class Detail" automaticallyAdjustsScrollViewInsets="NO" id="SIS-mR-Y8t" customClass="classDetailViewController" customModule="MFSCalendar" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="overview" title="Class Detail" automaticallyAdjustsScrollViewInsets="NO" id="SIS-mR-Y8t" customClass="classDetailViewController" customModule="MFSMobile" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" contentInsetAdjustmentBehavior="never" dataMode="prototypes" style="grouped" rowHeight="44" sectionHeaderHeight="1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" id="lrD-Zn-V13">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1810,7 +1810,7 @@
                             </constraints>
                         </view>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="syllabusCell" rowHeight="217" id="Oh2-LZ-JKF" customClass="syllabusView" customModule="MFSCalendar" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="syllabusCell" rowHeight="217" id="Oh2-LZ-JKF" customClass="syllabusView" customModule="MFSMobile" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="225.5" width="375" height="217"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Oh2-LZ-JKF" id="UJX-u0-vj1">
@@ -1884,7 +1884,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="homeworkTableHeader" rowHeight="46" id="QOd-HR-lcr" customClass="homeworkTableHeader" customModule="MFSCalendar" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="homeworkTableHeader" rowHeight="46" id="QOd-HR-lcr" customClass="homeworkTableHeader" customModule="MFSMobile" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="555.5" width="375" height="46"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="QOd-HR-lcr" id="8Be-6e-fca">
@@ -1910,7 +1910,7 @@
                                     <outlet property="titleLabel" destination="tbc-8a-h4N" id="y4N-07-Qyz"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="classTableShowMoreFooter" rowHeight="84" id="xnF-bW-bmc" userLabel="classTableShowMoreFooter" customClass="classTableShowMoreFooter" customModule="MFSCalendar" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="classTableShowMoreFooter" rowHeight="84" id="xnF-bW-bmc" userLabel="classTableShowMoreFooter" customClass="classTableShowMoreFooter" customModule="MFSMobile" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="601.5" width="375" height="84"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="xnF-bW-bmc" id="VOq-QD-I8f">
@@ -1993,7 +1993,7 @@
         <!--Grade View Controller-->
         <scene sceneID="1iS-Gw-pKI">
             <objects>
-                <tableViewController storyboardIdentifier="gradeViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="nOl-7j-hMf" customClass="gradeViewController" customModule="MFSCalendar" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="gradeViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="nOl-7j-hMf" customClass="gradeViewController" customModule="MFSMobile" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="300" sectionHeaderHeight="18" sectionFooterHeight="18" id="PYn-eU-6Xv">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2056,7 +2056,7 @@
                             </constraints>
                         </view>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="gray" indentationWidth="10" reuseIdentifier="gradeDetail" rowHeight="49" id="qB1-u1-vOG" customClass="gradeDetailCell" customModule="MFSCalendar" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="gray" indentationWidth="10" reuseIdentifier="gradeDetail" rowHeight="49" id="qB1-u1-vOG" customClass="gradeDetailCell" customModule="MFSMobile" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="323.5" width="375" height="49"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="qB1-u1-vOG" id="Q3y-nQ-AI5">
@@ -2101,7 +2101,7 @@
                                     <outlet property="name" destination="arN-ek-zeF" id="dYU-g7-9u4"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="tableHeader" rowHeight="44" id="EVe-45-aoX" customClass="homeworkTableHeader" customModule="MFSCalendar" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="tableHeader" rowHeight="44" id="EVe-45-aoX" customClass="homeworkTableHeader" customModule="MFSMobile" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="372.5" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="EVe-45-aoX" id="qif-yM-rg8">
@@ -2127,7 +2127,7 @@
                                     <outlet property="titleLabel" destination="nJx-v6-03Q" id="bkx-KC-Bv9"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="chartsView" rowHeight="280" id="beY-tN-BE0" customClass="gradeBarChartCell" customModule="MFSCalendar" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="chartsView" rowHeight="280" id="beY-tN-BE0" customClass="gradeBarChartCell" customModule="MFSMobile" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="416.5" width="375" height="280"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="beY-tN-BE0" id="1eY-nf-0dt">
@@ -2169,7 +2169,7 @@
         <!--Class Topic View Controller-->
         <scene sceneID="pDN-vR-dIX">
             <objects>
-                <viewController storyboardIdentifier="topic" id="Huo-9L-6DL" customClass="classTopicViewController" customModule="MFSCalendar" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="topic" id="Huo-9L-6DL" customClass="classTopicViewController" customModule="MFSMobile" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="U8f-5C-1SM"/>
                         <viewControllerLayoutGuide type="bottom" id="pVC-5D-5Yh"/>
@@ -2188,7 +2188,7 @@
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="classTopicsCell" id="de9-43-B9u" customClass="classTopicsCell" customModule="MFSCalendar" customModuleProvider="target">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="classTopicsCell" id="de9-43-B9u" customClass="classTopicsCell" customModule="MFSMobile" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="185" height="155"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -2269,7 +2269,7 @@
         <!--Topic Detail View Controller-->
         <scene sceneID="MYT-rh-4Xk">
             <objects>
-                <viewController storyboardIdentifier="topicDetailViewController" id="oiM-Rv-hM3" customClass="topicDetailViewController" customModule="MFSCalendar" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="topicDetailViewController" id="oiM-Rv-hM3" customClass="topicDetailViewController" customModule="MFSMobile" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="8t9-Ie-fhA"/>
                         <viewControllerLayoutGuide type="bottom" id="Srm-Kg-I8Q"/>
@@ -2282,7 +2282,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="topicCell" rowHeight="207" id="dpy-bA-0mZ" customClass="topicDetailDescriptionCell" customModule="MFSCalendar" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="topicCell" rowHeight="207" id="dpy-bA-0mZ" customClass="topicDetailDescriptionCell" customModule="MFSMobile" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="55.5" width="375" height="207"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="dpy-bA-0mZ" id="d6D-aX-vzd">
@@ -2355,7 +2355,7 @@
         <!--Course List-->
         <scene sceneID="BuE-oZ-M9F">
             <objects>
-                <viewController storyboardIdentifier="courseList" title="Course List" automaticallyAdjustsScrollViewInsets="NO" id="0RJ-yP-WMX" customClass="classListController" customModule="MFSCalendar" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="courseList" title="Course List" automaticallyAdjustsScrollViewInsets="NO" id="0RJ-yP-WMX" customClass="classListController" customModule="MFSMobile" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="H3v-0I-48l"/>
                         <viewControllerLayoutGuide type="bottom" id="Zxt-55-9mI"/>
@@ -2375,7 +2375,7 @@
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="classListViewCell" id="Em0-DC-sP0" customClass="classListViewCell" customModule="MFSCalendar" customModuleProvider="target">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="classListViewCell" id="Em0-DC-sP0" customClass="classListViewCell" customModule="MFSMobile" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="70" width="181" height="151"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -2437,7 +2437,7 @@
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
-                                <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="classListHeaderViewCell" id="RKB-Ed-5rL" customClass="classListHeaderViewCell" customModule="MFSCalendar" customModuleProvider="target">
+                                <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="classListHeaderViewCell" id="RKB-Ed-5rL" customClass="classListHeaderViewCell" customModule="MFSMobile" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="70"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
@@ -2488,7 +2488,7 @@
         <!--Class Information-->
         <scene sceneID="fHt-qn-dU1">
             <objects>
-                <viewController storyboardIdentifier="classDetailViewController" title="Class Information" automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" id="8Ug-j0-Kmo" customClass="classPagerViewController" customModule="MFSCalendar" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="classDetailViewController" title="Class Information" automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" id="8Ug-j0-Kmo" customClass="classPagerViewController" customModule="MFSMobile" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="0Ga-5R-Df4"/>
                         <viewControllerLayoutGuide type="bottom" id="WF9-7e-KiY"/>
@@ -2538,7 +2538,7 @@
         <!--Me-->
         <scene sceneID="kSK-pV-7Ke">
             <objects>
-                <collectionViewController storyboardIdentifier="more" title="Me" id="Q0f-l8-tfz" customClass="NewMoreViewController" customModule="MFSCalendar" customModuleProvider="target" sceneMemberID="viewController">
+                <collectionViewController storyboardIdentifier="more" title="Me" id="Q0f-l8-tfz" customClass="NewMoreViewController" customModule="MFSMobile" customModuleProvider="target" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsVerticalScrollIndicator="NO" dataMode="prototypes" id="xJu-be-hzF">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2550,7 +2550,7 @@
                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         </collectionViewFlowLayout>
                         <cells>
-                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" misplaced="YES" reuseIdentifier="profile" id="LV0-nG-5NP" customClass="ProfileCollectionCell" customModule="MFSCalendar" customModuleProvider="target">
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" misplaced="YES" reuseIdentifier="profile" id="LV0-nG-5NP" customClass="ProfileCollectionCell" customModule="MFSMobile" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="5" width="375" height="120"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
@@ -2623,7 +2623,7 @@
                                     <outlet property="view" destination="9w1-bn-bTY" id="Wz5-zf-gNj"/>
                                 </connections>
                             </collectionViewCell>
-                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" misplaced="YES" reuseIdentifier="menu" id="GOP-kq-PAR" customClass="MenuCollectionCell" customModule="MFSCalendar" customModuleProvider="target">
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" misplaced="YES" reuseIdentifier="menu" id="GOP-kq-PAR" customClass="MenuCollectionCell" customModule="MFSMobile" customModuleProvider="target">
                                 <rect key="frame" x="114.5" y="127" width="146" height="148"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
@@ -2707,7 +2707,7 @@
         <!--Settings-->
         <scene sceneID="dCL-MH-bcM">
             <objects>
-                <tableViewController title="Settings" id="XRE-Nj-Rag" customClass="settingViewController" customModule="MFSCalendar" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController title="Settings" id="XRE-Nj-Rag" customClass="settingViewController" customModule="MFSMobile" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="qtr-Lw-dXe">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2756,7 +2756,7 @@
         <!--About-->
         <scene sceneID="RfK-T2-m1d">
             <objects>
-                <tableViewController storyboardIdentifier="about" title="About" useStoryboardIdentifierAsRestorationIdentifier="YES" id="3kg-Bk-lvv" customClass="aboutView" customModule="MFSCalendar" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="about" title="About" useStoryboardIdentifierAsRestorationIdentifier="YES" id="3kg-Bk-lvv" customClass="aboutView" customModule="MFSMobile" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="BL3-4k-nFQ">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

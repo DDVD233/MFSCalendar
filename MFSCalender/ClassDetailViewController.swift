@@ -511,25 +511,29 @@ extension classDetailViewController {
 
         let dataTask = session.dataTask(with: request3, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
             if error == nil {
-                guard let json = JSON(data: data!).arrayObject as? [NSDictionary] else {
-                    semaphore.signal()
-                    return
+                do {
+                    guard let json = try JSON(data: data!).arrayObject as? [NSDictionary] else {
+                        semaphore.signal()
+                        return
+                    }
+                    
+                    var arrayToWrite = [NSDictionary]()
+                    
+                    for items in json {
+                        let dictToAdd: NSMutableDictionary = [:]
+                        dictToAdd["Description"] = items["Description"]
+                        dictToAdd["ShortDescription"] = items["ShortDescription"]
+                        dictToAdd["Attachment"] = items["Attachment"]
+                        dictToAdd["AttachmentQueryString"] = items["AttachmentQueryString"]
+                        arrayToWrite.append(dictToAdd)
+                    }
+                    
+                    let photoPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
+                    let path = photoPath.appending("/\(sectionId)_syllabus.plist")
+                    NSArray(array: arrayToWrite).write(toFile: path, atomically: true)
+                } catch {
+                    presentErrorMessage(presentMessage: error.localizedDescription, layout: .statusLine)
                 }
-
-                var arrayToWrite = [NSDictionary]()
-
-                for items in json {
-                    let dictToAdd: NSMutableDictionary = [:]
-                    dictToAdd["Description"] = items["Description"]
-                    dictToAdd["ShortDescription"] = items["ShortDescription"]
-                    dictToAdd["Attachment"] = items["Attachment"]
-                    dictToAdd["AttachmentQueryString"] = items["AttachmentQueryString"]
-                    arrayToWrite.append(dictToAdd)
-                }
-
-                let photoPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-                let path = photoPath.appending("/\(sectionId)_syllabus.plist")
-                NSArray(array: arrayToWrite).write(toFile: path, atomically: true)
             } else {
                 presentErrorMessage(presentMessage: error!.localizedDescription, layout: .statusLine)
             }
