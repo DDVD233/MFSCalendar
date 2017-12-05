@@ -216,16 +216,16 @@ class homeworkViewController: UITableViewController, UIViewControllerPreviewingD
         }
     }
     
-    override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        if scrollView.panGestureRecognizer.translation(in: scrollView).y < 0{
-            changeTabBar(hidden: true, animated: true)
-        }
-        else{
-            changeTabBar(hidden: false, animated: true)
-        }
-    }
-    
-    func changeTabBar(hidden:Bool, animated: Bool){
+//    override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+//        if scrollView.panGestureRecognizer.translation(in: scrollView).y < 0{
+//            changeTabBar(hidden: true, animated: true)
+//        }
+//        else{
+//            changeTabBar(hidden: false, animated: true)
+//        }
+//    }
+//
+//    func changeTabBar(hidden:Bool, animated: Bool){
 //        guard var tabBar = self.tabBarController?.tabBar else { return }
 //        if tabBar.isHidden == hidden{ return }
 //        let frame = tabBar.frame
@@ -240,7 +240,7 @@ class homeworkViewController: UITableViewController, UIViewControllerPreviewingD
 //                                    print($0)
 //                                    if $0 {tabBar?.hidden = hidden}
 //        })
-    }
+//    }
 
     
     func stringForHeaderInSection(section: Int) -> String {

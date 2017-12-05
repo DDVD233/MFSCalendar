@@ -397,6 +397,7 @@ class HomeworkView {
     }
     
     func updateAssignmentStatus(assignmentIndexId: String, assignmentStatus: String) throws {
+        guard loginAuthentication().success else { return }
         var success = true
         let url = "https://mfriends.myschoolapp.com/api/assignment2/assignmentstatusupdate/?format=json&assignmentIndexId=\(assignmentIndexId)&assignmentStatus=\(assignmentStatus)"
         
@@ -411,12 +412,12 @@ class HomeworkView {
         config.requestCachePolicy = .reloadIgnoringLocalCacheData
         let session = URLSession(configuration: config)
         let semaphore = DispatchSemaphore(value: 0)
-        getRequestVerification()
+        //getRequestVerification()
         
         let task: URLSessionDataTask = session.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
             if error == nil {
                 print(url)
-                print(try? JSON(data))
+                print("[Header]" + String(describing: request.allHTTPHeaderFields))
                 //print(try? JSONSerialization.jsonObject(with: data!, options: .allowFragments))
             } else {
                 success = false
