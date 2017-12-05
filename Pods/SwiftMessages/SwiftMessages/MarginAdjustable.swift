@@ -30,4 +30,3 @@ public protocol MarginAdjustable {
     /// Safe area bottom adjustment in iOS 11+
     var safeAreaBottomOffset: CGFloat { get set }
 }
-

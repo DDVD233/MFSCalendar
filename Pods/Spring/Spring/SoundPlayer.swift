@@ -23,7 +23,7 @@
 import UIKit
 import AudioToolbox
 
-public struct SoundPlayer {
+struct SoundPlayer {
     
     static var filename : String?
     static var enabled : Bool = true
@@ -32,7 +32,7 @@ public struct SoundPlayer {
         static var cache = [URL:SystemSoundID]()
     }
     
-    public static func playSound(soundFile: String) {
+    static func playSound(soundFile: String) {
         
         if !enabled {
             return

@@ -1,11 +1,11 @@
-project 'MFSMobile.xcodeproj'
+project 'MFSCalendar.xcodeproj'
 source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '8.0'
 use_frameworks!
 # Main 
 
 
-target 'MFSMobile' do
+target 'MFSCalendar' do
   pod 'SwiftMessages'
   pod 'NVActivityIndicatorView'
   pod 'UICircularProgressRing'
@@ -32,7 +32,7 @@ target 'MFSMobile' do
   pod 'JSQWebViewController'
   pod 'Down', :git => 'https://github.com/iwasrobbed/Down.git', :branch => 'master'
 
-  pod 'Spring', :git => 'https://github.com/MengTo/Spring.git'
+  pod 'Spring', :git => 'https://github.com/MengTo/Spring.git', :branch => 'swift4'
   pod 'Kanna', :git => 'https://github.com/tid-kijyun/Kanna.git', :branch => 'feature/v4.0.0'
   pod 'SVProgressHUD'
   pod 'UrbanAirship-iOS-SDK'
@@ -42,5 +42,5 @@ end
 
 post_install do |installer|
   require 'fileutils'
-  FileUtils.cp_r('Pods/Target Support Files/Pods-MFSMobile/Pods-MFSMobile-acknowledgements.markdown', 'MFSCalender/Acknowledgements.markdown', :remove_destination => true)
+  FileUtils.cp_r('Pods/Target Support Files/Pods-MFSCalendar/Pods-MFSCalendar-acknowledgements.markdown', 'MFSCalender/Acknowledgements.markdown', :remove_destination => true)
 end

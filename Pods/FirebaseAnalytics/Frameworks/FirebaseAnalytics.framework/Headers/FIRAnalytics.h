@@ -91,8 +91,7 @@ FIR_SWIFT_NAME(Analytics)
 /// viewDidAppear in your UIViewController but do not call [super viewDidAppear:], that screen class
 /// will not be automatically tracked. The class name can optionally be overridden by calling this
 /// method in the viewDidAppear callback of your UIViewController and specifying the
-/// screenClassOverride parameter. setScreenName:screenClass: must be called after
-/// [super viewDidAppear:].
+/// screenClassOverride parameter.
 ///
 /// If your app does not use a distinct UIViewController for each screen, you should call this
 /// method and specify a distinct screenName each time a new screen is presented to the user.

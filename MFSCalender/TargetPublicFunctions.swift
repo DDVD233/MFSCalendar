@@ -23,29 +23,23 @@ func areEqual<T:Equatable>(type: T.Type, a: Any?, b: Any?) -> Bool? {
     return a == b
 }
 
-public func getRequestVerification() {
-    let url = URL(string: "https://mfriends.myschoolapp.com/app#login")!
-    let semaphore = DispatchSemaphore.init(value:0)
-    let session = URLSession.shared
-    let task = session.dataTask(with: url, completionHandler: { (data, response, error) -> Void in
-        print(HTTPCookieStorage().cookies)
-//        semaphore.signal()
-    })
-//    Alamofire.request(url).response(queue: DispatchQueue.global(), completionHandler:  { result in
+//public func getRequestVerification() {
+//    let url = URL(string: "https://mfriends.myschoolapp.com/app#login")!
+//    let semaphore = DispatchSemaphore.init(value: 0)
+//    let task = URLSession.shared.dataTask(with: url, completionHandler: {(data, response, error) in
 //        semaphore.signal()
 //    })
-    
-    task.resume()
+//    
+//    task.resume()
 //    semaphore.wait()
-    
-    
-    loginAuthentication()
-    
+//    
+//    loginAuthentication()
+//    
 //    let htmlReqUrl = URL(string: "https://mfriends.myschoolapp.com/app/student")!
-//    Alamofire.request(htmlReqUrl).response(completionHandler: { result in
-//        print(result.response?.allHeaderFields)
+//    let task2 = URLSession.shared.dataTask(with: htmlReqUrl, completionHandler: { (data, response, error) in
+//        
 //    })
-}
+//}
 
 @available(iOS 11.0, *)
 func setLargeTitle(on viewController: UIViewController) {
@@ -289,11 +283,7 @@ class ClassView {
 
         let dataTask = session.dataTask(with: request3, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
             if error == nil {
-                guard let json = try? JSON(data: data!) else {
-                    semaphore.signal()
-                    presentErrorMessage(presentMessage: "Incorrect JSON format.", layout: .statusLine)
-                    return 
-                }
+                let json = JSON(data: data!)
                 if let filePath = json[0]["FilenameUrl"].string {
                     photoLink = "https:" + filePath
                 } else {
@@ -397,7 +387,6 @@ class HomeworkView {
     }
     
     func updateAssignmentStatus(assignmentIndexId: String, assignmentStatus: String) throws {
-        guard loginAuthentication().success else { return }
         var success = true
         let url = "https://mfriends.myschoolapp.com/api/assignment2/assignmentstatusupdate/?format=json&assignmentIndexId=\(assignmentIndexId)&assignmentStatus=\(assignmentStatus)"
         
@@ -412,12 +401,9 @@ class HomeworkView {
         config.requestCachePolicy = .reloadIgnoringLocalCacheData
         let session = URLSession(configuration: config)
         let semaphore = DispatchSemaphore(value: 0)
-        //getRequestVerification()
         
         let task: URLSessionDataTask = session.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
             if error == nil {
-                print(url)
-                print("[Header]" + String(describing: request.allHTTPHeaderFields))
                 //print(try? JSONSerialization.jsonObject(with: data!, options: .allowFragments))
             } else {
                 success = false

@@ -123,37 +123,33 @@ class courseFillController: UIViewController {
 
         let downloadTask = session.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
             if error == nil {
-                do {
-                    guard var courseData = try JSON(data: data!).arrayObject else {
-                        semaphore.signal()
-                        return
-                    }
-                    
-                    print(courseData)
-                    
-                    for (index, item) in courseData.enumerated() {
-                        var course = (item as! NSDictionary).mutableCopy() as! Dictionary<String, Any>
-                        print(course)
-                        course["className"] = course["sectionidentifier"] as? String
-                        course["teacherName"] = course["groupownername"] as? String
-                        //                    If I do not delete nill value, it will not be able to write to plist.
-                        for (key, value) in course {
-                            if (value as? NSNull) == NSNull() {
-                                course[key] = ""
-                            }
-                        }
-                        courseData[index] = course
-                    }
-                    
-                    let coursePath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-                    let path = coursePath.appending("/CourseList.plist")
-                    print(path)
-                    
-                    NSArray(array: courseData).write(toFile: path, atomically: true)
-                    success = true
-                } catch {
-                    presentErrorMessage(presentMessage: error.localizedDescription, layout: .statusLine)
+                guard var courseData = JSON(data: data!).arrayObject else {
+                    semaphore.signal()
+                    return
                 }
+                
+                print(courseData)
+
+                for (index, item) in courseData.enumerated() {
+                    var course = (item as! NSDictionary).mutableCopy() as! Dictionary<String, Any>
+                    print(course)
+                    course["className"] = course["sectionidentifier"] as? String
+                    course["teacherName"] = course["groupownername"] as? String
+//                    If I do not delete nill value, it will not be able to write to plist.
+                    for (key, value) in course {
+                        if (value as? NSNull) == NSNull() {
+                            course[key] = ""
+                        }
+                    }
+                    courseData[index] = course
+                }
+
+                let coursePath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
+                let path = coursePath.appending("/CourseList.plist")
+                print(path)
+
+                NSArray(array: courseData).write(toFile: path, atomically: true)
+                success = true
             } else {
                 presentErrorMessage(presentMessage: error!.localizedDescription, layout: .statusLine)
             }
