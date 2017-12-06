@@ -283,7 +283,7 @@ class ClassView {
 
         let dataTask = session.dataTask(with: request3, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
             if error == nil {
-                let json = JSON(data: data!)
+                let json = try! JSON(data: data!)
                 if let filePath = json[0]["FilenameUrl"].string {
                     photoLink = "https:" + filePath
                 } else {

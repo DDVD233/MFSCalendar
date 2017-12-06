@@ -123,7 +123,7 @@ class courseFillController: UIViewController {
 
         let downloadTask = session.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
             if error == nil {
-                guard var courseData = JSON(data: data!).arrayObject else {
+                guard var courseData = try! JSON(data: data!).arrayObject else {
                     semaphore.signal()
                     return
                 }

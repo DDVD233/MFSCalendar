@@ -7,8 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		9616020D2678949E980D3631 /* Pods_MFSCalendar.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C9307D95D24FE30AFAEDD40 /* Pods_MFSCalendar.framework */; };
-		A81D57C8AAC5C7709E22D1CB /* Pods_MFSCalendar.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E48F15A81F74687200A36904 /* Pods_MFSCalendar.framework */; };
+		7ED7944ABD6D3326AAD92DBA /* Pods_MFSMobile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DF673FDDB9EA200FEA7BD2D /* Pods_MFSMobile.framework */; };
 		E413AB0E1EE89441001EB189 /* Achievement.png in Resources */ = {isa = PBXBuildFile; fileRef = E413AB0D1EE89441001EB189 /* Achievement.png */; };
 		E413AB101EE89683001EB189 /* questionmark.png in Resources */ = {isa = PBXBuildFile; fileRef = E413AB0F1EE89683001EB189 /* questionmark.png */; };
 		E413AB121EE8A796001EB189 /* brush_pencil.png in Resources */ = {isa = PBXBuildFile; fileRef = E413AB111EE8A796001EB189 /* brush_pencil.png */; };
@@ -129,7 +128,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		7DF673FDDB9EA200FEA7BD2D /* Pods_MFSMobile.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MFSMobile.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		97446954E2D625EE1380762C /* Pods-MFSMobile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MFSMobile.release.xcconfig"; path = "Pods/Target Support Files/Pods-MFSMobile/Pods-MFSMobile.release.xcconfig"; sourceTree = "<group>"; };
 		9C9307D95D24FE30AFAEDD40 /* Pods_MFSCalendar.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MFSCalendar.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A4CA14223E8B31A5B7F590F6 /* Pods-MFSMobile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MFSMobile.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MFSMobile/Pods-MFSMobile.debug.xcconfig"; sourceTree = "<group>"; };
 		B710C5F6924F68DB86B70E20 /* Pods-MFSCalendar.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MFSCalendar.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MFSCalendar/Pods-MFSCalendar.debug.xcconfig"; sourceTree = "<group>"; };
 		E413AB0D1EE89441001EB189 /* Achievement.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Achievement.png; sourceTree = "<group>"; };
 		E413AB0F1EE89683001EB189 /* questionmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = questionmark.png; sourceTree = "<group>"; };
@@ -267,8 +269,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9616020D2678949E980D3631 /* Pods_MFSCalendar.framework in Frameworks */,
-				A81D57C8AAC5C7709E22D1CB /* Pods_MFSCalendar.framework in Frameworks */,
+				7ED7944ABD6D3326AAD92DBA /* Pods_MFSMobile.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -280,6 +281,8 @@
 			children = (
 				B710C5F6924F68DB86B70E20 /* Pods-MFSCalendar.debug.xcconfig */,
 				F67135CC47E915B369ECF057 /* Pods-MFSCalendar.release.xcconfig */,
+				A4CA14223E8B31A5B7F590F6 /* Pods-MFSMobile.debug.xcconfig */,
+				97446954E2D625EE1380762C /* Pods-MFSMobile.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -336,6 +339,7 @@
 				E48F15B51F74687200A36904 /* XLPagerTabStrip.framework */,
 				E48D4E011E61FC26008B0A97 /* NotificationCenter.framework */,
 				9C9307D95D24FE30AFAEDD40 /* Pods_MFSCalendar.framework */,
+				7DF673FDDB9EA200FEA7BD2D /* Pods_MFSMobile.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -695,7 +699,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-MFSCalendar/Pods-MFSCalendar-frameworks.sh",
+				"${SRCROOT}/Pods/Target Support Files/Pods-MFSMobile/Pods-MFSMobile-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/DGElasticPullToRefresh/DGElasticPullToRefresh.framework",
 				"${BUILT_PRODUCTS_DIR}/DZNEmptyDataSet/DZNEmptyDataSet.framework",
@@ -754,7 +758,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MFSCalendar/Pods-MFSCalendar-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MFSMobile/Pods-MFSMobile-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		C00B6DBCAB10894AA9BA0467 /* [CP] Check Pods Manifest.lock */ = {
@@ -828,7 +832,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MFSCalendar/Pods-MFSCalendar-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MFSMobile/Pods-MFSMobile-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -1187,7 +1191,7 @@
 		};
 		E4F86B431DF0E20C00CAD72B /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B710C5F6924F68DB86B70E20 /* Pods-MFSCalendar.debug.xcconfig */;
+			baseConfigurationReference = A4CA14223E8B31A5B7F590F6 /* Pods-MFSMobile.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-Plan D";
@@ -1205,7 +1209,7 @@
 		};
 		E4F86B441DF0E20C00CAD72B /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F67135CC47E915B369ECF057 /* Pods-MFSCalendar.release.xcconfig */;
+			baseConfigurationReference = 97446954E2D625EE1380762C /* Pods-MFSMobile.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-Plan D";

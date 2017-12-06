@@ -1,6 +1,6 @@
 {
   "name": "SkyFloatingLabelTextField",
-  "version": "3.3.0",
+  "version": "3.4.0",
   "summary": "A beautiful, flexible and customizable textfield that minimizes space when displaying additional context.",
   "homepage": "https://github.com/Skyscanner/SkyFloatingLabelTextField",
   "license": {
@@ -13,7 +13,7 @@
   },
   "source": {
     "git": "https://github.com/Skyscanner/SkyFloatingLabelTextField.git",
-    "tag": "v3.3.0"
+    "tag": "v3.4.0"
   },
   "source_files": "Sources/*.swift"
 }

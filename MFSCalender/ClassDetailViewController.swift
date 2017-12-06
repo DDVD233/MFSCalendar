@@ -511,7 +511,7 @@ extension classDetailViewController {
 
         let dataTask = session.dataTask(with: request3, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
             if error == nil {
-                guard let json = JSON(data: data!).arrayObject as? [NSDictionary] else {
+                guard let json = try! JSON(data: data!).arrayObject as? [NSDictionary] else {
                     semaphore.signal()
                     return
                 }
