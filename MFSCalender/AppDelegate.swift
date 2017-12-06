@@ -21,14 +21,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        let args = ProcessInfo.processInfo.arguments
-        if args.contains("UITEST") {
-            let preference = Preferences()
-            preference.username = nil
-            preference.password = nil
-            preference.didLogin = false
-        }
-        
         FirebaseApp.configure()
         Fabric.with([Crashlytics()])
         logUser()

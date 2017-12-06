@@ -321,19 +321,19 @@ class EventView {
     let formatter = DateFormatter()
     
     func getTimeInterval(rowDict: [String: Any?]) -> String {
-        let isAllDay = rowDict["isAllDay"] as? Int ?? 0
+        let isAllDay = rowDict["isAllDay"] as! Int
         if isAllDay == 1 {
             return "All Day"
         } else {
             let tEnd = rowDict["tEnd"] as! Int
             updateFormatterFormat(time: tEnd)
-            guard let timeEnd = formatter.date(from: String(describing: tEnd)) else { return "" }
+            let timeEnd = formatter.date(from: String(describing: tEnd))
             let tStart = rowDict["tStart"] as! Int
             updateFormatterFormat(time: tStart)
-            guard let timeStart = formatter.date(from: String(describing: tStart)) else { return "" }
+            let timeStart = formatter.date(from: String(describing: tStart))
             formatter.dateFormat = "h:mm a"
-            let startString = formatter.string(from: timeStart)
-            let endString = formatter.string(from: timeEnd)
+            let startString = formatter.string(from: timeStart!)
+            let endString = formatter.string(from: timeEnd!)
             return startString + " - " + endString
         }
     }
@@ -404,7 +404,9 @@ class HomeworkView {
         
         let task: URLSessionDataTask = session.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
             if error == nil {
-                //print(try? JSONSerialization.jsonObject(with: data!, options: .allowFragments))
+                print(url)
+                print(try? JSONSerialization.jsonObject(with: data!, options: .allowFragments))
+                print(response!)
             } else {
                 success = false
                 presentErrorMessage(presentMessage: error!.localizedDescription, layout: .statusLine)
@@ -428,14 +430,14 @@ class NetworkOperations {
         let request = URLRequest(url: URL(string: "https://dwei.org/currentDurationId")!)
         var strReturn: String? = nil
         let semaphore = DispatchSemaphore.init(value: 0)
-
+        
         let task = session.dataTask(with: request, completionHandler: { (data, _, error) -> Void in
             if error == nil {
                 strReturn = String(data: data!, encoding: .utf8)
             }
             semaphore.signal()
         })
-
+        
         task.resume()
         semaphore.wait()
         return strReturn

@@ -19,7 +19,7 @@ import SVProgressHUD
 
 class classDetailViewController: UITableViewController, UIDocumentInteractionControllerDelegate {
 
-    var classObject = [String: Any]()
+    var classObject = ClassView().getTheClassToPresent() ?? [String: Any]()
     var availableInformation = [String]()
     var sectionShouldShowMore = [String: Bool]()
     var overrideHeader = [String: String]()
@@ -66,7 +66,6 @@ class classDetailViewController: UITableViewController, UIDocumentInteractionCon
     }
 
     func loadContent() {
-        classObject = ClassView().getTheClassToPresent() ?? [String: Any]()
 
 //        if teacherName.text.existsAndNotEmpty() || roomNumber.text.existsAndNotEmpty() && !availableInformation.contains("Basic") {
 //            //            其中一个不为空,且目前还没有这一项时
@@ -79,7 +78,7 @@ class classDetailViewController: UITableViewController, UIDocumentInteractionCon
     }
     
     func configureBasicInfoView() {
-        guard let sectionId = classObject["leadsectionid"] as? Int else { return }
+        let sectionId = classObject["leadsectionid"] as! Int
         let photoPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
         let path = photoPath.appending("/\(sectionId)_profile.png")
         profileImageView.image = UIImage(contentsOfFile: path) ?? UIImage(named: "CourseBackground.jpg")!

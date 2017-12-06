@@ -92,8 +92,11 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     var listEvents = [[String: Any]]()
     var listClasses = [[String: Any?]]()
     var listHomework = [String: Array<Dictionary<String, Any?>>]()
+    var timer: Timer? = nil
 //    Format: {Lead_Section_ID: [Homework]}
+    var isVisible = true
 
+    let reachability = Reachability()!
     var screenWidth = UIScreen.main.bounds.width
 
     override func viewDidLoad() {
@@ -149,27 +152,22 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
 
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.setNavigationBarHidden(true, animated: false)
+        isVisible = true
     }
 
     override func viewDidAppear(_ animated: Bool) {
         //classViewHeightConstraint.constant = classView.contentSize.height
 
+//        Add "== true" to prevent force unwrap.
         guard Preferences().didLogin else {
-            if let vc = self.storyboard?.instantiateViewController(withIdentifier: "ftController") as? firstTimeLaunchController {
-                if isViewLoaded && view.window != nil {
-                    self.present(vc, animated: true, completion: nil)
-                }
-            }
+            let vc = self.storyboard?.instantiateViewController(withIdentifier: "ftController") as! firstTimeLaunchController
+            self.present(vc, animated: true, completion: nil)
             return
         }
 
         guard Preferences().courseInitialized else {
-            if let vc = self.storyboard?.instantiateViewController(withIdentifier: "courseFillController") {
-                if isViewLoaded && view.window != nil {
-                    self.present(vc, animated: true, completion: nil)
-                }
-                
-            }
+            let vc = self.storyboard?.instantiateViewController(withIdentifier: "courseFillController")
+            self.present(vc!, animated: true, completion: nil)
             return
         }
 
@@ -192,30 +190,21 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         if !userDefaults.bool(forKey: "didShowMobileServe") && Preferences().isStudent {
             userDefaults.set(true, forKey: "didShowMobileServe")
             if let mobileServeIntro = storyboard?.instantiateViewController(withIdentifier: "mobileServeIntro") {
-                if isViewLoaded && view.window != nil {
-                    self.present(mobileServeIntro, animated: true)
-                }
+                self.present(mobileServeIntro, animated: true)
             }
         }
-        
-//        DispatchQueue.global().async {
-//            self.autoRefreshContents()
-//        }
     }
     
     func autoRefreshContents() {
-        while isViewLoaded && view.window != nil {
-            DispatchQueue.global().async {
-                self.refreshDisplayedData()
-            }
-            print("Content refreshed")
-            sleep(1)
+        DispatchQueue.global().async {
+            self.refreshDisplayedData()
         }
+        print("Content refreshed")
     }
 
     override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(true)
         navigationController?.setNavigationBarHidden(false, animated: false)
+        isVisible = false
     }
 
     func updateData() {
@@ -230,10 +219,8 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         })
 
         group.wait()
-        
-        if isViewLoaded && (view.window != nil) {
-            refreshDisplayedData()
-        }
+
+        self.refreshDisplayedData()
         
         DispatchQueue.global().async {
             ClassView().getProfilePhoto()
@@ -246,9 +233,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     
     func presentCourseFillView() {
         if let vc = self.storyboard?.instantiateViewController(withIdentifier: "courseFillController") {
-            if isViewLoaded && view.window != nil {
-                self.present(vc, animated: true, completion: nil)
-            }
+            self.present(vc, animated: true, completion: nil)
         } else {
             presentErrorMessage(presentMessage: "Cannot find course fill page", layout: .statusLine)
         }
@@ -257,9 +242,9 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     func refreshDisplayedData() {
         eventDataFetching()
         periodCheck(day: dayCheck())
+        setupTheHeader()
 
         DispatchQueue.main.async {
-            self.setupTheHeader()
             self.classView.reloadData()
             self.eventView.reloadData()
         }
@@ -275,7 +260,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     }
 
     func downloadLargeProfilePhoto() {
-        if Reachability()?.connection == .wifi {
+        if reachability.connection == .wifi {
             if let largeFileLink = userDefaults.string(forKey: "largePhotoLink") {
                 provider.request(.downloadLargeProfilePhoto(link: largeFileLink), completion: { result in
                     switch result {
@@ -363,30 +348,32 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     func setupTheHeader() {
         let day = dayCheck()
         
-        let date = Date()
-        let formatter = DateFormatter()
-        formatter.dateFormat = "EEEE, MMMM d."
-        //MMMM d, yyyy
-        var today = formatter.string(from: date)
-        let labelAttributes = [NSAttributedStringKey.font:
-            UIFont.init(name: self.dateLabel.font.fontName, size: self.dateLabel.font.pointSize) ?? UIFont()]
-        if NSString(string: today).size(withAttributes: labelAttributes).width > self.dateLabel.bounds.size.width - 10 {
-            formatter.dateFormat = "EEEE, MMM d."
-            today = formatter.string(from: date)
+        DispatchQueue.main.async {
+            let date = Date()
+            let formatter = DateFormatter()
+            formatter.dateFormat = "EEEE, MMMM d."
+            //MMMM d, yyyy
+            var today = formatter.string(from: date)
+            let labelAttributes = [NSAttributedStringKey.font:
+                UIFont.init(name: self.dateLabel.font.fontName, size: self.dateLabel.font.pointSize) ?? UIFont()]
+            if NSString(string: today).size(withAttributes: labelAttributes).width > self.dateLabel.bounds.size.width - 10 {
+                formatter.dateFormat = "EEEE, MMM d."
+                today = formatter.string(from: date)
+            }
+            
+            if NSString(string: today).size(withAttributes: labelAttributes).width > self.dateLabel.bounds.size.width - 10 {
+                formatter.dateFormat = "EE, MMM d."
+                today = formatter.string(from: date)
+            }
+            if day == "No School" {
+                self.dayLabel.text = "No school today,"
+            } else {
+                self.dayLabel.text = "Today is " + day + " Day,"
+            }
+            self.welcomeLabel.text = "Welcome back, " + (Preferences().firstName ?? "") + "!"
+            
+            self.dateLabel.text = today
         }
-        
-        if NSString(string: today).size(withAttributes: labelAttributes).width > self.dateLabel.bounds.size.width - 10 {
-            formatter.dateFormat = "EE, MMM d."
-            today = formatter.string(from: date)
-        }
-        if day == "No School" {
-            self.dayLabel.text = "No school today,"
-        } else {
-            self.dayLabel.text = "Today is " + day + " Day,"
-        }
-        self.welcomeLabel.text = "Welcome back, " + (Preferences().firstName ?? "") + "!"
-        
-        self.dateLabel.text = today
 
     }
 

@@ -1,11 +1,11 @@
-project 'MFSMobile.xcodeproj'
+project 'MFSCalendar.xcodeproj'
 source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '8.0'
 use_frameworks!
 # Main 
 
 
-target 'MFSMobile' do
+target 'MFSCalendar' do
   pod 'SwiftMessages'
   pod 'NVActivityIndicatorView'
   pod 'UICircularProgressRing'
@@ -42,5 +42,5 @@ end
 
 post_install do |installer|
   require 'fileutils'
-  FileUtils.cp_r('Pods/Target Support Files/Pods-MFSMobile/Pods-MFSMobile-acknowledgements.markdown', 'MFSCalender/Acknowledgements.markdown', :remove_destination => true)
+  FileUtils.cp_r('Pods/Target Support Files/Pods-MFSCalendar/Pods-MFSCalendar-acknowledgements.markdown', 'MFSCalender/Acknowledgements.markdown', :remove_destination => true)
 end

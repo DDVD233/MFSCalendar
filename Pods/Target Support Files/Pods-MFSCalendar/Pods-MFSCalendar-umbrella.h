@@ -11,6 +11,6 @@
 #endif
 
 
-FOUNDATION_EXPORT double Pods_MFSMobileVersionNumber;
-FOUNDATION_EXPORT const unsigned char Pods_MFSMobileVersionString[];
+FOUNDATION_EXPORT double Pods_MFSCalendarVersionNumber;
+FOUNDATION_EXPORT const unsigned char Pods_MFSCalendarVersionString[];
 
