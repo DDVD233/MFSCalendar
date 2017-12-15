@@ -36,7 +36,7 @@ class gradeViewController: UITableViewController {
     @IBOutlet var sectionGradeChart: BarChartView!
     
     let dateFormatter = DateFormatter()
-    var quarterSelected: Quarters = .first
+    var quarterSelected: Quarters = .second
     
 
     var cumGrade: Float = 0 {

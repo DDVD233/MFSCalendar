@@ -1200,7 +1200,7 @@
 			baseConfigurationReference = B710C5F6924F68DB86B70E20 /* Pods-MFSCalendar.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-Plan O";
 				CODE_SIGN_ENTITLEMENTS = MFSCalender/MFSCalender.entitlements;
 				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				INFOPLIST_FILE = MFSCalender/Info.plist;
@@ -1218,7 +1218,7 @@
 			baseConfigurationReference = F67135CC47E915B369ECF057 /* Pods-MFSCalendar.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-Plan O";
 				CODE_SIGN_ENTITLEMENTS = MFSCalender/MFSCalender.entitlements;
 				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				INFOPLIST_FILE = MFSCalender/Info.plist;
