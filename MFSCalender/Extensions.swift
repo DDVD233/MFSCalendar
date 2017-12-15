@@ -75,15 +75,16 @@ extension String {
         return self.data(using: .utf8)!
     }
 
-    func convertToHtml(attribute: String = "Default") -> NSAttributedString? {
+    func convertToHtml(isTitle: Bool = false) -> NSAttributedString? {
         let font = UIFont.systemFont(ofSize: 15).fontName
+        let fontSize = isTitle ? "23" : "16"
         CLSLogv("String to convert to HTML: %@", getVaList([self]))
         let htmlString = "<html>" +
                 "<head>" +
                 "<style>" +
                 "body {" +
                 "font-family: '\(font)';" +
-                "font-size:16px;" +
+                "font-size:\(fontSize)px;" +
                 "text-decoration:none;" +
                 "}" +
                 "</style>" +

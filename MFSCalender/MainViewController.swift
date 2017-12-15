@@ -183,16 +183,16 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
             }
         }
         
-        if Preferences().doPresentServiceView {
-            self.tabBarController?.selectedIndex = 4
-        }
-        
-        if !userDefaults.bool(forKey: "didShowMobileServe") && Preferences().isStudent {
-            userDefaults.set(true, forKey: "didShowMobileServe")
-            if let mobileServeIntro = storyboard?.instantiateViewController(withIdentifier: "mobileServeIntro") {
-                self.present(mobileServeIntro, animated: true)
-            }
-        }
+//        if Preferences().doPresentServiceView {
+//            self.tabBarController?.selectedIndex = 4
+//        }
+//
+//        if !userDefaults.bool(forKey: "didShowMobileServe") && Preferences().isStudent {
+//            userDefaults.set(true, forKey: "didShowMobileServe")
+//            if let mobileServeIntro = storyboard?.instantiateViewController(withIdentifier: "mobileServeIntro") {
+//                self.present(mobileServeIntro, animated: true)
+//            }
+//        }
     }
     
     func autoRefreshContents() {
@@ -511,14 +511,8 @@ extension Main: UICollectionViewDelegate, UICollectionViewDataSource, UICollecti
         let classData = listClasses[row]
         let className = classData["className"] as? String
         let teacher = classData["teacherName"] as? String
-
-        if let roomNumber = classData["roomNumber"] as? String {
-            if !roomNumber.isEmpty {
-                cell.roomNumber.text = "AT: " + roomNumber
-            } else {
-                cell.roomNumber.text = nil
-            }
-        }
+        
+        cell.roomNumber.text = classData["roomNumber"] as? String ?? ""
 
         cell.teacher.text = teacher
         cell.className.text = className

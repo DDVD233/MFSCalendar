@@ -282,8 +282,8 @@ extension homeworKDetailViewController: UITableViewDelegate, UITableViewDataSour
                 cell.assignmentIndexID = String(describing: assignmentIndexID)
                 
                 
-                if let shortDescription = contentObject["title"] as? String {
-                    cell.title.text = shortDescription.replacingOccurrences(of: "<[^>]+>", with: "", options: .regularExpression, range: nil)
+                if let shortDescription = (contentObject["title"] as? String ?? "").convertToHtml(isTitle: true) {
+                    cell.title.attributedText = shortDescription
                 }
                 
                 let longDescription = contentObject["description"] as? String ?? ""
