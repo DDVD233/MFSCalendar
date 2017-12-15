@@ -15,7 +15,7 @@ class topicDetailViewController: UIViewController {
     let topicID = Preferences().topicID
     let topicIndexID = Preferences().topicIndexID
 
-    var topicData = [[String: Any?]]()
+    var topicData = [[String: Any]]()
 
     @IBOutlet var topicDetailTable: UITableView!
 
@@ -67,28 +67,33 @@ extension topicDetailViewController: UITableViewDelegate, UITableViewDataSource 
         // Note that index begins with 0
         return endIndex + 1
     }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "topicCell", for: indexPath) as! topicDetailDescriptionCell
+    
+    func topicObjectForCell(at indexPath: IndexPath) -> [String: Any]? {
+        var topicObject:[String: Any]? = nil
+        
         let topicObjectOfTheSection = topicData.filter({
             $0["CellIndex"] as? Int == indexPath.section
         })
-
-        var topicObject = [String: Any?]()
-
-//        In some rare cases, the sort order start with 1 and the first cell is missing.
+        
+        //        In some rare cases, the sort order start with 1 and the first cell is missing.
         if let thisTopicObject = topicObjectOfTheSection.filter({ $0["SortOrder"] as? Int == indexPath.row }).first {
             topicObject = thisTopicObject
         } else if topicObjectOfTheSection.indices.contains(indexPath.row) {
             topicObject = topicObjectOfTheSection[indexPath.row]
         }
+        
+        return topicObject
+    }
 
-        guard !topicObject.isEmpty else {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "topicCell", for: indexPath) as! topicDetailDescriptionCell
+
+        guard let topicObject = topicObjectForCell(at: indexPath) else {
             NSLog("Cell data not found")
             return UITableViewCell()
         }
 
-        cell.selectionStyle = .none
+        cell.selectionStyle = .default
 
         if let longDescription = topicObject["LongDescription"] as? String {
             if !longDescription.isEmpty {
@@ -104,57 +109,88 @@ extension topicDetailViewController: UITableViewDelegate, UITableViewDataSource 
             cell.longDescription.text = ""
         }
 
-        if let shortDescription = topicObject["ShortDescription"] as? String {
-            cell.link.setTitle(shortDescription, for: .normal)
-        } else {
-            cell.link.setTitle("", for: .normal)
-        }
+        let shortDescription = topicObject["ShortDescription"] as? String ?? ""
+        cell.title.text = shortDescription
 
         cell.imageView?.image = nil
 
-        if let url = topicObject["Url"] as? String {
-            cell.url = url
+        if topicObject["Url"] != nil {
             cell.linkImage.image = UIImage(named: "Link")
         }
 
-        if let filePath = topicObject["FilePath"] as? String, let fileName = topicObject["FileName"] as? String {
-            cell.filePath = "https://mfriends.myschoolapp.com" + filePath
-            cell.fileName = fileName
+        if topicObject["filePath"] != nil && topicObject["fileName"] != nil {
             cell.linkImage.image = UIImage(named: "Download")
         }
 
         cell.linkImage.contentMode = .scaleToFill
 
-        if cell.longDescription.text.isEmpty && (cell.link.titleLabel?.text ?? "").isEmpty {
+        if cell.longDescription.text.isEmpty && cell.title.text!.isEmpty {
             cell.isHidden = true
         }
 
         return cell
     }
-
-    func stringToHtml(string: String) -> NSAttributedString? {
-
-        let htmlString = "<html>" +
-                "<head>" +
-                "<style>" +
-                "body {" +
-                "font-family: 'Helvetica';" +
-                "font-size:15px;" +
-                "text-decoration:none;" +
-                "}" +
-                "</style>" +
-                "</head>" +
-                "<body>" +
-                string +
-                "</body></head></html>"
-
-        if let data = htmlString.data(using: .utf8, allowLossyConversion: true) {
-            if let formattedHtmlString = try? NSAttributedString(data: data, options: [.documentType: NSAttributedString.DocumentType.html, .characterEncoding: String.Encoding.utf8.rawValue], documentAttributes: nil) {
-                return formattedHtmlString
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let topicObject = topicObjectForCell(at: indexPath) else {
+            return
+        }
+        
+        var url = topicObject["Url"] as? String
+        var filePath: String? = nil
+        if let topicFilePath = topicObject["FilePath"] as? String {
+            filePath = "https://mfriends.myschoolapp.com" + topicFilePath
+        }
+        
+        let fileName = topicObject["FileName"] as? String
+        
+        if url != nil {
+            NetworkOperations().openLink(url: &url!, from: self)
+        } else if filePath != nil && fileName != nil {
+            DispatchQueue.main.async {
+                self.navigationController?.showProgress()
+                self.navigationController?.setIndeterminate(true)
+                SVProgressHUD.show()
+            }
+            
+            let path = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
+            let attachmentPath = path.appending("/" + fileName!)
+            NSLog("AttachmentPath: \(attachmentPath)")
+            //Init FileManager
+            let fileManager = FileManager.default
+            if fileManager.fileExists(atPath: attachmentPath) {
+                //          Open the existing attachment.
+                NSLog("Attempting to open file: \(fileName!)")
+                DispatchQueue.main.async {
+                    self.navigationController?.cancelProgress()
+                    SVProgressHUD.dismiss()
+                }
+                
+                NetworkOperations().openFile(fileUrl: URL(fileURLWithPath: attachmentPath), from: self)
+                return
+            }
+            
+            guard loginAuthentication().success else {
+                return
+            }
+            
+            let url = filePath! + fileName!
+            
+            let (fileURL, error) = NetworkOperations().downloadFile(url: URL(string: url)!, withName: fileName!)
+            DispatchQueue.main.async {
+                self.navigationController?.cancelProgress()
+                SVProgressHUD.dismiss()
+            }
+            
+            guard error == nil else {
+                presentErrorMessage(presentMessage: error!.localizedDescription, layout: .cardView)
+                return
+            }
+            
+            if fileURL != nil {
+                NetworkOperations().openFile(fileUrl: fileURL!, from: self)
             }
         }
-
-        return nil
     }
 }
 
@@ -187,7 +223,7 @@ extension topicDetailViewController {
             }
 
             do {
-                guard var json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? Array<Dictionary<String, Any?>> else {
+                guard var json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? Array<Dictionary<String, Any>> else {
                     NSLog("Json file has incorrect format")
                     return
                 }
@@ -212,7 +248,7 @@ extension topicDetailViewController {
         }
     }
 
-    func flattenColumn(data: inout Array<Dictionary<String, Any?>>) {
+    func flattenColumn(data: inout Array<Dictionary<String, Any>>) {
         var previousSectionIndex = -1
         var previousCellIndex = 0
 
@@ -250,7 +286,7 @@ extension topicDetailViewController: UIDocumentInteractionControllerDelegate {
 }
 
 class topicDetailDescriptionCell: UITableViewCell {
-    @IBOutlet var link: UIButton!
+    @IBOutlet var title: UILabel!
     @IBOutlet var longDescription: UITextView!
 
     @IBOutlet var linkImage: UIImageView!
@@ -273,52 +309,6 @@ class topicDetailDescriptionCell: UITableViewCell {
     }
     
     func openContent() {
-        if url != nil {
-            NetworkOperations().openLink(url: &url!, from: parentViewController!)
-        } else if filePath != nil && fileName != nil {
-            DispatchQueue.main.async {
-                self.parentViewController!.navigationController?.showProgress()
-                self.parentViewController!.navigationController?.setIndeterminate(true)
-                SVProgressHUD.show()
-            }
-            
-            let path = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-            let attachmentPath = path.appending("/" + fileName!)
-            NSLog("AttachmentPath: \(attachmentPath)")
-            //Init FileManager
-            let fileManager = FileManager.default
-            if fileManager.fileExists(atPath: attachmentPath) {
-                //          Open the existing attachment.
-                NSLog("Attempting to open file: \(fileName!)")
-                DispatchQueue.main.async {
-                    self.parentViewController!.navigationController?.cancelProgress()
-                    SVProgressHUD.dismiss()
-                }
-                
-                NetworkOperations().openFile(fileUrl: URL(fileURLWithPath: attachmentPath), from: parentViewController!)
-                return
-            }
-            
-            guard loginAuthentication().success else {
-                return
-            }
-            
-            let url = filePath! + fileName!
-            
-            let (fileURL, error) = NetworkOperations().downloadFile(url: URL(string: url)!, withName: fileName!)
-            DispatchQueue.main.async {
-                self.parentViewController!.navigationController?.cancelProgress()
-                SVProgressHUD.dismiss()
-            }
-            
-            guard error == nil else {
-                presentErrorMessage(presentMessage: error!.localizedDescription, layout: .cardView)
-                return
-            }
-            
-            if fileURL != nil {
-                NetworkOperations().openFile(fileUrl: fileURL!, from: parentViewController!)
-            }
-        }
+        
     }
 }

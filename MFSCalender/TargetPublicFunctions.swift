@@ -206,7 +206,8 @@ class ClassView {
                     return
                 }
                 
-                guard let photoURLPath = items["mostrecentgroupphoto"] as? String else {
+                guard let photoURLPath = self.getProfilePhotoLink(sectionId: String(describing: sectionIdInt)) else {
+                    NSLog("\(items["coursedescription"] as? String ?? "") has no photo.")
                     return
                 }
                 
@@ -214,16 +215,11 @@ class ClassView {
                     return
                 }
                 
-                guard !photoURLPath.isEmpty else {
-                    NSLog("\(items["coursedescription"] as? String ?? "") has no photo.")
-                    return
-                }
-                
                 let sectionId = String(sectionIdInt)
                 
-                let photoLink = "https://bbk12e1-cdn.myschoolcdn.com/736/photo/" + photoURLPath
+                //let photoLink = "https://bbk12e1-cdn.myschoolcdn.com/736/photo/" + photoURLPath
                 
-                let url = URL(string: photoLink)
+                let url = URL(string: photoURLPath)
                 
                 let downloadSemaphore = DispatchSemaphore.init(value: 0)
                 
@@ -264,7 +260,7 @@ class ClassView {
         return nil
     }
 
-    func getProfilePhotoLink(sectionId: String) -> String {
+    func getProfilePhotoLink(sectionId: String) -> String? {
         guard loginAuthentication().success else {
             return ""
         }
@@ -277,7 +273,7 @@ class ClassView {
         let config = URLSessionConfiguration.default
         config.requestCachePolicy = .reloadIgnoringLocalCacheData
         config.urlCache = nil
-        var photoLink = ""
+        var photoLink: String? = nil
 
         let session = URLSession.init(configuration: config)
 
