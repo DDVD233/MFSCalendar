@@ -168,11 +168,11 @@ class UICircularProgressRingLayer: CAShapeLayer {
      */
     private func drawOuterRing() {
         guard outerRingWidth > 0 else { return }
-        
+
         let width: CGFloat = bounds.width
         let height: CGFloat = bounds.width
         let center: CGPoint = CGPoint(x: bounds.midX, y: bounds.midY)
-        let outerRadius: CGFloat = max(width, height)/2 - max(outerRingWidth, innerRingWidth)/2
+        let outerRadius: CGFloat = min(width, height)/2 - max(outerRingWidth, innerRingWidth)/2
         let start: CGFloat = fullCircle ? 0 : startAngle.toRads
         let end: CGFloat = fullCircle ? CGFloat.pi * 2 : endAngle.toRads
         
@@ -234,11 +234,11 @@ class UICircularProgressRingLayer: CAShapeLayer {
         switch ringStyle {
             
         case .inside:
-            let difference: CGFloat = outerRingWidth*2 - innerRingSpacing
-            radiusIn = (max(bounds.width - difference,
+            let difference = outerRingWidth*2 - innerRingSpacing
+            radiusIn = (min(bounds.width - difference,
                             bounds.height - difference)/2) - innerRingWidth/2
         default:
-            radiusIn = (max(bounds.width, bounds.height)/2) - (max(outerRingWidth, innerRingWidth)/2)
+            radiusIn = (min(bounds.width, bounds.height)/2) - (max(outerRingWidth, innerRingWidth)/2)
         }
         
         // Start drawing
@@ -309,7 +309,7 @@ class UICircularProgressRingLayer: CAShapeLayer {
         valueLabel.font = self.font
         valueLabel.textAlignment = .center
         valueLabel.textColor = fontColor
-        
+
         valueLabel.update(withValue: value,
                           valueIndicator: valueIndicator,
                           showsDecimal: showFloatingPoint,

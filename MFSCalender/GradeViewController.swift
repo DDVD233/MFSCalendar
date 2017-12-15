@@ -360,6 +360,7 @@ extension gradeViewController {
                 cell.chartView.chartDescription?.text = ""
                 cell.chartView.rightAxis.enabled = false
                 cell.chartView.xAxis.enabled = false
+                cell.chartView.isUserInteractionEnabled = false
                 
                 cell.chartView.drawValueAboveBarEnabled = true
                 

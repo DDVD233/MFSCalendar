@@ -3103,7 +3103,7 @@
         <scene sceneID="YKL-WX-RcU">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="2Rt-XE-Yqg" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Homework" image="Homework" selectedImage="HomeworkSelected" id="bSa-Cf-LM5">
+                    <tabBarItem key="tabBarItem" title="Homework" image="Homework" landscapeImage="Homework" largeContentSizeImage="Homework" selectedImage="HomeworkSelected" id="bSa-Cf-LM5">
                         <inset key="imageInsets" minX="0.0" minY="3" maxX="0.0" maxY="-3"/>
                     </tabBarItem>
                     <toolbarItems/>

@@ -54,9 +54,9 @@ PODS:
     - nanopb/encode (= 0.3.8)
   - nanopb/decode (0.3.8)
   - nanopb/encode (0.3.8)
-  - NVActivityIndicatorView (4.0.1):
-    - NVActivityIndicatorView/Presenter (= 4.0.1)
-  - NVActivityIndicatorView/Presenter (4.0.1)
+  - NVActivityIndicatorView (4.1.0):
+    - NVActivityIndicatorView/Presenter (= 4.1.0)
+  - NVActivityIndicatorView/Presenter (4.1.0)
   - Protobuf (3.5.0)
   - ReachabilitySwift (4.1.0)
   - Result (3.2.4)
@@ -68,10 +68,10 @@ PODS:
   - SnapKit (4.0.0)
   - Spring (1.0.3)
   - SVProgressHUD (2.2.2)
-  - SwiftDate (4.5.0)
+  - SwiftDate (4.5.1)
   - SwiftMessages (4.1.0)
   - SwiftyJSON (4.0.0)
-  - UICircularProgressRing (1.7.4)
+  - UICircularProgressRing (1.7.5)
   - UrbanAirship-iOS-SDK (8.6.3)
   - XLPagerTabStrip (8.0.0)
 
@@ -159,7 +159,7 @@ SPEC CHECKSUMS:
   M13ProgressSuite: ea9f7263e73e9215e6849dfa54e29ee0ad6a145c
   Moya: 9e621707ff754eeb51ff3ec51a3d54e517c0733a
   nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
-  NVActivityIndicatorView: 77ed6d7b571643e24899e7858bf9ae2ee4c21f31
+  NVActivityIndicatorView: dc4726052dc24e89fa8576d43acf9e96f61d49db
   Protobuf: 8a9838fba8dae3389230e1b7f8c104aa32389c03
   ReachabilitySwift: 6849231cd4e06559f3b9ef4a97a0a0f96d41e09f
   Result: d2d07204ce72856f1fd9130bbe42c35a7b0fea10
@@ -169,10 +169,10 @@ SPEC CHECKSUMS:
   SnapKit: a42d492c16e80209130a3379f73596c3454b7694
   Spring: 3f02b5dc3308572ef177b3cad0fa7bbc4b0706f7
   SVProgressHUD: 59b2d3dabacbd051576d21d32293ca7228dc18b0
-  SwiftDate: 17dd829c004a2d60432ef63ffcdb26ca2eb97a60
+  SwiftDate: 7b56d42a221f582047287deb256b23fc5ed49a60
   SwiftMessages: 1bacc783c8f10bdfdc57c14860cae8a1f1fa6591
   SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
-  UICircularProgressRing: 5aca63423d913dc967661370e94e2af0770dd9cd
+  UICircularProgressRing: b35e45dc82aac8009d038ef4d2e19718675df2bd
   UrbanAirship-iOS-SDK: 61bad27cf3ea49e2da7c9a6c469674bf3ac2ffa0
   XLPagerTabStrip: d1ab378af0923320ec0b5eab11d7b2f803d31261
 
