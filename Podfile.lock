@@ -1,5 +1,8 @@
 PODS:
   - Alamofire (4.6.0)
+  - ChameleonFramework/Default (2.1.0)
+  - ChameleonFramework/Swift (2.1.0):
+    - ChameleonFramework/Default
   - Charts (3.0.4):
     - Charts/Core (= 3.0.4)
   - Charts/Core (3.0.4)
@@ -77,6 +80,7 @@ PODS:
 
 DEPENDENCIES:
   - Alamofire
+  - ChameleonFramework/Swift (from `https://github.com/ViccAlexander/Chameleon.git`)
   - Charts
   - Crashlytics
   - DGElasticPullToRefresh
@@ -108,6 +112,8 @@ DEPENDENCIES:
   - XLPagerTabStrip
 
 EXTERNAL SOURCES:
+  ChameleonFramework:
+    :git: https://github.com/ViccAlexander/Chameleon.git
   Down:
     :branch: master
     :git: https://github.com/iwasrobbed/Down.git
@@ -122,6 +128,9 @@ EXTERNAL SOURCES:
     :git: https://github.com/MengTo/Spring.git
 
 CHECKOUT OPTIONS:
+  ChameleonFramework:
+    :commit: 6dd284bde21ea2e7f9fd89bc36f40df16e16369d
+    :git: https://github.com/ViccAlexander/Chameleon.git
   Down:
     :commit: eb4e820a8ca67a2e834d75b4fff9d702e673ea1c
     :git: https://github.com/iwasrobbed/Down.git
@@ -137,6 +146,7 @@ CHECKOUT OPTIONS:
 
 SPEC CHECKSUMS:
   Alamofire: f41a599bd63041760b26d393ec1069d9d7b917f4
+  ChameleonFramework: d21a3cc247abfe5e37609a283a8238b03575cf64
   Charts: 0705898046257443f0afbbc3179f4b67507b6e48
   Crashlytics: dbb07d01876c171c5ccbdf7826410380189e452c
   DGElasticPullToRefresh: 28f11a6026302a90f8ffebbc6e24748e584dddd3
@@ -176,6 +186,6 @@ SPEC CHECKSUMS:
   UrbanAirship-iOS-SDK: 61bad27cf3ea49e2da7c9a6c469674bf3ac2ffa0
   XLPagerTabStrip: d1ab378af0923320ec0b5eab11d7b2f803d31261
 
-PODFILE CHECKSUM: 97cfe9c1a05aed42753b3f2018e32646368c94c1
+PODFILE CHECKSUM: b9ba79a2cb6f92b9a9e97f7afed2fb0e9c86feb7
 
 COCOAPODS: 1.2.0

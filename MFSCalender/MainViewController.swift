@@ -12,6 +12,7 @@ import UserNotifications
 import DZNEmptyDataSet
 import Reachability
 import SwiftDate
+import ChameleonFramework
 
 
 class customEventCellDashboard: UITableViewCell {
@@ -106,6 +107,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
 //        } else {
 //            hidesBottomBarWhenPushed = false
 //        }
+        //self.navigationController?.setStatusBarStyle(.lightContent)
         self.bottomView.layer.shadowColor = UIColor.black.cgColor
         self.bottomView.layer.shadowOpacity = 0.15
         self.bottomView.layer.shadowOffset = CGSize.zero
@@ -157,6 +159,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
 
     override func viewDidAppear(_ animated: Bool) {
         //classViewHeightConstraint.constant = classView.contentSize.height
+//        eventViewLarge.backgroundColor = UIColor(gradientStyle: .topToBottom, withFrame: eventViewLarge.frame, andColors: [UIColor(hexString: 0xFF6666), UIColor(hexString: 0xFF9966)])
 
 //        Add "== true" to prevent force unwrap.
         guard Preferences().didLogin else {

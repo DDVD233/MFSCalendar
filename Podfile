@@ -37,6 +37,7 @@ target 'MFSCalendar' do
   pod 'SVProgressHUD'
   pod 'UrbanAirship-iOS-SDK'
   pod 'Charts'
+  pod 'ChameleonFramework/Swift', :git => 'https://github.com/ViccAlexander/Chameleon.git'
   # pod 'GSKStretchyHeaderView'
 end
 

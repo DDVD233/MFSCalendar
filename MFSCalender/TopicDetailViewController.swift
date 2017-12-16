@@ -116,10 +116,10 @@ extension topicDetailViewController: UITableViewDelegate, UITableViewDataSource 
 
         if topicObject["Url"] != nil {
             cell.linkImage.image = UIImage(named: "Link")
-        }
-
-        if topicObject["filePath"] != nil && topicObject["fileName"] != nil {
+        } else if (topicObject["filePath"] as? String).existsAndNotEmpty() && topicObject["fileName"] != nil {
             cell.linkImage.image = UIImage(named: "Download")
+        } else {
+            cell.linkImage.image = nil
         }
 
         cell.linkImage.contentMode = .scaleToFill
