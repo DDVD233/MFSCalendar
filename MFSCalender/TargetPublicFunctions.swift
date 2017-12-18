@@ -219,7 +219,7 @@ class ClassView {
                 
                 //let photoLink = "https://bbk12e1-cdn.myschoolcdn.com/736/photo/" + photoURLPath
                 
-                let url = URL(string: photoURLPath)
+                guard let url = URL(string: photoURLPath) else { return }
                 
                 let downloadSemaphore = DispatchSemaphore.init(value: 0)
                 

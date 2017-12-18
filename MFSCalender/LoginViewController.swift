@@ -78,7 +78,7 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
                     // Fallback on earlier versions
                 }
             })
-            loginNotice.showInfo("Welcome", subTitle: "Welcome to MFS Calendar. Please use your myMFS account to log in.", animationStyle: .bottomToTop)
+            loginNotice.showInfo("Welcome", subTitle: "Welcome to MFS Mobile. Please use your myMFS account to log in.", animationStyle: .bottomToTop)
             
             Preferences().isFirstTimeLogin = false
         }
