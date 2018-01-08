@@ -211,6 +211,7 @@ extension Sequence {
 
 extension UINavigationBar {
     func removeBottomLine() {
+        self.barStyle = .black
         self.barTintColor = UIColor(hexString: 0xFF7E79)
         self.isTranslucent = false
         self.setBackgroundImage(UIImage(), for: UIBarMetrics.default)

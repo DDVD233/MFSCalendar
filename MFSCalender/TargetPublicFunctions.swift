@@ -43,11 +43,15 @@ func areEqual<T:Equatable>(type: T.Type, a: Any?, b: Any?) -> Bool? {
 
 @available(iOS 11.0, *)
 func setLargeTitle(on viewController: UIViewController) {
-    viewController.navigationController?.navigationBar.prefersLargeTitles = true
-    viewController.navigationController?.navigationBar.barTintColor = UIColor(hexString: 0xFF7E79)
-    //viewController.navigationItem.largeTitleDisplayMode = .never
-//    viewController.navigationController?.setBackgroundColor(UIColor(hexString: 0xFF7E79))
-    
+    if let navigationBar = viewController.navigationController?.navigationBar {
+        navigationBar.barStyle = .black
+        navigationBar.prefersLargeTitles = true
+        navigationBar.barTintColor = UIColor(hexString: 0xFF7E79)
+        //viewController.navigationItem.largeTitleDisplayMode = .never
+        //    viewController.navigationController?.setBackgroundColor(UIColor(hexString: 0xFF7E79))
+    } else {
+        print("Navigation bar not found")
+    }
 }
 
 @available(iOS 11.0, *)
@@ -236,7 +240,7 @@ class ClassView {
                 }
                 
                 
-                Alamofire.download(url!, to: destination).resume()
+                Alamofire.download(url, to: destination).resume()
                 downloadSemaphore.wait()
             }
         }

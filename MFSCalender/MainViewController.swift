@@ -244,7 +244,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
 
     func refreshDisplayedData() {
         eventDataFetching()
-        periodCheck(day: dayCheck())
+        getListClasses(day: dayCheck())
         setupTheHeader()
 
         DispatchQueue.main.async {
@@ -380,7 +380,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
 
     }
 
-    func periodCheck(day: String) {
+    func getListClasses(day: String) {
         let timeFormatter = DateFormatter()
         timeFormatter.dateFormat = "HHmm"
 

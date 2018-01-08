@@ -21,10 +21,6 @@ import ChameleonFramework
 
 
 class homeworkViewController: UITableViewController, UIViewControllerPreviewingDelegate, IndicatorInfoProvider, UIDocumentPickerDelegate {
-    
-//    override var preferredStatusBarStyle: UIStatusBarStyle {
-//        return .lightContent
-//    }
 
     @IBOutlet weak var homeworkTable: UITableView!
     var isUpdatingHomework = false
@@ -45,7 +41,7 @@ class homeworkViewController: UITableViewController, UIViewControllerPreviewingD
         homeworkTable.emptyDataSetSource = self
         homeworkTable.emptyDataSetDelegate = self
         homeworkTable.delegate = self
-        self.setStatusBarStyle(.lightContent)
+
 
 //        Remove the bottom 1px line on Navigation Bar
 //
@@ -61,13 +57,13 @@ class homeworkViewController: UITableViewController, UIViewControllerPreviewingD
             homeworkTable.dg_setPullToRefreshBackgroundColor(tableView.backgroundColor!)
         }
         
-//        if #available(iOS 11.0, *) {
-//            setLargeTitle(on: self)
-//        } else {
-//            if let navigationBar = self.navigationController?.navigationBar {
-//                navigationBar.removeBottomLine()
-//            }
-//        }
+        if #available(iOS 11.0, *) {
+            setLargeTitle(on: self)
+        } else {
+            if let navigationBar = self.navigationController?.navigationBar {
+                navigationBar.removeBottomLine()
+            }
+        }
         
         if #available(iOS 9.0, *) {
             if self.traitCollection.forceTouchCapability == .available {
