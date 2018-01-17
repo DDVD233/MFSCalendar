@@ -139,7 +139,6 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         if Preferences().didLogin && Preferences().courseInitialized {
 
             NSLog("Already Logged in.")
-            //timer = Timer.scheduledTimer(timeInterval: , target: self, selector: #selector(autoRefreshContents), userInfo: nil, repeats: true)
         } else {
             print("Cannot initialize data because the user did not logged in")
         }
@@ -196,9 +195,21 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
 //                self.present(mobileServeIntro, animated: true)
 //            }
 //        }
+        let notification = NotificationCenter.default
+        notification.addObserver(forName: .UIApplicationWillResignActive, object: nil, queue: OperationQueue.current, using: { _ in
+            self.timer?.invalidate()
+        })
+        
+        if #available(iOS 10.0, *) {
+            self.timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { _ in
+                self.autoRefreshContents()
+            })
+        } else {
+            // Fallback on earlier versions
+        }
     }
     
-    func autoRefreshContents() {
+    @objc func autoRefreshContents() {
         DispatchQueue.global().async {
             self.refreshDisplayedData()
         }
@@ -208,6 +219,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     override func viewWillDisappear(_ animated: Bool) {
         navigationController?.setNavigationBarHidden(false, animated: false)
         isVisible = false
+        timer?.invalidate()
     }
 
     func updateData() {
@@ -381,13 +393,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     }
 
     func getListClasses(day: String) {
-        let timeFormatter = DateFormatter()
-        timeFormatter.dateFormat = "HHmm"
-
-        guard let now = Int(timeFormatter.string(from: Date())) else { return }
-
-        let currentPeriod = getCurrentPeriod(time: now)
-
+        let currentPeriod = getCurrentPeriod()
         self.listClasses = getClassDataAt(period: currentPeriod, day: day)
     }
 
@@ -522,10 +528,8 @@ extension Main: UICollectionViewDelegate, UICollectionViewDataSource, UICollecti
         if let period = classData["period"] as? Int {
             if row == 0 || row == 1 {
                 cell.period.text = periodTimerString(periodNumber: period)
-            } else if className == "Lunch" {
-                cell.period.text = "LUNCH"
             } else {
-                cell.period.text = "PERIOD " + String(describing: period)
+                cell.period.text = getMeetTime(period: period)
             }
         }
 
@@ -576,7 +580,7 @@ extension Main: UITableViewDelegate, UITableViewDataSource {
 
 //        Add all day events first
         let allDayEvents = events.filter({ $0["isAllDay"] as? Int == 1 })
-        self.listEvents += allDayEvents
+        self.listEvents = allDayEvents
 
         self.formatter.dateFormat = "HHmmss"
         let currentTime = Int(formatter.string(from: Date())) ?? 0
@@ -592,8 +596,8 @@ extension Main: UITableViewDelegate, UITableViewDataSource {
 
     //    the number of the cell
     func tableView(_ tableView: UITableView, numberOfRowsInSection selection: Int) -> Int {
-        print(listEvents.count)
-        return self.listEvents.count
+        let eventCount = self.listEvents.count
+        return eventCount
     }
 
 

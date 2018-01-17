@@ -200,6 +200,15 @@ public class Preferences {
         }
     }
     
+    public var doUpdateQuarter: Bool {
+        get {
+            return userDefaults.object(forKey: "doUpdateQuarter" ) as? Bool ?? true
+        }
+        set(value) {
+            userDefaults.set(value, forKey: "doUpdateQuarter" )
+        }
+    }
+    
     public var doPresentServiceView: Bool {
         get {
             return userDefaults.bool(forKey: "doPresentServiceView" )

@@ -44,9 +44,9 @@ extension NewMoreViewController {
             return 1
         } else {
             if Preferences().isDev {
-                return 6
+                return 7
             } else {
-                return 5
+                return 6
             }
         }
     }
@@ -96,6 +96,9 @@ extension NewMoreViewController {
                 cell.nameLabel.text = "About"
                 cell.imageView.image = UIImage(named: "MenuAbout.png")
             case 5:
+                cell.nameLabel.text = "Settings"
+                cell.imageView.image = UIImage(named: "MenuSettings.png")
+            case 6:
                 cell.nameLabel.text = "DON'T TOUCH"
                 cell.imageView.image = UIImage(named: "MenuWarning.png")
             default:
@@ -156,6 +159,10 @@ extension NewMoreViewController {
                     show(infoVC, sender: self)
                 }
             case 5:
+                if let settingsVC = storyboard?.instantiateViewController(withIdentifier: "settings") {
+                    show(settingsVC, sender: self)
+                }
+            case 6:
                 userDefaults.set(false, forKey: "didShowMobileServe")
                 self.tabBarController?.selectedIndex = 0
             default:

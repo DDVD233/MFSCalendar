@@ -1110,7 +1110,7 @@
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
                                                             </subviews>
-                                                            <color key="backgroundColor" red="1" green="0.40000000600000002" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                                            <color key="backgroundColor" red="1" green="0.40000000000000002" blue="0.40000000000000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="trailing" secondItem="8Wk-gW-WdH" secondAttribute="trailing" id="59x-T0-TEO"/>
                                                                 <constraint firstItem="l4m-jp-B4s" firstAttribute="leading" secondItem="9Fo-fi-YE8" secondAttribute="leading" constant="5" id="654-rI-iFP"/>
@@ -2708,7 +2708,7 @@
         <!--Settings-->
         <scene sceneID="dCL-MH-bcM">
             <objects>
-                <tableViewController title="Settings" id="XRE-Nj-Rag" customClass="settingViewController" customModule="MFSMobile" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="settings" title="Settings" useStoryboardIdentifierAsRestorationIdentifier="YES" id="XRE-Nj-Rag" customClass="settingViewController" customModule="MFSMobile" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="qtr-Lw-dXe">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2716,28 +2716,41 @@
                         <sections>
                             <tableViewSection id="wAL-6B-Ndv">
                                 <cells>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="VqG-Ho-uyN">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="HmB-Vn-O6j">
                                         <rect key="frame" x="0.0" y="35" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="VqG-Ho-uyN" id="ZBY-VO-swW">
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="HmB-Vn-O6j" id="PKp-8s-SSt">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mht-Rd-GTo">
-                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
-                                                    <state key="normal" title="Log Out">
-                                                        <color key="titleColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                    </state>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Quarter" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JNv-Hn-mlE">
+                                                    <rect key="frame" x="16" y="11" width="59" height="22"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="a0k-pl-4C0">
+                                                    <rect key="frame" x="112" y="7" width="243" height="30.5"/>
+                                                    <segments>
+                                                        <segment title="First"/>
+                                                        <segment title="Second"/>
+                                                        <segment title="Third"/>
+                                                        <segment title="Fourth"/>
+                                                    </segments>
+                                                    <color key="tintColor" red="1" green="0.49327188729999999" blue="0.47399842739999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <connections>
-                                                        <action selector="logOut:" destination="XRE-Nj-Rag" eventType="touchUpInside" id="lkf-RR-rl3"/>
+                                                        <action selector="quarterButtonTouched:" destination="XRE-Nj-Rag" eventType="valueChanged" id="P2b-Zx-ZlP"/>
                                                     </connections>
-                                                </button>
+                                                </segmentedControl>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="Mht-Rd-GTo" firstAttribute="leading" secondItem="ZBY-VO-swW" secondAttribute="leading" id="08F-N5-S7T"/>
-                                                <constraint firstAttribute="trailing" secondItem="Mht-Rd-GTo" secondAttribute="trailing" id="1C5-Cf-mJb"/>
-                                                <constraint firstAttribute="bottom" secondItem="Mht-Rd-GTo" secondAttribute="bottom" id="NL7-FU-4g6"/>
-                                                <constraint firstItem="Mht-Rd-GTo" firstAttribute="top" secondItem="ZBY-VO-swW" secondAttribute="top" id="Sxb-SB-C9I"/>
+                                                <constraint firstItem="JNv-Hn-mlE" firstAttribute="top" secondItem="PKp-8s-SSt" secondAttribute="topMargin" id="2CS-4I-16n"/>
+                                                <constraint firstItem="JNv-Hn-mlE" firstAttribute="leading" secondItem="PKp-8s-SSt" secondAttribute="leadingMargin" id="K0b-oo-Yvr"/>
+                                                <constraint firstAttribute="bottom" secondItem="a0k-pl-4C0" secondAttribute="bottom" constant="7" id="bXM-7j-jrS"/>
+                                                <constraint firstItem="a0k-pl-4C0" firstAttribute="top" secondItem="PKp-8s-SSt" secondAttribute="top" constant="7" id="k46-aA-vPf"/>
+                                                <constraint firstAttribute="trailing" secondItem="a0k-pl-4C0" secondAttribute="trailing" constant="20" id="nPW-Kl-O2I"/>
+                                                <constraint firstItem="JNv-Hn-mlE" firstAttribute="bottom" secondItem="PKp-8s-SSt" secondAttribute="bottomMargin" id="ogb-u0-dH6"/>
+                                                <constraint firstItem="a0k-pl-4C0" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="JNv-Hn-mlE" secondAttribute="trailing" constant="10" id="rgh-7w-N7f"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -2749,10 +2762,13 @@
                             <outlet property="delegate" destination="XRE-Nj-Rag" id="3JN-pv-6Ry"/>
                         </connections>
                     </tableView>
+                    <connections>
+                        <outlet property="currentQuarter" destination="a0k-pl-4C0" id="2ln-Ni-eVb"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Eyl-gt-CPN" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4575" y="1639"/>
+            <point key="canvasLocation" x="4573.6000000000004" y="1638.5307346326838"/>
         </scene>
         <!--About-->
         <scene sceneID="RfK-T2-m1d">

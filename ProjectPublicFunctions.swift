@@ -95,59 +95,32 @@ func getMeetTime(period: Int) -> String {
     }
 }
 
-func getCurrentPeriod(time: Int) -> Int {
-    let Period1Start = 800
-    let Period2Start = 846
-    let Period3Start = 932
-    let Period4Start = 1042
-    let Period5Start = 1128
-    let Period6Start = 1214
-    let LunchStart = 1256
-    let Period7Start = 1342
-    let Period8Start = 1428
-    let Period8End = 1510
-    var currentClass: Int? = nil
+func getCurrentPeriod() -> Int {
+    let currentTime = DateInRegion()
+    let period = ClassTime().period
     
-    switch time {
-    case 0..<Period1Start:
-        NSLog("Period 0")
-        currentClass = 1
-    case Period1Start..<Period2Start:
-        NSLog("Period 1")
-        currentClass = 1
-    case Period2Start..<Period3Start:
-        NSLog("Period 2")
-        currentClass = 2
-    case Period3Start..<Period4Start:
-        NSLog("Period 3")
-        currentClass = 3
-    case Period4Start..<Period5Start:
-        NSLog("Period 4")
-        currentClass = 4
-    case Period5Start..<Period6Start:
-        NSLog("Period 5")
-        currentClass = 5
-    case Period6Start..<LunchStart:
-        NSLog("Period 6")
-        currentClass = 6
-    case LunchStart..<Period7Start:
-        NSLog("Lunch")
-        currentClass = 7
-    case Period7Start..<Period8Start:
-        NSLog("Period 8")
-        currentClass = 8
-    case Period8Start..<Period8End:
-        NSLog("Period 9")
-        currentClass = 9
-    case Period8End..<3000:
-        NSLog("After School.")
-        currentClass = 10
+    switch currentTime {
+    case currentTime.startOfDay..<period[0].end:
+        return 1
+    case period[0].end..<period[1].end:
+        return 2
+    case period[1].end..<period[2].end:
+        return 3
+    case period[2].end..<period[3].end:
+        return 4
+    case period[3].end..<period[4].end:
+        return 5
+    case period[4].end..<period[5].end:
+        return 6
+    case period[5].end..<period[6].end:
+        return 7
+    case period[6].end..<period[7].end:
+        return 8
+    case period[7].end..<period[8].end:
+        return 9
     default:
-        NSLog("???")
-        currentClass = 10
+        return 10
     }
-    
-    return currentClass!
 }
 
 func getClassDataAt(period: Int, day: String) -> [[String: Any]] {

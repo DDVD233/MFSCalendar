@@ -256,9 +256,11 @@ class ClassView {
         }
 
         let index = Preferences().indexForCourseToPresent
+        
+        print(classList)
 
-        if let thisClassObject = classList.filter({ $0["index"] as! Int == index }).first {
-            return thisClassObject
+        if classList.indices.contains(index) {
+            return classList[index]
         }
 
         return nil

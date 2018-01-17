@@ -9,6 +9,13 @@
 import UIKit
 
 class settingViewController: UITableViewController, UIActionSheetDelegate {
+    @IBOutlet var currentQuarter: UISegmentedControl!
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        currentQuarter.selectedSegmentIndex = Preferences().currentQuarter - 1
+    }
 
     override func viewWillAppear(_ animated: Bool) {
 //        themeColorLabel.text = userDefaults?.string(forKey: "themeColor") ?? "Salmon"
@@ -44,33 +51,12 @@ class settingViewController: UITableViewController, UIActionSheetDelegate {
         
     }
     
-    @IBAction func logOut(_ sender: UIButton) {
-        let logOutActionSheet = UIAlertController(title: nil, message: "Are you sure you want to log out?", preferredStyle: .actionSheet)
-        
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (alertAction) -> Void in
-            NSLog("Canceled")
-        }
-        
-        let logOutAction = UIAlertAction(title: "Log Out", style: .default) { (alertAction) -> Void in
-            NSLog("Logged Out")
-            let preferences = Preferences()
-            preferences.didLogin = false
-            preferences.courseInitialized = false
-            preferences.firstName = nil
-            preferences.lastName = nil
-            preferences.lockerNumber = nil
-            preferences.lockerCombination = nil
-            let vc = self.storyboard?.instantiateViewController(withIdentifier: "MainTab")
-            self.present(vc!, animated: false, completion: nil)
-        }
-        
-        logOutActionSheet.addAction(cancelAction)
-        logOutActionSheet.addAction(logOutAction)
-        
-        logOutActionSheet.popoverPresentationController?.sourceView = sender
-        logOutActionSheet.popoverPresentationController?.sourceRect = sender.frame
-        
-        self.present(logOutActionSheet, animated: true, completion: nil)
+    @IBAction func quarterButtonTouched(_ sender: Any) {
+        print(currentQuarter.selectedSegmentIndex)
+        Preferences().currentQuarter = currentQuarter.selectedSegmentIndex + 1
+        Preferences().courseInitialized = false
+        Preferences().doUpdateQuarter = false
+        self.tabBarController?.selectedIndex = 0
     }
     
 }

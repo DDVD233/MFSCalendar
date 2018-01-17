@@ -71,6 +71,7 @@
 		E4EBD9961F9BAAED0046CAD1 /* AirshipConfig.plist in Resources */ = {isa = PBXBuildFile; fileRef = E4EBD9951F9BAAED0046CAD1 /* AirshipConfig.plist */; };
 		E4EEFB131DF274EA00F199BE /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4EEFB121DF274EA00F199BE /* Images.xcassets */; };
 		E4F0B3751EAD1BE900C923A8 /* dayPicker.plist in Resources */ = {isa = PBXBuildFile; fileRef = E4F0B3741EAD1BE900C923A8 /* dayPicker.plist */; };
+		E4F0B37C200F814D00003A3D /* MenuSettings.png in Resources */ = {isa = PBXBuildFile; fileRef = E4F0B37B200F814D00003A3D /* MenuSettings.png */; };
 		E4F86B311DF0E20C00CAD72B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F86B301DF0E20C00CAD72B /* AppDelegate.swift */; };
 		E4F86B331DF0E20C00CAD72B /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F86B321DF0E20C00CAD72B /* MainViewController.swift */; };
 		E4F86B361DF0E20C00CAD72B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E4F86B341DF0E20C00CAD72B /* Main.storyboard */; };
@@ -233,6 +234,7 @@
 		E4EBD9951F9BAAED0046CAD1 /* AirshipConfig.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = AirshipConfig.plist; sourceTree = "<group>"; };
 		E4EEFB121DF274EA00F199BE /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		E4F0B3741EAD1BE900C923A8 /* dayPicker.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = dayPicker.plist; sourceTree = "<group>"; };
+		E4F0B37B200F814D00003A3D /* MenuSettings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MenuSettings.png; sourceTree = "<group>"; };
 		E4F86B2D1DF0E20C00CAD72B /* MFSMobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MFSMobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4F86B301DF0E20C00CAD72B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E4F86B321DF0E20C00CAD72B /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = MainViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -386,6 +388,7 @@
 		E4EA9D7B1DF225FB0021A823 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				E4F0B37B200F814D00003A3D /* MenuSettings.png */,
 				E4775A401F9A500C002170C7 /* MenuWarning.png */,
 				E49E533F1F990507003011A6 /* MSIntro.png */,
 				E4FB5A8A1F96E81000D7FED1 /* CourseBackground.jpg */,
@@ -674,6 +677,7 @@
 				E4EBD9961F9BAAED0046CAD1 /* AirshipConfig.plist in Resources */,
 				E495229F1F96CD6900C17A83 /* MenuLunch.png in Resources */,
 				E47DA48A1F81A091005FA2FC /* AppLogo.png in Resources */,
+				E4F0B37C200F814D00003A3D /* MenuSettings.png in Resources */,
 				E4765E171F7D74AF009F60F0 /* InfoPlist.strings in Resources */,
 				E4CA1DAE1F50097D0061784A /* Acknowledgements.markdown in Resources */,
 				E4A880BD1DF279BB00816AB7 /* MFS Logo.jpg in Resources */,

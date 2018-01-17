@@ -63,7 +63,11 @@ class courseFillController: UIViewController {
             UIApplication.shared.isNetworkActivityIndicatorVisible = true
         }
         
-        setQuarter()
+        if Preferences().doUpdateQuarter {
+            setQuarter()
+        } else {
+            Preferences().doUpdateQuarter = true
+        }
         
         let group = DispatchGroup()
         
@@ -188,12 +192,26 @@ class courseFillController: UIViewController {
         for courses in schedule {
             var courses = courses
             print(courses)
-            guard let meetTimeList = courses["meetTime"] as? [String], let quarter = courses["quarter"] as? String else {
+            guard let meetTimeList = courses["meetTime"] as? [String],
+                  let quarter = courses["quarter"] as? String,
+                  let className = courses["className"] as? String,
+                  let teacherName = courses["teacherName"] as? String
+                  else {
                 continue
             }
             
             guard Int(quarter) ?? 0 == Preferences().currentQuarter else {
                 continue
+            }
+            
+            let coursePath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
+            let path = coursePath.appending("/CourseList.plist")
+            if let coursesList = NSArray(contentsOfFile: path)! as? Array<Dictionary<String, Any>> {
+                if let courseIndex = coursesList.index(where: { $0["coursedescription"] as? String == className &&
+                                                                $0["teacherName"] as? String == teacherName
+                }) {
+                    courses["index"] = Int(courseIndex)
+                }
             }
             
             for meetTime in meetTimeList {
