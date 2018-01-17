@@ -310,8 +310,9 @@ class ClassView {
         case 4: return "10:42AM - 11:24AM"
         case 5: return "11:28AM - 12:10AM"
         case 6: return "12:14PM - 12:56PM"
-        case 7: return "1:42PM - 2:23PM"
-        case 8: return "2:24PM - 3:10PM"
+        case 7: return "1:00PM - 1:38PM"
+        case 8: return "1:42PM - 2:23PM"
+        case 9: return "2:24PM - 3:10PM"
         default: return "Error!"
         }
     }

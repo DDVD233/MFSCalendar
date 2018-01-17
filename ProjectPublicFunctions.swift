@@ -45,16 +45,16 @@ func getCurrentPeriod(time: Int) -> Int {
         currentClass = 6
     case LunchStart..<Period7Start:
         NSLog("Lunch")
-        currentClass = 11
-    case Period7Start..<Period8Start:
-        NSLog("Period 7")
         currentClass = 7
-    case Period8Start..<Period8End:
+    case Period7Start..<Period8Start:
         NSLog("Period 8")
         currentClass = 8
+    case Period8Start..<Period8End:
+        NSLog("Period 9")
+        currentClass = 9
     case Period8End..<3000:
         NSLog("After School.")
-        currentClass = 9
+        currentClass = 10
     default:
         NSLog("???")
         currentClass = -1
@@ -64,6 +64,7 @@ func getCurrentPeriod(time: Int) -> Int {
 }
 
 func getClassDataAt(period: Int, day: String) -> [[String: Any]] {
+    //var period = period
     var listClasses = [[String: Any]]()
 
     let plistPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
@@ -74,38 +75,62 @@ func getClassDataAt(period: Int, day: String) -> [[String: Any]] {
         return listClasses
     }
 
-    let lunch = ["className": "Lunch", "roomNumber": "DH/C", "teacher": "", "period": 11] as [String: Any]
+    //let lunch = ["className": "Lunch", "roomNumber": "DH/C", "teacher": "", "period": 11] as [String: Any]
     let meetingForWorship = ["className": "Meeting For Worship", "roomNumber": "Meeting House", "teacher": "", "period": 4] as [String: Any]
     
-    switch period {
-    case 1...8:
-        listClasses = Array(allClasses[(period - 1)...7])
-        
-        if listClasses.count >= 5 {
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "EE"
-            let day = dateFormatter.string(from: Date())
-            if day == "Wed" {
-//                currentClass == 1 -> index = 3
-//                currentClass == 2 -> index = 2
-//                currentClass == 3 -> index = 1
-//                currentClass == 4 -> index = 0
-                listClasses[4 - period] = meetingForWorship
-            }
-        }
-        
-        if listClasses.count > 2 { //Before lunch
-            listClasses.insert(lunch, at: 7 - period)
-        }
-    case 11:
-        // At lunch
-        
-        listClasses = Array(allClasses[6...7])
-        
-        listClasses.insert(lunch, at: 0)
-    default:
-        listClasses = []
+    if listClasses.count > 8 {
+        listClasses = Array(allClasses[(period - 1)...8])
     }
+    
+    if listClasses.count >= 6 {  // Before Meeting For Worship
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "EE"
+        let day = dateFormatter.string(from: Date())
+        if day == "Wed" {
+            //                currentClass == 1 -> index = 3
+            //                currentClass == 2 -> index = 2
+            //                currentClass == 3 -> index = 1
+            //                currentClass == 4 -> index = 0
+            listClasses[4 - period] = meetingForWorship
+        }
+    }
+    
+//    if listClasses.count > 2 { //Before lunch
+//        listClasses.insert(lunch, at: 7 - period)
+//    }
+//
+//    switch period {
+//    case 0...8:
+//        if period == 0 {
+//            period = 1
+//        }
+//        listClasses = Array(allClasses[(period - 1)...7])
+//
+//        if listClasses.count >= 5 {
+//            let dateFormatter = DateFormatter()
+//            dateFormatter.dateFormat = "EE"
+//            let day = dateFormatter.string(from: Date())
+//            if day == "Wed" {
+////                currentClass == 1 -> index = 3
+////                currentClass == 2 -> index = 2
+////                currentClass == 3 -> index = 1
+////                currentClass == 4 -> index = 0
+//                listClasses[4 - period] = meetingForWorship
+//            }
+//        }
+//
+//        if listClasses.count > 2 { //Before lunch
+//            listClasses.insert(lunch, at: 7 - period)
+//        }
+//    case 11:
+//        // At lunch
+//
+//        listClasses = Array(allClasses[6...7])
+//
+//        listClasses.insert(lunch, at: 0)
+//    default:
+//        listClasses = []
+//    }
 
     return listClasses
 }

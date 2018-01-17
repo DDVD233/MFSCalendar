@@ -14,6 +14,7 @@ import LTMorphingLabel
 import SwiftyJSON
 import FirebasePerformance
 import Alamofire
+import SwiftDate
 
 class courseFillController: UIViewController {
 
@@ -43,33 +44,70 @@ class courseFillController: UIViewController {
         }
     }
     
+    func setQuarter() {
+        var thirdQuarterStartComponent = DateComponents()
+        thirdQuarterStartComponent.year = 2018
+        thirdQuarterStartComponent.month = 1
+        thirdQuarterStartComponent.day = 20
+        
+        let thirdQuarterStart = DateInRegion(components: thirdQuarterStartComponent)!
+        if DateInRegion().isBefore(date: thirdQuarterStart, granularity: .day) {
+            Preferences().currentQuarter = 2
+        } else {
+            Preferences().currentQuarter = 3
+        }
+    }
+    
     func importCourse() {
         DispatchQueue.main.async {
             UIApplication.shared.isNetworkActivityIndicatorVisible = true
         }
         
-        guard self.newGetCourse() else {
-            viewDismiss()
-            return
-        }
+        setQuarter()
         
-        fillAdditionalInformarion()
+        let group = DispatchGroup()
+        
+        DispatchQueue.global().async(group: group, execute: {
+            guard self.newGetCourse() else {
+                DispatchQueue.main.async {
+                    self.viewDismiss()
+                }
+                return
+            }
+        })
+        
+        DispatchQueue.global().async(group: group, execute: {
+            for alphabet in "ABCDEF" {
+                self.clearData(day: String(alphabet))
+            }
+            
+            guard let schedule = self.getScheduleNC() else {
+                DispatchQueue.main.async {
+                    self.viewDismiss()
+                }
+                return
+            }
+            
+            self.createScheduleNC(schedule: schedule)
+            
+            //self.fillAdditionalInformarion()
+        })
+        
+        group.wait()
         setProgressTo(value: 33)
         
-        for alphabet in "ABCDEF" {
-            clearData(day: String(alphabet))
-        }
-        guard createSchedule(fillLowPriority: 0) else {
-            viewDismiss()
-            return
-        }
-        setProgressTo(value: 66)
+//        guard createSchedule(fillLowPriority: 0) else {
+//            viewDismiss()
+//            return
+//        }
+//        setProgressTo(value: 66)
+//
+//        guard createSchedule(fillLowPriority: 1) else {
+//            return
+//        }
         
-        guard createSchedule(fillLowPriority: 1) else {
-            return
-        }
         for alphabet in "ABCDEF" {
-            self.fillStudyHall(letter: String(alphabet))
+            self.fillStudyHallAndLunch(letter: String(alphabet))
         }
         
         ClassView().getProfilePhoto()
@@ -97,6 +135,95 @@ class courseFillController: UIViewController {
         self.trace?.stop()
         UIApplication.shared.isNetworkActivityIndicatorVisible = false
         self.dismiss(animated: true)
+    }
+    
+    func getScheduleNC() -> [[String: Any]]? {
+        let token = loginAuthentication().token
+        
+        let courseInfo = ["token": token]
+        guard let json = try? JSONSerialization.data(withJSONObject: courseInfo, options: .prettyPrinted) else {
+            return nil
+        }
+        let semaphore = DispatchSemaphore.init(value: 0)
+        let urlString = "http:127.0.0.1:5000" + "/getScheduleNC"
+        let url = URL(string: urlString)
+        var request = URLRequest(url: url!)
+        request.httpMethod = "POST"
+        request.httpBody = json
+        let session = URLSession.shared
+        
+        var schedule: [[String: Any]]? = nil
+        
+        let task = session.dataTask(with: request, completionHandler: { (data, response, error) in
+            guard error == nil else {
+                presentErrorMessage(presentMessage: error!.localizedDescription, layout: .cardView)
+                semaphore.signal()
+                return
+            }
+            
+            do {
+                guard let json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? [[String: Any]] else {
+                    presentErrorMessage(presentMessage: "JSON file has incorrect format.", layout: .cardView)
+                    return
+                }
+                
+                print(json)
+                schedule = json
+            } catch {
+                presentErrorMessage(presentMessage: error.localizedDescription, layout: .cardView)
+            }
+            
+            semaphore.signal()
+        })
+        
+        task.resume()
+        semaphore.wait()
+        return schedule
+    }
+    
+    func createScheduleNC(schedule: [[String: Any]]) {
+        // classID: String = Class ID
+        // className: Strinng = Class Name
+        // quarter: String = Quarter ("1"/"2"/"3"/"4")
+        for courses in schedule {
+            var courses = courses
+            print(courses)
+            guard let meetTimeList = courses["meetTime"] as? [String], let quarter = courses["quarter"] as? String else {
+                continue
+            }
+            
+            guard Int(quarter) ?? 0 == Preferences().currentQuarter else {
+                continue
+            }
+            
+            for meetTime in meetTimeList {
+                guard !meetTime.isEmpty else {
+                    continue
+                }
+                
+                let day = meetTime[0, 0]
+                let period = Int(meetTime[1, 1])!
+                
+                guard period > 0 else {
+                    continue
+                }
+                
+                let fileName = "/Class" + day + ".plist"
+                let path = userDocumentPath.appending(fileName)
+                
+                guard var classOfDay = NSArray(contentsOfFile: path) as? Array<Dictionary<String, Any>> else {
+                    continue
+                }
+                
+                let classOfThePeriod = classOfDay[period - 1]
+                
+                if classOfThePeriod.count == 0 {
+                    courses["period"] = period
+                    classOfDay[period - 1] = courses
+                    NSArray(array: classOfDay).write(toFile: path, atomically: true)
+                }
+            }
+        }
     }
 
     func newGetCourse() -> Bool {
@@ -160,7 +287,7 @@ class courseFillController: UIViewController {
         semaphore.wait()
         return success
     }
-
+    
     func fillAdditionalInformarion() {
         let coursePath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
         let path = coursePath.appending("/CourseList.plist")
@@ -240,7 +367,7 @@ class courseFillController: UIViewController {
         let coursePath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
         let fileName = "/Class" + day + ".plist"
         let path = coursePath.appending(fileName)
-        let blankArray = Array(repeating: [String: Any?](), count: 8)
+        let blankArray = Array(repeating: [String: Any?](), count: 9)
         NSArray(array: blankArray).write(toFile: path, atomically: true)
     }
 
@@ -337,7 +464,7 @@ class courseFillController: UIViewController {
             }
             
             let day = meetTime[0, 0]
-            let period = Int(meetTime[1, 1])! - 1
+            let period = Int(meetTime[1, 1])!
             let fileName = "/Class" + day + ".plist"
             let path = userDocumentPath.appending(fileName)
             
@@ -345,11 +472,11 @@ class courseFillController: UIViewController {
                 continue
             }
             
-            let classOfThePeriod = classOfDay[period]
+            let classOfThePeriod = classOfDay[period - 1]
             
             if classOfThePeriod.count == 0 {
-                course["period"] = period + 1
-                classOfDay[period] = course
+                course["period"] = (period <= 7) ? period : period + 1 // If before lunch, then period, else period + 1.
+                classOfDay[period - 1] = course
                 NSArray(array: classOfDay).write(toFile: path, atomically: true)
             } else if className.count >= 10 && className[0, 9] == "Study Hall" {
                 //         It is possible that a study hall that the user doesn't take appear on the course list.
@@ -361,17 +488,22 @@ class courseFillController: UIViewController {
     }
 
 //    Finish creating schedule
-    func fillStudyHall(letter: String) {
+    func fillStudyHallAndLunch(letter: String) {
         let plistPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
         let fileName = "/Class" + letter + ".plist"
         let path = plistPath.appending(fileName)
         var listClasses = NSArray(contentsOfFile: path) as! [[String: Any]]
+        
+        let lunch = ["className": "Lunch", "period": 7, "roomNumber": "DH/C", "teacher": ""] as [String : Any]
+        listClasses[6] = lunch
+        
         for periodNumber in 1...8 {
             if listClasses.filter({ $0["period"] as? Int == periodNumber }).count == 0 {
                 let addData = ["className": "Free", "period": periodNumber] as [String : Any]
                 listClasses[periodNumber - 1] = addData
             }
         }
+        
         NSArray(array: listClasses).write(toFile: path, atomically: true)
     }
 

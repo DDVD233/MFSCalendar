@@ -118,7 +118,15 @@ public class Preferences {
             userDefaults.set(value, forKey: "serviceUsername" )
         }
     }
-
+    
+    public var currentQuarter: Int {
+        get {
+            return userDefaults.integer(forKey: "currentQuarter" )
+        }
+        set(value) {
+            userDefaults.set(value, forKey: "currentQuarter" )
+        }
+    }
     
     public var indexForCourseToPresent: Int {
         get {
@@ -171,6 +179,15 @@ public class Preferences {
         }
         set(value) {
             userDefaults.set( value, forKey: "version" )
+        }
+    }
+    
+    public var dataVersion: Int {
+        get {
+            return userDefaults.integer( forKey: "dataVersion" )
+        }
+        set(value) {
+            userDefaults.set( value, forKey: "dataVersion" )
         }
     }
     

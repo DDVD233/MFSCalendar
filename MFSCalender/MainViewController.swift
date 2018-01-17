@@ -443,7 +443,6 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
                             }
                         }
                     }
-
                 } catch {
                     NSLog("Data parsing failed")
                 }
