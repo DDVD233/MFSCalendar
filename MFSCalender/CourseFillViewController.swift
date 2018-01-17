@@ -145,7 +145,7 @@ class courseFillController: UIViewController {
             return nil
         }
         let semaphore = DispatchSemaphore.init(value: 0)
-        let urlString = "http:127.0.0.1:5000" + "/getScheduleNC"
+        let urlString = self.baseURL + "/getScheduleNC"
         let url = URL(string: urlString)
         var request = URLRequest(url: url!)
         request.httpMethod = "POST"
