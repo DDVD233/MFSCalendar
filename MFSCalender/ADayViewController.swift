@@ -130,7 +130,7 @@ extension ADay: UITableViewDelegate, UITableViewDataSource, UIViewControllerPrev
         if let period = rowDict["period"] as? Int {
             cell?.PeriodNumber.text = String(describing: period)
 
-            cell?.PeriodTime.text = ClassView().getMeetTime(period: period)
+            cell?.PeriodTime.text = getMeetTime(period: period)
         }
 
         let roomN = rowDict["roomNumber"] as? String

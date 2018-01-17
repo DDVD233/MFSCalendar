@@ -7,6 +7,93 @@
 //
 
 import Foundation
+import SwiftDate
+
+struct ClassTime {
+    var currentDate: DateInRegion
+    
+    init() {
+        self.currentDate = DateInRegion()
+    }
+    
+    var period: [Period] {
+        return [Period(start: currentDate.atTime(hour: 8, minute: 0, second: 0)!,
+                       end: currentDate.atTime(hour: 8, minute: 42, second: 0)!),
+                Period(start: currentDate.atTime(hour: 8, minute: 46, second: 0)!,
+                       end: currentDate.atTime(hour: 9, minute: 28, second: 0)!),
+                Period(start: currentDate.atTime(hour: 9, minute: 32, second: 0)!,
+                       end: currentDate.atTime(hour: 10, minute: 32, second: 0)!),
+                Period(start: currentDate.atTime(hour: 10, minute: 42, second: 0)!,
+                       end: currentDate.atTime(hour: 11, minute: 24, second: 0)!),
+                Period(start: currentDate.atTime(hour: 11, minute: 28, second: 0)!,
+                       end: currentDate.atTime(hour: 12, minute: 10, second: 0)!),
+                Period(start: currentDate.atTime(hour: 12, minute: 14, second: 0)!,
+                       end: currentDate.atTime(hour: 12, minute: 56, second: 0)!),
+                Period(start: currentDate.atTime(hour: 13, minute: 0, second: 0)!,
+                       end: currentDate.atTime(hour: 13, minute: 38, second: 0)!),
+                Period(start: currentDate.atTime(hour: 13, minute: 42, second: 0)!,
+                       end: currentDate.atTime(hour: 14, minute: 24, second: 0)!),
+                Period(start: currentDate.atTime(hour: 14, minute: 28, second: 0)!,
+                       end: currentDate.atTime(hour: 15, minute: 10, second: 0)!)
+                ]
+    }
+}
+
+struct Period {
+    var start: DateInRegion
+    var end: DateInRegion
+    
+    init(start: DateInRegion, end: DateInRegion) {
+        self.start = start
+        self.end = end
+    }
+}
+
+func periodTimerString(periodNumber: Int) -> String {
+    var timerString: String = ""
+    let period = ClassTime().period[periodNumber-1]
+    let currentTime = DateInRegion()
+    print(currentTime)
+    
+    var difference: TimeInterval? = nil
+    
+    if currentTime.isBefore(date: period.start, granularity: .second) {
+        timerString = "Starts in "
+        difference = period.start - currentTime
+    } else if currentTime.isBefore(date: period.end, granularity: .second) {
+        timerString = "Ends in "
+        difference = period.end - currentTime
+    } else {
+        timerString = "Ended "
+        difference = currentTime - period.end
+    }
+    
+    let minutes = Int(difference!).seconds.in(.minute)!
+    
+    if minutes > 2 {
+        timerString += String(describing: minutes) + " minutes"
+    } else {
+        let seconds = Int(difference!)
+        timerString += String(describing: seconds) + " seconds"
+    }
+    
+    return timerString
+}
+
+func getMeetTime(period: Int) -> String {
+    switch period {
+    case 1: return "8:00AM - 8:42AM"
+    case 2: return "8:46AM - 9:28AM"
+    case 3: return "9:32AM - 10:32AM"
+    case 4: return "10:42AM - 11:24AM"
+    case 5: return "11:28AM - 12:10AM"
+    case 6: return "12:14PM - 12:56PM"
+    case 7: return "1:00PM - 1:38PM"
+    case 8: return "1:42PM - 2:23PM"
+    case 9: return "2:24PM - 3:10PM"
+    default: return "Error!"
+    }
+}
 
 func getCurrentPeriod(time: Int) -> Int {
     let Period1Start = 800
@@ -57,7 +144,7 @@ func getCurrentPeriod(time: Int) -> Int {
         currentClass = 10
     default:
         NSLog("???")
-        currentClass = -1
+        currentClass = 10
     }
     
     return currentClass!
@@ -78,7 +165,11 @@ func getClassDataAt(period: Int, day: String) -> [[String: Any]] {
     //let lunch = ["className": "Lunch", "roomNumber": "DH/C", "teacher": "", "period": 11] as [String: Any]
     let meetingForWorship = ["className": "Meeting For Worship", "roomNumber": "Meeting House", "teacher": "", "period": 4] as [String: Any]
     
-    if listClasses.count > 8 {
+    guard period <= 9 else {
+        return listClasses
+    }
+    
+    if allClasses.count > 8 {
         listClasses = Array(allClasses[(period - 1)...8])
     }
     

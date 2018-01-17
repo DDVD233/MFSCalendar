@@ -41,6 +41,10 @@ target 'MFSMobile' do
   # pod 'GSKStretchyHeaderView'
 end
 
+target 'Class Schedule' do
+  pod 'SwiftDate'
+end
+
 post_install do |installer|
   require 'fileutils'
   FileUtils.cp_r('Pods/Target Support Files/Pods-MFSMobile/Pods-MFSMobile-acknowledgements.markdown', 'MFSCalender/Acknowledgements.markdown', :remove_destination => true)

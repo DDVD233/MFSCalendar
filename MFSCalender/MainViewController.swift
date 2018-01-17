@@ -518,14 +518,13 @@ extension Main: UICollectionViewDelegate, UICollectionViewDataSource, UICollecti
 
         cell.teacher.text = teacher
         cell.className.text = className
-        if row == 0 {
-            cell.period.text = "CURRENT CLASS"
-        } else if row == 1 {
-            cell.period.text = "NEXT CLASS"
-        } else if className == "Lunch" {
-            cell.period.text = "LUNCH"
-        } else {
-            if let period = classData["period"] as? Int {
+        
+        if let period = classData["period"] as? Int {
+            if row == 0 || row == 1 {
+                cell.period.text = periodTimerString(periodNumber: period)
+            } else if className == "Lunch" {
+                cell.period.text = "LUNCH"
+            } else {
                 cell.period.text = "PERIOD " + String(describing: period)
             }
         }

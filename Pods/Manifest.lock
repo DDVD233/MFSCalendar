@@ -3,9 +3,9 @@ PODS:
   - ChameleonFramework/Default (2.1.0)
   - ChameleonFramework/Swift (2.1.0):
     - ChameleonFramework/Default
-  - Charts (3.0.4):
-    - Charts/Core (= 3.0.4)
-  - Charts/Core (3.0.4)
+  - Charts (3.0.5):
+    - Charts/Core (= 3.0.5)
+  - Charts/Core (3.0.5)
   - Crashlytics (3.9.3):
     - Fabric (~> 1.7.2)
   - DGElasticPullToRefresh (1.1)
@@ -46,7 +46,7 @@ PODS:
   - JSQWebViewController (6.0.0)
   - Kanna (4.0.0)
   - LTMorphingLabel (0.5.6)
-  - M13Checkbox (3.2.1)
+  - M13Checkbox (3.2.2)
   - M13ProgressSuite (1.2.9)
   - Moya (10.0.1):
     - Moya/Core (= 10.0.1)
@@ -133,22 +133,22 @@ CHECKOUT OPTIONS:
     :commit: 6dd284bde21ea2e7f9fd89bc36f40df16e16369d
     :git: https://github.com/ViccAlexander/Chameleon.git
   Down:
-    :commit: eb4e820a8ca67a2e834d75b4fff9d702e673ea1c
+    :commit: fbf9ef54b59c9524d2064788c0682355ca2b783e
     :git: https://github.com/iwasrobbed/Down.git
   Kanna:
     :commit: 58e3513d20cd16fe8b9ff16b5a2b481fcd643499
     :git: https://github.com/tid-kijyun/Kanna.git
   SkyFloatingLabelTextField:
-    :commit: c0076fe0e75c0bfae0b6588aac8f01c73410f3e7
+    :commit: acc9ee158f768717d3eac6d992bc6994882c3d4a
     :git: https://github.com/Skyscanner/SkyFloatingLabelTextField.git
   Spring:
-    :commit: b65cb00a1adc7e810e2ad10b174b840b6d520ac3
+    :commit: 8d04081f4b27ff85161addee45b21c1156f0143f
     :git: https://github.com/MengTo/Spring.git
 
 SPEC CHECKSUMS:
   Alamofire: f41a599bd63041760b26d393ec1069d9d7b917f4
   ChameleonFramework: d21a3cc247abfe5e37609a283a8238b03575cf64
-  Charts: 0705898046257443f0afbbc3179f4b67507b6e48
+  Charts: 45cdc985b764c838b35ee47eb1365d15735f6d1a
   Crashlytics: dbb07d01876c171c5ccbdf7826410380189e452c
   DGElasticPullToRefresh: 28f11a6026302a90f8ffebbc6e24748e584dddd3
   Down: 55a4bbd0b9507f63a6536a3a45afdf70d3b1e07d
@@ -166,7 +166,7 @@ SPEC CHECKSUMS:
   JSQWebViewController: 51041569b75d19dbb6b7fe0b7ae053c32409a9be
   Kanna: d5ae2a26472f7e7a474e7f36a9cd8aa2c8c63ad3
   LTMorphingLabel: bdb51d4682e9822da89da6f567bd8aa456fd6650
-  M13Checkbox: 12376f5b128189432508c240e4a36dc945ab7e4e
+  M13Checkbox: a8c2491cfbbca10797925fd0b9154a782bf40d89
   M13ProgressSuite: ea9f7263e73e9215e6849dfa54e29ee0ad6a145c
   Moya: 9e621707ff754eeb51ff3ec51a3d54e517c0733a
   nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
@@ -187,6 +187,6 @@ SPEC CHECKSUMS:
   UrbanAirship-iOS-SDK: 61bad27cf3ea49e2da7c9a6c469674bf3ac2ffa0
   XLPagerTabStrip: d1ab378af0923320ec0b5eab11d7b2f803d31261
 
-PODFILE CHECKSUM: 3d0d99e2a33df9ec06dce76efb50121798ef3a4b
+PODFILE CHECKSUM: f4d32a5b05aa3303ec4c1c1969232abbadb81a50
 
 COCOAPODS: 1.2.0
