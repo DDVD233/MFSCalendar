@@ -78,10 +78,12 @@ class classDetailViewController: UITableViewController, UIDocumentInteractionCon
     }
     
     func configureBasicInfoView() {
-        let sectionId = classObject["leadsectionid"] as! Int
-        let photoPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-        let path = photoPath.appending("/\(sectionId)_profile.png")
-        profileImageView.image = UIImage(contentsOfFile: path) ?? UIImage(named: "CourseBackground.jpg")!
+        if let sectionId = ClassView().getLeadSectionID(classDict: classObject) {
+            let photoPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
+            let path = photoPath.appending("/\(sectionId)_profile.png")
+            profileImageView.image = UIImage(contentsOfFile: path) ?? UIImage(named: "CourseBackground.jpg")!
+        }
+        
         profileImageView.contentMode = UIViewContentMode.scaleAspectFill
         profileImageView.clipsToBounds = true
         
@@ -99,7 +101,7 @@ class classDetailViewController: UITableViewController, UIDocumentInteractionCon
             self.configureBasicInfoView()
         }
 
-        guard let sectionId = classObject["leadsectionid"] as? Int else {
+        guard let sectionId = ClassView().getLeadSectionID(classDict: classObject) else {
             return
         }
 
@@ -335,7 +337,7 @@ extension classDetailViewController {
         switch availableInformation[section] {
         case "Basic":
             let cell = classDetailTable.dequeueReusableCell(withIdentifier: "classOverviewTable", for: indexPath)
-            let sectionId = classObject["leadsectionid"] as! Int
+            let sectionId = ClassView().getLeadSectionID(classDict: classObject) ?? 0
             let photoPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
             let path = photoPath.appending("/\(sectionId)_profile.png")
             profileImageView.image = UIImage(contentsOfFile: path) ?? UIImage(named: "CourseBackground.jpg")!

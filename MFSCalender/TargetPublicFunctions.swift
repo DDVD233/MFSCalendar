@@ -212,6 +212,16 @@ public func presentErrorMessage(presentMessage: String, layout: MessageView.Layo
 }
 
 class ClassView {
+    func getLeadSectionID(classDict: [String: Any]) -> Int? {
+        if let leadSectionID = classDict["leadsectionid"] as? Int {
+            return leadSectionID
+        } else if let sectionID = classDict["sectionid"] as? Int {
+            return sectionID
+        } else {
+            return nil
+        }
+    }
+    
     func getProfilePhoto() {
         let path = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
         let coursePath = path.appending("/CourseList.plist")
@@ -224,7 +234,7 @@ class ClassView {
         
         for items in courseList {
             queue.async(group: group) {
-                guard let sectionIdInt = items["leadsectionid"] as? Int else {
+                guard let sectionIdInt = ClassView().getLeadSectionID(classDict: items) else {
                     return
                 }
                 

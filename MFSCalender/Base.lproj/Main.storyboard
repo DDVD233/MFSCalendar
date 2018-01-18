@@ -913,15 +913,15 @@
                                                 <color key="separatorColor" red="1" green="0.7998471328771648" blue="0.50447591145833326" alpha="1" colorSpace="calibratedRGB"/>
                                                 <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 <prototypes>
-                                                    <tableViewCell clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="eventTableDash" rowHeight="75" id="4EP-aC-Nqw" customClass="customEventCellDashboard" customModule="MFSMobile" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="1" width="335" height="75"/>
+                                                    <tableViewCell clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="eventTableDash" rowHeight="92" id="4EP-aC-Nqw" customClass="customEventCellDashboard" customModule="MFSMobile" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="1" width="335" height="92"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="4EP-aC-Nqw" id="e6v-lZ-Add">
-                                                            <rect key="frame" x="0.0" y="0.0" width="335" height="74.5"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="335" height="91.5"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <subviews>
                                                                 <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MuJ-0d-ick">
-                                                                    <rect key="frame" x="5" y="7" width="3" height="60.5"/>
+                                                                    <rect key="frame" x="5" y="7" width="3" height="77.5"/>
                                                                     <color key="backgroundColor" red="0.76497395833333337" green="0.38398695081380213" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="width" constant="3" id="QMd-ii-H53"/>
@@ -933,7 +933,7 @@
                                                                     </userDefinedRuntimeAttributes>
                                                                 </view>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="N" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="706-YK-2Ak">
-                                                                    <rect key="frame" x="13" y="15.5" width="55" height="45"/>
+                                                                    <rect key="frame" x="13" y="23" width="55" height="45.5"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="width" constant="55" id="QXk-9Y-htB"/>
                                                                         <constraint firstAttribute="height" constant="45" id="g2j-d3-GL0"/>
@@ -948,14 +948,14 @@
                                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="time" textAlignment="natural" lineBreakMode="characterWrap" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qQu-jk-mfR">
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="time" textAlignment="natural" lineBreakMode="characterWrap" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qQu-jk-mfR">
                                                                     <rect key="frame" x="76" y="34.5" width="224" height="16"/>
                                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
                                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Room" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uU7-ur-obC">
-                                                                    <rect key="frame" x="76" y="47.5" width="224" height="21"/>
+                                                                    <rect key="frame" x="76" y="47.5" width="224" height="33.5"/>
                                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                                     <nil key="highlightedColor"/>
@@ -1477,13 +1477,22 @@
                             <constraint firstAttribute="trailing" secondItem="Rj8-l0-2iy" secondAttribute="trailing" id="tXf-TI-X60"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="TimeTable" id="cej-1q-Hf0">
+                    <navigationItem key="navigationItem" id="cej-1q-Hf0">
+                        <nil key="title"/>
                         <barButtonItem key="leftBarButtonItem" title="Back" id="9e5-Da-MZM">
                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <connections>
                                 <action selector="expandButton:" destination="QUz-Th-8ul" id="BXl-FN-H3g"/>
                             </connections>
                         </barButtonItem>
+                        <segmentedControl key="titleView" opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="fR1-y0-Ct9">
+                            <rect key="frame" x="127" y="7.5" width="121" height="29"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <segments>
+                                <segment title="First"/>
+                                <segment title="Second"/>
+                            </segments>
+                        </segmentedControl>
                         <barButtonItem key="rightBarButtonItem" title="Today" id="Vqp-lJ-jaV">
                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <connections>
@@ -1496,6 +1505,7 @@
                         <outlet property="calendarHeightConstraint" destination="o7H-31-jVt" id="vuR-fi-CYg"/>
                         <outlet property="calendarView" destination="Rj8-l0-2iy" id="upA-TS-Fdg"/>
                         <outlet property="containerView" destination="3nJ-HW-HKL" id="p3X-hO-Arn"/>
+                        <outlet property="segmentedControl" destination="fR1-y0-Ct9" id="0QL-0h-PVf"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="k5C-IO-qBZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -2701,7 +2711,7 @@
         <scene sceneID="dCL-MH-bcM">
             <objects>
                 <tableViewController storyboardIdentifier="settings" title="Settings" useStoryboardIdentifierAsRestorationIdentifier="YES" id="XRE-Nj-Rag" customClass="settingViewController" customModule="MFSMobile" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="qtr-Lw-dXe">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="qtr-Lw-dXe">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
@@ -2731,7 +2741,7 @@
                                                     </segments>
                                                     <color key="tintColor" red="1" green="0.49327188729999999" blue="0.47399842739999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <connections>
-                                                        <action selector="quarterButtonTouched:" destination="XRE-Nj-Rag" eventType="valueChanged" id="P2b-Zx-ZlP"/>
+                                                        <action selector="changeQuarter:" destination="XRE-Nj-Rag" eventType="valueChanged" id="9IV-ru-qHX"/>
                                                     </connections>
                                                 </segmentedControl>
                                             </subviews>

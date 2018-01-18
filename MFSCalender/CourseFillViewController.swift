@@ -263,7 +263,7 @@ class courseFillController: UIViewController {
 
         let (_, _, userId) = loginAuthentication()
 
-        guard let durationId = NetworkOperations().getDurationId(for: 1) else {
+        guard let durationId = NetworkOperations().getDurationId(for: Preferences().currentQuarter) else {
             return false
         }
 

@@ -199,7 +199,7 @@ class gradeViewController: UITableViewController {
     func getGradeDetail() {
         guard loginAuthentication().success else { return }
         let userID = loginAuthentication().userId
-        guard let sectionID = classObject["leadsectionid"] as? Int else { return }
+        guard let sectionID = ClassView().getLeadSectionID(classDict: classObject) else { return }
         
         var markingPeriodID: String {
             switch quarterSelected {
@@ -275,7 +275,7 @@ class gradeViewController: UITableViewController {
 
         let userId = loginAuthentication().userId
 
-        let leadSectionId = classObject["leadsectionid"] as? Int
+        let leadSectionId = ClassView().getLeadSectionID(classDict: classObject)
 
         var cumGrade = ""
 

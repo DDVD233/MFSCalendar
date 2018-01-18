@@ -51,7 +51,7 @@ class customEventCell: UITableViewCell {
     }
 }
 
-class CalendarViewController: TwitterPagerTabStripViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate, UIGestureRecognizerDelegate {
+class CalendarViewController: SegmentedPagerTabStripViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate, UIGestureRecognizerDelegate {
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent

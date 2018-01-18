@@ -87,8 +87,8 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     
     let formatter = DateFormatter()
     var listEvents = [[String: Any]]()
-    var listClasses = [[String: Any?]]()
-    var listHomework = [String: Array<Dictionary<String, Any?>>]()
+    var listClasses = [[String: Any]]()
+    var listHomework = [String: Array<Dictionary<String, Any>>]()
     var timer: Timer? = nil
 //    Format: {Lead_Section_ID: [Homework]}
     var isVisible = true
@@ -118,8 +118,6 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         self.eventView.emptyDataSetDelegate = self
         self.eventView.emptyDataSetSource = self
         self.eventView.separatorStyle = .singleLine
-        self.eventView.estimatedRowHeight = 200
-        self.eventView.rowHeight = UITableViewAutomaticDimension
         
         if #available(iOS 11, *) {
             eventBottomLayoutConstraint.isActive = true
@@ -418,7 +416,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     }
 
     func getHomework() {
-        self.listHomework = [String: Array<Dictionary<String, Any?>>]()
+        self.listHomework = [String: Array<Dictionary<String, Any>>]()
 
         guard let username = Preferences().username else {
             return
@@ -448,7 +446,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         let task: URLSessionDataTask = session.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
             if error == nil {
                 do {
-                    if let json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? Array<Dictionary<String, Any?>> {
+                    if let json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? Array<Dictionary<String, Any>> {
                         let formatter = DateFormatter()
                         formatter.dateFormat = "M/d/yyyy"
                         let tomorrow = formatter.string(from: (Date() + 1.day))
@@ -554,7 +552,7 @@ extension Main: UICollectionViewDelegate, UICollectionViewDataSource, UICollecti
         }
 
         cell.homeworkView.isHidden = true
-        if let leadSectionId = classData["leadsectionid"] as? Int {
+        if let leadSectionId = ClassView().getLeadSectionID(classDict: classData) {
             print(listHomework)
             if let thisClassHomework = listHomework[String(leadSectionId)] {
                 // cell.homeworkView.isHidden = false
@@ -621,7 +619,7 @@ extension Main: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableViewAutomaticDimension
+        return 90
     }
 
 

@@ -51,12 +51,30 @@ class settingViewController: UITableViewController, UIActionSheetDelegate {
         
     }
     
-    @IBAction func quarterButtonTouched(_ sender: Any) {
-        print(currentQuarter.selectedSegmentIndex)
-        Preferences().currentQuarter = currentQuarter.selectedSegmentIndex + 1
-        Preferences().courseInitialized = false
-        Preferences().doUpdateQuarter = false
-        self.tabBarController?.selectedIndex = 0
+    @IBAction func changeQuarter(_ sender: Any) {
+        let quarterActionSheet = UIAlertController(title: "Are you sure you want to change quarter?", message: "This will clear all the course data.", preferredStyle: .actionSheet)
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (alertAction) -> Void in
+            NSLog("Canceled")
+        }
+        
+        let changeQuarterAction = UIAlertAction(title: "Yes, change it!", style: .default) { (alertAction) -> Void in
+            NSLog("Quarter Changed")
+            print(self.currentQuarter.selectedSegmentIndex)
+            Preferences().currentQuarter = self.currentQuarter.selectedSegmentIndex + 1
+            Preferences().courseInitialized = false
+            Preferences().doUpdateQuarter = false
+            self.tabBarController?.selectedIndex = 0
+        }
+        
+        quarterActionSheet.addAction(cancelAction)
+        quarterActionSheet.addAction(changeQuarterAction)
+        
+        if let segmentedView = sender as? UIView {
+            quarterActionSheet.popoverPresentationController?.sourceView = segmentedView
+            quarterActionSheet.popoverPresentationController?.sourceRect = segmentedView.frame
+        }
+        
+        self.present(quarterActionSheet, animated: true, completion: nil)
     }
-    
 }
