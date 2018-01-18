@@ -23,23 +23,41 @@ func areEqual<T:Equatable>(type: T.Type, a: Any?, b: Any?) -> Bool? {
     return a == b
 }
 
-//public func getRequestVerification() {
-//    let url = URL(string: "https://mfriends.myschoolapp.com/app#login")!
-//    let semaphore = DispatchSemaphore.init(value: 0)
-//    let task = URLSession.shared.dataTask(with: url, completionHandler: {(data, response, error) in
-//        semaphore.signal()
-//    })
-//    
-//    task.resume()
-//    semaphore.wait()
-//    
-//    loginAuthentication()
-//    
-//    let htmlReqUrl = URL(string: "https://mfriends.myschoolapp.com/app/student")!
-//    let task2 = URLSession.shared.dataTask(with: htmlReqUrl, completionHandler: { (data, response, error) in
-//        
-//    })
-//}
+public func getRequestVerification() -> String? {
+    var requestVerification: String? = nil
+    
+    let url = URL(string: "https://mfriends.myschoolapp.com/app#login")!
+    let semaphore = DispatchSemaphore.init(value: 0)
+    let task = URLSession.shared.dataTask(with: url, completionHandler: {(data, response, error) in
+        semaphore.signal()
+    })
+    
+    task.resume()
+    semaphore.wait()
+    
+    loginAuthentication()
+    
+    let htmlReqUrl = URL(string: "https://mfriends.myschoolapp.com/app/student#studentmyday/assignment-center")!
+    let semaphore2 = DispatchSemaphore.init(value: 0)
+    let task2 = URLSession.shared.dataTask(with: htmlReqUrl, completionHandler: {(data, response, error) in
+        do {
+            let doc = try HTML(html: data!, encoding: .utf8)
+            requestVerification = doc
+                                  .body?
+                                  .xpath("//div[@id = '__AjaxAntiForgery']")
+                                  .first?.xpath("//input[@name = '__RequestVerificationToken']")
+                                  .first?["value"]
+            semaphore2.signal()
+        } catch {
+            print(error.localizedDescription)
+        }
+    })
+    
+    task2.resume()
+    semaphore2.wait()
+    
+    return requestVerification
+}
 
 @available(iOS 11.0, *)
 func setLargeTitle(on viewController: UIViewController) {
@@ -375,6 +393,12 @@ class HomeworkView {
     }
     
     func updateAssignmentStatus(assignmentIndexId: String, assignmentStatus: String) throws {
+        loginAuthentication()
+        guard let requestVerification = getRequestVerification() else {
+            throw CustomError.NetworkError
+        }
+        
+        print(requestVerification)
         var success = true
         let url = "https://mfriends.myschoolapp.com/api/assignment2/assignmentstatusupdate/?format=json&assignmentIndexId=\(assignmentIndexId)&assignmentStatus=\(assignmentStatus)"
         
@@ -385,10 +409,15 @@ class HomeworkView {
         
         var request = try! URLRequest(url: URL(string: url)!, method: .post)
         request.httpBody = jsonData
+        
+        request.setValue(requestVerification, forHTTPHeaderField: "RequestVerificationToken")
+        
         let config = URLSessionConfiguration.default
         config.requestCachePolicy = .reloadIgnoringLocalCacheData
         let session = URLSession(configuration: config)
         let semaphore = DispatchSemaphore(value: 0)
+        print(assignmentIndexId)
+        print(assignmentStatus)
         print(request.allHTTPHeaderFields)
         
         let task: URLSessionDataTask = session.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
