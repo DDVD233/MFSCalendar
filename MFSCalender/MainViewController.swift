@@ -330,6 +330,10 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     }
 
     func doRefreshData() -> Bool {
+        if Preferences().currentQuarter == 0 {
+            Preferences().doUpdateQuarter = true
+            return true
+        }
 
 //        当版本号不存在时，默认更新数据
         let version = Preferences().version

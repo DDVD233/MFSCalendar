@@ -183,13 +183,8 @@ extension homeworKDetailViewController: UITableViewDelegate, UITableViewDataSour
                 return
             }
             
-            guard let course = courseList.filter({ ($0["className"] as? String) == courseName }).first else {
+            guard let index = courseList.index(where: { ($0["className"] as? String) == courseName }) else {
                 presentErrorMessage(presentMessage: "Course not found", layout: .statusLine)
-                return
-            }
-            
-            guard let index = course["index"] as? Int else {
-                presentErrorMessage(presentMessage: "Course index not found", layout: .statusLine)
                 return
             }
             

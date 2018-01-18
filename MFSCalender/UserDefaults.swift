@@ -182,15 +182,6 @@ public class Preferences {
         }
     }
     
-    public var dataVersion: Int {
-        get {
-            return userDefaults.integer( forKey: "dataVersion" )
-        }
-        set(value) {
-            userDefaults.set( value, forKey: "dataVersion" )
-        }
-    }
-    
     public var isFirstTimeLogin: Bool {
         get {
             return userDefaults.object(forKey: "isFirstTimeLogin" ) as? Bool ?? true

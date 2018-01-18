@@ -70,6 +70,7 @@ class courseFillController: UIViewController {
         }
         
         let group = DispatchGroup()
+        var schedule = [[String: Any]]()
         
         DispatchQueue.global().async(group: group, execute: {
             guard self.newGetCourse() else {
@@ -78,6 +79,13 @@ class courseFillController: UIViewController {
                 }
                 return
             }
+            
+            self.setProgressTo(value: 33)
+            
+            ClassView().getProfilePhoto()
+            self.versionCheck()
+            
+            self.setProgressTo(value: 66)
         })
         
         DispatchQueue.global().async(group: group, execute: {
@@ -85,20 +93,21 @@ class courseFillController: UIViewController {
                 self.clearData(day: String(alphabet))
             }
             
-            guard let schedule = self.getScheduleNC() else {
+            guard let gotSchedule = self.getScheduleNC() else {
                 DispatchQueue.main.async {
                     self.viewDismiss()
                 }
                 return
             }
             
-            self.createScheduleNC(schedule: schedule)
+            schedule = gotSchedule
             
             //self.fillAdditionalInformarion()
         })
         
         group.wait()
-        setProgressTo(value: 33)
+        
+        self.createScheduleNC(schedule: schedule)
         
 //        guard createSchedule(fillLowPriority: 0) else {
 //            viewDismiss()
@@ -113,9 +122,7 @@ class courseFillController: UIViewController {
         for alphabet in "ABCDEF" {
             self.fillStudyHallAndLunch(letter: String(alphabet))
         }
-        
-        ClassView().getProfilePhoto()
-        versionCheck()
+
         setProgressTo(value: 100)
         DispatchQueue.main.async {
             UIApplication.shared.isNetworkActivityIndicatorVisible = true
@@ -207,7 +214,7 @@ class courseFillController: UIViewController {
             let coursePath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
             let path = coursePath.appending("/CourseList.plist")
             if let coursesList = NSArray(contentsOfFile: path)! as? Array<Dictionary<String, Any>> {
-                if let courseIndex = coursesList.index(where: { $0["coursedescription"] as? String == className &&
+                if let courseIndex = coursesList.index(where: { ($0["className"] as? String ?? "").contains(className) &&
                                                                 $0["teacherName"] as? String == teacherName
                 }) {
                     courses["index"] = Int(courseIndex)
@@ -280,6 +287,7 @@ class courseFillController: UIViewController {
                     print(course)
                     course["className"] = course["sectionidentifier"] as? String
                     course["teacherName"] = course["groupownername"] as? String
+                    course["index"] = index
 //                    If I do not delete nill value, it will not be able to write to plist.
                     for (key, value) in course {
                         if (value as? NSNull) == NSNull() {
