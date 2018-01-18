@@ -389,6 +389,7 @@ class HomeworkView {
         config.requestCachePolicy = .reloadIgnoringLocalCacheData
         let session = URLSession(configuration: config)
         let semaphore = DispatchSemaphore(value: 0)
+        print(request.allHTTPHeaderFields)
         
         let task: URLSessionDataTask = session.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
             if error == nil {

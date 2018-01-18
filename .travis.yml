@@ -1,7 +1,7 @@
 osx_image: xcode9
 language: swift
-xcode_project: MFSCalendar.xcworkspace # path to your xcodeproj folder
-xcode_scheme: MFSCalendar
+xcode_project: MFSMobile.xcworkspace # path to your xcodeproj folder
+xcode_scheme: MFSMobile
 before_install:
 - gem install cocoapods --pre --no-rdoc --no-ri --no-document --quiet
 - pod repo update
