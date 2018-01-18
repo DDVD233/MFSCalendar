@@ -66,17 +66,13 @@ class classViewCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
     }
-    
-    func updateTimer() {
-        
-    }
 }
 
 class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
 
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
-    }
+//    override var preferredStatusBarStyle: UIStatusBarStyle {
+//        return .lightContent
+//    }
 
     @IBOutlet weak var welcomeLabel: UILabel!
     @IBOutlet weak var dateLabel: UILabel!
@@ -122,6 +118,8 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         self.eventView.emptyDataSetDelegate = self
         self.eventView.emptyDataSetSource = self
         self.eventView.separatorStyle = .singleLine
+        self.eventView.estimatedRowHeight = 200
+        self.eventView.rowHeight = UITableViewAutomaticDimension
         
         if #available(iOS 11, *) {
             eventBottomLayoutConstraint.isActive = true
@@ -154,6 +152,8 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         isVisible = true
+        
+        UIApplication.shared.statusBarStyle = .lightContent
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -172,7 +172,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
             self.present(vc!, animated: true, completion: nil)
             return
         }
-
+        
         refreshDisplayedData()
         DispatchQueue.global().async {
             if Reachability()?.connection != .none && self.doRefreshData() {
@@ -197,29 +197,17 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
 //        }
         let notification = NotificationCenter.default
         notification.addObserver(forName: .UIApplicationWillResignActive, object: nil, queue: OperationQueue.current, using: { _ in
-            self.timer?.invalidate()
+            self.stopTimer()
         })
         
-        if #available(iOS 10.0, *) {
-            self.timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { _ in
-                self.autoRefreshContents()
-            })
-        } else {
-            // Fallback on earlier versions
-        }
-    }
-    
-    @objc func autoRefreshContents() {
-        DispatchQueue.global().async {
-            self.refreshDisplayedData()
-        }
-        print("Content refreshed")
+        startTimer()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(true)
         navigationController?.setNavigationBarHidden(false, animated: false)
         isVisible = false
-        timer?.invalidate()
+        stopTimer()
     }
 
     func updateData() {
@@ -234,8 +222,10 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         })
 
         group.wait()
-
-        self.refreshDisplayedData()
+        
+        DispatchQueue.main.async {
+            self.refreshDisplayedData()
+        }
         
         DispatchQueue.global().async {
             ClassView().getProfilePhoto()
@@ -253,8 +243,34 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
             presentErrorMessage(presentMessage: "Cannot find course fill page", layout: .statusLine)
         }
     }
+    
+    
+    func startTimer(){
+        if timer == nil {
+            if #available(iOS 10.0, *) {
+                timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { _ in
+                    DispatchQueue.main.async {
+                        self.refreshDisplayedData()
+                    }
+                })
+            } else {
+                // Fallback on earlier versions
+            }
+        }
+    }
+    
+    func stopTimer() {
+        if timer != nil {
+            timer!.invalidate()
+            timer = nil
+        }
+    }
 
     func refreshDisplayedData() {
+//        if !isViewLoaded || (view.window == nil) {
+//            stopTimer()
+//        }
+        
         eventDataFetching()
         getListClasses(day: dayCheck())
         setupTheHeader()
@@ -598,6 +614,10 @@ extension Main: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection selection: Int) -> Int {
         let eventCount = self.listEvents.count
         return eventCount
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableViewAutomaticDimension
     }
 
 

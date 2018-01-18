@@ -12,11 +12,6 @@ import XLPagerTabStrip
 class timeTableParentViewController: SegmentedPagerTabStripViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
-        if Preferences().isiPhoneX {
-            hidesBottomBarWhenPushed = true
-        } else {
-            hidesBottomBarWhenPushed = false
-        }
     }
     
     override public func viewControllers(for pagerTabStripController: PagerTabStripViewController) -> [UIViewController] {

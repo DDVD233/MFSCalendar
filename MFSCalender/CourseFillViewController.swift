@@ -256,7 +256,7 @@ class courseFillController: UIViewController {
 
         let (_, _, userId) = loginAuthentication()
 
-        guard let durationId = NetworkOperations().getDurationId() else {
+        guard let durationId = NetworkOperations().getDurationId(for: 1) else {
             return false
         }
 
@@ -514,6 +514,11 @@ class courseFillController: UIViewController {
         
         let lunch = ["className": "Lunch", "period": 7, "roomNumber": "DH/C", "teacher": ""] as [String : Any]
         listClasses[6] = lunch
+        
+        if letter == "B" {
+            let assembly = ["className": "Assembly", "period": 5, "roomNumber": "Auditorium", "teacher": ""] as [String : Any]
+            listClasses[4] = assembly
+        }
         
         for periodNumber in 1...8 {
             if listClasses.filter({ $0["period"] as? Int == periodNumber }).count == 0 {
