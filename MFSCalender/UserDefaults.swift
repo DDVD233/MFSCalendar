@@ -229,7 +229,7 @@ public class Preferences {
     
     public var isStudent: Bool {
         get {
-            return userDefaults.bool(forKey: "isStudent" )
+            return userDefaults.object(forKey: "isStudent" ) as? Bool ?? true
         }
         set(value) {
             userDefaults.set(value, forKey: "isStudent" )
