@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		7ED7944ABD6D3326AAD92DBA /* Pods_MFSMobile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DF673FDDB9EA200FEA7BD2D /* Pods_MFSMobile.framework */; };
 		8479CAF7D2DEA636A485F8F4 /* Pods_Class_Schedule.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FEC0DC0AD43DB47806205F3 /* Pods_Class_Schedule.framework */; };
+		E412E2BB201261B80082540B /* EventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E412E2BA201261B80082540B /* EventViewController.swift */; };
 		E413AB0E1EE89441001EB189 /* Achievement.png in Resources */ = {isa = PBXBuildFile; fileRef = E413AB0D1EE89441001EB189 /* Achievement.png */; };
 		E413AB101EE89683001EB189 /* questionmark.png in Resources */ = {isa = PBXBuildFile; fileRef = E413AB0F1EE89683001EB189 /* questionmark.png */; };
 		E413AB121EE8A796001EB189 /* brush_pencil.png in Resources */ = {isa = PBXBuildFile; fileRef = E413AB111EE8A796001EB189 /* brush_pencil.png */; };
@@ -138,6 +139,7 @@
 		9C9307D95D24FE30AFAEDD40 /* Pods_MFSCalendar.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MFSCalendar.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A4CA14223E8B31A5B7F590F6 /* Pods-MFSMobile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MFSMobile.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MFSMobile/Pods-MFSMobile.debug.xcconfig"; sourceTree = "<group>"; };
 		B710C5F6924F68DB86B70E20 /* Pods-MFSCalendar.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MFSCalendar.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MFSCalendar/Pods-MFSCalendar.debug.xcconfig"; sourceTree = "<group>"; };
+		E412E2BA201261B80082540B /* EventViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventViewController.swift; sourceTree = "<group>"; };
 		E413AB0D1EE89441001EB189 /* Achievement.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Achievement.png; sourceTree = "<group>"; };
 		E413AB0F1EE89683001EB189 /* questionmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = questionmark.png; sourceTree = "<group>"; };
 		E413AB111EE8A796001EB189 /* brush_pencil.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = brush_pencil.png; sourceTree = "<group>"; };
@@ -453,6 +455,7 @@
 				E4C46A2D1ED50CD3007F8F1A /* CourseFillViewController.swift */,
 				E4CE439A1EAD0D51000D743B /* LoginViewController.swift */,
 				E453F0D01EA137D900BCE58D /* CalendarViewController.swift */,
+				E412E2BA201261B80082540B /* EventViewController.swift */,
 				E4ADC9ED1E882172002A46F7 /* Extensions.swift */,
 				E4F8D4E31EF0DD2200F47525 /* HomeworkViewController.swift */,
 				E4DAB5B01F6386640013D943 /* HomeworkDetailViewController.swift */,
@@ -920,6 +923,7 @@
 				E427868A1F568EB100583D1E /* ProfileViewController.swift in Sources */,
 				E4F86B331DF0E20C00CAD72B /* MainViewController.swift in Sources */,
 				E4BD88981F383A060000FEF3 /* ClassTimetableViewController.swift in Sources */,
+				E412E2BB201261B80082540B /* EventViewController.swift in Sources */,
 				E49E53421F995156003011A6 /* MobileServeIntroViewController.swift in Sources */,
 				E4E8B21A1F1C5AF200913DAE /* GradeViewController.swift in Sources */,
 				E4B340061F08942000D6039A /* classTopicViewController.swift in Sources */,
