@@ -466,7 +466,7 @@ extension homeworkViewController: DZNEmptyDataSetDelegate {
     }
 }
 
-class homeworkViewCell: UITableViewCell, UIDocumentPickerDelegate {
+class homeworkViewCell: UITableViewCell {
     @IBOutlet weak var checkMark: M13Checkbox!
     @IBOutlet weak var homeworkType: UILabel!
     @IBOutlet weak var homeworkClass: UILabel!
@@ -493,48 +493,48 @@ class homeworkViewCell: UITableViewCell, UIDocumentPickerDelegate {
     
     @IBAction func submit(_ sender: Any) {
         presentErrorMessage(presentMessage: "Sorry, this isn't ready. I'm still working on that.", layout: .cardView)
-//        return
+        return
 //        let documentPicker = UIDocumentPickerViewController(documentTypes: ["public.content"], in: .import)
 //        documentPicker.delegate = self
 //        parentViewController!.present(documentPicker, animated: true, completion: nil)
     }
     
-    func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
-        print("cancelled")
-    }
+//    func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
+//        print("cancelled")
+//    }
+//
+//    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+//        guard loginAuthentication().success else {
+//            return
+//        }
+//        let fileURL = urls[0]
+//        let queue = DispatchQueue.global()
+//        Alamofire.upload(fileURL, to: "https://mfriends.myschoolapp.com/app/utilities/FileTransferHandler.ashx").responseJSON(queue: queue, options: .allowFragments, completionHandler: { response in
+//            if let jsonList = response.result.value as? [[String: Any]] {
+//                print(response.result.value ?? "None")
+//                print(jsonList)
+//                guard !jsonList.isEmpty else {
+//                    return
+//                }
+//                let json = jsonList[0]
+//                self.confirmSubmission(json: json)
+//            }
+//        })
+//    }
     
-    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
-        guard loginAuthentication().success else {
-            return
-        }
-        let fileURL = urls[0]
-        let queue = DispatchQueue.global()
-        Alamofire.upload(fileURL, to: "https://mfriends.myschoolapp.com/app/utilities/FileTransferHandler.ashx").responseJSON(queue: queue, options: .allowFragments, completionHandler: { response in
-            if let jsonList = response.result.value as? [[String: Any]] {
-                print(response.result.value ?? "None")
-                print(jsonList)
-                guard !jsonList.isEmpty else {
-                    return
-                }
-                let json = jsonList[0]
-                self.confirmSubmission(json: json)
-            }
-        })
-    }
-    
-    func confirmSubmission(json: [String: Any]) {
-        let studentId = loginAuthentication().userId
-        guard let name = json["name"] as? String, let originalName = json["original_name"] as? String, let size = json["size"] as? Int else {
-            return
-        }
-        let parameters = ["StudentUserId": studentId,
-                          "AssignmentIndexId": assignmentIndexId ?? "",
-                          "ReadyInd": 1,
-                          "files":[["Name": name, "FullPath": originalName, "Size": size]]] as [String : Any]
-        Alamofire.request("https://mfriends.myschoolapp.com/api/assignment2/DropBoxSave?format=json", method: .post, parameters: parameters).responseJSON(queue: DispatchQueue.global(), options: .allowFragments, completionHandler: { response in
-            
-        })
-    }
+//    func confirmSubmission(json: [String: Any]) {
+//        let studentId = loginAuthentication().userId
+//        guard let name = json["name"] as? String, let originalName = json["original_name"] as? String, let size = json["size"] as? Int else {
+//            return
+//        }
+//        let parameters = ["StudentUserId": studentId,
+//                          "AssignmentIndexId": assignmentIndexId ?? "",
+//                          "ReadyInd": 1,
+//                          "files":[["Name": name, "FullPath": originalName, "Size": size]]] as [String : Any]
+//        Alamofire.request("https://mfriends.myschoolapp.com/api/assignment2/DropBoxSave?format=json", method: .post, parameters: parameters).responseJSON(queue: DispatchQueue.global(), options: .allowFragments, completionHandler: { response in
+//
+//        })
+//    }
     
     @objc func checkDidChange(checkMark: M13Checkbox) {
         if #available(iOS 10.0, *) {
