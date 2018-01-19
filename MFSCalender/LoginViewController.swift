@@ -255,6 +255,8 @@ extension firstTimeLaunchController {
                         return
                     }
                     
+                    print(resDict)
+                    
                     guard resDict["Error"] == nil else {
                         //                        When error occured.
                         print("Login Error!")
@@ -299,6 +301,8 @@ extension firstTimeLaunchController {
                     
                     if let _ = resDict["StudentInfo"] as? [String: Any] {
                         Preferences().isStudent = true
+                    } else {
+                        Preferences().isStudent = false
                     }
                     
                 } catch {

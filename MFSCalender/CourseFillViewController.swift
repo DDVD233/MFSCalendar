@@ -40,7 +40,11 @@ class courseFillController: UIViewController {
         let date = formatter.string(from: Date())
         Preferences().refreshDate = date
         DispatchQueue.global().async {
-            self.importCourse()
+            if Preferences().isStudent {
+                self.importCourseStudent()
+            } else {
+                self.importCourseTeacher()
+            }
         }
     }
     
@@ -58,7 +62,56 @@ class courseFillController: UIViewController {
         }
     }
     
-    func importCourse() {
+    func importCourseTeacher() {
+        DispatchQueue.main.async {
+            UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        }
+        
+        if Preferences().doUpdateQuarter {
+            setQuarter()
+        } else {
+            Preferences().doUpdateQuarter = true
+        }
+        
+        guard self.newGetCourse() else {
+            viewDismiss()
+            return
+        }
+        
+        fillAdditionalInformarion()
+        setProgressTo(value: 33)
+        
+        for alphabet in "ABCDEF" {
+            clearData(day: String(alphabet))
+        }
+        guard createSchedule(fillLowPriority: 0) else {
+            viewDismiss()
+            return
+        }
+        setProgressTo(value: 66)
+        
+        guard createSchedule(fillLowPriority: 1) else {
+            return
+        }
+        for alphabet in "ABCDEF" {
+            self.fillStudyHallAndLunch(letter: String(alphabet))
+        }
+        
+        ClassView().getProfilePhoto()
+        versionCheck()
+        setProgressTo(value: 100)
+        DispatchQueue.main.async {
+            UIApplication.shared.isNetworkActivityIndicatorVisible = true
+            self.topLabel.text = "Success"
+            self.bottomLabel.text = "Successfully updated"
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2), execute: {
+            self.viewDismiss()
+        })
+    }
+    
+    func importCourseStudent() {
         DispatchQueue.main.async {
             UIApplication.shared.isNetworkActivityIndicatorVisible = true
         }
@@ -108,16 +161,6 @@ class courseFillController: UIViewController {
         group.wait()
         
         self.createScheduleNC(schedule: schedule)
-        
-//        guard createSchedule(fillLowPriority: 0) else {
-//            viewDismiss()
-//            return
-//        }
-//        setProgressTo(value: 66)
-//
-//        guard createSchedule(fillLowPriority: 1) else {
-//            return
-//        }
         
         for alphabet in "ABCDEF" {
             self.fillStudyHallAndLunch(letter: String(alphabet))
@@ -490,7 +533,8 @@ class courseFillController: UIViewController {
             }
             
             let day = meetTime[0, 0]
-            let period = Int(meetTime[1, 1])!
+            var period = Int(meetTime[1, 1])!
+            period = (period < 7) ? period : period + 1 // If before lunch, then period, otherwise period + 1.
             let fileName = "/Class" + day + ".plist"
             let path = userDocumentPath.appending(fileName)
             
@@ -501,7 +545,7 @@ class courseFillController: UIViewController {
             let classOfThePeriod = classOfDay[period - 1]
             
             if classOfThePeriod.count == 0 {
-                course["period"] = (period <= 7) ? period : period + 1 // If before lunch, then period, else period + 1.
+                course["period"] = period
                 classOfDay[period - 1] = course
                 NSArray(array: classOfDay).write(toFile: path, atomically: true)
             } else if className.count >= 10 && className[0, 9] == "Study Hall" {
