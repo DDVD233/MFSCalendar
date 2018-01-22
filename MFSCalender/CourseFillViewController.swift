@@ -146,19 +146,27 @@ class courseFillController: UIViewController {
                 self.clearData(day: String(alphabet))
             }
             
-            guard let gotSchedule = self.getScheduleNC() else {
-                DispatchQueue.main.async {
-                    self.viewDismiss()
+            if self.NCIsRunning() {
+                guard let gotSchedule = self.getScheduleNC() else {
+                    DispatchQueue.main.async {
+                        self.viewDismiss()
+                    }
+                    return
                 }
-                return
+                
+                schedule = gotSchedule
+            } else {
+                self.importCourseTeacher()
             }
-            
-            schedule = gotSchedule
             
             //self.fillAdditionalInformarion()
         })
         
         group.wait()
+        
+        if !self.NCIsRunning() {
+            return
+        }
         
         self.createScheduleNC(schedule: schedule)
         
@@ -189,6 +197,36 @@ class courseFillController: UIViewController {
         self.trace?.stop()
         UIApplication.shared.isNetworkActivityIndicatorVisible = false
         self.dismiss(animated: true)
+    }
+    
+    func NCIsRunning() -> Bool {
+        var isRunning = true
+        let url = self.baseURL + "/NCIsRunning"
+        let semaphore = DispatchSemaphore(value: 0)
+        Alamofire.request(url).response { (result) in
+            guard result.error == nil else {
+                presentErrorMessage(presentMessage: result.error!.localizedDescription, layout: .statusLine)
+                semaphore.signal()
+                return
+            }
+            
+            guard let statusCode = String(data: result.data!, encoding: .utf8) else {
+                presentErrorMessage(presentMessage: "Failed to check if NetClassroom is running.", layout: .statusLine)
+                semaphore.signal()
+                return
+            }
+            
+            if statusCode == "0" {
+                isRunning = false
+            } else {
+                isRunning = true
+            }
+            
+            semaphore.signal()
+        }
+        
+        semaphore.wait()
+        return isRunning
     }
     
     func getScheduleNC() -> [[String: Any]]? {
@@ -572,7 +610,7 @@ class courseFillController: UIViewController {
             listClasses[4] = assembly
         }
         
-        for periodNumber in 1...8 {
+        for periodNumber in 1...9 {
             if listClasses.filter({ $0["period"] as? Int == periodNumber }).count == 0 {
                 let addData = ["className": "Free", "period": periodNumber] as [String : Any]
                 listClasses[periodNumber - 1] = addData

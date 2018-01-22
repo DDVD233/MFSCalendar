@@ -77,13 +77,12 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     @IBOutlet weak var welcomeLabel: UILabel!
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var dayLabel: UILabel!
-    @IBOutlet weak var eventView: UITableView!
     @IBOutlet weak var classView: UICollectionView!
     @IBOutlet weak var bottomView: UIView!
-    @IBOutlet var eventViewLarge: UIView!
-    @IBOutlet var eventBottomLayoutConstraint: NSLayoutConstraint!
     @IBOutlet var classViewFlowLayout: UICollectionViewFlowLayout!
     @IBOutlet var classViewHeightConstraint: NSLayoutConstraint!
+    @IBOutlet var eventViewContainer: UIView!
+    
     
     let formatter = DateFormatter()
     var listEvents = [[String: Any]]()
@@ -92,18 +91,14 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     var timer: Timer? = nil
 //    Format: {Lead_Section_ID: [Homework]}
     var isVisible = true
+    
+    let eventViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier :"eventViewController") as! eventViewController
 
     let reachability = Reachability()!
     var screenWidth = UIScreen.main.bounds.width
 
     override func viewDidLoad() {
         super.viewDidLoad()
-//        if Preferences().isiPhoneX {
-//            hidesBottomBarWhenPushed = true
-//        } else {
-//            hidesBottomBarWhenPushed = false
-//        }
-        //self.navigationController?.setStatusBarStyle(.lightContent)
         self.bottomView.layer.shadowColor = UIColor.black.cgColor
         self.bottomView.layer.shadowOpacity = 0.15
         self.bottomView.layer.shadowOffset = CGSize.zero
@@ -113,20 +108,23 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         self.classView.dataSource = self
         self.classView.emptyDataSetSource = self
         self.classView.emptyDataSetDelegate = self
-        self.eventView.delegate = self
-        self.eventView.dataSource = self
-        self.eventView.emptyDataSetDelegate = self
-        self.eventView.emptyDataSetSource = self
-        self.eventView.separatorStyle = .singleLine
         
-        if #available(iOS 11, *) {
-            eventBottomLayoutConstraint.isActive = true
-        } else {
-            eventBottomLayoutConstraint.isActive = false
-            eventViewLarge.snp.makeConstraints({ make in
-                make.bottom.equalTo(self.bottomLayoutGuide.snp.top).offset(-10)
-            })
-        }
+        self.addChildViewController(eventViewController)
+        self.eventViewContainer.addSubview(eventViewController.view)
+//        self.eventView.delegate = self
+//        self.eventView.dataSource = self
+//        self.eventView.emptyDataSetDelegate = self
+//        self.eventView.emptyDataSetSource = self
+//        self.eventView.separatorStyle = .singleLine
+        
+//        if #available(iOS 11, *) {
+//            eventBottomLayoutConstraint.isActive = true
+//        } else {
+//            eventBottomLayoutConstraint.isActive = false
+//            eventViewLarge.snp.makeConstraints({ make in
+//                make.bottom.equalTo(self.bottomLayoutGuide.snp.top).offset(-10)
+//            })
+//        }
 
         if Preferences().firstName == nil {
             Preferences().didLogin = false
@@ -275,7 +273,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
 
         DispatchQueue.main.async {
             self.classView.reloadData()
-            self.eventView.reloadData()
+            self.eventDataFetching()
         }
 
 //        Put time-taking process here.
@@ -305,14 +303,8 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
 
     func title(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
         var str: String? = ""
-        var attrs: [NSAttributedStringKey: Any] = [NSAttributedStringKey.font: UIFont.preferredFont(forTextStyle: UIFontTextStyle.headline)]
-        if scrollView == classView {
-            str = "No more classes for today!"
-        } else if scrollView == eventView {
-            self.eventView.separatorStyle = .none
-            str = "No more events for today!"
-            attrs = [NSAttributedStringKey.font: UIFont.preferredFont(forTextStyle: UIFontTextStyle.headline), NSAttributedStringKey.foregroundColor: UIColor.white]
-        }
+        let attrs: [NSAttributedStringKey: Any] = [NSAttributedStringKey.font: UIFont.preferredFont(forTextStyle: UIFontTextStyle.headline)]
+        str = "No more classes for today!"
 
         return NSAttributedString(string: str!, attributes: attrs)
     }
@@ -321,8 +313,6 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         var image: UIImage? = nil
         if scrollView == classView {
             image = UIImage(named: "Achievement.png")?.imageResize(sizeChange: CGSize(width: 120, height: 93.3))
-        } else if scrollView == eventView {
-            image = UIImage(named: "bell.png")?.imageResize(sizeChange: CGSize(width: 80, height: 80))
         }
         return image
     }
@@ -413,6 +403,12 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     func getListClasses(day: String) {
         let currentPeriod = getCurrentPeriod()
         self.listClasses = getClassDataAt(period: currentPeriod, day: day)
+    }
+    
+    func eventDataFetching() {
+        let selectedDate = Date()
+        eventViewController.selectedDate = selectedDate
+        eventViewController.eventDataFetching()
     }
 
     func getHomework() {
@@ -581,73 +577,73 @@ extension Main: UICollectionViewDelegate, UICollectionViewDataSource, UICollecti
     }
 }
 
-extension Main: UITableViewDelegate, UITableViewDataSource {
-
-    func eventDataFetching() {
-        self.listEvents = []
-        let plistPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-        let fileName = "/Events.plist"
-        let path = plistPath.appending(fileName)
-        let eventData = NSMutableDictionary(contentsOfFile: path)
-        let date = Date()
-        self.formatter.dateFormat = "yyyyMMdd"
-        let eventDate = formatter.string(from: date)
-        guard let events = eventData?[eventDate] as? Array<Dictionary<String, Any>> else {
-            return
-        }
-
-//        Add all day events first
-        let allDayEvents = events.filter({ $0["isAllDay"] as? Int == 1 })
-        self.listEvents = allDayEvents
-
-        self.formatter.dateFormat = "HHmmss"
-        let currentTime = Int(formatter.string(from: Date())) ?? 0
-
-        //        Sort the event from earliest to latest
-        let eventToSort = events.filter({ $0["tEnd"] as? Int ?? -1 > currentTime })
-        let sortedEvents = eventToSort.sorted(by: {
-            ($0["tEnd"] as? Int ?? 0) < ($1["tEnd"] as? Int ?? 0)
-        })
-        
-        self.listEvents += sortedEvents
-    }
-
-    //    the number of the cell
-    func tableView(_ tableView: UITableView, numberOfRowsInSection selection: Int) -> Int {
-        let eventCount = self.listEvents.count
-        return eventCount
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 90
-    }
-
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "eventTableDash", for: indexPath as IndexPath) as! customEventCellDashboard
-        let row = indexPath.row
-        guard self.listEvents.count >= row + 1 else {
-            return cell
-        }
-        let rowDict = self.listEvents[row]
-        guard let summary = rowDict["summary"] as? String else {
-            return UITableViewCell()
-        }
-        cell.ClassName.text = summary
-//        Use the first letter as the letter on the left side of the cell
-        let letter = String(describing: summary[...summary.startIndex])
-        cell.PeriodNumber.text = letter
-
-        if rowDict["location"] != nil {
-            cell.RoomNumber.text = "At: " + (rowDict["location"] as! String)
-        } else {
-            cell.RoomNumber.text = nil
-        }
-
-        cell.PeriodTime.text = EventView().getTimeInterval(rowDict: rowDict)
-        return cell
-    }
-}
+//extension Main: UITableViewDelegate, UITableViewDataSource {
+//
+//    func eventDataFetching() {
+//        self.listEvents = []
+//        let plistPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
+//        let fileName = "/Events.plist"
+//        let path = plistPath.appending(fileName)
+//        let eventData = NSMutableDictionary(contentsOfFile: path)
+//        let date = Date()
+//        self.formatter.dateFormat = "yyyyMMdd"
+//        let eventDate = formatter.string(from: date)
+//        guard let events = eventData?[eventDate] as? Array<Dictionary<String, Any>> else {
+//            return
+//        }
+//
+////        Add all day events first
+//        let allDayEvents = events.filter({ $0["isAllDay"] as? Int == 1 })
+//        self.listEvents = allDayEvents
+//
+//        self.formatter.dateFormat = "HHmmss"
+//        let currentTime = Int(formatter.string(from: Date())) ?? 0
+//
+//        //        Sort the event from earliest to latest
+//        let eventToSort = events.filter({ $0["tEnd"] as? Int ?? -1 > currentTime })
+//        let sortedEvents = eventToSort.sorted(by: {
+//            ($0["tEnd"] as? Int ?? 0) < ($1["tEnd"] as? Int ?? 0)
+//        })
+//
+//        self.listEvents += sortedEvents
+//    }
+//
+//    //    the number of the cell
+//    func tableView(_ tableView: UITableView, numberOfRowsInSection selection: Int) -> Int {
+//        let eventCount = self.listEvents.count
+//        return eventCount
+//    }
+//
+//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+//        return 90
+//    }
+//
+//
+//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+//        let cell = tableView.dequeueReusableCell(withIdentifier: "eventTableDash", for: indexPath as IndexPath) as! customEventCellDashboard
+//        let row = indexPath.row
+//        guard self.listEvents.count >= row + 1 else {
+//            return cell
+//        }
+//        let rowDict = self.listEvents[row]
+//        guard let summary = rowDict["summary"] as? String else {
+//            return UITableViewCell()
+//        }
+//        cell.ClassName.text = summary
+////        Use the first letter as the letter on the left side of the cell
+//        let letter = String(describing: summary[...summary.startIndex])
+//        cell.PeriodNumber.text = letter
+//
+//        if rowDict["location"] != nil {
+//            cell.RoomNumber.text = "At: " + (rowDict["location"] as! String)
+//        } else {
+//            cell.RoomNumber.text = nil
+//        }
+//
+//        cell.PeriodTime.text = EventView().getTimeInterval(rowDict: rowDict)
+//        return cell
+//    }
+//}
 
 
 extension Main {
