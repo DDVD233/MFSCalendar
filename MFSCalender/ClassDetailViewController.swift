@@ -111,8 +111,9 @@ class classDetailViewController: UITableViewController, UIDocumentInteractionCon
             SVProgressHUD.show()
             UIApplication.shared.isNetworkActivityIndicatorVisible = true
         }
-
-        let sectionIdString = String(describing: sectionId)
+        
+        let sectionIdString = ClassView().getLeadSectionIDFromSectionInfo(sectionID: String(describing: sectionId))
+        
         let semaphore = DispatchSemaphore(value: 0)
 
         provider.request(.getPossibleContent(sectionId: sectionIdString), completion: {
@@ -120,7 +121,7 @@ class classDetailViewController: UITableViewController, UIDocumentInteractionCon
             switch result {
             case let .success(response):
                 do {
-                    guard let json = try JSONSerialization.jsonObject(with: response.data, options: .allowFragments) as? Array<Dictionary<String, Any?>> else {
+                    guard let json = try JSONSerialization.jsonObject(with: response.data, options: .allowFragments) as? Array<Dictionary<String, Any>> else {
                         presentErrorMessage(presentMessage: "Internal error: Incorrect data format", layout: .statusLine)
                         semaphore.signal()
                         return
@@ -172,7 +173,9 @@ class classDetailViewController: UITableViewController, UIDocumentInteractionCon
                 let semaphore = DispatchSemaphore(value: 0)
                 provider.request(MyService.getClassContentData(contentName: contentNameRemovedWhitespace, sectionId: sectionId), completion: { result in
                     switch result {
+
                     case let .success(response):
+                        print(response.request?.url)
                         do {
                             guard let json = try response.mapJSON(failsOnEmptyData: true) as? Array<Dictionary<String, Any?>> else {
                                 semaphore.signal()

@@ -1019,18 +1019,33 @@
                                         </cells>
                                     </collectionView>
                                     <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Upd-iJ-CgO">
-                                        <rect key="frame" x="0.0" y="185" width="375" height="232"/>
+                                        <rect key="frame" x="0.0" y="186" width="375" height="231"/>
                                         <connections>
                                             <segue destination="Dc0-iM-lFO" kind="embed" id="sbo-FP-LLG"/>
                                         </connections>
                                     </containerView>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xRR-BQ-Vx2">
+                                        <rect key="frame" x="20" y="185" width="335" height="1"/>
+                                        <color key="backgroundColor" red="0.82352941176470584" green="0.82352941176470584" blue="0.82352941176470584" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="1" id="mma-5a-tiX"/>
+                                        </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <real key="value" value="1"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </view>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="Upd-iJ-CgO" secondAttribute="trailing" id="3tu-fF-IG9"/>
-                                    <constraint firstItem="Upd-iJ-CgO" firstAttribute="top" secondItem="p4P-pw-RjD" secondAttribute="bottom" constant="10" id="Enb-IE-SsR"/>
+                                    <constraint firstAttribute="trailing" secondItem="xRR-BQ-Vx2" secondAttribute="trailing" constant="20" id="IaE-BY-DGB"/>
                                     <constraint firstItem="p4P-pw-RjD" firstAttribute="leading" secondItem="U8A-Xp-bII" secondAttribute="leading" constant="20" id="RAM-J1-sEF"/>
+                                    <constraint firstItem="Upd-iJ-CgO" firstAttribute="top" secondItem="xRR-BQ-Vx2" secondAttribute="bottom" id="RgC-uS-Fcl"/>
+                                    <constraint firstItem="xRR-BQ-Vx2" firstAttribute="top" secondItem="p4P-pw-RjD" secondAttribute="bottom" constant="10" id="RtR-kE-uHI"/>
                                     <constraint firstAttribute="trailing" secondItem="p4P-pw-RjD" secondAttribute="trailing" constant="10" id="U2u-Ae-MFX"/>
+                                    <constraint firstItem="xRR-BQ-Vx2" firstAttribute="leading" secondItem="U8A-Xp-bII" secondAttribute="leading" constant="20" id="ZHU-yX-kog"/>
                                     <constraint firstItem="Upd-iJ-CgO" firstAttribute="leading" secondItem="U8A-Xp-bII" secondAttribute="leading" id="cEO-B9-0EQ"/>
                                     <constraint firstItem="p4P-pw-RjD" firstAttribute="top" secondItem="U8A-Xp-bII" secondAttribute="top" constant="20" id="d7z-Hm-ezx"/>
                                     <constraint firstItem="Upd-iJ-CgO" firstAttribute="bottom" secondItem="U8A-Xp-bII" secondAttribute="bottomMargin" id="eyb-Qg-Bx8"/>
@@ -1395,6 +1410,11 @@
                                 <rect key="frame" x="0.0" y="20" width="375" height="647"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <gestureRecognizers/>
+                                <view key="tableFooterView" contentMode="scaleToFill" id="vht-J6-jmB">
+                                    <rect key="frame" x="0.0" y="81" width="375" height="44"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </view>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="eventTable" id="xE8-0J-TfC" customClass="customEventCell" customModule="MFSMobile" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="1" width="375" height="80"/>
@@ -3066,7 +3086,7 @@
                         <viewControllerLayoutGuide type="bottom" id="duK-sv-58K"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Aaa-t3-7tw">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="232"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="231"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </view>

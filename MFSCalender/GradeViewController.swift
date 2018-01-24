@@ -40,7 +40,7 @@ class gradeViewController: UITableViewController {
     
 
     var cumGrade: Float = 0 {
-        willSet {
+        didSet {
             DispatchQueue.main.async {
                 self.cumGradeProgressRing.setProgress(value: CGFloat(self.cumGrade), animationDuration: 1.0)
             }
@@ -199,7 +199,14 @@ class gradeViewController: UITableViewController {
     func getGradeDetail() {
         guard loginAuthentication().success else { return }
         let userID = loginAuthentication().userId
-        guard let sectionID = ClassView().getLeadSectionID(classDict: classObject) else { return }
+        guard let sectionIDInt = ClassView().getLeadSectionID(classDict: classObject) else { return }
+        var sectionID = String(describing: sectionIDInt)
+        let group = DispatchGroup()
+        DispatchQueue.global().async(group: group) {
+            sectionID = ClassView().getLeadSectionIDFromSectionInfo(sectionID: sectionID)
+        }
+        
+        group.wait()
         
         var markingPeriodID: String {
             switch quarterSelected {
@@ -214,7 +221,7 @@ class gradeViewController: UITableViewController {
             }
         }
         
-        let url = "https://mfriends.myschoolapp.com/api/datadirect/GradeBookPerformanceAssignmentStudentList/?sectionId=\(String(describing: sectionID))&markingPeriodId=\(markingPeriodID)&studentUserId=\(userID)"
+        let url = "https://mfriends.myschoolapp.com/api/datadirect/GradeBookPerformanceAssignmentStudentList/?sectionId=\(sectionID)&markingPeriodId=\(markingPeriodID)&studentUserId=\(userID)"
         
         let semaphore = DispatchSemaphore(value: 0)
         
@@ -275,7 +282,8 @@ class gradeViewController: UITableViewController {
 
         let userId = loginAuthentication().userId
 
-        let leadSectionId = ClassView().getLeadSectionID(classDict: classObject)
+//        let leadSectionId = ClassView().getLeadSectionID(classDict: classObject)
+        let className = classObject["className"] as? String ?? ""
 
         var cumGrade = ""
 
@@ -301,9 +309,10 @@ class gradeViewController: UITableViewController {
             (data, response, error) -> Void in
             if error == nil {
                 let json = JSON(data!)
+                print(json)
 
                 for (_, subJson): (String, JSON) in json {
-                    if subJson["leadsectionid"].intValue == leadSectionId {
+                    if subJson["sectionidentifier"].stringValue == className {
                         cumGrade = subJson["cumgrade"].stringValue
                         print("CumGrade: \(cumGrade)")
                     }
@@ -355,12 +364,12 @@ extension gradeViewController {
                 
                 cell.chartView.delegate = self
                 cell.chartView.drawBarShadowEnabled = false
-                cell.chartView.maxVisibleCount = 60
+                cell.chartView.maxVisibleCount = 10
                 //cell.chartView.xAxis.labelPosition = .bottom
                 cell.chartView.chartDescription?.text = ""
                 cell.chartView.rightAxis.enabled = false
                 cell.chartView.xAxis.enabled = false
-                cell.chartView.isUserInteractionEnabled = false
+                cell.chartView.isUserInteractionEnabled = true
                 
                 cell.chartView.drawValueAboveBarEnabled = true
                 
@@ -370,7 +379,7 @@ extension gradeViewController {
                 yAxisFormatter.positiveSuffix = " %"
                 
                 let yAxis = cell.chartView.leftAxis
-                yAxis.labelFont = UIFont.systemFont(ofSize: 10)
+                yAxis.labelFont = UIFont.systemFont(ofSize: 12)
                 yAxis.labelCount = 6
                 yAxis.valueFormatter = DefaultAxisValueFormatter(formatter: yAxisFormatter)
                 yAxis.labelPosition = .outsideChart
@@ -381,6 +390,7 @@ extension gradeViewController {
                 legend.horizontalAlignment = .left
                 legend.verticalAlignment = .bottom
                 legend.orientation = .horizontal
+                legend.font = UIFont.systemFont(ofSize: 12)
                 legend.xEntrySpace = 4.0
                 
                 guard !gradeList.isEmpty else { break }
@@ -399,6 +409,7 @@ extension gradeViewController {
                         
                         let dataSet = BarChartDataSet(values: yValues, label: assignmentType)
                         dataSet.setColor(HomeworkView().colorForTheType(type: assignmentType), alpha: 0.7)
+                        dataSet.valueFont = UIFont.systemFont(ofSize: 12)
                         
                         if let data = cell.chartView.data {
                             data.addDataSet(dataSet)

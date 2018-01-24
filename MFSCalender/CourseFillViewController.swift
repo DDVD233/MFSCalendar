@@ -116,6 +116,11 @@ class courseFillController: UIViewController {
             UIApplication.shared.isNetworkActivityIndicatorVisible = true
         }
         
+        if !self.NCIsRunning() {
+            self.importCourseTeacher()
+            return
+        }
+        
         if Preferences().doUpdateQuarter {
             setQuarter()
         } else {
@@ -146,27 +151,19 @@ class courseFillController: UIViewController {
                 self.clearData(day: String(alphabet))
             }
             
-            if self.NCIsRunning() {
-                guard let gotSchedule = self.getScheduleNC() else {
-                    DispatchQueue.main.async {
-                        self.viewDismiss()
-                    }
-                    return
+            guard let gotSchedule = self.getScheduleNC() else {
+                DispatchQueue.main.async {
+                    self.viewDismiss()
                 }
-                
-                schedule = gotSchedule
-            } else {
-                self.importCourseTeacher()
+                return
             }
+            
+            schedule = gotSchedule
             
             //self.fillAdditionalInformarion()
         })
         
         group.wait()
-        
-        if !self.NCIsRunning() {
-            return
-        }
         
         self.createScheduleNC(schedule: schedule)
         

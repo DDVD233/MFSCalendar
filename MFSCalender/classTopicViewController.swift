@@ -31,6 +31,7 @@ class classTopicViewController: UIViewController {
         DispatchQueue.global().async {
             let classObject = ClassView().getTheClassToPresent() ?? [String: Any]()
             self.leadSectionIdInt = ClassView().getLeadSectionID(classDict: classObject) ?? 0
+            self.leadSectionIdInt = Int(ClassView().getLeadSectionIDFromSectionInfo(sectionID: String(describing: self.leadSectionIdInt))) ?? 0
 
             let fileManager = FileManager.default
 
@@ -65,6 +66,7 @@ class classTopicViewController: UIViewController {
         DispatchQueue.global().async {
             let classObject = ClassView().getTheClassToPresent() ?? [String: Any]()
             self.leadSectionIdInt = ClassView().getLeadSectionID(classDict: classObject) ?? 0
+            self.leadSectionIdInt = Int(ClassView().getLeadSectionIDFromSectionInfo(sectionID: String(self.leadSectionIdInt))) ?? 0
             self.refreshTopics(leadSectionIdInt: self.leadSectionIdInt)
         }
     }

@@ -222,6 +222,44 @@ class ClassView {
         }
     }
     
+    func getLeadSectionIDFromSectionInfo(sectionID: String) -> String {
+        let semaphoreSectionID = DispatchSemaphore(value: 0)
+        var sectionID = sectionID
+        
+        provider.request(.sectionInfoView(sectionID: sectionID), callbackQueue: DispatchQueue.global(), completion: {
+            (result) in
+            switch result {
+            case let .success(response):
+                do {
+                    guard let json = try JSONSerialization.jsonObject(with: response.data, options: .allowFragments) as? Array<Dictionary<String, Any>> else {
+                        presentErrorMessage(presentMessage: "Internal error: Incorrect data format", layout: .statusLine)
+                        semaphoreSectionID.signal()
+                        return
+                    }
+                    
+                    guard json.count > 0 else {
+                        presentErrorMessage(presentMessage: "Unable to find section ID.", layout: .statusLine)
+                        semaphoreSectionID.signal()
+                        return
+                    }
+                    
+                    if let leadSectionID = json[0]["LeadSectionId"] as? Int {
+                        sectionID = String(describing: leadSectionID)
+                    }
+                } catch {
+                    presentErrorMessage(presentMessage: error.localizedDescription, layout: .statusLine)
+                }
+            case let .failure(error):
+                presentErrorMessage(presentMessage: error.localizedDescription, layout: .statusLine)
+            }
+            
+            semaphoreSectionID.signal()
+        })
+        
+        semaphoreSectionID.wait()
+        return sectionID
+    }
+    
     func getProfilePhoto() {
         let path = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
         let coursePath = path.appending("/CourseList.plist")

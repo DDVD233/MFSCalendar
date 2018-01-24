@@ -19,6 +19,7 @@ enum MyService {
     case getPossibleContent(sectionId: String)
     case getContentList(sectionId: String)
     case getClassContentData(contentName: String, sectionId: String)
+    case sectionInfoView(sectionID: String)
 
     //Dwei
     case getCalendarData
@@ -56,6 +57,8 @@ extension MyService: TargetType {
             return "/api/datadirect/GroupPossibleContentGet/"
         case .getClassContentData(let contentName, let sectionId):
             return "/api/\(contentName)/forsection/\(sectionId)/"
+        case .sectionInfoView:
+            return "/api/datadirect/SectionInfoView/"
 
                 // Dwei
         case .getCalendarData:
@@ -98,6 +101,8 @@ extension MyService: TargetType {
             return ["format": "json", "SectionId": sectionId]
         case .getClassContentData:
             return ["format": "json", "editMode": "false", "active": "true", "future": "false", "expired": "false", "contextLabelId": "2"]
+        case .sectionInfoView(let sectionID):
+            return ["format": "json", "sectionId": sectionID, "associationId": "1"]
         default: return nil
         }
     }

@@ -14,7 +14,7 @@ class eventViewController: UIViewController, DZNEmptyDataSetSource, DZNEmptyData
     
     @IBOutlet var eventView: UITableView!
     let formatter = DateFormatter()
-    var listEvents: NSMutableArray = []
+    var listEvents = [[String: Any]]()
     var selectedDate: Date? = nil
     
     override func viewDidLoad() {
@@ -40,22 +40,34 @@ class eventViewController: UIViewController, DZNEmptyDataSetSource, DZNEmptyData
         let plistPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
         let fileName = "/Events.plist"
         let path = plistPath.appending(fileName)
-        let eventData = NSMutableDictionary(contentsOfFile: path)
+        guard let eventData = NSDictionary(contentsOfFile: path) as? [String: [[String: Any]]] else {
+            self.listEvents = []
+            reloadData()
+            return
+        }
+        
         guard let SelectedDate = selectedDate else {
             print("No Date")
             return
         }
         self.formatter.dateFormat = "yyyyMMdd"
         let eventDate = formatter.string(from: SelectedDate)
-        guard let events = eventData?[eventDate] as? NSMutableArray else {
+        guard let events = eventData[eventDate] else {
             self.listEvents = []
-            self.eventView.reloadData(with: .automatic)
-            self.eventView.reloadData()
+            reloadData()
             return
         }
         self.listEvents = events
-        self.eventView.reloadData(with: .automatic)
-        self.eventView.reloadData()
+        reloadData()
+    }
+    
+    func reloadData() {
+        DispatchQueue.main.async {
+            if self.isViewLoaded && self.view != nil {
+                self.eventView.reloadData(with: .automatic)
+                self.eventView.reloadData()
+            }
+        }
     }
     
     func indicatorInfo(for pagerTabStripController: PagerTabStripViewController) -> IndicatorInfo {
@@ -74,20 +86,18 @@ extension eventViewController: UITableViewDelegate, UITableViewDataSource {
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "eventTable", for: indexPath as IndexPath) as? customEventCell
         let row = indexPath.row
-        let rowDict = self.listEvents[row] as! Dictionary<String, Any?>
+        let rowDict = self.listEvents[row]
         guard let summary = rowDict["summary"] as? String else {
             return UITableViewCell()
         }
         cell?.ClassName.text = summary
         let letter = String(describing: summary[...summary.startIndex])
         cell?.PeriodNumber.text = letter
-        if rowDict["location"] != nil {
-            let location = rowDict["location"] as! String
-            if location.hasSuffix("place fields") || location.hasSuffix("Place Fields") {
-                cell?.RoomNumber.text = nil
-            } else {
-                cell?.RoomNumber.text = "At: " + location
-            }
+        let location = rowDict["location"] as? String ?? ""
+        if location.hasSuffix("place fields") || location.hasSuffix("Place Fields") {
+            cell?.RoomNumber.text = ""
+        } else {
+            cell?.RoomNumber.text = location
         }
         
         cell?.PeriodTime.text = EventView().getTimeInterval(rowDict: rowDict)

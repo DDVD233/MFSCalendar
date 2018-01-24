@@ -548,29 +548,29 @@ extension Main: UICollectionViewDelegate, UICollectionViewDataSource, UICollecti
         }
 
         cell.homeworkView.isHidden = true
-        if let leadSectionId = ClassView().getLeadSectionID(classDict: classData) {
-            print(listHomework)
-            if let thisClassHomework = listHomework[String(leadSectionId)] {
-                // cell.homeworkView.isHidden = false
-
-                let numberOfHomework = thisClassHomework.count
-
-                let numberOfCompletedHomework = thisClassHomework.filter({
-                    ($0["assignment_status"] as? Int) == 1
-                }).count
-
-                let numberOfUncompletedHomework = numberOfHomework - numberOfCompletedHomework
-
-                var homeworkButtonText = ""
-                if numberOfUncompletedHomework == 0 {
-                    homeworkButtonText = "All \(String(numberOfHomework)) HW were completed!"
-                } else {
-                    homeworkButtonText = "\(String(numberOfHomework)) uncompleted HW"
-                }
-
-                cell.homeworkButton.setTitle(homeworkButtonText, for: .normal)
-            }
-        }
+//        if let leadSectionId = ClassView().getLeadSectionID(classDict: classData) {
+//            print(listHomework)
+//            if let thisClassHomework = listHomework[String(leadSectionId)] {
+//                // cell.homeworkView.isHidden = false
+//
+//                let numberOfHomework = thisClassHomework.count
+//
+//                let numberOfCompletedHomework = thisClassHomework.filter({
+//                    ($0["assignment_status"] as? Int) == 1
+//                }).count
+//
+//                let numberOfUncompletedHomework = numberOfHomework - numberOfCompletedHomework
+//
+//                var homeworkButtonText = ""
+//                if numberOfUncompletedHomework == 0 {
+//                    homeworkButtonText = "All \(String(numberOfHomework)) HW were completed!"
+//                } else {
+//                    homeworkButtonText = "\(String(numberOfHomework)) uncompleted HW"
+//                }
+//
+//                cell.homeworkButton.setTitle(homeworkButtonText, for: .normal)
+//            }
+//        }
         cell.index = classData["index"] as? Int
 
         return cell
