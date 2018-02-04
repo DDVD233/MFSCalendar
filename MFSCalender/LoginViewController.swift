@@ -14,6 +14,149 @@ import SkyFloatingLabelTextField
 import NotificationCenter
 import Crashlytics
 
+class LoginView {
+    func getProfile() {
+        
+        let semaphore = DispatchSemaphore.init(value: 0)
+        let token = Preferences().token
+        let userID = Preferences().userID
+        
+        provider.request(MyService.getProfile(userID: userID!, token: token!), callbackQueue: DispatchQueue.global(), completion: { result in
+            switch result {
+            case let .success(response):
+                do {
+                    guard let resDict = try response.mapJSON() as? Dictionary<String, Any?> else {
+                        presentErrorMessage(presentMessage: "Internal error: incorrect file format.", layout: .cardView)
+                        semaphore.signal()
+                        return
+                    }
+                    
+                    print(resDict)
+                    
+                    guard resDict["Error"] == nil else {
+                        //                        When error occured.
+                        print("Login Error!")
+                        if (resDict["ErrorType"] as! String) == "UNAUTHORIZED_ACCESS" {
+                            DispatchQueue.main.async {
+                                presentErrorMessage(presentMessage: "The username/password is incorrect. Please check your spelling.", layout: .cardView)
+                            }
+                        }
+                        
+                        semaphore.signal()
+                        return
+                    }
+                    
+                    if let firstName = resDict["FirstName"] as? String, let lastName = resDict["LastName"] as? String {
+                        Preferences().firstName = firstName
+                        Preferences().lastName = lastName
+                        if firstName == "Wei" && lastName == "Dai" {
+                            Preferences().isDev = true
+                        }
+                    }
+                    
+                    if let email = resDict["Email"] as? String {
+                        Preferences().email = email
+                    }
+                    
+                    if let photo = resDict["ProfilePhoto"] as? NSDictionary {
+                        if let photolink = photo["ThumbFilenameUrl"] as? String {
+                            userDefaults.set(photolink, forKey: "photoLink")
+                            print(photolink)
+                            self.downloadSmallProfilePhoto(photoLink: photolink)
+                        }
+                        
+                        let largePhotoLink = photo["LargeFilenameUrl"] as? String
+                        userDefaults.set(largePhotoLink, forKey: "largePhotoLink")
+                    }
+                    
+                    if let lockerNumber = resDict["LockerNbr"] as? String {
+                        Preferences().lockerNumber = lockerNumber
+                    }
+                    if let lockerPassword = resDict["LockerCombo"] as? String {
+                        Preferences().lockerCombination = lockerPassword
+                    }
+                    
+                    Preferences().isStudent = false
+                    if let studentInfo = resDict["StudentInfo"] as? [String: Any] {
+                        print(studentInfo)
+                        if (studentInfo["GradYear"] as? String).existsAndNotEmpty() {
+                            Preferences().isStudent = true
+                        }
+                    }
+                    
+                } catch {
+                    NSLog("Data parsing failed")
+                    DispatchQueue.main.async {
+                        presentErrorMessage(presentMessage: error.localizedDescription, layout: .statusLine)
+                    }
+                }
+            case let .failure(error):
+                presentErrorMessage(presentMessage: error.localizedDescription, layout: .cardView)
+            }
+            
+            semaphore.signal()
+        })
+        
+        semaphore.wait()
+    }
+    
+    func downloadSmallProfilePhoto(photoLink: String) {
+        let semaphore = DispatchSemaphore(value: 0)
+        
+        provider.request(.downloadLargeProfilePhoto(link: photoLink), callbackQueue: DispatchQueue.global()) { (result) in
+            switch result {
+            case .success(let response):
+                print(response.request?.url)
+                userDefaults.set(false, forKey: "didDownloadFullSizeImage")
+            case let .failure(error):
+                NSLog("Failed downloading small profile photo because: \(error)")
+            }
+            
+            semaphore.signal()
+        }
+        
+        semaphore.wait()
+        
+//        let urlString = "https://mfriends.myschoolapp.com" + photoLink
+//        let url = URL(string: urlString)
+//        //create request.
+//        var request3 = URLRequest(url: url!)
+//        request3.timeoutInterval = 5
+//        let downloadTask = URLSession.shared.downloadTask(with: request3, completionHandler: { (location: URL?, response: URLResponse?, error: Error?) -> Void in
+//            if error == nil {
+//                //Temp location:
+//                print("location:\(String(describing: location))")
+//                let locationPath = location!.path
+//                //Copy to User Directory
+//                let photoPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
+//                let path = photoPath.appending("/ProfilePhoto.png")
+//                //Init FileManager
+//                let fileManager = FileManager.default
+//                if fileManager.fileExists(atPath: path) {
+//                    do {
+//                        try fileManager.removeItem(atPath: path)
+//                    } catch {
+//                        NSLog("File does not exist! (Which is impossible)")
+//                    }
+//                }
+//                try! fileManager.moveItem(atPath: locationPath, toPath: path)
+//                print("new location:\(path)")
+//                userDefaults.set(false, forKey: "didDownloadFullSizeImage")
+//            } else {
+//                DispatchQueue.main.async {
+//                    let presentMessage = error!.localizedDescription + " Please check your internet connection."
+//                    presentErrorMessage(presentMessage: presentMessage, layout: .statusLine)
+//                }
+//            }
+//            // semaphore.signal()
+//        })
+//
+//        //使用resume方法启动任务
+//        downloadTask.resume()
+        // semaphore.wait()
+    }
+}
+
 class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var loginView: UIView!
     @IBOutlet weak var wrongPassword: UILabel!
@@ -184,7 +327,7 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
         let group = DispatchGroup()
         
         DispatchQueue.global().async(group: group) {
-            self.getProfile()
+            LoginView().getProfile()
         }
         
         DispatchQueue.global().async(group: group) {
@@ -237,130 +380,6 @@ extension firstTimeLaunchController {
         }
 
         return false
-    }
-
-    func getProfile() {
-
-        let semaphore = DispatchSemaphore.init(value: 0)
-        let token = Preferences().token
-        let userID = Preferences().userID
-        
-        provider.request(MyService.getProfile(userID: userID!, token: token!), callbackQueue: DispatchQueue.global(), completion: { result in
-            switch result {
-            case let .success(response):
-                do {
-                    guard let resDict = try response.mapJSON() as? Dictionary<String, Any?> else {
-                        presentErrorMessage(presentMessage: "Internal error: incorrect file format.", layout: .cardView)
-                        semaphore.signal()
-                        return
-                    }
-                    
-                    print(resDict)
-                    
-                    guard resDict["Error"] == nil else {
-                        //                        When error occured.
-                        print("Login Error!")
-                        if (resDict["ErrorType"] as! String) == "UNAUTHORIZED_ACCESS" {
-                            DispatchQueue.main.async {
-                                presentErrorMessage(presentMessage: "The username/password is incorrect. Please check your spelling.", layout: .cardView)
-                            }
-                        }
-                        
-                        semaphore.signal()
-                        return
-                    }
-                    
-                    if let firstName = resDict["FirstName"] as? String, let lastName = resDict["LastName"] as? String {
-                        Preferences().firstName = firstName
-                        Preferences().lastName = lastName
-                        if firstName == "Wei" && lastName == "Dai" {
-                            Preferences().isDev = true
-                        }
-                    }
-                    
-                    if let email = resDict["Email"] as? String {
-                        Preferences().email = email
-                    }
-                    
-                    if let photo = resDict["ProfilePhoto"] as? NSDictionary {
-                        if let photolink = photo["ThumbFilenameUrl"] as? String {
-                            userDefaults.set(photolink, forKey: "photoLink")
-                            self.downloadSmallProfilePhoto(photoLink: photolink)
-                        }
-                        
-                        let largePhotoLink = photo["LargeFilenameUrl"] as? String
-                        userDefaults.set(largePhotoLink, forKey: "largePhotoLink")
-                    }
-                    
-                    if let lockerNumber = resDict["LockerNbr"] as? String {
-                        Preferences().lockerNumber = lockerNumber
-                    }
-                    if let lockerPassword = resDict["LockerCombo"] as? String {
-                        Preferences().lockerCombination = lockerPassword
-                    }
-                    
-                    if let _ = resDict["StudentInfo"] as? [String: Any] {
-                        Preferences().isStudent = true
-                    } else {
-                        Preferences().isStudent = false
-                    }
-                    
-                } catch {
-                    NSLog("Data parsing failed")
-                    DispatchQueue.main.async {
-                        self.errorMessage(presentMessage: error.localizedDescription)
-                    }
-                }
-            case let .failure(error):
-                presentErrorMessage(presentMessage: error.localizedDescription, layout: .cardView)
-            }
-            
-            semaphore.signal()
-        })
-
-        semaphore.wait()
-    }
-
-    func downloadSmallProfilePhoto(photoLink: String) {
-        // let semaphore = DispatchSemaphore(value: 0)
-
-        let urlString = "https://mfriends.myschoolapp.com" + photoLink
-        let url = URL(string: urlString)
-        //create request.
-        var request3 = URLRequest(url: url!)
-        request3.timeoutInterval = 5
-        let downloadTask = URLSession.shared.downloadTask(with: request3, completionHandler: { (location: URL?, response: URLResponse?, error: Error?) -> Void in
-            if error == nil {
-                //Temp location:
-                print("location:\(String(describing: location))")
-                let locationPath = location!.path
-                //Copy to User Directory
-                let photoPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-                let path = photoPath.appending("/ProfilePhoto.png")
-                //Init FileManager
-                let fileManager = FileManager.default
-                if fileManager.fileExists(atPath: path) {
-                    do {
-                        try fileManager.removeItem(atPath: path)
-                    } catch {
-                        NSLog("File does not exist! (Which is impossible)")
-                    }
-                }
-                try! fileManager.moveItem(atPath: locationPath, toPath: path)
-                print("new location:\(path)")
-                userDefaults.set(false, forKey: "didDownloadFullSizeImage")
-            } else {
-                DispatchQueue.main.async {
-                    let presentMessage = error!.localizedDescription + " Please check your internet connection."
-                    self.errorMessage(presentMessage: presentMessage)
-                }
-            }
-            // semaphore.signal()
-        })
-
-        //使用resume方法启动任务
-        downloadTask.resume()
-        // semaphore.wait()
     }
 
     //Get calendar's day data.

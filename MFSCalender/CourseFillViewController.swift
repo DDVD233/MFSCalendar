@@ -361,7 +361,9 @@ class courseFillController: UIViewController {
                 print(courseData)
 
                 for (index, item) in courseData.enumerated() {
-                    var course = (item as! NSDictionary).mutableCopy() as! Dictionary<String, Any>
+                    guard var course = item as? Dictionary<String, Any?> else {
+                        continue
+                    }
                     print(course)
                     course["className"] = course["sectionidentifier"] as? String
                     course["teacherName"] = course["groupownername"] as? String
@@ -378,8 +380,7 @@ class courseFillController: UIViewController {
                 let coursePath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
                 let path = coursePath.appending("/CourseList.plist")
                 print(path)
-
-                NSArray(array: courseData).write(toFile: path, atomically: true)
+                NSArray(array: courseData).write(to: URL.init(fileURLWithPath: path), atomically: true)
                 success = true
             } else {
                 presentErrorMessage(presentMessage: error!.localizedDescription, layout: .statusLine)

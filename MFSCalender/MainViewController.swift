@@ -142,6 +142,10 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
                 self.updateData()
             }
         }
+        
+        DispatchQueue.global().async {
+            self.teacherSideScheduleFix()
+        }
         // Do any additional setup after loading the view, typically from a nib.
     }
 
@@ -197,6 +201,20 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         })
         
         startTimer()
+    }
+    
+    func teacherSideScheduleFix() {
+        let preferences = Preferences()
+        if preferences.dataBuild < 1076 {
+            preferences.dataBuild = Int(Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "") ?? 0
+            LoginView().getProfile()
+            if !preferences.isStudent {
+                DispatchQueue.main.async {
+                    let vc = self.storyboard?.instantiateViewController(withIdentifier: "courseFillController")
+                    self.present(vc!, animated: true, completion: nil)
+                }
+            }
+        }
     }
 
     override func viewWillDisappear(_ animated: Bool) {

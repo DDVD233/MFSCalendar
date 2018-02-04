@@ -164,6 +164,15 @@ public class Preferences {
         }
     }
     
+    public var dataBuild: Int {
+        get {
+            return userDefaults.integer(forKey: "dataBuild" )
+        }
+        set(value) {
+            userDefaults.set(value, forKey: "dataBuild" )
+        }
+    }
+    
     public var topicIndexID: Int {
         get {
             return userDefaults.integer( forKey: "topicIndexID" )
