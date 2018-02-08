@@ -267,7 +267,6 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
 //            stopTimer()
 //        }
         
-        eventDataFetching()
         getListClasses(day: dayCheck())
         setupTheHeader()
 

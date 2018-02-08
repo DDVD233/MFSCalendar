@@ -374,20 +374,26 @@ class ClassView {
 class EventView {
     let formatter = DateFormatter()
     
-    func getTimeInterval(rowDict: [String: Any?]) -> String {
-        let isAllDay = rowDict["isAllDay"] as! Int
+    func getTimeInterval(rowDict: [String: Any]) -> String {
+        let isAllDay = rowDict["isAllDay"] as? Int ?? 0
         if isAllDay == 1 {
             return "All Day"
         } else {
-            let tEnd = rowDict["tEnd"] as! Int
+            let tEnd = rowDict["tEnd"] as? Int ?? 0
             updateFormatterFormat(time: tEnd)
-            let timeEnd = formatter.date(from: String(describing: tEnd))
-            let tStart = rowDict["tStart"] as! Int
+            guard let timeEnd = formatter.date(from: String(tEnd)) else {
+                return ""
+            }
+            
+            let tStart = rowDict["tStart"] as? Int ?? 0
             updateFormatterFormat(time: tStart)
-            let timeStart = formatter.date(from: String(describing: tStart))
+            guard let timeStart = formatter.date(from: String(tStart)) else {
+                return ""
+            }
+            
             formatter.dateFormat = "h:mm a"
-            let startString = formatter.string(from: timeStart!)
-            let endString = formatter.string(from: timeEnd!)
+            let startString = formatter.string(from: timeStart)
+            let endString = formatter.string(from: timeEnd)
             return startString + " - " + endString
         }
     }
@@ -441,7 +447,7 @@ class HomeworkView {
     }
     
     func updateAssignmentStatus(assignmentIndexId: String, assignmentStatus: String) throws {
-        loginAuthentication()
+        _ = loginAuthentication()
         guard let requestVerification = getRequestVerification() else {
             throw CustomError.NetworkError
         }
@@ -464,15 +470,15 @@ class HomeworkView {
         config.requestCachePolicy = .reloadIgnoringLocalCacheData
         let session = URLSession(configuration: config)
         let semaphore = DispatchSemaphore(value: 0)
-        print(assignmentIndexId)
-        print(assignmentStatus)
-        print(request.allHTTPHeaderFields)
+//        print(assignmentIndexId)
+//        print(assignmentStatus)
+//        print(request.allHTTPHeaderFields)
         
         let task: URLSessionDataTask = session.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
             if error == nil {
-                print(url)
-                print(try? JSONSerialization.jsonObject(with: data!, options: .allowFragments))
-                print(response!)
+//                print(url)
+//                print(try? JSONSerialization.jsonObject(with: data!, options: .allowFragments))
+//                print(response!)
             } else {
                 success = false
                 presentErrorMessage(presentMessage: error!.localizedDescription, layout: .statusLine)

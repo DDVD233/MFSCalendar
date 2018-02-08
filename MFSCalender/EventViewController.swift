@@ -46,12 +46,12 @@ class eventViewController: UIViewController, DZNEmptyDataSetSource, DZNEmptyData
             return
         }
         
-        guard let SelectedDate = selectedDate else {
+        guard let thisSelectedDate = selectedDate else {
             print("No Date")
             return
         }
         self.formatter.dateFormat = "yyyyMMdd"
-        let eventDate = formatter.string(from: SelectedDate)
+        let eventDate = formatter.string(from: thisSelectedDate)
         guard let events = eventData[eventDate] else {
             self.listEvents = []
             reloadData()
@@ -84,24 +84,29 @@ extension eventViewController: UITableViewDelegate, UITableViewDataSource {
     
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "eventTable", for: indexPath as IndexPath) as? customEventCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "eventTable", for: indexPath as IndexPath) as! customEventCell
         let row = indexPath.row
+        
+        guard self.listEvents.indices.contains(row) else { return cell }
         let rowDict = self.listEvents[row]
+        
         guard let summary = rowDict["summary"] as? String else {
             return UITableViewCell()
         }
-        cell?.ClassName.text = summary
+        cell.ClassName.text = summary
+        
         let letter = String(describing: summary[...summary.startIndex])
-        cell?.PeriodNumber.text = letter
+        cell.PeriodNumber.text = letter
+        
         let location = rowDict["location"] as? String ?? ""
         if location.hasSuffix("place fields") || location.hasSuffix("Place Fields") {
-            cell?.RoomNumber.text = ""
+            cell.RoomNumber.text = ""
         } else {
-            cell?.RoomNumber.text = location
+            cell.RoomNumber.text = location
         }
         
-        cell?.PeriodTime.text = EventView().getTimeInterval(rowDict: rowDict)
-        return cell!
+        cell.PeriodTime.text = EventView().getTimeInterval(rowDict: rowDict)
+        return cell
     }
 }
 
