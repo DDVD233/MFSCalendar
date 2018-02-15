@@ -22,6 +22,8 @@
 
 - [UVI Mate](https://itunes.apple.com/us/app/uvi-mate-global-uv-index-now/id1207745216?mt=8) by Alexander Ershov.
 
+- [HotelTonight](https://itunes.apple.com/app/id407690035?mt=8) by Hotel Tonight Inc.
+
 ## Installation 
 
 ### CocoaPods (Recommended)
@@ -43,10 +45,6 @@
 
 ### Carthage
 
-**_Important note_: Carthage support for IBDesignable and IBInspectable is broken due to how frameworks work.
-So if you decide on using Carthage, you will not be able to use IB to design this view.
-Take a look [here](https://github.com/Carthage/Carthage/issues/335) for the issue.**
-
 To use with [Carthage](https://github.com/Carthage/Carthage)
 
 1. Make sure Carthage is installed 
@@ -55,7 +53,18 @@ To use with [Carthage](https://github.com/Carthage/Carthage)
 2. Add this repo to your Cartfile
 
 	`github "luispadron/UICircularProgressRing"` 
-3. Drag the `UICircularProgressRing.framework` from `MyProjDir/Carthage/Builds/iOS/UICircularProgressRing` into the `General -> Embeded Binaries` section of your Xcode project.
+
+##### Either Embed or Link the framework
+
+###### Embed:
+
+1. Drag the `UICircularProgressRing.framework` from `MyProjDir/Carthage/Builds/iOS/UICircularProgressRing` into the `General -> Embeded Binaries` section of your Xcode project.
+
+###### Link:
+
+1. Drag the `UICircularProgressRing.framework` from `MyProjDir/Carthage/Builds/iOS/UICircularProgressRing` into the `General -> Linked Frameworks and Binaries` section of your Xcode project.
+2. Add a run script phase, under `Build Phases -> +`, put this in the code for the run script: `/usr/local/bin/carthage copy-frameworks`
+3. Add a `Copy Files Phase` under `Build Phases -> +`, select `Frameworks` as destination and add `UICircularProgressRing.framework`, make sure `Code Sign On Copy` is enabled.
 
 ### Manually
 

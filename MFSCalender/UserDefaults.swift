@@ -29,6 +29,24 @@ public class Preferences {
         }
     }
     
+    public var baseURL: String {
+        get {
+            return userDefaults.string(forKey: "baseURL" ) ?? "https://mfriends.myschoolapp.com"
+        }
+        set(value) {
+            userDefaults.set(value, forKey: "baseURL" )
+        }
+    }
+    
+    public var schoolCode: String? {
+        get {
+            return userDefaults.string(forKey: "schoolCode" )
+        }
+        set(value) {
+            userDefaults.set(value, forKey: "schoolCode" )
+        }
+    }
+    
     public var firstName: String? {
         get {
             return userDefaults.string(forKey: "firstName" )

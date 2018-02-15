@@ -61,7 +61,7 @@ import UIKit
      ## Author
      Luis Padron
      */
-    open weak var delegate: UICircularProgressRingDelegate?
+    @objc open weak var delegate: UICircularProgressRingDelegate? = nil
     
     // MARK: Circle Properties
     
@@ -227,7 +227,7 @@ import UIKit
      ## Author
      Luis Padron
      */
-    open var ringStyle: UICircularProgressRingStyle = .inside {
+    @objc open var ringStyle: UICircularProgressRingStyle = .inside {
         didSet {
             self.ringLayer.ringStyle = self.ringStyle
         }
@@ -243,7 +243,7 @@ import UIKit
      ## Author
      Luis Padron
      */
-    open var patternForDashes: [CGFloat] = [7.0, 7.0] {
+    @objc open var patternForDashes: [CGFloat] = [7.0, 7.0] {
         didSet {
             self.ringLayer.patternForDashes = self.patternForDashes
         }
@@ -304,7 +304,7 @@ import UIKit
      ## Author
      Luis Padron
      */
-    open var gradientColors: [UIColor] = [UIColor]() {
+    @objc open var gradientColors: [UIColor] = [UIColor]() {
         didSet {
             self.ringLayer.gradientColors = self.gradientColors
         }
@@ -329,7 +329,7 @@ import UIKit
      ## Author
      Luis Padron
      */
-    open var gradientColorLocations: [CGFloat]? = nil {
+    @objc open var gradientColorLocations: [CGFloat]? = nil {
         didSet {
             self.ringLayer.gradientColorLocations = self.gradientColorLocations
         }
@@ -346,7 +346,7 @@ import UIKit
      ## Author
      Luis Padron
      */
-    open var gradientStartPosition: UICircularProgressRingGradientPosition = .topRight {
+    @objc open var gradientStartPosition: UICircularProgressRingGradientPosition = .topRight {
         didSet {
             self.ringLayer.gradientStartPosition = self.gradientStartPosition
         }
@@ -363,7 +363,7 @@ import UIKit
      ## Author
      Luis Padron
      */
-    open var gradientEndPosition: UICircularProgressRingGradientPosition = .bottomLeft {
+    @objc open var gradientEndPosition: UICircularProgressRingGradientPosition = .bottomLeft {
         didSet {
             self.ringLayer.gradientEndPosition = self.gradientEndPosition
         }
@@ -448,7 +448,7 @@ import UIKit
      ## Author
      Luis Padron
      */
-    open var outerCapStyle: CGLineCap = .butt {
+    @objc open var outerCapStyle: CGLineCap = .butt {
         didSet {
             self.ringLayer.outerCapStyle = self.outerCapStyle
         }
@@ -550,7 +550,7 @@ import UIKit
      ## Author
      Luis Padron
      */
-    open var innerCapStyle: CGLineCap = .round {
+    @objc open var innerCapStyle: CGLineCap = .round {
         didSet {
             self.ringLayer.innerCapStyle = self.innerCapStyle
         }
@@ -676,7 +676,7 @@ import UIKit
      ## Author
      Luis Padron
      */
-    open var animationStyle: String = kCAMediaTimingFunctionEaseIn {
+    @objc open var animationStyle: String = kCAMediaTimingFunctionEaseIn {
         didSet {
             self.ringLayer.animationStyle = self.animationStyle
         }
@@ -691,7 +691,7 @@ import UIKit
      ## Author
      Luis Padron
      */
-    open var isAnimating: Bool {
+    @objc open var isAnimating: Bool {
         get { return (self.layer.animation(forKey: "value") != nil) ? true : false }
     }
     
@@ -818,7 +818,7 @@ import UIKit
      ## Author
      Luis Padron
      */
-    open func setProgress(value: CGFloat, animationDuration: TimeInterval,
+    @objc open func setProgress(value: CGFloat, animationDuration: TimeInterval,
                           completion: ProgressCompletion? = nil) {
         // Remove the current animation, so that new can be processed
         if isAnimating { self.layer.removeAnimation(forKey: "value") }
@@ -834,6 +834,49 @@ import UIKit
         }
 
         self.value = value
+        CATransaction.commit()
+    }
+
+    /**
+     Typealias for animateProperties(duration:animations:completion:) fucntion completion
+     */
+    public typealias PropertyAnimationCompletion = (() -> Void)
+
+    /**
+     This function allows animation of the animatable properties of the `UICircularProgressRing`.
+     These properties include `innerRingColor, innerRingWidth, outerRingColor, outerRingWidth, innerRingSpacing, fontColor`.
+
+     Simply call this function and inside of the animation block change the animatable properties as you would in any `UView`
+     animation block.
+
+     The completion block is called when all animations finish.
+     */
+    @objc open func animateProperties(duration: TimeInterval, animations: () -> Void) {
+        self.animateProperties(duration: duration, animations: animations, completion: nil)
+    }
+
+    /**
+     This function allows animation of the animatable properties of the `UICircularProgressRing`.
+     These properties include `innerRingColor, innerRingWidth, outerRingColor, outerRingWidth, innerRingSpacing, fontColor`.
+
+     Simply call this function and inside of the animation block change the animatable properties as you would in any `UView`
+     animation block.
+
+     The completion block is called when all animations finish.
+     */
+    @objc open func animateProperties(duration: TimeInterval, animations: () -> Void,
+                                      completion: PropertyAnimationCompletion? = nil) {
+        self.ringLayer.shouldAnimateProperties = true
+        self.ringLayer.propertyAnimationDuration = duration
+        CATransaction.begin()
+        CATransaction.setCompletionBlock {
+            // Reset and call completion
+            self.ringLayer.shouldAnimateProperties = false
+            self.ringLayer.propertyAnimationDuration = 0.0
+            completion?()
+        }
+        // Commit and perform animations
+        animations()
         CATransaction.commit()
     }
 }
