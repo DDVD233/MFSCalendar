@@ -3,7 +3,7 @@
 //  MFSCalender
 //
 //  Created by David Dai on 2016/12/1.
-//  Copyright © 2016年 David. All rights reserved.
+//  Copyright © 2016 David. All rights reserved.
 //
 
 import UIKit
