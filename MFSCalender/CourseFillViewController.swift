@@ -3,7 +3,7 @@
 //  MFSCalendar
 //
 //  Created by David Dai on 2017/5/23.
-//  Copyright © 2017年 David. All rights reserved.
+//  Copyright © 2017 David. All rights reserved.
 //
 
 import UIKit
@@ -186,6 +186,22 @@ class courseFillController: UIViewController {
     func setProgressTo(value: CGFloat) {
         DispatchQueue.main.async {
             self.progressView.setProgress(value: value, animationDuration: 1)
+        }
+    }
+    
+    func createSchedulePlist() {
+        let letterDayListPath = URL(fileURLWithPath: userDocumentPath.appending("/Day.plist"))
+        guard let letterDayList = NSDictionary(contentsOf: letterDayListPath) as? [String: String?] else {
+            print("Letter day file has incorrect format")
+            return
+        }
+        
+        let scheduleData = [String: [String: Any]]()
+        for (key, value) in letterDayList {
+            let plistPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
+            guard let day = value else { continue }
+            let fileName = "/Class" + day + ".plist"
+            let path = plistPath.appending(fileName)
         }
     }
     
@@ -608,8 +624,16 @@ class courseFillController: UIViewController {
             listClasses[4] = assembly
         }
         
+        let meetTimeListPath = plistPath.appending("/ScheduleMFS.plist")
+        let meetTimeList = NSArray(contentsOfFile: meetTimeListPath) as! [[String: String]]
+        
         for periodNumber in 1...9 {
-            if listClasses.filter({ $0["period"] as? Int == periodNumber }).count == 0 {
+            if var classAtPeriod = listClasses.filter({ $0["period"] as? Int == periodNumber }).first {
+                let periodTime = meetTimeList[periodNumber - 1]
+                classAtPeriod["MyDayStartTime"] = periodTime["StartTime"]
+                classAtPeriod["MyDayEndTime"] = periodTime["EndTime"]
+                listClasses[periodNumber - 1] = classAtPeriod
+            } else {
                 let addData = ["className": "Free", "period": periodNumber] as [String : Any]
                 listClasses[periodNumber - 1] = addData
             }

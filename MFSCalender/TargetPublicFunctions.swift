@@ -3,7 +3,7 @@
 //  MFSCalendar
 //
 //  Created by David Dai on 2017/8/5.
-//  Copyright © 2017年 David. All rights reserved.
+//  Copyright © 2017 David. All rights reserved.
 //
 
 import Foundation
@@ -337,6 +337,35 @@ class HomeworkView {
 }
 
 class NetworkOperations {
+    func refreshData() {
+        let semaphore = DispatchSemaphore.init(value: 0)
+        
+        provider.request(MyService.getCalendarData, completion: { result in
+            switch result {
+            case let .success(response):
+                do {
+                    guard let dayData = try response.mapJSON(failsOnEmptyData: false) as? Dictionary<String, Any> else {
+                        presentErrorMessage(presentMessage: "Incorrect file format for day data", layout: .statusLine)
+                        return
+                    }
+                    
+                    let dayFile = userDocumentPath.appending("/Day.plist")
+                    
+                    print("Info: Day Data refreshed")
+                    NSDictionary(dictionary: dayData).write(toFile: dayFile, atomically: true)
+                } catch {
+                    presentErrorMessage(presentMessage: error.localizedDescription, layout: .statusLine)
+                }
+            case let .failure(error):
+                presentErrorMessage(presentMessage: error.localizedDescription, layout: .statusLine)
+            }
+            
+            semaphore.signal()
+        })
+        
+        semaphore.wait()
+    }
+    
     func getDurationId(for quarter: Int) -> String? {
 //        let session = URLSession.shared
 //        let request = URLRequest(url: URL(string: "https://dwei.org/currentDurationId")!)

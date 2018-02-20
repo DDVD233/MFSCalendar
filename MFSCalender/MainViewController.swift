@@ -155,6 +155,8 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         
         UIApplication.shared.statusBarStyle = .lightContent
     }
+    
+    
 
     override func viewDidAppear(_ animated: Bool) {
         //classViewHeightConstraint.constant = classView.contentSize.height
@@ -232,7 +234,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         })
 
         DispatchQueue.global().async(group: group, execute: {
-            self.refreshData()
+            NetworkOperations().refreshData()
         })
 
         group.wait()
@@ -416,10 +418,25 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         }
 
     }
+    
+    func dayCheck() -> String {
+        var dayOfSchool: String? = nil
+        let date = Date()
+        let formatter = DateFormatter()
+        let plistPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
+        let path = plistPath.appending("/Day.plist")
+        guard let dayDict = NSDictionary(contentsOfFile: path) as? [String: String] else {
+            return "No School"
+        }
+        formatter.dateFormat = "yyyyMMdd"
+        let checkDate = formatter.string(from: date)
+        
+        dayOfSchool = dayDict[checkDate] ?? "No School"
+        return dayOfSchool!
+    }
 
     func getListClasses(day: String) {
-        let currentPeriod = getCurrentPeriod()
-        self.listClasses = getClassDataAt(period: currentPeriod, day: day)
+        self.listClasses = getClassDataAt(day: day)
     }
     
     func eventDataFetching() {
@@ -490,22 +507,6 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         task.resume()
         semaphore.wait()
 
-    }
-
-    func dayCheck() -> String {
-        var dayOfSchool: String? = nil
-        let date = Date()
-        let formatter = DateFormatter()
-        let plistPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-        let path = plistPath.appending("/Day.plist")
-        guard let dayDict = NSDictionary(contentsOfFile: path) as? [String: String] else {
-            return "No School"
-        }
-        formatter.dateFormat = "yyyyMMdd"
-        let checkDate = formatter.string(from: date)
-
-        dayOfSchool = dayDict[checkDate] ?? "No School"
-        return dayOfSchool!
     }
 
 
@@ -666,34 +667,6 @@ extension Main: UICollectionViewDelegate, UICollectionViewDataSource, UICollecti
 extension Main {
     //Refresh day data and event data. Update version number.
     //刷新Day和Event数据，并更新版本号
-    func refreshData() {
-        let semaphore = DispatchSemaphore.init(value: 0)
-
-        provider.request(MyService.getCalendarData, completion: { result in
-            switch result {
-            case let .success(response):
-                do {
-                    guard let dayData = try response.mapJSON(failsOnEmptyData: false) as? Dictionary<String, Any> else {
-                        presentErrorMessage(presentMessage: "Incorrect file format for day data", layout: .statusLine)
-                        return
-                    }
-
-                    let dayFile = userDocumentPath.appending("/Day.plist")
-
-                    print("Info: Day Data refreshed")
-                    NSDictionary(dictionary: dayData).write(toFile: dayFile, atomically: true)
-                } catch {
-                    presentErrorMessage(presentMessage: error.localizedDescription, layout: .statusLine)
-                }
-            case let .failure(error):
-                presentErrorMessage(presentMessage: error.localizedDescription, layout: .statusLine)
-            }
-
-            semaphore.signal()
-        })
-
-        semaphore.wait()
-    }
 
     func refreshEvents() {
         let semaphore = DispatchSemaphore.init(value: 0)

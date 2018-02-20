@@ -2,7 +2,7 @@
 //  MobileServeIntroViewController.swift
 //  MFSCalendar
 //
-//  Created by 戴元平 on 10/19/17.
+//  Created by David Dai on 10/19/17.
 //  Copyright © 2017 David. All rights reserved.
 //
 

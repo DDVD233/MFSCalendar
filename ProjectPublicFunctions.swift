@@ -2,8 +2,8 @@
 //  ProjectPublicFunctions.swift
 //  MFSCalendar
 //
-//  Created by 戴元平 on 2017/9/2.
-//  Copyright © 2017年 David. All rights reserved.
+//  Created by David Dai on 2017/9/2.
+//  Copyright © 2017 David. All rights reserved.
 //
 
 import Foundation
@@ -123,8 +123,24 @@ func getCurrentPeriod() -> Int {
     }
 }
 
-func getClassDataAt(period: Int, day: String) -> [[String: Any]] {
-    //var period = period
+func dayCheck() -> String {
+    var dayOfSchool: String? = nil
+    let date = Date()
+    let formatter = DateFormatter()
+    let plistPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
+    let path = plistPath.appending("/Day.plist")
+    guard let dayDict = NSDictionary(contentsOfFile: path) as? [String: String] else {
+        return "No School"
+    }
+    formatter.dateFormat = "yyyyMMdd"
+    let checkDate = formatter.string(from: date)
+    
+    dayOfSchool = dayDict[checkDate] ?? "No School"
+    return dayOfSchool!
+}
+
+func getClassDataAt(day: String) -> [[String: Any]] {
+    let period = getCurrentPeriod()
     var listClasses = [[String: Any]]()
 
     let plistPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path

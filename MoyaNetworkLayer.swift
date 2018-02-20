@@ -3,7 +3,7 @@
 //  MFSCalendar
 //
 //  Created by David Dai on 2017/6/9.
-//  Copyright © 2017年 David. All rights reserved.
+//  Copyright © 2017 David. All rights reserved.
 //
 
 import Foundation
@@ -20,6 +20,7 @@ enum MyService {
     case getContentList(sectionId: String)
     case getClassContentData(contentName: String, sectionId: String)
     case sectionInfoView(sectionID: String)
+    case mySchoolGetSchedule(startTimeStamp: String, endTimeStamp: String, userID: String)
 
     //Dwei
     case getCalendarData
@@ -41,12 +42,12 @@ extension MyService: TargetType {
         case .getCalendarData, .getCalendarEvent, .dataVersionCheck, .meetTimeSearch:
             return URL(string: "https://dwei.org")!
         default:
-            return URL(string: "https://mfriends.myschoolapp.com")!
+            return URL(string: Preferences().baseURL)!
         }
     }
     var path: String {
         switch self {
-                //myMFS
+                //mySchool
         case .downloadLargeProfilePhoto(let link):
             return "/\(link)"
         case .getProfile(let userID, _):
@@ -59,6 +60,8 @@ extension MyService: TargetType {
             return "/api/\(contentName)/forsection/\(sectionId)/"
         case .sectionInfoView:
             return "/api/datadirect/SectionInfoView/"
+        case .mySchoolGetSchedule:
+            return "/api/DataDirect/ScheduleList/"
 
                 // Dwei
         case .getCalendarData:
@@ -103,6 +106,8 @@ extension MyService: TargetType {
             return ["format": "json", "editMode": "false", "active": "true", "future": "false", "expired": "false", "contextLabelId": "2"]
         case .sectionInfoView(let sectionID):
             return ["format": "json", "sectionId": sectionID, "associationId": "1"]
+        case .mySchoolGetSchedule(let startTimeStamp, let endTimeStamp, let userID):
+            return ["format": "json", "personaId": "2", "viewerPersonaId": "2", "start": startTimeStamp, "end": endTimeStamp, "viewerId": userID]
         default: return nil
         }
     }
