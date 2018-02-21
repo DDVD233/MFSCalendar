@@ -200,6 +200,7 @@ public func addLoginCookie(token: String) {
 }
 
 public func presentErrorMessage(presentMessage: String, layout: MessageView.Layout) {
+    print("[Error] " + presentMessage)
     let view = MessageView.viewFromNib(layout: layout)
     view.configureTheme(.error)
     let icon = "😱"
