@@ -19,6 +19,9 @@
 		E427868A1F568EB100583D1E /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42786891F568EB100583D1E /* ProfileViewController.swift */; };
 		E4288E1420360F6600E4488D /* ClassView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4288E1320360F6600E4488D /* ClassView.swift */; };
 		E436EDC41F96E3AF00395DA5 /* MenuService.png in Resources */ = {isa = PBXBuildFile; fileRef = E436EDC31F96E3A000395DA5 /* MenuService.png */; };
+		E43D4FC8203DB46C00E65FF4 /* MFSCalender.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E4F86B371DF0E20C00CAD72B /* MFSCalender.xcdatamodeld */; };
+		E43D4FCA203DB59700E65FF4 /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43D4FC9203DB59700E65FF4 /* DataController.swift */; };
+		E43D4FCB203DB59700E65FF4 /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43D4FC9203DB59700E65FF4 /* DataController.swift */; };
 		E440F1BC1EEA7F4E004AFD0B /* MoyaNetworkLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E440F1BB1EEA7F4E004AFD0B /* MoyaNetworkLayer.swift */; };
 		E445E73E1EAD8B7D00794560 /* MoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E445E73D1EAD8B7D00794560 /* MoreViewController.swift */; };
 		E44632501F9BB020004F8E2E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E4F86B3C1DF0E20C00CAD72B /* LaunchScreen.storyboard */; };
@@ -153,6 +156,7 @@
 		E42786891F568EB100583D1E /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		E4288E1320360F6600E4488D /* ClassView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassView.swift; sourceTree = "<group>"; };
 		E436EDC31F96E3A000395DA5 /* MenuService.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MenuService.png; sourceTree = "<group>"; };
+		E43D4FC9203DB59700E65FF4 /* DataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataController.swift; sourceTree = "<group>"; };
 		E440F1BB1EEA7F4E004AFD0B /* MoyaNetworkLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MoyaNetworkLayer.swift; path = ../MoyaNetworkLayer.swift; sourceTree = "<group>"; };
 		E44484D71E13A105002C68D5 /* MFSCalender.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MFSCalender.entitlements; sourceTree = "<group>"; };
 		E445E73D1EAD8B7D00794560 /* MoreViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoreViewController.swift; sourceTree = "<group>"; };
@@ -478,6 +482,7 @@
 				E484E6541EFA33260056F2D5 /* Localizable.strings */,
 				E44484D71E13A105002C68D5 /* MFSCalender.entitlements */,
 				E4F86B301DF0E20C00CAD72B /* AppDelegate.swift */,
+				E43D4FC9203DB59700E65FF4 /* DataController.swift */,
 				E4F86B321DF0E20C00CAD72B /* MainViewController.swift */,
 				E4C46A2D1ED50CD3007F8F1A /* CourseFillViewController.swift */,
 				E462F462203CB1E800062E5A /* MySchoolScheduleFill.swift */,
@@ -932,6 +937,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E43D4FC8203DB46C00E65FF4 /* MFSCalender.xcdatamodeld in Sources */,
+				E43D4FCB203DB59700E65FF4 /* DataController.swift in Sources */,
 				E48D4E051E61FC26008B0A97 /* TodayViewController.swift in Sources */,
 				E489F6C81F5A825A00F2269F /* ProjectPublicFunctions.swift in Sources */,
 			);
@@ -982,6 +989,7 @@
 				E489F6C71F5A821E00F2269F /* ProjectPublicFunctions.swift in Sources */,
 				E48B85A91F96691D000DC288 /* NewMoreViewController.swift in Sources */,
 				E440F1BC1EEA7F4E004AFD0B /* MoyaNetworkLayer.swift in Sources */,
+				E43D4FCA203DB59700E65FF4 /* DataController.swift in Sources */,
 				E42786881F568A5F00583D1E /* AboutViewController.swift in Sources */,
 				E48CE0981F9FA6BB007B53D0 /* UserDefaults.swift in Sources */,
 				E4F86B311DF0E20C00CAD72B /* AppDelegate.swift in Sources */,

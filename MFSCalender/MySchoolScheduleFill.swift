@@ -8,8 +8,18 @@
 
 import Foundation
 import SwiftDate
+import CoreData
 
 class MySchoolScheduleFill {
+    let courseListPath = URL.init(fileURLWithPath: userDocumentPath.appending("/CourseList.plist"))
+    var courseList: [[String: Any]]
+    let managedContext: NSManagedObjectContext
+    
+    init() {
+        courseList = NSArray(contentsOf: courseListPath) as? [[String: Any]] ?? [[String: Any]]()
+        managedContext = NSManagedObjectContext.init(concurrencyType: .privateQueueConcurrencyType)
+    }
+    
     func getScheduleFromMySchool(startTime: Date, endTime: Date) -> [[String: Any]] {
         let semaphore = DispatchSemaphore.init(value: 0)
         let userID = Preferences().userID ?? "0"
@@ -55,18 +65,25 @@ class MySchoolScheduleFill {
             
             if (course["allDay"] as? Bool ?? true) {
                 writeDayDataToFile(course: course)
+            } else {
+                writeScheduleDataToFile(course: course)
             }
+        }
+        
+        do {
+            try managedContext.save()
+        } catch {
+            fatalError("Failure to save context: \(error)")
         }
     }
     
     func writeDayDataToFile(course: [String: Any]) {
-        guard let startTime = course["start"] as? String else {
+        guard let startDate = course["start"] as? String else {
             print("writeDayDataToFile: StartTimeNotFound")
             return
         }
         
-        guard let date = DateInRegion(string: startTime, format: .custom("M/d/yyyy h:mm a")) else {
-            presentErrorMessage(presentMessage: "writeDayDataToFile: Date cannot be converted", layout: .statusLine)
+        guard let dateString = dateStringFormatter(date: startDate) else {
             return
         }
         
@@ -75,7 +92,6 @@ class MySchoolScheduleFill {
             return
         }
         
-        let dateString = date.string(format: .custom("yyyyMMdd"))
         let abbreviation = abbreviateTitle(title: dayDescription)
         
         let dayDictPath = userDocumentPath.appending("/Day.plist")
@@ -83,6 +99,58 @@ class MySchoolScheduleFill {
         
         dayDict[dateString] = abbreviation
         NSDictionary(dictionary: dayDict).write(toFile: dateString, atomically: true)
+    }
+    
+    func writeScheduleDataToFile(course: [String: Any]) {
+        let courseObject = NSEntityDescription.insertNewObject(forEntityName: "Course", into: managedContext) as! CourseMO
+
+        guard let startString = course["start"] as? String else {
+            print("writeScheduleDataToFile: StartDateNotFound")
+            return
+        }
+        guard let start = timeStringFormatter(date: startString) else {
+            return
+        }
+        courseObject.startTime = start
+        
+        guard let endString = course["end"] as? String else {
+            print("writeScheduleDataToFile: EndDateNotFound")
+            return
+        }
+        guard let end = timeStringFormatter(date: endString) else {
+            return
+        }
+        courseObject.endTime = end
+        
+        let title = course["title"] as? String ?? ""
+        courseObject.name = title
+        
+        if let courseInList = courseList
+                             .filter({ $0["sectionidentifier"] as? String == title })
+                             .first {
+            courseObject.secionID = Int32(courseInList["sectionid"] as? Int ?? 0)
+            courseObject.room = "" //TODO: Add room number
+        }
+        
+    }
+    
+    func timeStringFormatter(date: String) -> Date? {
+        guard let date = DateInRegion(string: date, format: .custom("M/d/yyyy h:mm a")) else {
+            presentErrorMessage(presentMessage: "dateStringFormatter: Date cannot be converted", layout: .statusLine)
+            return nil
+        }
+        
+        return date.absoluteDate
+    }
+    
+    func dateStringFormatter(date: String) -> String? {
+        guard let date = DateInRegion(string: date, format: .custom("M/d/yyyy h:mm a")) else {
+            presentErrorMessage(presentMessage: "dateStringFormatter: Date cannot be converted", layout: .statusLine)
+            return nil
+        }
+        
+        let dateString = date.string(format: .custom("yyyyMMdd"))
+        return dateString
     }
     
     func abbreviateTitle(title: String) -> String {
@@ -101,3 +169,5 @@ class MySchoolScheduleFill {
         return abbreviation
     }
 }
+
+
