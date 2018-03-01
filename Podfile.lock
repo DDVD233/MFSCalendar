@@ -6,16 +6,16 @@ PODS:
   - Charts (3.0.5):
     - Charts/Core (= 3.0.5)
   - Charts/Core (3.0.5)
-  - Crashlytics (3.10.0):
-    - Fabric (~> 1.7.3)
+  - Crashlytics (3.10.1):
+    - Fabric (~> 1.7.5)
   - DGElasticPullToRefresh (1.1)
-  - Down (0.4.2)
+  - Down (0.5.0)
   - DZNEmptyDataSet (1.8.1)
-  - Fabric (1.7.3)
-  - Firebase/Core (4.8.2):
+  - Fabric (1.7.5)
+  - Firebase/Core (4.9.0):
     - FirebaseAnalytics (= 4.0.9)
-    - FirebaseCore (= 4.0.14)
-  - Firebase/Performance (4.8.2):
+    - FirebaseCore (= 4.0.15)
+  - Firebase/Performance (4.9.0):
     - Firebase/Core
     - FirebasePerformance (= 1.1.1)
   - FirebaseAnalytics (4.0.9):
@@ -23,9 +23,9 @@ PODS:
     - FirebaseInstanceID (~> 2.0)
     - GoogleToolboxForMac/NSData+zlib (~> 2.1)
     - nanopb (~> 0.3)
-  - FirebaseCore (4.0.14):
+  - FirebaseCore (4.0.15):
     - GoogleToolboxForMac/NSData+zlib (~> 2.1)
-  - FirebaseInstanceID (2.0.8):
+  - FirebaseInstanceID (2.0.9):
     - FirebaseCore (~> 4.0)
   - FirebasePerformance (1.1.1):
     - FirebaseAnalytics (~> 4.0)
@@ -42,15 +42,15 @@ PODS:
     - GoogleToolboxForMac/Defines (= 2.1.3)
   - GoogleToolboxForMac/NSData+zlib (2.1.3):
     - GoogleToolboxForMac/Defines (= 2.1.3)
-  - GTMSessionFetcher/Core (1.1.13)
+  - GTMSessionFetcher/Core (1.1.14)
   - JSQWebViewController (6.0.0)
   - Kanna (4.0.0)
   - LTMorphingLabel (0.5.6)
   - M13Checkbox (3.2.2)
   - M13ProgressSuite (1.2.9)
-  - Moya (11.0.0):
-    - Moya/Core (= 11.0.0)
-  - Moya/Core (11.0.0):
+  - Moya (11.0.1):
+    - Moya/Core (= 11.0.1)
+  - Moya/Core (11.0.1):
     - Alamofire (~> 4.1)
     - Result (~> 3.0)
   - nanopb (0.3.8):
@@ -65,17 +65,17 @@ PODS:
   - ReachabilitySwift (4.1.0)
   - Result (3.2.4)
   - SCLAlertView (0.7.0)
-  - SDWebImage (4.3.0):
-    - SDWebImage/Core (= 4.3.0)
-  - SDWebImage/Core (4.3.0)
+  - SDWebImage (4.3.2):
+    - SDWebImage/Core (= 4.3.2)
+  - SDWebImage/Core (4.3.2)
   - SkyFloatingLabelTextField (3.4.0)
   - SnapKit (4.0.0)
   - Spring (1.0.3)
-  - SVProgressHUD (2.2.3)
+  - SVProgressHUD (2.2.5)
   - SwiftDate (4.5.1)
   - SwiftMessages (4.1.0)
   - SwiftyJSON (4.0.0)
-  - UICircularProgressRing (1.8.0)
+  - UICircularProgressRing (1.8.4)
   - UrbanAirship-iOS-SDK (8.6.3)
   - XLPagerTabStrip (8.0.0)
 
@@ -133,7 +133,7 @@ CHECKOUT OPTIONS:
     :commit: 6dd284bde21ea2e7f9fd89bc36f40df16e16369d
     :git: https://github.com/ViccAlexander/Chameleon.git
   Down:
-    :commit: fbf9ef54b59c9524d2064788c0682355ca2b783e
+    :commit: d0c23a3def8aa45e2e14814b2be536408f246a29
     :git: https://github.com/iwasrobbed/Down.git
   Kanna:
     :commit: d14801345da8998d4da4a071006fb7746de3d1eb
@@ -149,41 +149,41 @@ SPEC CHECKSUMS:
   Alamofire: f41a599bd63041760b26d393ec1069d9d7b917f4
   ChameleonFramework: d21a3cc247abfe5e37609a283a8238b03575cf64
   Charts: 45cdc985b764c838b35ee47eb1365d15735f6d1a
-  Crashlytics: a989ef242b66605577a425733797f810bd2725eb
+  Crashlytics: aee1a064cbbf99b32efa3f056a5f458d846bc8ff
   DGElasticPullToRefresh: 28f11a6026302a90f8ffebbc6e24748e584dddd3
-  Down: 55a4bbd0b9507f63a6536a3a45afdf70d3b1e07d
+  Down: 654a67e384c57f6dc01254f362c228c737e19f12
   DZNEmptyDataSet: 9525833b9e68ac21c30253e1d3d7076cc828eaa7
-  Fabric: bb495bb9a7a7677c6d03a1f8b83d95bc49b47e41
-  Firebase: 7d3b8cd837ad9fcd391657734c0d56dab8e9a5a3
+  Fabric: ae7146a5f505ea370a1e44820b4b1dc8890e2890
+  Firebase: 632216af3ed7f31e3be34776947fdc7546cfb572
   FirebaseAnalytics: 388b630c15713f5dbf364071f5f3d6077fb52f4e
-  FirebaseCore: 2e0b98fb2d64ca8140136beff15772bdd14d2dd7
-  FirebaseInstanceID: 81df5805a08001e69138664bdd02c6719a9ac80f
+  FirebaseCore: 3bd047463058fa6b5d312c97502c52e45401cdfb
+  FirebaseInstanceID: d2058a35e9bebda1b6dd42486b84917bde552a9d
   FirebasePerformance: 4e1f8091e400eaf88505234caef5718313653709
   FirebaseSwizzlingUtilities: f1c49a5a372ac852c853722a5891a0a5e2344a6c
   FSCalendar: a04b09f16f811bc92e82f3cf852a15225233b9d5
   GoogleToolboxForMac: 2501e2ad72a52eb3dfe7bd9aee7dad11b858bd20
-  GTMSessionFetcher: 5bb1eae636127de695590f50e7d248483eb891e6
+  GTMSessionFetcher: 390ea358e5a0d0133153806f744662dad933d06b
   JSQWebViewController: 51041569b75d19dbb6b7fe0b7ae053c32409a9be
   Kanna: d5ae2a26472f7e7a474e7f36a9cd8aa2c8c63ad3
   LTMorphingLabel: bdb51d4682e9822da89da6f567bd8aa456fd6650
   M13Checkbox: a8c2491cfbbca10797925fd0b9154a782bf40d89
   M13ProgressSuite: ea9f7263e73e9215e6849dfa54e29ee0ad6a145c
-  Moya: be29766339783963a70d1279d69c891ab3a1393c
+  Moya: 3d594ada51a21cc02b18739ab578a1984f900c8a
   nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
   NVActivityIndicatorView: 60109b9bf46efc2e71ab81453196ccdfdfeea870
   Protobuf: 8a9838fba8dae3389230e1b7f8c104aa32389c03
   ReachabilitySwift: 6849231cd4e06559f3b9ef4a97a0a0f96d41e09f
   Result: d2d07204ce72856f1fd9130bbe42c35a7b0fea10
   SCLAlertView: 8a14ffc40590c619e183eed2298b854385f30be1
-  SDWebImage: 6da6c8bca115addc4de8613362e1b15f66333825
+  SDWebImage: 29bd3c0bc1f01e5eb59720847c64ad4c4ca1af5d
   SkyFloatingLabelTextField: 52b6ade8588f40c5bed423c651c70848f068e1dc
   SnapKit: a42d492c16e80209130a3379f73596c3454b7694
   Spring: 3f02b5dc3308572ef177b3cad0fa7bbc4b0706f7
-  SVProgressHUD: a5eaeff664a82dda89809c409ace40183ce91523
+  SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
   SwiftDate: 7b56d42a221f582047287deb256b23fc5ed49a60
   SwiftMessages: 1bacc783c8f10bdfdc57c14860cae8a1f1fa6591
   SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
-  UICircularProgressRing: c37a16e6b71c92eb31824e773e881203ba669306
+  UICircularProgressRing: 653b31f7252b2959e8234f5b9ea5f925da755954
   UrbanAirship-iOS-SDK: 61bad27cf3ea49e2da7c9a6c469674bf3ac2ffa0
   XLPagerTabStrip: d1ab378af0923320ec0b5eab11d7b2f803d31261
 
