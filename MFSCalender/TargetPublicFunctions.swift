@@ -383,17 +383,28 @@ class NetworkOperations {
 //        task.resume()
 //        semaphore.wait()
 //        return strReturn
-        switch quarter {
-        case 1:
-            return "90656"
-        case 2:
-            return "90657"
-        case 3:
-            return "90658"
-        case 4:
-            return "90659"
-        default:
-            return nil
+        if Preferences().schoolCode == "CMH" {
+            switch quarter {
+            case 1, 2:
+                return "87782"
+            case 3, 4:
+                return "87783"
+            default:
+                return nil
+            }
+        } else {
+            switch quarter {
+            case 1:
+                return "90656"
+            case 2:
+                return "90657"
+            case 3:
+                return "90658"
+            case 4:
+                return "90659"
+            default:
+                return nil
+            }
         }
     }
     

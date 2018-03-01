@@ -175,7 +175,6 @@ class classDetailViewController: UITableViewController, UIDocumentInteractionCon
                     switch result {
 
                     case let .success(response):
-                        print(response.request?.url)
                         do {
                             guard let json = try response.mapJSON(failsOnEmptyData: true) as? Array<Dictionary<String, Any?>> else {
                                 semaphore.signal()

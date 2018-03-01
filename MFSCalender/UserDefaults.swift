@@ -40,7 +40,7 @@ public class Preferences {
     
     public var schoolCode: String? {
         get {
-            return userDefaults.string(forKey: "schoolCode" )
+            return userDefaults.string(forKey: "schoolCode" ) ?? "MFS"
         }
         set(value) {
             userDefaults.set(value, forKey: "schoolCode" )

@@ -8,12 +8,17 @@
 
 import Foundation
 import SwiftDate
+import CoreData
 
 struct ClassTime {
     var currentDate: DateInRegion
     
     init() {
         self.currentDate = DateInRegion()
+    }
+    
+    init(date: DateInRegion) {
+        self.currentDate = date
     }
     
     var period: [Period] {
@@ -49,23 +54,27 @@ struct Period {
     }
 }
 
-func periodTimerString(periodNumber: Int) -> String {
+func periodTimerString(course: CourseMO) -> String {
+    assert(course.startTime != nil)
+    assert(course.endTime != nil)
     var timerString: String = ""
-    let period = ClassTime().period[periodNumber-1]
     let currentTime = DateInRegion()
+    let periodStartTime = DateInRegion(absoluteDate: course.startTime ?? Date())
+    let periodEndTime = DateInRegion(absoluteDate: course.endTime ?? Date())
+    
     print(currentTime)
     
     var difference: TimeInterval? = nil
     
-    if currentTime.isBefore(date: period.start, granularity: .second) {
+    if currentTime.isBefore(date: periodStartTime, granularity: .second) {
         timerString = "Starts in "
-        difference = period.start - currentTime
-    } else if currentTime.isBefore(date: period.end, granularity: .second) {
+        difference =  periodStartTime - currentTime
+    } else if currentTime.isBefore(date: periodEndTime, granularity: .second) {
         timerString = "Ends in "
-        difference = period.end - currentTime
+        difference = periodEndTime - currentTime
     } else {
         timerString = "Ended "
-        difference = currentTime - period.end
+        difference = currentTime - periodEndTime
     }
     
     let minutes = Int(difference!).seconds.in(.minute)!
@@ -80,52 +89,46 @@ func periodTimerString(periodNumber: Int) -> String {
     return timerString
 }
 
-func getMeetTime(period: Int) -> String {
-    switch period {
-    case 1: return "8:00AM - 8:42AM"
-    case 2: return "8:46AM - 9:28AM"
-    case 3: return "9:32AM - 10:32AM"
-    case 4: return "10:42AM - 11:24AM"
-    case 5: return "11:28AM - 12:10AM"
-    case 6: return "12:14PM - 12:56PM"
-    case 7: return "1:00PM - 1:38PM"
-    case 8: return "1:42PM - 2:23PM"
-    case 9: return "2:24PM - 3:10PM"
-    default: return "Error!"
-    }
-}
+//func getMeetTime(period: Int) -> String {
+//    switch period {
+//    case 1: return "8:00AM - 8:42AM"
+//    case 2: return "8:46AM - 9:28AM"
+//    case 3: return "9:32AM - 10:32AM"
+//    case 4: return "10:42AM - 11:24AM"
+//    case 5: return "11:28AM - 12:10AM"
+//    case 6: return "12:14PM - 12:56PM"
+//    case 7: return "1:00PM - 1:38PM"
+//    case 8: return "1:42PM - 2:23PM"
+//    case 9: return "2:24PM - 3:10PM"
+//    default: return "Error!"
+//    }
+//}
 
-func getCurrentPeriod() -> Int {
-    let currentTime = DateInRegion()
-    let period = ClassTime().period
+//func getCurrentPeriod(classList: [CourseMO]) -> Int {
+//    let currentTime = DateInRegion()
+//
+//}
+
+func getMeetTimeInterval(classData: CourseMO) -> String? {
+    var intervalString = ""
+    guard let startTime = classData.startTime else {
+        return intervalString
+    }
     
-    switch currentTime {
-    case currentTime.startOfDay..<period[0].end:
-        return 1
-    case period[0].end..<period[1].end:
-        return 2
-    case period[1].end..<period[2].end:
-        return 3
-    case period[2].end..<period[3].end:
-        return 4
-    case period[3].end..<period[4].end:
-        return 5
-    case period[4].end..<period[5].end:
-        return 6
-    case period[5].end..<period[6].end:
-        return 7
-    case period[6].end..<period[7].end:
-        return 8
-    case period[7].end..<period[8].end:
-        return 9
-    default:
-        return 10
+    guard let endTime = classData.endTime else {
+        return intervalString
     }
+    
+    let formatter = DateFormatter()
+    formatter.dateFormat = "h:mm a"
+    
+    intervalString = formatter.string(from: startTime) + " - " + formatter.string(from: endTime)
+    
+    return intervalString
 }
 
-func dayCheck() -> String {
+func dayCheck(date: Date) -> String {
     var dayOfSchool: String? = nil
-    let date = Date()
     let formatter = DateFormatter()
     let plistPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
     let path = plistPath.appending("/Day.plist")
@@ -139,78 +142,24 @@ func dayCheck() -> String {
     return dayOfSchool!
 }
 
-func getClassDataAt(day: String) -> [[String: Any]] {
-    let period = getCurrentPeriod()
-    var listClasses = [[String: Any]]()
-
-    let plistPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-    let fileName = "/Class" + day + ".plist"
-    let path = plistPath.appending(fileName)
-
-    guard let allClasses = NSArray(contentsOfFile: path) as? Array<Dictionary<String, Any>> else {
-        return listClasses
+func getClassDataAt(date: Date) -> [CourseMO] {
+    let managedContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+    let classRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Employee")
+    let startDate = date
+    let endDate = date.atTime(hour: 24, minute: 0, second: 0)!
+    classRequest.predicate = NSPredicate(format: "(date >= %@) AND (date <= %@)", argumentArray: [startDate, endDate])
+    var listClasses = [CourseMO]()
+    
+    do {
+        let meetingForWorship = ["className": "Meeting For Worship", "roomNumber": "Meeting House", "teacher": "", "period": 4] as [String: Any]
+        let fetchedClasses = try managedContext.fetch(classRequest) as! [CourseMO]
+        listClasses = fetchedClasses.sorted(by: { $0.startTime ?? Date() < $1.endTime ?? Date() })
+//        let period = getCurrentPeriod(classList: fetchedClasses)
+    } catch {
+        fatalError("Failed to fetch classes: \(error)")
     }
 
     //let lunch = ["className": "Lunch", "roomNumber": "DH/C", "teacher": "", "period": 11] as [String: Any]
-    let meetingForWorship = ["className": "Meeting For Worship", "roomNumber": "Meeting House", "teacher": "", "period": 4] as [String: Any]
     
-    guard period <= 9 else {
-        return listClasses
-    }
-    
-    if allClasses.count > 8 {
-        listClasses = Array(allClasses[(period - 1)...8])
-    }
-    
-    if listClasses.count >= 6 {  // Before Meeting For Worship
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "EE"
-        let day = dateFormatter.string(from: Date())
-        if day == "Wed" {
-            //                currentClass == 1 -> index = 3
-            //                currentClass == 2 -> index = 2
-            //                currentClass == 3 -> index = 1
-            //                currentClass == 4 -> index = 0
-            listClasses[4 - period] = meetingForWorship
-        }
-    }
-    
-//    if listClasses.count > 2 { //Before lunch
-//        listClasses.insert(lunch, at: 7 - period)
-//    }
-//
-//    switch period {
-//    case 0...8:
-//        if period == 0 {
-//            period = 1
-//        }
-//        listClasses = Array(allClasses[(period - 1)...7])
-//
-//        if listClasses.count >= 5 {
-//            let dateFormatter = DateFormatter()
-//            dateFormatter.dateFormat = "EE"
-//            let day = dateFormatter.string(from: Date())
-//            if day == "Wed" {
-////                currentClass == 1 -> index = 3
-////                currentClass == 2 -> index = 2
-////                currentClass == 3 -> index = 1
-////                currentClass == 4 -> index = 0
-//                listClasses[4 - period] = meetingForWorship
-//            }
-//        }
-//
-//        if listClasses.count > 2 { //Before lunch
-//            listClasses.insert(lunch, at: 7 - period)
-//        }
-//    case 11:
-//        // At lunch
-//
-//        listClasses = Array(allClasses[6...7])
-//
-//        listClasses.insert(lunch, at: 0)
-//    default:
-//        listClasses = []
-//    }
-
     return listClasses
 }

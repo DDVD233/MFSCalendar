@@ -32,7 +32,7 @@ class TodayViewController: UIViewController, NCWidgetProviding, UITableViewDeleg
 
     @IBOutlet var noClass: UILabel!
 
-    var listClasses = [[String: Any]]()
+    var listClasses = [CourseMO]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -56,7 +56,7 @@ class TodayViewController: UIViewController, NCWidgetProviding, UITableViewDeleg
 
     func getAllClass() {
         let day = dayCheck()
-        self.listClasses = getClassDataAt(day: day)
+        self.listClasses = getClassDataAt(date: Date())
 
         print(self.listClasses)
     }
@@ -83,39 +83,39 @@ class TodayViewController: UIViewController, NCWidgetProviding, UITableViewDeleg
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
-        let cell = tableView.dequeueReusableCell(withIdentifier: "timeline", for: indexPath as IndexPath) as? customCellWidget
+        let cell = tableView.dequeueReusableCell(withIdentifier: "timeline", for: indexPath as IndexPath) as! customCellWidget
 
         let row = indexPath.row
 
         let rowDict = self.listClasses[row]
 
-        let className = rowDict["className"] as? String
-        cell?.className.text = className
-        let periodNumber = rowDict["period"] as! Int
-        
-        cell?.classTime.text = getMeetTime(period: periodNumber)
+        let className = rowDict.teacherName
+        cell.className.text = className
+//        let periodNumber = rowDict["period"] as! Int
+//        
+//        cell?.classTime.text = getMeetTime(period: periodNumber)
+//
+//        if cell.className.text == "Lunch" {
+//            cell.periodNumber.text = "L"
+//        } else {
+//            cell.periodNumber.text = String(describing: periodNumber)
+//        }
+        cell.classRoom.text = rowDict.room
 
-        if cell?.className.text == "Lunch" {
-            cell?.periodNumber.text = "L"
-        } else {
-            cell?.periodNumber.text = String(describing: periodNumber)
-        }
-        cell?.classRoom.text = rowDict["roomNumber"] as? String
-
-        return cell!
+        return cell
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let rowDict = self.listClasses[indexPath.row]
         print("didSelect")
-        guard let index = rowDict["index"] as? Int else {
-            return
-        }
+//        guard let index = rowDict["index"] as? Int else {
+//            return
+//        }
+//
+//        let indexString = String(describing: index)
+//        let url = URL(string: "MFSCalendar://classDetail/?\(indexString)")!
 
-        let indexString = String(describing: index)
-        let url = URL(string: "MFSCalendar://classDetail/?\(indexString)")!
-
-        extensionContext?.open(url, completionHandler: nil)
+//        extensionContext?.open(url, completionHandler: nil)
     }
 
     @available(iOSApplicationExtension 10.0, *)

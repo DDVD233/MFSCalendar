@@ -15,6 +15,7 @@ import SwiftyJSON
 import FirebasePerformance
 import Alamofire
 import SwiftDate
+import CoreData
 
 class courseFillController: UIViewController {
 
@@ -40,11 +41,7 @@ class courseFillController: UIViewController {
         let date = formatter.string(from: Date())
         Preferences().refreshDate = date
         DispatchQueue.global().async {
-            if Preferences().isStudent {
-                self.importCourseStudent()
-            } else {
-                self.importCourseTeacher()
-            }
+            self.importCoursePrimary()
         }
     }
     
@@ -62,19 +59,58 @@ class courseFillController: UIViewController {
         }
     }
     
+    func importCoursePrimary() {
+        NetworkOperations().refreshData()
+        
+        if Preferences().schoolCode == "CMH" {
+            importCourseCMH()
+        } else {
+            if Preferences().isStudent {
+                importCourseStudent()
+            } else {
+                importCourseTeacher()
+            }
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2), execute: {
+            self.viewDismiss()
+        })
+    }
+    
+    func importCourseCMH() {
+        DispatchQueue.main.async {
+            UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        }
+        
+        updateQuarterIfNeeded()
+        
+        guard self.newGetCourse() else {
+            return
+        }
+        
+        setProgressTo(value: 33)
+        
+        importCourseMySchool()
+        setProgressTo(value: 66)
+        
+        ClassView().getProfilePhoto()
+        versionCheck()
+        setProgressTo(value: 100)
+        DispatchQueue.main.async {
+            UIApplication.shared.isNetworkActivityIndicatorVisible = false
+            self.topLabel.text = "Success"
+            self.bottomLabel.text = "Successfully updated"
+        }
+    }
+    
     func importCourseTeacher() {
         DispatchQueue.main.async {
             UIApplication.shared.isNetworkActivityIndicatorVisible = true
         }
         
-        if Preferences().doUpdateQuarter {
-            setQuarter()
-        } else {
-            Preferences().doUpdateQuarter = true
-        }
+        updateQuarterIfNeeded()
         
         guard self.newGetCourse() else {
-            viewDismiss()
             return
         }
         
@@ -85,7 +121,6 @@ class courseFillController: UIViewController {
             clearData(day: String(alphabet))
         }
         guard createSchedule(fillLowPriority: 0) else {
-            viewDismiss()
             return
         }
         setProgressTo(value: 66)
@@ -101,14 +136,10 @@ class courseFillController: UIViewController {
         versionCheck()
         setProgressTo(value: 100)
         DispatchQueue.main.async {
-            UIApplication.shared.isNetworkActivityIndicatorVisible = true
+            UIApplication.shared.isNetworkActivityIndicatorVisible = false
             self.topLabel.text = "Success"
             self.bottomLabel.text = "Successfully updated"
         }
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2), execute: {
-            self.viewDismiss()
-        })
     }
     
     func importCourseStudent() {
@@ -121,20 +152,13 @@ class courseFillController: UIViewController {
             return
         }
         
-        if Preferences().doUpdateQuarter {
-            setQuarter()
-        } else {
-            Preferences().doUpdateQuarter = true
-        }
+        updateQuarterIfNeeded()
         
         let group = DispatchGroup()
         var schedule = [[String: Any]]()
         
         DispatchQueue.global().async(group: group, execute: {
             guard self.newGetCourse() else {
-                DispatchQueue.main.async {
-                    self.viewDismiss()
-                }
                 return
             }
             
@@ -152,9 +176,6 @@ class courseFillController: UIViewController {
             }
             
             guard let gotSchedule = self.getScheduleNC() else {
-                DispatchQueue.main.async {
-                    self.viewDismiss()
-                }
                 return
             }
             
@@ -173,14 +194,31 @@ class courseFillController: UIViewController {
 
         setProgressTo(value: 100)
         DispatchQueue.main.async {
-            UIApplication.shared.isNetworkActivityIndicatorVisible = true
+            UIApplication.shared.isNetworkActivityIndicatorVisible = false
             self.topLabel.text = "Success"
             self.bottomLabel.text = "Successfully updated"
         }
+    }
+    
+    func updateQuarterIfNeeded() {
+        if Preferences().doUpdateQuarter {
+            setQuarter()
+        } else {
+            Preferences().doUpdateQuarter = true
+        }
+    }
+    
+    func importCourseMySchool() {
+        let mySchoolScheduleFill = MySchoolScheduleFill()
+        let currentSchoolYear = DateInRegion().month < 8 ? DateInRegion().year - 1 : DateInRegion().year
+        let startComponents: [Calendar.Component : Int] = [.year: currentSchoolYear, .month: 8, .day: 1]
+        guard let startDate = DateInRegion(components: startComponents) else {
+            fatalError("StartDate failed to create")
+        }
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2), execute: {
-            self.viewDismiss()
-        })
+        let endDate = startDate + 1.year
+        let courses = mySchoolScheduleFill.getScheduleFromMySchool(startTime: startDate.absoluteDate, endTime: endDate.absoluteDate)
+        mySchoolScheduleFill.storeMySchoolSchedule(scheduleData: courses)
     }
     
     func setProgressTo(value: CGFloat) {
@@ -189,19 +227,57 @@ class courseFillController: UIViewController {
         }
     }
     
-    func createSchedulePlist() {
+    func createScheduleData() {
         let letterDayListPath = URL(fileURLWithPath: userDocumentPath.appending("/Day.plist"))
         guard let letterDayList = NSDictionary(contentsOf: letterDayListPath) as? [String: String?] else {
             print("Letter day file has incorrect format")
             return
         }
         
+        let managedContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+        
         let scheduleData = [String: [String: Any]]()
         for (key, value) in letterDayList {
-            let plistPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-            guard let day = value else { continue }
-            let fileName = "/Class" + day + ".plist"
-            let path = plistPath.appending(fileName)
+            let courseObject = NSEntityDescription.insertNewObject(forEntityName: "Course", into: managedContext) as! CourseMO
+            
+            guard key.count == 8 else { continue }
+            guard let letter = value else { continue }
+            
+            let fileName = "/Class" + letter + ".plist"
+            let path = URL.init(fileURLWithPath: userDocumentPath.appending(fileName))
+            guard let classInDay = NSArray(contentsOf: path) as? [[String: Any]] else {
+                continue
+            }
+            
+            let startIndex = key.startIndex
+            let monthIndexBegin = key.index(startIndex, offsetBy: 4)
+            let dayIndexBegin = key.index(startIndex, offsetBy: 6)
+            let year = Int(key[..<monthIndexBegin])!
+            let month = Int(key[monthIndexBegin..<dayIndexBegin])!
+            let day = Int(key[dayIndexBegin...])!
+            let components: [Calendar.Component:Int] = [.year: year, .month: month, .day: day]
+            guard let date = DateInRegion(components: components) else { continue }
+            
+            for (index, course) in classInDay.enumerated() {
+                let classTime = ClassTime(date: date)
+                let period = classTime.period[index]
+                
+                let startTime = period.start
+                courseObject.startTime = startTime.absoluteDate
+                
+                let endTime = period.end
+                courseObject.endTime = endTime.absoluteDate
+                
+                courseObject.name = course["className"] as? String
+                courseObject.room = course["roomNumber"] as? String
+                courseObject.teacherName = course["teacherName"] as? String
+            }
+        }
+        
+        do {
+            try managedContext.save()
+        } catch {
+            presentErrorMessage(presentMessage: error.localizedDescription, layout: .statusLine)
         }
     }
     
@@ -361,7 +437,7 @@ class courseFillController: UIViewController {
             return false
         }
 
-        let urlString = "https://mfriends.myschoolapp.com/api/datadirect/ParentStudentUserAcademicGroupsGet?userId=\(userId)&schoolYearLabel=2017+-+2018&memberLevel=3&persona=2&durationList=\(durationId)"
+        let urlString = Preferences().baseURL + "/api/datadirect/ParentStudentUserAcademicGroupsGet?userId=\(userId)&schoolYearLabel=2017+-+2018&memberLevel=3&persona=2&durationList=\(durationId)"
         print(urlString)
 
         let url = URL(string: urlString)

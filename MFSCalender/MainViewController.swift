@@ -53,6 +53,7 @@ class classViewCell: UICollectionViewCell {
     
 
     @IBAction func classViewButtonClicked(_ sender: Any) {
+        //        TODO: Fix this
         guard index != nil else {
             return
         }
@@ -86,7 +87,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     
     let formatter = DateFormatter()
     var listEvents = [[String: Any]]()
-    var listClasses = [[String: Any]]()
+    var listClasses = [CourseMO]()
     var listHomework = [String: Array<Dictionary<String, Any>>]()
     var timer: Timer? = nil
 //    Format: {Lead_Section_ID: [Homework]}
@@ -436,7 +437,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     }
 
     func getListClasses(day: String) {
-        self.listClasses = getClassDataAt(day: day)
+        self.listClasses = getClassDataAt(date: Date())
     }
     
     func eventDataFetching() {
@@ -549,20 +550,18 @@ extension Main: UICollectionViewDelegate, UICollectionViewDataSource, UICollecti
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "classViewCell", for: indexPath as IndexPath) as! classViewCell
         let row = indexPath.row
         let classData = listClasses[row]
-        let className = classData["className"] as? String
-        let teacher = classData["teacherName"] as? String
+        let className = classData.name
+        let teacher = classData.teacherName
         
-        cell.roomNumber.text = classData["roomNumber"] as? String ?? ""
+        cell.roomNumber.text = classData.room ?? ""
 
         cell.teacher.text = teacher
         cell.className.text = className
         
-        if let period = classData["period"] as? Int {
-            if row == 0 || row == 1 {
-                cell.period.text = periodTimerString(periodNumber: period)
-            } else {
-                cell.period.text = getMeetTime(period: period)
-            }
+        if row == 0 || row == 1 {
+            cell.period.text = periodTimerString(course: classData)
+        } else {
+            cell.period.text = getMeetTimeInterval(classData: classData)
         }
 
         cell.homeworkView.isHidden = true
@@ -589,7 +588,6 @@ extension Main: UICollectionViewDelegate, UICollectionViewDataSource, UICollecti
 //                cell.homeworkButton.setTitle(homeworkButtonText, for: .normal)
 //            }
 //        }
-        cell.index = classData["index"] as? Int
 
         return cell
     }
