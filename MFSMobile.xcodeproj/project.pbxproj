@@ -70,6 +70,7 @@
 		E4BD88981F383A060000FEF3 /* ClassTimetableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BD88971F383A060000FEF3 /* ClassTimetableViewController.swift */; };
 		E4BD889A1F397BE80000FEF3 /* TopicDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BD88991F397BE80000FEF3 /* TopicDetailViewController.swift */; };
 		E4C46A2E1ED50CD3007F8F1A /* CourseFillViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C46A2D1ED50CD3007F8F1A /* CourseFillViewController.swift */; };
+		E4C7A48F2052FEA0002A7444 /* CourseDataBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C7A48E2052FEA0002A7444 /* CourseDataBridge.swift */; };
 		E4CA1DAE1F50097D0061784A /* Acknowledgements.markdown in Resources */ = {isa = PBXBuildFile; fileRef = E4CA1DAC1F5007C40061784A /* Acknowledgements.markdown */; };
 		E4CE43991EAC36F3000D743B /* BlankDictionary.plist in Resources */ = {isa = PBXBuildFile; fileRef = E4CE43981EAC36F3000D743B /* BlankDictionary.plist */; };
 		E4CE439B1EAD0D51000D743B /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CE439A1EAD0D51000D743B /* LoginViewController.swift */; };
@@ -238,6 +239,7 @@
 		E4BD88971F383A060000FEF3 /* ClassTimetableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClassTimetableViewController.swift; sourceTree = "<group>"; };
 		E4BD88991F397BE80000FEF3 /* TopicDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopicDetailViewController.swift; sourceTree = "<group>"; };
 		E4C46A2D1ED50CD3007F8F1A /* CourseFillViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CourseFillViewController.swift; sourceTree = "<group>"; };
+		E4C7A48E2052FEA0002A7444 /* CourseDataBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseDataBridge.swift; sourceTree = "<group>"; };
 		E4CA1DAC1F5007C40061784A /* Acknowledgements.markdown */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = Acknowledgements.markdown; sourceTree = "<group>"; };
 		E4CE43981EAC36F3000D743B /* BlankDictionary.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = BlankDictionary.plist; sourceTree = "<group>"; };
 		E4CE439A1EAD0D51000D743B /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -485,6 +487,7 @@
 				E43D4FC9203DB59700E65FF4 /* DataController.swift */,
 				E4F86B321DF0E20C00CAD72B /* MainViewController.swift */,
 				E4C46A2D1ED50CD3007F8F1A /* CourseFillViewController.swift */,
+				E4C7A48E2052FEA0002A7444 /* CourseDataBridge.swift */,
 				E462F462203CB1E800062E5A /* MySchoolScheduleFill.swift */,
 				E4CE439A1EAD0D51000D743B /* LoginViewController.swift */,
 				E412E2BA201261B80082540B /* EventViewController.swift */,
@@ -973,6 +976,7 @@
 				E427868A1F568EB100583D1E /* ProfileViewController.swift in Sources */,
 				E4F86B331DF0E20C00CAD72B /* MainViewController.swift in Sources */,
 				E4BD88981F383A060000FEF3 /* ClassTimetableViewController.swift in Sources */,
+				E4C7A48F2052FEA0002A7444 /* CourseDataBridge.swift in Sources */,
 				E412E2BB201261B80082540B /* EventViewController.swift in Sources */,
 				E49E53421F995156003011A6 /* MobileServeIntroViewController.swift in Sources */,
 				E4E8B21A1F1C5AF200913DAE /* GradeViewController.swift in Sources */,

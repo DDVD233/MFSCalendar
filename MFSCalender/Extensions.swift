@@ -10,6 +10,19 @@ import UIKit
 import Crashlytics
 import Kanna
 
+extension CourseMO {
+    var index: Int? {
+        let courseListPath = URL.init(fileURLWithPath: userDocumentPath.appending("/CourseList.plist"))
+        guard let courseList = NSArray(contentsOf: courseListPath) as? [[String: Any]] else {
+            return nil
+        }
+        guard let name = self.name else { return nil }
+        let index = courseList.index(where: { $0["coursedescription"] as? String ?? "" == name })
+        
+        return index
+    }
+}
+
 extension UIView {
     @IBInspectable var cornerRadius: CGFloat {
         get {

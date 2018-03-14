@@ -234,11 +234,9 @@ class courseFillController: UIViewController {
             return
         }
         
-        let managedContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
-        
         let scheduleData = [String: [String: Any]]()
         for (key, value) in letterDayList {
-            let courseObject = NSEntityDescription.insertNewObject(forEntityName: "Course", into: managedContext) as! CourseMO
+            let courseObject = NSEntityDescription.insertNewObject(forEntityName: "Course", into: managedContext!) as! CourseMO
             
             guard key.count == 8 else { continue }
             guard let letter = value else { continue }
@@ -275,7 +273,7 @@ class courseFillController: UIViewController {
         }
         
         do {
-            try managedContext.save()
+            try managedContext?.save()
         } catch {
             presentErrorMessage(presentMessage: error.localizedDescription, layout: .statusLine)
         }
@@ -446,6 +444,7 @@ class courseFillController: UIViewController {
         let downloadTask = session.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
             if error == nil {
                 guard var courseData = try! JSON(data: data!).arrayObject else {
+                    print(String.init(data: data!, encoding: .utf8) as Any)
                     semaphore.signal()
                     return
                 }
@@ -700,7 +699,7 @@ class courseFillController: UIViewController {
             listClasses[4] = assembly
         }
         
-        let meetTimeListPath = plistPath.appending("/ScheduleMFS.plist")
+        let meetTimeListPath = Bundle.main.path(forResource: "ScheduleMFS", ofType: "plist")!
         let meetTimeList = NSArray(contentsOfFile: meetTimeListPath) as! [[String: String]]
         
         for periodNumber in 1...9 {

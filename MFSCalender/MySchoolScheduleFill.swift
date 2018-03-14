@@ -13,11 +13,9 @@ import CoreData
 class MySchoolScheduleFill {
     let courseListPath = URL.init(fileURLWithPath: userDocumentPath.appending("/CourseList.plist"))
     var courseList: [[String: Any]]
-    let managedContext: NSManagedObjectContext
     
     init() {
         courseList = NSArray(contentsOf: courseListPath) as? [[String: Any]] ?? [[String: Any]]()
-        managedContext = NSManagedObjectContext.init(concurrencyType: .privateQueueConcurrencyType)
     }
     
     func getScheduleFromMySchool(startTime: Date, endTime: Date) -> [[String: Any]] {
@@ -71,7 +69,7 @@ class MySchoolScheduleFill {
         }
         
         do {
-            try managedContext.save()
+            try managedContext?.save()
         } catch {
             fatalError("Failure to save context: \(error)")
         }
@@ -102,7 +100,7 @@ class MySchoolScheduleFill {
     }
     
     func writeScheduleDataToFile(course: [String: Any]) {
-        let courseObject = NSEntityDescription.insertNewObject(forEntityName: "Course", into: managedContext) as! CourseMO
+        let courseObject = NSEntityDescription.insertNewObject(forEntityName: "Course", into: managedContext!) as! CourseMO
 
         guard let startString = course["start"] as? String else {
             print("writeScheduleDataToFile: StartDateNotFound")

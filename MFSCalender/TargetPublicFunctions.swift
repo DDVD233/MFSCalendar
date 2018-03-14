@@ -14,6 +14,8 @@ import M13Checkbox
 import SafariServices
 import JSQWebViewController
 import Kanna
+import CoreData
+
 
 func areEqual<T:Equatable>(type: T.Type, a: Any?, b: Any?) -> Bool? {
     guard let a = a as? T, let b = b as? T else {
@@ -114,7 +116,7 @@ public func loginAuthentication() -> (success: Bool, token: String, userId: Stri
         return (false, "Cannot convert to url string", "")
     }
 
-    let accountCheckURL = "https://mfriends.myschoolapp.com/api/authentication/login/?username=" + usernameTextUrlEscaped + "&password=" + passwordTextUrlEscaped + "&format=json"
+    let accountCheckURL = Preferences().baseURL + "/api/authentication/login/?username=" + usernameTextUrlEscaped + "&password=" + passwordTextUrlEscaped + "&format=json"
     let url = NSURL(string: accountCheckURL)
     let request = URLRequest(url: url! as URL)
 
@@ -177,7 +179,7 @@ public func loginAuthentication() -> (success: Bool, token: String, userId: Stri
 
 public func addLoginCookie(token: String) {
     let cookieProps: [HTTPCookiePropertyKey: Any] = [
-        HTTPCookiePropertyKey.domain: "mfriends.myschoolapp.com",
+        HTTPCookiePropertyKey.domain: Preferences().baseDomain,
         HTTPCookiePropertyKey.path: "/",
         HTTPCookiePropertyKey.name: "t",
         HTTPCookiePropertyKey.value: token
@@ -188,7 +190,7 @@ public func addLoginCookie(token: String) {
     }
 
     let cookieProps2: [HTTPCookiePropertyKey: Any] = [
-        HTTPCookiePropertyKey.domain: "mfriends.myschoolapp.com",
+        HTTPCookiePropertyKey.domain: Preferences().baseDomain,
         HTTPCookiePropertyKey.path: "/",
         HTTPCookiePropertyKey.name: "bridge",
         HTTPCookiePropertyKey.value: "action=create&src=webapp&xdb=true"
@@ -523,3 +525,16 @@ class Layout {
     }
 }
 
+var managedContext: NSManagedObjectContext? {
+    guard let appDelegate =
+        UIApplication().delegate as? AppDelegate else {
+            return nil
+    }
+    
+    if #available(iOS 10.0, *) {
+        let managedContext = appDelegate.persistentContainer.viewContext
+        return managedContext
+    } else {
+        return appDelegate.managedObjectContext
+    }
+}

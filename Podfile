@@ -30,7 +30,7 @@ target 'MFSMobile' do
   pod 'M13ProgressSuite'
   pod 'SnapKit'
   pod 'JSQWebViewController'
-  pod 'Down', :git => 'https://github.com/iwasrobbed/Down.git', :branch => 'master'
+  pod 'Down'
 
   pod 'Spring', :git => 'https://github.com/MengTo/Spring.git', :branch => 'swift4'
   pod 'Kanna', :git => 'https://github.com/tid-kijyun/Kanna.git', :branch => 'feature/v4.0.0'

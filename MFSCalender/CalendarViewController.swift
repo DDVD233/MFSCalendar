@@ -65,7 +65,6 @@ class CalendarViewController: SegmentedPagerTabStripViewController, UIGestureRec
     var numberOfRolls: Int? = 6
 
     let formatter = DateFormatter()
-    var dayOfSchool: String? = nil
     var screenSize = UIScreen.main.bounds.size
     
     let classViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier :"timeTableViewController") as! ADay
@@ -168,16 +167,11 @@ class CalendarViewController: SegmentedPagerTabStripViewController, UIGestureRec
     }
     
     func dataFetching() {
-        guard let checkDate = self.calendarView.selectedDates.first else {
+        guard let dateSelected = self.calendarView.selectedDates.first else {
             return
         }
         
-        self.dayOfSchool = self.checkDate(checkDate: checkDate)
-        if self.dayOfSchool != "No School" {
-            classViewController.daySelected = self.dayOfSchool
-        } else {
-            classViewController.daySelected = nil
-        }
+        classViewController.daySelected = dateSelected
         
         DispatchQueue.main.async {
             self.classViewController.dataFetching()

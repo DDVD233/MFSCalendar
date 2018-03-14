@@ -29,13 +29,19 @@ public class Preferences {
         }
     }
     
+    public var baseDomain: String {
+        switch schoolCode ?? "MFS" {
+        case "CMH":
+            return "catholicmemorial-hs.myschoolapp.com"
+        case "MFS":
+            return "mfriends.myschoolapp.com"
+        default:
+            return "mfriends.myschoolapp.com"
+        }
+    }
+    
     public var baseURL: String {
-        get {
-            return userDefaults.string(forKey: "baseURL" ) ?? "https://mfriends.myschoolapp.com"
-        }
-        set(value) {
-            userDefaults.set(value, forKey: "baseURL" )
-        }
+        return "https://" + baseDomain
     }
     
     public var schoolCode: String? {

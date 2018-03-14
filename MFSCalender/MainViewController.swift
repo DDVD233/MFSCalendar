@@ -208,7 +208,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     
     func teacherSideScheduleFix() {
         let preferences = Preferences()
-        if preferences.dataBuild < 1076 {
+        if preferences.dataBuild < 1100 {
             preferences.dataBuild = Int(Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "") ?? 0
             LoginView().getProfile()
             if !preferences.isStudent {

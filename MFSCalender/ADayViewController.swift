@@ -131,17 +131,17 @@ extension ADay: UITableViewDelegate, UITableViewDataSource, UIViewControllerPrev
 //        }
 
         let roomN = rowDict.room
-        cell?.RoomNumber.text = roomN
+        cell.RoomNumber.text = roomN
         
-        cell?.teachersName.text = rowDict["teacherName"] as? String
+        cell.teachersName.text = rowDict.teacherName
         
-        if rowDict["index"] != nil {
-            cell.selectionStyle = .default
-            cell.accessoryType = .disclosureIndicator
-        } else {
-            cell.selectionStyle = .none
-           // cell?.accessoryType = .none
-        }
+//        if rowDict["index"] != nil {
+//            cell.selectionStyle = .default
+//            cell.accessoryType = .disclosureIndicator
+//        } else {
+//            cell.selectionStyle = .none
+//           // cell?.accessoryType = .none
+//        }
 
         return cell
     }
@@ -158,7 +158,7 @@ extension ADay: UITableViewDelegate, UITableViewDataSource, UIViewControllerPrev
         }
         
         let rowDict = self.listClasses[indexPath.row]
-        guard let index = rowDict["index"] as? Int else {
+        guard let index = rowDict.index else {
             return nil
         }
         
@@ -175,7 +175,7 @@ extension ADay: UITableViewDelegate, UITableViewDataSource, UIViewControllerPrev
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let rowDict = self.listClasses[indexPath.row] 
-        guard let index = rowDict["index"] as? Int else {
+        guard let index = rowDict.index as? Int else {
             return
         }
         
