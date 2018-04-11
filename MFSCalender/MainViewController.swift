@@ -136,6 +136,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
             NSLog("Already Logged in.")
         } else {
             print("Cannot initialize data because the user did not logged in")
+            return // Omit any following steps
         }
         
         if Reachability()?.connection == .wifi {

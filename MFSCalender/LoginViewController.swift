@@ -169,7 +169,10 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
     @IBOutlet var bottomLayoutConstraint: NSLayoutConstraint!
 
     @IBOutlet var logoPhoto: UIImageView!
-
+    
+    @IBOutlet var MFSLogo: UIButton!
+    @IBOutlet var CMHLogo: UIButton!
+    
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
@@ -186,6 +189,9 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
         self.wrongPassword.isHidden = true
         self.username.delegate = self
         self.password.delegate = self
+        
+        MFSLogo.showsTouchWhenHighlighted = true
+        CMHLogo.showsTouchWhenHighlighted = true
 
         self.username.text = Preferences().username
         self.password.text = Preferences().password
@@ -353,6 +359,13 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
             self.dismiss(animated: true, completion: nil)
         }
     }
+    
+    @IBAction func MFSSelected(_ sender: Any) {
+        let MFSbuttonLayer = MFSLogo.layer
+        MFSbuttonLayer.borderWidth = 3
+        MFSbuttonLayer.borderColor = UIColor.salmon
+    }
+    
 }
 
 extension firstTimeLaunchController {

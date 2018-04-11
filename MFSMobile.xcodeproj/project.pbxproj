@@ -19,6 +19,7 @@
 		E427868A1F568EB100583D1E /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42786891F568EB100583D1E /* ProfileViewController.swift */; };
 		E4288E1420360F6600E4488D /* ClassView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4288E1320360F6600E4488D /* ClassView.swift */; };
 		E436EDC41F96E3AF00395DA5 /* MenuService.png in Resources */ = {isa = PBXBuildFile; fileRef = E436EDC31F96E3A000395DA5 /* MenuService.png */; };
+		E43808832062AEE500D6724A /* CMH Logo.png in Resources */ = {isa = PBXBuildFile; fileRef = E43808822062AEE400D6724A /* CMH Logo.png */; };
 		E43D4FC8203DB46C00E65FF4 /* MFSCalender.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E4F86B371DF0E20C00CAD72B /* MFSCalender.xcdatamodeld */; };
 		E43D4FCA203DB59700E65FF4 /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43D4FC9203DB59700E65FF4 /* DataController.swift */; };
 		E43D4FCB203DB59700E65FF4 /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43D4FC9203DB59700E65FF4 /* DataController.swift */; };
@@ -157,6 +158,7 @@
 		E42786891F568EB100583D1E /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		E4288E1320360F6600E4488D /* ClassView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassView.swift; sourceTree = "<group>"; };
 		E436EDC31F96E3A000395DA5 /* MenuService.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MenuService.png; sourceTree = "<group>"; };
+		E43808822062AEE400D6724A /* CMH Logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "CMH Logo.png"; sourceTree = "<group>"; };
 		E43D4FC9203DB59700E65FF4 /* DataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataController.swift; sourceTree = "<group>"; };
 		E440F1BB1EEA7F4E004AFD0B /* MoyaNetworkLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MoyaNetworkLayer.swift; path = ../MoyaNetworkLayer.swift; sourceTree = "<group>"; };
 		E44484D71E13A105002C68D5 /* MFSCalender.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MFSCalender.entitlements; sourceTree = "<group>"; };
@@ -422,6 +424,7 @@
 		E4EA9D7B1DF225FB0021A823 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				E43808822062AEE400D6724A /* CMH Logo.png */,
 				E48333C920112A1F00BE2FEA /* AppLogo.png */,
 				E4F0B37B200F814D00003A3D /* MenuSettings.png */,
 				E4775A401F9A500C002170C7 /* MenuWarning.png */,
@@ -721,6 +724,7 @@
 				E4F0B3751EAD1BE900C923A8 /* dayPicker.plist in Resources */,
 				E4F86B3B1DF0E20C00CAD72B /* Assets.xcassets in Resources */,
 				E49321881F5D32E800C65067 /* .travis.yml in Resources */,
+				E43808832062AEE500D6724A /* CMH Logo.png in Resources */,
 				E413AB121EE8A796001EB189 /* brush_pencil.png in Resources */,
 				E413AB101EE89683001EB189 /* questionmark.png in Resources */,
 				E4EEFB131DF274EA00F199BE /* Images.xcassets in Resources */,

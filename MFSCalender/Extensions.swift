@@ -125,6 +125,10 @@ extension UIColor {
         let blue = CGFloat((hexString & 0x0000FF)) / 255.0
         self.init(red: red, green: green, blue: blue, alpha: alpha)
     }
+    
+    public static var salmon: UIColor {
+        get { return UIColor(hexString: 0xFF7E79) }
+    }
 }
 
 

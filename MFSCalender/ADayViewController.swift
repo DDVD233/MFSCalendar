@@ -175,7 +175,7 @@ extension ADay: UITableViewDelegate, UITableViewDataSource, UIViewControllerPrev
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let rowDict = self.listClasses[indexPath.row] 
-        guard let index = rowDict.index as? Int else {
+        guard let index = rowDict.index else {
             return
         }
         
