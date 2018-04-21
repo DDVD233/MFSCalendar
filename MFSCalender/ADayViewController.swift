@@ -36,10 +36,7 @@ class customCell: UITableViewCell {
 class ADay: UIViewController, IndicatorInfoProvider {
     
     var daySelected: Date? = nil
-    var dayLetter: String? {
-        guard daySelected != nil else { return nil }
-        return dayCheck(date: daySelected!)
-    }
+    var dayLetter: String? = nil
 
     @IBOutlet var tableView: UITableView!
     
@@ -93,11 +90,6 @@ class ADay: UIViewController, IndicatorInfoProvider {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
-    }
-    
-    
-
-    @IBAction func unWindSegueBack(segue: UIStoryboardSegue) {
     }
     
     func indicatorInfo(for pagerTabStripController: PagerTabStripViewController) -> IndicatorInfo {

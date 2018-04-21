@@ -448,6 +448,9 @@
                                             <constraint firstAttribute="height" constant="80" id="Sav-uz-LRX"/>
                                         </constraints>
                                         <state key="normal" backgroundImage="CMH Logo.png"/>
+                                        <connections>
+                                            <action selector="CMHSelected:" destination="vao-er-1v4" eventType="touchUpInside" id="61O-Lj-zxh"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>

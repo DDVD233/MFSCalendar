@@ -50,12 +50,20 @@ class courseFillController: UIViewController {
         thirdQuarterStartComponent.year = 2018
         thirdQuarterStartComponent.month = 1
         thirdQuarterStartComponent.day = 20
-        
         let thirdQuarterStart = DateInRegion(components: thirdQuarterStartComponent)!
+        
+        var fourthQuarterStartComponent = DateComponents()
+        fourthQuarterStartComponent.year = 2018
+        fourthQuarterStartComponent.month = 4
+        fourthQuarterStartComponent.day = 1
+        let fourthQuarterStart = DateInRegion(components: thirdQuarterStartComponent)!
+        
         if DateInRegion().isBefore(date: thirdQuarterStart, granularity: .day) {
             Preferences().currentQuarter = 2
-        } else {
+        } else if DateInRegion().isBefore(date: fourthQuarterStart, granularity: .day) {
             Preferences().currentQuarter = 3
+        } else {
+            Preferences().currentQuarter = 4
         }
     }
     

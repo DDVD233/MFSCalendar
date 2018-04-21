@@ -167,8 +167,6 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var NVIndicator: NVActivityIndicatorView!
     
     @IBOutlet var bottomLayoutConstraint: NSLayoutConstraint!
-
-    @IBOutlet var logoPhoto: UIImageView!
     
     @IBOutlet var MFSLogo: UIButton!
     @IBOutlet var CMHLogo: UIButton!
@@ -218,20 +216,22 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
     override func viewDidAppear(_ animated: Bool) {
         let isFirstTimeLogin = Preferences().isFirstTimeLogin
         if isFirstTimeLogin {
-            let loginNotice = SCLAlertView()
-            loginNotice.addButton("Go to myMFS website", action: {
-                if #available(iOS 10.0, *) {
-                    //TODO
-                    UIApplication.shared.open(URL(string: "https://mfriends.myschoolapp.com/app/#login")!, options: [:], completionHandler: nil)
-                } else {
-                    UIApplication.shared.openURL(URL(string: "https://mfriends.myschoolapp.com/app/#login")!)
-                    // Fallback on earlier versions
-                }
-            })
-            loginNotice.showInfo("Welcome", subTitle: "Welcome to MFS Mobile. Please use your myMFS account to log in.", animationStyle: .bottomToTop)
+//            let loginNotice = SCLAlertView()
+//            loginNotice.addButton("Go to myMFS website", action: {
+//                if #available(iOS 10.0, *) {
+//                    //TODO
+//                    UIApplication.shared.open(URL(string: "https://mfriends.myschoolapp.com/app/#login")!, options: [:], completionHandler: nil)
+//                } else {
+//                    UIApplication.shared.openURL(URL(string: "https://mfriends.myschoolapp.com/app/#login")!)
+//                    // Fallback on earlier versions
+//                }
+//            })
+//            loginNotice.showInfo("Welcome", subTitle: "Welcome to MFS Mobile. Please use your myMFS account to log in.", animationStyle: .bottomToTop)
             
             Preferences().isFirstTimeLogin = false
         }
+        
+        MFSSelected(MFSLogo)
     }
 
     @objc func keyboardNotification(notification: NSNotification) {
@@ -250,7 +250,8 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
                     delay: TimeInterval(0),
                     options: animationCurve,
                     animations: {
-                        self.logoPhoto.isHidden = true
+                        self.MFSLogo.isHidden = true
+                        self.CMHLogo.isHidden = true
                         self.view.layoutIfNeeded()
                     },
                     completion: nil)
@@ -268,7 +269,8 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
                     delay: TimeInterval(0),
                     options: animationCurve,
                     animations: {
-                        self.logoPhoto.isHidden = false
+                        self.MFSLogo.isHidden = false
+                        self.CMHLogo.isHidden = false
                         self.view.layoutIfNeeded()
                     },
                     completion: nil)
@@ -363,15 +365,22 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
     @IBAction func MFSSelected(_ sender: Any) {
         let MFSbuttonLayer = MFSLogo.layer
         MFSbuttonLayer.borderWidth = 3
-        MFSbuttonLayer.borderColor = UIColor.salmon
+        MFSbuttonLayer.borderColor = UIColor.salmon.cgColor
+        Preferences().schoolCode = "MFS"
     }
     
+    @IBAction func CMHSelected(_ sender: Any) {
+        let CMHbuttonLayer = MFSLogo.layer
+        CMHbuttonLayer.borderWidth = 3
+        CMHbuttonLayer.borderColor = UIColor.salmon.cgColor
+        Preferences().schoolCode = "CMH"
+    }
 }
 
 extension firstTimeLaunchController {
 
     func authentication() -> Bool {
-        Preferences().schoolCode = "CMH"
+        //Preferences().schoolCode = "CMH"
         var username: String? = nil
         var password: String? = nil
         DispatchQueue.main.sync {
