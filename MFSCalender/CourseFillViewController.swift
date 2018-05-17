@@ -27,7 +27,7 @@ class courseFillController: UIViewController {
     @IBOutlet weak var bottomLabel: LTMorphingLabel!
 
     let trace = Performance.startTrace(name: "course fill trace")
-    let baseURL = "https://dwei.org"
+    let baseURL = Preferences().davidBaseURL
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -249,6 +249,8 @@ class courseFillController: UIViewController {
                 semaphore.signal()
                 return
             }
+            
+            print(String.init(data: data!, encoding: .utf8))
             
             do {
                 guard let json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? [[String: Any]] else {

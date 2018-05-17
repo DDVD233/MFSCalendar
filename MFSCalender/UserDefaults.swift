@@ -38,6 +38,15 @@ public class Preferences {
         }
     }
     
+    public var davidBaseURL: String {
+        get {
+            return userDefaults.string(forKey: "baseURL" ) ?? "https://mfs-calendar.appspot.com"
+        }
+        set(value) {
+            userDefaults.set(value, forKey: "baseURL" )
+        }
+    }
+    
     public var schoolCode: String? {
         get {
             return userDefaults.string(forKey: "schoolCode" )

@@ -195,7 +195,7 @@ extension NewMoreViewController {
             return 997
         }
         
-        let url = "https://dwei.org/serviceHour/\(username)/\(password)"
+        let url = "https://mfs-calendar.appspot.com/serviceHour/\(username)/\(password)"
         Crashlytics.sharedInstance().setObjectValue(url, forKey: "MobileServe_URL")
         print(url)
         

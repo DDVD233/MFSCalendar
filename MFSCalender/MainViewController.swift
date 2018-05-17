@@ -434,7 +434,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         guard let username = Preferences().username else {
             return
         }
-        var request = URLRequest(url: URL(string: "https://dwei.org/assignmentlist/")!)
+        var request = URLRequest(url: URL(string: "https://mfs-calendar.appspot.com/assignmentlist/")!)
 
         let config = URLSessionConfiguration.default
         config.requestCachePolicy = .reloadIgnoringLocalCacheData

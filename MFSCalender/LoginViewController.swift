@@ -443,8 +443,8 @@ extension firstTimeLaunchController {
                     return
                 }
                 let versionNumber = Int(version)
-                print("Version: %@", versionNumber!)
-                Preferences().version = versionNumber!
+                print("Version: %@", versionNumber ?? 0)
+                Preferences().version = versionNumber ?? 0
             case let .failure(error):
                 DispatchQueue.main.async {
                     let presentMessage = error.localizedDescription + " Please check your internet connection."

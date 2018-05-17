@@ -39,7 +39,7 @@ extension MyService: TargetType {
     var baseURL: URL {
         switch self {
         case .getCalendarData, .getCalendarEvent, .dataVersionCheck, .meetTimeSearch:
-            return URL(string: "https://dwei.org")!
+            return URL(string: Preferences().davidBaseURL)!
         default:
             return URL(string: "https://mfriends.myschoolapp.com")!
         }
