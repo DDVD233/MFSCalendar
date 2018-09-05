@@ -18,10 +18,10 @@ class LoginView {
     func getProfile() {
         
         let semaphore = DispatchSemaphore.init(value: 0)
-        let token = Preferences().token
-        let userID = Preferences().userID
+        guard let token = Preferences().token else { return }
+        guard let userID = Preferences().userID else { return }
         
-        provider.request(MyService.getProfile(userID: userID!, token: token!), callbackQueue: DispatchQueue.global(), completion: { result in
+        provider.request(MyService.getProfile(userID: userID, token: token), callbackQueue: DispatchQueue.global(), completion: { result in
             switch result {
             case let .success(response):
                 do {

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="TWf-dU-uxH">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="TWf-dU-uxH">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
@@ -895,31 +895,6 @@
                                                     <rect key="frame" x="0.0" y="0.0" width="181" height="151"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
-                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WOl-gq-AAR">
-                                                            <rect key="frame" x="6" y="98" width="169" height="40"/>
-                                                            <subviews>
-                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2as-Md-liJ">
-                                                                    <rect key="frame" x="8" y="19" width="153" height="21"/>
-                                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
-                                                                    <state key="normal" title="Button">
-                                                                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                                    </state>
-                                                                </button>
-                                                            </subviews>
-                                                            <color key="backgroundColor" red="0.0" green="0.97680455450000003" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                            <constraints>
-                                                                <constraint firstItem="2as-Md-liJ" firstAttribute="leading" secondItem="WOl-gq-AAR" secondAttribute="leading" constant="8" id="Giz-fN-6db"/>
-                                                                <constraint firstAttribute="height" constant="40" id="Zof-uA-5TL"/>
-                                                                <constraint firstAttribute="bottom" secondItem="2as-Md-liJ" secondAttribute="bottom" id="mkz-1Z-Kuj"/>
-                                                                <constraint firstItem="2as-Md-liJ" firstAttribute="top" secondItem="WOl-gq-AAR" secondAttribute="top" constant="19" id="rwG-LI-p36"/>
-                                                                <constraint firstAttribute="trailing" secondItem="2as-Md-liJ" secondAttribute="trailing" constant="8" id="sbS-Pu-sHI"/>
-                                                            </constraints>
-                                                            <userDefinedRuntimeAttributes>
-                                                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                                    <real key="value" value="10"/>
-                                                                </userDefinedRuntimeAttribute>
-                                                            </userDefinedRuntimeAttributes>
-                                                        </view>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Fo-fi-YE8">
                                                             <rect key="frame" x="6" y="8" width="169" height="107"/>
                                                             <subviews>
@@ -996,21 +971,24 @@
                                                                 </userDefinedRuntimeAttribute>
                                                             </userDefinedRuntimeAttributes>
                                                         </view>
+                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Owu-Dm-XgS">
+                                                            <rect key="frame" x="6" y="120" width="169" height="36"/>
+                                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        </view>
                                                     </subviews>
                                                 </view>
                                                 <constraints>
-                                                    <constraint firstAttribute="trailing" secondItem="WOl-gq-AAR" secondAttribute="trailing" constant="6" id="C6u-bs-xDl"/>
+                                                    <constraint firstAttribute="bottom" secondItem="Owu-Dm-XgS" secondAttribute="bottom" constant="-5" id="1my-rF-uAN"/>
                                                     <constraint firstAttribute="trailing" secondItem="9Fo-fi-YE8" secondAttribute="trailing" constant="6" id="CVb-QQ-7tT"/>
                                                     <constraint firstItem="9Fo-fi-YE8" firstAttribute="leading" secondItem="QqS-YB-yDB" secondAttribute="leading" constant="6" id="L58-Nb-WCI"/>
-                                                    <constraint firstItem="WOl-gq-AAR" firstAttribute="leading" secondItem="QqS-YB-yDB" secondAttribute="leading" constant="6" id="Y0Q-73-Lsc"/>
+                                                    <constraint firstItem="Owu-Dm-XgS" firstAttribute="top" secondItem="9Fo-fi-YE8" secondAttribute="bottom" constant="5" id="agV-ih-Egi"/>
+                                                    <constraint firstItem="Owu-Dm-XgS" firstAttribute="leading" secondItem="QqS-YB-yDB" secondAttribute="leading" constant="6" id="jG8-eX-74c"/>
                                                     <constraint firstItem="9Fo-fi-YE8" firstAttribute="top" secondItem="QqS-YB-yDB" secondAttribute="top" constant="8" id="qLd-PF-aBq"/>
-                                                    <constraint firstItem="WOl-gq-AAR" firstAttribute="top" secondItem="9Fo-fi-YE8" secondAttribute="bottom" constant="-17" id="uwN-BG-7zP"/>
+                                                    <constraint firstAttribute="trailing" secondItem="Owu-Dm-XgS" secondAttribute="trailing" constant="6" id="rP5-EI-EJg"/>
                                                 </constraints>
                                                 <connections>
                                                     <outlet property="className" destination="uqj-Bb-Yyn" id="656-yC-Va9"/>
                                                     <outlet property="classViewButton" destination="8Wk-gW-WdH" id="QZ9-5K-fvk"/>
-                                                    <outlet property="homeworkButton" destination="2as-Md-liJ" id="WyA-am-Jtj"/>
-                                                    <outlet property="homeworkView" destination="WOl-gq-AAR" id="Cc5-zr-FPF"/>
                                                     <outlet property="period" destination="L1A-eY-tem" id="0Bt-d3-uyp"/>
                                                     <outlet property="roomNumber" destination="l4m-jp-B4s" id="F6k-9c-xDy"/>
                                                     <outlet property="teacher" destination="JNj-nw-gIh" id="9iO-eA-r34"/>
@@ -3093,6 +3071,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8UT-kJ-WeU" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="385" y="134"/>
         </scene>
     </scenes>
     <resources>

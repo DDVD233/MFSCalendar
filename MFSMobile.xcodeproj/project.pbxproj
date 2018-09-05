@@ -60,6 +60,7 @@
 		E4B340081F0905EB00D6039A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E4B340071F0905EB00D6039A /* GoogleService-Info.plist */; };
 		E4B3400A1F0905F400D6039A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E4B340091F0905F400D6039A /* GoogleService-Info.plist */; };
 		E4B6F4C11F746AE600F56C4D /* MFSCalendarUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48F15601F7467D900A36904 /* MFSCalendarUITests.swift */; };
+		E4B9378120C71DE500F0A225 /* NetworkFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B9378020C71DE500F0A225 /* NetworkFunctions.swift */; };
 		E4BD88961F35973C0000FEF3 /* TargetPublicFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BD88951F35973C0000FEF3 /* TargetPublicFunctions.swift */; };
 		E4BD88981F383A060000FEF3 /* ClassTimetableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BD88971F383A060000FEF3 /* ClassTimetableViewController.swift */; };
 		E4BD889A1F397BE80000FEF3 /* TopicDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BD88991F397BE80000FEF3 /* TopicDetailViewController.swift */; };
@@ -225,6 +226,7 @@
 		E4B340051F08942000D6039A /* classTopicViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = classTopicViewController.swift; sourceTree = "<group>"; };
 		E4B340071F0905EB00D6039A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		E4B340091F0905F400D6039A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		E4B9378020C71DE500F0A225 /* NetworkFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkFunctions.swift; sourceTree = "<group>"; };
 		E4BD88951F35973C0000FEF3 /* TargetPublicFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TargetPublicFunctions.swift; sourceTree = "<group>"; };
 		E4BD88971F383A060000FEF3 /* ClassTimetableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClassTimetableViewController.swift; sourceTree = "<group>"; };
 		E4BD88991F397BE80000FEF3 /* TopicDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopicDetailViewController.swift; sourceTree = "<group>"; };
@@ -464,6 +466,7 @@
 				E4DAB5B01F6386640013D943 /* HomeworkDetailViewController.swift */,
 				E440F1BB1EEA7F4E004AFD0B /* MoyaNetworkLayer.swift */,
 				E4BD88951F35973C0000FEF3 /* TargetPublicFunctions.swift */,
+				E4B9378020C71DE500F0A225 /* NetworkFunctions.swift */,
 				E48D4DEF1E61F275008B0A97 /* ADayViewController.swift */,
 				E4BD88971F383A060000FEF3 /* ClassTimetableViewController.swift */,
 				E48CE0971F9FA6BB007B53D0 /* UserDefaults.swift */,
@@ -954,6 +957,7 @@
 				E4288E1420360F6600E4488D /* MFSClasses.swift in Sources */,
 				E4F8D4E41EF0DD2200F47525 /* HomeworkViewController.swift in Sources */,
 				E489F6C71F5A821E00F2269F /* ProjectPublicFunctions.swift in Sources */,
+				E4B9378120C71DE500F0A225 /* NetworkFunctions.swift in Sources */,
 				E48B85A91F96691D000DC288 /* NewMoreViewController.swift in Sources */,
 				E440F1BC1EEA7F4E004AFD0B /* MoyaNetworkLayer.swift in Sources */,
 				E42786881F568A5F00583D1E /* AboutViewController.swift in Sources */,

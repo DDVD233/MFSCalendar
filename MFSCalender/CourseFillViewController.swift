@@ -48,17 +48,19 @@ class courseFillController: UIViewController {
         }
     }
     
+    // Get the quarter data from David Server. Format: Array(Dict(Quarter: Int, BeginDate: Int, ReferenceNumber: Int))
     func setQuarter() {
-        var thirdQuarterStartComponent = DateComponents()
-        thirdQuarterStartComponent.year = 2018
-        thirdQuarterStartComponent.month = 1
-        thirdQuarterStartComponent.day = 20
+        NetworkOperations().getQuarterSchedule()
         
-        let thirdQuarterStart = DateInRegion(components: thirdQuarterStartComponent)!
-        if DateInRegion().isBefore(date: thirdQuarterStart, granularity: .day) {
-            Preferences().currentQuarter = 2
-        } else {
-            Preferences().currentQuarter = 3
+        let quarterDataPath = URL(fileURLWithPath: userDocumentPath + "/QuarterSchedule.plist")
+        guard let quarterData = NSArray(contentsOf: quarterDataPath) as? [[String: Any]] else {
+            presentErrorMessage(presentMessage: "Quarter data not found", layout: .cardView)
+            return
+        }
+        
+        for quarter in quarterData {
+            let beginDate = quarter["BeginDate"]
+            
         }
     }
     
@@ -250,7 +252,7 @@ class courseFillController: UIViewController {
                 return
             }
             
-            print(String.init(data: data!, encoding: .utf8))
+//            print(String.init(data: data!, encoding: .utf8))
             
             do {
                 guard let json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? [[String: Any]] else {

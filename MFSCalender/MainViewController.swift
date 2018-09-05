@@ -45,10 +45,6 @@ class classViewCell: UICollectionViewCell {
 
     @IBOutlet weak var roomNumber: UILabel!
 
-    @IBOutlet var homeworkView: UIView!
-
-    @IBOutlet var homeworkButton: UIButton!
-
     @IBOutlet var classViewButton: UIButton!
     
 
@@ -564,7 +560,6 @@ extension Main: UICollectionViewDelegate, UICollectionViewDataSource, UICollecti
             }
         }
 
-        cell.homeworkView.isHidden = true
 //        if let leadSectionId = ClassView().getLeadSectionID(classDict: classData) {
 //            print(listHomework)
 //            if let thisClassHomework = listHomework[String(leadSectionId)] {

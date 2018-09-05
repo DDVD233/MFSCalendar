@@ -25,6 +25,7 @@ enum MyService {
     case getCalendarData
     case getCalendarEvent
     case dataVersionCheck
+    case getQuarterSchedule
     case meetTimeSearch(classId: String)
 }
 
@@ -69,6 +70,8 @@ extension MyService: TargetType {
             return "/dataversion"
         case .meetTimeSearch(let classId):
             return "/searchbyid/" + classId
+        case .getQuarterSchedule:
+            return "/getQuarterSchedule"
         }
     }
 

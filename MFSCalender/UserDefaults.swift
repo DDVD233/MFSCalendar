@@ -40,7 +40,7 @@ public class Preferences {
     
     public var davidBaseURL: String {
         get {
-            return userDefaults.string(forKey: "baseURL" ) ?? "https://mfs-calendar.appspot.com"
+            return userDefaults.string(forKey: "baseURL" ) ?? "https://dwei.org"
         }
         set(value) {
             userDefaults.set(value, forKey: "baseURL" )
