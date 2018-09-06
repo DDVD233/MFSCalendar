@@ -49,7 +49,7 @@ extension MyService: TargetType {
         switch self {
                 //myMFS
         case .downloadLargeProfilePhoto(let link):
-            return "/\(link)"
+            return "\(link)"
         case .getProfile(let userID, _):
             return "/api/user/\(userID)/"
         case .getPossibleContent:

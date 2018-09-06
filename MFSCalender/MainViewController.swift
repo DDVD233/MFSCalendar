@@ -234,7 +234,9 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         }
         
         DispatchQueue.global().async {
-            self.downloadLargeProfilePhoto()
+            if self.reachability.connection == .wifi {
+                NetworkOperations().downloadLargeProfilePhoto()
+            }
         }
     }
     
@@ -289,21 +291,6 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
 //                self.classView.reloadData()
 //            }
 //        }
-    }
-
-    func downloadLargeProfilePhoto() {
-        if reachability.connection == .wifi {
-            if let largeFileLink = userDefaults.string(forKey: "largePhotoLink") {
-                provider.request(.downloadLargeProfilePhoto(link: largeFileLink), completion: { result in
-                    switch result {
-                    case .success(_):
-                        userDefaults.set(true, forKey: "didDownloadFullSizeImage")
-                    case let .failure(error):
-                        NSLog("Failed downloading large profile photo because: \(error)")
-                    }
-                })
-            }
-        }
     }
 
     func title(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
@@ -580,74 +567,6 @@ extension Main: UICollectionViewDelegate, UICollectionViewDataSource, UICollecti
         return cell
     }
 }
-
-//extension Main: UITableViewDelegate, UITableViewDataSource {
-//
-//    func eventDataFetching() {
-//        self.listEvents = []
-//        let plistPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-//        let fileName = "/Events.plist"
-//        let path = plistPath.appending(fileName)
-//        let eventData = NSMutableDictionary(contentsOfFile: path)
-//        let date = Date()
-//        self.formatter.dateFormat = "yyyyMMdd"
-//        let eventDate = formatter.string(from: date)
-//        guard let events = eventData?[eventDate] as? Array<Dictionary<String, Any>> else {
-//            return
-//        }
-//
-////        Add all day events first
-//        let allDayEvents = events.filter({ $0["isAllDay"] as? Int == 1 })
-//        self.listEvents = allDayEvents
-//
-//        self.formatter.dateFormat = "HHmmss"
-//        let currentTime = Int(formatter.string(from: Date())) ?? 0
-//
-//        //        Sort the event from earliest to latest
-//        let eventToSort = events.filter({ $0["tEnd"] as? Int ?? -1 > currentTime })
-//        let sortedEvents = eventToSort.sorted(by: {
-//            ($0["tEnd"] as? Int ?? 0) < ($1["tEnd"] as? Int ?? 0)
-//        })
-//
-//        self.listEvents += sortedEvents
-//    }
-//
-//    //    the number of the cell
-//    func tableView(_ tableView: UITableView, numberOfRowsInSection selection: Int) -> Int {
-//        let eventCount = self.listEvents.count
-//        return eventCount
-//    }
-//
-//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-//        return 90
-//    }
-//
-//
-//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        let cell = tableView.dequeueReusableCell(withIdentifier: "eventTableDash", for: indexPath as IndexPath) as! customEventCellDashboard
-//        let row = indexPath.row
-//        guard self.listEvents.count >= row + 1 else {
-//            return cell
-//        }
-//        let rowDict = self.listEvents[row]
-//        guard let summary = rowDict["summary"] as? String else {
-//            return UITableViewCell()
-//        }
-//        cell.ClassName.text = summary
-////        Use the first letter as the letter on the left side of the cell
-//        let letter = String(describing: summary[...summary.startIndex])
-//        cell.PeriodNumber.text = letter
-//
-//        if rowDict["location"] != nil {
-//            cell.RoomNumber.text = "At: " + (rowDict["location"] as! String)
-//        } else {
-//            cell.RoomNumber.text = nil
-//        }
-//
-//        cell.PeriodTime.text = EventView().getTimeInterval(rowDict: rowDict)
-//        return cell
-//    }
-//}
 
 
 extension Main {

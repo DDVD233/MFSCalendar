@@ -40,7 +40,7 @@ class courseFillController: UIViewController {
         let date = formatter.string(from: Date())
         Preferences().refreshDate = date
         DispatchQueue.global().async {
-            
+            NetworkOperations().downloadLargeProfilePhoto()
         }
         
         DispatchQueue.global().async {
