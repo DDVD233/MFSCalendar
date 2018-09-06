@@ -500,7 +500,6 @@
 				E48D4DFC1E61FC25008B0A97 /* Frameworks */,
 				E48D4DFD1E61FC25008B0A97 /* Resources */,
 				E465A32B1F96F698000303D6 /* Build Auto Increment */,
-				F9262A3008A7E923F3A86923 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -558,7 +557,6 @@
 				E48D4E101E61FC26008B0A97 /* Embed App Extensions */,
 				E40D87BD1E8894910082523D /* Embed Watch Content */,
 				38B39BD1028F8E29BE39F059 /* [CP] Embed Pods Frameworks */,
-				FF0356DEF6547DA2CDAA0F62 /* [CP] Copy Pods Resources */,
 				E4B3400B1F090A8A00D6039A /* ShellScript */,
 				E465A32A1F96F645000303D6 /* Build Auto Increment */,
 			);
@@ -750,6 +748,7 @@
 				"${BUILT_PRODUCTS_DIR}/FSCalendar/FSCalendar.framework",
 				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
+				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
 				"${BUILT_PRODUCTS_DIR}/JSQWebViewController/JSQWebViewController.framework",
 				"${BUILT_PRODUCTS_DIR}/Kanna/Kanna.framework",
 				"${BUILT_PRODUCTS_DIR}/LTMorphingLabel/LTMorphingLabel.framework",
@@ -785,6 +784,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FSCalendar.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JSQWebViewController.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Kanna.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/LTMorphingLabel.framework",
@@ -872,36 +872,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Fabric/run\" f9f1e5093a548340955ef1ace69696d9dce62af5 cde3f6f4e1460f69d22d1373f85cfc561a05cf3ebb06dbf2a912e0165b3caeec";
-		};
-		F9262A3008A7E923F3A86923 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Class Schedule/Pods-Class Schedule-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		FF0356DEF6547DA2CDAA0F62 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MFSMobile/Pods-MFSMobile-resources.sh\"\n";
-			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 

@@ -17,24 +17,24 @@ struct ClassTime {
     }
     
     var period: [Period] {
-        return [Period(start: currentDate.atTime(hour: 8, minute: 0, second: 0)!,
-                       end: currentDate.atTime(hour: 8, minute: 42, second: 0)!),
-                Period(start: currentDate.atTime(hour: 8, minute: 46, second: 0)!,
-                       end: currentDate.atTime(hour: 9, minute: 28, second: 0)!),
-                Period(start: currentDate.atTime(hour: 9, minute: 32, second: 0)!,
-                       end: currentDate.atTime(hour: 10, minute: 32, second: 0)!),
-                Period(start: currentDate.atTime(hour: 10, minute: 42, second: 0)!,
-                       end: currentDate.atTime(hour: 11, minute: 24, second: 0)!),
-                Period(start: currentDate.atTime(hour: 11, minute: 28, second: 0)!,
-                       end: currentDate.atTime(hour: 12, minute: 10, second: 0)!),
-                Period(start: currentDate.atTime(hour: 12, minute: 14, second: 0)!,
-                       end: currentDate.atTime(hour: 12, minute: 56, second: 0)!),
-                Period(start: currentDate.atTime(hour: 13, minute: 0, second: 0)!,
-                       end: currentDate.atTime(hour: 13, minute: 38, second: 0)!),
-                Period(start: currentDate.atTime(hour: 13, minute: 42, second: 0)!,
-                       end: currentDate.atTime(hour: 14, minute: 24, second: 0)!),
-                Period(start: currentDate.atTime(hour: 14, minute: 28, second: 0)!,
-                       end: currentDate.atTime(hour: 15, minute: 10, second: 0)!)
+        return [Period(start: currentDate.dateBySet(hour: 8, min: 0, secs: 0)!,
+                       end: currentDate.dateBySet(hour: 8, min: 42, secs: 0)!),
+                Period(start: currentDate.dateBySet(hour: 8, min: 46, secs: 0)!,
+                       end: currentDate.dateBySet(hour: 9, min: 28, secs: 0)!),
+                Period(start: currentDate.dateBySet(hour: 9, min: 32, secs: 0)!,
+                       end: currentDate.dateBySet(hour: 10, min: 32, secs: 0)!),
+                Period(start: currentDate.dateBySet(hour: 10, min: 42, secs: 0)!,
+                       end: currentDate.dateBySet(hour: 11, min: 24, secs: 0)!),
+                Period(start: currentDate.dateBySet(hour: 11, min: 28, secs: 0)!,
+                       end: currentDate.dateBySet(hour: 12, min: 10, secs: 0)!),
+                Period(start: currentDate.dateBySet(hour: 12, min: 14, secs: 0)!,
+                       end: currentDate.dateBySet(hour: 12, min: 56, secs: 0)!),
+                Period(start: currentDate.dateBySet(hour: 13, min: 0, secs: 0)!,
+                       end: currentDate.dateBySet(hour: 13, min: 38, secs: 0)!),
+                Period(start: currentDate.dateBySet(hour: 13, min: 42, secs: 0)!,
+                       end: currentDate.dateBySet(hour: 14, min: 24, secs: 0)!),
+                Period(start: currentDate.dateBySet(hour: 14, min: 28, secs: 0)!,
+                       end: currentDate.dateBySet(hour: 15, min: 10, secs: 0)!)
                 ]
     }
 }
@@ -57,15 +57,15 @@ func periodTimerString(periodNumber: Int) -> String {
     
     var difference: TimeInterval? = nil
     
-    if currentTime.isBefore(date: period.start, granularity: .second) {
+    if currentTime.isBeforeDate(period.start, granularity: .second) {
         timerString = "Starts in "
-        difference = period.start - currentTime
-    } else if currentTime.isBefore(date: period.end, granularity: .second) {
+        difference = (period.start - currentTime).timeInterval
+    } else if currentTime.isBeforeDate(period.end, granularity: .second) {
         timerString = "Ends in "
-        difference = period.end - currentTime
+        difference = (period.end - currentTime).timeInterval
     } else {
         timerString = "Ended "
-        difference = currentTime - period.end
+        difference = (currentTime - period.end).timeInterval
     }
     
     let minutes = Int(difference!).seconds.in(.minute)!
@@ -100,7 +100,7 @@ func getCurrentPeriod() -> Int {
     let period = ClassTime().period
     
     switch currentTime {
-    case currentTime.startOfDay..<period[0].end:
+    case currentTime.dateAt(.startOfDay)..<period[0].end:
         return 1
     case period[0].end..<period[1].end:
         return 2

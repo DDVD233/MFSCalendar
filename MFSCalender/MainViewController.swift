@@ -107,23 +107,11 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         
         self.addChildViewController(eventViewController)
         self.eventViewContainer.addSubview(eventViewController.view)
-//        self.eventView.delegate = self
-//        self.eventView.dataSource = self
-//        self.eventView.emptyDataSetDelegate = self
-//        self.eventView.emptyDataSetSource = self
-//        self.eventView.separatorStyle = .singleLine
         
-//        if #available(iOS 11, *) {
-//            eventBottomLayoutConstraint.isActive = true
-//        } else {
-//            eventBottomLayoutConstraint.isActive = false
-//            eventViewLarge.snp.makeConstraints({ make in
-//                make.bottom.equalTo(self.bottomLayoutGuide.snp.top).offset(-10)
-//            })
-//        }
-
-        if Preferences().firstName == nil {
-            Preferences().didLogin = false
+        let preferences = Preferences()
+        if preferences.firstName == nil || !preferences.didOpenAfterUpdate {
+            preferences.didLogin = false
+            preferences.didOpenAfterUpdate = true
         }
         
         if Preferences().didLogin && Preferences().courseInitialized {
@@ -458,7 +446,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
                     if let json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? Array<Dictionary<String, Any>> {
                         let formatter = DateFormatter()
                         formatter.dateFormat = "M/d/yyyy"
-                        let tomorrow = formatter.string(from: (Date() + 1.day))
+                        let tomorrow = formatter.string(from: (Date() + 1.days))
                         for items in json {
 //                            Temp
                             var homework = items

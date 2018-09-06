@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="TWf-dU-uxH">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="TWf-dU-uxH">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -52,7 +52,7 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </label>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5uT-kv-1A4" customClass="UICircularProgressRingView" customModule="UICircularProgressRing">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5uT-kv-1A4" customClass="UICircularProgressRing" customModule="UICircularProgressRing">
                                 <rect key="frame" x="72.5" y="119.5" width="230" height="230"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
@@ -1850,7 +1850,7 @@
                             <rect key="frame" x="0.0" y="0.0" width="375" height="268"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zdr-19-Y3d" customClass="UICircularProgressRingView" customModule="UICircularProgressRing">
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zdr-19-Y3d" customClass="UICircularProgressRing" customModule="UICircularProgressRing">
                                     <rect key="frame" x="92" y="18" width="191.5" height="191"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
@@ -2006,7 +2006,7 @@
                         </connections>
                     </tableView>
                     <connections>
-                        <outlet property="cumGradeProgressRing" destination="zdr-19-Y3d" id="UoB-ql-ZjM"/>
+                        <outlet property="cumGradeProgressRing" destination="zdr-19-Y3d" id="PJ0-za-amB"/>
                         <outlet property="sectionGradeChart" destination="epQ-km-Dst" id="E8c-oe-lKt"/>
                     </connections>
                 </tableViewController>

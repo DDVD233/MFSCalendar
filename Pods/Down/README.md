@@ -208,7 +208,7 @@ public static let smart = DownOptions(rawValue: 1 << 6)
 ```
 
 ### Supports
-Swift; iOS 9+, tvOS 9+, macOS 10.11+
+Swift, ARC & iOS 9+
 
 ### Markdown Specification
 

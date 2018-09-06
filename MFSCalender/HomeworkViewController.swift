@@ -125,7 +125,7 @@ class homeworkViewController: UITableViewController, UIViewControllerPreviewingD
         formatter.locale = Locale(identifier: "en_US")
         formatter.dateFormat = "M/d/yyyy"
         let daySelectedString = formatter.string(from: daySelected!).addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-        let dayEndString = filter == 2 ? formatter.string(from: daySelected! + 1.month).addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)! : daySelectedString
+        let dayEndString = filter == 2 ? formatter.string(from: daySelected! + 1.months).addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)! : daySelectedString
         let url = "https://mfriends.myschoolapp.com/api/DataDirect/AssignmentCenterAssignments/?format=json&filter=\(String(describing: filter))&dateStart=\(daySelectedString)&dateEnd=\(dayEndString)&persona=2"
         let request = URLRequest(url: URL(string: url)!)
         
@@ -259,14 +259,14 @@ class homeworkViewController: UITableViewController, UIViewControllerPreviewingD
             return "Today"
         } else if dueDate.isTomorrow {
             return "Tomorrow"
-        } else if dueDate.isBefore(date: Date().endOf(component: .weekOfYear), granularity: .day) {
-            let weekDay = dueDate.string(format: .custom("EEEE"))
+        } else if dueDate.isBeforeDate(Date().dateAt(.endOfWeek), granularity: .day) {
+            let weekDay = dueDate.toString(.custom("EEEE"))
             return "This " + weekDay
-        } else if dueDate.isBefore(date: (Date() + 1.week).endOf(component: .weekOfYear), granularity: .day) {
-            let weekDay = dueDate.string(format: .custom("EEEE"))
+        } else if dueDate.isBeforeDate((Date() + 1.weeks).dateAt(.endOfWeek), granularity: .day) {
+            let weekDay = dueDate.toString(.custom("EEEE"))
             return "Next " + weekDay
         } else {
-            return dueDate.string(format: .custom("EEEE, MMM d, yyyy"))
+            return dueDate.toString(.custom("EEEE, MMM d, yyyy"))
         }
     }
 

@@ -22,7 +22,7 @@ class courseFillController: UIViewController {
         return .lightContent
     }
 
-    @IBOutlet weak var progressView: UICircularProgressRingView!
+    @IBOutlet weak var progressView: UICircularProgressRing!
     @IBOutlet weak var topLabel: LTMorphingLabel!
     @IBOutlet weak var bottomLabel: LTMorphingLabel!
 
@@ -40,7 +40,7 @@ class courseFillController: UIViewController {
         let date = formatter.string(from: Date())
         Preferences().refreshDate = date
         DispatchQueue.global().async {
-        
+            
         }
         
         DispatchQueue.global().async {
@@ -74,7 +74,7 @@ class courseFillController: UIViewController {
                 return
             }
             
-            if Date().isAfter(date: beginDate, granularity: .day) {
+            if Date().isAfterDate(beginDate, granularity: .day) {
                 let preferences = Preferences()
                 preferences.currentQuarter = quarter["Quarter"] as! Int
                 preferences.durationID = String(describing: quarter["ReferenceNumber"] as! Int)
@@ -205,7 +205,7 @@ class courseFillController: UIViewController {
     
     func setProgressTo(value: CGFloat) {
         DispatchQueue.main.async {
-            self.progressView.setProgress(value: value, animationDuration: 1)
+            self.progressView.startProgress(to: value, duration: 1)
         }
     }
     

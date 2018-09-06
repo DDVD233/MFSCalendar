@@ -281,6 +281,16 @@ public class Preferences {
         }
     }
     
+    // Update any necessary data after opening, then mark the value as true.
+    public var didOpenAfterUpdate: Bool {
+        get {
+            return userDefaults.bool(forKey: "didOpenAfterUpdate" )
+        }
+        set(value) {
+            userDefaults.set(value, forKey: "didOpenAfterUpdate" )
+        }
+    }
+    
     public var isiPhoneX: Bool {
         get {
             return userDefaults.bool(forKey: "isiPhoneX" )

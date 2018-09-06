@@ -42,12 +42,12 @@ class gradeViewController: UITableViewController {
     var cumGrade: Float = 0 {
         didSet {
             DispatchQueue.main.async {
-                self.cumGradeProgressRing.setProgress(value: CGFloat(self.cumGrade), animationDuration: 1.0)
+                self.cumGradeProgressRing.startProgress(to: CGFloat(self.cumGrade), duration: 1.0)
             }
         }
     }
     
-    @IBOutlet var cumGradeProgressRing: UICircularProgressRingView!
+    @IBOutlet var cumGradeProgressRing: UICircularProgressRing!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -185,7 +185,7 @@ class gradeViewController: UITableViewController {
     }
     
     func animate() {
-        cumGradeProgressRing.setProgress(value: CGFloat(self.cumGrade), animationDuration: 1.0)
+        cumGradeProgressRing.startProgress(to: CGFloat(self.cumGrade), duration: 1.0)
         
 //        if let chartCell = self.tableView.cellForRow(at: IndexPath(row: 1, section: 0)) as? gradeBarChartCell {
 //            print(chartCell.chartView.data)

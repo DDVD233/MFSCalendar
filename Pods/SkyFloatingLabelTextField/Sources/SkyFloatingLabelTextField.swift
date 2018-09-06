@@ -20,7 +20,7 @@ open class SkyFloatingLabelTextField: UITextField { // swiftlint:disable:this ty
      A Boolean value that determines if the language displayed is LTR. 
      Default value set automatically from the application language settings.
      */
-    open var isLTRLanguage: Bool = UIApplication.shared.userInterfaceLayoutDirection == .leftToRight {
+    @objc open var isLTRLanguage: Bool = UIApplication.shared.userInterfaceLayoutDirection == .leftToRight {
         didSet {
            updateTextAligment()
         }
@@ -121,6 +121,27 @@ open class SkyFloatingLabelTextField: UITextField { // swiftlint:disable:this ty
         }
     }
 
+    /// A UIColor value that determines the color used for the line when error message is not `nil`
+    @IBInspectable dynamic open var lineErrorColor: UIColor? {
+        didSet {
+            updateColors()
+        }
+    }
+    
+    /// A UIColor value that determines the color used for the text when error message is not `nil`
+    @IBInspectable dynamic open var textErrorColor: UIColor? {
+        didSet {
+            updateColors()
+        }
+    }
+    
+    /// A UIColor value that determines the color used for the title label when error message is not `nil`
+    @IBInspectable dynamic open var titleErrorColor: UIColor? {
+        didSet {
+            updateColors()
+        }
+    }
+    
     /// A UIColor value that determines the color used for the title label and line when text field is disabled
     @IBInspectable dynamic open var disabledColor: UIColor = UIColor(white: 0.88, alpha: 1.0) {
         didSet {
@@ -177,7 +198,11 @@ open class SkyFloatingLabelTextField: UITextField { // swiftlint:disable:this ty
     The default implementation converts the text to uppercase.
     */
     open var titleFormatter: ((String) -> String) = { (text: String) -> String in
-        return text.uppercased()
+        if #available(iOS 9.0, *) {
+            return text.localizedUppercase
+        } else {
+            return text.uppercased()
+        }
     }
 
     /**
@@ -194,6 +219,7 @@ open class SkyFloatingLabelTextField: UITextField { // swiftlint:disable:this ty
     }
 
     /// A String value for the error message to display.
+    @IBInspectable
     open var errorMessage: String? {
         didSet {
             updateControl(true)
@@ -386,9 +412,11 @@ open class SkyFloatingLabelTextField: UITextField { // swiftlint:disable:this ty
     }
 
     fileprivate func updateLineView() {
-        if let lineView = lineView {
-            lineView.frame = lineViewRectForBounds(bounds, editing: editingOrSelected)
+        guard let lineView = lineView else {
+            return
         }
+
+        lineView.frame = lineViewRectForBounds(bounds, editing: editingOrSelected)
         updateLineColor()
     }
 
@@ -402,20 +430,28 @@ open class SkyFloatingLabelTextField: UITextField { // swiftlint:disable:this ty
     }
 
     fileprivate func updateLineColor() {
+        guard let lineView = lineView else {
+            return
+        }
+
         if !isEnabled {
             lineView.backgroundColor = disabledColor
         } else if hasErrorMessage {
-            lineView.backgroundColor = errorColor
+            lineView.backgroundColor = lineErrorColor ?? errorColor
         } else {
             lineView.backgroundColor = editingOrSelected ? selectedLineColor : lineColor
         }
     }
 
     fileprivate func updateTitleColor() {
+        guard let titleLabel = titleLabel else {
+            return
+        }
+
         if !isEnabled {
             titleLabel.textColor = disabledColor
         } else if hasErrorMessage {
-            titleLabel.textColor = errorColor
+            titleLabel.textColor = titleErrorColor ?? errorColor
         } else {
             if editingOrSelected || isHighlighted {
                 titleLabel.textColor = selectedTitleColor
@@ -429,7 +465,7 @@ open class SkyFloatingLabelTextField: UITextField { // swiftlint:disable:this ty
         if !isEnabled {
             super.textColor = disabledColor
         } else if hasErrorMessage {
-            super.textColor = errorColor
+            super.textColor = textErrorColor ?? errorColor
         } else {
             super.textColor = cachedTextColor
         }
@@ -438,6 +474,9 @@ open class SkyFloatingLabelTextField: UITextField { // swiftlint:disable:this ty
     // MARK: - Title handling
 
     fileprivate func updateTitleLabel(_ animated: Bool = false) {
+        guard let titleLabel = titleLabel else {
+            return
+        }
 
         var titleText: String? = nil
         if hasErrorMessage {
@@ -600,7 +639,11 @@ open class SkyFloatingLabelTextField: UITextField { // swiftlint:disable:this ty
      -returns: the calculated height of the textfield. Override to size the textfield with a different height
      */
     open func textHeight() -> CGFloat {
-        return self.font!.lineHeight + 7.0
+        guard let font = self.font else {
+            return 0.0
+        }
+
+        return font.lineHeight + 7.0;
     }
 
     // MARK: - Layout
