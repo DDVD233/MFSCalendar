@@ -40,6 +40,10 @@ class courseFillController: UIViewController {
         let date = formatter.string(from: Date())
         Preferences().refreshDate = date
         DispatchQueue.global().async {
+        
+        }
+        
+        DispatchQueue.global().async {
             if Preferences().isStudent {
                 self.importCourseStudent()
             } else {

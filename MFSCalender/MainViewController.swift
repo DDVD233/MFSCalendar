@@ -224,7 +224,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         let group = DispatchGroup()
 
         DispatchQueue.global().async(group: group, execute: {
-            self.refreshEvents()
+            NetworkOperations().refreshEvents()
         })
 
         DispatchQueue.global().async(group: group, execute: {
@@ -680,23 +680,6 @@ extension Main {
                 } catch {
                     presentErrorMessage(presentMessage: error.localizedDescription, layout: .statusLine)
                 }
-            case let .failure(error):
-                presentErrorMessage(presentMessage: error.localizedDescription, layout: .statusLine)
-            }
-
-            semaphore.signal()
-        })
-
-        semaphore.wait()
-    }
-
-    func refreshEvents() {
-        let semaphore = DispatchSemaphore.init(value: 0)
-
-        provider.request(MyService.getCalendarEvent, completion: { result in
-            switch result {
-            case .success(_):
-                print("Info: event data refreshed")
             case let .failure(error):
                 presentErrorMessage(presentMessage: error.localizedDescription, layout: .statusLine)
             }

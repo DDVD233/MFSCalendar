@@ -335,7 +335,7 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
         }
         
         DispatchQueue.global().async(group: group) {
-            self.getEvent()
+            NetworkOperations().refreshEvents()
         }
         
         DispatchQueue.global().async(group: group) {
@@ -408,25 +408,6 @@ extension firstTimeLaunchController {
                 }
             }
 
-            semaphore.signal()
-        })
-
-        semaphore.wait()
-    }
-
-    func getEvent() {
-        let semaphore = DispatchSemaphore.init(value: 0)
-
-        provider.request(.getCalendarEvent, completion: { result in
-            switch result {
-            case .success(_):
-                break
-            case let .failure(error):
-                DispatchQueue.main.async {
-                    let presentMessage = error.localizedDescription + " Please check your internet connection."
-                    self.errorMessage(presentMessage: presentMessage)
-                }
-            }
             semaphore.signal()
         })
 
