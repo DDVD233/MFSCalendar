@@ -95,6 +95,8 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        SwiftDate.defaultRegion = Region.local
+        
         self.bottomView.layer.shadowColor = UIColor.black.cgColor
         self.bottomView.layer.shadowOpacity = 0.15
         self.bottomView.layer.shadowOffset = CGSize.zero
@@ -104,6 +106,8 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         self.classView.dataSource = self
         self.classView.emptyDataSetSource = self
         self.classView.emptyDataSetDelegate = self
+        
+        
         
         self.addChildViewController(eventViewController)
         self.eventViewContainer.addSubview(eventViewController.view)
