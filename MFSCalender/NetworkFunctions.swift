@@ -13,11 +13,14 @@ import SafariServices
 
 class NetworkOperations {
     func getQuarterSchedule() {
+        let semaphore = DispatchSemaphore(value: 0)
         provider.request(MyService.getQuarterSchedule, callbackQueue: DispatchQueue.global()) { (result) in
             switch result {
             case let .success(response):
                 do {
-                    guard let json = try JSONSerialization.jsonObject(with: response.data, options: .allowFragments) as? [[String: String]] else {
+                    print(response.request?.url)
+                    print(String(data: response.data, encoding: .utf8))
+                    guard let json = try JSONSerialization.jsonObject(with: response.data, options: .allowFragments) as? [[String: Any]] else {
                         presentErrorMessage(presentMessage: "Quarter Data not found", layout: .cardView)
                         return
                     }
@@ -28,41 +31,16 @@ class NetworkOperations {
                     NSArray(array: json).write(toFile: quarterScheduleFile, atomically: true)
                 } catch {
                     presentErrorMessage(presentMessage: error.localizedDescription, layout: .cardView)
+                    print(error.localizedDescription)
                 }
+                
+                semaphore.signal()
             case let .failure(error):
                 presentErrorMessage(presentMessage: error.errorDescription!, layout: .cardView)
             }
         }
-    }
-    
-    func getDurationId(for quarter: Int) -> String? {
-        //        let session = URLSession.shared
-        //        let request = URLRequest(url: URL(string: "https://dwei.org/currentDurationId")!)
-        //        var strReturn: String? = nil
-        //        let semaphore = DispatchSemaphore.init(value: 0)
-        //
-        //        let task = session.dataTask(with: request, completionHandler: { (data, _, error) -> Void in
-        //            if error == nil {
-        //                strReturn = String(data: data!, encoding: .utf8)
-        //            }
-        //            semaphore.signal()
-        //        })
-        //
-        //        task.resume()
-        //        semaphore.wait()
-        //        return strReturn
-        switch quarter {
-        case 1:
-            return "90656"
-        case 2:
-            return "90657"
-        case 3:
-            return "90658"
-        case 4:
-            return "90659"
-        default:
-            return nil
-        }
+        
+        semaphore.wait()
     }
     
     func loginUsingPost() -> [HTTPCookie]? {

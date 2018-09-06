@@ -59,8 +59,22 @@ class courseFillController: UIViewController {
         }
         
         for quarter in quarterData {
-            let beginDate = quarter["BeginDate"]
+            guard let beginDateInt = quarter["BeginDate"] as? Int else {
+                return
+            }
             
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyyMMdd"
+            
+            guard let beginDate = dateFormatter.date(from: String(beginDateInt)) else {
+                return
+            }
+            
+            if Date().isAfter(date: beginDate, granularity: .day) {
+                let preferences = Preferences()
+                preferences.currentQuarter = quarter["Quarter"] as! Int
+                preferences.durationID = String(describing: quarter["ReferenceNumber"] as! Int)
+            }
         }
     }
     
@@ -345,11 +359,11 @@ class courseFillController: UIViewController {
 
         let (_, _, userId) = loginAuthentication()
 
-        guard let durationId = NetworkOperations().getDurationId(for: Preferences().currentQuarter) else {
+        guard let durationId = Preferences().durationID else {
             return false
         }
 
-        let urlString = "https://mfriends.myschoolapp.com/api/datadirect/ParentStudentUserAcademicGroupsGet?userId=\(userId)&schoolYearLabel=2017+-+2018&memberLevel=3&persona=2&durationList=\(durationId)"
+        let urlString = "https://mfriends.myschoolapp.com/api/datadirect/ParentStudentUserAcademicGroupsGet?userId=\(userId)&schoolYearLabel=2018+-+2019&memberLevel=3&persona=2&durationList=\(durationId)"
         print(urlString)
 
         let url = URL(string: urlString)

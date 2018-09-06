@@ -301,7 +301,7 @@ class gradeViewController: UITableViewController {
         }
 
         let session = URLSession.shared
-        let url = "https://mfriends.myschoolapp.com/api/datadirect/ParentStudentUserAcademicGroupsGet?userId=\(userId)&schoolYearLabel=2017+-+2018&memberLevel=3&persona=2&durationList=\(durationId)&markingPeriodId="
+        let url = "https://mfriends.myschoolapp.com/api/datadirect/ParentStudentUserAcademicGroupsGet?userId=\(userId)&schoolYearLabel=2018+-+2019&memberLevel=3&persona=2&durationList=\(durationId)&markingPeriodId="
         let request = URLRequest(url: URL(string: url)!)
         let semaphore = DispatchSemaphore.init(value: 0)
 

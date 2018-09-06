@@ -39,7 +39,7 @@ extension MyService: TargetType {
 
     var baseURL: URL {
         switch self {
-        case .getCalendarData, .getCalendarEvent, .dataVersionCheck, .meetTimeSearch:
+        case .getCalendarData, .getCalendarEvent, .dataVersionCheck, .meetTimeSearch, .getQuarterSchedule:
             return URL(string: Preferences().davidBaseURL)!
         default:
             return URL(string: "https://mfriends.myschoolapp.com")!
@@ -71,7 +71,7 @@ extension MyService: TargetType {
         case .meetTimeSearch(let classId):
             return "/searchbyid/" + classId
         case .getQuarterSchedule:
-            return "/getQuarterSchedule"
+            return "/quarterdata"
         }
     }
 

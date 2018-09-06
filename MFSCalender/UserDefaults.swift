@@ -40,7 +40,7 @@ public class Preferences {
     
     public var davidBaseURL: String {
         get {
-            return userDefaults.string(forKey: "baseURL" ) ?? "https://dwei.org"
+            return "https://dwei.org"
         }
         set(value) {
             userDefaults.set(value, forKey: "baseURL" )
@@ -143,6 +143,15 @@ public class Preferences {
         }
         set(value) {
             userDefaults.set(value, forKey: "serviceUsername" )
+        }
+    }
+    
+    public var durationID: String? {
+        get {
+            return userDefaults.string(forKey: "durationID" )
+        }
+        set(value) {
+            userDefaults.set(value, forKey: "durationID" )
         }
     }
     
