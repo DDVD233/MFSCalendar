@@ -287,18 +287,7 @@ class gradeViewController: UITableViewController {
 
         var cumGrade = ""
 
-        var durationId: String {
-            switch quarterSelected {
-            case .first:
-                return "90656"
-            case .second:
-                return "90657"
-            case .third:
-                return "90658"
-            case .forth:
-                return "90659"
-            }
-        }
+        var durationId: String = Preferences().durationID ?? ""
 
         let session = URLSession.shared
         let url = "https://mfriends.myschoolapp.com/api/datadirect/ParentStudentUserAcademicGroupsGet?userId=\(userId)&schoolYearLabel=2018+-+2019&memberLevel=3&persona=2&durationList=\(durationId)&markingPeriodId="
