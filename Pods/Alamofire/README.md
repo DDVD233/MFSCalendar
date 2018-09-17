@@ -235,8 +235,11 @@ With your continued support, the ASF will be able to improve its reach and also 
 If you use any of our libraries for work, see if your employers would be interested in donating.
 Any amount you can donate today to help us reach our goal would be greatly appreciated.
 
+<<<<<<< HEAD
 [![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=W34WPEE74APJQ)
 
+=======
+>>>>>>> master
 ## License
 
 Alamofire is released under the MIT license. [See LICENSE](https://github.com/Alamofire/Alamofire/blob/master/LICENSE) for details.

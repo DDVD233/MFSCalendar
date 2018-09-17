@@ -1,8 +1,8 @@
 //
-//  MFSClasses.swift
+//  CourseDataBridge.swift
 //  MFSMobile
 //
-//  Created by David Dai on 2/15/18.
+//  Created by 戴元平 on 3/9/18.
 //  Copyright © 2018 David. All rights reserved.
 //
 

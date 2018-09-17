@@ -3,12 +3,25 @@
 //  MFSCalender
 //
 //  Created by David Dai on 2017/3/26.
-//  Copyright © 2017年 David. All rights reserved.
+//  Copyright © 2017 David. All rights reserved.
 //
 
 import UIKit
 import Crashlytics
 import Kanna
+
+extension CourseMO {
+    var index: Int? {
+        let courseListPath = URL.init(fileURLWithPath: userDocumentPath.appending("/CourseList.plist"))
+        guard let courseList = NSArray(contentsOf: courseListPath) as? [[String: Any]] else {
+            return nil
+        }
+        guard let name = self.name else { return nil }
+        let index = courseList.index(where: { $0["coursedescription"] as? String ?? "" == name })
+        
+        return index
+    }
+}
 
 extension UIView {
     @IBInspectable var cornerRadius: CGFloat {
@@ -111,6 +124,10 @@ extension UIColor {
         let green = CGFloat((hexString & 0x00FF00) >> 8) / 255.0
         let blue = CGFloat((hexString & 0x0000FF)) / 255.0
         self.init(red: red, green: green, blue: blue, alpha: alpha)
+    }
+    
+    public static var salmon: UIColor {
+        get { return UIColor(hexString: 0xFF7E79) }
     }
 }
 

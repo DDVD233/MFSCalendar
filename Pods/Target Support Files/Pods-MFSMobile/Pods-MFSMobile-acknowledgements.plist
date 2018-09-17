@@ -1069,7 +1069,61 @@ THE SOFTWARE.
    limitations under the License.
 </string>
 			<key>License</key>
+<<<<<<< HEAD
 			<string>Apache</string>
+=======
+			<string>MIT</string>
+			<key>Title</key>
+			<string>FSCalendar</string>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+		</dict>
+		<dict>
+			<key>FooterText</key>
+			<string>Fabric: Copyright 2018 Google, Inc. All Rights Reserved. Use of this software is subject to the terms and conditions of the Fabric Software and Services Agreement located at https://fabric.io/terms. OSS: http://get.fabric.io/terms/opensource.txt</string>
+			<key>License</key>
+			<string>Commercial</string>
+			<key>Title</key>
+			<string>Fabric</string>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+		</dict>
+		<dict>
+			<key>FooterText</key>
+			<string>Copyright 2018 Google</string>
+			<key>License</key>
+			<string>Copyright</string>
+			<key>Title</key>
+			<string>Firebase</string>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+		</dict>
+		<dict>
+			<key>FooterText</key>
+			<string>Copyright 2018 Google</string>
+			<key>License</key>
+			<string>Copyright</string>
+			<key>Title</key>
+			<string>FirebaseAnalytics</string>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+		</dict>
+		<dict>
+			<key>FooterText</key>
+			<string>Copyright 2018 Google</string>
+			<key>License</key>
+			<string>Copyright</string>
+			<key>Title</key>
+			<string>FirebaseCore</string>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+		</dict>
+		<dict>
+			<key>FooterText</key>
+			<string>Copyright 2018 Google</string>
+			<key>License</key>
+			<string>Copyright</string>
+>>>>>>> master
 			<key>Title</key>
 			<string>GTMSessionFetcher</string>
 			<key>Type</key>

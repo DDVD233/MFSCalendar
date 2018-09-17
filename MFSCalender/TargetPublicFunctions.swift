@@ -3,7 +3,7 @@
 //  MFSCalendar
 //
 //  Created by David Dai on 2017/8/5.
-//  Copyright © 2017年 David. All rights reserved.
+//  Copyright © 2017 David. All rights reserved.
 //
 
 import Foundation
@@ -13,6 +13,8 @@ import Alamofire
 import M13Checkbox
 import SafariServices
 import Kanna
+import CoreData
+
 
 func areEqual<T:Equatable>(type: T.Type, a: Any?, b: Any?) -> Bool? {
     guard let a = a as? T, let b = b as? T else {
@@ -113,7 +115,7 @@ public func loginAuthentication() -> (success: Bool, token: String, userId: Stri
         return (false, "Cannot convert to url string", "")
     }
 
-    let accountCheckURL = "https://mfriends.myschoolapp.com/api/authentication/login/?username=" + usernameTextUrlEscaped + "&password=" + passwordTextUrlEscaped + "&format=json"
+    let accountCheckURL = Preferences().baseURL + "/api/authentication/login/?username=" + usernameTextUrlEscaped + "&password=" + passwordTextUrlEscaped + "&format=json"
     let url = NSURL(string: accountCheckURL)
     let request = URLRequest(url: url! as URL)
 
@@ -176,7 +178,7 @@ public func loginAuthentication() -> (success: Bool, token: String, userId: Stri
 
 public func addLoginCookie(token: String) {
     let cookieProps: [HTTPCookiePropertyKey: Any] = [
-        HTTPCookiePropertyKey.domain: "mfriends.myschoolapp.com",
+        HTTPCookiePropertyKey.domain: Preferences().baseDomain,
         HTTPCookiePropertyKey.path: "/",
         HTTPCookiePropertyKey.name: "t",
         HTTPCookiePropertyKey.value: token
@@ -187,7 +189,7 @@ public func addLoginCookie(token: String) {
     }
 
     let cookieProps2: [HTTPCookiePropertyKey: Any] = [
-        HTTPCookiePropertyKey.domain: "mfriends.myschoolapp.com",
+        HTTPCookiePropertyKey.domain: Preferences().baseDomain,
         HTTPCookiePropertyKey.path: "/",
         HTTPCookiePropertyKey.name: "bridge",
         HTTPCookiePropertyKey.value: "action=create&src=webapp&xdb=true"
@@ -199,6 +201,7 @@ public func addLoginCookie(token: String) {
 }
 
 public func presentErrorMessage(presentMessage: String, layout: MessageView.Layout) {
+    print("[Error] " + presentMessage)
     let view = MessageView.viewFromNib(layout: layout)
     view.configureTheme(.error)
     let icon = "😱"
@@ -208,166 +211,6 @@ public func presentErrorMessage(presentMessage: String, layout: MessageView.Layo
     let config = SwiftMessages.Config()
     DispatchQueue.main.async {
         SwiftMessages.show(config: config, view: view)
-    }
-}
-
-class ClassView {
-    func getLeadSectionID(classDict: [String: Any]) -> Int? {
-        if let leadSectionID = classDict["leadsectionid"] as? Int {
-            return leadSectionID
-        } else if let sectionID = classDict["sectionid"] as? Int {
-            return sectionID
-        } else {
-            return nil
-        }
-    }
-    
-    func getLeadSectionIDFromSectionInfo(sectionID: String) -> String {
-        let semaphoreSectionID = DispatchSemaphore(value: 0)
-        var sectionID = sectionID
-        
-        provider.request(.sectionInfoView(sectionID: sectionID), callbackQueue: DispatchQueue.global(), completion: {
-            (result) in
-            switch result {
-            case let .success(response):
-                do {
-                    guard let json = try JSONSerialization.jsonObject(with: response.data, options: .allowFragments) as? Array<Dictionary<String, Any>> else {
-                        presentErrorMessage(presentMessage: "Internal error: Incorrect data format", layout: .statusLine)
-                        semaphoreSectionID.signal()
-                        return
-                    }
-                    
-                    guard json.count > 0 else {
-                        presentErrorMessage(presentMessage: "Unable to find section ID.", layout: .statusLine)
-                        semaphoreSectionID.signal()
-                        return
-                    }
-                    
-                    if let leadSectionID = json[0]["LeadSectionId"] as? Int {
-                        sectionID = String(describing: leadSectionID)
-                    }
-                } catch {
-                    presentErrorMessage(presentMessage: error.localizedDescription, layout: .statusLine)
-                }
-            case let .failure(error):
-                presentErrorMessage(presentMessage: error.localizedDescription, layout: .statusLine)
-            }
-            
-            semaphoreSectionID.signal()
-        })
-        
-        semaphoreSectionID.wait()
-        return sectionID
-    }
-    
-    func getProfilePhoto() {
-        let path = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-        let coursePath = path.appending("/CourseList.plist")
-        
-        guard let courseList = NSArray(contentsOfFile: coursePath) as? Array<Dictionary<String, Any>> else {
-            return
-        }
-        let group = DispatchGroup()
-        let queue = DispatchQueue.global()
-        
-        for items in courseList {
-            queue.async(group: group) {
-                guard let sectionIdInt = ClassView().getLeadSectionID(classDict: items) else {
-                    return
-                }
-                
-                guard let photoURLPath = self.getProfilePhotoLink(sectionId: String(describing: sectionIdInt)) else {
-                    NSLog("\(items["coursedescription"] as? String ?? "") has no photo.")
-                    return
-                }
-                
-                guard loginAuthentication().success else {
-                    return
-                }
-                
-                let sectionId = String(sectionIdInt)
-                
-                //let photoLink = "https://bbk12e1-cdn.myschoolcdn.com/736/photo/" + photoURLPath
-                
-                guard let url = URL(string: photoURLPath) else { return }
-                
-                let downloadSemaphore = DispatchSemaphore.init(value: 0)
-                
-                let destination: DownloadRequest.DownloadFileDestination = { _, _ in
-                    let path = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-                    let photoPath = path.appending("/\(sectionId)_profile.png")
-                    
-                    let fileURL = URL(fileURLWithPath: photoPath)
-                    print(fileURL)
-                    
-                    downloadSemaphore.signal()
-                    
-                    return (fileURL, [.removePreviousFile, .createIntermediateDirectories])
-                }
-                
-                
-                Alamofire.download(url, to: destination).resume()
-                downloadSemaphore.wait()
-            }
-        }
-        
-        group.wait()
-    }
-    
-    func getTheClassToPresent() -> Dictionary<String, Any>? {
-        let classPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-        let path = classPath.appending("/CourseList.plist")
-        guard let classList = NSArray(contentsOfFile: path) as? Array<Dictionary<String, Any>> else {
-            return nil
-        }
-
-        let index = Preferences().indexForCourseToPresent
-        
-        print(classList)
-
-        if classList.indices.contains(index) {
-            return classList[index]
-        }
-
-        return nil
-    }
-
-    func getProfilePhotoLink(sectionId: String) -> String? {
-        guard loginAuthentication().success else {
-            return ""
-        }
-        let urlString = "https://mfriends.myschoolapp.com/api/media/sectionmediaget/\(sectionId)/?format=json&contentId=31&editMode=false&active=true&future=false&expired=false&contextLabelId=2"
-        let url = URL(string: urlString)
-        //create request.
-        let request3 = URLRequest(url: url!)
-        let semaphore = DispatchSemaphore(value: 0)
-
-        let config = URLSessionConfiguration.default
-        config.requestCachePolicy = .reloadIgnoringLocalCacheData
-        config.urlCache = nil
-        var photoLink: String? = nil
-
-        let session = URLSession.init(configuration: config)
-
-        let dataTask = session.dataTask(with: request3, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
-            if error == nil {
-                let json = try! JSON(data: data!)
-                if let filePath = json[0]["FilenameUrl"].string {
-                    photoLink = "https:" + filePath
-                } else {
-                    NSLog("File path not found. Error code: 13")
-                }
-            } else {
-                DispatchQueue.main.async {
-                    presentErrorMessage(presentMessage: error!.localizedDescription, layout: .cardView)
-                }
-            }
-            semaphore.signal()
-        })
-        //使用resume方法启动任务
-        dataTask.resume()
-        semaphore.wait()
-        return photoLink
     }
 }
 
@@ -496,7 +339,184 @@ class HomeworkView {
     }
 }
 
+<<<<<<< HEAD
 
+=======
+class NetworkOperations {
+    func refreshData() {
+        let semaphore = DispatchSemaphore.init(value: 0)
+        
+        provider.request(MyService.getCalendarData, completion: { result in
+            switch result {
+            case let .success(response):
+                do {
+                    guard let dayData = try response.mapJSON(failsOnEmptyData: false) as? Dictionary<String, Any> else {
+                        presentErrorMessage(presentMessage: "Incorrect file format for day data", layout: .statusLine)
+                        return
+                    }
+                    
+                    let dayFile = userDocumentPath.appending("/Day.plist")
+                    
+                    print("Info: Day Data refreshed")
+                    NSDictionary(dictionary: dayData).write(toFile: dayFile, atomically: true)
+                } catch {
+                    presentErrorMessage(presentMessage: error.localizedDescription, layout: .statusLine)
+                }
+            case let .failure(error):
+                presentErrorMessage(presentMessage: error.localizedDescription, layout: .statusLine)
+            }
+            
+            semaphore.signal()
+        })
+        
+        semaphore.wait()
+    }
+    
+    func getDurationId(for quarter: Int) -> String? {
+//        let session = URLSession.shared
+//        let request = URLRequest(url: URL(string: "https://dwei.org/currentDurationId")!)
+//        var strReturn: String? = nil
+//        let semaphore = DispatchSemaphore.init(value: 0)
+//
+//        let task = session.dataTask(with: request, completionHandler: { (data, _, error) -> Void in
+//            if error == nil {
+//                strReturn = String(data: data!, encoding: .utf8)
+//            }
+//            semaphore.signal()
+//        })
+//
+//        task.resume()
+//        semaphore.wait()
+//        return strReturn
+        if Preferences().schoolCode == "CMH" {
+            switch quarter {
+            case 1, 2:
+                return "87782"
+            case 3, 4:
+                return "87783"
+            default:
+                return nil
+            }
+        } else {
+            switch quarter {
+            case 1:
+                return "90656"
+            case 2:
+                return "90657"
+            case 3:
+                return "90658"
+            case 4:
+                return "90659"
+            default:
+                return nil
+            }
+        }
+    }
+    
+    func loginUsingPost() -> [HTTPCookie]? {
+        guard let password = Preferences().password, let username = Preferences().username else {
+            return nil
+        }
+        
+        let parameter = ["From":"", "Password": password, "Username": username, "InterfaceSource": "WebApp"]
+        print(parameter)
+        let jsonData = try! JSONSerialization.data(withJSONObject: parameter, options: .prettyPrinted)
+        
+        let session = URLSession.shared
+        var request = try! URLRequest(url: "https://mfriends.myschoolapp.com/api/SignIn", method: .post)
+        request.httpBody = jsonData
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        let semaphore = DispatchSemaphore(value: 0)
+        var cookie = [HTTPCookie]()
+        
+        let task = session.dataTask(with: request, completionHandler: {(data, response, error) in
+            let json = try! JSONSerialization.jsonObject(with: data!, options: .allowFragments)
+            print(json)
+            if let thisResponse = response as? HTTPURLResponse {
+                cookie = HTTPCookie.cookies(withResponseHeaderFields: thisResponse.allHeaderFields as! [String : String], for: thisResponse.url!)
+                semaphore.signal()
+            }
+        })
+        
+        task.resume()
+        semaphore.wait()
+        return cookie
+    }
+    
+    func downloadFile(url: URL, withName fileName: String) -> (filePath: URL?, error: Error?) {
+        let semaphore = DispatchSemaphore(value: 0)
+        
+        let attachmentPath = userDocumentPath + "/" + fileName
+        var returnURL: URL? = nil
+        var networkError: Error? = nil
+        let destination: DownloadRequest.DownloadFileDestination = { _, _ in
+            let fileURL = URL(fileURLWithPath: attachmentPath)
+            print(fileURL)
+            
+            return (fileURL, [.removePreviousFile, .createIntermediateDirectories])
+        }
+        
+        DispatchQueue.main.async {
+            UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        }
+        
+        let queue = DispatchQueue(label: "com.cnoon.response-queue", qos: .utility, attributes: [.concurrent])
+        Alamofire.download(url, to: destination).response(queue: queue, completionHandler: { response in
+            
+            if response.error == nil {
+            
+            NSLog("Attempting to open file: \(fileName)")
+            returnURL = URL(fileURLWithPath: attachmentPath)
+            } else {
+            networkError = response.error
+            }
+            
+            semaphore.signal()
+        })
+        
+        semaphore.wait()
+        
+        DispatchQueue.main.async {
+            UIApplication.shared.isNetworkActivityIndicatorVisible = false
+        }
+        
+        return (returnURL, networkError)
+    }
+    
+    func openFile(fileUrl: URL, from viewController: UIViewController) {
+        let documentController = UIDocumentInteractionController.init(url: fileUrl)
+        
+        if let delegate = viewController as? UIDocumentInteractionControllerDelegate {
+            documentController.delegate = delegate
+        }
+        
+        DispatchQueue.main.async {
+            viewController.navigationController?.cancelProgress()
+            documentController.presentPreview(animated: true)
+        }
+        
+    }
+    
+    func openLink(url: inout String, from viewController: UIViewController) {
+        if !url.contains("http") {
+            url = "http://" + url
+        }
+        if let urlToOpen = URL(string: url) {
+            if #available(iOS 9.0, *) {
+                let safariViewController = SFSafariViewController(url: urlToOpen)
+                DispatchQueue.main.async {
+                    viewController.present(safariViewController, animated: true, completion: nil)
+                }
+            } else {
+                DispatchQueue.main.async {
+                    let webViewController = WebViewController(url: urlToOpen)
+                    viewController.show(webViewController, sender: viewController)
+                }
+            }
+        }
+    }
+}
+>>>>>>> master
 
 class Layout {
     func squareSize(estimatedWidth: Int = 150) -> CGFloat {
@@ -509,3 +529,16 @@ class Layout {
     }
 }
 
+var managedContext: NSManagedObjectContext? {
+    guard let appDelegate =
+        UIApplication().delegate as? AppDelegate else {
+            return nil
+    }
+    
+    if #available(iOS 10.0, *) {
+        let managedContext = appDelegate.persistentContainer.viewContext
+        return managedContext
+    } else {
+        return appDelegate.managedObjectContext
+    }
+}

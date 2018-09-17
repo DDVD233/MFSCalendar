@@ -3,7 +3,7 @@
 //  MFSCalender
 //
 //  Created by David Dai on 2016/12/1.
-//  Copyright © 2016年 David. All rights reserved.
+//  Copyright © 2016 David. All rights reserved.
 //
 
 import UIKit
@@ -49,6 +49,7 @@ class classViewCell: UICollectionViewCell {
     
 
     @IBAction func classViewButtonClicked(_ sender: Any) {
+        //        TODO: Fix this
         guard index != nil else {
             return
         }
@@ -82,7 +83,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     
     let formatter = DateFormatter()
     var listEvents = [[String: Any]]()
-    var listClasses = [[String: Any]]()
+    var listClasses = [CourseMO]()
     var listHomework = [String: Array<Dictionary<String, Any>>]()
     var timer: Timer? = nil
 //    Format: {Lead_Section_ID: [Homework]}
@@ -123,6 +124,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
             NSLog("Already Logged in.")
         } else {
             print("Cannot initialize data because the user did not logged in")
+            return // Omit any following steps
         }
         
         if Reachability()?.connection == .wifi {
@@ -143,6 +145,8 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         
         UIApplication.shared.statusBarStyle = .lightContent
     }
+    
+    
 
     override func viewDidAppear(_ animated: Bool) {
         //classViewHeightConstraint.constant = classView.contentSize.height
@@ -193,7 +197,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     
     func teacherSideScheduleFix() {
         let preferences = Preferences()
-        if preferences.dataBuild < 1076 {
+        if preferences.dataBuild < 1100 {
             preferences.dataBuild = Int(Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "") ?? 0
             LoginView().getProfile()
             if !preferences.isStudent {
@@ -220,7 +224,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         })
 
         DispatchQueue.global().async(group: group, execute: {
-            self.refreshData()
+            NetworkOperations().refreshData()
         })
 
         group.wait()
@@ -391,10 +395,25 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         }
 
     }
+    
+    func dayCheck() -> String {
+        var dayOfSchool: String? = nil
+        let date = Date()
+        let formatter = DateFormatter()
+        let plistPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
+        let path = plistPath.appending("/Day.plist")
+        guard let dayDict = NSDictionary(contentsOfFile: path) as? [String: String] else {
+            return "No School"
+        }
+        formatter.dateFormat = "yyyyMMdd"
+        let checkDate = formatter.string(from: date)
+        
+        dayOfSchool = dayDict[checkDate] ?? "No School"
+        return dayOfSchool!
+    }
 
     func getListClasses(day: String) {
-        let currentPeriod = getCurrentPeriod()
-        self.listClasses = getClassDataAt(period: currentPeriod, day: day)
+        self.listClasses = getClassDataAt(date: Date())
     }
     
     func eventDataFetching() {
@@ -467,22 +486,6 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
 
     }
 
-    func dayCheck() -> String {
-        var dayOfSchool: String? = nil
-        let date = Date()
-        let formatter = DateFormatter()
-        let plistPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-        let path = plistPath.appending("/Day.plist")
-        guard let dayDict = NSDictionary(contentsOfFile: path) as? [String: String] else {
-            return "No School"
-        }
-        formatter.dateFormat = "yyyyMMdd"
-        let checkDate = formatter.string(from: date)
-
-        dayOfSchool = dayDict[checkDate] ?? "No School"
-        return dayOfSchool!
-    }
-
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -523,20 +526,18 @@ extension Main: UICollectionViewDelegate, UICollectionViewDataSource, UICollecti
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "classViewCell", for: indexPath as IndexPath) as! classViewCell
         let row = indexPath.row
         let classData = listClasses[row]
-        let className = classData["className"] as? String
-        let teacher = classData["teacherName"] as? String
+        let className = classData.name
+        let teacher = classData.teacherName
         
-        cell.roomNumber.text = classData["roomNumber"] as? String ?? ""
+        cell.roomNumber.text = classData.room ?? ""
 
         cell.teacher.text = teacher
         cell.className.text = className
         
-        if let period = classData["period"] as? Int {
-            if row == 0 || row == 1 {
-                cell.period.text = periodTimerString(periodNumber: period)
-            } else {
-                cell.period.text = getMeetTime(period: period)
-            }
+        if row == 0 || row == 1 {
+            cell.period.text = periodTimerString(course: classData)
+        } else {
+            cell.period.text = getMeetTimeInterval(classData: classData)
         }
 
 //        if let leadSectionId = ClassView().getLeadSectionID(classDict: classData) {
@@ -562,7 +563,6 @@ extension Main: UICollectionViewDelegate, UICollectionViewDataSource, UICollecti
 //                cell.homeworkButton.setTitle(homeworkButtonText, for: .normal)
 //            }
 //        }
-        cell.index = classData["index"] as? Int
 
         return cell
     }
@@ -572,6 +572,7 @@ extension Main: UICollectionViewDelegate, UICollectionViewDataSource, UICollecti
 extension Main {
     //Refresh day data and event data. Update version number.
     //刷新Day和Event数据，并更新版本号
+<<<<<<< HEAD
     func refreshData() {
         let semaphore = DispatchSemaphore.init(value: 0)
 
@@ -591,6 +592,16 @@ extension Main {
                 } catch {
                     presentErrorMessage(presentMessage: error.localizedDescription, layout: .statusLine)
                 }
+=======
+
+    func refreshEvents() {
+        let semaphore = DispatchSemaphore.init(value: 0)
+
+        provider.request(MyService.getCalendarEvent, completion: { result in
+            switch result {
+            case .success(_):
+                print("Info: event data refreshed")
+>>>>>>> master
             case let .failure(error):
                 presentErrorMessage(presentMessage: error.localizedDescription, layout: .statusLine)
             }

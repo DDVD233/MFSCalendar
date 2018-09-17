@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 2018-08-14 -- v3.2.1
 - Fixed an issue that checkin is not cached properly when app first started. (#1561)
 
@@ -25,6 +26,8 @@ dependents like remote config to be working inside the app extensions.
 - Improved documentation on InstanceID usage for GDPR.
 - Improved the keypair handling during GCM to FCM migration. If you are migrating from GCM to FCM, we encourage you to update to this version and above.
 
+=======
+>>>>>>> master
 # 2018-02-06 -- v2.0.9
 - Improved support for language targeting for FCM service. Server updates happen more efficiently when language changes.
 - Improved support for FCM token auto generation enable/disable functions.

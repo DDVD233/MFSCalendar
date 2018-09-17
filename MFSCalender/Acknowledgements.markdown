@@ -810,6 +810,7 @@ Copyright 2018 Google
       copyright notice that is included in or attached to the work
       (an example is provided in the Appendix below).
 
+<<<<<<< HEAD
       "Derivative Works" shall mean any work, whether in Source or Object
       form, that is based on (or derived from) the Work and for which the
       editorial revisions, annotations, elaborations, or other modifications
@@ -817,6 +818,9 @@ Copyright 2018 Google
       of this License, Derivative Works shall not include works that remain
       separable from, or merely link (or bind by name) to the interfaces of,
       the Work and Derivative Works thereof.
+=======
+Fabric: Copyright 2018 Google, Inc. All Rights Reserved. Use of this software is subject to the terms and conditions of the Fabric Software and Services Agreement located at https://fabric.io/terms. OSS: http://get.fabric.io/terms/opensource.txt
+>>>>>>> master
 
       "Contribution" shall mean any work of authorship, including
       the original version of the Work and any modifications or additions
@@ -870,11 +874,15 @@ Copyright 2018 Google
       (b) You must cause any modified files to carry prominent notices
           stating that You changed the files; and
 
+<<<<<<< HEAD
       (c) You must retain, in the Source form of any Derivative Works
           that You distribute, all copyright, patent, trademark, and
           attribution notices from the Source form of the Work,
           excluding those notices that do not pertain to any part of
           the Derivative Works; and
+=======
+Copyright 2018 Google
+>>>>>>> master
 
       (d) If the Work includes a "NOTICE" text file as part of its
           distribution, then any Derivative Works that You distribute must

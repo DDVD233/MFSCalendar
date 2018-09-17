@@ -31,7 +31,11 @@
 + (SDWebImageTransition *)fadeTransition {
     SDWebImageTransition *transition = [SDWebImageTransition new];
 #if SD_UIKIT
+<<<<<<< HEAD
     transition.animationOptions = UIViewAnimationOptionTransitionCrossDissolve | UIViewAnimationOptionAllowUserInteraction;
+=======
+    transition.animationOptions = UIViewAnimationOptionTransitionCrossDissolve;
+>>>>>>> master
 #else
     transition.animations = ^(__kindof NSView * _Nonnull view, NSImage * _Nullable image) {
         CATransition *trans = [CATransition animation];
@@ -45,7 +49,11 @@
 + (SDWebImageTransition *)flipFromLeftTransition {
     SDWebImageTransition *transition = [SDWebImageTransition new];
 #if SD_UIKIT
+<<<<<<< HEAD
     transition.animationOptions = UIViewAnimationOptionTransitionFlipFromLeft | UIViewAnimationOptionAllowUserInteraction;
+=======
+    transition.animationOptions = UIViewAnimationOptionTransitionFlipFromLeft;
+>>>>>>> master
 #else
     transition.animations = ^(__kindof NSView * _Nonnull view, NSImage * _Nullable image) {
         CATransition *trans = [CATransition animation];
@@ -60,7 +68,11 @@
 + (SDWebImageTransition *)flipFromRightTransition {
     SDWebImageTransition *transition = [SDWebImageTransition new];
 #if SD_UIKIT
+<<<<<<< HEAD
     transition.animationOptions = UIViewAnimationOptionTransitionFlipFromRight | UIViewAnimationOptionAllowUserInteraction;
+=======
+    transition.animationOptions = UIViewAnimationOptionTransitionFlipFromRight;
+>>>>>>> master
 #else
     transition.animations = ^(__kindof NSView * _Nonnull view, NSImage * _Nullable image) {
         CATransition *trans = [CATransition animation];
@@ -75,7 +87,11 @@
 + (SDWebImageTransition *)flipFromTopTransition {
     SDWebImageTransition *transition = [SDWebImageTransition new];
 #if SD_UIKIT
+<<<<<<< HEAD
     transition.animationOptions = UIViewAnimationOptionTransitionFlipFromTop | UIViewAnimationOptionAllowUserInteraction;
+=======
+    transition.animationOptions = UIViewAnimationOptionTransitionFlipFromTop;
+>>>>>>> master
 #else
     transition.animations = ^(__kindof NSView * _Nonnull view, NSImage * _Nullable image) {
         CATransition *trans = [CATransition animation];
@@ -90,7 +106,11 @@
 + (SDWebImageTransition *)flipFromBottomTransition {
     SDWebImageTransition *transition = [SDWebImageTransition new];
 #if SD_UIKIT
+<<<<<<< HEAD
     transition.animationOptions = UIViewAnimationOptionTransitionFlipFromBottom | UIViewAnimationOptionAllowUserInteraction;
+=======
+    transition.animationOptions = UIViewAnimationOptionTransitionFlipFromBottom;
+>>>>>>> master
 #else
     transition.animations = ^(__kindof NSView * _Nonnull view, NSImage * _Nullable image) {
         CATransition *trans = [CATransition animation];
@@ -105,7 +125,11 @@
 + (SDWebImageTransition *)curlUpTransition {
     SDWebImageTransition *transition = [SDWebImageTransition new];
 #if SD_UIKIT
+<<<<<<< HEAD
     transition.animationOptions = UIViewAnimationOptionTransitionCurlUp | UIViewAnimationOptionAllowUserInteraction;
+=======
+    transition.animationOptions = UIViewAnimationOptionTransitionCurlUp;
+>>>>>>> master
 #else
     transition.animations = ^(__kindof NSView * _Nonnull view, NSImage * _Nullable image) {
         CATransition *trans = [CATransition animation];
@@ -120,7 +144,11 @@
 + (SDWebImageTransition *)curlDownTransition {
     SDWebImageTransition *transition = [SDWebImageTransition new];
 #if SD_UIKIT
+<<<<<<< HEAD
     transition.animationOptions = UIViewAnimationOptionTransitionCurlDown | UIViewAnimationOptionAllowUserInteraction;
+=======
+    transition.animationOptions = UIViewAnimationOptionTransitionCurlDown;
+>>>>>>> master
 #else
     transition.animations = ^(__kindof NSView * _Nonnull view, NSImage * _Nullable image) {
         CATransition *trans = [CATransition animation];

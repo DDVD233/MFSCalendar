@@ -3,7 +3,7 @@
 //  MFSCalendar
 //
 //  Created by David Dai on 2017/6/22.
-//  Copyright © 2017年 David. All rights reserved.
+//  Copyright © 2017 David. All rights reserved.
 //
 
 import UIKit
@@ -175,7 +175,6 @@ class classDetailViewController: UITableViewController, UIDocumentInteractionCon
                     switch result {
 
                     case let .success(response):
-                        print(response.request?.url)
                         do {
                             guard let json = try response.mapJSON(failsOnEmptyData: true) as? Array<Dictionary<String, Any?>> else {
                                 semaphore.signal()

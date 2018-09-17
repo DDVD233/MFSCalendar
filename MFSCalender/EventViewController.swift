@@ -2,7 +2,7 @@
 //  EventViewController.swift
 //  MFSMobile
 //
-//  Created by 戴元平 on 1/19/18.
+//  Created by David Dai on 1/19/18.
 //  Copyright © 2018 David. All rights reserved.
 //
 

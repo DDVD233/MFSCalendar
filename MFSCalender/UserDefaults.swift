@@ -29,15 +29,18 @@ public class Preferences {
         }
     }
     
-    public var baseURL: String {
-        get {
-            return userDefaults.string(forKey: "baseURL" ) ?? "https://mfriends.myschoolapp.com"
-        }
-        set(value) {
-            userDefaults.set(value, forKey: "baseURL" )
+    public var baseDomain: String {
+        switch schoolCode ?? "MFS" {
+        case "CMH":
+            return "catholicmemorial-hs.myschoolapp.com"
+        case "MFS":
+            return "mfriends.myschoolapp.com"
+        default:
+            return "mfriends.myschoolapp.com"
         }
     }
     
+<<<<<<< HEAD
     public var davidBaseURL: String {
         get {
             return "https://dwei.org"
@@ -45,11 +48,15 @@ public class Preferences {
         set(value) {
             userDefaults.set(value, forKey: "baseURL" )
         }
+=======
+    public var baseURL: String {
+        return "https://" + baseDomain
+>>>>>>> master
     }
     
     public var schoolCode: String? {
         get {
-            return userDefaults.string(forKey: "schoolCode" )
+            return userDefaults.string(forKey: "schoolCode" ) ?? "MFS"
         }
         set(value) {
             userDefaults.set(value, forKey: "schoolCode" )

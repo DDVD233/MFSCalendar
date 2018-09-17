@@ -33,7 +33,11 @@ import libxmlKanna
 
 extension String.Encoding {
     var IANACharSetName: String? {
+<<<<<<< HEAD
         #if os(Linux) && swift(>=4)
+=======
+        #if os(Linux)
+>>>>>>> master
         switch self {
         case .ascii:
             return "us-ascii"
@@ -82,6 +86,7 @@ extension String.Encoding {
         default:
             return nil
         }
+<<<<<<< HEAD
         #elseif os(Linux) && swift(>=3)
         switch self {
         case String.Encoding.ascii:
@@ -131,6 +136,8 @@ extension String.Encoding {
         default:
             return nil
         }
+=======
+>>>>>>> master
         #else
         let cfenc = CFStringConvertNSStringEncodingToEncoding(self.rawValue)
         guard let cfencstr = CFStringConvertEncodingToIANACharSetName(cfenc) else {

@@ -1,4 +1,5 @@
 PODS:
+<<<<<<< HEAD
   - Alamofire (4.7.3)
   - ChameleonFramework/Default (2.1.0)
   - ChameleonFramework/Swift (2.1.0):
@@ -37,12 +38,47 @@ PODS:
   - FirebasePerformance (2.1.1):
     - FirebaseAnalytics (~> 5.1)
     - FirebaseInstanceID (~> 3.2)
+=======
+  - Alamofire (4.7.0)
+  - ChameleonFramework/Default (2.1.0)
+  - ChameleonFramework/Swift (2.1.0):
+    - ChameleonFramework/Default
+  - Charts (3.0.5):
+    - Charts/Core (= 3.0.5)
+  - Charts/Core (3.0.5)
+  - Crashlytics (3.10.1):
+    - Fabric (~> 1.7.5)
+  - DGElasticPullToRefresh (1.1)
+  - Down (0.5.0)
+  - DZNEmptyDataSet (1.8.1)
+  - Fabric (1.7.5)
+  - Firebase/Core (4.10.1):
+    - FirebaseAnalytics (= 4.1.0)
+    - FirebaseCore (= 4.0.17)
+  - Firebase/Performance (4.10.1):
+    - Firebase/Core
+    - FirebasePerformance (= 1.1.2)
+  - FirebaseAnalytics (4.1.0):
+    - FirebaseCore (~> 4.0)
+    - FirebaseInstanceID (~> 2.0)
+    - GoogleToolboxForMac/NSData+zlib (~> 2.1)
+    - nanopb (~> 0.3)
+  - FirebaseCore (4.0.17):
+    - GoogleToolboxForMac/NSData+zlib (~> 2.1)
+  - FirebaseInstanceID (2.0.9):
+    - FirebaseCore (~> 4.0)
+  - FirebasePerformance (1.1.2):
+    - FirebaseAnalytics (~> 4.1)
+    - FirebaseInstanceID (~> 2.0)
+    - FirebaseSwizzlingUtilities (~> 1.0)
+>>>>>>> master
     - GoogleToolboxForMac/Logger (~> 2.1)
     - "GoogleToolboxForMac/NSData+zlib (~> 2.1)"
     - GoogleUtilities/ISASwizzler (~> 5.2.0)
     - GoogleUtilities/MethodSwizzler (~> 5.2.0)
     - GTMSessionFetcher/Core (~> 1.1)
     - Protobuf (~> 3.5)
+<<<<<<< HEAD
   - FSCalendar (2.7.9)
   - GoogleAppMeasurement (5.1.2):
     - GoogleUtilities/AppDelegateSwizzler (~> 5.2.0)
@@ -73,14 +109,30 @@ PODS:
   - GoogleUtilities/Reachability (5.2.3):
     - GoogleUtilities/Logger
   - GTMSessionFetcher/Core (1.2.0)
+=======
+  - FirebaseSwizzlingUtilities (1.0.0)
+  - FSCalendar (2.7.9)
+  - GoogleToolboxForMac/Defines (2.1.3)
+  - GoogleToolboxForMac/Logger (2.1.3):
+    - GoogleToolboxForMac/Defines (= 2.1.3)
+  - GoogleToolboxForMac/NSData+zlib (2.1.3):
+    - GoogleToolboxForMac/Defines (= 2.1.3)
+  - GTMSessionFetcher/Core (1.1.14)
+>>>>>>> master
   - JSQWebViewController (6.0.0)
   - Kanna (4.0.2)
   - LTMorphingLabel (0.5.7)
   - M13Checkbox (3.2.2)
   - M13ProgressSuite (1.2.9)
+<<<<<<< HEAD
   - Moya (11.0.2):
     - Moya/Core (= 11.0.2)
   - Moya/Core (11.0.2):
+=======
+  - Moya (11.0.1):
+    - Moya/Core (= 11.0.1)
+  - Moya/Core (11.0.1):
+>>>>>>> master
     - Alamofire (~> 4.1)
     - Result (~> 3.0)
   - nanopb (0.3.8):
@@ -96,6 +148,7 @@ PODS:
   - ReachabilitySwift (4.2.1)
   - Result (3.2.4)
   - SCLAlertView (0.8)
+<<<<<<< HEAD
   - SDWebImage (4.4.2):
     - SDWebImage/Core (= 4.4.2)
   - SDWebImage/Core (4.4.2)
@@ -111,6 +164,21 @@ PODS:
   - UICircularProgressRing (4.0.0)
   - UrbanAirship-iOS-SDK (9.4.0)
   - XLPagerTabStrip (8.0.1)
+=======
+  - SDWebImage (4.3.2):
+    - SDWebImage/Core (= 4.3.2)
+  - SDWebImage/Core (4.3.2)
+  - SkyFloatingLabelTextField (3.4.0)
+  - SnapKit (4.0.0)
+  - Spring (1.0.3)
+  - SVProgressHUD (2.2.5)
+  - SwiftDate (4.5.1)
+  - SwiftMessages (4.1.0)
+  - SwiftyJSON (4.0.0)
+  - UICircularProgressRing (1.8.4)
+  - UrbanAirship-iOS-SDK (8.6.3)
+  - XLPagerTabStrip (8.0.0)
+>>>>>>> master
 
 DEPENDENCIES:
   - Alamofire
@@ -193,11 +261,24 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   ChameleonFramework:
     :git: https://github.com/ViccAlexander/Chameleon.git
+<<<<<<< HEAD
+=======
+  Kanna:
+    :branch: feature/v4.0.0
+    :git: https://github.com/tid-kijyun/Kanna.git
+  SkyFloatingLabelTextField:
+    :branch: master
+    :git: https://github.com/Skyscanner/SkyFloatingLabelTextField.git
+  Spring:
+    :branch: swift4
+    :git: https://github.com/MengTo/Spring.git
+>>>>>>> master
 
 CHECKOUT OPTIONS:
   ChameleonFramework:
     :commit: 6dd284bde21ea2e7f9fd89bc36f40df16e16369d
     :git: https://github.com/ViccAlexander/Chameleon.git
+<<<<<<< HEAD
 
 SPEC CHECKSUMS:
   Alamofire: c7287b6e5d7da964a70935e5db17046b7fde6568
@@ -218,12 +299,46 @@ SPEC CHECKSUMS:
   GoogleToolboxForMac: 91c824d21e85b31c2aae9bb011c5027c9b4e738f
   GoogleUtilities: 6f681e27050c5e130325e89fa0316dfca826f954
   GTMSessionFetcher: 0c4baf0a73acd0041bf9f71ea018deedab5ea84e
+=======
+  Kanna:
+    :commit: 81ce91fd485b637517c340c73590a9b59ac9f7d5
+    :git: https://github.com/tid-kijyun/Kanna.git
+  SkyFloatingLabelTextField:
+    :commit: acc9ee158f768717d3eac6d992bc6994882c3d4a
+    :git: https://github.com/Skyscanner/SkyFloatingLabelTextField.git
+  Spring:
+    :commit: 8d04081f4b27ff85161addee45b21c1156f0143f
+    :git: https://github.com/MengTo/Spring.git
+
+SPEC CHECKSUMS:
+  Alamofire: 907e0a98eb68cdb7f9d1f541a563d6ac5dc77b25
+  ChameleonFramework: d21a3cc247abfe5e37609a283a8238b03575cf64
+  Charts: 45cdc985b764c838b35ee47eb1365d15735f6d1a
+  Crashlytics: aee1a064cbbf99b32efa3f056a5f458d846bc8ff
+  DGElasticPullToRefresh: 28f11a6026302a90f8ffebbc6e24748e584dddd3
+  Down: 560261dbefd41f7a86f11c5e7a5cd9f9596ae5b3
+  DZNEmptyDataSet: 9525833b9e68ac21c30253e1d3d7076cc828eaa7
+  Fabric: ae7146a5f505ea370a1e44820b4b1dc8890e2890
+  Firebase: 92c6ba593e32db0defde464a9adc981d5cb49f97
+  FirebaseAnalytics: 3dfae28d4a5e06f86c4fae830efc2ad3fadb19bc
+  FirebaseCore: 872307b001bbefda1dfa0dbfffa50a6919023d4a
+  FirebaseInstanceID: d2058a35e9bebda1b6dd42486b84917bde552a9d
+  FirebasePerformance: 96c831a9eaf8d2ddf8bb37a4a6f6dd1b4bfe929f
+  FirebaseSwizzlingUtilities: f1c49a5a372ac852c853722a5891a0a5e2344a6c
+  FSCalendar: a04b09f16f811bc92e82f3cf852a15225233b9d5
+  GoogleToolboxForMac: 2501e2ad72a52eb3dfe7bd9aee7dad11b858bd20
+  GTMSessionFetcher: 390ea358e5a0d0133153806f744662dad933d06b
+>>>>>>> master
   JSQWebViewController: 51041569b75d19dbb6b7fe0b7ae053c32409a9be
   Kanna: c60b61d72554bf04ed1ee074f9b379855cab4892
   LTMorphingLabel: 9d1c38bd602fe505f264d3e9fdb780995142f275
   M13Checkbox: a8c2491cfbbca10797925fd0b9154a782bf40d89
   M13ProgressSuite: ea9f7263e73e9215e6849dfa54e29ee0ad6a145c
+<<<<<<< HEAD
   Moya: a725035953bc1c0eb1be505ab903984501d82440
+=======
+  Moya: 3d594ada51a21cc02b18739ab578a1984f900c8a
+>>>>>>> master
   nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
   NVActivityIndicatorView: 963f62bf9f993fcf23218e55958e5b1761b9504c
   p2.OAuth2: fdc2effef37793a8f775dd4760bc4c1ea906c956
@@ -231,6 +346,7 @@ SPEC CHECKSUMS:
   ReachabilitySwift: 35720ffea59c1c76d15f885be77fd33e33985427
   Result: d2d07204ce72856f1fd9130bbe42c35a7b0fea10
   SCLAlertView: 6a77bb2edfc65e04dbe57725546cb4107a506b85
+<<<<<<< HEAD
   SDWebImage: 624d6e296c69b244bcede364c72ae0430ac14681
   SkyFloatingLabelTextField: f0672b67cd0e86abda946c0dc3b2fe8580767dbb
   SnapKit: a42d492c16e80209130a3379f73596c3454b7694
@@ -244,5 +360,20 @@ SPEC CHECKSUMS:
   XLPagerTabStrip: c908b17cbf42fcd2598ee1adfc49bae25444d88a
 
 PODFILE CHECKSUM: 0a84edbc11855a83b2f54b9d7befac615e8b24e1
+=======
+  SDWebImage: 29bd3c0bc1f01e5eb59720847c64ad4c4ca1af5d
+  SkyFloatingLabelTextField: 52b6ade8588f40c5bed423c651c70848f068e1dc
+  SnapKit: a42d492c16e80209130a3379f73596c3454b7694
+  Spring: 3f02b5dc3308572ef177b3cad0fa7bbc4b0706f7
+  SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
+  SwiftDate: 7b56d42a221f582047287deb256b23fc5ed49a60
+  SwiftMessages: 1bacc783c8f10bdfdc57c14860cae8a1f1fa6591
+  SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
+  UICircularProgressRing: 653b31f7252b2959e8234f5b9ea5f925da755954
+  UrbanAirship-iOS-SDK: 61bad27cf3ea49e2da7c9a6c469674bf3ac2ffa0
+  XLPagerTabStrip: d1ab378af0923320ec0b5eab11d7b2f803d31261
+
+PODFILE CHECKSUM: 97aeb0c0041e64c242311e980b499f94060bf80e
+>>>>>>> master
 
 COCOAPODS: 1.5.2

@@ -19,7 +19,11 @@
 	<key>CFBundleShortVersionString</key>
 	<string>1.5.2</string>
 	<key>CFBundleVersion</key>
+<<<<<<< HEAD
 	<string>1248</string>
+=======
+	<string>1236</string>
+>>>>>>> master
 	<key>NSExtension</key>
 	<dict>
 		<key>NSExtensionMainStoryboard</key>

@@ -31,8 +31,14 @@ target 'MFSMobile' do
   pod 'SnapKit'
   pod 'JSQWebViewController'
   pod 'Down'
+<<<<<<< HEAD
   pod 'Spring'
   pod 'Kanna'
+=======
+
+  pod 'Spring', :git => 'https://github.com/MengTo/Spring.git', :branch => 'swift4'
+  pod 'Kanna', :git => 'https://github.com/tid-kijyun/Kanna.git', :branch => 'feature/v4.0.0'
+>>>>>>> master
   pod 'SVProgressHUD'
   pod 'UrbanAirship-iOS-SDK'
   pod 'Charts'

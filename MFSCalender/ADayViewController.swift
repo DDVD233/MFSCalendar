@@ -3,7 +3,7 @@
 //  MFSCalender
 //
 //  Created by David Dai on 2017/2/25.
-//  Copyright © 2017年 David. All rights reserved.
+//  Copyright © 2017 David. All rights reserved.
 //
 
 import UIKit
@@ -35,11 +35,12 @@ class customCell: UITableViewCell {
 
 class ADay: UIViewController, IndicatorInfoProvider {
     
-    var daySelected: String? = nil
+    var daySelected: Date? = nil
+    var dayLetter: String? = nil
 
     @IBOutlet var tableView: UITableView!
     
-    var listClasses = [[String: Any]]()
+    var listClasses = [CourseMO]()
     var previewController: UIViewControllerPreviewing? = nil
 
     override func viewDidLoad() {
@@ -76,16 +77,9 @@ class ADay: UIViewController, IndicatorInfoProvider {
             return
         }
         
-        NSLog("Day: %@", daySelected!)
-        let plistPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-        let fileName = "/Class" + daySelected! + ".plist"
-        NSLog(fileName)
-        let path = plistPath.appending(fileName)
-        NSLog(path)
-
-        if let data = NSArray(contentsOfFile: path) as? [[String: Any]] {
-            self.listClasses = data
-        }
+        print("Day: %@", daySelected!)
+        let startTime = daySelected!.atTime(hour: 0, minute: 0, second: 0)!
+        self.listClasses = getClassDataAt(date: startTime)
         print(listClasses)
         
         DispatchQueue.main.async {
@@ -98,14 +92,9 @@ class ADay: UIViewController, IndicatorInfoProvider {
         // Dispose of any resources that can be recreated.
     }
     
-    
-
-    @IBAction func unWindSegueBack(segue: UIStoryboardSegue) {
-    }
-    
     func indicatorInfo(for pagerTabStripController: PagerTabStripViewController) -> IndicatorInfo {
-        if daySelected != nil {
-            return IndicatorInfo(title: daySelected! + " Day")
+        if dayLetter != nil {
+            return IndicatorInfo(title: dayLetter! + " Day")
         } else {
             return IndicatorInfo(title: "Classes")
         }
@@ -120,33 +109,33 @@ extension ADay: UITableViewDelegate, UITableViewDataSource, UIViewControllerPrev
 
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cellIdentifier", for: indexPath as IndexPath) as? customCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cellIdentifier", for: indexPath as IndexPath) as! customCell
 
         let row = indexPath.row
 
         let rowDict = self.listClasses[row] 
 
-        cell?.ClassName.text = rowDict["className"] as? String
-        if let period = rowDict["period"] as? Int {
-            cell?.PeriodNumber.text = String(describing: period)
+        cell.ClassName.text = rowDict.name
+//        if let period = rowDict["period"] as? Int {
+//            cell?.PeriodNumber.text = String(describing: period)
+//
+//            cell?.PeriodTime.text = getMeetTime(period: period)
+//        }
 
-            cell?.PeriodTime.text = getMeetTime(period: period)
-        }
-
-        let roomN = rowDict["roomNumber"] as? String
-        cell?.RoomNumber.text = roomN
+        let roomN = rowDict.room
+        cell.RoomNumber.text = roomN
         
-        cell?.teachersName.text = rowDict["teacherName"] as? String
+        cell.teachersName.text = rowDict.teacherName
         
-        if rowDict["index"] != nil {
-            cell?.selectionStyle = .default
-            cell?.accessoryType = .disclosureIndicator
-        } else {
-            cell?.selectionStyle = .none
-           // cell?.accessoryType = .none
-        }
+//        if rowDict["index"] != nil {
+//            cell.selectionStyle = .default
+//            cell.accessoryType = .disclosureIndicator
+//        } else {
+//            cell.selectionStyle = .none
+//           // cell?.accessoryType = .none
+//        }
 
-        return cell!
+        return cell
     }
     
     @available(iOS 9.0, *)
@@ -161,7 +150,7 @@ extension ADay: UITableViewDelegate, UITableViewDataSource, UIViewControllerPrev
         }
         
         let rowDict = self.listClasses[indexPath.row]
-        guard let index = rowDict["index"] as? Int else {
+        guard let index = rowDict.index else {
             return nil
         }
         
@@ -178,7 +167,7 @@ extension ADay: UITableViewDelegate, UITableViewDataSource, UIViewControllerPrev
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let rowDict = self.listClasses[indexPath.row] 
-        guard let index = rowDict["index"] as? Int else {
+        guard let index = rowDict.index else {
             return
         }
         

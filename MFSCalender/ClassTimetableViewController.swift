@@ -3,7 +3,7 @@
 //  MFSCalendar
 //
 //  Created by David Dai on 2017/8/7.
-//  Copyright © 2017年 David. All rights reserved.
+//  Copyright © 2017 David. All rights reserved.
 //
 
 import UIKit
@@ -15,15 +15,15 @@ class timeTableParentViewController: SegmentedPagerTabStripViewController {
     }
     
     override public func viewControllers(for pagerTabStripController: PagerTabStripViewController) -> [UIViewController] {
-        var arrayToReturn = [UIViewController]()
-        for alphabet in "ABCDEF" {
-            let viewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier :"timeTableViewController") as! ADay
-            
-            viewController.daySelected = String(alphabet)
-            
-            arrayToReturn.append(viewController)
-        }
-        return arrayToReturn
+//        var arrayToReturn = [UIViewController]()
+//        for alphabet in "ABCDEF" {
+//            let viewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "timeTableViewController") as! ADay
+//            
+//            viewController.daySelected = String(alphabet)
+//            
+//            arrayToReturn.append(viewController)
+//        }
+        return [UIViewController]()
     }
     
 }

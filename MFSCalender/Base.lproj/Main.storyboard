@@ -1,11 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<<<<<<< HEAD
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="TWf-dU-uxH">
+=======
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="TWf-dU-uxH">
+>>>>>>> master
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
+<<<<<<< HEAD
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
+=======
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
+>>>>>>> master
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -306,6 +317,7 @@
                             <view clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8Lz-Go-b0R">
                                 <rect key="frame" x="22.5" y="133.5" width="330" height="400"/>
                                 <subviews>
+<<<<<<< HEAD
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="MFS Logo.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="XkU-JF-CFs">
                                         <rect key="frame" x="125" y="23" width="80" height="80"/>
                                         <constraints>
@@ -314,6 +326,9 @@
                                         </constraints>
                                     </imageView>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="H8k-9e-xfx" customClass="SkyFloatingLabelTextField" customModule="SkyFloatingLabelTextField">
+=======
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="H8k-9e-xfx" customClass="SkyFloatingLabelTextField" customModule="SkyFloatingLabelTextField">
+>>>>>>> master
                                         <rect key="frame" x="8" y="130" width="314" height="50"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="50" id="EqS-bX-vsM"/>
@@ -392,7 +407,7 @@
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eff-bQ-VpN">
                                         <rect key="frame" x="8" y="333" width="314" height="50"/>
-                                        <color key="backgroundColor" red="1" green="0.40000000600000002" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="backgroundColor" red="1" green="0.49327188729999999" blue="0.47399842739999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="50" id="CTT-TB-JYS"/>
                                         </constraints>
@@ -434,15 +449,38 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                     </view>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JHd-ia-qFN">
+                                        <rect key="frame" x="75" y="23" width="80" height="80"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="80" id="6kT-gB-pBf"/>
+                                            <constraint firstAttribute="height" constant="80" id="X5n-V6-eXX"/>
+                                        </constraints>
+                                        <state key="normal" backgroundImage="MFS Logo.jpg"/>
+                                        <connections>
+                                            <action selector="MFSSelected:" destination="vao-er-1v4" eventType="touchUpInside" id="rtb-Po-AQw"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IHx-BP-0dU">
+                                        <rect key="frame" x="175" y="23" width="80" height="80"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="80" id="Ac9-8m-0zb"/>
+                                            <constraint firstAttribute="height" constant="80" id="Sav-uz-LRX"/>
+                                        </constraints>
+                                        <state key="normal" backgroundImage="CMH Logo.png"/>
+                                        <connections>
+                                            <action selector="CMHSelected:" destination="vao-er-1v4" eventType="touchUpInside" id="61O-Lj-zxh"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="EPk-aJ-Rux" secondAttribute="trailing" constant="8" id="0B8-Ot-qgA"/>
                                     <constraint firstItem="o2p-ku-fch" firstAttribute="leading" secondItem="8Lz-Go-b0R" secondAttribute="leading" constant="8" id="14B-gs-UVg"/>
+                                    <constraint firstItem="JHd-ia-qFN" firstAttribute="top" secondItem="8Lz-Go-b0R" secondAttribute="top" constant="23" id="1jU-ms-RAj"/>
                                     <constraint firstAttribute="trailing" secondItem="eff-bQ-VpN" secondAttribute="trailing" constant="8" id="1ru-Ql-wHN"/>
+                                    <constraint firstItem="H8k-9e-xfx" firstAttribute="top" secondItem="IHx-BP-0dU" secondAttribute="bottom" constant="27" id="6cU-cC-S4C"/>
                                     <constraint firstItem="EPk-aJ-Rux" firstAttribute="leading" secondItem="8Lz-Go-b0R" secondAttribute="leading" constant="8" id="9CG-7k-JDG"/>
                                     <constraint firstItem="o2p-ku-fch" firstAttribute="top" secondItem="EPk-aJ-Rux" secondAttribute="bottom" constant="3.3300000000000001" id="FD9-Of-4F4"/>
-                                    <constraint firstItem="H8k-9e-xfx" firstAttribute="top" secondItem="XkU-JF-CFs" secondAttribute="bottom" constant="27" id="Fu8-4n-mvL"/>
                                     <constraint firstAttribute="bottom" secondItem="eff-bQ-VpN" secondAttribute="bottom" constant="17" id="KjL-ix-ANe"/>
                                     <constraint firstAttribute="trailing" secondItem="o2p-ku-fch" secondAttribute="trailing" constant="8" id="Kq3-mm-g7Z"/>
                                     <constraint firstAttribute="trailing" secondItem="H8k-9e-xfx" secondAttribute="trailing" constant="8" id="Kwg-6v-M7u"/>
@@ -450,11 +488,13 @@
                                     <constraint firstAttribute="width" priority="750" constant="330" id="Mgb-ok-j80"/>
                                     <constraint firstItem="cP5-ob-YKv" firstAttribute="centerX" secondItem="8Lz-Go-b0R" secondAttribute="centerX" id="NLw-xk-kIk"/>
                                     <constraint firstAttribute="height" priority="750" constant="400" id="OgX-Jq-vOI"/>
-                                    <constraint firstItem="XkU-JF-CFs" firstAttribute="top" secondItem="8Lz-Go-b0R" secondAttribute="top" priority="750" constant="23" id="RvA-4d-LKP"/>
-                                    <constraint firstItem="XkU-JF-CFs" firstAttribute="centerX" secondItem="8Lz-Go-b0R" secondAttribute="centerX" id="cCU-Hf-RwY"/>
                                     <constraint firstItem="eff-bQ-VpN" firstAttribute="top" secondItem="o2p-ku-fch" secondAttribute="bottom" constant="28" id="cQk-vv-vHL"/>
+                                    <constraint firstItem="IHx-BP-0dU" firstAttribute="centerX" secondItem="8Lz-Go-b0R" secondAttribute="centerX" constant="50" id="o6f-dO-qyt"/>
                                     <constraint firstItem="cP5-ob-YKv" firstAttribute="centerY" secondItem="8Lz-Go-b0R" secondAttribute="centerY" id="ocX-fl-tFA"/>
+                                    <constraint firstItem="IHx-BP-0dU" firstAttribute="top" secondItem="8Lz-Go-b0R" secondAttribute="top" constant="23" id="scR-GV-p77"/>
                                     <constraint firstItem="eff-bQ-VpN" firstAttribute="leading" secondItem="8Lz-Go-b0R" secondAttribute="leading" constant="8" id="t30-AL-crK"/>
+                                    <constraint firstItem="JHd-ia-qFN" firstAttribute="centerX" secondItem="8Lz-Go-b0R" secondAttribute="centerX" constant="-50" id="t6M-Ui-CT2"/>
+                                    <constraint firstItem="H8k-9e-xfx" firstAttribute="top" secondItem="JHd-ia-qFN" secondAttribute="bottom" constant="27" id="v1O-kq-npA"/>
                                     <constraint firstItem="H8k-9e-xfx" firstAttribute="leading" secondItem="8Lz-Go-b0R" secondAttribute="leading" constant="8" id="vnB-gN-Fc8"/>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
@@ -483,11 +523,12 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="CMHLogo" destination="IHx-BP-0dU" id="FNf-Vd-nTo"/>
+                        <outlet property="MFSLogo" destination="JHd-ia-qFN" id="7wh-vo-X4L"/>
                         <outlet property="NVIndicator" destination="0Dl-Zn-wee" id="9b5-ye-EfW"/>
                         <outlet property="bottomLayoutConstraint" destination="KnF-ZL-LtT" id="VMm-7v-ytW"/>
                         <outlet property="indicatorView" destination="cP5-ob-YKv" id="6yR-eP-WgS"/>
                         <outlet property="loginView" destination="8Lz-Go-b0R" id="CvA-BE-hgt"/>
-                        <outlet property="logoPhoto" destination="XkU-JF-CFs" id="euL-jA-MRo"/>
                         <outlet property="password" destination="EPk-aJ-Rux" id="d3e-5i-XhE"/>
                         <outlet property="username" destination="H8k-9e-xfx" id="PlN-YA-cSD"/>
                         <outlet property="wrongPassword" destination="o2p-ku-fch" id="Z8h-gL-6cm"/>
@@ -3047,6 +3088,24 @@
             <point key="canvasLocation" x="113" y="1912"/>
         </scene>
         <!--View Controller-->
+        <scene sceneID="iwa-Sq-oGr">
+            <objects>
+                <viewController id="5Ag-hm-Yc2" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="vLm-xh-a4F"/>
+                        <viewControllerLayoutGuide type="bottom" id="Mkp-4e-aTg"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="hM5-fq-Lan">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="fOk-Z6-KZ3" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1009" y="2563"/>
+        </scene>
+        <!--View Controller-->
         <scene sceneID="TP5-LJ-EGT">
             <objects>
                 <viewController id="Dc0-iM-lFO" sceneMemberID="viewController">
@@ -3062,6 +3121,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8UT-kJ-WeU" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
+<<<<<<< HEAD
             <point key="canvasLocation" x="385" y="134"/>
         </scene>
         <!--Mail-->
@@ -3088,11 +3148,15 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="E7Z-GB-79B" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1833" y="-587"/>
+=======
+            <point key="canvasLocation" x="1806" y="-476"/>
+>>>>>>> master
         </scene>
     </scenes>
     <resources>
         <image name="AppLogo.png" width="1024" height="1024"/>
         <image name="Arrowhead-Right.png" width="256" height="256"/>
+        <image name="CMH Logo.png" width="866" height="844"/>
         <image name="Calendar" width="25" height="25"/>
         <image name="CalendarUnselected" width="25" height="25"/>
         <image name="Homework" width="25" height="25"/>

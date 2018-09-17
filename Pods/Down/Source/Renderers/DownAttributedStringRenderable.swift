@@ -30,15 +30,22 @@ public extension DownAttributedStringRenderable {
      Generates an `NSAttributedString` from the `markdownString` property
 
      - parameter options: `DownOptions` to modify parsing or rendering, defaulting to `.default`
+<<<<<<< HEAD
 
      - parameter stylesheet: a `String` to use as the CSS stylesheet when rendering, defaulting to a style that uses the `NSAttributedString` default font
+=======
+>>>>>>> master
 
      - throws: `DownErrors` depending on the scenario
 
      - returns: An `NSAttributedString`
      */
     
+<<<<<<< HEAD
     public func toAttributedString(_ options: DownOptions = .default, stylesheet: String? = nil) throws -> NSAttributedString {
+=======
+    public func toAttributedString(_ options: DownOptions = .default) throws -> NSAttributedString {
+>>>>>>> master
         let html = try self.toHTML(options)
         let defaultStylesheet = "* {font-family: Helvetica } code, pre { font-family: Menlo }"
         return try NSAttributedString(htmlString: "<style>" + (stylesheet ?? defaultStylesheet) + "</style>" + html)

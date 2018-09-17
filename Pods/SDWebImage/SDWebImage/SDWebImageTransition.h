@@ -62,7 +62,11 @@ typedef void (^SDWebImageTransitionCompletionBlock)(BOOL finished);
 @end
 
 // Convenience way to create transition. Remember to specify the duration if needed.
+<<<<<<< HEAD
 // for UIKit, these transition just use the correspond `animationOptions`. By default we enable `UIViewAnimationOptionAllowUserInteraction` to allow user interaction during transition.
+=======
+// for UIKit, these transition just use the correspond `animationOptions`
+>>>>>>> master
 // for AppKit, these transition use Core Animation in `animations`. So your view must be layer-backed. Set `wantsLayer = YES` before you apply it.
 
 @interface SDWebImageTransition (Conveniences)
