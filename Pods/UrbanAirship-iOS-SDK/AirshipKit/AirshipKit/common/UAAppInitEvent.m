@@ -1,4 +1,4 @@
-/* Copyright 2017 Urban Airship and Contributors */
+/* Copyright 2018 Urban Airship and Contributors */
 
 #import <UIKit/UIKit.h>
 #import "UAAppInitEvent+Internal.h"
@@ -6,7 +6,7 @@
 #import "UAAnalytics.h"
 #import "UAirship.h"
 #import "UAUser.h"
-#import "UAUtils.h"
+#import "UAUtils+Internal.h"
 
 @implementation UAAppInitEvent
 
@@ -19,7 +19,7 @@
 - (NSMutableDictionary *)gatherData {
     NSMutableDictionary *data = [NSMutableDictionary dictionary];
 
-    UAAnalytics *analytics = [UAirship shared].analytics;
+    UAAnalytics *analytics = [UAirship analytics];
 
     [data setValue:analytics.conversionSendID forKey:@"push_id"];
     [data setValue:analytics.conversionPushMetadata forKey:@"metadata"];

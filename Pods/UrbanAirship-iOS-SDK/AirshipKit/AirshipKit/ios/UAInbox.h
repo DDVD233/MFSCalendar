@@ -1,8 +1,9 @@
-/* Copyright 2017 Urban Airship and Contributors */
+/* Copyright 2018 Urban Airship and Contributors */
 
 #import <Foundation/Foundation.h>
 
 #import "UAGlobal.h"
+#import "UAComponent.h"
 
 @class UAInboxMessageList;
 @class UAInboxAPIClient;
@@ -64,7 +65,7 @@ NS_ASSUME_NONNULL_BEGIN
  * This class bridges library functionality with the UI and is the main point of interaction.
  * Most implementations will only use functionality found in this class.
  */
-@interface UAInbox : NSObject
+@interface UAInbox : UAComponent
 
 ///---------------------------------------------------------------------------------------
 /// @name Inbox Properties
@@ -74,11 +75,6 @@ NS_ASSUME_NONNULL_BEGIN
  * The list of Rich Push Inbox messages.
  */
 @property (nonatomic, strong) UAInboxMessageList *messageList;
-
-/**
- * The Inbox API Client
- */
-@property (nonatomic, readonly, strong) UAInboxAPIClient *client;
 
 /**
  * The delegate that should be notified when an incoming push is handled,

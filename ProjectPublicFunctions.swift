@@ -13,6 +13,7 @@ struct ClassTime {
     var currentDate: DateInRegion
     
     init() {
+        SwiftDate.defaultRegion = Region.local
         self.currentDate = DateInRegion()
     }
     
@@ -97,6 +98,7 @@ func getMeetTime(period: Int) -> String {
 
 func getCurrentPeriod() -> Int {
     let currentTime = DateInRegion()
+    print(currentTime)
     let period = ClassTime().period
     
     switch currentTime {
@@ -159,42 +161,6 @@ func getClassDataAt(period: Int, day: String) -> [[String: Any]] {
         }
     }
     
-//    if listClasses.count > 2 { //Before lunch
-//        listClasses.insert(lunch, at: 7 - period)
-//    }
-//
-//    switch period {
-//    case 0...8:
-//        if period == 0 {
-//            period = 1
-//        }
-//        listClasses = Array(allClasses[(period - 1)...7])
-//
-//        if listClasses.count >= 5 {
-//            let dateFormatter = DateFormatter()
-//            dateFormatter.dateFormat = "EE"
-//            let day = dateFormatter.string(from: Date())
-//            if day == "Wed" {
-////                currentClass == 1 -> index = 3
-////                currentClass == 2 -> index = 2
-////                currentClass == 3 -> index = 1
-////                currentClass == 4 -> index = 0
-//                listClasses[4 - period] = meetingForWorship
-//            }
-//        }
-//
-//        if listClasses.count > 2 { //Before lunch
-//            listClasses.insert(lunch, at: 7 - period)
-//        }
-//    case 11:
-//        // At lunch
-//
-//        listClasses = Array(allClasses[6...7])
-//
-//        listClasses.insert(lunch, at: 0)
-//    default:
-//        listClasses = []
-//    }
 
     return listClasses
 }

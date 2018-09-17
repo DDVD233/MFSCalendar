@@ -1,4 +1,4 @@
-/* Copyright 2017 Urban Airship and Contributors */
+/* Copyright 2018 Urban Airship and Contributors */
 
 #import <Foundation/Foundation.h>
 
@@ -41,6 +41,11 @@
  */
 @property (atomic, strong, readonly) NSDate *lastSendTime;
 
+/**
+ * Flag indicating whether evant manager uploads are enabled. Clear to disable. Default is enabled.
+ */
+@property (nonatomic, assign) BOOL uploadsEnabled;
+
 ///---------------------------------------------------------------------------------------
 /// @name Event Manager Internal Methods
 ///---------------------------------------------------------------------------------------
@@ -62,13 +67,15 @@
  * @param eventStore The event data store.
  * @param client The event api client.
  * @param queue The operation queue.
+ * @param notificationCenter The notification center.
  * @return UAEventManager instance.
  */
 + (instancetype)eventManagerWithConfig:(UAConfig *)config
                              dataStore:(UAPreferenceDataStore *)dataStore
                             eventStore:(UAEventStore *)eventStore
                                 client:(UAEventAPIClient *)client
-                                 queue:(NSOperationQueue *)queue;
+                                 queue:(NSOperationQueue *)queue
+                    notificationCenter:(NSNotificationCenter *)notificationCenter;
 
 /**
  * Adds an analytic event to be batched and uploaded to Urban Airship.

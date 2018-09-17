@@ -1,7 +1,7 @@
-/* Copyright 2017 Urban Airship and Contributors */
+/* Copyright 2018 Urban Airship and Contributors */
 
 #import "UAAppIntegration.h"
-#import "UAirship.h"
+#import "UAirship+Internal.h"
 #import "UAAnalytics+Internal.h"
 #import "UAPush+Internal.h"
 
@@ -11,10 +11,11 @@
 #import "UANotificationAction.h"
 #import "UANotificationCategory.h"
 #import "UAActionArguments.h"
-#import "UAUtils.h"
+#import "UAUtils+Internal.h"
 #import "UAConfig.h"
 #import "UAActionRunner+Internal.h"
 #import "UAActionRegistry+Internal.h"
+#import "UARemoteDataManager+Internal.h"
 
 #if !TARGET_OS_TV
 #import "UAInboxUtils.h"
@@ -22,10 +23,11 @@
 #import "UADisplayInboxAction.h"
 #import "UAInbox+Internal.h"
 #import "UAInboxMessageList+Internal.h"
-#import "UAInAppMessaging+Internal.h"
+#import "UALegacyInAppMessaging+Internal.h"
 #endif
 
 #define kUANotificationActionKey @"com.urbanairship.interactive_actions"
+#define kUANotificationRefreshRemoteDataKey @"com.urbanairship.remote-data.update"
 
 @implementation UAAppIntegration
 
@@ -42,7 +44,7 @@
 + (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     UA_LINFO(@"Application registered device token: %@", [UAUtils deviceTokenStringFromDeviceToken:deviceToken]);
 
-    [[UAirship shared].analytics addEvent:[UADeviceRegistrationEvent event]];
+    [[UAirship analytics] addEvent:[UADeviceRegistrationEvent event]];
 
     [[UAirship push] application:application didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
 }
@@ -61,6 +63,7 @@
 
 + (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
     switch(application.applicationState) {
+        UA_LTRACE(@"Received remote notification: %@", userInfo);
         case UIApplicationStateActive:
             if ([[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){10, 0, 0}] && ![UAUtils isSilentPush:userInfo]) {
                 // Handled by the new userNotificationCenter:willPresentNotification:withCompletionHandler:
@@ -111,6 +114,8 @@
 }
 
 + (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forRemoteNotification:(NSDictionary *)userInfo withResponseInfo:(NSDictionary *)responseInfo completionHandler:(void (^)(void))handler {
+    UA_LTRACE(@"Handling notification action: %@", identifier);
+
     NSString *responseText = responseInfo ? responseInfo[UIUserNotificationActionResponseTypedTextKey] : nil;
     UANotificationResponse *response = [UANotificationResponse notificationResponseWithNotificationInfo:userInfo
                                                                                        actionIdentifier:identifier
@@ -143,6 +148,8 @@
 
 #if !TARGET_OS_TV   // UNNotificationResponse not available on tvOS
 + (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void(^)(void))completionHandler {
+    UA_LTRACE(@"Received notification response: %@", response);
+
     UANotificationResponse *airshipResponse = [UANotificationResponse notificationResponseWithUNNotificationResponse:response];
 
     [self handleNotificationResponse:airshipResponse completionHandler:^(void) {
@@ -154,7 +161,7 @@
 #pragma mark -
 #pragma mark Notification handling
 
-+ (void)handleForegroundNotification:(UNNotification *)notification mergedOptions:(UNNotificationPresentationOptions)options withCompletionHandler:(void(^)(void))completionHandler {
++ (void)handleForegroundNotification:(UNNotification *)notification mergedOptions:(UNNotificationPresentationOptions)options withCompletionHandler:(void(^)(void))completionHandler NS_AVAILABLE_IOS(10.0) {
     BOOL foregroundPresentation = (options & UNNotificationPresentationOptionAlert) > 0;
 
     UANotificationContent *notificationContent = [UANotificationContent notificationWithUNNotification:notification];
@@ -171,15 +178,16 @@
 
     UA_LINFO(@"Received notification response: %@", response);
 
-    // Clear any in-app messages (nibs unavailable in tvOS)
+    // Clear any legacy in-app messages (nibs unavailable in tvOS)
 #if !TARGET_OS_TV
-    [[UAirship inAppMessaging] handleNotificationResponse:response];
+    [[UAirship legacyInAppMessaging] handleNotificationResponse:response];
 #endif
+    
     UASituation situation;
     NSDictionary *actionsPayload = [self actionsPayloadForNotificationContent:response.notificationContent actionIdentifier:response.actionIdentifier];
 
     if ([response.actionIdentifier isEqualToString:UANotificationDefaultActionIdentifier]) {
-        [[UAirship shared].analytics launchedFromNotification:response.notificationContent.notificationInfo];
+        [[UAirship analytics] launchedFromNotification:response.notificationContent.notificationInfo];
         situation = UASituationLaunchedFromPush;
     } else {
         UANotificationAction *notificationAction = [self notificationActionForCategory:response.notificationContent.categoryIdentifier
@@ -192,7 +200,7 @@
         }
 
         if (notificationAction.options & UANotificationActionOptionForeground) {
-            [[UAirship shared].analytics launchedFromNotification:response.notificationContent.notificationInfo];
+            [[UAirship analytics] launchedFromNotification:response.notificationContent.notificationInfo];
             situation = UASituationForegroundInteractiveButton;
         } else {
             situation = UASituationBackgroundInteractiveButton;
@@ -203,7 +211,7 @@
                                                                   notification:response.notificationContent.notificationInfo
                                                                   responseText:response.responseText];
 
-        [[UAirship shared].analytics addEvent:event];
+        [[UAirship analytics] addEvent:event];
     }
 
     NSMutableDictionary *metadata = [NSMutableDictionary dictionary];
@@ -226,10 +234,30 @@
 
     UA_LINFO(@"Received notification: %@", notificationContent);
 
-    // Process any in-app messages (nibs unavailable in tvOS)
+    // Process any legacy in-app messages (nibs unavailable in tvOS)
 #if !TARGET_OS_TV
-    [[UAirship inAppMessaging] handleRemoteNotification:notificationContent];
+    [[UAirship legacyInAppMessaging] handleRemoteNotification:notificationContent];
 #endif
+    
+    dispatch_group_t dispatchGroup = dispatch_group_create();
+
+    // array to store results of various concurrent fetches, so a summary can be provided to the system.
+    // because the fetches run concurrently access to `fetchResults` is synchronized.
+    __block NSMutableArray *fetchResults = [NSMutableArray array];
+    
+    if (notificationContent.notificationInfo[kUANotificationRefreshRemoteDataKey]) {
+        dispatch_group_enter(dispatchGroup);
+        [UAirship.remoteDataManager refreshWithCompletionHandler:^(BOOL success) {
+            @synchronized (fetchResults) {
+                if (success) {
+                    [fetchResults addObject:[NSNumber numberWithInt:UIBackgroundFetchResultNewData]];
+                } else {
+                    [fetchResults addObject:[NSNumber numberWithInt:UIBackgroundFetchResultFailed]];
+                }
+            }
+            dispatch_group_leave(dispatchGroup);
+        }];
+    }
 
     UASituation situation = [UIApplication sharedApplication].applicationState == UIApplicationStateActive ? UASituationForegroundPush : UASituationBackgroundPush;
     NSDictionary *actionsPayload = [self actionsPayloadForNotificationContent:notificationContent actionIdentifier:nil];
@@ -237,40 +265,26 @@
     NSDictionary *metadata = @{ UAActionMetadataForegroundPresentationKey: @(foregroundPresentation),
                                 UAActionMetadataPushPayloadKey: notificationContent.notificationInfo };
 
-    __block NSUInteger resultCount = 0;
-    __block NSUInteger expectedCount = 1;
-    __block NSMutableArray *fetchResults = [NSMutableArray array];
-
 #if !TARGET_OS_TV   // Message Center not supported on tvOS
     // Refresh the message center, call completion block when finished
     if ([UAInboxUtils inboxMessageIDFromNotification:notificationContent.notificationInfo]) {
-        expectedCount = 2;
-
+        dispatch_group_enter(dispatchGroup);
         [[UAirship inbox].messageList retrieveMessageListWithSuccessBlock:^{
-            [fetchResults addObject:[NSNumber numberWithInt:UIBackgroundFetchResultNewData]];
-
-            dispatch_async(dispatch_get_main_queue(), ^{
-                resultCount++;
-
-                if (expectedCount == resultCount) {
-                    completionHandler([UAUtils mergeFetchResults:fetchResults]);
-                }
-            });
+            @synchronized (fetchResults) {
+                [fetchResults addObject:[NSNumber numberWithInt:UIBackgroundFetchResultNewData]];
+            }
+            dispatch_group_leave(dispatchGroup);
         } withFailureBlock:^{
-            [fetchResults addObject:[NSNumber numberWithInt:UIBackgroundFetchResultFailed]];
-
-            dispatch_async(dispatch_get_main_queue(), ^{
-                resultCount++;
-
-                if (expectedCount == resultCount) {
-                    completionHandler([UAUtils mergeFetchResults:fetchResults]);
-                }
-            });
+            @synchronized (fetchResults) {
+                [fetchResults addObject:[NSNumber numberWithInt:UIBackgroundFetchResultFailed]];
+            }
+            dispatch_group_leave(dispatchGroup);
         }];
     }
 #endif
 
     // Run the actions
+    dispatch_group_enter(dispatchGroup);
     [UAActionRunner runActionsWithActionValues:actionsPayload
                                      situation:situation
                                       metadata:metadata
@@ -280,18 +294,19 @@
                                  [[UAirship push] handleRemoteNotification:notificationContent
                                                                 foreground:(situation == UASituationForegroundPush)
                                                          completionHandler:^(UIBackgroundFetchResult fetchResult) {
-                                                             [fetchResults addObject:[NSNumber numberWithInt:fetchResult]];
-
-                                                             dispatch_async(dispatch_get_main_queue(), ^{
-                                                                 resultCount++;
-
-                                                                 if (expectedCount == resultCount) {
-                                                                     completionHandler([UAUtils mergeFetchResults:fetchResults]);
-                                                                 }
-                                                             });
+                                                             @synchronized (fetchResults) {
+                                                                 [fetchResults addObject:[NSNumber numberWithInt:fetchResult]];
+                                                             }
+                                                             dispatch_group_leave(dispatchGroup);
                                                          }];
-
                              }];
+    
+    dispatch_group_notify(dispatchGroup, dispatch_get_main_queue(),^{
+        // all processing of incoming notification is complete
+        if (completionHandler) {
+            completionHandler([UAUtils mergeFetchResults:fetchResults]);
+        }
+    });
 }
 
 #pragma mark -

@@ -1,4 +1,4 @@
-/* Copyright 2017 Urban Airship and Contributors */
+/* Copyright 2018 Urban Airship and Contributors */
 
 
 #import "UARequestSession+Internal.h"
@@ -38,6 +38,11 @@ const NSTimeInterval MaxBackOff = 3000;
     queue.maxConcurrentOperationCount = 1;
 
     NSURLSessionConfiguration *sessionConfig = [NSURLSessionConfiguration defaultSessionConfiguration];
+
+    // Disable the default HTTP cache so that 304 responses can be received. API clients using
+    // UARequestSession are expected to provide their own caching.
+    sessionConfig.requestCachePolicy = NSURLRequestReloadIgnoringLocalCacheData;
+
     NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfig delegate:nil delegateQueue:nil];
 
     return [[UARequestSession alloc] initWithConfig:config session:session queue:queue];

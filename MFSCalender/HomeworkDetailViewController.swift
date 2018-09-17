@@ -332,7 +332,7 @@ extension homeworKDetailViewController: UITableViewDelegate, UITableViewDataSour
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableViewAutomaticDimension
+        return UITableView.automaticDimension
     }
     
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -355,7 +355,7 @@ class homeworkDetailViewCell: UITableViewCell {
         activityIndicator.isHidden = true
         checkBox.stateChangeAnimation = .bounce(.fill)
         checkBox.boxLineWidth = 3
-        checkBox.addTarget(self, action: #selector(checkDidChange), for: UIControlEvents.valueChanged)
+        checkBox.addTarget(self, action: #selector(checkDidChange), for: UIControl.Event.valueChanged)
     }
     
     @objc func checkDidChange() {

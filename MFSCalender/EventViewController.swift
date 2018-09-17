@@ -9,6 +9,7 @@
 import UIKit
 import DZNEmptyDataSet
 import XLPagerTabStrip
+import SafariServices
 
 class eventViewController: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate, IndicatorInfoProvider {
     
@@ -19,10 +20,14 @@ class eventViewController: UIViewController, DZNEmptyDataSetSource, DZNEmptyData
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        eventView.delegate = self
+        eventView.dataSource = self
+        eventView.emptyDataSetSource = self
+        eventView.emptyDataSetDelegate = self
     }
     
     func title(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
-        let attr = [NSAttributedStringKey.font: UIFont.preferredFont(forTextStyle: UIFontTextStyle.headline)]
+        let attr = [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: UIFont.TextStyle.headline)]
         let str = "There is no event on this day."
         self.eventView.separatorStyle = .none
         
@@ -62,9 +67,9 @@ class eventViewController: UIViewController, DZNEmptyDataSetSource, DZNEmptyData
     }
     
     func reloadData() {
+        self.listEvents.insert(["summary": "1st Period Announcement", "isAllDay": 1], at: 0)
         DispatchQueue.main.async {
             if self.isViewLoaded && self.view != nil {
-                self.eventView.reloadData(with: .automatic)
                 self.eventView.reloadData()
             }
         }
@@ -87,6 +92,12 @@ extension eventViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "eventTable", for: indexPath as IndexPath) as! customEventCell
         let row = indexPath.row
         
+        if row == 0 {
+            cell.selectionStyle = .default
+        } else {
+            cell.selectionStyle = .none
+        }
+        
         guard self.listEvents.indices.contains(row) else { return cell }
         let rowDict = self.listEvents[row]
         
@@ -107,6 +118,14 @@ extension eventViewController: UITableViewDelegate, UITableViewDataSource {
         
         cell.PeriodTime.text = EventView().getTimeInterval(rowDict: rowDict)
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if indexPath.row == 0 {
+            let url = URL.init(string: "https://sites.google.com/mfriends.org/us-students/home")!
+            let safariViewController = SFSafariViewController(url: url)
+            present(safariViewController, animated: true, completion: nil)
+        }
     }
 }
 

@@ -1,9 +1,8 @@
-/* Copyright 2017 Urban Airship and Contributors */
+/* Copyright 2018 Urban Airship and Contributors */
 
 #import <UIKit/UIKit.h>
 
 @class UAConfig;
-@class UAPreferenceDataStore;
 @class UAPush;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -14,23 +13,6 @@ NS_ASSUME_NONNULL_BEGIN
  * or optionally open a url with the channel as an argument.
  */
 @interface UAChannelCapture : NSObject
-
-///---------------------------------------------------------------------------------------
-/// @name Channel Capture Factory
-///---------------------------------------------------------------------------------------
-
-/**
- * Factory method to create the UAChannelCapture.
- *
- * @param config The Urban Airship config.
- * @param push The UAPush instance.
- * @param dataStore The UAPreferenceDataStore instance.
- *
- * @return A channel capture instance.
- */
-+ (instancetype)channelCaptureWithConfig:(UAConfig *)config
-                                    push:(UAPush *)push
-                               dataStore:(UAPreferenceDataStore *)dataStore;
 
 ///---------------------------------------------------------------------------------------
 /// @name Channel Capture Management

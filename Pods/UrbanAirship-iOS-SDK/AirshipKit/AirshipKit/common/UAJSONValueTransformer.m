@@ -1,8 +1,8 @@
-/* Copyright 2017 Urban Airship and Contributors */
+/* Copyright 2018 Urban Airship and Contributors */
 
 #import "NSJSONSerialization+UAAdditions.h"
 #import "UAJSONValueTransformer+Internal.h"
-
+#import "UAJSONSerialization+Internal.h"
 
 @implementation UAJSONValueTransformer
 
@@ -15,7 +15,7 @@
 }
 
 - (id)transformedValue:(NSDictionary *)value {
-    return [NSJSONSerialization dataWithJSONObject:value
+    return [UAJSONSerialization dataWithJSONObject:value
                                            options:NSJSONWritingPrettyPrinted
                                              error:nil];
 }

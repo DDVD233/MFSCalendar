@@ -1,4 +1,4 @@
-**Version 3.1.1**, synced to [MPAndroidChart #f6a398b](https://github.com/PhilJay/MPAndroidChart/commit/f6a398b)
+**Version 3.2.0**, synced to [MPAndroidChart #f6a398b](https://github.com/PhilJay/MPAndroidChart/commit/f6a398b)
 
 ![alt tag](https://raw.github.com/danielgindi/Charts/master/Assets/feature_graphic.png)
   ![Supported Platforms](https://img.shields.io/cocoapods/p/Charts.svg) [![Releases](https://img.shields.io/github/release/danielgindi/Charts.svg)](https://github.com/danielgindi/Charts/releases) [![Latest pod release](https://img.shields.io/cocoapods/v/Charts.svg)](http://cocoapods.org/pods/charts) [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage) [![Build Status](https://travis-ci.org/danielgindi/Charts.svg?branch=master)](https://travis-ci.org/danielgindi/Charts) [![codecov](https://codecov.io/gh/danielgindi/Charts/branch/master/graph/badge.svg)](https://codecov.io/gh/danielgindi/Charts)
@@ -78,8 +78,8 @@ For [Realm](https://realm.io/) support, please add `pod 'ChartsRealm'` too.
 Charts now include Carthage prebuilt binaries.
 
 ```carthage
-github "danielgindi/Charts" == 3.1.1
-github "danielgindi/Charts" ~> 3.1.1
+github "danielgindi/Charts" == 3.2.0
+github "danielgindi/Charts" ~> 3.2.0
 ```
 
 In order to build the binaries for a new release, use `carthage build --no-skip-current && carthage archive Charts`.
@@ -187,7 +187,7 @@ Documentation
 Currently there's no need for documentation for the iOS/tvOS/macOS version, as the API is **95% the same** as on Android.  
 You can read the official [MPAndroidChart](https://github.com/PhilJay/MPAndroidChart) documentation here: [**Wiki**](https://github.com/PhilJay/MPAndroidChart/wiki)
 
-Or you can see the [**ChartsDemo**](https://github.com/danielgindi/Charts/tree/master/ChartsDemo) project and learn the how-tos from it.
+Or you can see the Charts Demo project in both Objective-C and Swift ([**ChartsDemo-iOS**](https://github.com/danielgindi/Charts/tree/master/ChartsDemo-iOS), as well as macOS [**ChartsDemo-macOS**](https://github.com/danielgindi/Charts/tree/master/ChartsDemo-macOS)) and learn the how-tos from it.
 
 
 Special Thanks

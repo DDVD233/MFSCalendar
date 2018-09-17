@@ -1,32 +1,32 @@
-/* Copyright 2017 Urban Airship and Contributors */
+/* Copyright 2018 Urban Airship and Contributors */
 
 #import <Foundation/Foundation.h>
 
-#define kUAChannelIdentityHintsKey @"identity_hints"
-#define kUAChannelUserIDKey @"user_id"
-#define kUAChannelDeviceIDKey @"device_id"
-
-#define kUAChannelKey @"channel"
-#define kUAChannelDeviceTypeKey @"device_type"
-#define kUAChannelOptInKey @"opt_in"
-#define kUAChannelPushAddressKey @"push_address"
-
-#define kUAChannelTopLevelTimeZoneJSONKey @"timezone"
-#define kUAChannelTopLevelLanguageJSONKey @"locale_language"
-#define kUAChannelTopLevelCountryJSONKey @"locale_country"
-
-#define kUAChanneliOSKey @"ios"
-#define kUAChannelBadgeJSONKey @"badge"
-#define kUAChannelQuietTimeJSONKey @"quiettime"
-#define kUAChannelTimeZoneJSONKey @"tz"
-
-#define kUAChannelAliasJSONKey @"alias"
-#define kUAChannelSetTagsKey @"set_tags"
-#define kUAChannelTagsJSONKey @"tags"
-
-#define kUABackgroundEnabledJSONKey @"background"
-
 NS_ASSUME_NONNULL_BEGIN
+
+extern NSString *const UAChannelIdentityHintsKey;
+extern NSString *const UAChannelUserIDKey;
+extern NSString *const UAChannelDeviceIDKey;
+
+extern NSString *const UAChannelKey;
+extern NSString *const UAChannelDeviceTypeKey;
+extern NSString *const UAChannelOptInKey;
+extern NSString *const UAChannelPushAddressKey;
+
+extern NSString *const UAChannelTopLevelTimeZoneJSONKey;
+extern NSString *const UAChannelTopLevelLanguageJSONKey;
+extern NSString *const UAChannelTopLevelCountryJSONKey;
+
+extern NSString *const UAChanneliOSKey;
+extern NSString *const UAChannelBadgeJSONKey;
+extern NSString *const UAChannelQuietTimeJSONKey;
+extern NSString *const UAChannelTimeZoneJSONKey;
+
+extern NSString *const UAChannelAliasJSONKey;
+extern NSString *const UAChannelSetTagsKey;
+extern NSString *const UAChannelTagsJSONKey;
+
+extern NSString *const UABackgroundEnabledJSONKey;
 
 /**
  * Model object encapsulating the data relevant to a creation or updates processed by UAChannelAPIClient.
@@ -107,6 +107,12 @@ NS_ASSUME_NONNULL_BEGIN
 ///---------------------------------------------------------------------------------------
 /// @name Channel Registration Payload Internal Methods
 ///---------------------------------------------------------------------------------------
+
+/**
+ * Factory method that builds a payload from NSData.
+ * @return A UAChannelRegistrationPayload instance.
+ */
++ (UAChannelRegistrationPayload *)channelRegistrationPayloadWithData:(NSData *)data;
 
 /**
  * The UAChannelRegistrationPayload as JSON data.

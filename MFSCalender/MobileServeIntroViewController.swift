@@ -43,7 +43,7 @@ class MobileServeRegister: UIViewController {
     @IBAction func register(_ sender: Any) {
         let urlString = "https://app.mobileserve.com/login/?next=/user/setup/organization/code/%3Forg_code%3DMFS123"
         if #available(iOS 10.0, *) {
-            UIApplication.shared.open(URL(string: urlString)!, options: [:], completionHandler: nil)
+            UIApplication.shared.open(URL(string: urlString)!, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: nil)
         } else {
             UIApplication.shared.openURL(URL(string: urlString)!)
             // Fallback on earlier versions
@@ -52,3 +52,8 @@ class MobileServeRegister: UIViewController {
 }
 
 
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToUIApplicationOpenExternalURLOptionsKeyDictionary(_ input: [String: Any]) -> [UIApplication.OpenExternalURLOptionsKey: Any] {
+	return Dictionary(uniqueKeysWithValues: input.map { key, value in (UIApplication.OpenExternalURLOptionsKey(rawValue: key), value)})
+}

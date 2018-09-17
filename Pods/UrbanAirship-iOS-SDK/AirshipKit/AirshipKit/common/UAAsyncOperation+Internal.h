@@ -1,6 +1,8 @@
-/* Copyright 2017 Urban Airship and Contributors */
+/* Copyright 2018 Urban Airship and Contributors */
 
 #import <Foundation/Foundation.h>
+
+NS_ASSUME_NONNULL_BEGIN
 
 /**
  * NSOperation that executes an asynchronous block.
@@ -35,4 +37,11 @@
  */
 - (void)finish;
 
+/**
+ * Blocked called on cancel.
+ */
+@property (nullable, copy) void (^cancelBlock)(void);
+
 @end
+
+NS_ASSUME_NONNULL_END

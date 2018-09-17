@@ -1,4 +1,4 @@
-/* Copyright 2017 Urban Airship and Contributors */
+/* Copyright 2018 Urban Airship and Contributors */
 
 
 #import <Foundation/Foundation.h>
@@ -22,16 +22,15 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, readonly, strong, nullable) NSDate *lastApplicationOpenDate;
 
-///---------------------------------------------------------------------------------------
-/// @name Application Metrics Core Methods
-///---------------------------------------------------------------------------------------
+/**
+ * The application's current short version string.
+ */
+@property (nonatomic, readonly) NSString *currentAppVersion;
 
 /**
- * Triggers an analytics event.
- * @param dataStore The dataStore.
- * @return An application metrics instance.
+ * Determines whether the application's short version string has been updated.
  */
-+ (instancetype)applicationMetricsWithDataStore:(UAPreferenceDataStore *)dataStore;
+@property (nonatomic, readonly) BOOL isAppVersionUpdated;
 
 @end
 

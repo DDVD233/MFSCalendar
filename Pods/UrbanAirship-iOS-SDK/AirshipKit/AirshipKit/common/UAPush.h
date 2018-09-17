@@ -1,12 +1,12 @@
-/* Copyright 2017 Urban Airship and Contributors */
+/* Copyright 2018 Urban Airship and Contributors */
 
 #import "UAGlobal.h"
 #import "UAirship.h"
 #import "UANamedUser.h"
-#import "UAChannelRegistrar.h"
 #import "UANotificationContent.h"
 #import "UANotificationResponse.h"
 #import "UANotificationAction.h"
+#import "UAComponent.h"
 
 @class UANotificationCategory;
 
@@ -54,6 +54,19 @@ typedef NS_OPTIONS(NSUInteger, UANotificationOptions) {
 };
 
 /**
+ * Authorized notification settings
+ */
+typedef NS_OPTIONS(NSUInteger, UAAuthorizedNotificationSettings) {
+    UAAuthorizedNotificationSettingsNone = 0,
+    UAAuthorizedNotificationSettingsBadge   = (1 << 0),
+    UAAuthorizedNotificationSettingsSound   = (1 << 1),
+    UAAuthorizedNotificationSettingsAlert   = (1 << 2),
+    UAAuthorizedNotificationSettingsCarPlay = (1 << 3),
+    UAAuthorizedNotificationSettingsLockScreen = (1 << 4),
+    UAAuthorizedNotificationSettingsNotificationCenter = (1 << 5)
+};
+
+/**
  * Notification option for notification type `none`.
  * Not included in UANotificationOptions enum to maintain parity with UNAuthorizationOptions.
  */
@@ -72,7 +85,7 @@ static const UANotificationOptions UANotificationOptionNone =  0;
 @optional
 
 /**
- * Called when the device channel registers with Urban Airship. Successful
+ * Called after the device channel registers with Urban Airship. Successful
  * registrations could be disabling push, enabling push, or updating the device
  * registration settings.
  *
@@ -81,6 +94,10 @@ static const UANotificationOptions UANotificationOptionNone =  0;
  *
  * When registration finishes in the background, any async tasks that are triggered
  * from this call should request a background task.
+ *
+ * @note This method may be called at any time. It does not guarantee a channel 
+ * registration just occurred.
+ *
  * @param channelID The channel ID string.
  * @param deviceToken The device token string.
  */
@@ -97,17 +114,38 @@ static const UANotificationOptions UANotificationOptionNone =  0;
 /**
  * Called when APNS registration completes.
  *
- * @param options UANotificationOptions that were most recently registered.
+ * @param authorizedSettings The settings that were authorized at the time of registration.
  * @param categories NSSet of the categories that were most recently registered.
  */
-- (void)notificationRegistrationFinishedWithOptions:(UANotificationOptions)options categories:(NSSet *)categories;
+- (void)notificationRegistrationFinishedWithAuthorizedSettings:(UAAuthorizedNotificationSettings)authorizedSettings
+                                                    categories:(NSSet *)categories;
+
+/**
+ * Called when notification authentication changes with the new authorized settings.
+ *
+ * @param authorizedSettings UAAuthorizedNotificationSettings The newly changed authorized settings.
+ */
+- (void)notificationAuthorizedSettingsDidChange:(UAAuthorizedNotificationSettings)authorizedSettings;
+
+/**
+ * Called when APNS registration completes.
+ *
+ * @param options UANotificationOptions that were most recently registered.
+ * @param categories NSSet of the categories that were most recently registered.
+ *
+ * @deprecated Deprecated - to be removed in SDK version 11.0. Please use notificationRegistrationFinishedWithAuthorizedSettings:categories:
+ */
+- (void)notificationRegistrationFinishedWithOptions:(UANotificationOptions)options
+                                         categories:(NSSet *)categories DEPRECATED_MSG_ATTRIBUTE("Deprecated - to be removed in SDK version 11.0. Please use notificationRegistrationFinishedWithAuthorizedSettings:categories");
 
 /**
  * Called when APNS authentication changes with the new authorized options.
  *
  * @param options UANotificationOptions that were most recently registered.
+ *
+ * @deprecated Deprecated - to be removed in SDK version 11.0. Please use notificationAuthorizedSettingsDidChange:
  */
-- (void)notificationAuthorizedOptionsDidChange:(UANotificationOptions)options;
+- (void)notificationAuthorizedOptionsDidChange:(UANotificationOptions)options DEPRECATED_MSG_ATTRIBUTE("Deprecated - to be removed in SDK version 11.0. Please use notificationAuthorizedSettingsDidChange");
 
 /**
  * Called when the UIApplicationDelegate's application:didRegisterForRemoteNotificationsWithDeviceToken:
@@ -176,7 +214,7 @@ static const UANotificationOptions UANotificationOptionNone =  0;
  * @param notification The notification.
  * @return a UNNotificationPresentationOptions enum value indicating the presentation options for the notification.
  */
-- (UNNotificationPresentationOptions)presentationOptionsForNotification:(UNNotification *)notification;
+- (UNNotificationPresentationOptions)presentationOptionsForNotification:(UNNotification *)notification NS_AVAILABLE_IOS(10.0);
 
 @end
 
@@ -188,7 +226,7 @@ static const UANotificationOptions UANotificationOptionNone =  0;
 /**
  * This singleton provides an interface to the functionality provided by the Urban Airship iOS Push API.
  */
-@interface UAPush : NSObject
+@interface UAPush : UAComponent
 
 
 ///---------------------------------------------------------------------------------------
@@ -328,9 +366,23 @@ static const UANotificationOptions UANotificationOptionNone =  0;
 @property (nonatomic, readonly, strong, nullable) UANotificationResponse *launchNotificationResponse;
 
 /**
- * The current authorized notification options.
+ * The current authorized notification settings.
+ *
+ * Note: this value reflects all the notification settings currently enabled in the
+ * Settings app and does not take into account which options were originally requested.
  */
-@property (nonatomic, assign, readonly) UANotificationOptions authorizedNotificationOptions;
+@property (nonatomic, assign, readonly) UAAuthorizedNotificationSettings authorizedNotificationSettings;
+
+/**
+ * The current authorized notification options.
+ *
+ * Note: Unlike authorizedNotificationSettings, this value may diverge from the settings enabled in the
+ * Settings app depending on whether user push notifications are enabled and which options were originally requested.
+ * This behavior has been maintained for backwards compatibility.
+ 
+ * @deprecated Deprecated - to be removed in SDK version 11.0. Please use authorizedNotificationSettings.
+ */
+@property (nonatomic, assign, readonly) UANotificationOptions authorizedNotificationOptions DEPRECATED_MSG_ATTRIBUTE("Deprecated - to be removed in SDK version 11.0. Please use authorizedNotificationSettings");
 
 /**
  * Indicates whether the user has been prompted for notifications or not.
@@ -342,7 +394,7 @@ static const UANotificationOptions UANotificationOptionNone =  0;
  *
  * Note: this property is relevant only for iOS 10 and above.
  */
-@property (nonatomic, assign) UNNotificationPresentationOptions defaultPresentationOptions;
+@property (nonatomic, assign) UNNotificationPresentationOptions defaultPresentationOptions NS_AVAILABLE_IOS(10.0);
 
 ///---------------------------------------------------------------------------------------
 /// @name Autobadge

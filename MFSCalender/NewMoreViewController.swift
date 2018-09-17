@@ -60,7 +60,7 @@ extension NewMoreViewController {
             let photoPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
             let path = photoPath.appending("/ProfilePhoto.png")
             cell.imageView.image = UIImage(contentsOfFile: path)
-            cell.imageView.contentMode = UIViewContentMode.scaleAspectFill
+            cell.imageView.contentMode = UIView.ContentMode.scaleAspectFill
             
             cell.nameLabel.text = ""
             if let firstName = Preferences().firstName {

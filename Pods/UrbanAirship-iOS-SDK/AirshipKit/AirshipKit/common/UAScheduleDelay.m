@@ -1,4 +1,5 @@
-/* Copyright 2017 Urban Airship and Contributors */
+
+/* Copyright 2018 Urban Airship and Contributors */
 
 #import "UAScheduleDelay.h"
 
@@ -7,7 +8,7 @@ NSUInteger const UAScheduleDelayMaxCancellationTriggers = 10;
 // JSON Keys
 NSString *const UAScheduleDelaySecondsKey = @"seconds";
 NSString *const UAScheduleDelayRegionKey = @"region";
-NSString *const UAScheduleDelayScreenKey = @"screen";
+NSString *const UAScheduleDelayScreensKey = @"screen";
 NSString *const UAScheduleDelayCancellationTriggersKey = @"cancellation_triggers";
 NSString *const UAScheduleDelayAppStateKey = @"app_state";
 NSString *const UAScheduleDelayAppStateForegroundName = @"foreground";
@@ -19,6 +20,7 @@ NSString * const UAScheduleDelayErrorDomain = @"com.urbanairship.schedule_delay"
 @interface UAScheduleDelay()
 @property(nonatomic, assign) NSTimeInterval seconds;
 @property(nonatomic, copy) NSString *screen;
+@property(nonatomic, copy) NSArray *screens;
 @property(nonatomic, copy) NSString *regionID;
 @property(nonatomic, assign) UAScheduleDelayAppState appState;
 @property(nonatomic, copy) NSArray<UAScheduleTrigger *> *cancellationTriggers;
@@ -32,10 +34,10 @@ NSString * const UAScheduleDelayErrorDomain = @"com.urbanairship.schedule_delay"
 
 
 - (instancetype)initWithBuilder:(UAScheduleDelayBuilder *)builder {
-    self = [super self];
+    self = [super init];
     if (self) {
         self.seconds = builder.seconds;
-        self.screen = builder.screen;
+        self.screens = builder.screens;
         self.regionID = builder.regionID;
         self.appState = builder.appState;
         self.cancellationTriggers = builder.cancellationTriggers ?: @[];
@@ -92,22 +94,49 @@ NSString * const UAScheduleDelayErrorDomain = @"com.urbanairship.schedule_delay"
         return nil;
     }
 
-    // Screen
-    id screen = json[UAScheduleDelayScreenKey];
-    if (screen && ![screen isKindOfClass:[NSString class]]) {
+    // Screens
+    id screens = json[UAScheduleDelayScreensKey];
+
+    if (screens && (![screens isKindOfClass:[NSString class]] && ![screens isKindOfClass:[NSArray class]])) {
         if (error) {
-            NSString *msg = [NSString stringWithFormat:@"Screen must be a string. Invalid value: %@", screen];
+            NSString *msg = [NSString stringWithFormat:@"Screens must be a string or an array of strings. Invalid value: %@", screens];
             *error =  [NSError errorWithDomain:UAScheduleDelayErrorDomain
                                           code:UAScheduleDelayErrorCodeInvalidJSON
                                       userInfo:@{NSLocalizedDescriptionKey:msg}];
         }
-
         return nil;
+    }
+
+    if ([screens isKindOfClass:[NSString class]]) {
+        screens = @[screens];
+    }
+
+    for (NSString *screen in screens) {
+        if (screen && ![screen isKindOfClass:[NSString class]]) {
+            if (error) {
+                NSString *msg = [NSString stringWithFormat:@"Screens must be a string or an array of strings. Invalid value: %@", screen];
+                *error =  [NSError errorWithDomain:UAScheduleDelayErrorDomain
+                                              code:UAScheduleDelayErrorCodeInvalidJSON
+                                          userInfo:@{NSLocalizedDescriptionKey:msg}];
+            }
+            return nil;
+        }
     }
 
     // App state
     UAScheduleDelayAppState appState = UAScheduleDelayAppStateAny;
-    if (json[UAScheduleDelayAppStateKey]) {
+    id appStateContents = json[UAScheduleDelayAppStateKey];
+    if (appStateContents) {
+        if (![appStateContents isKindOfClass:[NSString class]]) {
+            if (error) {
+                NSString *msg = [NSString stringWithFormat:@"App state must be a string."];
+                *error =  [NSError errorWithDomain:UAScheduleDelayErrorDomain
+                                              code:UAScheduleDelayErrorCodeInvalidJSON
+                                          userInfo:@{NSLocalizedDescriptionKey:msg}];
+            }
+            return nil;
+        }
+        
         NSString *stateName = [json[UAScheduleDelayAppStateKey] lowercaseString];
 
         if ([UAScheduleDelayAppStateForegroundName isEqualToString:stateName]) {
@@ -151,7 +180,7 @@ NSString * const UAScheduleDelayErrorDomain = @"com.urbanairship.schedule_delay"
 
     return [UAScheduleDelay delayWithBuilderBlock:^(UAScheduleDelayBuilder *builder) {
         builder.appState = appState;
-        builder.screen = screen;
+        builder.screens = screens;
         builder.regionID = regionID;
         builder.seconds = [seconds doubleValue];
         builder.cancellationTriggers = triggers;
@@ -181,6 +210,14 @@ NSString * const UAScheduleDelayErrorDomain = @"com.urbanairship.schedule_delay"
 
     if (self.screen != delay.screen && ![self.screen isEqualToString:delay.screen]) {
         return NO;
+    }
+
+    if (self.screens != nil) {
+        for (NSString *screen in delay.screens) {
+            if (![self.screens containsObject:screen]) {
+                return NO;
+            }
+        }
     }
 
     if (self.regionID != delay.regionID && ![self.regionID isEqualToString:delay.regionID]) {
@@ -214,7 +251,7 @@ NSString * const UAScheduleDelayErrorDomain = @"com.urbanairship.schedule_delay"
     result = 31 * result + self.seconds;
     result = 31 * result + self.appState;
     result = 31 * result + [self.regionID hash];
-    result = 31 * result + [self.screen hash];
+    result = 31 * result + [self.screens hash];
     result = 31 * result + [self.cancellationTriggers hash];
     return result;
 }

@@ -458,7 +458,7 @@ extension gradeViewController {
         if indexPath.section == 0 {
             return 280
         } else {
-            return UITableViewAutomaticDimension
+            return UITableView.automaticDimension
         }
     }
     

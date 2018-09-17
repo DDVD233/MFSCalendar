@@ -1,4 +1,4 @@
-/* Copyright 2017 Urban Airship and Contributors */
+/* Copyright 2018 Urban Airship and Contributors */
 
 #import "UADisplayInboxAction.h"
 #import "UAActionArguments.h"
@@ -7,7 +7,7 @@
 #import "UAInboxMessage.h"
 #import "UAInboxMessageList.h"
 #import "UAInboxUtils.h"
-#import "UADefaultMessageCenter.h"
+#import "UAMessageCenter.h"
 
 #define kUADisplayInboxActionMessageIDPlaceHolder @"auto"
 
@@ -67,7 +67,9 @@
         if (arguments.situation == UASituationLaunchedFromPush) {
             id<UAInboxDelegate> inboxDelegate = [UAirship inbox].delegate;
             if ([inboxDelegate respondsToSelector:@selector(showMessageForID:)]) {
-                [inboxDelegate showMessageForID:messageID];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [inboxDelegate showMessageForID:messageID];
+                });
                 completionHandler([UAActionResult resultWithValue:nil withFetchResult:UAActionFetchResultNoData]);
                 return;
             }
@@ -97,47 +99,51 @@
  */
 - (void)displayInboxMessage:(UAInboxMessage *)message situation:(UASituation)situation {
     id<UAInboxDelegate> inboxDelegate = [UAirship inbox].delegate;
-
+    
     switch (situation) {
         case UASituationForegroundPush:
             if ([inboxDelegate respondsToSelector:@selector(richPushMessageAvailable:)]) {
-                [inboxDelegate richPushMessageAvailable:message];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [inboxDelegate richPushMessageAvailable:message];
+                });
             }
             break;
         case UASituationLaunchedFromPush:
             if ([inboxDelegate respondsToSelector:@selector(showMessageForID:)]) {
-                [inboxDelegate showMessageForID:message.messageID];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [inboxDelegate showMessageForID:message.messageID];
+                });
             } else if ([inboxDelegate respondsToSelector:@selector(showInboxMessage:)]) {
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-                [inboxDelegate showInboxMessage:message];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [inboxDelegate showInboxMessage:message];
+                });
 #pragma GCC diagnostic pop
-            } else if ([[UAirship defaultMessageCenter] respondsToSelector:@selector(displayMessageForID:)]) {
-                [[UAirship defaultMessageCenter] displayMessageForID:message.messageID];
             } else {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-                [[UAirship defaultMessageCenter] displayMessage:message];
-#pragma GCC diagnostic pop
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [[UAirship messageCenter] displayMessageForID:message.messageID];
+                });
             }
             break;
         case UASituationManualInvocation:
         case UASituationWebViewInvocation:
         case UASituationForegroundInteractiveButton:
             if ([inboxDelegate respondsToSelector:@selector(showMessageForID:)]) {
-                [inboxDelegate showMessageForID:message.messageID];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [inboxDelegate showMessageForID:message.messageID];
+                });
             } else if ([inboxDelegate respondsToSelector:@selector(showInboxMessage:)]) {
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-                [inboxDelegate showInboxMessage:message];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [inboxDelegate showInboxMessage:message];
+                });
 #pragma GCC diagnostic pop
-            } else if ([[UAirship defaultMessageCenter] respondsToSelector:@selector(displayMessageForID:)]) {
-                [[UAirship defaultMessageCenter] displayMessageForID:message.messageID];
             } else {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-                [[UAirship defaultMessageCenter] displayMessage:message];
-#pragma GCC diagnostic pop
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [[UAirship messageCenter] displayMessageForID:message.messageID];
+                });
             }
             break;
         case UASituationBackgroundPush:
@@ -157,12 +163,16 @@
         // Avoid interrupting the user to view the inbox
         return;
     }
-
+    
     id<UAInboxDelegate> inboxDelegate = [UAirship inbox].delegate;
     if ([inboxDelegate respondsToSelector:@selector(showInbox)]) {
-        [inboxDelegate showInbox];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [inboxDelegate showInbox];
+        });
     } else {
-        [[UAirship defaultMessageCenter] display];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[UAirship messageCenter] display];
+        });
     }
 }
 

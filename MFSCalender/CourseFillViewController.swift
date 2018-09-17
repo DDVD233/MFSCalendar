@@ -254,7 +254,7 @@ class courseFillController: UIViewController {
             return nil
         }
         let semaphore = DispatchSemaphore.init(value: 0)
-        let urlString = self.baseURL + "/getScheduleNC"
+        let urlString = "http://127.0.0.1:5000" + "/getScheduleNC"
         let url = URL(string: urlString)
         var request = URLRequest(url: url!)
         request.httpMethod = "POST"
@@ -266,6 +266,7 @@ class courseFillController: UIViewController {
         let task = session.dataTask(with: request, completionHandler: { (data, response, error) in
             guard error == nil else {
                 presentErrorMessage(presentMessage: error!.localizedDescription, layout: .cardView)
+                
                 semaphore.signal()
                 return
             }
@@ -281,6 +282,7 @@ class courseFillController: UIViewController {
                 print(json)
                 schedule = json
             } catch {
+                print(String(data: data!, encoding: .utf8))
                 presentErrorMessage(presentMessage: error.localizedDescription, layout: .cardView)
             }
             

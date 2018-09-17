@@ -35,6 +35,7 @@
 		E484E6551EFA33260056F2D5 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E484E6541EFA33260056F2D5 /* Localizable.strings */; };
 		E489F6C71F5A821E00F2269F /* ProjectPublicFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E489F6C61F5A821E00F2269F /* ProjectPublicFunctions.swift */; };
 		E489F6C81F5A825A00F2269F /* ProjectPublicFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E489F6C61F5A821E00F2269F /* ProjectPublicFunctions.swift */; };
+		E48A0A3C214AC842005ABB87 /* MailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48A0A3B214AC842005ABB87 /* MailViewController.swift */; };
 		E48B85A91F96691D000DC288 /* NewMoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48B85A81F96691D000DC288 /* NewMoreViewController.swift */; };
 		E48CE0981F9FA6BB007B53D0 /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48CE0971F9FA6BB007B53D0 /* UserDefaults.swift */; };
 		E48D4DF01E61F275008B0A97 /* ADayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48D4DEF1E61F275008B0A97 /* ADayViewController.swift */; };
@@ -167,6 +168,7 @@
 		E484E6591EFA337F0056F2D5 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E484E65B1EFA338B0056F2D5 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		E489F6C61F5A821E00F2269F /* ProjectPublicFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProjectPublicFunctions.swift; sourceTree = "<group>"; };
+		E48A0A3B214AC842005ABB87 /* MailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailViewController.swift; sourceTree = "<group>"; };
 		E48B85A81F96691D000DC288 /* NewMoreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewMoreViewController.swift; sourceTree = "<group>"; };
 		E48C89E61F71A8EA00D01B61 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		E48CE0971F9FA6BB007B53D0 /* UserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaults.swift; sourceTree = "<group>"; };
@@ -472,6 +474,7 @@
 				E48CE0971F9FA6BB007B53D0 /* UserDefaults.swift */,
 				E472A15E1EFB6F3C00EF5A74 /* More View */,
 				E4F86B341DF0E20C00CAD72B /* Main.storyboard */,
+				E48A0A3B214AC842005ABB87 /* MailViewController.swift */,
 				E4F86B3A1DF0E20C00CAD72B /* Assets.xcassets */,
 				E4EA9D7B1DF225FB0021A823 /* Images */,
 				E4F86B3F1DF0E20C00CAD72B /* Info.plist */,
@@ -583,6 +586,7 @@
 					E48D4DFE1E61FC25008B0A97 = {
 						CreatedOnToolsVersion = 8.3;
 						DevelopmentTeam = HWH6G9P2V2;
+						LastSwiftMigration = 1000;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
@@ -599,12 +603,14 @@
 					E48F155D1F7467D900A36904 = {
 						CreatedOnToolsVersion = 9.0;
 						DevelopmentTeam = HWH6G9P2V2;
+						LastSwiftMigration = 1000;
 						ProvisioningStyle = Automatic;
 						TestTargetID = E4F86B2C1DF0E20C00CAD72B;
 					};
 					E4F86B2C1DF0E20C00CAD72B = {
 						CreatedOnToolsVersion = 8.1;
 						DevelopmentTeam = HWH6G9P2V2;
+						LastSwiftMigration = 1000;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
@@ -772,6 +778,7 @@
 				"${BUILT_PRODUCTS_DIR}/UrbanAirship-iOS-SDK/AirshipKit.framework",
 				"${BUILT_PRODUCTS_DIR}/XLPagerTabStrip/XLPagerTabStrip.framework",
 				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
+				"${BUILT_PRODUCTS_DIR}/p2.OAuth2/p2_OAuth2.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
@@ -808,6 +815,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AirshipKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/XLPagerTabStrip.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/p2_OAuth2.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -925,6 +933,7 @@
 				E4C46A2E1ED50CD3007F8F1A /* CourseFillViewController.swift in Sources */,
 				E453F0D11EA137D900BCE58D /* CalendarViewController.swift in Sources */,
 				E4288E1420360F6600E4488D /* MFSClasses.swift in Sources */,
+				E48A0A3C214AC842005ABB87 /* MailViewController.swift in Sources */,
 				E4F8D4E41EF0DD2200F47525 /* HomeworkViewController.swift in Sources */,
 				E489F6C71F5A821E00F2269F /* ProjectPublicFunctions.swift in Sources */,
 				E4B9378120C71DE500F0A225 /* NetworkFunctions.swift in Sources */,
@@ -1009,7 +1018,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.dwei.ClassSchedule;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -1028,7 +1037,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.dwei.ClassSchedule;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -1094,7 +1103,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.dwei.MFSCalendarUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = MFSCalendar;
 			};
@@ -1115,7 +1124,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.dwei.MFSCalendarUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = MFSCalendar;
 			};
@@ -1241,11 +1250,11 @@
 				CODE_SIGN_ENTITLEMENTS = MFSCalender/MFSCalender.entitlements;
 				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				INFOPLIST_FILE = MFSCalender/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.dwei;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -1259,11 +1268,11 @@
 				CODE_SIGN_ENTITLEMENTS = MFSCalender/MFSCalender.entitlements;
 				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				INFOPLIST_FILE = MFSCalender/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.dwei;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

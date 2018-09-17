@@ -1,8 +1,8 @@
-/* Copyright 2017 Urban Airship and Contributors */
-
+/* Copyright 2018 Urban Airship and Contributors */
 
 #import <Foundation/Foundation.h>
 #import "UAAPIClient+Internal.h"
+#import "UATagGroupsType+Internal.h"
 
 @class UAConfig;
 @class UATagGroupsMutation;
@@ -36,26 +36,17 @@ NS_ASSUME_NONNULL_BEGIN
 + (instancetype)clientWithConfig:(UAConfig *)config session:(UARequestSession *)session;
 
 /**
- * Update the channel tag group.
+ * Update the tag group for the identifier.
  *
- * @param channelId The channel ID string.
+ * @param identifier The ID string.
  * @param mutation The tag groups changes.
+ * @param type The tag groups type.
  * @param completionHandler The completion handler with the status code.
  */
-- (void)updateChannel:(NSString *)channelId
-    tagGroupsMutation:(UATagGroupsMutation *)mutation
-    completionHandler:(void (^)(NSUInteger status))completionHandler;
-
-/**
- * Update the named user tags.
- *
- * @param identifier The named user ID string.
- * @param mutation The tag groups changes.
- * @param completionHandler The completion handler with the status code.
- */
-- (void)updateNamedUser:(NSString *)identifier
-      tagGroupsMutation:(UATagGroupsMutation *)mutation
-      completionHandler:(void (^)(NSUInteger status))completionHandler;
+- (void)updateTagGroupsForId:(NSString *)identifier
+           tagGroupsMutation:(UATagGroupsMutation *)mutation
+                        type:(UATagGroupsType)type
+           completionHandler:(void (^)(NSUInteger status))completionHandler;
 
 @end
 

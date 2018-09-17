@@ -1,4 +1,4 @@
-/* Copyright 2017 Urban Airship and Contributors */
+/* Copyright 2018 Urban Airship and Contributors */
 
 
 #import "UAFetchDeviceInfoAction.h"
@@ -27,7 +27,7 @@ NSString *const UALocationEnabledKey = @"location_enabled";
         [dict setValue:tags forKey:UATagsKey];
     }
 
-    BOOL optedIn = [UAirship push].authorizedNotificationOptions != 0;
+    BOOL optedIn = [UAirship push].authorizedNotificationSettings != 0;
     [dict setValue:@(optedIn) forKey:UAPushOptInKey];
     
     BOOL locationEnabled = [UAirship location].locationUpdatesEnabled;

@@ -1,11 +1,8 @@
-/* Copyright 2017 Urban Airship and Contributors */
+/* Copyright 2018 Urban Airship and Contributors */
 
 #import "UAInboxMessage+Internal.h"
-#import "UAInbox.h"
-#import "UAInboxMessageData+Internal.h"
-#import "UAInboxAPIClient+Internal.h"
 #import "UAInboxMessageList+Internal.h"
-#import "UAUtils.h"
+#import "UAUtils+Internal.h"
 
 @interface UAInboxMessage()
 @property (nonatomic, copy) NSString *messageID;

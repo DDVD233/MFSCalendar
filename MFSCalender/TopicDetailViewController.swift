@@ -22,7 +22,7 @@ class topicDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        topicDetailTable.rowHeight = UITableViewAutomaticDimension
+        topicDetailTable.rowHeight = UITableView.automaticDimension
         topicDetailTable.estimatedRowHeight = 50
         topicDetailTable.delegate = self
         topicDetailTable.dataSource = self

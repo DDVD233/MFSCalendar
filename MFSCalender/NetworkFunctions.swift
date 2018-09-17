@@ -18,8 +18,6 @@ class NetworkOperations {
             switch result {
             case let .success(response):
                 do {
-                    print(response.request?.url)
-                    print(String(data: response.data, encoding: .utf8))
                     guard let json = try JSONSerialization.jsonObject(with: response.data, options: .allowFragments) as? [[String: Any]] else {
                         presentErrorMessage(presentMessage: "Quarter Data not found", layout: .cardView)
                         return
@@ -167,8 +165,7 @@ class NetworkOperations {
         if let largeFileLink = userDefaults.string(forKey: "largePhotoLink") {
             provider.request(.downloadLargeProfilePhoto(link: largeFileLink), completion: { result in
                 switch result {
-                case let .success(response):
-                    print(response.request?.url)
+                case let .success(_):
                     userDefaults.set(true, forKey: "didDownloadFullSizeImage")
                 case let .failure(error):
                     NSLog("Failed downloading large profile photo because: \(error)")

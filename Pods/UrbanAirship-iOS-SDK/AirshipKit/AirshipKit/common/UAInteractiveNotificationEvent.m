@@ -1,4 +1,4 @@
-/* Copyright 2017 Urban Airship and Contributors */
+/* Copyright 2018 Urban Airship and Contributors */
 
 #import "UAInteractiveNotificationEvent+Internal.h"
 #import "UAEvent+Internal.h"
@@ -24,10 +24,10 @@ const NSUInteger UAInteractiveNotificationEventCharacterLimit = 255;
 
     UAInteractiveNotificationEvent *event = [[self alloc] init];
 
-#if TARGET_OS_TV   // application launch to the foreground (UNNotificationActionOptionForeground) not supported in tvOS
+#if TARGET_OS_TV   // application launch to the foreground (UANotificationActionOptionForeground) not supported in tvOS
     BOOL foreground = NO;
 #else
-    BOOL foreground = (action.options & UNNotificationActionOptionForeground) > 0;
+    BOOL foreground = (action.options & UANotificationActionOptionForeground) > 0;
 #endif
 
     NSMutableDictionary *data = [NSMutableDictionary dictionary];

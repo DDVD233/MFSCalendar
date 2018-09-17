@@ -109,7 +109,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         
         
         
-        self.addChildViewController(eventViewController)
+        self.addChild(eventViewController)
         self.eventViewContainer.addSubview(eventViewController.view)
         
         let preferences = Preferences()
@@ -184,7 +184,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
 //            }
 //        }
         let notification = NotificationCenter.default
-        notification.addObserver(forName: .UIApplicationWillResignActive, object: nil, queue: OperationQueue.current, using: { _ in
+        notification.addObserver(forName: UIApplication.willResignActiveNotification, object: nil, queue: OperationQueue.current, using: { _ in
             self.stopTimer()
         })
         
@@ -295,7 +295,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
 
     func title(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
         var str: String? = ""
-        let attrs: [NSAttributedStringKey: Any] = [NSAttributedStringKey.font: UIFont.preferredFont(forTextStyle: UIFontTextStyle.headline)]
+        let attrs: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: UIFont.TextStyle.headline)]
         str = "No more classes for today!"
 
         return NSAttributedString(string: str!, attributes: attrs)
@@ -369,7 +369,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
             formatter.dateFormat = "EEEE, MMMM d."
             //MMMM d, yyyy
             var today = formatter.string(from: date)
-            let labelAttributes = [NSAttributedStringKey.font:
+            let labelAttributes = [NSAttributedString.Key.font:
                 UIFont.init(name: self.dateLabel.font.fontName, size: self.dateLabel.font.pointSize) ?? UIFont()]
             if NSString(string: today).size(withAttributes: labelAttributes).width > self.dateLabel.bounds.size.width - 10 {
                 formatter.dateFormat = "EEEE, MMM d."

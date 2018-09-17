@@ -1,9 +1,11 @@
-/* Copyright 2017 Urban Airship and Contributors */
+/* Copyright 2018 Urban Airship and Contributors */
 
 #import "UANamedUserAPIClient+Internal.h"
 #import "UAConfig.h"
-#import "UAUtils.h"
+#import "UAUtils+Internal.h"
 #import "NSJSONSerialization+UAAdditions.h"
+#import "NSURLResponse+UAAdditions.h"
+#import "UAJSONSerialization+Internal.h"
 
 #define kUANamedUserPath @"/api/named_users"
 #define kUANamedUserChannelIDKey @"channel_id"
@@ -25,6 +27,11 @@
         onSuccess:(UANamedUserAPIClientSuccessBlock)successBlock
         onFailure:(UANamedUserAPIClientFailureBlock)failureBlock {
 
+    if (!self.enabled) {
+        UA_LDEBUG(@"Disabled");
+        return;
+    }
+    
     if (!identifier) {
         UA_LERR(@"The named user ID cannot be nil.");
         return;
@@ -48,13 +55,7 @@
                                         urlString:[NSString stringWithFormat:@"%@%@", urlString, @"/associate"]];
 
     [self.session dataTaskWithRequest:request retryWhere:^BOOL(NSData * _Nullable data, NSURLResponse * _Nullable response) {
-        NSHTTPURLResponse *httpResponse = nil;
-        if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
-            httpResponse = (NSHTTPURLResponse *) response;
-        }
-
-        NSInteger status = httpResponse.statusCode;
-        return (BOOL)(status >= 500 && status <= 599);
+        return [response hasRetriableStatus];
     } completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         NSHTTPURLResponse *httpResponse = nil;
         if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
@@ -79,6 +80,11 @@
            onSuccess:(UANamedUserAPIClientSuccessBlock)successBlock
            onFailure:(UANamedUserAPIClientFailureBlock)failureBlock {
 
+    if (!self.enabled) {
+        UA_LDEBUG(@"Disabled");
+        return;
+    }
+    
     if (!channelID) {
         UA_LERR(@"The channel ID cannot be nil.");
         return;
@@ -95,14 +101,7 @@
                                         urlString:[NSString stringWithFormat:@"%@%@", urlString, @"/disassociate"]];
 
     [self.session dataTaskWithRequest:request retryWhere:^BOOL(NSData * _Nullable data, NSURLResponse * _Nullable response) {
-        NSHTTPURLResponse *httpResponse = nil;
-        if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
-            httpResponse = (NSHTTPURLResponse *) response;
-        }
-        NSInteger status = httpResponse.statusCode;
-        return (BOOL)(status >= 500 && status <= 599);
-
-
+        return [response hasRetriableStatus];
     } completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         NSHTTPURLResponse *httpResponse = nil;
         if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
@@ -132,7 +131,7 @@
         builder.password = self.config.appSecret;
         [builder setValue:@"application/vnd.urbanairship+json; version=3;" forHeader:@"Accept"];
         [builder setValue:@"application/json" forHeader:@"Content-Type"];
-        builder.body = [NSJSONSerialization dataWithJSONObject:payload
+        builder.body = [UAJSONSerialization dataWithJSONObject:payload
                                                        options:0
                                                          error:nil];
     }];

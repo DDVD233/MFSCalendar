@@ -203,6 +203,7 @@ public func presentErrorMessage(presentMessage: String, layout: MessageView.Layo
     view.configureTheme(.error)
     let icon = "😱"
     view.configureContent(title: "Error!", body: presentMessage, iconText: icon)
+    print("[ERROR] " + presentMessage)
     view.button?.isHidden = true
     let config = SwiftMessages.Config()
     DispatchQueue.main.async {

@@ -1,7 +1,8 @@
-/* Copyright 2017 Urban Airship and Contributors */
+/* Copyright 2018 Urban Airship and Contributors */
 
 #import "NSJSONSerialization+UAAdditions.h"
 #import "UAGlobal.h"
+#import "UAJSONSerialization+Internal.h"
 
 @implementation NSJSONSerialization (UAAdditions)
 
@@ -53,7 +54,7 @@ NSString * const UAJSONSerializationErrorDomain = @"com.urbanairship.json_serial
             }
             return nil;
         }
-        NSData *data = [NSJSONSerialization dataWithJSONObject:jsonObject
+        NSData *data = [UAJSONSerialization dataWithJSONObject:jsonObject
                                                        options:opt
                                                          error:error];
 

@@ -1,4 +1,4 @@
-/* Copyright 2017 Urban Airship and Contributors */
+/* Copyright 2018 Urban Airship and Contributors */
 
 #import "UABaseNativeBridge.h"
 #import "UABaseNativeBridge+Internal.h"
@@ -6,7 +6,7 @@
 #import "UAWhitelist.h"
 #import "UAInboxMessage.h"
 #import "UAGlobal.h"
-#import "UAUtils.h"
+#import "UAUtils+Internal.h"
 #import "UAirship+Internal.h"
 #import "UAInbox.h"
 #import "UAInboxMessage.h"
@@ -26,7 +26,7 @@
         return;
     }
     
-    if (![[UAirship shared].whitelist isWhitelisted:url]) {
+    if (![[UAirship shared].whitelist isWhitelisted:url scope:UAWhitelistScopeJavaScriptInterface]) {
         // Don't log in the special case of about:blank URLs
         if (![url.absoluteString isEqualToString:@"about:blank"]) {
             UA_LINFO(@"URL %@ is not whitelisted, not populating JS interface", url);
@@ -171,7 +171,7 @@
 
 - (NSURL *)createValidPhoneNumberUrlFromUrl:(NSURL *)url {
 
-    NSString *decodedURLString = [url.absoluteString stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSString *decodedURLString = [url.absoluteString stringByRemovingPercentEncoding];
     NSCharacterSet *characterSet = [[NSCharacterSet characterSetWithCharactersInString:@"+-.0123456789"] invertedSet];
     NSString *strippedNumber = [[decodedURLString componentsSeparatedByCharactersInSet:characterSet] componentsJoinedByString:@""];
 
@@ -225,10 +225,17 @@
     return NO;
 }
 
-- (BOOL)isWhiteListedAirshipRequest:(NSURLRequest *)request {
+- (BOOL)isAirshipRequest:(NSURLRequest *)request {
+    return [[request.URL scheme] isEqualToString:@"uairship"];
+}
+
+- (BOOL)isWhitelisted:(NSURL *)url {
+    return [[UAirship shared].whitelist isWhitelisted:url scope:UAWhitelistScopeJavaScriptInterface];
+}
+
+- (BOOL)isWhiteListedAirshipRequest:(NSURLRequest *)request originatingURL:(NSURL *)originatingURL {
     // uairship://command/[<arguments>][?<options>]
-    NSURL *requestURL = (request.mainDocumentURL) ? request.mainDocumentURL : request.URL;
-    return ([[request.URL scheme] isEqualToString:@"uairship"] && ([[UAirship shared].whitelist isWhitelisted:requestURL]));
+    return [self isAirshipRequest:request] && [self isWhitelisted:originatingURL];
 }
 
 @end

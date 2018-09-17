@@ -1,13 +1,11 @@
-/* Copyright 2017 Urban Airship and Contributors */
+/* Copyright 2018 Urban Airship and Contributors */
 
 #import "UANamedUser+Internal.h"
-#import "UAPreferenceDataStore+InternalTagGroupsMutation.h"
 #import "UANamedUserAPIClient+Internal.h"
 #import "UAPush+Internal.h"
-#import "UATagGroupsAPIClient+Internal.h"
+#import "UATagGroupsRegistrar+Internal.h"
 #import "UATagUtils+Internal.h"
 #import "UAConfig+Internal.h"
-#import "UATagGroupsMutation+Internal.h"
 
 #define kUAMaxNamedUserIDLength 128
 
@@ -15,32 +13,31 @@ NSString *const UANamedUserIDKey = @"UANamedUserID";
 NSString *const UANamedUserChangeTokenKey = @"UANamedUserChangeToken";
 NSString *const UANamedUserLastUpdatedTokenKey = @"UANamedUserLastUpdatedToken";
 
-// Named user tag group keys
-NSString *const UANamedUserAddTagGroupsSettingsKey = @"UANamedUserAddTagGroups";
-NSString *const UANamedUserRemoveTagGroupsSettingsKey = @"UANamedUserRemoveTagGroups";
-NSString *const UANamedUserTagGroupsMutationsKey = @"UANamedUserTagGroupsMutations";
+@interface UANamedUser()
+
+/**
+ * The UATagGroupsRegistrar that manages tag group registration with Urban Airship.
+ */
+@property (nonatomic, strong) UATagGroupsRegistrar *tagGroupsRegistrar;
+
+@end
 
 @implementation UANamedUser
 
-- (instancetype)initWithPush:(UAPush *)push config:(UAConfig *)config dataStore:(UAPreferenceDataStore *)dataStore {
-    self = [super init];
+- (instancetype)initWithPush:(UAPush *)push config:(UAConfig *)config dataStore:(UAPreferenceDataStore *)dataStore tagGroupsRegistrar:(UATagGroupsRegistrar *)tagGroupsRegistrar {
+    self = [super initWithDataStore:dataStore];
     if (self) {
         self.config = config;
         self.push = push;
         self.dataStore = dataStore;
         self.namedUserAPIClient = [UANamedUserAPIClient clientWithConfig:config];
-        self.tagGroupsAPIClient = [UATagGroupsAPIClient clientWithConfig:config];
-
+        self.namedUserAPIClient.enabled = self.componentEnabled;
+        self.tagGroupsRegistrar = tagGroupsRegistrar;
 
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(channelCreated:)
                                                      name:UAChannelCreatedEvent
                                                    object:nil];
-
-        // Migrate tag group settings
-        [self.dataStore migrateTagGroupSettingsForAddTagsKey:UANamedUserAddTagGroupsSettingsKey
-                                               removeTagsKey:UANamedUserRemoveTagGroupsSettingsKey
-                                                      newKey:UANamedUserTagGroupsMutationsKey];
 
         // Update the named user if necessary.
         [self update];
@@ -49,14 +46,11 @@ NSString *const UANamedUserTagGroupsMutationsKey = @"UANamedUserTagGroupsMutatio
     return self;
 }
 
-
-- (void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
-
-+ (instancetype) namedUserWithPush:(UAPush *)push config:(UAConfig *)config dataStore:(UAPreferenceDataStore *)dataStore {
-    return [[UANamedUser alloc] initWithPush:push config:config dataStore:dataStore];
++ (instancetype) namedUserWithPush:(UAPush *)push
+                            config:(UAConfig *)config
+                         dataStore:(UAPreferenceDataStore *)dataStore
+                tagGroupsRegistrar:(nonnull UATagGroupsRegistrar *)tagGroupsRegistrar  {
+    return [[UANamedUser alloc] initWithPush:push config:config dataStore:dataStore tagGroupsRegistrar:tagGroupsRegistrar];
 }
 
 - (void)update {
@@ -112,8 +106,7 @@ NSString *const UANamedUserTagGroupsMutationsKey = @"UANamedUserTagGroupsMutatio
         [self update];
 
         // Clear pending tag group mutations
-        [self.dataStore removeObjectForKey:UANamedUserTagGroupsMutationsKey];
-
+        [self.tagGroupsRegistrar clearAllPendingTagUpdates:UATagGroupsTypeNamedUser];
     } else {
         UA_LDEBUG(@"NamedUser - Skipping update. Named user ID trimmed already matches existing named user: %@", self.identifier);
     }
@@ -173,87 +166,24 @@ NSString *const UANamedUserTagGroupsMutationsKey = @"UANamedUserTagGroupsMutatio
 
 
 - (void)addTags:(NSArray *)tags group:(NSString *)tagGroupID {
-    NSArray *normalizedTags = [UATagUtils normalizeTags:tags];
-    NSString *normalizedTagGroupID = [UATagUtils normalizeTagGroupID:tagGroupID];
-
-    if (!normalizedTags.count || !normalizedTagGroupID.length) {
-        return;
-    }
-
-    UATagGroupsMutation *mutation = [UATagGroupsMutation mutationToAddTags:normalizedTags
-                                                                     group:normalizedTagGroupID];
-
-    [self.dataStore addTagGroupsMutation:mutation atBeginning:NO forKey:UANamedUserTagGroupsMutationsKey];
+    [self.tagGroupsRegistrar addTags:tags group:tagGroupID type:UATagGroupsTypeNamedUser];
 }
 
 - (void)removeTags:(NSArray *)tags group:(NSString *)tagGroupID {
-    NSArray *normalizedTags = [UATagUtils normalizeTags:tags];
-    NSString *normalizedTagGroupID = [UATagUtils normalizeTagGroupID:tagGroupID];
-
-    if (!normalizedTags.count || !normalizedTagGroupID.length) {
-        return;
-    }
-
-    UATagGroupsMutation *mutation = [UATagGroupsMutation mutationToRemoveTags:normalizedTags
-                                                                        group:normalizedTagGroupID];
-
-    [self.dataStore addTagGroupsMutation:mutation atBeginning:NO forKey:UANamedUserTagGroupsMutationsKey];
+    [self.tagGroupsRegistrar removeTags:tags group:tagGroupID type:UATagGroupsTypeNamedUser];
 }
 
 - (void)setTags:(NSArray *)tags group:(NSString *)tagGroupID {
-    NSArray *normalizedTags = [UATagUtils normalizeTags:tags];
-    NSString *normalizedTagGroupID = [UATagUtils normalizeTagGroupID:tagGroupID];
-
-    if (!normalizedTagGroupID.length) {
-        return;
-    }
-
-    UATagGroupsMutation *mutation = [UATagGroupsMutation mutationToSetTags:normalizedTags
-                                                                     group:normalizedTagGroupID];
-
-    [self.dataStore addTagGroupsMutation:mutation atBeginning:NO forKey:UANamedUserTagGroupsMutationsKey];
+    [self.tagGroupsRegistrar setTags:tags group:tagGroupID type:UATagGroupsTypeNamedUser];
 }
 
 - (void)updateTags {
     if (!self.identifier) {
+        UA_LERR(@"Can't update tags without first setting a named user identifier.");
         return;
     }
-
-    UATagGroupsMutation *mutation = [self.dataStore pollTagGroupsMutationForKey:UANamedUserTagGroupsMutationsKey];
-
-    if (!mutation) {
-        return;
-    }
-
-    __block UIBackgroundTaskIdentifier backgroundTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
-        UA_LTRACE(@"Tag groups background task expired.");
-        [self.tagGroupsAPIClient cancelAllRequests];
-        [self.dataStore addTagGroupsMutation:mutation atBeginning:YES forKey:UANamedUserTagGroupsMutationsKey];
-
-        if (backgroundTask != UIBackgroundTaskInvalid) {
-            [[UIApplication sharedApplication] endBackgroundTask:backgroundTask];
-            backgroundTask = UIBackgroundTaskInvalid;
-        }
-    }];
-
-    if (backgroundTask == UIBackgroundTaskInvalid) {
-        UA_LTRACE("Background task unavailable, skipping tag groups update.");
-        [self.dataStore addTagGroupsMutation:mutation atBeginning:YES forKey:UANamedUserTagGroupsMutationsKey];
-        return;
-    }
-
-    [self.tagGroupsAPIClient updateNamedUser:self.identifier
-                           tagGroupsMutation:mutation
-                           completionHandler:^(NSUInteger status) {
-                               if (status >= 200 && status <= 299) {
-                                   [self updateTags];
-                               } else if (status != 400 && status != 403) {
-                                   [self.dataStore addTagGroupsMutation:mutation atBeginning:YES forKey:UANamedUserTagGroupsMutationsKey];
-                               }
-
-                               [[UIApplication sharedApplication] endBackgroundTask:backgroundTask];
-                               backgroundTask = UIBackgroundTaskInvalid;
-                           }];
+    
+    [self.tagGroupsRegistrar updateTagGroupsForID:self.identifier type:UATagGroupsTypeNamedUser];
 }
 
 - (void)channelCreated:(NSNotification *)notification {
@@ -266,6 +196,12 @@ NSString *const UANamedUserTagGroupsMutationsKey = @"UANamedUserTagGroupsMutatio
         // Once we get a channel, update the named user if necessary.
         [self update];
     }
+}
+
+- (void)onComponentEnableChange {
+    // Disable/enable the API client and user to disable/enable the inbox
+    self.namedUserAPIClient.enabled = self.componentEnabled;
+    self.tagGroupsRegistrar.componentEnabled = self.componentEnabled;
 }
 
 @end

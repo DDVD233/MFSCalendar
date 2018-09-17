@@ -1,4 +1,4 @@
-/* Copyright 2017 Urban Airship and Contributors */
+/* Copyright 2018 Urban Airship and Contributors */
 
 #import <objc/runtime.h>
 
@@ -17,6 +17,7 @@
     self = [super init];
     if (self) {
         self.deviceAPIURL = kUAAirshipProductionServer;
+        self.remoteDataAPIURL = kUARemoteDataProductionServer;
         self.analyticsURL = kUAAnalyticsProductionServer;
         self.landingPageContentURL = kUAProductionLandingPageContentURL;
         self.developmentLogLevel = UALogLevelDebug;
@@ -31,10 +32,10 @@
         self.whitelist = @[];
         self.clearNamedUserOnAppRestore = NO;
         self.channelCaptureEnabled = YES;
+        self.openURLWhitelistingEnabled = NO;
         self.customConfig = @{};
         self.channelCreationDelayEnabled = NO;
         self.defaultDetectProvisioningMode = YES;
-        self.useWKWebView = NO;
     }
 
     return self;
@@ -54,6 +55,7 @@
         _productionAppKey = config.productionAppKey;
         _productionAppSecret = config.productionAppSecret;
         _deviceAPIURL = config.deviceAPIURL;
+        _remoteDataAPIURL = config.remoteDataAPIURL;
         _analyticsURL = config.analyticsURL;
         _landingPageContentURL = config.landingPageContentURL;
         _developmentLogLevel = config.developmentLogLevel;
@@ -70,11 +72,11 @@
         _whitelist = config.whitelist;
         _clearNamedUserOnAppRestore = config.clearNamedUserOnAppRestore;
         _channelCaptureEnabled = config.channelCaptureEnabled;
+        _openURLWhitelistingEnabled = config.openURLWhitelistingEnabled;
         _customConfig = config.customConfig;
         _channelCreationDelayEnabled = config.channelCreationDelayEnabled;
         _defaultDetectProvisioningMode = config.defaultDetectProvisioningMode;
         _messageCenterStyleConfig = config.messageCenterStyleConfig;
-        _useWKWebView = config.useWKWebView;
         _itunesID = config.itunesID;
     }
 
@@ -97,6 +99,7 @@
             "Analytics Enabled: %d\n"
             "Analytics URL: %@\n"
             "Device API URL: %@\n"
+            "Remote Data API URL: %@\n"
             "Cache Size: %ld MB\n"
             "Landing Page Content URL: %@\n"
             "Automatic Setup Enabled: %d\n"
@@ -104,10 +107,10 @@
             "Whitelist: %@\n"
             "Clear named user on App Restore: %d\n"
             "Channel Capture Enabled: %d\n"
+            "URL Whitelisting Enabled: %d\n"
             "Custom Config: %@\n"
             "Delay Channel Creation: %d\n"
             "Default Message Center Style Config File: %@\n"
-            "Use WKWebView: %d\n"
             "Use iTunes ID: %@\n",
             self.appKey,
             self.appSecret,
@@ -124,6 +127,7 @@
             self.analyticsEnabled,
             self.analyticsURL,
             self.deviceAPIURL,
+            self.remoteDataAPIURL,
             (unsigned long)self.cacheDiskSizeInMB,
             self.landingPageContentURL,
             self.automaticSetupEnabled,
@@ -131,10 +135,10 @@
             self.whitelist,
             self.clearNamedUserOnAppRestore,
             self.channelCaptureEnabled,
+            self.openURLWhitelistingEnabled,
             self.customConfig,
             self.channelCreationDelayEnabled,
             self.messageCenterStyleConfig,
-            self.useWKWebView,
             self.itunesID];
 }
 
@@ -366,34 +370,30 @@
     return YES;// For safety, assume production unless the profile is explicitly set to development
 }
 
-- (void)setAnalyticsURL:(NSString *)analyticsURL {
+- (NSString *)normalizeURL:(NSString *)urlString {
     //Any appending url starts with a beginning /, so make sure the base url does not
-    if ([analyticsURL hasSuffix:@"/"]) {
-        UA_LWARN(@"Analytics URL ends with a trailing slash, stripping ending slash.");
-        _analyticsURL = [analyticsURL substringWithRange:NSMakeRange(0, [analyticsURL length] - 1)];
+    if ([urlString hasSuffix:@"/"]) {
+        UA_LWARN(@"URL %@ ends with a trailing slash, stripping ending slash.", urlString);
+        return [urlString substringWithRange:NSMakeRange(0, urlString.length - 1)];
     } else {
-        _analyticsURL = [analyticsURL copy];
+        return [urlString copy];
     }
+}
+
+- (void)setAnalyticsURL:(NSString *)analyticsURL {
+    _analyticsURL = [self normalizeURL:analyticsURL];
 }
 
 - (void)setDeviceAPIURL:(NSString *)deviceAPIURL {
-    //Any appending url starts with a beginning /, so make sure the base url does not
-    if ([deviceAPIURL hasSuffix:@"/"]) {
-        UA_LWARN(@"Device API URL ends with a trailing slash, stripping ending slash.");
-        _deviceAPIURL = [deviceAPIURL substringWithRange:NSMakeRange(0, [deviceAPIURL length] - 1)];
-    } else {
-        _deviceAPIURL = [deviceAPIURL copy];
-    }
+    _deviceAPIURL = [self normalizeURL:deviceAPIURL];
+}
+
+- (void)setRemoteDataAPIURL:(NSString *)remoteDataAPIURL {
+    _remoteDataAPIURL = [self normalizeURL:remoteDataAPIURL];
 }
 
 - (void)setLandingPageContentURL:(NSString *)landingPageContentURL {
-    //Any appending url starts with a beginning /, so make sure the base url does not
-    if ([landingPageContentURL hasSuffix:@"/"]) {
-        UA_LWARN(@"Landing page content URL ends with a trailing slash, stripping ending slash.");
-        _landingPageContentURL = [landingPageContentURL substringWithRange:NSMakeRange(0, [landingPageContentURL length] - 1)];
-    } else {
-        _landingPageContentURL = [landingPageContentURL copy];
-    }
+    _landingPageContentURL = [self normalizeURL:landingPageContentURL];
 }
 
 #pragma mark -

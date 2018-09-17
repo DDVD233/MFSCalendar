@@ -1,4 +1,4 @@
-/* Copyright 2017 Urban Airship and Contributors */
+/* Copyright 2018 Urban Airship and Contributors */
 
 #import "UAScheduleTrigger+Internal.h"
 #import "UAJSONPredicate.h"
@@ -18,13 +18,15 @@ NSString *const UAScheduleTriggerRegionExitName = @"region_exit";
 NSString *const UAScheduleTriggerCustomEventCountName = @"custom_event_count";
 NSString *const UAScheduleTriggerCustomEventValueName = @"custom_event_value";
 NSString *const UAScheduleTriggerScreenName = @"screen";
+NSString *const UAScheduleTriggerActiveSessionName = @"active_session";
+NSString *const UAScheduleTriggerVersionName = @"version";
 
 NSString * const UAScheduleTriggerErrorDomain = @"com.urbanairship.schedule_trigger";
 
 @implementation UAScheduleTrigger
 
 - (instancetype)initWithType:(UAScheduleTriggerType)type goal:(NSNumber *)goal predicate:(UAJSONPredicate *)predicate {
-    self = [super self];
+    self = [super init];
     if (self) {
         self.goal = goal;
         self.predicate = predicate;
@@ -50,9 +52,13 @@ NSString * const UAScheduleTriggerErrorDomain = @"com.urbanairship.schedule_trig
     return [UAScheduleTrigger triggerWithType:UAScheduleTriggerAppBackground goal:@(count) predicate:nil];
 }
 
++ (instancetype)activeSessionTriggerWithCount:(NSUInteger)count {
+    return [UAScheduleTrigger triggerWithType:UAScheduleTriggerActiveSession goal:@(count) predicate:nil];
+}
+
 + (instancetype)regionEnterTriggerForRegionID:(NSString *)regionID count:(NSUInteger)count {
     UAJSONValueMatcher *valueMatcher = [UAJSONValueMatcher matcherWhereStringEquals:regionID];
-    UAJSONMatcher *jsonMatcher = [UAJSONMatcher matcherWithValueMatcher:valueMatcher key:kUARegionIDKey];
+    UAJSONMatcher *jsonMatcher = [UAJSONMatcher matcherWithValueMatcher:valueMatcher scope:@[kUARegionIDKey]];
     UAJSONPredicate *predicate = [UAJSONPredicate predicateWithJSONMatcher:jsonMatcher];
 
     return [UAScheduleTrigger triggerWithType:UAScheduleTriggerRegionEnter
@@ -62,7 +68,7 @@ NSString * const UAScheduleTriggerErrorDomain = @"com.urbanairship.schedule_trig
 
 + (instancetype)regionExitTriggerForRegionID:(NSString *)regionID count:(NSUInteger)count {
     UAJSONValueMatcher *valueMatcher = [UAJSONValueMatcher matcherWhereStringEquals:regionID];
-    UAJSONMatcher *jsonMatcher = [UAJSONMatcher matcherWithValueMatcher:valueMatcher key:kUARegionIDKey];
+    UAJSONMatcher *jsonMatcher = [UAJSONMatcher matcherWithValueMatcher:valueMatcher scope:@[kUARegionIDKey]];
     UAJSONPredicate *predicate = [UAJSONPredicate predicateWithJSONMatcher:jsonMatcher];
 
     return [UAScheduleTrigger triggerWithType:UAScheduleTriggerRegionExit
@@ -92,6 +98,11 @@ NSString * const UAScheduleTriggerErrorDomain = @"com.urbanairship.schedule_trig
                                     predicate:predicate];
 }
 
++ (instancetype)versionTriggerWithConstraint:(NSString *)versionConstraint count:(NSUInteger)count {
+    UAJSONMatcher *matcher = [UAJSONMatcher matcherWithValueMatcher:[UAJSONValueMatcher matcherWithVersionConstraint:versionConstraint] scope:@[@"ios", @"version"]];
+    UAJSONPredicate *predicate = [UAJSONPredicate predicateWithJSONMatcher:matcher];
+    return [UAScheduleTrigger triggerWithType:UAScheduleTriggerVersion goal:@(count) predicate:predicate];
+}
 
 + (instancetype)triggerWithJSON:(id)json error:(NSError **)error {
     if (![json isKindOfClass:[NSDictionary class]]) {
@@ -107,7 +118,19 @@ NSString * const UAScheduleTriggerErrorDomain = @"com.urbanairship.schedule_trig
 
     UAScheduleTriggerType triggerType;
 
-    NSString *triggerTypeString = [json[UAScheduleTriggerTypeKey] lowercaseString];
+    id triggerTypeContents = json[UAScheduleTriggerTypeKey];
+    if (![triggerTypeContents isKindOfClass:[NSString class]]) {
+        if (error) {
+            NSString *msg = [NSString stringWithFormat:@"Trigger type must be a string."];
+            *error =  [NSError errorWithDomain:UAScheduleTriggerErrorDomain
+                                          code:UAScheduleTriggerErrorCodeInvalidJSON
+                                      userInfo:@{NSLocalizedDescriptionKey:msg}];
+        }
+        return nil;
+    }
+
+    NSString *triggerTypeString = [triggerTypeContents lowercaseString];
+    
     if ([UAScheduleTriggerAppForegroundName isEqualToString:triggerTypeString]) {
         triggerType = UAScheduleTriggerAppForeground;
     } else if ([UAScheduleTriggerAppBackgroundName isEqualToString:triggerTypeString]) {
@@ -124,6 +147,10 @@ NSString * const UAScheduleTriggerErrorDomain = @"com.urbanairship.schedule_trig
         triggerType = UAScheduleTriggerScreen;
     } else if ([UAScheduleTriggerAppInitName isEqualToString:triggerTypeString]) {
         triggerType = UAScheduleTriggerAppInit;
+    } else if ([UAScheduleTriggerActiveSessionName isEqualToString:triggerTypeString]) {
+        triggerType = UAScheduleTriggerActiveSession;
+    } else if ([UAScheduleTriggerVersionName isEqualToString:triggerTypeString]) {
+        triggerType = UAScheduleTriggerVersion;
     } else {
 
         if (error) {
@@ -133,7 +160,6 @@ NSString * const UAScheduleTriggerErrorDomain = @"com.urbanairship.schedule_trig
                                       userInfo:@{NSLocalizedDescriptionKey:msg}];
         }
 
-        // No valid trigger type
         return nil;
     }
 

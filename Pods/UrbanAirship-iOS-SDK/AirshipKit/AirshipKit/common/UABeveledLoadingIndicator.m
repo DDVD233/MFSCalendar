@@ -1,4 +1,4 @@
-/* Copyright 2017 Urban Airship and Contributors */
+/* Copyright 2018 Urban Airship and Contributors */
 
 #import "UABeveledLoadingIndicator.h"
 #include <QuartzCore/QuartzCore.h>
@@ -15,6 +15,17 @@
 
     if (self) {
         [self setup];
+    }
+
+    return self;
+}
+
+- (instancetype)init {
+    self = [super init];
+
+    if (self) {
+        [self setup];
+        self.hidden = NO;
     }
 
     return self;
@@ -45,15 +56,22 @@
     [self setup];
 }
 
+- (void)setHidden:(BOOL)hidden {
+    if (hidden) {
+        [self.activity stopAnimating];
+    } else {
+        [self.activity startAnimating];
+    }
+
+    super.hidden = hidden;
+}
+
 - (void)show {
     self.hidden = NO;
-    [self.activity startAnimating];
 }
 
 - (void)hide {
     self.hidden = YES;
-    [self.activity stopAnimating];
 }
-
 
 @end

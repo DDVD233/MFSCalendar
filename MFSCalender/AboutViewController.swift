@@ -36,7 +36,7 @@ class aboutView: UITableViewController, MFMailComposeViewControllerDelegate {
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.section == 2 {
-            return UITableViewAutomaticDimension
+            return UITableView.automaticDimension
         } else {
             return 44
         }

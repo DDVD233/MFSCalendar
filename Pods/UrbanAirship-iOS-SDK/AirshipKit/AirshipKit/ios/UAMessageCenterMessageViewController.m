@@ -1,14 +1,18 @@
-/* Copyright 2017 Urban Airship and Contributors */
+/* Copyright 2018 Urban Airship and Contributors */
 
 #import "UAMessageCenterMessageViewController.h"
 #import "UAWKWebViewNativeBridge.h"
 #import "UAInbox.h"
 #import "UAirship.h"
+#import "UAMessageCenter.h"
 #import "UAInboxMessageList.h"
 #import "UAInboxMessage.h"
-#import "UAUtils.h"
+#import "UAUtils+Internal.h"
+#import "UAViewUtils+Internal.h"
 #import "UAMessageCenterLocalization.h"
 #import "UABeveledLoadingIndicator.h"
+#import "UAInAppMessageUtils+Internal.h"
+
 
 #define kMessageUp 0
 #define kMessageDown 1
@@ -23,9 +27,19 @@
 @property (nonatomic, strong) WKWebView *webView;
 
 /**
- * The loading indicator.
+ * The custom loading indicator container view.
  */
-@property (weak, nonatomic) IBOutlet UABeveledLoadingIndicator *loadingIndicatorView;
+@property (nonatomic, strong) IBOutlet UIView *loadingIndicatorContainerView;
+
+/**
+ * The optional custom loading indicator view.
+ */
+@property (nullable, nonatomic, strong) UIView *loadingIndicatorView;
+
+/**
+ * The optional custom animation to execute during loading.
+ */
+@property (nullable, nonatomic, strong) void (^loadingAnimations)(void);
 
 /**
  * The view displayed when there are no messages.
@@ -81,14 +95,21 @@ typedef enum MessageState {
     [self.webView stopLoading];
 }
 
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self.webView.scrollView setZoomScale:0 animated:YES];
+    });
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
 
     self.nativeBridge = [[UAWKWebViewNativeBridge alloc] init];
     self.nativeBridge.forwardDelegate = self;
     self.webView.navigationDelegate = self.nativeBridge;
+    self.webView.allowsLinkPreview = ![UAirship messageCenter].disableMessageLinkPreviewAndCallouts;
 
-    if ([[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){10, 0, 0}]) {
+    if (@available(iOS 10.0, tvOS 10.0, *)) {
         // Allow the webView to detect data types (e.g. phone numbers, addresses) at will
         [self.webView.configuration setDataDetectorTypes:WKDataDetectorTypeAll];
     }
@@ -122,6 +143,22 @@ typedef enum MessageState {
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+
+    // Add the custom loading view if it's been set
+    if (self.loadingIndicatorView) {
+        // Add custom loading indicator view and constrain it to the center
+        [self.loadingIndicatorContainerView addSubview:self.loadingIndicatorView];
+        [UAViewUtils applyContainerConstraintsToContainer:self.loadingIndicatorContainerView containedView:self.loadingIndicatorView];
+    } else {
+        // Generate default loading view
+        UABeveledLoadingIndicator *defaultLoadingIndicatorView = [[UABeveledLoadingIndicator alloc] init];
+
+        self.loadingIndicatorView = defaultLoadingIndicatorView;
+
+        // Add default loading indicator view and constrain it to the center
+        [self.loadingIndicatorContainerView addSubview:self.loadingIndicatorView];
+        [UAViewUtils applyContainerConstraintsToContainer:self.loadingIndicatorContainerView containedView:self.loadingIndicatorView];
+    }
     
     if (self.messageState == NONE) {
         [self coverWithMessageAndHideLoadingIndicator:UAMessageCenterLocalizedString(@"ua_message_not_selected")];
@@ -178,12 +215,21 @@ typedef enum MessageState {
     [self hideLoadingIndicator];
 }
 
+- (void)setLoadingIndicatorView:(UIView *)loadingIndicatorView animations:(void (^)(void))animations {
+    self.loadingAnimations = animations;
+    self.loadingIndicatorView = loadingIndicatorView;
+}
+
 - (void)showLoadingIndicator {
-    [self.loadingIndicatorView show];
+    if (self.loadingAnimations) {
+        self.loadingAnimations();
+    }
+
+    [self.loadingIndicatorView setHidden:NO];
 }
 
 - (void)hideLoadingIndicator {
-    [self.loadingIndicatorView hide];
+    [self.loadingIndicatorView setHidden:YES];
 }
 
 static NSString *urlForBlankPage = @"about:blank";
@@ -199,32 +245,40 @@ static NSString *urlForBlankPage = @"about:blank";
     // Refresh the list to see if the message is available in the cloud
     self.messageState = FETCHING;
 
-    __weak id weakSelf = self;
+    UA_WEAKIFY(self);
 
     [[UAirship inbox].messageList retrieveMessageListWithSuccessBlock:^{
          dispatch_async(dispatch_get_main_queue(),^{
-            __strong id strongSelf = weakSelf;
-            
+             UA_STRONGIFY(self)
+
             UAInboxMessage *message = [[UAirship inbox].messageList messageForID:messageID];
             if (message) {
                 // display the message
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-                [strongSelf loadMessage:message onlyIfChanged:onlyIfChanged];
+                [self loadMessage:message onlyIfChanged:onlyIfChanged];
 #pragma GCC diagnostic pop
             } else {
                 // if the message no longer exists, clean up and show an error dialog
-                [strongSelf hideLoadingIndicator];
+                [self hideLoadingIndicator];
                 
-                [strongSelf displayAlertOnOK:errorCompletion onRetry:^{
-                    [weakSelf loadMessageForID:messageID onlyIfChanged:onlyIfChanged onError:errorCompletion];
+                [self displayNoLongerAvailableAlertOnOK:^{
+                    UA_STRONGIFY(self);
+                    self.messageState = NONE;
+                    self.message = nil;
+                    if (errorCompletion) {
+                        errorCompletion();
+                    };
                 }];
             }
             return;
         });
     } withFailureBlock:^{
         dispatch_async(dispatch_get_main_queue(),^{
-            [weakSelf hideLoadingIndicator];
+            UA_STRONGIFY(self);
+            
+            [self hideLoadingIndicator];
+            
             if (errorCompletion) {
                 errorCompletion();
             }
@@ -233,6 +287,8 @@ static NSString *urlForBlankPage = @"about:blank";
     }];
 }
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-implementations"
 - (void)loadMessage:(UAInboxMessage *)message onlyIfChanged:(BOOL)onlyIfChanged {
     if (!message) {
         if (self.messageState == LOADING) {
@@ -268,6 +324,7 @@ static NSString *urlForBlankPage = @"about:blank";
         }
     }
 }
+#pragma GCC diagnostic pop
 
 - (void)loadMessageIntoWebView {
     self.title = self.message.title;
@@ -281,7 +338,26 @@ static NSString *urlForBlankPage = @"about:blank";
     [self.webView loadRequest:requestObj];
 }
 
-- (void)displayAlertOnOK:(void (^)(void))okCompletion onRetry:(void (^)(void))retryCompletion {
+- (void)displayNoLongerAvailableAlertOnOK:(void (^)(void))okCompletion {
+    UIAlertController* alert = [UIAlertController alertControllerWithTitle:UAMessageCenterLocalizedString(@"ua_content_error")
+                                                                   message:UAMessageCenterLocalizedString(@"ua_mc_no_longer_available")
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:UAMessageCenterLocalizedString(@"ua_ok")
+                                                            style:UIAlertActionStyleDefault
+                                                          handler:^(UIAlertAction * action) {
+                                                              if (okCompletion) {
+                                                                  okCompletion();
+                                                              }
+                                                          }];
+    
+    [alert addAction:defaultAction];
+    
+    [self presentViewController:alert animated:YES completion:nil];
+    
+}
+
+- (void)displayFailedToLoadAlertOnOK:(void (^)(void))okCompletion onRetry:(void (^)(void))retryCompletion {
     UIAlertController* alert = [UIAlertController alertControllerWithTitle:UAMessageCenterLocalizedString(@"ua_connection_error")
                                                                    message:UAMessageCenterLocalizedString(@"ua_mc_failed_to_load")
                                                             preferredStyle:UIAlertControllerStyleAlert];
@@ -325,7 +401,9 @@ static NSString *urlForBlankPage = @"about:blank";
             [self coverWithBlankViewAndShowLoadingIndicator];
             if (status >= 500) {
                 // Display a retry alert
-                [self displayAlertOnOK:nil onRetry:^{
+                UA_WEAKIFY(self);
+                [self displayFailedToLoadAlertOnOK:nil onRetry:^{
+                    UA_STRONGIFY(self);
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
                     [self loadMessage:self.message onlyIfChanged:NO];
@@ -333,7 +411,11 @@ static NSString *urlForBlankPage = @"about:blank";
                 }];
             } else {
                 // Display a generic alert
-                [self displayAlertOnOK:nil onRetry:nil];
+                UA_WEAKIFY(self);
+                [self displayFailedToLoadAlertOnOK:^{
+                    UA_STRONGIFY(self);
+                    [self uncoverAndHideLoadingIndicator];
+                } onRetry:nil];
             }
             return;
         }
@@ -347,6 +429,11 @@ static NSString *urlForBlankPage = @"about:blank";
     if (self.messageState != LOADING) {
         UA_LWARN(@"WARNING: messageState = %u. Should be \"LOADING\"",self.messageState);
     }
+    
+    if ([UAirship messageCenter].disableMessageLinkPreviewAndCallouts) {
+        [self.webView evaluateJavaScript:@"document.body.style.webkitTouchCallout='none';" completionHandler:nil];
+    }
+    
     if ([wv.URL.absoluteString isEqualToString:urlForBlankPage]) {
         [self loadMessageIntoWebView];
         return;
@@ -376,7 +463,9 @@ static NSString *urlForBlankPage = @"about:blank";
     [self hideLoadingIndicator];
 
     // Display a retry alert
-    [self displayAlertOnOK:nil onRetry:^{
+    UA_WEAKIFY(self);
+    [self displayFailedToLoadAlertOnOK:nil onRetry:^{
+        UA_STRONGIFY(self);
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
         [self loadMessage:self.message onlyIfChanged:NO];

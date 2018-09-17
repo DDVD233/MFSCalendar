@@ -1,6 +1,6 @@
-/* Copyright 2017 Urban Airship and Contributors */
+/* Copyright 2018 Urban Airship and Contributors */
 
-#import "UAUtils.h"
+#import "UAUtils+Internal.h"
 #import "UAActionResult.h"
 
 // Frameworks
@@ -109,7 +109,7 @@
 
 + (NSString *)getReadableFileSizeFromBytes:(double)bytes {
     if (bytes < 1024)
-        return([NSString stringWithFormat:@"%.0f bytes",bytes]);
+        return([NSString stringWithFormat:@"%.0f %@",bytes,[self pluralize:bytes singularForm:@"byte" pluralForm:@"bytes"]]);
 
     bytes /= 1024.0;
     if (bytes < 1024)
@@ -200,7 +200,8 @@
     dateFormatter.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:0];
 
     // All the various formats
-    NSArray *formats = @[@"yyyy-MM-dd'T'HH:mm:ss",
+    NSArray *formats = @[@"yyyy-MM-dd'T'HH:mm:ss.SSS",
+                         @"yyyy-MM-dd'T'HH:mm:ss",
                          @"yyyy-MM-dd HH:mm:ss",
                          @"yyyy-MM-dd'T'HH:mm",
                          @"yyyy-MM-dd HH:mm",
@@ -283,7 +284,7 @@
         if (fetchResult.intValue == UIBackgroundFetchResultNewData) {
             return UIBackgroundFetchResultNewData;
         } else if (fetchResult.intValue == UIBackgroundFetchResultFailed) {
-            mergedResult = fetchResult.intValue;
+            mergedResult = UIBackgroundFetchResultFailed;
         }
     }
 
@@ -338,6 +339,28 @@
     }
     
     return [deviceTokenString lowercaseString];
+}
+
+/**
+ * A utility method that compares two version strings and determines their order.
+ */
++ (NSComparisonResult)compareVersion:(NSString *)version1 toVersion:(NSString *)version2 {
+    NSArray *version1Components = [version1 componentsSeparatedByString:@"."];
+    NSArray *version2Components = [version2 componentsSeparatedByString:@"."];
+
+    NSInteger index = 0;
+    while ([version1Components count] > index || [version2Components count] > index) {
+        NSInteger version1Component = [version1Components count] > index ? [[version1Components objectAtIndex:index] integerValue] : 0;
+        NSInteger version2Component = [version2Components count] > index ? [[version2Components objectAtIndex:index] integerValue] : 0;
+        if (version1Component < version2Component) {
+            return NSOrderedAscending;
+        } else if (version1Component > version2Component) {
+            return NSOrderedDescending;
+        }
+        index++;
+    }
+
+    return NSOrderedSame;
 }
 
 @end

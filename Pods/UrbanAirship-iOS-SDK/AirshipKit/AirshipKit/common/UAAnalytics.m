@@ -1,4 +1,4 @@
-/* Copyright 2017 Urban Airship and Contributors */
+/* Copyright 2018 Urban Airship and Contributors */
 
 #import <UIKit/UIKit.h>
 #import "UAAnalytics+Internal.h"
@@ -6,7 +6,7 @@
 #import "UAEventManager+Internal.h"
 #import "UAConfig.h"
 #import "UAEvent.h"
-#import "UAUtils.h"
+#import "UAUtils+Internal.h"
 
 #import "UAAppBackgroundEvent+Internal.h"
 #import "UAAppForegroundEvent+Internal.h"
@@ -26,6 +26,7 @@
 @property (nonatomic, strong) UAConfig *config;
 @property (nonatomic, strong) UAPreferenceDataStore *dataStore;
 @property (nonatomic, strong) UAEventManager *eventManager;
+@property (nonatomic, strong) NSNotificationCenter *notificationCenter;
 
 @property (nonatomic, assign) BOOL isEnteringForeground;
 
@@ -35,50 +36,59 @@
 @property (nonatomic, assign) NSTimeInterval startTime;
 @end
 
+
+NSString *const UACustomEventAdded = @"UACustomEventAdded";
+NSString *const UARegionEventAdded = @"UARegionEventAdded";
+NSString *const UAScreenTracked = @"UAScreenTracked";
+NSString *const UAScreenKey = @"screen";
+NSString *const UAEventKey = @"event";
+
 @implementation UAAnalytics
 
+- (instancetype)initWithConfig:(UAConfig *)airshipConfig
+                     dataStore:(UAPreferenceDataStore *)dataStore
+                  eventManager:(UAEventManager *)eventManager
+            notificationCenter:(NSNotificationCenter *)notificationCenter {
 
-- (void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
-- (instancetype)initWithConfig:(UAConfig *)airshipConfig dataStore:(UAPreferenceDataStore *)dataStore eventManager:(UAEventManager *)eventManager {
-    self = [super init];
+    self = [super initWithDataStore:dataStore];
 
     if (self) {
         // Set server to default if not specified in options
         self.config = airshipConfig;
         self.dataStore = dataStore;
         self.eventManager = eventManager;
+        self.notificationCenter = notificationCenter;
 
         // Default analytics value
         if (![self.dataStore objectForKey:kUAAnalyticsEnabled]) {
             [self.dataStore setBool:YES forKey:kUAAnalyticsEnabled];
         }
 
+        self.eventManager.uploadsEnabled = self.isEnabled && self.componentEnabled;
+
         // Register for background notifications
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(enterBackground)
-                                                     name:UIApplicationDidEnterBackgroundNotification
-                                                   object:nil];
+        [self.notificationCenter addObserver:self
+                                    selector:@selector(enterBackground)
+                                        name:UIApplicationDidEnterBackgroundNotification
+                                      object:nil];
 
         // Register for foreground notifications
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(enterForeground)
-                                                     name:UIApplicationWillEnterForegroundNotification
-                                                   object:nil];
+        [self.notificationCenter addObserver:self
+                                    selector:@selector(enterForeground)
+                                        name:UIApplicationWillEnterForegroundNotification
+                                      object:nil];
 
         // App inactive/active for incoming calls, notification center, and taskbar
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(didBecomeActive)
-                                                     name:UIApplicationDidBecomeActiveNotification
-                                                   object:nil];
+        [self.notificationCenter addObserver:self
+                                    selector:@selector(didBecomeActive)
+                                        name:UIApplicationDidBecomeActiveNotification
+                                      object:nil];
 
         // Register for terminate notifications
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(willTerminate)
-                                                     name:UIApplicationWillTerminateNotification
-                                                   object:nil];
+        [self.notificationCenter addObserver:self
+                                    selector:@selector(willTerminate)
+                                        name:UIApplicationWillTerminateNotification
+                                      object:nil];
 
         [self startSession];
 
@@ -93,16 +103,18 @@
 + (instancetype)analyticsWithConfig:(UAConfig *)config dataStore:(UAPreferenceDataStore *)dataStore {
     return [[UAAnalytics alloc] initWithConfig:config
                                      dataStore:dataStore
-                                  eventManager:[UAEventManager eventManagerWithConfig:config dataStore:dataStore]];
+                                  eventManager:[UAEventManager eventManagerWithConfig:config dataStore:dataStore]
+                            notificationCenter:[NSNotificationCenter defaultCenter]];
 }
 
 + (instancetype)analyticsWithConfig:(UAConfig *)config
                           dataStore:(UAPreferenceDataStore *)dataStore
-                       eventManager:(UAEventManager *)eventManager {
-
+                       eventManager:(UAEventManager *)eventManager
+                 notificationCenter:(NSNotificationCenter *)notificationCenter {
     return [[UAAnalytics alloc] initWithConfig:config
                                      dataStore:dataStore
-                                  eventManager:eventManager];
+                                  eventManager:eventManager
+                            notificationCenter:notificationCenter];
 
 }
 
@@ -173,22 +185,23 @@
         return;
     }
 
-    UA_LDEBUG(@"Adding %@ event %@.", event.eventType, event.eventID);
-    [self.eventManager addEvent:event sessionID:self.sessionID];
-    UA_LTRACE(@"Event added: %@.", event);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UA_LDEBUG(@"Adding %@ event %@.", event.eventType, event.eventID);
+        [self.eventManager addEvent:event sessionID:self.sessionID];
+        UA_LTRACE(@"Event added: %@.", event);
 
-    id strongDelegate = self.delegate;
-    if ([event isKindOfClass:[UACustomEvent class]]) {
-        if ([strongDelegate respondsToSelector:@selector(customEventAdded:)]) {
-            [strongDelegate customEventAdded:(UACustomEvent *)event];
+        if ([event isKindOfClass:[UACustomEvent class]]) {
+            [self.notificationCenter postNotificationName:UACustomEventAdded
+                                                   object:self
+                                                 userInfo:@{UAEventKey: event}];
         }
-    }
 
-    if ([event isKindOfClass:[UARegionEvent class]]) {
-        if ([strongDelegate respondsToSelector:@selector(regionEventAdded:)]) {
-            [strongDelegate regionEventAdded:(UARegionEvent *)event];
+        if ([event isKindOfClass:[UARegionEvent class]]) {
+            [self.notificationCenter postNotificationName:UARegionEventAdded
+                                                   object:self
+                                                 userInfo:@{UAEventKey: event}];
         }
-    }
+    });
 }
 
 
@@ -232,6 +245,7 @@
     }
 
     [self.dataStore setBool:enabled forKey:kUAAnalyticsEnabled];
+    self.eventManager.uploadsEnabled = self.isEnabled && self.componentEnabled;
 }
 
 - (void)associateDeviceIdentifiers:(UAAssociatedIdentifiers *)associatedIdentifiers {
@@ -251,10 +265,9 @@
         return;
     }
 
-    id strongDelegate = self.delegate;
-    if ([strongDelegate respondsToSelector:@selector(screenTracked:)]) {
-        [strongDelegate screenTracked:screen];
-    }
+    [self.notificationCenter postNotificationName:UAScreenTracked
+                                           object:self
+                                         userInfo:screen == nil ? @{} : @{UAScreenKey: screen}];
 
     // If there's a screen currently being tracked set it's stop time and add it to analytics
     if (self.currentScreen) {
@@ -268,7 +281,7 @@
         // Add screen tracking event to next analytics batch
         [self addEvent:ste];
     }
-    
+
     self.currentScreen = screen;
     self.startTime = [NSDate date].timeIntervalSince1970;
 }
@@ -285,4 +298,17 @@
     [self.eventManager scheduleUpload];
 }
 
+- (void)onComponentEnableChange {
+    self.eventManager.uploadsEnabled = self.isEnabled && self.componentEnabled;
+    if (self.componentEnabled) {
+        // if component was disabled and is now enabled, schedule an upload just in case
+        [self scheduleUpload];
+    } else {
+        // if component was enabled and is now disabled, cancel any pending uploads
+        [self cancelUpload];
+    }
+}
+
 @end
+
+

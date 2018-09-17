@@ -1,4 +1,4 @@
-/* Copyright 2017 Urban Airship and Contributors */
+/* Copyright 2018 Urban Airship and Contributors */
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
@@ -7,9 +7,6 @@
 #import <SystemConfiguration/SCNetworkReachability.h>
 
 NS_ASSUME_NONNULL_BEGIN
-
-@class UAHTTPRequest;
-@class UARequest;
 
 #define kUAConnectionTypeNone @"none"
 #define kUAConnectionTypeCell @"cell"
@@ -36,16 +33,6 @@ NS_ASSUME_NONNULL_BEGIN
  * @return The device ID, or an empty string if the ID cannot be retrieved or created.
  */
 + (NSString *)deviceID;
-
-///---------------------------------------------------------------------------------------
-/// @name UAHTTP Authenticated Request Helpers
-///---------------------------------------------------------------------------------------
-
-+ (void)logFailedRequest:(UARequest *)request
-             withMessage:(NSString *)message
-               withError:(nullable NSError *)error
-            withResponse:(nullable NSHTTPURLResponse *)response;
-
 
 #if !TARGET_OS_TV   // Inbox not supported on tvOS
 /**
@@ -181,6 +168,12 @@ NS_ASSUME_NONNULL_BEGIN
  * A utility method that takes an APNS-provided device token and returns the decoded UA device token
  */
 + (NSString *)deviceTokenStringFromDeviceToken:(NSData *)deviceToken;
+
+/**
+ * A utility method that compares two version strings and determines their order.
+ */
++ (NSComparisonResult)compareVersion:(NSString *)version1 toVersion:(NSString *)version2;
+
 
 @end
 

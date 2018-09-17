@@ -1,15 +1,16 @@
-/* Copyright 2017 Urban Airship and Contributors */
+/* Copyright 2018 Urban Airship and Contributors */
 
 #import "UAEventData+Internal.h"
 #import "NSJSONSerialization+UAAdditions.h"
 
 #import "UAEventStore+Internal.h"
-#import "NSManagedObjectContext+UAAdditions.h"
+#import "NSManagedObjectContext+UAAdditions+Internal.h"
 #import <CoreData/CoreData.h>
 #import "UAConfig.h"
 #import "UAEvent.h"
 #import "UAirship.h"
 #import "UASQLite+Internal.h"
+#import "UAJSONSerialization+Internal.h"
 
 NSString *const UAEventStoreFileFormat = @"Events-%@.sqlite";
 NSString *const UAEventDataEntityName = @"UAEventData";
@@ -42,14 +43,15 @@ NSString *const UAEventDataEntityName = @"UAEventData";
 }
 
 - (void)addPersistentStore {
-    __weak id weakSelf = self;
+    UA_WEAKIFY(self);
     [self.managedContext addPersistentSqlStore:self.storeName completionHandler:^(BOOL success, NSError *error) {
+        UA_STRONGIFY(self)
         if (!success) {
             UA_LERR(@"Failed to create analytics persistent store: %@", error);
             return;
         }
 
-        [weakSelf migrateOldDatabase];
+        [self migrateOldDatabase];
     }];
 
 }
@@ -251,7 +253,7 @@ NSString *const UAEventDataEntityName = @"UAEventData";
 
 - (void)storeEventWithID:(NSString *)eventID eventType:(NSString *)eventType eventTime:(NSString *)eventTime eventBody:(id)eventBody sessionID:(NSString *)sessionID {
     NSError *error;
-    id json = [NSJSONSerialization dataWithJSONObject:eventBody options:0 error:&error];
+    id json = [UAJSONSerialization dataWithJSONObject:eventBody options:0 error:&error];
     if (error) {
         UA_LERR(@"Unable to save event. %@", error);
         return;

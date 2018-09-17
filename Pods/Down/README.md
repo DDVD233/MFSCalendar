@@ -16,6 +16,8 @@ Is your app using it? [Let us know!](mailto:rob@robphillips.me)
 
 - [Rob Phillips](https://github.com/iwasrobbed)
 - [Keaton Burleson](https://github.com/128keaton)
+- [Tony Arnold](https://github.com/tonyarnold)
+- [Ken Harris](https://github.com/kengruven)
 - [Other contributors](https://github.com/iwasrobbed/Down/graphs/contributors) 🙌 
 
 ### Installation
@@ -114,7 +116,9 @@ let commonMark = try? down.toCommonMark()
 
 // Convert to an attributed string
 let attributedString = try? down.toAttributedString()
-// NSAttributedString representation of the rendered HTML
+// NSAttributedString representation of the rendered HTML;
+// by default, uses a stylesheet that matches NSAttributedString's default font,
+// but you can override this by passing in your own, using the 'stylesheet:' parameter.
 
 // Convert to abstract syntax tree
 let ast = try? down.toAST()
@@ -208,7 +212,7 @@ public static let smart = DownOptions(rawValue: 1 << 6)
 ```
 
 ### Supports
-Swift, ARC & iOS 9+
+Swift; iOS 9+, tvOS 9+, macOS 10.11+
 
 ### Markdown Specification
 

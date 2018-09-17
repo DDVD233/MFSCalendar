@@ -1,4 +1,4 @@
-/* Copyright 2017 Urban Airship and Contributors */
+/* Copyright 2018 Urban Airship and Contributors */
 
 #import "UAAppIntegration.h"
 #import "UANotificationContent.h"
@@ -19,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
  * @param options The merged notification presentation options.
  * @param completionHandler The completion handler.
  */
-+ (void)handleForegroundNotification:(UNNotification *)notification mergedOptions:(UNNotificationPresentationOptions)options withCompletionHandler:(void(^)(void))completionHandler;
++ (void)handleForegroundNotification:(UNNotification *)notification mergedOptions:(UNNotificationPresentationOptions)options withCompletionHandler:(void(^)(void))completionHandler NS_AVAILABLE_IOS(10.0);
 
 /**
  * Creates an actions payload

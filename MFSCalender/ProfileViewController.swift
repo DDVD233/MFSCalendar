@@ -39,7 +39,7 @@ class profileViewController: UITableViewController {
         let photoPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
         let path = photoPath.appending("/ProfilePhoto.png")
         profilePhoto.image = UIImage(contentsOfFile: path)
-        profilePhoto.contentMode = UIViewContentMode.scaleAspectFill
+        profilePhoto.contentMode = UIView.ContentMode.scaleAspectFill
         profilePhoto.cornerRadius = profilePhoto.frame.size.width / 2
         
         let firstName = Preferences().firstName ?? ""

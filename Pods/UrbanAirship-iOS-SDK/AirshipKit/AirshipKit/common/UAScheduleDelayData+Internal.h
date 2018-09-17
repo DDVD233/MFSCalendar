@@ -1,9 +1,9 @@
-/* Copyright 2017 Urban Airship and Contributors */
+/* Copyright 2018 Urban Airship and Contributors */
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class UAActionScheduleData;
+@class UAScheduleData;
 @class UAScheduleDelayConditionsData;
 @class UAScheduleTriggerData;
 
@@ -27,11 +27,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSNumber *seconds;
 
 /**
- * Specifies the name of an app screen that the user must currently be viewing before the
- * the schedule's actions are able to be executed. Specifying a screen requires the application
- * to make use of UAAnalytic's screen tracking method `trackScreen:`.
+ * A JSON encoded string of app screens that will trigger the schedule's actions if viewed.
+ * Specifying screens requires the application to make use of UAAnalytic's screen tracking method `trackScreen:`.
  */
-@property (nullable, nonatomic, retain) NSString *screen;
+@property (nullable, nonatomic, copy) NSString *screens;
 
 /**
  * Specifies the ID of a region that the device must currently be in before the schedule's
@@ -47,9 +46,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSNumber *appState;
 
 /**
- * The action schedule data.
+ * The schedule data.
  */
-@property (nullable, nonatomic, retain) UAActionScheduleData *schedule;
+@property (nullable, nonatomic, retain) UAScheduleData *schedule;
 
 /**
  * The cancellation triggers.

@@ -1,8 +1,9 @@
-/* Copyright 2017 Urban Airship and Contributors */
+/* Copyright 2018 Urban Airship and Contributors */
 
 #import <UIKit/UIKit.h>
 #import <WebKit/WebKit.h>
 #import "UAWKWebViewDelegate.h"
+#import "UABeveledLoadingIndicator.h"
 #import "UAMessageCenterMessageViewProtocol.h"
 
 /**

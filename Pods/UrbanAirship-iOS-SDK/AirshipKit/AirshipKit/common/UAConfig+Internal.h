@@ -1,4 +1,4 @@
-/* Copyright 2017 Urban Airship and Contributors */
+/* Copyright 2018 Urban Airship and Contributors */
 
 #import "UAConfig.h"
 
@@ -40,6 +40,11 @@ NS_ASSUME_NONNULL_BEGIN
  * configured for push.
  */
 @property (nonatomic, strong) NSNumber *usesProductionPushServer;
+
+/**
+ * The Urban Airship remote data API url. This option is reserved for internal debugging.
+ */
+@property (nonatomic, copy) NSString *remoteDataAPIURL;
 
 ///---------------------------------------------------------------------------------------
 /// @name Config Internal Methods

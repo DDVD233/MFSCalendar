@@ -1,9 +1,11 @@
-/* Copyright 2017 Urban Airship and Contributors */
+/* Copyright 2018 Urban Airship and Contributors */
 
 #import "UATagGroupsAPIClient+Internal.h"
 #import "UATagGroupsMutation+Internal.h"
 #import "UAConfig.h"
 #import "NSJSONSerialization+UAAdditions.h"
+#import "NSURLResponse+UAAdditions.h"
+#import "UAJSONSerialization+Internal.h"
 
 #define kUAChannelTagGroupsPath @"/api/channels/tags/"
 #define kUANamedUserTagsPath @"/api/named_users/tags/"
@@ -16,30 +18,41 @@
 @implementation UATagGroupsAPIClient
 
 + (instancetype)clientWithConfig:(UAConfig *)config {
-    return [[self alloc] initWithConfig:config session:[UARequestSession sessionWithConfig:config]];
+    UATagGroupsAPIClient *client = [self clientWithConfig:config session:[UARequestSession sessionWithConfig:config]];
+    return client;
 }
 
 + (instancetype)clientWithConfig:(UAConfig *)config session:(UARequestSession *)session {
-    return [[self alloc] initWithConfig:config session:session];
+    UATagGroupsAPIClient *client = [[self alloc] initWithConfig:config session:session];
+    return client;
 }
 
-- (void)updateChannel:(NSString *)channelId
-    tagGroupsMutation:(UATagGroupsMutation *)mutation
-    completionHandler:(void (^)(NSUInteger status))completionHandler {
-
-    [self performTagGroupsMutation:mutation
-                              path:kUAChannelTagGroupsPath
-                          audience:@{kUATagGroupsIosChannelKey : channelId}
-                 completionHandler:completionHandler];
+- (NSString *)keyForType:(UATagGroupsType)type {
+    switch (type) {
+        case UATagGroupsTypeChannel:
+            return kUATagGroupsIosChannelKey;
+        case UATagGroupsTypeNamedUser:
+            return kUATagGroupsNamedUserIdKey;
+    }
 }
 
-- (void)updateNamedUser:(NSString *)identifier
-      tagGroupsMutation:(UATagGroupsMutation *)mutation
-      completionHandler:(void (^)(NSUInteger status))completionHandler {
+- (NSString *)pathForType:(UATagGroupsType)type {
+    switch (type) {
+        case UATagGroupsTypeChannel:
+            return kUAChannelTagGroupsPath;
+        case UATagGroupsTypeNamedUser:
+            return kUANamedUserTagsPath;
+    }
+}
+
+- (void)updateTagGroupsForId:(NSString *)identifier
+           tagGroupsMutation:(UATagGroupsMutation *)mutation
+                        type:(UATagGroupsType)type
+           completionHandler:(void (^)(NSUInteger status))completionHandler {
 
     [self performTagGroupsMutation:mutation
-                              path:kUANamedUserTagsPath
-                          audience:@{kUATagGroupsNamedUserIdKey : identifier}
+                              path:[self pathForType:type]
+                          audience:@{[self keyForType:type] : identifier}
                  completionHandler:completionHandler];
 }
 
@@ -48,6 +61,10 @@
                         audience:(NSDictionary *)audience
                completionHandler:(void (^)(NSUInteger status))completionHandler {
 
+    if (!self.enabled) {
+        UA_LDEBUG(@"Disabled");
+        return;
+    }
 
     NSMutableDictionary *payload = [[mutation payload] mutableCopy];
     [payload setValue:audience forKey:kUATagGroupsAudienceKey];
@@ -58,7 +75,7 @@
         builder.method = @"POST";
         builder.username = self.config.appKey;
         builder.password = self.config.appSecret;
-        builder.body = [NSJSONSerialization dataWithJSONObject:payload options:NSJSONWritingPrettyPrinted error:nil];
+        builder.body = [UAJSONSerialization dataWithJSONObject:payload options:NSJSONWritingPrettyPrinted error:nil];
         [builder setValue:@"application/vnd.urbanairship+json; version=3;" forHeader:@"Accept"];
         [builder setValue:@"application/json" forHeader:@"Content-Type"];
     }];
@@ -66,13 +83,7 @@
     UA_LTRACE(@"Updating tag groups with payload: %@", payload);
 
     [self.session dataTaskWithRequest:request retryWhere:^BOOL(NSData * _Nullable data, NSURLResponse * _Nullable response) {
-        NSHTTPURLResponse *httpResponse = nil;
-        if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
-            httpResponse = (NSHTTPURLResponse *) response;
-        }
-
-        NSInteger status = httpResponse.statusCode;
-        return (BOOL)((status >= 500 && status <= 599));
+        return [response hasRetriableStatus];
     } completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         NSHTTPURLResponse *httpResponse = nil;
         if ([response isKindOfClass:[NSHTTPURLResponse class]]) {

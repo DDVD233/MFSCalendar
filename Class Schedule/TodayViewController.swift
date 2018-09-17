@@ -8,6 +8,7 @@
 
 import UIKit
 import NotificationCenter
+import SwiftDate
 
 
 class customCellWidget: UITableViewCell {
@@ -37,13 +38,13 @@ class TodayViewController: UIViewController, NCWidgetProviding, UITableViewDeleg
     override func viewDidLoad() {
         super.viewDidLoad()
         getAllClass()
-
+        SwiftDate.defaultRegion = Region.local
         if listClasses.count == 0 {
             self.tableView.isHidden = true
             noClass.frame = CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: 110)
             self.view.addSubview(noClass)
         }
-
+        
         self.tableView.delegate = self
         self.tableView.dataSource = self
 

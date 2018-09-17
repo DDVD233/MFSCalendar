@@ -1,4 +1,4 @@
-/* Copyright 2017 Urban Airship and Contributors */
+/* Copyright 2018 Urban Airship and Contributors */
 
 #import <Foundation/Foundation.h>
 #import "UAApplicationMetrics.h"
@@ -20,7 +20,15 @@ NS_ASSUME_NONNULL_BEGIN
 /// @name Application Metrics Internal Methods
 ///---------------------------------------------------------------------------------------
 
+/**
+ * Application metrics factory method.
+ * @param dataStore The dataStore.
+ * @return An application metrics instance.
+ */
++ (instancetype)applicationMetricsWithDataStore:(UAPreferenceDataStore *)dataStore;
+
 - (void)didBecomeActive;
+- (NSString *)lastAppVersion;
 
 @end
 

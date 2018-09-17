@@ -84,7 +84,7 @@ class classDetailViewController: UITableViewController, UIDocumentInteractionCon
             profileImageView.image = UIImage(contentsOfFile: path) ?? UIImage(named: "CourseBackground.jpg")!
         }
         
-        profileImageView.contentMode = UIViewContentMode.scaleAspectFill
+        profileImageView.contentMode = UIView.ContentMode.scaleAspectFill
         profileImageView.clipsToBounds = true
         
         self.teacherName.text = self.classObject["teacherName"] as? String ?? ""
@@ -300,7 +300,7 @@ extension classDetailViewController {
             return 170
         }
 
-        return UITableViewAutomaticDimension
+        return UITableView.automaticDimension
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -344,7 +344,7 @@ extension classDetailViewController {
             let photoPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
             let path = photoPath.appending("/\(sectionId)_profile.png")
             profileImageView.image = UIImage(contentsOfFile: path) ?? UIImage(named: "CourseBackground.jpg")!
-            profileImageView.contentMode = UIViewContentMode.scaleAspectFill
+            profileImageView.contentMode = UIView.ContentMode.scaleAspectFill
             profileImageView.clipsToBounds = true
 
             cell.selectionStyle = .none

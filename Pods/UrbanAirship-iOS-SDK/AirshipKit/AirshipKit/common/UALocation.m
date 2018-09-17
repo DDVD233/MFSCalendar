@@ -1,4 +1,4 @@
-/* Copyright 2017 Urban Airship and Contributors */
+/* Copyright 2018 Urban Airship and Contributors */
 
 #import <UIKit/UIKit.h>
 
@@ -14,8 +14,8 @@ NSString *const UALocationBackgroundUpdatesAllowed = @"UALocationBackgroundUpdat
 
 @implementation UALocation
 
-- (instancetype)initWithAnalytics:(UAAnalytics *)analytics dataStore:(UAPreferenceDataStore *)dataStore {
-    self = [super init];
+- (instancetype)initWithAnalytics:(UAAnalytics *)analytics dataStore:(UAPreferenceDataStore *)dataStore notificationCenter:(NSNotificationCenter *)notificationCenter {
+    self = [super initWithDataStore:dataStore];
 
     if (self) {
         self.locationManager = [[CLLocationManager alloc] init];
@@ -24,29 +24,32 @@ NSString *const UALocationBackgroundUpdatesAllowed = @"UALocationBackgroundUpdat
         self.analytics = analytics;
 
         // Update the location service on app background
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(updateLocationService)
-                                                     name:UIApplicationDidEnterBackgroundNotification
-                                                   object:nil];
+        [notificationCenter addObserver:self
+                               selector:@selector(updateLocationService)
+                                   name:UIApplicationDidEnterBackgroundNotification
+                                 object:nil];
 
         // Update the location service on app becoming active
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(updateLocationService)
-                                                     name:UIApplicationDidBecomeActiveNotification
-                                                   object:nil];
+        [notificationCenter addObserver:self
+                               selector:@selector(updateLocationService)
+                                   name:UIApplicationDidBecomeActiveNotification
+                                 object:nil];
 
-        [self updateLocationService];
+        if (self.componentEnabled) {
+            [self updateLocationService];
+        }
     }
 
     return self;
 }
 
-- (void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
 
 + (instancetype)locationWithAnalytics:(UAAnalytics *)analytics dataStore:(UAPreferenceDataStore *)dataStore {
-    return [[UALocation alloc] initWithAnalytics:analytics dataStore:dataStore];
+    return [[UALocation alloc] initWithAnalytics:analytics dataStore:dataStore notificationCenter:[NSNotificationCenter defaultCenter]];
+}
+
++ (instancetype)locationWithAnalytics:(UAAnalytics *)analytics dataStore:(UAPreferenceDataStore *)dataStore notificationCenter:(NSNotificationCenter *)notificationCenter {
+    return [[UALocation alloc] initWithAnalytics:analytics dataStore:dataStore notificationCenter:notificationCenter];
 }
 
 - (BOOL)isAutoRequestAuthorizationEnabled {
@@ -95,6 +98,10 @@ NSString *const UALocationBackgroundUpdatesAllowed = @"UALocationBackgroundUpdat
 }
 
 - (void)updateLocationService {
+    if (!self.componentEnabled) {
+        return;
+    }
+    
     // Check if location updates are enabled
     if (!self.locationUpdatesEnabled) {
         [self stopLocationUpdates];
@@ -156,6 +163,10 @@ NSString *const UALocationBackgroundUpdatesAllowed = @"UALocationBackgroundUpdat
 }
 
 - (void)startLocationUpdates {
+    if (!self.componentEnabled) {
+        return;
+    }
+    
     if (self.locationUpdatesStarted) {
         // Already started
         return;
@@ -190,20 +201,48 @@ NSString *const UALocationBackgroundUpdatesAllowed = @"UALocationBackgroundUpdat
         return;
     }
 
-    // Make sure the NSLocationAlwaysUsageDescription plist value is set
-    if (![[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSLocationAlwaysUsageDescription"]) {
-        UA_LERR(@"NSLocationAlwaysUsageDescription not set, unable to request authorization.");
+    if (![self usageDescriptionsAreValid]) {
         return;
     }
 
     UA_LINFO("Requesting location authorization.");
-#if TARGET_OS_TV    // requestAlwaysAuthorization is not available on tvOS
+#if TARGET_OS_TV //requestAlwaysAuthorization is not available on tvOS
     [self.locationManager requestWhenInUseAuthorization];
 #else
+    // On iOS 11+ this will potentially result in 'when in use' authorization
     [self.locationManager requestAlwaysAuthorization];
 #endif
 }
 
+-(BOOL)usageDescriptionsAreValid {
+#if TARGET_OS_TV
+    // tvOS only needs the NSLocationWhenInUseUsageDescription to be valid
+    if (![[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSLocationWhenInUseUsageDescription"]) {
+        UA_LERR(@"NSLocationWhenInUseUsageDescription not set, unable to request authorization.");
+        return false;
+    }
+#else
+    if ([[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){11, 0, 0}]) {
+        // iOS >11 needs both the NSLocationWhenInUseUsageDescription && NSLocationAlwaysAndWhenInUseUsageDescription to be valid
+        if (![[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSLocationWhenInUseUsageDescription"]) {
+            UA_LERR(@"NSLocationWhenInUseUsageDescription not set, unable to request always authorization.");
+            return false;
+        }
+        if (![[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSLocationAlwaysAndWhenInUseUsageDescription"]) {
+            UA_LERR(@"NSLocationAlwaysAndWhenInUseUsageDescription not set, unable to request always authorization.");
+            return false;
+        }
+    } else {
+        // iOS <11 only needs the NSLocationAlwaysUsageDescription to be valid
+        if (![[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSLocationAlwaysUsageDescription"]) {
+            UA_LERR(@"NSLocationAlwaysUsageDescription not set, unable to request authorization.");
+            return false;
+        }
+    }
+#endif
+
+    return true;
+}
 
 #pragma mark -
 #pragma mark CLLocationManager Delegate
@@ -244,6 +283,16 @@ NSString *const UALocationBackgroundUpdatesAllowed = @"UALocationBackgroundUpdat
     UA_LTRACE(@"Location updates failed with error: %@", error);
 
     [self updateLocationService];
+}
+
+- (void)onComponentEnableChange {
+    if (self.componentEnabled) {
+        // if component was disabled and is now enabled, start updating the location
+        [self updateLocationService];
+    } else {
+        // if component was enabled and is now disabled, stop updating the location
+        [self stopLocationUpdates];
+    }
 }
 
 @end

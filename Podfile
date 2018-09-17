@@ -1,6 +1,6 @@
 project 'MFSMobile.xcodeproj'
 source 'https://github.com/CocoaPods/Specs.git'
-platform :ios, '8.0'
+platform :ios, '9.0'
 use_frameworks!
 # Main 
 
@@ -37,6 +37,8 @@ target 'MFSMobile' do
   pod 'UrbanAirship-iOS-SDK'
   pod 'Charts'
   pod 'ChameleonFramework/Swift', :git => 'https://github.com/ViccAlexander/Chameleon.git'
+  pod 'p2.OAuth2'
+  pod 'SwiftyJSON'
   # pod 'GSKStretchyHeaderView'
 end
 

@@ -36,7 +36,7 @@ class homeworkViewController: UITableViewController, UIViewControllerPreviewingD
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        homeworkTable.rowHeight = UITableViewAutomaticDimension
+        homeworkTable.rowHeight = UITableView.automaticDimension
         homeworkTable.estimatedRowHeight = 80
         homeworkTable.emptyDataSetSource = self
         homeworkTable.emptyDataSetDelegate = self
@@ -438,7 +438,7 @@ extension homeworkViewController: DZNEmptyDataSetSource {
     }
 
     func title(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
-        let attr = [NSAttributedStringKey.font: UIFont.preferredFont(forTextStyle: UIFontTextStyle.headline)]
+        let attr = [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: UIFont.TextStyle.headline)]
 
         var str = "There is no homework to display."
         if isUpdatingHomework {
@@ -447,12 +447,12 @@ extension homeworkViewController: DZNEmptyDataSetSource {
         return NSAttributedString(string: str, attributes: attr)
     }
 
-    func buttonTitle(forEmptyDataSet scrollView: UIScrollView!, for state: UIControlState) -> NSAttributedString! {
+    func buttonTitle(forEmptyDataSet scrollView: UIScrollView!, for state: UIControl.State) -> NSAttributedString! {
         if isUpdatingHomework {
             return NSAttributedString()
         }
 
-        let buttonTitleString = NSAttributedString(string: "Refresh...", attributes: [NSAttributedStringKey.foregroundColor: UIColor(hexString: 0xFF7E79)])
+        let buttonTitleString = NSAttributedString(string: "Refresh...", attributes: [NSAttributedString.Key.foregroundColor: UIColor(hexString: 0xFF7E79)])
 
         return buttonTitleString
     }
@@ -480,7 +480,7 @@ class homeworkViewCell: UITableViewCell {
     override func awakeFromNib() {
         checkMark.stateChangeAnimation = .bounce(.fill)
         checkMark.boxLineWidth = 3
-        checkMark.addTarget(self, action: #selector(checkDidChange), for: UIControlEvents.valueChanged)
+        checkMark.addTarget(self, action: #selector(checkDidChange), for: UIControl.Event.valueChanged)
         activityIndicator.isHidden = true
         let shortDescriptionString = shortDescription.attributedText.string
         

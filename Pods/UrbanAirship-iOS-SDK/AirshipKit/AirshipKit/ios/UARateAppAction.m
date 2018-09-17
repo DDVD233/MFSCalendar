@@ -1,4 +1,4 @@
-/* Copyright 2017 Urban Airship and Contributors */
+/* Copyright 2018 Urban Airship and Contributors */
 
 #import <StoreKit/StoreKit.h>
 
@@ -12,8 +12,9 @@
 
 @property (assign) BOOL showLinkPrompt;
 
-@property (strong, nonatomic) NSString *linkPromptTitle;
-@property (strong, nonatomic) NSString *linkPromptBody;
+@property (nonatomic, copy) NSString *linkPromptTitle;
+@property (nonatomic, copy) NSString *linkPromptBody;
+@property (nonatomic, copy) NSString *itunesID;
 
 @end
 
@@ -30,16 +31,16 @@ NSTimeInterval const kSecondsInYear = 31536000;
 NSString *const UARateAppShowLinkPromptKey = @"show_link_prompt";
 NSString *const UARateAppLinkPromptTitleKey = @"link_prompt_title";
 NSString *const UARateAppLinkPromptBodyKey = @"link_prompt_body";
+NSString *const UARateAppItunesIDKey = @"itunes_id";
 
 // Internal
 NSString *const UARateAppNibName = @"UARateAppPromptView";
 NSString *const UARateAppItunesURLFormat = @"itms-apps://itunes.apple.com/app/id%@?action=write-review";
 NSString *const UARateAppPromptTimestampsKey = @"RateAppActionPromptCount";
 NSString *const UARateAppLinkPromptTimestampsKey = @"RateAppActionLinkPromptCount";
-NSString *const UARateAppGenericDisplayName = @"This App";
 
 - (void)performWithArguments:(UAActionArguments *)arguments
-           completionHandler:(UAActionCompletionHandler)completionHandler {
+           completionHandler:(UAActionCompletionHandler)completionHandler NS_AVAILABLE_IOS(10.3) {
 
     if (![self parseArguments:arguments]) {
         return;
@@ -52,7 +53,7 @@ NSString *const UARateAppGenericDisplayName = @"This App";
         return;
     }
 
-    NSString *linkString = [NSString stringWithFormat:UARateAppItunesURLFormat, [[UAirship shared].config itunesID]];
+    NSString *linkString = [NSString stringWithFormat:UARateAppItunesURLFormat, self.itunesID];
 
     // If the user doesn't want to show a link prompt just open link to store
     if (!self.showLinkPrompt) {
@@ -73,6 +74,7 @@ NSString *const UARateAppGenericDisplayName = @"This App";
     id showLinkPrompt;
     id linkPromptTitle;
     id linkPromptBody;
+    id itunesID;
 
     if (arguments.value != nil && ![arguments.value isKindOfClass:[NSDictionary class]]) {
         UA_LWARN(@"Unable to parse arguments: %@", arguments);
@@ -82,6 +84,7 @@ NSString *const UARateAppGenericDisplayName = @"This App";
     showLinkPrompt = [arguments.value objectForKey:UARateAppShowLinkPromptKey];
     linkPromptTitle = [arguments.value objectForKey:UARateAppLinkPromptTitleKey];
     linkPromptBody = [arguments.value objectForKey:UARateAppLinkPromptBodyKey];
+    itunesID = [arguments.value objectForKey:UARateAppItunesIDKey] ?: [[UAirship shared].config itunesID];
 
     if (!showLinkPrompt) {
         UA_LWARN(@"show_link_prompt not provided in arguments: %@, show_link_prompt is required.", arguments);
@@ -90,12 +93,6 @@ NSString *const UARateAppGenericDisplayName = @"This App";
 
     if (![showLinkPrompt isKindOfClass:[NSNumber class]]) {
         UA_LWARN(@"Parsed an invalid show_link_prompt from arguments: %@. show_link_prompt must be an NSNumber or BOOL.", arguments);
-        return NO;
-    }
-
-
-    if (![[UAirship shared].config itunesID]) {
-        UA_LWARN(@"iTunes ID is required.");
         return NO;
     }
 
@@ -123,14 +120,30 @@ NSString *const UARateAppGenericDisplayName = @"This App";
         }
     }
 
+    if (!itunesID) {
+        UA_LWARN(@"iTunes ID is required.");
+        return NO;
+    } else {
+        if (![itunesID isKindOfClass:[NSString class]]) {
+            UA_LWARN(@"Parsed an invalid itunes ID from arguments: %@. Link itunes ID must be an NSString.", arguments);
+            return NO;
+        }
+
+        if ([itunesID length] == 0) {
+            UA_LWARN(@"Parsed an invalid itunes ID from arguments: %@ - itunes ID must not be an empty string.", arguments);
+            return NO;
+        }
+    }
+
     self.showLinkPrompt = [showLinkPrompt boolValue];
     self.linkPromptTitle = linkPromptTitle;
     self.linkPromptBody = linkPromptBody;
+    self.itunesID = itunesID;
 
     return YES;
 }
 
--(void)displaySystemLinkPrompt {
+-(void)displaySystemLinkPrompt NS_AVAILABLE_IOS(10.3) {
     [SKStoreReviewController requestReview];
 
     [self storeTimestamp:UARateAppPromptTimestampsKey];
@@ -187,29 +200,20 @@ NSString *const UARateAppGenericDisplayName = @"This App";
         return;
     }
 
-    if (![[NSProcessInfo processInfo]
-         isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){10, 0, 0}]) {
+    if ([[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){10, 0, 0}]) {
+        if (@available(iOS 10.0, *)) {
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:linkString] options:@{} completionHandler:nil];
+        }
+    } else {
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:linkString]];
-        return;
     }
-
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:linkString] options:@{} completionHandler:nil];
 }
 
-// Rate app action for iOS 8+ with applications track ID using a store URL link
+// Rate app action for iOS 8+ with application's track ID using a store URL link
 -(void)displayLinkPrompt:(NSString *)linkString completionHandler:(void (^)(BOOL dismissed))completionHandler {
-    NSString *displayName;
 
     if (![self canLinkToStore:linkString]) {
         return;
-    }
-
-    // Prioritize the optional display name and fall back to short name
-    if (NSBundle.mainBundle.infoDictionary[@"CFBundleDisplayName"]) {
-        displayName = NSBundle.mainBundle.infoDictionary[@"CFBundleDisplayName"];
-    } else {
-        displayName = UARateAppGenericDisplayName;
-        UA_LWARN(@"CFBundleDisplayName unavailable, falling back to generic display name: %@", UARateAppGenericDisplayName);
     }
 
     UARateAppPromptViewController *linkPrompt = [[UARateAppPromptViewController alloc] initWithNibName:UARateAppNibName bundle:[UAirship resources]];

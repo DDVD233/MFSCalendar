@@ -1,203 +1,425 @@
-/* Copyright 2017 Urban Airship and Contributors */
+/* Copyright 2018 Urban Airship and Contributors */
 
-#import "UAInAppMessage.h"
-#import "UAUtils.h"
-#import "UAColorUtils+Internal.h"
-#import "UAInAppMessageButtonActionBinding.h"
-#import "UAActionArguments.h"
-#import "UAirship+Internal.h"
-#import "UAPreferenceDataStore+Internal.h"
-#import "UAPush+Internal.h"
-#import "UANotificationCategories+Internal.h"
-#import "UANotificationCategory.h"
-#import "UANotificationAction.h"
+#import "UAInAppMessage+Internal.h"
+#import "UAInAppMessageBannerDisplayContent+Internal.h"
+#import "UAInAppMessageFullScreenDisplayContent+Internal.h"
+#import "UAInAppMessageModalDisplayContent+Internal.h"
+#import "UAInAppMessageCustomDisplayContent+Internal.h"
+#import "UAInAppMessageHTMLDisplayContent+Internal.h"
+#import "UAInAppMessageAudience+Internal.h"
+#import "UAGlobal.h"
 
-// 30 days in seconds
-#define kUADefaultInAppMessageExpiryInterval 60 * 60 * 24 * 30
+NSUInteger const UAInAppMessageIDLimit = 100;
 
-// 15 seconds
-#define kUADefaultInAppMessageDurationInterval 15
+@implementation UAInAppMessageBuilder
 
-@implementation UAInAppMessage
-
-+ (instancetype)message {
-    return [[self alloc] init];
-}
-
-+ (instancetype)messageWithPayload:(NSDictionary *)payload {
-    UAInAppMessage *message = [[self alloc] init];
-
-    id (^typeCheck)(id, Class) = ^id(id value, Class class) {
-        return [value isKindOfClass:class] ? value : nil;
-    };
-
-    // top-level keys
-    NSString *identifier = typeCheck(payload[@"identifier"], [NSString class]);
-    NSString *expiry = typeCheck(payload[@"expiry"], [NSString class]);
-    NSDictionary *extra = typeCheck(payload[@"extra"], [NSDictionary class]);
-    NSDictionary *display = typeCheck(payload[@"display"], [NSDictionary class]);
-    NSDictionary *actions = typeCheck(payload[@"actions"], [NSDictionary class]);
-
-    message.identifier = identifier;
-
-    if (expiry) {
-        message.expiry = [UAUtils parseISO8601DateFromString:expiry];
-    }
-
-    message.extra = extra;
-
-    // display
-
-    NSString *displayType = typeCheck(display[@"type"], [NSString class]);
-
-    if ([displayType isEqualToString:@"banner"]) {
-        message.displayType = UAInAppMessageDisplayTypeBanner;
-    } else {
-        message.displayType = UAInAppMessageDisplayTypeUnknown;
-    }
-
-    message.alert = typeCheck(display[@"alert"], [NSString class]);
-
-    NSNumber *durationNumber = typeCheck(display[@"duration"], [NSNumber class]);
-    if (durationNumber) {
-        message.duration = [durationNumber doubleValue];
-    }
-
-    NSString *positionString = typeCheck(display[@"position"], [NSString class]);
-    if ([positionString isEqualToString:@"top"]) {
-        message.position = UAInAppMessagePositionTop;
-    } else if ([positionString isEqualToString:@"bottom"]) {
-        message.position = UAInAppMessagePositionBottom;
-    }
-
-    message.primaryColor = [UAColorUtils colorWithHexString:typeCheck(display[@"primary_color"], [NSString class])];
-    message.secondaryColor = [UAColorUtils colorWithHexString:typeCheck(display[@"secondary_color"], [NSString class])];
-
-    // actions
-
-    message.buttonGroup = typeCheck(actions[@"button_group"], [NSString class]);
-    message.buttonActions = typeCheck(actions[@"button_actions"], [NSDictionary class]);
-    message.onClick = typeCheck(actions[@"on_click"], [NSDictionary class]);
-
-    return message;
-}
-
-- (instancetype)init {
+- (instancetype)initWithMessage:(UAInAppMessage *)message {
     self = [super init];
+
     if (self) {
-        // Default values unless otherwise specified
-        self.displayType = UAInAppMessageDisplayTypeBanner;
-        self.expiry = [NSDate dateWithTimeIntervalSinceNow:kUADefaultInAppMessageExpiryInterval];
-        self.position = UAInAppMessagePositionBottom;
-        self.duration = kUADefaultInAppMessageDurationInterval;
+        self.identifier = message.identifier;
+        self.displayContent = message.displayContent;
+        self.extras = message.extras;
+        self.actions = message.actions;
+        self.audience = message.audience;
+        self.source = message.source;
+        self.campaigns = message.campaigns;
     }
+
     return self;
 }
 
-- (BOOL)isEqualToMessage:(UAInAppMessage *)message {
-    return [self.payload isEqualToDictionary:message.payload];
++ (instancetype)builderWithMessage:(UAInAppMessage *)message {
+    return [[self alloc] initWithMessage:message];
 }
 
-- (NSDictionary *)payload {
-
-    NSDateFormatter *formatter = [UAUtils ISODateFormatterUTCWithDelimiter];
-    NSString *expiry = [formatter stringFromDate:self.expiry];
-
-    NSDictionary *extra = self.extra;
-
-    NSString *displayType;
-    if (self.displayType == UAInAppMessageDisplayTypeBanner) {
-        displayType = @"banner";
-    } else {
-        displayType = @"unknown";
+- (BOOL)isValid {
+    if (!self.identifier.length || self.identifier.length > UAInAppMessageIDLimit) {
+        UA_LERR(@"In-app message requires an identifier between [1, 100] characters");
+        return NO;
     }
 
-    NSString *alert = self.alert;
-
-    NSNumber *duration = [NSNumber numberWithDouble:self.duration];
-
-    NSString *position;
-    if (self.position == UAInAppMessagePositionTop) {
-        position = @"top";
-    } else if (self.position == UAInAppMessagePositionBottom) {
-        position = @"bottom";
+    if (!self.displayContent) {
+        UA_LERR(@"Messages require display content.");
+        return NO;
     }
 
-    NSString *primaryColor = [UAColorUtils hexStringWithColor:self.primaryColor];
-    NSString *secondaryColor = [UAColorUtils hexStringWithColor:self.secondaryColor];
+    return YES;
+}
 
-    NSMutableDictionary *display = [NSMutableDictionary dictionary];
-    [display setValue:displayType forKey:@"type"];
-    [display setValue:position forKey:@"position"];
-    [display setValue:alert forKey:@"alert"];
-    [display setValue:duration forKey:@"duration"];
-    [display setValue:primaryColor forKey:@"primary_color"];
-    [display setValue:secondaryColor forKey:@"secondary_color"];
+@end
+
+@interface UAInAppMessage()
+@property(nonatomic, copy) NSString *identifier;
+@property(nonatomic, strong) UAInAppMessageDisplayContent *displayContent;
+@property(nonatomic, copy, nullable) NSDictionary *extras;
+@property(nonatomic, strong, nullable) UAInAppMessageAudience *audience;
+@property(nonatomic, copy, nullable) NSDictionary *actions;
+@end
+
+@implementation UAInAppMessage
+@synthesize campaigns = _campaigns;
+@synthesize source = _source;
+
+NSString * const UAInAppMessageErrorDomain = @"com.urbanairship.in_app_message";
+
+// Keys via IAM v2 spec
+NSString *const UAInAppMessageIDKey = @"message_id";
+NSString *const UAInAppMessageDisplayTypeKey = @"display_type";
+NSString *const UAInAppMessageDisplayContentKey = @"display";
+NSString *const UAInAppMessageExtrasKey = @"extras";
+NSString *const UAInAppMessageAudienceKey = @"audience";
+NSString *const UAInAppMessageActionsKey = @"actions";
+NSString *const UAInAppMessageCampaignsKey = @"campaigns";
+NSString *const UAInAppMessageSourceKey = @"source";
+
+NSString *const UAInAppMessageDisplayTypeBannerValue = @"banner";
+NSString *const UAInAppMessageDisplayTypeFullScreenValue = @"fullscreen";
+NSString *const UAInAppMessageDisplayTypeModalValue = @"modal";
+NSString *const UAInAppMessageDisplayTypeHTMLValue = @"html";
+NSString *const UAInAppMessageDisplayTypeCustomValue = @"custom";
+
+NSString *const UAInAppMessageSourceAppDefinedValue = @"app-defined";
+NSString *const UAInAppMessageSourceRemoteDataValue = @"remote-data";
+NSString *const UAInAppMessageSourceLegacyPushValue = @"legacy-push";
+
+
++ (instancetype)messageWithJSON:(NSDictionary *)json error:(NSError * _Nullable *)error {
+    return [UAInAppMessage messageWithJSON:json defaultSource:UAInAppMessageSourceAppDefined error:error];
+}
+
++ (instancetype)messageWithJSON:(NSDictionary *)json defaultSource:(UAInAppMessageSource)defaultSource error:(NSError * _Nullable *)error {
+    UAInAppMessageBuilder *builder = [[UAInAppMessageBuilder alloc] init];
     
-    NSMutableDictionary *actions = [NSMutableDictionary dictionary];
-    [actions setValue:self.buttonGroup forKey:@"button_group"];
-    [actions setValue:self.buttonActions forKey:@"button_actions"];
-    [actions setValue:self.onClick forKey:@"on_click"];
+    if (![json isKindOfClass:[NSDictionary class]]) {
+        if (error) {
+            NSString *msg = [NSString stringWithFormat:@"Attempted to deserialize invalid object: %@", json];
+            *error =  [NSError errorWithDomain:UAInAppMessageErrorDomain
+                                          code:UAInAppMessageErrorCodeInvalidJSON
+                                      userInfo:@{NSLocalizedDescriptionKey:msg}];
+        }
 
-    NSMutableDictionary *payload = [NSMutableDictionary dictionary];
-    [payload setValue:self.identifier forKey:@"identifier"];
-    [payload setValue:expiry forKey:@"expiry"];
-    [payload setValue:(extra.count ? extra : nil) forKey:@"extra"];
-    [payload setValue:(display.count ? display : nil) forKey:@"display"];
-    [payload setValue:(actions.count ? actions : nil) forKey:@"actions"];
+        return nil;
+    }
 
-    return payload;
-}
+    id identifier = json[UAInAppMessageIDKey];
+    if (identifier) {
+        if (![identifier isKindOfClass:[NSString class]]) {
+            if (error) {
+                NSString *msg = [NSString stringWithFormat:@"Message identifier must be a string. Invalid value: %@", identifier];
+                *error =  [NSError errorWithDomain:UAInAppMessageErrorDomain
+                                              code:UAInAppMessageErrorCodeInvalidJSON
+                                          userInfo:@{NSLocalizedDescriptionKey:msg}];
+            }
+            
+            return nil;
+        }
+        builder.identifier = identifier;
+    }
 
-- (UANotificationCategory *)buttonCategory {
-    if (self.buttonGroup) {
-        NSSet *categories = [UAirship push].combinedCategories;
-
-        for (UANotificationCategory *category in categories) {
-            // Find the category that matches our buttonGroup
-            if ([category.identifier isEqualToString:self.buttonGroup]) {
-                return category;
+    id displayContentDict = json[UAInAppMessageDisplayContentKey];
+    if (displayContentDict) {
+        if (![displayContentDict isKindOfClass:[NSDictionary class]]) {
+            if (error) {
+                NSString *msg = [NSString stringWithFormat:@"Display content must be a dictionary. Invalid value: %@", json[UAInAppMessageMediaKey]];
+                *error =  [NSError errorWithDomain:UAInAppMessageErrorDomain
+                                              code:UAInAppMessageErrorCodeInvalidJSON
+                                          userInfo:@{NSLocalizedDescriptionKey:msg}];
+            }
+            
+            return nil;
+        }
+        
+        id displayTypeStr = json[UAInAppMessageDisplayTypeKey];
+        if (displayTypeStr && [displayTypeStr isKindOfClass:[NSString class]]) {
+            displayTypeStr = [displayTypeStr lowercaseString];
+            
+            if ([UAInAppMessageDisplayTypeBannerValue isEqualToString:displayTypeStr]) {
+                builder.displayContent = [UAInAppMessageBannerDisplayContent displayContentWithJSON:displayContentDict error:error];
+            } else if ([UAInAppMessageDisplayTypeFullScreenValue isEqualToString:displayTypeStr]) {
+            	builder.displayContent = [UAInAppMessageFullScreenDisplayContent displayContentWithJSON:displayContentDict error:error];
+            } else if ([UAInAppMessageDisplayTypeModalValue isEqualToString:displayTypeStr]) {
+                builder.displayContent = [UAInAppMessageModalDisplayContent displayContentWithJSON:displayContentDict error:error];
+            } else if ([UAInAppMessageDisplayTypeHTMLValue isEqualToString:displayTypeStr]) {
+                builder.displayContent = [UAInAppMessageHTMLDisplayContent displayContentWithJSON:displayContentDict error:error];
+            } else if ([UAInAppMessageDisplayTypeCustomValue isEqualToString:displayTypeStr]) {
+                builder.displayContent = [UAInAppMessageCustomDisplayContent displayContentWithJSON:displayContentDict error:error];
+            } else {
+                if (error) {
+                    NSString *msg = [NSString stringWithFormat:@"Message display type must be a string represening a valid display type. Invalid value: %@", displayTypeStr];
+                    *error =  [NSError errorWithDomain:UAInAppMessageErrorDomain
+                                                  code:UAInAppMessageErrorCodeInvalidJSON
+                                              userInfo:@{NSLocalizedDescriptionKey:msg}];
+                }
+                return nil;
+            }
+            
+            if (!builder.displayContent) {
+                UA_LERR(@"Unable to create message, missing display content");
+                return nil;
             }
         }
     }
-
-    return nil;
-}
-
-- (NSArray *)notificationActions {
-    return self.buttonCategory.actions;
-}
-
-- (NSArray *)buttonActionBindings {
-    NSMutableArray *bindings = [NSMutableArray array];
-
-    // Create a button action binding for each corresponding action identifier
-    for (UANotificationAction *notificationAction in self.notificationActions) {
-        NSDictionary *payload = self.buttonActions[[notificationAction identifier]] ?: [NSDictionary dictionary];
-
-        UAInAppMessageButtonActionBinding *binding = [[UAInAppMessageButtonActionBinding alloc] init];
-
-        binding.title = notificationAction.title;
-
-        binding.identifier = notificationAction.identifier;
-
-        // choose the situation that matches the corresponding notificationAction's activation mode
-        if ((notificationAction.options & UANotificationActionOptionForeground) > 0) {
-            binding.situation = UASituationForegroundInteractiveButton;
-        } else {
-            binding.situation = UASituationBackgroundInteractiveButton;
+    
+    id extras = json[UAInAppMessageExtrasKey];
+    if (extras) {
+        if (![extras isKindOfClass:[NSDictionary class]]) {
+            if (error) {
+                NSString *msg = [NSString stringWithFormat:@"Message extras must be a dictionary. Invalid value: %@", extras];
+                *error =  [NSError errorWithDomain:UAInAppMessageErrorDomain
+                                              code:UAInAppMessageErrorCodeInvalidJSON
+                                          userInfo:@{NSLocalizedDescriptionKey:msg}];
+            }
+            return nil;
         }
-
-        binding.actions = payload;
-
-        [bindings addObject:binding];
+        builder.extras = extras;
     }
 
-    return bindings;
+    id actions = json[UAInAppMessageActionsKey];
+    if (actions) {
+        if (![actions isKindOfClass:[NSDictionary class]]) {
+            if (error) {
+                NSString *msg = [NSString stringWithFormat:@"Message actions must be a dictionary. Invalid value: %@", actions];
+                *error =  [NSError errorWithDomain:UAInAppMessageErrorDomain
+                                              code:UAInAppMessageErrorCodeInvalidJSON
+                                          userInfo:@{NSLocalizedDescriptionKey:msg}];
+            }
+
+            return nil;
+        }
+
+        builder.actions = actions;
+    }
+
+    id campaigns = json[UAInAppMessageCampaignsKey];
+    if (campaigns) {
+        if (![campaigns isKindOfClass:[NSDictionary class]]) {
+            if (error) {
+                NSString *msg = [NSString stringWithFormat:@"Message campagins must be a dictionary. Invalid value: %@", campaigns];
+                *error =  [NSError errorWithDomain:UAInAppMessageErrorDomain
+                                              code:UAInAppMessageErrorCodeInvalidJSON
+                                          userInfo:@{NSLocalizedDescriptionKey:msg}];
+            }
+
+            return nil;
+        }
+
+        builder.campaigns = campaigns;
+    }
+    
+    id audienceDict = json[UAInAppMessageAudienceKey];
+    if (audienceDict) {
+        if (![audienceDict isKindOfClass:[NSDictionary class]]) {
+            if (error) {
+                NSString *msg = [NSString stringWithFormat:@"Display content must be a dictionary. Invalid value: %@", json[UAInAppMessageAudienceKey]];
+                *error =  [NSError errorWithDomain:UAInAppMessageErrorDomain
+                                              code:UAInAppMessageErrorCodeInvalidJSON
+                                          userInfo:@{NSLocalizedDescriptionKey:msg}];
+            }
+            return nil;
+        }
+        
+        builder.audience = [UAInAppMessageAudience audienceWithJSON:audienceDict error:error];
+    }
+
+    id sourceStr = json[UAInAppMessageSourceKey];
+    if (sourceStr && [sourceStr isKindOfClass:[NSString class]]) {
+        sourceStr = [sourceStr lowercaseString];
+
+        if ([UAInAppMessageSourceAppDefinedValue isEqualToString:sourceStr]) {
+            builder.source = UAInAppMessageSourceAppDefined;
+        } else if ([UAInAppMessageSourceRemoteDataValue isEqualToString:sourceStr]) {
+            builder.source = UAInAppMessageSourceRemoteData;
+        } else if ([UAInAppMessageSourceLegacyPushValue isEqualToString:sourceStr]) {
+            builder.source = UAInAppMessageSourceLegacyPush;
+        } else {
+            if (error) {
+                NSString *msg = [NSString stringWithFormat:@"Invalid source: %@", sourceStr];
+                *error =  [NSError errorWithDomain:UAInAppMessageErrorDomain
+                                              code:UAInAppMessageErrorCodeInvalidJSON
+                                          userInfo:@{NSLocalizedDescriptionKey:msg}];
+            }
+            return nil;
+        }
+    } else {
+        builder.source = defaultSource;
+    }
+
+
+    if (![builder isValid]) {
+        if (error) {
+            NSString *msg = [NSString stringWithFormat:@"Invalid message JSON: %@", json];
+            *error =  [NSError errorWithDomain:UAInAppMessageErrorDomain
+                                          code:UAInAppMessageErrorCodeInvalidJSON
+                                      userInfo:@{NSLocalizedDescriptionKey:msg}];
+        }
+        return nil;
+    }
+    
+    return [[UAInAppMessage alloc] initWithBuilder:builder];
+}
+
++ (instancetype)messageWithBuilderBlock:(void(^)(UAInAppMessageBuilder *builder))builderBlock {
+    UAInAppMessageBuilder *builder = [[UAInAppMessageBuilder alloc] init];
+
+    if (builderBlock) {
+        builderBlock(builder);
+    }
+
+    return [[UAInAppMessage alloc] initWithBuilder:builder];
+}
+
+- (instancetype)initWithBuilder:(UAInAppMessageBuilder *)builder {
+    self = [super init];
+    
+    if (![builder isValid]) {
+        UA_LDEBUG(@"UAInAppMessage could not be initialized, builder has missing or invalid parameters.");
+        return nil;
+    }
+    
+    if (self) {
+        self.identifier = builder.identifier;
+        self.displayContent = builder.displayContent;
+        self.extras = builder.extras;
+        self.audience = builder.audience;
+        self.actions = builder.actions;
+        _campaigns = builder.campaigns;
+        _source = builder.source;
+    }
+
+    return self;
+}
+
+- (UAInAppMessageSource)source {
+    return _source;
+}
+
+- (NSDictionary *)campaigns {
+    return _campaigns;
+}
+
+- (UAInAppMessage *)extend:(void(^)(UAInAppMessageBuilder *builder))builderBlock {
+    if (builderBlock) {
+        UAInAppMessageBuilder *builder = [UAInAppMessageBuilder builderWithMessage:self];
+        builderBlock(builder);
+        return [[UAInAppMessage alloc] initWithBuilder:builder];
+    }
+
+    UA_LINFO(@"Extended %@ with nil builderBlock. Returning self.", self);
+    return self;
+}
+
+#pragma mark - Validation
+
+- (NSDictionary *)toJSON {
+    NSMutableDictionary *data = [NSMutableDictionary dictionary];
+    
+    [data setValue:self.identifier forKey:UAInAppMessageIDKey];
+    switch (self.displayType) {
+        case UAInAppMessageDisplayTypeBanner:
+            [data setValue:UAInAppMessageDisplayTypeBannerValue forKey:UAInAppMessageDisplayTypeKey];
+            break;
+        case UAInAppMessageDisplayTypeFullScreen:
+            [data setValue:UAInAppMessageDisplayTypeFullScreenValue forKey:UAInAppMessageDisplayTypeKey];
+            break;
+        case UAInAppMessageDisplayTypeModal:
+            [data setValue:UAInAppMessageDisplayTypeModalValue forKey:UAInAppMessageDisplayTypeKey];
+            break;
+        case UAInAppMessageDisplayTypeHTML:
+            [data setValue:UAInAppMessageDisplayTypeHTMLValue forKey:UAInAppMessageDisplayTypeKey];
+            break;
+        case UAInAppMessageDisplayTypeCustom:
+            [data setValue:UAInAppMessageDisplayTypeCustomValue forKey:UAInAppMessageDisplayTypeKey];
+            break;
+    }
+
+    switch (self.source) {
+        case UAInAppMessageSourceRemoteData:
+            [data setValue:UAInAppMessageSourceRemoteDataValue forKey:UAInAppMessageSourceKey];
+            break;
+
+        case UAInAppMessageSourceLegacyPush:
+            [data setValue:UAInAppMessageSourceLegacyPushValue forKey:UAInAppMessageSourceKey];
+            break;
+
+        case UAInAppMessageSourceAppDefined:
+            [data setValue:UAInAppMessageSourceAppDefinedValue forKey:UAInAppMessageSourceKey];
+            break;
+    }
+
+    [data setValue:[self.displayContent toJSON] forKey:UAInAppMessageDisplayContentKey];
+    [data setValue:[self.audience toJSON] forKey:UAInAppMessageAudienceKey];
+    [data setValue:self.extras forKey:UAInAppMessageExtrasKey];
+    [data setValue:self.actions forKey:UAInAppMessageActionsKey];
+    [data setValue:self.campaigns forKey:UAInAppMessageCampaignsKey];
+
+    return [data copy];
+}
+
+- (BOOL)isEqualToInAppMessage:(UAInAppMessage *)message {
+    if (![self.identifier isEqualToString:message.identifier]) {
+        return NO;
+    }
+
+    // Do we need to check type here first? make sure
+    if (![self.displayContent isEqual:message.displayContent]) {
+        return NO;
+    }
+
+    if (self.extras != message.extras && ![self.extras isEqualToDictionary:message.extras]) {
+        return NO;
+    }
+
+    if (self.audience != message.audience && ![self.audience isEqual:message.audience]) {
+        return NO;
+    }
+
+    if (self.actions != message.actions && ![self.actions isEqualToDictionary:message.actions]) {
+        return NO;
+    }
+
+    if (self.campaigns != message.campaigns && ![self.campaigns isEqualToDictionary:message.campaigns]) {
+        return NO;
+    }
+
+    if (self.source != message.source) {
+        return NO;
+    }
+
+    return YES;
+}
+
+
+- (BOOL)isEqual:(id)object {
+    if (self == object) {
+        return YES;
+    }
+
+    if (![object isKindOfClass:[UAInAppMessage class]]) {
+        return NO;
+    }
+
+    return [self isEqualToInAppMessage:(UAInAppMessage *)object];
+}
+
+- (NSUInteger)hash {
+    NSUInteger result = 1;
+    result = 31 * result + [self.identifier hash];
+    result = 31 * result + [self.displayContent hash];
+    result = 31 * result + [self.extras hash];
+    result = 31 * result + [self.audience hash];
+    result = 31 * result + [self.actions hash];
+    result = 31 * result + [self.campaigns hash];
+    result = 31 * result + self.source;
+
+    return result;
+}
+
+- (UAInAppMessageDisplayType)displayType {
+    return self.displayContent.displayType;
 }
 
 - (NSString *)description {
-    return self.payload.description;
+    return [NSString stringWithFormat:@"<UAInAppMessage: %@>", [self toJSON]];
 }
-
 @end

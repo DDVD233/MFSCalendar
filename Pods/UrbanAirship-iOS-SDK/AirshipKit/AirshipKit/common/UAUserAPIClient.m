@@ -1,11 +1,13 @@
-/* Copyright 2017 Urban Airship and Contributors */
+/* Copyright 2018 Urban Airship and Contributors */
 
 #import "UAUserAPIClient+Internal.h"
 #import "UAConfig.h"
-#import "UAUtils.h"
+#import "UAUtils+Internal.h"
 #import "NSJSONSerialization+UAAdditions.h"
 #import "UAUser.h"
 #import "UAUserData+Internal.h"
+#import "NSURLResponse+UAAdditions.h"
+#import "UAJSONSerialization+Internal.h"
 
 @implementation UAUserAPIClient
 
@@ -31,16 +33,7 @@
 
 
     [self.session dataTaskWithRequest:request retryWhere:^BOOL(NSData * _Nullable data, NSURLResponse * _Nullable response) {
-        NSHTTPURLResponse *httpResponse = nil;
-        if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
-            httpResponse = (NSHTTPURLResponse *) response;
-        }
-
-        if (httpResponse.statusCode >= 500 && httpResponse.statusCode <= 599) {
-            return YES;
-        }
-
-        return NO;
+        return [response hasRetriableStatus];
     } completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         NSHTTPURLResponse *httpResponse = nil;
         if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
@@ -85,16 +78,7 @@
     UARequest *request = [self requestToUpdateUser:user payload:payload];
 
     [self.session dataTaskWithRequest:request retryWhere:^BOOL(NSData * _Nullable data, NSURLResponse * _Nullable response) {
-        NSHTTPURLResponse *httpResponse = nil;
-        if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
-            httpResponse = (NSHTTPURLResponse *) response;
-        }
-
-        if (httpResponse.statusCode >= 500 && httpResponse.statusCode <= 599) {
-            return YES;
-        }
-
-        return NO;
+        return [response hasRetriableStatus];
     } completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         NSHTTPURLResponse *httpResponse = nil;
         if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
@@ -131,7 +115,7 @@
         [builder setValue:@"application/json" forHeader:@"Content-Type"];
         [builder setValue:@"application/vnd.urbanairship+json; version=3;" forHeader:@"Accept"];
 
-        builder.body = [NSJSONSerialization dataWithJSONObject:payload
+        builder.body = [UAJSONSerialization dataWithJSONObject:payload
                                                        options:0
                                                          error:nil];
 
@@ -156,7 +140,7 @@
         [builder setValue:@"application/json" forHeader:@"Content-Type"];
         [builder setValue:@"application/vnd.urbanairship+json; version=3;" forHeader:@"Accept"];
 
-        builder.body = [NSJSONSerialization dataWithJSONObject:payload
+        builder.body = [UAJSONSerialization dataWithJSONObject:payload
                                                        options:0
                                                          error:nil];
 

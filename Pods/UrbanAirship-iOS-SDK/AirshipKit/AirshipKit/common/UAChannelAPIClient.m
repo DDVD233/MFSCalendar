@@ -1,12 +1,13 @@
-/* Copyright 2017 Urban Airship and Contributors */
+/* Copyright 2018 Urban Airship and Contributors */
 
 #import "UAChannelAPIClient+Internal.h"
 #import "UAChannelRegistrationPayload+Internal.h"
 #import "UAConfig.h"
-#import "UAUtils.h"
+#import "UAUtils+Internal.h"
 #import "UAirship.h"
 #import "UAAnalytics+Internal.h"
 #import "NSJSONSerialization+UAAdditions.h"
+#import "NSURLResponse+UAAdditions.h"
 
 #define kUAChannelCreateLocation @"/api/channels/"
 
@@ -38,16 +39,7 @@
     }];
 
     [self.session dataTaskWithRequest:request retryWhere:^BOOL(NSData *data, NSURLResponse *response) {
-        NSHTTPURLResponse *httpResponse = nil;
-        if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
-            httpResponse = (NSHTTPURLResponse *) response;
-        }
-
-        if (httpResponse.statusCode >= 500 && httpResponse.statusCode <= 599) {
-            return YES;
-        }
-
-        return NO;
+        return [response hasRetriableStatus];
     } completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         NSHTTPURLResponse *httpResponse = nil;
         if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
@@ -93,16 +85,7 @@
     }];
 
     [self.session dataTaskWithRequest:request retryWhere:^BOOL(NSData *data, NSURLResponse *response) {
-        NSHTTPURLResponse *httpResponse = nil;
-        if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
-            httpResponse = (NSHTTPURLResponse *) response;
-        }
-
-        if (httpResponse.statusCode >= 500 && httpResponse.statusCode <= 599) {
-            return YES;
-        }
-
-        return NO;
+        return [response hasRetriableStatus];
     } completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         NSHTTPURLResponse *httpResponse = nil;
         if ([response isKindOfClass:[NSHTTPURLResponse class]]) {

@@ -1,10 +1,10 @@
-/* Copyright 2017 Urban Airship and Contributors */
+/* Copyright 2018 Urban Airship and Contributors */
 
 #import "UAOverlayViewController.h"
 
 #import "UABespokeCloseView.h"
 #import "UABeveledLoadingIndicator.h"
-#import "UAUtils.h"
+#import "UAUtils+Internal.h"
 #import "UAirship.h"
 #import "UAGlobal.h"
 #import "UAInboxMessage.h"
@@ -28,14 +28,11 @@ static NSMutableSet *overlayControllers_ = nil;
 
 @property (strong, nonatomic) IBOutlet UIView *containerView;
 @property (strong, nonatomic) IBOutlet UIView *shadeView;
-@property (strong, nonatomic) IBOutlet UIView *backgroundView;
 @property (strong, nonatomic) IBOutlet UIButton *closeButton;
 @property (strong, nonatomic) IBOutlet UIView *closeButtonView;
 @property (strong, nonatomic) IBOutlet UIView *backgroundInsetView;
 @property (strong, nonatomic) IBOutlet UABeveledLoadingIndicator *loadingIndicatorView;
 
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *containerViewHeightConstraint;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *containerViewWidthConstraint;
 
 /**
  * Block invoked whenever the [UIView layoutSubviews] method is called.
@@ -44,58 +41,90 @@ static NSMutableSet *overlayControllers_ = nil;
 
 @property(nonatomic, assign) CGSize size;
 @property(nonatomic, assign) BOOL aspectLock;
+@property(nonatomic, assign) UIDeviceOrientation previousOrientation;
 
+@property(nonatomic, strong) NSLayoutConstraint *widthConstraint;
+@property(nonatomic, strong) NSLayoutConstraint *heightConstraint;
 
 @end
 
 @implementation UAOverlayView
 
-- (id)initWithSize:(CGSize)size aspectLock:(BOOL)aspectLock {
++ (id)overlayViewWithSize:(CGSize)size aspectLock:(BOOL)aspectLock {
+    NSString *nibName = kUAOverlayViewNibName;
     NSBundle *bundle = [UAirship resources];
-    self = [[bundle loadNibNamed:kUAOverlayViewNibName owner:self options:nil] firstObject];
+    
+    UAOverlayView *view = [[bundle loadNibNamed:nibName owner:nil options:nil] firstObject];
+    [view configureWithSize:size aspectLock:aspectLock];
+    
+    return view;
+}
 
-    if (self) {
-        self.size = size;
-        self.aspectLock = aspectLock;
+- (void)configureWithSize:(CGSize)size aspectLock:(BOOL)aspectLock {
+    self.size = size;
+    self.aspectLock = aspectLock;
+}
+
+- (CGSize)getMaxSafeOverlaySize {
+    CGSize screenSize = [UIScreen mainScreen].bounds.size;
+
+    // Get insets for max size
+    CGFloat topInset = 0;
+    CGFloat bottomInset = 0;
+    CGFloat leftInset = 0;
+    CGFloat rightInset = 0;
+
+    if (@available(iOS 11.0, *)) {
+        UIWindow *window = [UAUtils mainWindow];
+        topInset = window.safeAreaInsets.top;
+        bottomInset = window.safeAreaInsets.bottom;
+        leftInset = window.safeAreaInsets.left;
+        rightInset = window.safeAreaInsets.right;
     }
 
-    return self;
+    CGFloat maxOverlayWidth = screenSize.width - (fabs(leftInset) + fabs(rightInset));
+    CGFloat maxOverlayHeight = screenSize.height - (fabs(topInset) + fabs(bottomInset));
+
+    return CGSizeMake(maxOverlayWidth, maxOverlayHeight);
 }
 
 // Normalizes the provided size to aspect fill the current screen
-- (CGSize)normalizeSizeForScreen:(CGSize)size {
-    CGSize screenSize = [UIScreen mainScreen].bounds.size;
+- (CGSize)normalizeSize:(CGSize)size {
+    CGFloat requestedAspect = size.width/size.height;
 
-    CGFloat screenAspect = screenSize.width/screenSize.height;
-    CGFloat landingPageAspect = size.width/size.height;
+    CGSize maxSafeOverlaySize = [self getMaxSafeOverlaySize];
+    CGFloat screenAspect = maxSafeOverlaySize.width/maxSafeOverlaySize.height;
+
+    // If aspect ratio is invalid, remove aspect lock
+    if (![self validateAspectRatio:requestedAspect]) {
+        self.aspectLock = NO;
+    }
 
     BOOL sizeIsValid = ([self validateWidth:size.width] && [self validateHeight:size.height]);
 
-    if (self.aspectLock && [self validateAspectRatio:landingPageAspect] && !sizeIsValid) {
-
-        if (screenAspect > landingPageAspect) {
-            return CGSizeMake(size.width * (screenSize.height/size.height), screenSize.height);
+    // If aspect lock is on and size is invalid, adjust size
+    if (self.aspectLock && !sizeIsValid) {
+        if (screenAspect > requestedAspect) {
+            return CGSizeMake(size.width * (maxSafeOverlaySize.height/size.height), maxSafeOverlaySize.height);
         } else {
-            return CGSizeMake(screenSize.width, size.height * (screenSize.width/size.width));
+            return CGSizeMake(maxSafeOverlaySize.width, size.height * (maxSafeOverlaySize.width/size.width));
         }
     }
 
     // Fill screen width if width is invalid
     if (![self validateWidth:size.width]) {
-        size.width = screenSize.width;
+        size.width = maxSafeOverlaySize.width;
     }
 
     // Fill screen height if height is invalid
     if (![self validateHeight:size.height]) {
-        size.height = screenSize.height;
+        size.height = maxSafeOverlaySize.height;
     }
 
     return size;
 }
 
 -(BOOL)validateAspectRatio:(CGFloat)aspectRatio {
-
-
     if (isnan(aspectRatio) || aspectRatio > INTMAX_MAX) {
         return NO;
     }
@@ -128,8 +157,8 @@ static NSMutableSet *overlayControllers_ = nil;
 }
 
 - (BOOL)validateHeight:(CGFloat)height {
-    CGSize screenSize = [UIScreen mainScreen].bounds.size;
-    CGFloat maximumOverlayViewHeight = screenSize.height;
+    CGSize maxScreenSize = [self getMaxSafeOverlaySize];
+    CGFloat maximumOverlayViewHeight = maxScreenSize.height;
     CGFloat minimumOverlayViewHeight = (kUAOverlayViewControllerWebViewPadding * 4) * 2;
 
     if (height < minimumOverlayViewHeight) {
@@ -147,23 +176,49 @@ static NSMutableSet *overlayControllers_ = nil;
     return YES;
 }
 
+- (void)applySizeConstraintsForSize:(CGSize)size {
+    // Apply height and width constraints
+    self.widthConstraint.active = NO;
+    self.widthConstraint = [NSLayoutConstraint constraintWithItem:self.containerView
+                                                        attribute:NSLayoutAttributeWidth
+                                                        relatedBy:NSLayoutRelationEqual
+                                                           toItem:nil
+                                                        attribute:NSLayoutAttributeNotAnAttribute
+                                                       multiplier:1
+                                                         constant:size.width];
+    self.widthConstraint.active = YES;
+
+    self.heightConstraint.active = NO;
+    self.heightConstraint = [NSLayoutConstraint constraintWithItem:self.containerView
+                                                         attribute:NSLayoutAttributeHeight
+                                                         relatedBy:NSLayoutRelationEqual
+                                                            toItem:nil
+                                                         attribute:NSLayoutAttributeNotAnAttribute
+                                                        multiplier:1
+                                                          constant:size.height];
+    self.heightConstraint.active = YES;
+}
+
 - (void)layoutSubviews {
     [super layoutSubviews];
-
-    CGSize screenSize = [UIScreen mainScreen].bounds.size;
-
-    CGSize normalizedSize = [self normalizeSizeForScreen:self.size];
-
-    CGFloat widthConstant = normalizedSize.width - screenSize.width;
-    CGFloat heightConstant = normalizedSize.height - screenSize.height;
-
-    self.containerViewHeightConstraint.constant = heightConstant;
-    self.containerViewWidthConstraint.constant = widthConstant;
 
     [self.containerView layoutIfNeeded];
 
     if (self.onLayoutSubviews) {
         self.onLayoutSubviews();
+    }
+
+    UIDeviceOrientation orientation = [UIDevice currentDevice].orientation;
+    if (self.previousOrientation != orientation) {
+
+        // apply the size
+        [self applySizeConstraintsForSize:[self normalizeSize:self.size]];
+
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self.webView.scrollView setZoomScale:0 animated:YES];
+        });
+
+        self.previousOrientation = orientation;
     }
 }
 
@@ -186,7 +241,7 @@ static NSMutableSet *overlayControllers_ = nil;
  * The message being displayed, if applicable. This value may be nil.
  */
 @property (nonatomic, strong) UAInboxMessage *message;
-@property (nonatomic, strong) UIViewController *parentViewController;
+@property (nonatomic, strong) UIView *parentView;
 @property (nonatomic, strong) UAOverlayView *overlayView;
 @property (nonatomic, strong) UIView *background;
 @property (nonatomic, strong) UIView *backgroundInset;
@@ -220,7 +275,7 @@ static NSMutableSet *overlayControllers_ = nil;
 
 + (void)showURL:(NSURL *)url withHeaders:(NSDictionary *)headers {
     CGSize defaultsToFullSize = CGSizeZero;
-    UAOverlayViewController *overlayController = [[UAOverlayViewController alloc] initWithParentViewController:[UAUtils topController]
+    UAOverlayViewController *overlayController = [[UAOverlayViewController alloc] initWithParentView:[UAUtils mainWindow]
                                                                                                                       andURL:url
                                                                                                                   andMessage:nil
                                                                                                                   andHeaders:headers
@@ -230,7 +285,7 @@ static NSMutableSet *overlayControllers_ = nil;
 }
 
 + (void)showURL:(NSURL *)url withHeaders:(NSDictionary *)headers size:(CGSize)size aspectLock:(BOOL)aspectLock {
-    UAOverlayViewController *overlayController = [[UAOverlayViewController alloc] initWithParentViewController:[UAUtils topController]
+    UAOverlayViewController *overlayController = [[UAOverlayViewController alloc] initWithParentView:[UAUtils mainWindow]
                                                                                                                       andURL:url
                                                                                                                   andMessage:nil
                                                                                                                   andHeaders:headers
@@ -246,7 +301,7 @@ static NSMutableSet *overlayControllers_ = nil;
 
 + (void)showMessage:(UAInboxMessage *)message withHeaders:(NSDictionary *)headers {
     CGSize defaultsToFullSize = CGSizeZero;
-    UAOverlayViewController *overlayController = [[UAOverlayViewController alloc] initWithParentViewController:[UAUtils topController]
+    UAOverlayViewController *overlayController = [[UAOverlayViewController alloc] initWithParentView:[UAUtils mainWindow]
                                                                                                                       andURL:message.messageBodyURL
                                                                                                                   andMessage:message
                                                                                                                   andHeaders:headers
@@ -256,7 +311,7 @@ static NSMutableSet *overlayControllers_ = nil;
 }
 
 + (void)showMessage:(UAInboxMessage *)message withHeaders:(NSDictionary *)headers size:(CGSize)size aspectLock:(BOOL)aspectLock {
-    UAOverlayViewController *overlayController = [[UAOverlayViewController alloc] initWithParentViewController:[UAUtils topController]
+    UAOverlayViewController *overlayController = [[UAOverlayViewController alloc] initWithParentView:[UAUtils mainWindow]
                                                                                                                       andURL:message.messageBodyURL
                                                                                                                   andMessage:message
                                                                                                                   andHeaders:headers
@@ -271,14 +326,13 @@ static NSMutableSet *overlayControllers_ = nil;
     }
 }
 
-- (instancetype)initWithParentViewController:(UIViewController *)parent andURL:(NSURL *)url andMessage:(UAInboxMessage *)message andHeaders:(NSDictionary *)headers size:(CGSize)size aspectLock:(BOOL)aspectLock {
+- (instancetype)initWithParentView:(UIView *)parent andURL:(NSURL *)url andMessage:(UAInboxMessage *)message andHeaders:(NSDictionary *)headers size:(CGSize)size aspectLock:(BOOL)aspectLock {
     self = [super init];
     if (self) {
-
-        self.overlayView = [[UAOverlayView alloc] initWithSize:size aspectLock:aspectLock];
+        self.overlayView = [UAOverlayView overlayViewWithSize:size aspectLock:aspectLock];
         self.overlayView.alpha = 0.0;
 
-        self.parentViewController = parent;
+        self.parentView = parent;
         self.url = url;
         self.message = message;
         self.headers = headers;
@@ -290,7 +344,7 @@ static NSMutableSet *overlayControllers_ = nil;
         self.nativeBridge.forwardDelegate = self;
         self.overlayView.webView.navigationDelegate = self.nativeBridge;
 
-        if ([[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){10, 0, 0}]) {
+        if (@available(iOS 10.0, tvOS 10.0, *)) {
             [self.overlayView.webView.configuration setDataDetectorTypes:WKDataDetectorTypeNone];
         }
     }
@@ -330,13 +384,12 @@ static NSMutableSet *overlayControllers_ = nil;
 }
 
 - (void)showOverlay {
-
-    UIView *parentView = self.parentViewController.view;
-
-    [parentView addSubview:self.overlayView];
-    self.overlayView.translatesAutoresizingMaskIntoConstraints = NO;
+    UIView *parentView = self.parentView;
 
     if (parentView != nil) {
+        [parentView addSubview:self.overlayView];
+        self.overlayView.translatesAutoresizingMaskIntoConstraints = NO;
+
         // Constrain overlay view to center of parent view
         NSLayoutConstraint *xConstraint = [NSLayoutConstraint constraintWithItem:self.overlayView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:parentView attribute:NSLayoutAttributeCenterX multiplier:1 constant:0];
         NSLayoutConstraint *yConstraint = [NSLayoutConstraint constraintWithItem:self.overlayView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:parentView attribute:NSLayoutAttributeCenterY multiplier:1 constant:0];
@@ -350,7 +403,6 @@ static NSMutableSet *overlayControllers_ = nil;
         widthConstraint.active = YES;
         heightConstraint.active = YES;
     }
-
 
     // Technically UABespokeCloseView is a not a UIButton, so we will be adding it as a subView of an actual, transparent one.
     self.closeButtonView.userInteractionEnabled = NO;
@@ -407,14 +459,14 @@ static NSMutableSet *overlayControllers_ = nil;
 
 - (void)webView:(WKWebView *)webView didFailNavigation:(null_unspecified WKNavigation *)navigation withError:(nonnull NSError *)error {
 
-    __typeof(self) __weak weakSelf = self;
+    UA_WEAKIFY(self);
 
     // Wait twenty seconds, try again if necessary
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 20.0 * NSEC_PER_SEC), dispatch_get_main_queue(), ^(void){
-        __typeof(self) __strong strongSelf = weakSelf;
-        if (strongSelf) {
-            UA_LINFO(@"Retrying url: %@", strongSelf.url);
-            [strongSelf load];
+        UA_STRONGIFY(self)
+        if (self) {
+            UA_LINFO(@"Retrying url: %@", self.url);
+            [self load];
         }
     });
 }

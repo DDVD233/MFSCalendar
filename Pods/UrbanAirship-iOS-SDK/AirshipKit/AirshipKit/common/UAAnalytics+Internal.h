@@ -1,7 +1,8 @@
-/* Copyright 2017 Urban Airship and Contributors */
+/* Copyright 2018 Urban Airship and Contributors */
 
 #import <Foundation/Foundation.h>
 #import "UAAnalytics.h"
+#import "UAComponent+Internal.h"
 
 #define kUAAnalyticsEnabled @"UAAnalyticsEnabled"
 #define kUAMissingSendID @"MISSING_SEND_ID"
@@ -16,55 +17,20 @@
 NS_ASSUME_NONNULL_BEGIN
 
 
-/**
- * Analytics delegate.
- */
-@protocol UAAnalyticsDelegate <NSObject>
-
-///---------------------------------------------------------------------------------------
-/// @name Analytics Delegate Internal Methods
-///---------------------------------------------------------------------------------------
-
-@optional
-/**
- * Called when a custom event was added.
- *
- * @param event The added custom event.
- */
--(void)customEventAdded:(UACustomEvent *)event;
-
-
-/**
- * Called when a region event was added.
- *
- * @param event The added region event.
- */
--(void)regionEventAdded:(UARegionEvent *)event;
-
-/**
- * Called when a screen was tracked. Called when a `trackScreen:` is first called.
- * An event will be added for the screen will be added after the next time
- * `trackScreen:` is called or if the application backgrounds.
- *
- * @param screenName Name of the screen.
- */
--(void)screenTracked:(nullable NSString *)screenName;
-
-@end
-
 /*
  * SDK-private extensions to Analytics
  */
 @interface UAAnalytics ()
 
+extern NSString *const UACustomEventAdded;
+extern NSString *const UARegionEventAdded;
+extern NSString *const UAScreenTracked;
+extern NSString *const UAEventKey;
+extern NSString *const UAScreenKey;
+
 ///---------------------------------------------------------------------------------------
 /// @name Analytics Internal Properties
 ///---------------------------------------------------------------------------------------
-
-/**
- * Set a delegate that implements the UAAnalyticsDelegate protocol.
- */
-@property (nonatomic, weak, nullable) id<UAAnalyticsDelegate> delegate;
 
 /**
  * The conversion send ID.
@@ -101,15 +67,18 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 /**
- * Factory method to create an analytics instance.
+ * Factory method to create an analytics instance. Used for testing.
+ *
  * @param airshipConfig The 'AirshipConfig.plist' file
  * @param dataStore The shared preference data store.
  * @param eventManager An event manager instance.
+ * @param notificationCenter The notification center.
  * @return A new analytics instance.
  */
 + (instancetype)analyticsWithConfig:(UAConfig *)airshipConfig
                           dataStore:(UAPreferenceDataStore *)dataStore
-                       eventManager:(UAEventManager *)eventManager;
+                       eventManager:(UAEventManager *)eventManager
+                 notificationCenter:(NSNotificationCenter *)notificationCenter;
 
 /**
  * Called to notify analytics the app was launched from a push notification.

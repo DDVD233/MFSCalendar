@@ -1,13 +1,12 @@
-/* Copyright 2017 Urban Airship and Contributors */
+/* Copyright 2018 Urban Airship and Contributors */
 
 #import "UAShareAction.h"
-#import "UAUtils.h"
+#import "UAUtils+Internal.h"
 #import "UAGlobal.h"
 #import "UAActivityViewController.h"
 
 @interface UAShareAction()
 @property (nonatomic, strong) UAActivityViewController *lastActivityViewController;
-@property (nonatomic, strong) UIPopoverController *popoverController;
 @end
 
 @implementation UAShareAction
@@ -62,15 +61,14 @@
 
 
     void (^dismissalBlock)(void);
-    __weak UAShareAction *weakSelf = self;
+    UA_WEAKIFY(self);
 
     activityViewController.dismissalBlock = dismissalBlock = ^{
-        __strong UAShareAction *strongSelf = weakSelf;
+        UA_STRONGIFY(self)
 
         completionHandler([UAActionResult emptyResult]);
 
-        strongSelf.lastActivityViewController = nil;
-        strongSelf.popoverController = nil;
+        self.lastActivityViewController = nil;
     };
 
     if (self.lastActivityViewController) {

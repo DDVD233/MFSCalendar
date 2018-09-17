@@ -1,4 +1,4 @@
-/* Copyright 2017 Urban Airship and Contributors */
+/* Copyright 2018 Urban Airship and Contributors */
 
 #import <UIKit/UIKit.h>
 #import <WebKit/WebKit.h>
@@ -44,9 +44,10 @@ NS_ASSUME_NONNULL_BEGIN
  * Test if request's URL is an Airship URL and is whitelisted.
  *
  * @param request The request.
+ * @param originatingURL The URL the request was made from.
  * @returns YES if the request is both an Airship URL and is whitelisted, otherwise NO.
  */
-- (BOOL)isWhiteListedAirshipRequest:(NSURLRequest *)request;
+- (BOOL)isWhiteListedAirshipRequest:(NSURLRequest *)request originatingURL:(NSURL *)originatingURL;
 
 @end
 

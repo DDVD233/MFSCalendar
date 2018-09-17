@@ -1,10 +1,9 @@
-/* Copyright 2017 Urban Airship and Contributors */
+/* Copyright 2018 Urban Airship and Contributors */
 
 #import "UAActionArguments.h"
 #import "UAActionArguments+Internal.h"
 
 
-NSString * const UAActionMetadataWebViewKey = @"com.urbanairship.webview";
 NSString * const UAActionMetadataPushPayloadKey = @"com.urbanairship.payload";
 NSString * const UAActionMetadataForegroundPresentationKey = @"com.urbanairship.foreground_presentation";
 NSString * const UAActionMetadataInboxMessageKey = @"com.urbanairship.message";

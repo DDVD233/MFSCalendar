@@ -196,8 +196,8 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
 //        self.password.placeholder = "Password"
 //        self.password.title = "Password"
 
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardNotification(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardHide(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardNotification(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
 
     deinit {
@@ -215,7 +215,7 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
             let loginNotice = SCLAlertView()
             loginNotice.addButton("Go to myMFS website", action: {
                 if #available(iOS 10.0, *) {
-                    UIApplication.shared.open(URL(string: "https://mfriends.myschoolapp.com/app/#login")!, options: [:], completionHandler: nil)
+                    UIApplication.shared.open(URL(string: "https://mfriends.myschoolapp.com/app/#login")!, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: nil)
                 } else {
                     UIApplication.shared.openURL(URL(string: "https://mfriends.myschoolapp.com/app/#login")!)
                     // Fallback on earlier versions
@@ -229,11 +229,11 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
 
     @objc func keyboardNotification(notification: NSNotification) {
         if let userInfo = notification.userInfo {
-            let endFrame = (userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
-            let duration: TimeInterval = (userInfo[UIKeyboardAnimationDurationUserInfoKey] as? NSNumber)?.doubleValue ?? 0
-            let animationCurveRawNSN = userInfo[UIKeyboardAnimationCurveUserInfoKey] as? NSNumber
-            let animationCurveRaw = animationCurveRawNSN?.uintValue ?? UIViewAnimationOptions.curveEaseInOut.rawValue
-            let animationCurve: UIViewAnimationOptions = UIViewAnimationOptions(rawValue: animationCurveRaw)
+            let endFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
+            let duration: TimeInterval = (userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? NSNumber)?.doubleValue ?? 0
+            let animationCurveRawNSN = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? NSNumber
+            let animationCurveRaw = animationCurveRawNSN?.uintValue ?? UIView.AnimationOptions.curveEaseInOut.rawValue
+            let animationCurve: UIView.AnimationOptions = UIView.AnimationOptions(rawValue: animationCurveRaw)
             if (endFrame?.origin.y)! >= UIScreen.main.bounds.size.height {
                 self.bottomLayoutConstraint?.constant = 0.0
             } else {
@@ -252,10 +252,10 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
 
     @objc func keyboardHide(notification: NSNotification) {
         if let userInfo = notification.userInfo {
-            let duration: TimeInterval = (userInfo[UIKeyboardAnimationDurationUserInfoKey] as? NSNumber)?.doubleValue ?? 0
-            let animationCurveRawNSN = userInfo[UIKeyboardAnimationCurveUserInfoKey] as? NSNumber
-            let animationCurveRaw = animationCurveRawNSN?.uintValue ?? UIViewAnimationOptions.curveEaseInOut.rawValue
-            let animationCurve: UIViewAnimationOptions = UIViewAnimationOptions(rawValue: animationCurveRaw)
+            let duration: TimeInterval = (userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? NSNumber)?.doubleValue ?? 0
+            let animationCurveRawNSN = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? NSNumber
+            let animationCurveRaw = animationCurveRawNSN?.uintValue ?? UIView.AnimationOptions.curveEaseInOut.rawValue
+            let animationCurve: UIView.AnimationOptions = UIView.AnimationOptions(rawValue: animationCurveRaw)
             self.bottomLayoutConstraint?.constant = 20
             UIView.animate(withDuration: duration,
                     delay: TimeInterval(0),
@@ -295,7 +295,7 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
     @objc func wrongPassword(button: UIButton!) {
         print("Password?")
         if #available(iOS 10.0, *) {
-            UIApplication.shared.open(URL(string: "https://mfriends.myschoolapp.com/app/#login/request")!, options: [:], completionHandler: nil)
+            UIApplication.shared.open(URL(string: "https://mfriends.myschoolapp.com/app/#login/request")!, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: nil)
         } else {
             // Fallback on earlier versions
             UIApplication.shared.openURL(URL(string: "https://mfriends.myschoolapp.com/app/#login/request")!)
@@ -440,3 +440,8 @@ extension firstTimeLaunchController {
     }
 }
 
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToUIApplicationOpenExternalURLOptionsKeyDictionary(_ input: [String: Any]) -> [UIApplication.OpenExternalURLOptionsKey: Any] {
+	return Dictionary(uniqueKeysWithValues: input.map { key, value in (UIApplication.OpenExternalURLOptionsKey(rawValue: key), value)})
+}

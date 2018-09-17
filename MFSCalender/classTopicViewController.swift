@@ -205,7 +205,7 @@ extension classTopicViewController: DZNEmptyDataSetSource, DZNEmptyDataSetDelega
     }
     
     func title(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
-        let attr = [NSAttributedStringKey.font: UIFont.preferredFont(forTextStyle: UIFontTextStyle.headline)]
+        let attr = [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: UIFont.TextStyle.headline)]
         let str = "There is no topic to display."
         return NSAttributedString(string: str, attributes: attr)
     }

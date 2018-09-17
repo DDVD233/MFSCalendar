@@ -1,4 +1,4 @@
-/* Copyright 2017 Urban Airship and Contributors */
+/* Copyright 2018 Urban Airship and Contributors */
 
 #import "UAUser.h"
 
@@ -69,6 +69,17 @@ NS_ASSUME_NONNULL_BEGIN
  * @return User instance.
  */
 + (instancetype)userWithPush:(UAPush *)push config:(UAConfig *)config dataStore:(UAPreferenceDataStore *)dataStore;
+
+/**
+ * Factory method to create a user instance. Used for testing.
+ * @param push The push manager.
+ * @param config The Urban Airship config.
+ * @param dataStore The preference data store.
+ * @param client The API client.
+ * @param notificationCenter The notification center.
+ * @return User instance.
+ */
++ (instancetype)userWithPush:(UAPush *)push config:(UAConfig *)config dataStore:(UAPreferenceDataStore *)dataStore client:(UAUserAPIClient *)client notificationCenter:(NSNotificationCenter *)notificationCenter;
 
 /**
  * Updates the user's device token and or channel ID

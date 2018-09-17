@@ -1,14 +1,15 @@
-/* Copyright 2017 Urban Airship and Contributors */
+/* Copyright 2018 Urban Airship and Contributors */
 
 #import <UIKit/UIKit.h>
 
 #import "UAEventAPIClient+Internal.h"
-#import "UAUtils.h"
+#import "UAUtils+Internal.h"
 #import "UAirship.h"
 #import "UAPush+Internal.h"
 #import "UAUser.h"
 #import "UALocation.h"
 #import "NSJSONSerialization+UAAdditions.h"
+#import "UAJSONSerialization+Internal.h"
 
 #if !TARGET_OS_TV
 #import "UAInbox.h"
@@ -52,7 +53,7 @@
 
         // Body
         builder.compressBody = YES;
-        builder.body = [NSJSONSerialization dataWithJSONObject:events options:0 error:nil];
+        builder.body = [UAJSONSerialization dataWithJSONObject:events options:0 error:nil];
         [builder setValue:@"application/json" forHeader:@"Content-Type"];
 
         // Sent timestamp

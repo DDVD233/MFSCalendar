@@ -1,4 +1,4 @@
-/* Copyright 2017 Urban Airship and Contributors */
+/* Copyright 2018 Urban Airship and Contributors */
 
 #import "UAScheduleDelayData+Internal.h"
 
@@ -7,7 +7,7 @@
 @dynamic seconds;
 @dynamic regionID;
 @dynamic appState;
-@dynamic screen;
+@dynamic screens;
 @dynamic schedule;
 @dynamic cancellationTriggers;
 
