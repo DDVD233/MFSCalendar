@@ -59,7 +59,6 @@
 		E4B340041F0891AE00D6039A /* ClassPagerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B340031F0891AE00D6039A /* ClassPagerViewController.swift */; };
 		E4B340061F08942000D6039A /* classTopicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B340051F08942000D6039A /* classTopicViewController.swift */; };
 		E4B340081F0905EB00D6039A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E4B340071F0905EB00D6039A /* GoogleService-Info.plist */; };
-		E4B3400A1F0905F400D6039A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E4B340091F0905F400D6039A /* GoogleService-Info.plist */; };
 		E4B6F4C11F746AE600F56C4D /* MFSCalendarUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48F15601F7467D900A36904 /* MFSCalendarUITests.swift */; };
 		E4B9378120C71DE500F0A225 /* NetworkFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B9378020C71DE500F0A225 /* NetworkFunctions.swift */; };
 		E4BD88961F35973C0000FEF3 /* TargetPublicFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BD88951F35973C0000FEF3 /* TargetPublicFunctions.swift */; };
@@ -711,7 +710,6 @@
 				E4AAD1611EE8CC9E00E4E5EC /* bell.png in Resources */,
 				E41DE2F81EFA4293001155E9 /* No_homework.png in Resources */,
 				E48333CA20112A1F00BE2FEA /* AppLogo.png in Resources */,
-				E4B3400A1F0905F400D6039A /* GoogleService-Info.plist in Resources */,
 				E413AB0E1EE89441001EB189 /* Achievement.png in Resources */,
 				E4B340081F0905EB00D6039A /* GoogleService-Info.plist in Resources */,
 			);

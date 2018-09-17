@@ -20,7 +20,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        UIApplication.shared.statusBarStyle = .lightContent
         // Override point for customization after application launch.
         FirebaseApp.configure()
         Fabric.with([Crashlytics()])
@@ -37,7 +36,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func setPushNotification() {
         UAirship.takeOff()
         UAirship.push().userPushNotificationsEnabled = true
-        UAirship.push().defaultPresentationOptions = [.alert, .badge, .sound]
+        if #available(iOS 10.0, *) {
+            UAirship.push().defaultPresentationOptions = [.alert, .badge, .sound]
+        } else {
+            // Fallback on earlier versions
+        }
         if Preferences().isDev {
             UAirship.push().addTag("developer")
         }
@@ -55,7 +58,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
             }
         }
-        print("Channel ID: " + (UAPush().channelID ?? "None"))
+//        print("Channel ID: " + (UAPus ?? "None"))
     }
     
     func logUser() {

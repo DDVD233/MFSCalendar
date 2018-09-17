@@ -282,7 +282,7 @@ class courseFillController: UIViewController {
                 print(json)
                 schedule = json
             } catch {
-                print(String(data: data!, encoding: .utf8))
+                print(String(data: data!, encoding: .utf8) as Any)
                 presentErrorMessage(presentMessage: error.localizedDescription, layout: .cardView)
             }
             

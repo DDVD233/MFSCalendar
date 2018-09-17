@@ -36,7 +36,7 @@ class gradeViewController: UITableViewController {
     @IBOutlet var sectionGradeChart: BarChartView!
     
     let dateFormatter = DateFormatter()
-    var quarterSelected: Quarters = .second
+    var quarterSelected: Quarters = .first
     
 
     var cumGrade: Float = 0 {
@@ -52,6 +52,7 @@ class gradeViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         cumGradeProgressRing.font = UIFont.boldSystemFont(ofSize: 32)
+        setQuarterBasedOnCurrentQuarter()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -73,6 +74,21 @@ class gradeViewController: UITableViewController {
         super.viewDidAppear(true)
         self.animate()
         Answers.logContentView(withName: "Grade", contentType: "Grade", contentId: "2", customAttributes: nil)
+    }
+    
+    func setQuarterBasedOnCurrentQuarter() {
+        switch Preferences().currentQuarter {
+        case 1:
+            quarterSelected = .first
+        case 2:
+            quarterSelected = .second
+        case 3:
+            quarterSelected = .third
+        case 4:
+            quarterSelected = .forth
+        default:
+            quarterSelected = .first
+        }
     }
     
     @objc func changeQuarter(sender: UIButton) {
@@ -211,13 +227,13 @@ class gradeViewController: UITableViewController {
         var markingPeriodID: String {
             switch quarterSelected {
             case .first:
-                return "5196"
+                return "6893"
             case .second:
-                return "5197"
+                return "6894"
             case .third:
-                return "5198"
+                return "6895"
             case .forth:
-                return "5199"
+                return "6896"
             }
         }
         
