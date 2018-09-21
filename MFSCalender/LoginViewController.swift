@@ -106,7 +106,7 @@ class LoginView {
         provider.request(.downloadLargeProfilePhoto(link: photoLink), callbackQueue: DispatchQueue.global()) { (result) in
             switch result {
             case .success(let response):
-                print(response.request?.url)
+                print(response.request?.url as Any)
                 userDefaults.set(false, forKey: "didDownloadFullSizeImage")
             case let .failure(error):
                 NSLog("Failed downloading small profile photo because: \(error)")

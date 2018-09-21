@@ -34,7 +34,7 @@ public func getRequestVerification() -> String? {
     task.resume()
     semaphore.wait()
     
-    loginAuthentication()
+    let _ = loginAuthentication()
     
     let htmlReqUrl = URL(string: "https://mfriends.myschoolapp.com/app/student#studentmyday/assignment-center")!
     let semaphore2 = DispatchSemaphore.init(value: 0)

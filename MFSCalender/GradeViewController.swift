@@ -303,7 +303,7 @@ class gradeViewController: UITableViewController {
 
         var cumGrade = ""
 
-        var durationId: String = Preferences().durationID ?? ""
+        let durationId: String = Preferences().durationID ?? ""
 
         let session = URLSession.shared
         let url = "https://mfriends.myschoolapp.com/api/datadirect/ParentStudentUserAcademicGroupsGet?userId=\(userId)&schoolYearLabel=2018+-+2019&memberLevel=3&persona=2&durationList=\(durationId)&markingPeriodId="
