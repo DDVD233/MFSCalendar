@@ -13,6 +13,7 @@ import SCLAlertView
 import SkyFloatingLabelTextField
 import NotificationCenter
 import Crashlytics
+import SwiftDate
 
 class LoginView {
     func getProfile() {
@@ -20,6 +21,7 @@ class LoginView {
         let semaphore = DispatchSemaphore.init(value: 0)
         guard let token = Preferences().token else { return }
         guard let userID = Preferences().userID else { return }
+        print(userID)
         
         provider.request(MyService.getProfile(userID: userID, token: token), callbackQueue: DispatchQueue.global(), completion: { result in
             switch result {
@@ -79,8 +81,14 @@ class LoginView {
                     Preferences().isStudent = false
                     if let studentInfo = resDict["StudentInfo"] as? [String: Any] {
                         print(studentInfo)
-                        if (studentInfo["GradYear"] as? String).existsAndNotEmpty() {
-                            Preferences().isStudent = true
+                        if let graduationYear = studentInfo["GradYear"] as? String {
+                            if !graduation {
+                                Preferences().isStudent = true
+                                
+                                let gradYearInt = Int(gradYear)
+                                let year = DateInRegion().year
+                                Preferences().gradeLevel =
+                            }
                         }
                     }
                     

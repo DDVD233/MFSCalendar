@@ -200,6 +200,15 @@ public class Preferences {
         }
     }
     
+    public var gradeLevel: Int {
+        get {
+            return userDefaults.integer(forKey: "gradeLevel" )
+        }
+        set(value) {
+            userDefaults.set(value, forKey: "gradeLevel" )
+        }
+    }
+    
     public var dataBuild: Int {
         get {
             return userDefaults.integer(forKey: "dataBuild" )

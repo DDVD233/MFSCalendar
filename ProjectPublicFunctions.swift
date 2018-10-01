@@ -90,8 +90,8 @@ func getMeetTime(period: Int) -> String {
     case 5: return "11:28AM - 12:10AM"
     case 6: return "12:14PM - 12:56PM"
     case 7: return "1:00PM - 1:38PM"
-    case 8: return "1:42PM - 2:23PM"
-    case 9: return "2:24PM - 3:10PM"
+    case 8: return "1:42PM - 2:24PM"
+    case 9: return "2:28PM - 3:10PM"
     default: return "Error!"
     }
 }
