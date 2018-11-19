@@ -385,7 +385,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
             } else {
                 self.dayLabel.text = "Today is " + day + " Day,"
             }
-            self.welcomeLabel.text = "Welcome back, " + (Preferences().firstName ?? "") + "!"
+            self.welcomeLabel.text = "Welcome back, \(Preferences().firstName ?? "") !"
             
             self.dateLabel.text = today
         }

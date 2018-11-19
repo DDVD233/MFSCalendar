@@ -326,4 +326,13 @@ public class Preferences {
             userDefaults.set(value, forKey: "loginTime" )
         }
     }
+    
+    public var reviewDate: Date? {
+        get {
+            return userDefaults.object(forKey: "reviewDate" ) as? Date
+        }
+        set(value) {
+            userDefaults.set(value, forKey: "reviewDate" )
+        }
+    }
 }

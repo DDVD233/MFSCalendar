@@ -18,6 +18,7 @@ import Alamofire
 import Crashlytics
 import M13ProgressSuite
 import ChameleonFramework
+import StoreKit
 
 
 class homeworkViewController: UITableViewController, UIViewControllerPreviewingDelegate, IndicatorInfoProvider, UIDocumentPickerDelegate {
@@ -166,6 +167,25 @@ class homeworkViewController: UITableViewController, UIViewControllerPreviewingD
         }
         
         Answers.logContentView(withName: "Homework", contentType: "Homework", contentId: "1", customAttributes: nil)
+        
+        requestReviewIfNeeded()
+    }
+    
+    func requestReviewIfNeeded() {
+        let presentationDate = DateInRegion(components: {
+            $0.year = 2018
+            $0.month = 12
+            $0.day = 1
+            $0.hour = 12
+            $0.minute = 0
+        })
+        
+        if (Preferences().reviewDate == nil) && DateInRegion().isBeforeDate(presentationDate!, granularity: .day) {
+            if #available(iOS 10.3, *) {
+                SKStoreReviewController.requestReview()
+                Preferences().reviewDate = Date()
+            }
+        }
     }
 
     func manageDate(originalData: [[String: Any]]) {

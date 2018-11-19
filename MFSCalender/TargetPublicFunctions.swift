@@ -442,7 +442,7 @@ class HomeworkView {
         case 1, 4:
             return .checked
         default:
-            return .unchecked
+            return .checked
         }
     }
     
