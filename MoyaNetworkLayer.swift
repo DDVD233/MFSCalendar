@@ -42,7 +42,7 @@ extension MyService: TargetType {
     var baseURL: URL {
         switch self {
         case .getCalendarData, .getCalendarEvent, .dataVersionCheck, .meetTimeSearch, .getQuarterSchedule, .getSteps, .reportSteps:
-            return URL(string: "http://127.0.0.1:5000")!
+            return URL(string: Preferences().davidBaseURL)!
         default:
             return URL(string: "https://mfriends.myschoolapp.com")!
         }

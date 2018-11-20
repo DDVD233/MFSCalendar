@@ -20,6 +20,7 @@
 		E4288E1420360F6600E4488D /* MFSClasses.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4288E1320360F6600E4488D /* MFSClasses.swift */; };
 		E43611BB21A45BFE00994A10 /* StepChallengeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43611BA21A45BFE00994A10 /* StepChallengeViewController.swift */; };
 		E43611BD21A47CF900994A10 /* running.png in Resources */ = {isa = PBXBuildFile; fileRef = E43611BC21A47CF900994A10 /* running.png */; };
+		E43611C521A4B9D300994A10 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E43611C421A4B9D300994A10 /* HealthKit.framework */; };
 		E436EDC41F96E3AF00395DA5 /* MenuService.png in Resources */ = {isa = PBXBuildFile; fileRef = E436EDC31F96E3A000395DA5 /* MenuService.png */; };
 		E440F1BC1EEA7F4E004AFD0B /* MoyaNetworkLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E440F1BB1EEA7F4E004AFD0B /* MoyaNetworkLayer.swift */; };
 		E445E73E1EAD8B7D00794560 /* MoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E445E73D1EAD8B7D00794560 /* MoreViewController.swift */; };
@@ -154,6 +155,7 @@
 		E4288E1320360F6600E4488D /* MFSClasses.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MFSClasses.swift; sourceTree = "<group>"; };
 		E43611BA21A45BFE00994A10 /* StepChallengeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepChallengeViewController.swift; sourceTree = "<group>"; };
 		E43611BC21A47CF900994A10 /* running.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = running.png; sourceTree = "<group>"; };
+		E43611C421A4B9D300994A10 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 		E436EDC31F96E3A000395DA5 /* MenuService.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MenuService.png; sourceTree = "<group>"; };
 		E440F1BB1EEA7F4E004AFD0B /* MoyaNetworkLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MoyaNetworkLayer.swift; path = ../MoyaNetworkLayer.swift; sourceTree = "<group>"; };
 		E44484D71E13A105002C68D5 /* MFSCalender.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MFSCalender.entitlements; sourceTree = "<group>"; };
@@ -288,6 +290,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7ED7944ABD6D3326AAD92DBA /* Pods_MFSMobile.framework in Frameworks */,
+				E43611C521A4B9D300994A10 /* HealthKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -329,6 +332,7 @@
 		E48D4E001E61FC26008B0A97 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E43611C421A4B9D300994A10 /* HealthKit.framework */,
 				E48F159A1F74687200A36904 /* Alamofire.framework */,
 				E48F159B1F74687200A36904 /* DGElasticPullToRefresh.framework */,
 				E48F159C1F74687200A36904 /* Down.framework */,
@@ -597,6 +601,9 @@
 							com.apple.ApplicationGroups.iOS = {
 								enabled = 1;
 							};
+							com.apple.HealthKit = {
+								enabled = 0;
+							};
 						};
 					};
 					E48F154F1F745BF400A36904 = {
@@ -622,6 +629,9 @@
 								enabled = 1;
 							};
 							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+							com.apple.HealthKit = {
 								enabled = 1;
 							};
 							com.apple.Push = {
