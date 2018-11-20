@@ -234,10 +234,62 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         }
         
         DispatchQueue.global().async {
+            self.updatePhotoLink()
+        }
+        
+        DispatchQueue.global().async {
             if self.reachability.connection == .wifi {
                 NetworkOperations().downloadLargeProfilePhoto()
             }
         }
+    }
+    
+    func updatePhotoLink() {
+        guard let token = Preferences().token else { return }
+        guard let userID = Preferences().userID else { return }
+        
+        provider.request(MyService.getProfile(userID: userID, token: token), callbackQueue: DispatchQueue.global(), completion: { result in
+            switch result {
+            case let .success(response):
+                do {
+                    guard let resDict = try response.mapJSON() as? Dictionary<String, Any?> else {
+                        presentErrorMessage(presentMessage: "Internal error: incorrect file format.", layout: .cardView)
+                        return
+                    }
+                    
+                    print(resDict)
+                    
+                    guard resDict["Error"] == nil else {
+                        //                        When error occured.
+                        print("Login Error!")
+                        if (resDict["ErrorType"] as! String) == "UNAUTHORIZED_ACCESS" {
+                            DispatchQueue.main.async {
+                                presentErrorMessage(presentMessage: "The username/password is incorrect. Please check your spelling.", layout: .cardView)
+                            }
+                        }
+                        
+                        return
+                    }
+                    
+                    if let photo = resDict["ProfilePhoto"] as? NSDictionary {
+                        if let photolink = photo["ThumbFilenameUrl"] as? String {
+                            Preferences().photoLink = photolink
+                            print(photolink)
+                        }
+                        
+                        let largePhotoLink = photo["LargeFilenameUrl"] as? String
+                        userDefaults.set(largePhotoLink, forKey: "largePhotoLink")
+                    }
+                } catch {
+                    NSLog("Data parsing failed")
+                    DispatchQueue.main.async {
+                        presentErrorMessage(presentMessage: error.localizedDescription, layout: .statusLine)
+                    }
+                }
+            case let .failure(error):
+                presentErrorMessage(presentMessage: error.localizedDescription, layout: .cardView)
+            }
+        })
     }
     
     func presentCourseFillView() {

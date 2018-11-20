@@ -183,7 +183,7 @@ class StepChallenge {
         let link = (preferences.photoLink ?? "none")
         provider.request(MyService.reportSteps(steps: steps, username: username, link: link)) { (result) in
             switch result {
-            case .success(let _):
+            case .success(_):
                 print("Successfully uploaded the result")
                 break
             case .failure(let error):
