@@ -9,6 +9,9 @@
 import UIKit
 import SDWebImage
 import HealthKit
+import DGElasticPullToRefresh
+import DZNEmptyDataSet
+import SwiftDate
 
 class StepChallengeViewController: UIViewController {
     var stepArray = [[String: Any]]()
@@ -20,20 +23,34 @@ class StepChallengeViewController: UIViewController {
         super.viewDidLoad()
         self.stepTable.delegate = self
         self.stepTable.dataSource = self
-        stepChallenge.reportSteps()
+        stepTable.emptyDataSetSource = self
+        stepTable.emptyDataSetDelegate = self
+        let loadingview = DGElasticPullToRefreshLoadingViewCircle()
+        loadingview.tintColor = UIColor.white
+        stepTable.dg_addPullToRefreshWithActionHandler({ [weak self] () -> Void in
+            StepChallenge().reportSteps()
+            self?.getSteps()
+            self?.stepTable.dg_stopLoading()
+            }, loadingView: loadingview)
+        stepTable.dg_setPullToRefreshFillColor(UIColor(hexString: 0xFF7E79))
+        stepTable.dg_setPullToRefreshBackgroundColor(stepTable.backgroundColor!)
+        
+        if Preferences().isInStepChallenge {
+            stepChallenge.reportSteps()
+            getSteps()
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
-        
-        getSteps()
     }
     
     func getSteps() {
-        let date = Date()
+        let region = Region(zone: TimeZone(identifier: "America/New_York")!)
+        let date = DateInRegion.init(Date(), region: region)
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyyMMdd"
-        let checkDate = formatter.string(from: date)
+        let checkDate = formatter.string(from: date.date)
         
         provider.request(MyService.getSteps(date: checkDate), callbackQueue: DispatchQueue.global()) { (result) in
             switch result {
@@ -58,9 +75,9 @@ class StepChallengeViewController: UIViewController {
     
     func sortSteps() {
         stepArray = stepArray.sorted(by: { (first, second) -> Bool in
-            let firstStep = Int(first["steps"] as? String ?? "0") ?? 0
-            let secondStep = Int(second["steps"] as? String ?? "0") ?? 0
-            return  firstStep<secondStep
+            let firstStep = first["steps"] as? Int ?? 0
+            let secondStep = second["steps"] as? Int ?? 0
+            return  firstStep>secondStep
         })
         
         DispatchQueue.main.async {
@@ -70,12 +87,34 @@ class StepChallengeViewController: UIViewController {
 }
 
 extension StepChallengeViewController: UITableViewDelegate, UITableViewDataSource {
+    func numberOfSections(in tableView: UITableView) -> Int {
+        if Preferences().isInStepChallenge {
+            return 2
+        } else {
+            return 0
+        }
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return stepArray.count;
+        if section == 0 {
+            return 1
+        } else {
+            return stepArray.count;
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let stepRecord = stepArray[indexPath.row]
+        var stepRecord = [String: Any]()
+        let preferences = Preferences()
+        let currentUserName = (preferences.firstName ?? "") + " " + (preferences.lastName ?? "")
+        
+        if indexPath.section == 0 {
+            stepRecord = stepArray.filter({ (object) -> Bool in
+                return (object["name"] as? String ?? "") == currentUserName
+            }).first ?? [String: Any]()
+        } else {
+            stepRecord = stepArray[indexPath.row]
+        }
         let cell = stepTable.dequeueReusableCell(withIdentifier: "stepRecord", for: indexPath) as! StepTableCell
         
         cell.name.text = stepRecord["name"] as? String ?? ""
@@ -87,7 +126,33 @@ extension StepChallengeViewController: UITableViewDelegate, UITableViewDataSourc
         cell.photo.contentMode = .scaleAspectFill
         return cell
     }
+}
+
+extension StepChallengeViewController: DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
+    func title(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
+        var str: String? = ""
+        let attrs: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: UIFont.TextStyle.headline)]
+        str = "Join Step Challenge!"
+        
+        return NSAttributedString(string: str!, attributes: attrs)
+    }
     
+    func image(forEmptyDataSet scrollView: UIScrollView!) -> UIImage! {
+        let image: UIImage = UIImage(named: "runningColor.png")!.imageResize(sizeChange: CGSize(width: 100, height: 100))
+        return image
+    }
+    
+    func buttonTitle(forEmptyDataSet scrollView: UIScrollView!, for state: UIControl.State) -> NSAttributedString! {
+        let str: String = "Join"
+        let attrs: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: UIFont.TextStyle.headline)]
+        
+        return NSAttributedString(string: str, attributes: attrs)
+    }
+    
+    func emptyDataSet(_ scrollView: UIScrollView!, didTap button: UIButton!) {
+        Preferences().isInStepChallenge = true
+        viewDidLoad()
+    }
 }
 
 class StepChallenge {

@@ -290,6 +290,15 @@ public class Preferences {
         }
     }
     
+    public var isInStepChallenge: Bool {
+        get {
+            return userDefaults.bool(forKey: "isInStepChallenge" )
+        }
+        set(value) {
+            userDefaults.set(value, forKey: "isInStepChallenge" )
+        }
+    }
+    
     public var isStudent: Bool {
         get {
             return userDefaults.object(forKey: "isStudent" ) as? Bool ?? true
