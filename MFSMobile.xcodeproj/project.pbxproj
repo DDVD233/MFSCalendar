@@ -18,6 +18,8 @@
 		E42786881F568A5F00583D1E /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42786871F568A5F00583D1E /* AboutViewController.swift */; };
 		E427868A1F568EB100583D1E /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42786891F568EB100583D1E /* ProfileViewController.swift */; };
 		E4288E1420360F6600E4488D /* MFSClasses.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4288E1320360F6600E4488D /* MFSClasses.swift */; };
+		E43611BB21A45BFE00994A10 /* StepChallengeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43611BA21A45BFE00994A10 /* StepChallengeViewController.swift */; };
+		E43611BD21A47CF900994A10 /* running.png in Resources */ = {isa = PBXBuildFile; fileRef = E43611BC21A47CF900994A10 /* running.png */; };
 		E436EDC41F96E3AF00395DA5 /* MenuService.png in Resources */ = {isa = PBXBuildFile; fileRef = E436EDC31F96E3A000395DA5 /* MenuService.png */; };
 		E440F1BC1EEA7F4E004AFD0B /* MoyaNetworkLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E440F1BB1EEA7F4E004AFD0B /* MoyaNetworkLayer.swift */; };
 		E445E73E1EAD8B7D00794560 /* MoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E445E73D1EAD8B7D00794560 /* MoreViewController.swift */; };
@@ -150,6 +152,8 @@
 		E42786871F568A5F00583D1E /* AboutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
 		E42786891F568EB100583D1E /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		E4288E1320360F6600E4488D /* MFSClasses.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MFSClasses.swift; sourceTree = "<group>"; };
+		E43611BA21A45BFE00994A10 /* StepChallengeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepChallengeViewController.swift; sourceTree = "<group>"; };
+		E43611BC21A47CF900994A10 /* running.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = running.png; sourceTree = "<group>"; };
 		E436EDC31F96E3A000395DA5 /* MenuService.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MenuService.png; sourceTree = "<group>"; };
 		E440F1BB1EEA7F4E004AFD0B /* MoyaNetworkLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MoyaNetworkLayer.swift; path = ../MoyaNetworkLayer.swift; sourceTree = "<group>"; };
 		E44484D71E13A105002C68D5 /* MFSCalender.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MFSCalender.entitlements; sourceTree = "<group>"; };
@@ -395,6 +399,7 @@
 		E4EA9D7B1DF225FB0021A823 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				E43611BC21A47CF900994A10 /* running.png */,
 				E48333C920112A1F00BE2FEA /* AppLogo.png */,
 				E4F0B37B200F814D00003A3D /* MenuSettings.png */,
 				E4775A401F9A500C002170C7 /* MenuWarning.png */,
@@ -473,6 +478,7 @@
 				E48CE0971F9FA6BB007B53D0 /* UserDefaults.swift */,
 				E472A15E1EFB6F3C00EF5A74 /* More View */,
 				E4F86B341DF0E20C00CAD72B /* Main.storyboard */,
+				E43611BA21A45BFE00994A10 /* StepChallengeViewController.swift */,
 				E48A0A3B214AC842005ABB87 /* MailViewController.swift */,
 				E4F86B3A1DF0E20C00CAD72B /* Assets.xcassets */,
 				E4EA9D7B1DF225FB0021A823 /* Images */,
@@ -692,6 +698,7 @@
 				E4765E171F7D74AF009F60F0 /* InfoPlist.strings in Resources */,
 				E4CA1DAE1F50097D0061784A /* Acknowledgements.markdown in Resources */,
 				E4A880BD1DF279BB00816AB7 /* MFS Logo.jpg in Resources */,
+				E43611BD21A47CF900994A10 /* running.png in Resources */,
 				E4F0B3751EAD1BE900C923A8 /* dayPicker.plist in Resources */,
 				E4F86B3B1DF0E20C00CAD72B /* Assets.xcassets in Resources */,
 				E49321881F5D32E800C65067 /* .travis.yml in Resources */,
@@ -925,6 +932,7 @@
 				E4E8B21A1F1C5AF200913DAE /* GradeViewController.swift in Sources */,
 				E4B340061F08942000D6039A /* classTopicViewController.swift in Sources */,
 				E4BD88961F35973C0000FEF3 /* TargetPublicFunctions.swift in Sources */,
+				E43611BB21A45BFE00994A10 /* StepChallengeViewController.swift in Sources */,
 				E4ADC9EE1E882172002A46F7 /* Extensions.swift in Sources */,
 				E472A1601EFB6F8400EF5A74 /* ClassDetailViewController.swift in Sources */,
 				E445E73E1EAD8B7D00794560 /* MoreViewController.swift in Sources */,

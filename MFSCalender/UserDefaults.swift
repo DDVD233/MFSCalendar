@@ -38,6 +38,15 @@ public class Preferences {
         }
     }
     
+    public var photoLink: String? {
+        get {
+            return userDefaults.string(forKey: "photoLink")
+        }
+        set(value) {
+            userDefaults.set(value, forKey: "photoLink" )
+        }
+    }
+    
     public var davidBaseURL: String {
         get {
             return "https://dwei.org"

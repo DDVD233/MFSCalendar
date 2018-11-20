@@ -62,7 +62,7 @@ class LoginView {
                     
                     if let photo = resDict["ProfilePhoto"] as? NSDictionary {
                         if let photolink = photo["ThumbFilenameUrl"] as? String {
-                            userDefaults.set(photolink, forKey: "photoLink")
+                            Preferences().photoLink = photolink
                             print(photolink)
                             self.downloadSmallProfilePhoto(photoLink: photolink)
                         }
@@ -80,16 +80,14 @@ class LoginView {
                     
                     Preferences().isStudent = false
                     if let studentInfo = resDict["StudentInfo"] as? [String: Any] {
-                        //TODO
+//                        //TODO
 //                        print(studentInfo)
 //                        if let graduationYear = studentInfo["GradYear"] as? String {
-//                            if !graduation {
 //                                Preferences().isStudent = true
 //
-//                                let gradYearInt = Int(gradYear)
+//                                let gradYearInt = Int(graduationYear)
 //                                let year = DateInRegion().year
 //                                Preferences().gradeLevel =
-//                            }
 //                        }
                     }
                     

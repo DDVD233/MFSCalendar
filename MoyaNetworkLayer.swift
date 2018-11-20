@@ -27,6 +27,8 @@ enum MyService {
     case dataVersionCheck
     case getQuarterSchedule
     case meetTimeSearch(classId: String)
+    case getSteps(date: String)
+    case reportSteps(steps: String, username: String, link: String)
 }
 
 fileprivate let assetDir: URL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!
@@ -39,8 +41,8 @@ extension MyService: TargetType {
 
     var baseURL: URL {
         switch self {
-        case .getCalendarData, .getCalendarEvent, .dataVersionCheck, .meetTimeSearch, .getQuarterSchedule:
-            return URL(string: Preferences().davidBaseURL)!
+        case .getCalendarData, .getCalendarEvent, .dataVersionCheck, .meetTimeSearch, .getQuarterSchedule, .getSteps, .reportSteps:
+            return URL(string: "http://127.0.0.1:5000")!
         default:
             return URL(string: "https://mfriends.myschoolapp.com")!
         }
@@ -72,6 +74,10 @@ extension MyService: TargetType {
             return "/searchbyid/" + classId
         case .getQuarterSchedule:
             return "/quarterdata"
+        case .getSteps(let date):
+            return "/getSteps/" + date
+        case .reportSteps:
+            return "/recordSteps"
         }
     }
 
@@ -89,6 +95,8 @@ extension MyService: TargetType {
 
     var method: Moya.Method {
         switch self {
+        case .reportSteps:
+            return .post
         default:
             return .get
         }
@@ -106,6 +114,8 @@ extension MyService: TargetType {
             return ["format": "json", "editMode": "false", "active": "true", "future": "false", "expired": "false", "contextLabelId": "2"]
         case .sectionInfoView(let sectionID):
             return ["format": "json", "sectionId": sectionID, "associationId": "1"]
+        case .reportSteps(let steps, let username, let link):
+            return ["name": username, "link": link, "steps": steps]
         default: return nil
         }
     }

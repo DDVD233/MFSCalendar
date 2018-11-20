@@ -45,9 +45,9 @@ extension NewMoreViewController {
             return 1
         } else {
             if Preferences().isDev {
-                return 7
+                return 8
             } else {
-                return 6
+                return 7
             }
         }
     }
@@ -100,6 +100,9 @@ extension NewMoreViewController {
                 cell.nameLabel.text = "Settings"
                 cell.imageView.image = UIImage(named: "MenuSettings.png")
             case 6:
+                cell.nameLabel.text = "Step Challenge"
+                cell.imageView.image = UIImage(named: "running.png")
+            case 7:
                 cell.nameLabel.text = "DON'T TOUCH"
                 cell.imageView.image = UIImage(named: "MenuWarning.png")
             default:
@@ -164,6 +167,10 @@ extension NewMoreViewController {
                     show(settingsVC, sender: self)
                 }
             case 6:
+                if let stepChallengeVC = storyboard?.instantiateViewController(withIdentifier: "stepChallenge") {
+                    show(stepChallengeVC, sender: self)
+                }
+            case 7:
                 userDefaults.set(false, forKey: "didShowMobileServe")
                 self.tabBarController?.selectedIndex = 0
             default:
