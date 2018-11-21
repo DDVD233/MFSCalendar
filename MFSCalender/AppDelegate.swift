@@ -28,6 +28,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             Preferences().isiPhoneX = true
         }
         
+        UIApplication.shared.setMinimumBackgroundFetchInterval(3600)
+        
         //setPushNotification()
         
         return true
@@ -153,6 +155,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if #available(iOS 10.0, *) {
             self.saveContext()
         }
+    }
+    
+    func application(_ application: UIApplication,
+                     performFetchWithCompletionHandler completionHandler:
+        @escaping (UIBackgroundFetchResult) -> Void) {
+        // Check for new data.
+        if Preferences().isInStepChallenge {
+            StepChallenge().reportSteps()
+        }
+        
+        completionHandler(.noData)
     }
 
     // MARK: - Core Data stack

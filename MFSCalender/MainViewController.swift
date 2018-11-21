@@ -242,6 +242,12 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
                 NetworkOperations().downloadLargeProfilePhoto()
             }
         }
+        
+        if Preferences().isInStepChallenge {
+            DispatchQueue.global().async {
+                StepChallenge().reportSteps()
+            }
+        }
     }
     
     func updatePhotoLink() {
