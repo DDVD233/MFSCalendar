@@ -97,6 +97,7 @@ func getMeetTime(period: Int) -> String {
 }
 
 func getCurrentPeriod() -> Int {
+    SwiftDate.defaultRegion = Region.local
     let currentTime = DateInRegion()
     print(currentTime)
     let period = ClassTime().period

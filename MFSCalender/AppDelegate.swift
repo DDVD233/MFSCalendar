@@ -165,7 +165,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             StepChallenge().reportSteps()
         }
         
-        completionHandler(.noData)
+        completionHandler(.newData)
     }
 
     // MARK: - Core Data stack

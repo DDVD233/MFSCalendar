@@ -188,7 +188,18 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
             self.stopTimer()
         })
         
+        presentAdIfNeeded()
+        
         startTimer()
+    }
+    
+    func presentAdIfNeeded() {
+        let presentationDate = "2018-11-30 12:56:00".toDate()!
+        if Date().isBeforeDate(presentationDate.date, granularity: .minute) &&
+            !Preferences().didPresentCapstoneAd {
+            let adVC = self.storyboard!.instantiateViewController(withIdentifier: "adVC")
+            self.present(adVC, animated: true, completion: nil)
+        }
     }
     
     func teacherSideScheduleFix() {

@@ -272,6 +272,15 @@ public class Preferences {
         }
     }
     
+    public var didPresentCapstoneAd: Bool {
+        get {
+            return userDefaults.bool(forKey: "didPresentCapstoneAd" )
+        }
+        set(value) {
+            userDefaults.set(value, forKey: "didPresentCapstoneAd" )
+        }
+    }
+    
     public var didLogin: Bool {
         get {
             return userDefaults.bool(forKey: "didLogin" )

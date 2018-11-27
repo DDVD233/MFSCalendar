@@ -196,6 +196,120 @@
             </objects>
             <point key="canvasLocation" x="1009" y="1912"/>
         </scene>
+        <!--Capstone Ad View Controller-->
+        <scene sceneID="sEr-fe-Uvt">
+            <objects>
+                <viewController storyboardIdentifier="adVC" id="O7Z-ij-W5t" customClass="CapstoneAdViewController" customModule="MFSMobile" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="94H-nT-tTM"/>
+                        <viewControllerLayoutGuide type="bottom" id="CB5-7B-DnO"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="cwL-42-d8I">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Capstone!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1dh-6R-nrd">
+                                <rect key="frame" x="121" y="87" width="133.5" height="36"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle0"/>
+                                <color key="textColor" red="1" green="0.49327188729999999" blue="0.47399842739999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LargeIcon.png" translatesAutoresizingMaskIntoConstraints="NO" id="JCL-uw-beL">
+                                <rect key="frame" x="66" y="153" width="243" height="243"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="JCL-uw-beL" secondAttribute="height" multiplier="1:1" id="UAo-ky-gtH"/>
+                                </constraints>
+                            </imageView>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" usesAttributedText="YES" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3c4-pv-bFq">
+                                <rect key="frame" x="36" y="401" width="303" height="57.5"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <attributedString key="attributedText">
+                                    <fragment content="Come to my Capstone presentation ">
+                                        <attributes>
+                                            <color key="NSColor" red="1" green="0.49327188729999999" blue="0.47399842739999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" metaFont="system" size="17"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content="this Friday">
+                                        <attributes>
+                                            <color key="NSColor" red="1" green="0.49327188729999999" blue="0.47399842739999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" size="17" name="HelveticaNeue-Bold"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content=" at ">
+                                        <attributes>
+                                            <color key="NSColor" red="1" green="0.49327188729999999" blue="0.47399842739999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" metaFont="system" size="17"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content="Mr. Omilian's room">
+                                        <attributes>
+                                            <color key="NSColor" red="1" green="0.49327188729999999" blue="0.47399842739999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" size="17" name="HelveticaNeue-Bold"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content="!">
+                                        <attributes>
+                                            <color key="NSColor" red="1" green="0.49327188729999999" blue="0.47399842739999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" metaFont="system" size="17"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                        </attributes>
+                                    </fragment>
+                                </attributedString>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xTJ-RK-4kM">
+                                <rect key="frame" x="123" y="532" width="129" height="33"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                                <state key="normal" title="Add to Calendar">
+                                    <color key="titleColor" red="1" green="0.49327188729999999" blue="0.47399842739999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="addToCalendar:" destination="O7Z-ij-W5t" eventType="touchUpInside" id="gpC-hf-KOi"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vAX-ny-rch">
+                                <rect key="frame" x="162.5" y="585" width="50" height="32"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleCallout"/>
+                                <state key="normal" title="Cancel">
+                                    <color key="titleColor" red="1" green="0.49327188729999999" blue="0.47399842739999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="cancel:" destination="O7Z-ij-W5t" eventType="touchUpInside" id="Eyz-uQ-nfx"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="CB5-7B-DnO" firstAttribute="top" secondItem="vAX-ny-rch" secondAttribute="bottom" constant="50" id="365-W7-SQK"/>
+                            <constraint firstItem="vAX-ny-rch" firstAttribute="centerX" secondItem="cwL-42-d8I" secondAttribute="centerX" id="5cQ-Tj-wre"/>
+                            <constraint firstItem="1dh-6R-nrd" firstAttribute="centerX" secondItem="cwL-42-d8I" secondAttribute="centerX" id="72J-YX-n7G"/>
+                            <constraint firstItem="JCL-uw-beL" firstAttribute="top" secondItem="1dh-6R-nrd" secondAttribute="bottom" constant="30" id="JZp-2Y-maL"/>
+                            <constraint firstItem="vAX-ny-rch" firstAttribute="top" secondItem="xTJ-RK-4kM" secondAttribute="bottom" constant="20" id="K8g-hT-z1E"/>
+                            <constraint firstItem="xTJ-RK-4kM" firstAttribute="top" relation="greaterThanOrEqual" secondItem="3c4-pv-bFq" secondAttribute="bottom" constant="20" id="Rom-ya-lxk"/>
+                            <constraint firstItem="3c4-pv-bFq" firstAttribute="leading" secondItem="cwL-42-d8I" secondAttribute="leadingMargin" constant="20" id="a6O-kk-3Dg"/>
+                            <constraint firstItem="xTJ-RK-4kM" firstAttribute="centerX" secondItem="cwL-42-d8I" secondAttribute="centerX" id="d2i-Rq-cwl"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="JCL-uw-beL" secondAttribute="trailing" constant="50" id="g1O-ZX-liD"/>
+                            <constraint firstItem="JCL-uw-beL" firstAttribute="leading" secondItem="cwL-42-d8I" secondAttribute="leadingMargin" constant="50" id="gQL-6k-l17"/>
+                            <constraint firstItem="3c4-pv-bFq" firstAttribute="top" secondItem="JCL-uw-beL" secondAttribute="bottom" constant="5" id="jTf-4y-j0I"/>
+                            <constraint firstItem="1dh-6R-nrd" firstAttribute="top" secondItem="94H-nT-tTM" secondAttribute="bottom" constant="67" id="oMP-pb-g0B"/>
+                            <constraint firstItem="3c4-pv-bFq" firstAttribute="centerX" secondItem="cwL-42-d8I" secondAttribute="centerX" id="sMr-IK-rWp"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="3c4-pv-bFq" secondAttribute="trailing" constant="20" id="t6B-cN-6c3"/>
+                            <constraint firstItem="JCL-uw-beL" firstAttribute="centerX" secondItem="cwL-42-d8I" secondAttribute="centerX" id="tzt-4Q-dGc"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="addCalendar" destination="xTJ-RK-4kM" id="61c-Ty-JAi"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="rpW-Hu-XzT" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1008.8" y="2611.8440779610196"/>
+        </scene>
         <!--Mobile Serve Register-->
         <scene sceneID="nOq-gK-Zc7">
             <objects>
@@ -2913,7 +3027,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="90" estimatedRowHeight="-1" sectionHeaderHeight="1" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="T13-hJ-dwV">
-                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="stepRecord" rowHeight="90" id="lRn-hI-w8B" customClass="StepTableCell" customModule="MFSMobile" customModuleProvider="target">
@@ -2989,6 +3103,7 @@
                             <constraint firstItem="T13-hJ-dwV" firstAttribute="top" secondItem="r5u-BU-gcJ" secondAttribute="bottom" id="QAY-OI-HMN"/>
                         </constraints>
                     </view>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" barStyle="black" prompted="NO"/>
                     <connections>
                         <outlet property="stepTable" destination="T13-hJ-dwV" id="C8O-pP-C96"/>
                     </connections>
@@ -3185,6 +3300,7 @@
         <image name="CalendarUnselected" width="50" height="50"/>
         <image name="Homework" width="50" height="50"/>
         <image name="HomeworkSelected" width="50" height="50"/>
+        <image name="LargeIcon.png" width="1118" height="1117"/>
         <image name="MFS Logo.jpg" width="300" height="300"/>
         <image name="MSIntro.png" width="2019" height="2627"/>
         <image name="School.jpg" width="1080" height="1921"/>

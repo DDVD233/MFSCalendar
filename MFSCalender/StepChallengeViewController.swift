@@ -39,10 +39,16 @@ class StepChallengeViewController: UIViewController {
             stepChallenge.reportSteps()
             getSteps()
         }
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "History", style: .plain, target: self, action: #selector(history))
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
+    }
+    
+    @objc func history() {
+        
     }
     
     func getSteps() {
