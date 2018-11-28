@@ -28,7 +28,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             Preferences().isiPhoneX = true
         }
         
-        UIApplication.shared.setMinimumBackgroundFetchInterval(3600)
+        UIApplication.shared.setMinimumBackgroundFetchInterval(1800)
         
         //setPushNotification()
         
