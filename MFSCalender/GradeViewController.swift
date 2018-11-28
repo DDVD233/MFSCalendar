@@ -33,7 +33,6 @@ class gradeViewController: UITableViewController {
         return Array(groupedGradeList.keys)
     }
     
-    @IBOutlet var sectionGradeChart: BarChartView!
     
     let dateFormatter = DateFormatter()
     var quarterSelected: Quarters = .first
@@ -135,70 +134,70 @@ class gradeViewController: UITableViewController {
             self.navigationController?.cancelProgress()
             SVProgressHUD.dismiss()
             self.tableView.reloadData()
-            self.setupSectionGradeChart()
+//            self.setupSectionGradeChart()
         }
         
     }
     
-    func setupSectionGradeChart() {
-        sectionGradeChart.drawBarShadowEnabled = false
-        sectionGradeChart.chartDescription?.text = ""
-        sectionGradeChart.rightAxis.enabled = false
-        
-        let yAxisFormatter = NumberFormatter()
-        yAxisFormatter.minimumFractionDigits = 0
-        yAxisFormatter.maximumFractionDigits = 1
-        yAxisFormatter.positiveSuffix = " %"
-        
-        let yAxis = sectionGradeChart.xAxis
-        
-        yAxis.labelFont = UIFont.systemFont(ofSize: 10)
-        yAxis.labelCount = 6
-        yAxis.valueFormatter = DefaultAxisValueFormatter(formatter: yAxisFormatter)
-        yAxis.axisMinimum = 0
-        
-        let legend = sectionGradeChart.legend
-        legend.horizontalAlignment = .left
-        legend.verticalAlignment = .bottom
-        legend.orientation = .horizontal
-        legend.xEntrySpace = 4.0
-        
-        guard !gradeList.isEmpty else { return }
-        
-        
-        
-        for assignmentType in groupedGradeKeys {
-            
-            guard let gradeListOfThisType = groupedGradeList[assignmentType] else { continue }
-            var yValues = [BarChartDataEntry]()
-            for grade in gradeListOfThisType {
-                guard let gradePercent = grade["AssignmentPercentage"] as? Double else {
-                    continue
-                }
-                let dataEntry = BarChartDataEntry(x: Double(grade["index"] as! Int), y: gradePercent)
-                yValues.append(dataEntry)
-            }
-            
-            let dataSet = BarChartDataSet(values: yValues, label: assignmentType)
-            dataSet.setColor(HomeworkView().colorForTheType(type: assignmentType), alpha: 0.7)
+//    func setupSectionGradeChart() {
+//        sectionGradeChart.drawBarShadowEnabled = false
+//        sectionGradeChart.chartDescription?.text = ""
+//        sectionGradeChart.rightAxis.enabled = false
 //
-//            if let data = cell.chartView.data {
-//                data.addDataSet(dataSet)
-//            } else {
-//                let data = BarChartData(dataSet: dataSet)
-//                //data.setValueFont(UIFont.systemFont(ofSize: 10))
+//        let yAxisFormatter = NumberFormatter()
+//        yAxisFormatter.minimumFractionDigits = 0
+//        yAxisFormatter.maximumFractionDigits = 1
+//        yAxisFormatter.positiveSuffix = " %"
 //
-//                cell.chartView.data = data
+//        let yAxis = sectionGradeChart.xAxis
+//
+//        yAxis.labelFont = UIFont.systemFont(ofSize: 10)
+//        yAxis.labelCount = 6
+//        yAxis.valueFormatter = DefaultAxisValueFormatter(formatter: yAxisFormatter)
+//        yAxis.axisMinimum = 0
+//
+//        let legend = sectionGradeChart.legend
+//        legend.horizontalAlignment = .left
+//        legend.verticalAlignment = .bottom
+//        legend.orientation = .horizontal
+//        legend.xEntrySpace = 4.0
+//
+//        guard !gradeList.isEmpty else { return }
+//
+//
+//
+//        for assignmentType in groupedGradeKeys {
+//
+//            guard let gradeListOfThisType = groupedGradeList[assignmentType] else { continue }
+//            var yValues = [BarChartDataEntry]()
+//            for grade in gradeListOfThisType {
+//                guard let gradePercent = grade["AssignmentPercentage"] as? Double else {
+//                    continue
+//                }
+//                let dataEntry = BarChartDataEntry(x: Double(grade["index"] as! Int), y: gradePercent)
+//                yValues.append(dataEntry)
 //            }
-        }
 //
-//        cell.chartView.data?.notifyDataChanged()
-//        cell.chartView.notifyDataSetChanged()
-//
-//        cell.chartView.noDataText = "No grade data is found."
-//
-//        return cell
-    }
+//            let dataSet = BarChartDataSet(values: yValues, label: assignmentType)
+//            dataSet.setColor(HomeworkView().colorForTheType(type: assignmentType), alpha: 0.7)
+////
+////            if let data = cell.chartView.data {
+////                data.addDataSet(dataSet)
+////            } else {
+////                let data = BarChartData(dataSet: dataSet)
+////                //data.setValueFont(UIFont.systemFont(ofSize: 10))
+////
+////                cell.chartView.data = data
+////            }
+//        }
+////
+////        cell.chartView.data?.notifyDataChanged()
+////        cell.chartView.notifyDataSetChanged()
+////
+////        cell.chartView.noDataText = "No grade data is found."
+////
+////        return cell
+//    }
     
     func animate() {
         cumGradeProgressRing.startProgress(to: CGFloat(self.cumGrade), duration: 1.0)
