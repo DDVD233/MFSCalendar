@@ -82,13 +82,13 @@ class LoginView {
                     if let studentInfo = resDict["StudentInfo"] as? [String: Any] {
 //                        //TODO
 //                        print(studentInfo)
-//                        if let graduationYear = studentInfo["GradYear"] as? String {
-//                                Preferences().isStudent = true
-//
+                        if let graduationYear = studentInfo["GradYear"] as? String {
+                                Preferences().isStudent = true
+
 //                                let gradYearInt = Int(graduationYear)
 //                                let year = DateInRegion().year
 //                                Preferences().gradeLevel =
-//                        }
+                        }
                     }
                     
                 } catch {
