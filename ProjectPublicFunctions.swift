@@ -60,13 +60,13 @@ func periodTimerString(periodNumber: Int) -> String {
     
     if currentTime.isBeforeDate(period.start, granularity: .second) {
         timerString = "Starts in "
-        difference = (period.start - currentTime).timeInterval
+        difference = period.start - currentTime
     } else if currentTime.isBeforeDate(period.end, granularity: .second) {
         timerString = "Ends in "
-        difference = (period.end - currentTime).timeInterval
+        difference = period.end - currentTime
     } else {
         timerString = "Ended "
-        difference = (currentTime - period.end).timeInterval
+        difference = currentTime - period.end
     }
     
     let minutes = Int(difference!).seconds.in(.minute)!
@@ -154,11 +154,11 @@ func getClassDataAt(period: Int, day: String) -> [[String: Any]] {
         dateFormatter.dateFormat = "EE"
         let day = dateFormatter.string(from: Date())
         if day == "Wed" {
+             listClasses[4 - period] = meetingForWorship
             //                currentClass == 1 -> index = 3
             //                currentClass == 2 -> index = 2
             //                currentClass == 3 -> index = 1
             //                currentClass == 4 -> index = 0
-            listClasses[4 - period] = meetingForWorship
         }
     }
     

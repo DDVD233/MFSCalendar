@@ -26,7 +26,8 @@ class homeworkViewController: UITableViewController, UIViewControllerPreviewingD
     @IBOutlet weak var homeworkTable: UITableView!
     var isUpdatingHomework = false
 
-    var listHomework = [String: [[String: Any]]]()
+    var listHomework = Dictionary<String, Array<Dictionary<String, Any>>>()
+    // Format: Key: "The date homework is due" Value: The List of homework record(A dict) on that day
     var daySelected: Date? = Date()
     var filter = 2
     var sections: [String] {

@@ -83,7 +83,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     let formatter = DateFormatter()
     var listEvents = [[String: Any]]()
     var listClasses = [[String: Any]]()
-    var listHomework = [String: Array<Dictionary<String, Any>>]()
+    var listHomework = Dictionary<String, Array<Dictionary<String, Any>>>()
     var timer: Timer? = nil
 //    Format: {Lead_Section_ID: [Homework]}
     var isVisible = true
