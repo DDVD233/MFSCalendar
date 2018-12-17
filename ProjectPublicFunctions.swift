@@ -60,13 +60,13 @@ func periodTimerString(periodNumber: Int) -> String {
     
     if currentTime.isBeforeDate(period.start, granularity: .second) {
         timerString = "Starts in "
-        difference = period.start - currentTime
+        difference = currentTime - period.start
     } else if currentTime.isBeforeDate(period.end, granularity: .second) {
         timerString = "Ends in "
-        difference = period.end - currentTime
+        difference = currentTime - period.end
     } else {
         timerString = "Ended "
-        difference = currentTime - period.end
+        difference = period.end - currentTime
     }
     
     let minutes = Int(difference!).seconds.in(.minute)!

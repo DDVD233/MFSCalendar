@@ -83,11 +83,11 @@ class LoginView {
 //                        //TODO
 //                        print(studentInfo)
                         if let graduationYear = studentInfo["GradYear"] as? String {
-//                                Preferences().isStudent = true
+                                Preferences().isStudent = true
 
 //                                let gradYearInt = Int(graduationYear)
 //                                let year = DateInRegion().year
-//                                Preferences().gradeLevel =
+//                                Preferences().gradeLevel = 
                         }
                     }
                     
