@@ -147,10 +147,8 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     override func viewDidAppear(_ animated: Bool) {
         //classViewHeightConstraint.constant = classView.contentSize.height
 //        eventViewLarge.backgroundColor = UIColor(gradientStyle: .topToBottom, withFrame: eventViewLarge.frame, andColors: [UIColor(hexString: 0xFF6666), UIColor(hexString: 0xFF9966)])
-
-//        Add "== true" to prevent force unwrap.
         guard Preferences().didLogin else {
-            let vc = self.storyboard?.instantiateViewController(withIdentifier: "ftController") as! firstTimeLaunchController
+            let vc = self.storyboard!.instantiateViewController(withIdentifier: "ftController")
             self.present(vc, animated: true, completion: nil)
             return
         }
@@ -603,7 +601,7 @@ extension Main: UICollectionViewDelegate, UICollectionViewDataSource, UICollecti
             if row == 0 || row == 1 {
                 cell.period.text = school.periodTimerString(time: Date(), index: row)
             } else {
-                cell.period.text = getMeetTime(period: period)
+                cell.period.text = school.meetTimeForPeriod(periodObject: classData)
             }
         }
 

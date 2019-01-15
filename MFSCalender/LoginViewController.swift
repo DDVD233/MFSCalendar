@@ -193,6 +193,12 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
         self.wrongPassword.isHidden = true
         self.username.delegate = self
         self.password.delegate = self
+        
+        if Preferences().schoolName == "MFS" {
+            self.logoPhoto.image = UIImage(named: "MFS Logo.jpg")
+        } else {
+            self.logoPhoto.image = UIImage(named: "CMH Logo.jpg")
+        }
 
         self.username.text = Preferences().username
         self.password.text = Preferences().password

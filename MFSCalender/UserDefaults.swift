@@ -31,10 +31,14 @@ public class Preferences {
     
     public var baseURL: String {
         get {
-            return userDefaults.string(forKey: "baseURL" ) ?? "https://mfriends.myschoolapp.com"
-        }
-        set(value) {
-            userDefaults.set(value, forKey: "baseURL" )
+            switch self.schoolName ?? "" {
+            case "MFS":
+                return "https://mfriends.myschoolapp.com"
+            case "CMH":
+                return "https://catholicmemorial-hs.myschoolapp.com"
+            default:
+                return ""
+            }
         }
     }
     
@@ -62,6 +66,15 @@ public class Preferences {
         }
         set(value) {
             userDefaults.set(value, forKey: "schoolCode" )
+        }
+    }
+    
+    public var schoolName: String? {
+        get {
+            return userDefaults.string(forKey: "schoolName" ) ?? "MFS"
+        }
+        set(value) {
+            userDefaults.set(value, forKey: "schoolName" )
         }
     }
     

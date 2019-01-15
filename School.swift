@@ -80,9 +80,36 @@ public class School {
         return timerString
     }
     
-    func meetTimeForPeriod(index: Int, date: Date) {
-        let listClasses = getClassDataAt(date: date)
+    func meetTimeForPeriod(period: Int, date: Date) -> String {
+        guard let periodObject = getClassDataAt(date: date)[safe: period] else { return "" }
+        let startTime = timeToAMFormat(time: periodObject["startTime"] as? Int ?? 0)
+        let endTime = timeToAMFormat(time: periodObject["endTime"] as? Int ?? 0)
+        return startTime + " - " + endTime
+    }
+    
+    func meetTimeForPeriod(periodObject: [String: Any]) -> String {
+        let startTime = timeToAMFormat(time: periodObject["startTime"] as? Int ?? 0)
+        let endTime = timeToAMFormat(time: periodObject["endTime"] as? Int ?? 0)
+        return startTime + " - " + endTime
+    }
+    
+    func timeToAMFormat(time: Int) -> String {
+        var hour = Int(time/100)
+        var amString = ""
+        if hour > 12 {
+            hour -= 12
+            amString = "AM"
+        } else {
+            amString = "PM"
+        }
         
+        let minute = Int(time%100)
+        var minuteString = String(minute)
+        if minute == 0 {
+            minuteString = "00"
+        }
+        let timeString = String(hour) + ":" + minuteString + amString
+        return timeString
     }
 }
 

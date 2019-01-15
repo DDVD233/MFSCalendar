@@ -93,7 +93,7 @@ class TodayViewController: UIViewController, NCWidgetProviding, UITableViewDeleg
         cell?.className.text = className
         let periodNumber = rowDict["period"] as! Int
         
-        cell?.classTime.text = getMeetTime(period: periodNumber)
+        cell?.classTime.text = school.meetTimeForPeriod(period: periodNumber, date: Date())
 
         if cell?.className.text == "Lunch" {
             cell?.periodNumber.text = "L"
