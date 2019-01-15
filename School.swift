@@ -8,7 +8,18 @@
 
 import Foundation
 import SwiftDate
-
+/** Class Structure
+ *  classID     String
+ *  className   String
+ *  startTime   Int               Format: HHmm
+ *  endTime     Int               Format: HHmm
+ *  index       Int               Index of this class in course list
+ *  period      Int               Period # in the day
+ *  quarter     String            Or semester
+ *  meetTime    [String: Any]
+ *  roomNumber  String
+ *  teacherName String
+ **/
 public class School {
     var listClasses = [[String: Any]]()
     func getClassDataAt(date: Date) -> [[String: Any]] {
