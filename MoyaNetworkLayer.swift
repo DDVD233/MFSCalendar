@@ -29,6 +29,7 @@ enum MyService {
     case meetTimeSearch(classId: String)
     case getSteps(date: String)
     case reportSteps(steps: String, username: String, link: String)
+    case getStepPoints(username: String)
 }
 
 fileprivate let assetDir: URL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!
@@ -41,7 +42,7 @@ extension MyService: TargetType {
 
     var baseURL: URL {
         switch self {
-        case .getCalendarData, .getCalendarEvent, .dataVersionCheck, .meetTimeSearch, .getQuarterSchedule, .getSteps, .reportSteps:
+        case .getCalendarData, .getCalendarEvent, .dataVersionCheck, .meetTimeSearch, .getQuarterSchedule, .getSteps, .reportSteps, .getStepPoints:
             return URL(string: Preferences().davidBaseURL)!
         default:
             return URL(string: "https://mfriends.myschoolapp.com")!
@@ -78,6 +79,8 @@ extension MyService: TargetType {
             return "/getSteps/" + date
         case .reportSteps:
             return "/recordSteps"
+        case .getStepPoints(let username):
+            return "/getStepPoints/" + username
         }
     }
 

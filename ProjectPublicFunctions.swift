@@ -2,9 +2,10 @@
 //  ProjectPublicFunctions.swift
 //  MFSCalendar
 //
-//  Created by 戴元平 on 2017/9/2.
+//  Created by David on 2017/9/2.
 //  Copyright © 2017年 David. All rights reserved.
 //
+//  Hard code 一时爽，代码重构火葬场。 --戴维于2019年1月15日
 
 import Foundation
 import SwiftDate

@@ -17,6 +17,7 @@ class StepChallengeViewController: UIViewController {
     var stepArray = [[String: Any]]()
     @IBOutlet var stepTable: UITableView!
     let stepChallenge = StepChallenge()
+    @IBOutlet var pointLabel: UILabel!
     
     
     override func viewDidLoad() {
@@ -38,6 +39,7 @@ class StepChallengeViewController: UIViewController {
         if Preferences().isInStepChallenge {
             stepChallenge.reportSteps()
             getSteps()
+            getPoints()
         }
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "History", style: .plain, target: self, action: #selector(history))
@@ -75,6 +77,23 @@ class StepChallengeViewController: UIViewController {
                 }
             case .failure(let error):
                 print(error.localizedDescription)
+            }
+        }
+    }
+    
+    func getPoints() {
+        let preferences = Preferences()
+        let currentUserName = (preferences.firstName ?? "") + " " + (preferences.lastName ?? "")
+        provider.request(MyService.getStepPoints(username: currentUserName), callbackQueue: DispatchQueue.global()) { (result) in
+            switch result {
+            case .success(let response):
+                let totalPoints = String.init(data: response.data, encoding: .utf8) ?? ""
+                print(response.request?.url)
+                DispatchQueue.main.async {
+                    self.pointLabel.text = totalPoints
+                }
+            case .failure(let error):
+                print(error)
             }
         }
     }

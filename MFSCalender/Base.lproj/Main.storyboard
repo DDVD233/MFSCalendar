@@ -2947,7 +2947,7 @@
                                                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g42-Eq-D5j">
                                                     <rect key="frame" x="20" y="49" width="335" height="391.5"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                    <mutableString key="text">- Marcella Thanh-Guyet - Henry Powell - Chris Chen - Italia Vitella - Blythe Salamone - Maddie Mininno - Courtney Tarter - Alaisha Blue - Oscar Wan - Susu Guo - Mia Peng - Annabelle Crescenzo - Lauren Kam - Tylar Pierce - Andrew Rauscher - Jacob Del Angel - Dylan Zhou - Chris Gu</mutableString>
+                                                    <string key="text">- Marcella Thanh-Guyet - Henry Powell - Chris Chen - Italia Vitella - Blythe Salamone - Maddie Mininno - Courtney Tarter - Alaisha Blue - Oscar Wan - Susu Guo - Mia Peng - Annabelle Crescenzo - Lauren Kam - Tylar Pierce - Andrew Rauscher - Jacob Del Angel - Dylan Zhou - Chris Gu</string>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                                 </textView>
@@ -3042,9 +3042,35 @@
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="90" estimatedRowHeight="-1" sectionHeaderHeight="1" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="T13-hJ-dwV">
                                 <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <view key="tableHeaderView" contentMode="scaleToFill" id="Dj9-jg-LU7">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="156"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Total Points" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="J9X-FF-EYx">
+                                            <rect key="frame" x="137.5" y="40" width="100" height="24"/>
+                                            <fontDescription key="fontDescription" style="UICTFontTextStyleTitle3"/>
+                                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="255" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uxc-AZ-jZq">
+                                            <rect key="frame" x="143.5" y="64" width="88" height="60"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="50"/>
+                                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <color key="backgroundColor" red="1" green="0.49327188729999999" blue="0.47399842739999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <constraints>
+                                        <constraint firstItem="J9X-FF-EYx" firstAttribute="top" secondItem="Dj9-jg-LU7" secondAttribute="top" constant="40" id="99L-TF-fgh"/>
+                                        <constraint firstItem="uxc-AZ-jZq" firstAttribute="top" secondItem="J9X-FF-EYx" secondAttribute="bottom" id="J6G-fF-aMC"/>
+                                        <constraint firstItem="J9X-FF-EYx" firstAttribute="centerX" secondItem="Dj9-jg-LU7" secondAttribute="centerX" id="aon-Oj-G4F"/>
+                                        <constraint firstAttribute="bottom" secondItem="uxc-AZ-jZq" secondAttribute="bottom" constant="32" id="eZ2-od-VKI"/>
+                                        <constraint firstItem="uxc-AZ-jZq" firstAttribute="centerX" secondItem="Dj9-jg-LU7" secondAttribute="centerX" id="kAB-3f-B9l"/>
+                                    </constraints>
+                                </view>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="stepRecord" rowHeight="90" id="lRn-hI-w8B" customClass="StepTableCell" customModule="MFSMobile" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="55.5" width="375" height="90"/>
+                                        <rect key="frame" x="0.0" y="211.5" width="375" height="90"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="lRn-hI-w8B" id="HW2-qH-Mb8">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="89.5"/>
@@ -3118,6 +3144,7 @@
                     </view>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" barStyle="black" prompted="NO"/>
                     <connections>
+                        <outlet property="pointLabel" destination="uxc-AZ-jZq" id="hj6-yr-SpN"/>
                         <outlet property="stepTable" destination="T13-hJ-dwV" id="C8O-pP-C96"/>
                     </connections>
                 </viewController>

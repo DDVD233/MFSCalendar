@@ -637,6 +637,39 @@ class courseFillController: UIViewController {
                 let addData = ["className": "Free", "period": periodNumber] as [String : Any]
                 listClasses[periodNumber - 1] = addData
             }
+            
+            var classWithStartTime = listClasses[periodNumber - 1]
+            switch periodNumber {
+            case 1:
+                classWithStartTime["startTime"] = 0800
+                classWithStartTime["endTime"] = 0842
+            case 2:
+                classWithStartTime["startTime"] = 0846
+                classWithStartTime["endTime"] = 0928
+            case 3:
+                classWithStartTime["startTime"] = 0932
+                classWithStartTime["endTime"] = 1032
+            case 4:
+                classWithStartTime["startTime"] = 1042
+                classWithStartTime["endTime"] = 1124
+            case 5:
+                classWithStartTime["startTime"] = 1128
+                classWithStartTime["endTime"] = 1210
+            case 6:
+                classWithStartTime["startTime"] = 1214
+                classWithStartTime["endTime"] = 1256
+            case 7:
+                classWithStartTime["startTime"] = 1256
+                classWithStartTime["endTime"] = 1338
+            case 8:
+                classWithStartTime["startTime"] = 1342
+                classWithStartTime["endTime"] = 1424
+            case 9:
+                classWithStartTime["startTime"] = 1428
+                classWithStartTime["endTime"] = 1510
+            default:
+                break
+            }
         }
         
         NSArray(array: listClasses).write(toFile: path, atomically: true)
