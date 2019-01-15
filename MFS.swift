@@ -8,15 +8,11 @@
 
 import Foundation
 
-class MFS: School {
+public class MFS: School {
     
-    func classesOnDay(day: Date) {
-        
-    }
-    
-    private func getClassDataAt(date: Date) -> [[String: Any]] {
+    override func getClassDataAt(date: Date) -> [[String: Any]] {
         //var period = period
-        var listClasses = [[String: Any]]()
+        listClasses = [[String: Any]]()
         let day = dayCheck(date: date)
         
         let plistPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
@@ -38,30 +34,9 @@ class MFS: School {
             listClasses[3] = meetingForWorship
         }
         
+        
+        
         return listClasses
-    }
-    
-    func classesOnADayAfter(time: Date) -> [[String: Any]] {
-        let classData = getClassDataAt(date: time)
-        
-        if classData.isEmpty {
-            return classData
-        }
-        
-        let sortedClassData = classData.sorted { (a, b) -> Bool in
-            return (a["startTime"] as? Int ?? 0) < (b["startTime"] as? Int ?? 0)
-        }
-        
-        print(sortedClassData)
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "HHmm"
-        let currentTime = Int(dateFormatter.string(from: time)) ?? 0
-        
-        let filteredData = sortedClassData.filter { (a) -> Bool in
-            return (a["endTime"] as? Int ?? 0) > currentTime
-        }
-        
-        return filteredData
     }
     
     

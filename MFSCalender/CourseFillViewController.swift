@@ -670,6 +670,8 @@ class courseFillController: UIViewController {
             default:
                 break
             }
+            
+            listClasses[periodNumber - 1] = classWithStartTime
         }
         
         NSArray(array: listClasses).write(toFile: path, atomically: true)

@@ -56,10 +56,7 @@ class TodayViewController: UIViewController, NCWidgetProviding, UITableViewDeleg
 
 
     func getAllClass() {
-        let day = dayCheck()
-        let currentPeriod = getCurrentPeriod()
-
-        self.listClasses = getClassDataAt(period: currentPeriod, day: day)
+        self.listClasses = school.classesOnADayAfter(date: Date())
 
         print(self.listClasses)
     }

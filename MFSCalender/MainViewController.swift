@@ -462,8 +462,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     }
 
     func getListClasses(day: String) {
-        let currentPeriod = getCurrentPeriod()
-        self.listClasses = getClassDataAt(period: currentPeriod, day: day)
+        self.listClasses = school.classesOnADayAfter(date: Date())
     }
     
     func eventDataFetching() {
@@ -602,7 +601,7 @@ extension Main: UICollectionViewDelegate, UICollectionViewDataSource, UICollecti
         
         if let period = classData["period"] as? Int {
             if row == 0 || row == 1 {
-                cell.period.text = periodTimerString(periodNumber: period)
+                cell.period.text = school.periodTimerString(time: Date(), index: row)
             } else {
                 cell.period.text = getMeetTime(period: period)
             }
