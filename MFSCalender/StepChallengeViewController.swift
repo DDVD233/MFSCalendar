@@ -146,7 +146,7 @@ extension StepChallengeViewController: UITableViewDelegate, UITableViewDataSourc
         cell.rank.text = String(indexPath.row + 1)
         cell.steps.text = String(stepRecord["steps"] as? Int ?? 0)
         let photoLink = stepRecord["link"] as? String ?? ""
-        let photoURL = URL(string: "https://mfriends.myschoolapp.com" + photoLink)
+        let photoURL = URL(string: Preferences().baseURL + photoLink)
         cell.photo.sd_setImage(with: photoURL, completed: nil)
         cell.photo.contentMode = .scaleAspectFill
         return cell

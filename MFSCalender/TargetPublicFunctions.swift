@@ -25,7 +25,7 @@ func areEqual<T:Equatable>(type: T.Type, a: Any?, b: Any?) -> Bool? {
 public func getRequestVerification() -> String? {
     var requestVerification: String? = nil
     
-    let url = URL(string: "https://mfriends.myschoolapp.com/app#login")!
+    let url = URL(string: Preferences().baseURL + "/app#login")!
     let semaphore = DispatchSemaphore.init(value: 0)
     let task = URLSession.shared.dataTask(with: url, completionHandler: {(data, response, error) in
         semaphore.signal()
@@ -36,7 +36,7 @@ public func getRequestVerification() -> String? {
     
     let _ = loginAuthentication()
     
-    let htmlReqUrl = URL(string: "https://mfriends.myschoolapp.com/app/student#studentmyday/assignment-center")!
+    let htmlReqUrl = URL(string: Preferences().baseURL + "/app/student#studentmyday/assignment-center")!
     let semaphore2 = DispatchSemaphore.init(value: 0)
     let task2 = URLSession.shared.dataTask(with: htmlReqUrl, completionHandler: {(data, response, error) in
         do {
@@ -113,7 +113,7 @@ public func loginAuthentication() -> (success: Bool, token: String, userId: Stri
         return (false, "Cannot convert to url string", "")
     }
 
-    let accountCheckURL = "https://mfriends.myschoolapp.com/api/authentication/login/?username=" + usernameTextUrlEscaped + "&password=" + passwordTextUrlEscaped + "&format=json"
+    let accountCheckURL = Preferences().baseURL + "/api/authentication/login/?username=" + usernameTextUrlEscaped + "&password=" + passwordTextUrlEscaped + "&format=json"
     let url = NSURL(string: accountCheckURL)
     let request = URLRequest(url: url! as URL)
 
@@ -175,19 +175,21 @@ public func loginAuthentication() -> (success: Bool, token: String, userId: Stri
 }
 
 public func addLoginCookie(token: String) {
+    let baseURL = Preferences().baseURL
+    let domain = baseURL[8, baseURL.count - 1]
     let cookieProps: [HTTPCookiePropertyKey: Any] = [
-        HTTPCookiePropertyKey.domain: "mfriends.myschoolapp.com",
+        HTTPCookiePropertyKey.domain: domain,
         HTTPCookiePropertyKey.path: "/",
         HTTPCookiePropertyKey.name: "t",
         HTTPCookiePropertyKey.value: token
     ]
-
+    
     if let cookie = HTTPCookie(properties: cookieProps) {
         HTTPCookieStorage.shared.setCookie(cookie)
     }
 
     let cookieProps2: [HTTPCookiePropertyKey: Any] = [
-        HTTPCookiePropertyKey.domain: "mfriends.myschoolapp.com",
+        HTTPCookiePropertyKey.domain: domain,
         HTTPCookiePropertyKey.path: "/",
         HTTPCookiePropertyKey.name: "bridge",
         HTTPCookiePropertyKey.value: "action=create&src=webapp&xdb=true"
@@ -336,7 +338,7 @@ class ClassView {
         guard loginAuthentication().success else {
             return ""
         }
-        let urlString = "https://mfriends.myschoolapp.com/api/media/sectionmediaget/\(sectionId)/?format=json&contentId=31&editMode=false&active=true&future=false&expired=false&contextLabelId=2"
+        let urlString = Preferences().baseURL + "/api/media/sectionmediaget/\(sectionId)/?format=json&contentId=31&editMode=false&active=true&future=false&expired=false&contextLabelId=2"
         let url = URL(string: urlString)
         //create request.
         let request3 = URLRequest(url: url!)
@@ -454,7 +456,7 @@ class HomeworkView {
         
         print(requestVerification)
         var success = true
-        let url = "https://mfriends.myschoolapp.com/api/assignment2/assignmentstatusupdate/?format=json&assignmentIndexId=\(assignmentIndexId)&assignmentStatus=\(assignmentStatus)"
+        let url = Preferences().baseURL + "/api/assignment2/assignmentstatusupdate/?format=json&assignmentIndexId=\(assignmentIndexId)&assignmentStatus=\(assignmentStatus)"
         
         let json = ["assignmentIndexId": Int(assignmentIndexId)!, "assignmentStatus": assignmentStatus] as [String : Any]
         guard let jsonData = try? JSONSerialization.data(withJSONObject: json) else {

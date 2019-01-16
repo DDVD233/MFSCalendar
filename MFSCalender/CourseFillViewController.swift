@@ -43,20 +43,43 @@ class courseFillController: UIViewController {
             NetworkOperations().downloadLargeProfilePhoto()
         }
         
-        DispatchQueue.global().async {
-            if Preferences().isStudent {
-                self.importCourseStudent()
-            } else {
-                self.importCourseTeacher()
+        if Preferences().doUpdateQuarter {
+            setQuarter()
+        } else {
+            Preferences().doUpdateQuarter = true
+        }
+        
+        if Preferences().schoolName == "CMH" {
+            self.newGetCourse()
+            setProgressTo(value: 33)
+            ClassView().getProfilePhoto()
+            setProgressTo(value: 66)
+            self.getScheduleFromMySchool()
+            setProgressTo(value: 100)
+            DispatchQueue.main.async {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                self.topLabel.text = "Success"
+                self.bottomLabel.text = "Successfully updated"
+            }
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2), execute: {
+                self.viewDismiss()
+            })
+        } else {
+            DispatchQueue.global().async {
+                if Preferences().isStudent {
+                    self.importCourseStudent()
+                } else {
+                    self.importCourseTeacher()
+                }
             }
         }
     }
     
     // Get the quarter data from David Server. Format: Array(Dict(Quarter: Int, BeginDate: Int, ReferenceNumber: Int))
     func setQuarter() {
-        NetworkOperations().getQuarterSchedule()
         
-        let quarterDataPath = URL(fileURLWithPath: userDocumentPath + "/QuarterSchedule.plist")
+        let quarterDataPath = Bundle.main.url(forResource: "QuarterSchedule" + (Preferences().schoolName ?? ""), withExtension: "plist")!
         guard let quarterData = NSArray(contentsOf: quarterDataPath) as? [[String: Any]] else {
             presentErrorMessage(presentMessage: "Quarter data not found", layout: .cardView)
             return
@@ -87,12 +110,6 @@ class courseFillController: UIViewController {
             UIApplication.shared.isNetworkActivityIndicatorVisible = true
         }
         
-        if Preferences().doUpdateQuarter {
-            setQuarter()
-        } else {
-            Preferences().doUpdateQuarter = true
-        }
-        
         guard self.newGetCourse() else {
             viewDismiss()
             return
@@ -121,7 +138,7 @@ class courseFillController: UIViewController {
         versionCheck()
         setProgressTo(value: 100)
         DispatchQueue.main.async {
-            UIApplication.shared.isNetworkActivityIndicatorVisible = true
+            UIApplication.shared.isNetworkActivityIndicatorVisible = false
             self.topLabel.text = "Success"
             self.bottomLabel.text = "Successfully updated"
         }
@@ -139,12 +156,6 @@ class courseFillController: UIViewController {
         if !self.NCIsRunning() {
             self.importCourseTeacher()
             return
-        }
-        
-        if Preferences().doUpdateQuarter {
-            setQuarter()
-        } else {
-            Preferences().doUpdateQuarter = true
         }
         
         let group = DispatchGroup()
@@ -193,7 +204,7 @@ class courseFillController: UIViewController {
 
         setProgressTo(value: 100)
         DispatchQueue.main.async {
-            UIApplication.shared.isNetworkActivityIndicatorVisible = true
+            UIApplication.shared.isNetworkActivityIndicatorVisible = false
             self.topLabel.text = "Success"
             self.bottomLabel.text = "Successfully updated"
         }
@@ -244,6 +255,105 @@ class courseFillController: UIViewController {
         
         semaphore.wait()
         return isRunning
+    }
+    
+    func getScheduleFromMySchool() {
+        let startTime = String(Int((DateInRegion() - 1.years).date.timeIntervalSince1970))
+        let endTime = String(Int((DateInRegion() + 1.years).date.timeIntervalSince1970))
+        let semaphore = DispatchSemaphore.init(value: 0)
+        
+        provider.request(MyService.getSchedule(userID: Preferences().userID ?? "", startTime: startTime, endTime: endTime),
+                         callbackQueue: DispatchQueue.global(), progress: nil) { (result) in
+                            switch result {
+                            case .success(let response):
+                                do {
+                                    print(response.request?.url)
+                                    guard let json = try JSONSerialization.jsonObject(with: response.data, options: .allowFragments) as? [[String: Any]] else {
+                                        presentErrorMessage(presentMessage: "JSON Format Incorrect", layout: .cardView)
+                                        print(String(data: response.data, encoding: .utf8))
+                                        return
+                                    }
+                                    
+                                    DispatchQueue.main.async {
+                                        self.setProgressTo(value: 0.5)
+                                    }
+                                    self.createScheduleFromMySchool(json: json)
+                                } catch {
+                                    presentErrorMessage(presentMessage: error.localizedDescription, layout: .cardView)
+                                }
+                            case .failure(let error):
+                                presentErrorMessage(presentMessage: error.localizedDescription, layout: .cardView)
+                            }
+                            semaphore.signal()
+        }
+        
+        semaphore.wait()
+    }
+    
+    func createScheduleFromMySchool(json: [[String: Any]]) {
+        var sortedClass = [String: [[String: Any]]]()
+        let formatter = DateFormatter()
+        for classObject in json {
+            formatter.dateFormat = "MM/dd/yyyy hh:mm a"
+            let endTimeString = classObject["end"] as? String ?? ""
+            guard let endTime = formatter.date(from: endTimeString) else {
+                continue
+    
+            }
+            let startTimeString = classObject["start"] as? String ?? ""
+            guard let startTime = formatter.date(from: startTimeString) else {
+                continue
+                
+            }
+            
+            guard startTimeString != endTimeString else { continue }
+            
+            var modifiedClassObject = classObject
+            
+            let startTimeInt = dateToTimeInt(date: startTime)
+            modifiedClassObject["startTime"] = startTimeInt
+            
+            let endTimeInt = dateToTimeInt(date: endTime)
+            modifiedClassObject["endTime"] = endTimeInt
+            
+            modifiedClassObject["className"] = classObject["title"] as? String ?? ""
+            
+            // If I do not delete nill value, it will not be able to write to plist.
+            for (key, value) in modifiedClassObject {
+                if (value as? NSNull) == NSNull() {
+                    modifiedClassObject[key] = ""
+                }
+            }
+            
+            formatter.dateFormat = "yyyyMMdd"
+            let dateString = formatter.string(from: startTime)
+            var classArray = sortedClass[dateString] ?? [[String: Any]]()
+            classArray.append(modifiedClassObject)
+            sortedClass[dateString] = classArray
+        }
+        
+        for (key, classArray) in sortedClass {
+            var sortedClassArray = classArray.sorted { (a, b) -> Bool in
+                return a["startTime"] as? Int ?? 0 < b["startTime"] as? Int ?? 0
+            }
+            
+            for (index, classObject) in sortedClassArray.enumerated() {
+                var modifiedClassObject = classObject
+                modifiedClassObject["period"] = index + 1
+                sortedClassArray[index] = modifiedClassObject
+            }
+            
+            let fileName = "/Class" + key + ".plist"
+            let path = userDocumentPath.appending(fileName)
+            
+            NSArray(array: sortedClassArray).write(toFile: path, atomically: true)
+        }
+    }
+    
+    func dateToTimeInt(date: Date) -> Int {
+        let hour = date.hour
+        let minute = date.minute
+        return hour * 100 + minute
     }
     
     func getScheduleNC() -> [[String: Any]]? {
@@ -369,7 +479,7 @@ class courseFillController: UIViewController {
             return false
         }
 
-        let urlString = "https://mfriends.myschoolapp.com/api/datadirect/ParentStudentUserAcademicGroupsGet?userId=\(userId)&schoolYearLabel=2018+-+2019&memberLevel=3&persona=2&durationList=\(durationId)"
+        let urlString = Preferences().baseURL + "/api/datadirect/ParentStudentUserAcademicGroupsGet?userId=\(userId)&schoolYearLabel=2018+-+2019&memberLevel=3&persona=2&durationList=\(durationId)"
         print(urlString)
 
         let url = URL(string: urlString)
@@ -377,6 +487,7 @@ class courseFillController: UIViewController {
 
         let downloadTask = session.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
             if error == nil {
+                print(String(data: data!, encoding: .utf8))
                 guard var courseData = try! JSON(data: data!).arrayObject else {
                     semaphore.signal()
                     return

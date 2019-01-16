@@ -172,12 +172,13 @@ class CalendarViewController: SegmentedPagerTabStripViewController, UIGestureRec
             return
         }
         
-        self.dayOfSchool = self.checkDate(checkDate: checkDate)
-        if self.dayOfSchool != "No School" {
-            classViewController.daySelected = self.dayOfSchool
-        } else {
-            classViewController.daySelected = nil
-        }
+        classViewController.date = checkDate
+//        self.dayOfSchool = self.checkDate(checkDate: checkDate)
+//        if self.dayOfSchool != "No School" {
+//            classViewController.daySelected = self.dayOfSchool
+//        } else {
+//            classViewController.daySelected = nil
+//        }
         
         DispatchQueue.main.async {
             self.classViewController.dataFetching()
@@ -228,12 +229,16 @@ extension CalendarViewController: FSCalendarDelegate, FSCalendarDataSource {
     }
 
     func calendar(_ calendar: FSCalendar, subtitleFor date: Date) -> String? {
-        let day = checkDate(checkDate: date)
-        if day == "No School" {
-            return nil
-        } else {
-            return day
+        if Preferences().schoolName == "MFS" {
+            let day = checkDate(checkDate: date)
+            if day == "No School" {
+                return nil
+            } else {
+                return day
+            }
         }
+        
+        return nil
     }
     
     func calendar(_ calendar: FSCalendar, boundingRectWillChange bounds: CGRect, animated: Bool) {

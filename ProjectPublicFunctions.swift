@@ -10,9 +10,15 @@
 import Foundation
 import SwiftDate
 
+public let userDefaults = UserDefaults(suiteName: "group.org.dwei.MFSCalendar")!
+public let userDocumentPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
 var school: School {
     get {
-        return MFS()
+        if Preferences().schoolName == "CMH" {
+            return CMH()
+        } else {
+            return MFS()
+        }
     }
 }
 

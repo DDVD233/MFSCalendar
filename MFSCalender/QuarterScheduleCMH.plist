@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>BeginDate</key>
+		<real>20180813</real>
+		<key>Quarter</key>
+		<integer>1</integer>
+		<key>ReferenceNumber</key>
+		<integer>94635</integer>
+	</dict>
+	<dict>
+		<key>BeginDate</key>
+		<real>20181221</real>
+		<key>Quarter</key>
+		<integer>2</integer>
+		<key>ReferenceNumber</key>
+		<integer>94636</integer>
+	</dict>
+</array>
+</plist>

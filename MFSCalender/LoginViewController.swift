@@ -197,7 +197,7 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
         if Preferences().schoolName == "MFS" {
             self.logoPhoto.image = UIImage(named: "MFS Logo.jpg")
         } else {
-            self.logoPhoto.image = UIImage(named: "CMH Logo.jpg")
+            self.logoPhoto.image = UIImage(named: "CMH Logo.png ")
         }
 
         self.username.text = Preferences().username
@@ -224,20 +224,20 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
 
     override func viewDidAppear(_ animated: Bool) {
         let isFirstTimeLogin = Preferences().isFirstTimeLogin
-        if isFirstTimeLogin {
-            let loginNotice = SCLAlertView()
-            loginNotice.addButton("Go to myMFS website", action: {
-                if #available(iOS 10.0, *) {
-                    UIApplication.shared.open(URL(string: "https://mfriends.myschoolapp.com/app/#login")!, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: nil)
-                } else {
-                    UIApplication.shared.openURL(URL(string: "https://mfriends.myschoolapp.com/app/#login")!)
-                    // Fallback on earlier versions
-                }
-            })
-            loginNotice.showInfo("Welcome", subTitle: "Welcome to MFS Mobile. Please use your myMFS account to log in.", animationStyle: .bottomToTop)
-            
-            Preferences().isFirstTimeLogin = false
-        }
+//        if isFirstTimeLogin {
+//            let loginNotice = SCLAlertView()
+//            loginNotice.addButton("Go to myMFS website", action: {
+//                if #available(iOS 10.0, *) {
+//                    UIApplication.shared.open(URL(string: "https://mfriends.myschoolapp.com/app/#login")!, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: nil)
+//                } else {
+//                    UIApplication.shared.openURL(URL(string: "https://mfriends.myschoolapp.com/app/#login")!)
+//                    // Fallback on earlier versions
+//                }
+//            })
+//            loginNotice.showInfo("Welcome", subTitle: "Welcome to MFS Mobile. Please use your myMFS account to log in.", animationStyle: .bottomToTop)
+//
+//            Preferences().isFirstTimeLogin = false
+//        }
     }
 
     @objc func keyboardNotification(notification: NSNotification) {

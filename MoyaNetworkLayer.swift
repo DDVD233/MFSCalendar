@@ -20,6 +20,7 @@ enum MyService {
     case getContentList(sectionId: String)
     case getClassContentData(contentName: String, sectionId: String)
     case sectionInfoView(sectionID: String)
+    case getSchedule(userID: String, startTime: String, endTime: String)
 
     //Dwei
     case getCalendarData
@@ -45,7 +46,7 @@ extension MyService: TargetType {
         case .getCalendarData, .getCalendarEvent, .dataVersionCheck, .meetTimeSearch, .getQuarterSchedule, .getSteps, .reportSteps, .getStepPoints:
             return URL(string: Preferences().davidBaseURL)!
         default:
-            return URL(string: "https://mfriends.myschoolapp.com")!
+            return URL(string: Preferences().baseURL)!
         }
     }
     var path: String {
@@ -63,6 +64,8 @@ extension MyService: TargetType {
             return "/api/\(contentName)/forsection/\(sectionId)/"
         case .sectionInfoView:
             return "/api/datadirect/SectionInfoView/"
+        case .getSchedule:
+            return "/api/DataDirect/ScheduleList/"
 
                 // Dwei
         case .getCalendarData:
@@ -119,6 +122,8 @@ extension MyService: TargetType {
             return ["format": "json", "sectionId": sectionID, "associationId": "1"]
         case .reportSteps(let steps, let username, let link):
             return ["name": username, "link": link, "steps": steps]
+        case .getSchedule(let userID, let startTime, let endTime):
+            return ["format": "json", "viewerID": userID, "personaId": "2", "viewerPersonaId": "2", "start": startTime, "end": endTime]
         default: return nil
         }
     }

@@ -37,6 +37,11 @@
 		E470C38121EE503700E5C358 /* School.swift in Sources */ = {isa = PBXBuildFile; fileRef = E470C37E21EE355A00E5C358 /* School.swift */; };
 		E470C38321EE692300E5C358 /* CMH Logo.png in Resources */ = {isa = PBXBuildFile; fileRef = E470C38221EE692200E5C358 /* CMH Logo.png */; };
 		E470C38521EE6A5E00E5C358 /* SchoolSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E470C38421EE6A5E00E5C358 /* SchoolSelectionViewController.swift */; };
+		E470C38721EEB23700E5C358 /* CMH.swift in Sources */ = {isa = PBXBuildFile; fileRef = E470C38621EEB23700E5C358 /* CMH.swift */; };
+		E470C38821EEB36400E5C358 /* CMH.swift in Sources */ = {isa = PBXBuildFile; fileRef = E470C38621EEB23700E5C358 /* CMH.swift */; };
+		E470C38921EEB36700E5C358 /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48CE0971F9FA6BB007B53D0 /* UserDefaults.swift */; };
+		E470C38D21EEC94000E5C358 /* QuarterScheduleMFS.plist in Resources */ = {isa = PBXBuildFile; fileRef = E470C38C21EEC94000E5C358 /* QuarterScheduleMFS.plist */; };
+		E470C38F21EECAC700E5C358 /* QuarterScheduleCMH.plist in Resources */ = {isa = PBXBuildFile; fileRef = E470C38E21EECAC700E5C358 /* QuarterScheduleCMH.plist */; };
 		E472A1601EFB6F8400EF5A74 /* ClassDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E472A15F1EFB6F8400EF5A74 /* ClassDetailViewController.swift */; };
 		E472A1621EFB72EA00EF5A74 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E472A1611EFB72EA00EF5A74 /* SettingViewController.swift */; };
 		E472A1641EFB735C00EF5A74 /* ClassListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E472A1631EFB735C00EF5A74 /* ClassListViewController.swift */; };
@@ -178,6 +183,9 @@
 		E470C37E21EE355A00E5C358 /* School.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = School.swift; sourceTree = "<group>"; };
 		E470C38221EE692200E5C358 /* CMH Logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "CMH Logo.png"; sourceTree = "<group>"; };
 		E470C38421EE6A5E00E5C358 /* SchoolSelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchoolSelectionViewController.swift; sourceTree = "<group>"; };
+		E470C38621EEB23700E5C358 /* CMH.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMH.swift; sourceTree = "<group>"; };
+		E470C38C21EEC94000E5C358 /* QuarterScheduleMFS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = QuarterScheduleMFS.plist; sourceTree = "<group>"; };
+		E470C38E21EECAC700E5C358 /* QuarterScheduleCMH.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = QuarterScheduleCMH.plist; sourceTree = "<group>"; };
 		E472A15F1EFB6F8400EF5A74 /* ClassDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClassDetailViewController.swift; sourceTree = "<group>"; };
 		E472A1611EFB72EA00EF5A74 /* SettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		E472A1631EFB735C00EF5A74 /* ClassListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClassListViewController.swift; sourceTree = "<group>"; };
@@ -450,8 +458,10 @@
 			children = (
 				E49321871F5D32E800C65067 /* .travis.yml */,
 				E4288E1320360F6600E4488D /* MFS.swift */,
+				E470C38621EEB23700E5C358 /* CMH.swift */,
 				E470C37E21EE355A00E5C358 /* School.swift */,
 				E489F6C61F5A821E00F2269F /* ProjectPublicFunctions.swift */,
+				E48CE0971F9FA6BB007B53D0 /* UserDefaults.swift */,
 				E4F86B2F1DF0E20C00CAD72B /* MFSCalendar */,
 				E48D4E031E61FC26008B0A97 /* Class Schedule Widget */,
 				E48F15511F745BF400A36904 /* MFSCalendarTests */,
@@ -481,6 +491,8 @@
 				E4CA1DAC1F5007C40061784A /* Acknowledgements.markdown */,
 				E45510EE1F4D6F09001CF9BE /* GroupPossibleContent.plist */,
 				E4B340071F0905EB00D6039A /* GoogleService-Info.plist */,
+				E470C38C21EEC94000E5C358 /* QuarterScheduleMFS.plist */,
+				E470C38E21EECAC700E5C358 /* QuarterScheduleCMH.plist */,
 				E484E6541EFA33260056F2D5 /* Localizable.strings */,
 				E44484D71E13A105002C68D5 /* MFSCalender.entitlements */,
 				E4F86B301DF0E20C00CAD72B /* AppDelegate.swift */,
@@ -497,7 +509,6 @@
 				E4B9378020C71DE500F0A225 /* NetworkFunctions.swift */,
 				E48D4DEF1E61F275008B0A97 /* ADayViewController.swift */,
 				E4BD88971F383A060000FEF3 /* ClassTimetableViewController.swift */,
-				E48CE0971F9FA6BB007B53D0 /* UserDefaults.swift */,
 				E472A15E1EFB6F3C00EF5A74 /* More View */,
 				E4F86B341DF0E20C00CAD72B /* Main.storyboard */,
 				E470C38421EE6A5E00E5C358 /* SchoolSelectionViewController.swift */,
@@ -729,7 +740,9 @@
 				E43611C721A4C35C00994A10 /* runningColor.png in Resources */,
 				E4CA1DAE1F50097D0061784A /* Acknowledgements.markdown in Resources */,
 				E4A880BD1DF279BB00816AB7 /* MFS Logo.jpg in Resources */,
+				E470C38F21EECAC700E5C358 /* QuarterScheduleCMH.plist in Resources */,
 				E43611BD21A47CF900994A10 /* running.png in Resources */,
+				E470C38D21EEC94000E5C358 /* QuarterScheduleMFS.plist in Resources */,
 				E4F0B3751EAD1BE900C923A8 /* dayPicker.plist in Resources */,
 				E4F86B3B1DF0E20C00CAD72B /* Assets.xcassets in Resources */,
 				E49321881F5D32E800C65067 /* .travis.yml in Resources */,
@@ -926,6 +939,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E470C38921EEB36700E5C358 /* UserDefaults.swift in Sources */,
+				E470C38821EEB36400E5C358 /* CMH.swift in Sources */,
 				E470C38121EE503700E5C358 /* School.swift in Sources */,
 				E470C38021EE503400E5C358 /* MFS.swift in Sources */,
 				E48D4E051E61FC26008B0A97 /* TodayViewController.swift in Sources */,
@@ -985,6 +1000,7 @@
 				E440F1BC1EEA7F4E004AFD0B /* MoyaNetworkLayer.swift in Sources */,
 				E42786881F568A5F00583D1E /* AboutViewController.swift in Sources */,
 				E48CE0981F9FA6BB007B53D0 /* UserDefaults.swift in Sources */,
+				E470C38721EEB23700E5C358 /* CMH.swift in Sources */,
 				E4F86B311DF0E20C00CAD72B /* AppDelegate.swift in Sources */,
 				E472A1621EFB72EA00EF5A74 /* SettingViewController.swift in Sources */,
 				E4DAB5B11F6386640013D943 /* HomeworkDetailViewController.swift in Sources */,

@@ -8,7 +8,7 @@
 
 import Foundation
 import SwiftDate
-/** Class Structure
+/** Class*.plist Structure
  *  classID     String
  *  className   String
  *  startTime   Int               Format: HHmm
@@ -37,7 +37,6 @@ public class School {
             return (a["startTime"] as? Int ?? 0) < (b["startTime"] as? Int ?? 0)
         }
         
-        print(sortedClassData)
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "HHmm"
         let currentTime = Int(dateFormatter.string(from: time)) ?? 0
@@ -116,8 +115,8 @@ public class School {
         
         let minute = Int(time%100)
         var minuteString = String(minute)
-        if minute == 0 {
-            minuteString = "00"
+        if minute < 10 {
+            minuteString = "0" + String(minute)
         }
         let timeString = String(hour) + ":" + minuteString + amString
         return timeString

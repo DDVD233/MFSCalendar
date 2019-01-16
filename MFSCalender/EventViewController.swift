@@ -67,7 +67,10 @@ class eventViewController: UIViewController, DZNEmptyDataSetSource, DZNEmptyData
     }
     
     func reloadData() {
-        self.listEvents.insert(["summary": "1st Period Announcement", "isAllDay": 1], at: 0)
+        if Preferences().schoolName == "MFS" {
+            self.listEvents.insert(["summary": "1st Period Announcement", "isAllDay": 1], at: 0)
+        }
+        
         DispatchQueue.main.async {
             if self.isViewLoaded && self.view != nil {
                 self.eventView.reloadData()
@@ -92,7 +95,7 @@ extension eventViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "eventTable", for: indexPath as IndexPath) as! customEventCell
         let row = indexPath.row
         
-        if row == 0 {
+        if row == 0 && Preferences().schoolName == "MFS" {
             cell.selectionStyle = .default
         } else {
             cell.selectionStyle = .none
@@ -121,7 +124,7 @@ extension eventViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.row == 0 {
+        if indexPath.row == 0 && Preferences().schoolName == "MFS" {
             let url = URL.init(string: "https://sites.google.com/mfriends.org/us-students/home")!
             let safariViewController = SFSafariViewController(url: url)
             present(safariViewController, animated: true, completion: nil)

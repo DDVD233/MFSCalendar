@@ -69,7 +69,7 @@ class homeworKDetailViewController: UIViewController, SFSafariViewControllerDele
             return
         }
         
-        let url = URL(string: "https://mfriends.myschoolapp.com/api/datadirect/AssignmentStudentDetail?format=json&studentId=\(userId)&AssignmentIndexId=\(assignmentIndexID)")!
+        let url = URL(string: Preferences().baseURL + "/api/datadirect/AssignmentStudentDetail?format=json&studentId=\(userId)&AssignmentIndexId=\(assignmentIndexID)")!
         print(url)
         let semaphore = DispatchSemaphore(value: 0)
         
@@ -96,7 +96,7 @@ class homeworKDetailViewController: UIViewController, SFSafariViewControllerDele
     func getLinksToPresent() {
         let assignmentID = Preferences().idForAssignmentToPresent
         
-        let url = "https://mfriends.myschoolapp.com/api/assignment2/read/\(String(describing: assignmentID))/?format=json"
+        let url = Preferences().baseURL + "/api/assignment2/read/\(String(describing: assignmentID))/?format=json"
         let semaphore = DispatchSemaphore(value: 0)
         
         let task = URLSession.shared.dataTask(with: URL(string: url)!, completionHandler: { (data, response, error) in
@@ -243,7 +243,7 @@ extension homeworKDetailViewController: UITableViewDelegate, UITableViewDataSour
             return
         }
         
-        let downloadUrl = URL(string: "https://mfriends.myschoolapp.com" + url)!
+        let downloadUrl = URL(string: Preferences().baseURL + url)!
         let (filePath, error) = NetworkOperations().downloadFile(url: downloadUrl, withName: fileName)
         
         guard error == nil else {
@@ -408,5 +408,4 @@ class homeworkDetailViewCell: UITableViewCell {
         }
     }
 }
-
 

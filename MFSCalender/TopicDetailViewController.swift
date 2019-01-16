@@ -139,7 +139,7 @@ extension topicDetailViewController: UITableViewDelegate, UITableViewDataSource 
         var url = topicObject["Url"] as? String
         var filePath: String? = nil
         if let topicFilePath = topicObject["FilePath"] as? String {
-            filePath = "https://mfriends.myschoolapp.com" + topicFilePath
+            filePath = Preferences().baseURL + topicFilePath
         }
         
         let fileName = topicObject["FileName"] as? String
@@ -212,7 +212,7 @@ extension topicDetailViewController {
         let topicIDString = String(describing: topicID)
         let topicIndexIDString = String(describing: topicIndexID)
 
-        let url = "https://mfriends.myschoolapp.com/api/datadirect/topiccontentget/\(topicIDString)/?format=json&index_id=\(topicIndexIDString)&id=\(topicIndexIDString)"
+        let url = Preferences().baseURL + "/api/datadirect/topiccontentget/\(topicIDString)/?format=json&index_id=\(topicIndexIDString)&id=\(topicIndexIDString)"
         let semaphore = DispatchSemaphore.init(value: 0)
 
         let dataTask = URLSession.shared.dataTask(with: URL(string: url)!, completionHandler: { (data, response, error) in

@@ -51,7 +51,7 @@ class NetworkOperations {
         let jsonData = try! JSONSerialization.data(withJSONObject: parameter, options: .prettyPrinted)
         
         let session = URLSession.shared
-        var request = try! URLRequest(url: "https://mfriends.myschoolapp.com/api/SignIn", method: .post)
+        var request = try! URLRequest(url: Preferences().baseURL + "/api/SignIn", method: .post)
         request.httpBody = jsonData
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         let semaphore = DispatchSemaphore(value: 0)

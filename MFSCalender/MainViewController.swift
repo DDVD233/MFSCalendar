@@ -134,6 +134,8 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         DispatchQueue.global().async {
             self.teacherSideScheduleFix()
         }
+        
+        
         // Do any additional setup after loading the view, typically from a nib.
     }
 
@@ -171,6 +173,10 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
             }
         }
         
+        if Preferences().schoolName == "CMH" {
+            removeTab(at: 3)
+        }
+        
 //        if Preferences().doPresentServiceView {
 //            self.tabBarController?.selectedIndex = 4
 //        }
@@ -189,6 +195,12 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         presentAdIfNeeded()
         
         startTimer()
+    }
+    
+    func removeTab(at index: Int) {
+        guard let viewControllers = self.tabBarController?.viewControllers as? NSMutableArray else { return }
+        viewControllers.removeObject(at: index)
+        self.tabBarController?.viewControllers = (viewControllers as! [UIViewController])
     }
     
     func presentAdIfNeeded() {
@@ -447,11 +459,18 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
                 formatter.dateFormat = "EE, MMM d."
                 today = formatter.string(from: date)
             }
-            if day == "No School" {
-                self.dayLabel.text = "No school today,"
+            
+            if Preferences().schoolName == "MFS" {
+                if day == "No School" {
+                    self.dayLabel.text = "No school today,"
+                } else {
+                    self.dayLabel.text = "Today is " + day + " Day,"
+                }
+    
             } else {
-                self.dayLabel.text = "Today is " + day + " Day,"
+                self.dayLabel.text = "Today is "
             }
+            
             self.welcomeLabel.text = "Welcome back, \(Preferences().firstName ?? "") !"
             
             self.dateLabel.text = today
@@ -490,7 +509,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
                 formatter.locale = Locale(identifier: "en_US")
                 formatter.dateFormat = "M/d/yyyy"
                 let today = formatter.string(from: Date()).addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-                let url = "https://mfriends.myschoolapp.com/api/DataDirect/AssignmentCenterAssignments/?format=json&filter=2&dateStart=\(today)&dateEnd=\(today)&persona=2"
+                let url = Preferences().baseURL + "/api/DataDirect/AssignmentCenterAssignments/?format=json&filter=2&dateStart=\(today)&dateEnd=\(today)&persona=2"
                 request.url = URL(string: url)
             }
         }

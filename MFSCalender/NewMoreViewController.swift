@@ -168,6 +168,7 @@ extension NewMoreViewController {
                 }
             case 6:
                 if let stepChallengeVC = storyboard?.instantiateViewController(withIdentifier: "stepChallenge") {
+                    guard Preferences().schoolName == "MFS" else { return }
                     show(stepChallengeVC, sender: self)
                 }
             case 7:

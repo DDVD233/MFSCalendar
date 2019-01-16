@@ -35,6 +35,7 @@ class customCell: UITableViewCell {
 
 class ADay: UIViewController, IndicatorInfoProvider {
     
+    var date: Date? = nil
     var daySelected: String? = nil
 
     @IBOutlet var tableView: UITableView!
@@ -68,25 +69,27 @@ class ADay: UIViewController, IndicatorInfoProvider {
     
 
     func dataFetching() {
-        guard daySelected != nil else {
-            self.listClasses = []
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
+        if date != nil {
+            self.listClasses = school.getClassDataAt(date: date!)
+            print(listClasses)
+        } else if daySelected != nil {
+            NSLog("Day: %@", daySelected!)
+            let plistPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
+            let fileName = "/Class" + daySelected! + ".plist"
+            NSLog(fileName)
+            let path = plistPath.appending(fileName)
+            NSLog(path)
+            
+            if let data = NSArray(contentsOfFile: path) as? [[String: Any]] {
+                self.listClasses = data
             }
-            return
+            
+            print(listClasses)
+        } else {
+            self.listClasses = []
         }
         
-        NSLog("Day: %@", daySelected!)
-        let plistPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-        let fileName = "/Class" + daySelected! + ".plist"
-        NSLog(fileName)
-        let path = plistPath.appending(fileName)
-        NSLog(path)
-
-        if let data = NSArray(contentsOfFile: path) as? [[String: Any]] {
-            self.listClasses = data
-        }
-        print(listClasses)
+        
         
         DispatchQueue.main.async {
             self.tableView.reloadData()

@@ -236,7 +236,7 @@ class gradeViewController: UITableViewController {
             }
         }
         
-        let url = "https://mfriends.myschoolapp.com/api/datadirect/GradeBookPerformanceAssignmentStudentList/?sectionId=\(sectionID)&markingPeriodId=\(markingPeriodID)&studentUserId=\(userID)"
+        let url = Preferences().baseURL + "/api/datadirect/GradeBookPerformanceAssignmentStudentList/?sectionId=\(sectionID)&markingPeriodId=\(markingPeriodID)&studentUserId=\(userID)"
         
         let semaphore = DispatchSemaphore(value: 0)
         
@@ -305,7 +305,7 @@ class gradeViewController: UITableViewController {
         let durationId: String = Preferences().durationID ?? ""
 
         let session = URLSession.shared
-        let url = "https://mfriends.myschoolapp.com/api/datadirect/ParentStudentUserAcademicGroupsGet?userId=\(userId)&schoolYearLabel=2018+-+2019&memberLevel=3&persona=2&durationList=\(durationId)&markingPeriodId="
+        let url = Preferences().baseURL + "/api/datadirect/ParentStudentUserAcademicGroupsGet?userId=\(userId)&schoolYearLabel=2018+-+2019&memberLevel=3&persona=2&durationList=\(durationId)&markingPeriodId="
         let request = URLRequest(url: URL(string: url)!)
         let semaphore = DispatchSemaphore.init(value: 0)
 

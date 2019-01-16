@@ -99,7 +99,7 @@ class classTopicViewController: UIViewController {
             return
         }
 
-        let url = "https://mfriends.myschoolapp.com/api/datadirect/sectiontopicsget/\(String(leadSectionIdInt))/?format=json&active=true&future=false&expired=false&sharedTopics=false"
+        let url = Preferences().baseURL + "/api/datadirect/sectiontopicsget/\(String(leadSectionIdInt))/?format=json&active=true&future=false&expired=false&sharedTopics=false"
 
         let session = URLSession.shared
         let request = URLRequest(url: URL(string: url)!)

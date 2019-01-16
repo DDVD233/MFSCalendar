@@ -501,7 +501,7 @@ extension classDetailViewController {
             return
         }
 
-        let urlString = "https://mfriends.myschoolapp.com/api/syllabus/forsection/\(sectionId)/?format=json&active=true&future=false&expired=false"
+        let urlString = Preferences().baseURL + "/api/syllabus/forsection/\(sectionId)/?format=json&active=true&future=false&expired=false"
         let url = URL(string: urlString)
         //create request.
         let request3 = URLRequest(url: url!)
@@ -633,10 +633,10 @@ class syllabusView: UITableViewCell {
         
         var url: String {
             if directDownloadUrl != nil {
-                return "https://mfriends.myschoolapp.com" + directDownloadUrl!
+                return Preferences().baseURL + directDownloadUrl!
             }
             
-            return "https://mfriends.myschoolapp.com/app/utilities/FileDownload.ashx?" + attachmentQueryString!
+            return Preferences().baseURL + "/app/utilities/FileDownload.ashx?" + attachmentQueryString!
         }
         
         let (filePath, error) = NetworkOperations().downloadFile(url: URL(string: url)!, withName: attachmentFileName!)
