@@ -351,6 +351,15 @@
 			name = "More View";
 			sourceTree = "<group>";
 		};
+		E47E0C5E21EF733C00C1F01B /* Homeowrk View */ = {
+			isa = PBXGroup;
+			children = (
+				E4DAB5B01F6386640013D943 /* HomeworkDetailViewController.swift */,
+				E4F8D4E31EF0DD2200F47525 /* HomeworkViewController.swift */,
+			);
+			name = "Homeowrk View";
+			sourceTree = "<group>";
+		};
 		E48D4E001E61FC26008B0A97 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -502,13 +511,12 @@
 				E453F0D01EA137D900BCE58D /* CalendarViewController.swift */,
 				E412E2BA201261B80082540B /* EventViewController.swift */,
 				E4ADC9ED1E882172002A46F7 /* Extensions.swift */,
-				E4F8D4E31EF0DD2200F47525 /* HomeworkViewController.swift */,
-				E4DAB5B01F6386640013D943 /* HomeworkDetailViewController.swift */,
 				E440F1BB1EEA7F4E004AFD0B /* MoyaNetworkLayer.swift */,
 				E4BD88951F35973C0000FEF3 /* TargetPublicFunctions.swift */,
 				E4B9378020C71DE500F0A225 /* NetworkFunctions.swift */,
 				E48D4DEF1E61F275008B0A97 /* ADayViewController.swift */,
 				E4BD88971F383A060000FEF3 /* ClassTimetableViewController.swift */,
+				E47E0C5E21EF733C00C1F01B /* Homeowrk View */,
 				E472A15E1EFB6F3C00EF5A74 /* More View */,
 				E4F86B341DF0E20C00CAD72B /* Main.storyboard */,
 				E470C38421EE6A5E00E5C358 /* SchoolSelectionViewController.swift */,

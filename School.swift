@@ -91,7 +91,7 @@ public class School {
     }
     
     func meetTimeForPeriod(period: Int, date: Date) -> String {
-        guard let periodObject = getClassDataAt(date: date)[safe: period] else { return "" }
+        guard let periodObject = getClassDataAt(date: date)[safe: period - 1] else { return "" }
         let startTime = timeToAMFormat(time: periodObject["startTime"] as? Int ?? 0)
         let endTime = timeToAMFormat(time: periodObject["endTime"] as? Int ?? 0)
         return startTime + " - " + endTime
