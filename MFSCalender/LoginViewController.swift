@@ -53,6 +53,8 @@ class LoginView {
                         Preferences().lastName = lastName
                         if firstName == "Wei" && lastName == "Dai" {
                             Preferences().isDev = true
+                        } else {
+                            Preferences().isDev = false
                         }
                     }
                     
@@ -308,10 +310,10 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
     @objc func wrongPassword(button: UIButton!) {
         print("Password?")
         if #available(iOS 10.0, *) {
-            UIApplication.shared.open(URL(string: "https://mfriends.myschoolapp.com/app/#login/request")!, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: nil)
+            UIApplication.shared.open(URL(string: Preferences().baseURL + "/app/#login/request")!, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: nil)
         } else {
             // Fallback on earlier versions
-            UIApplication.shared.openURL(URL(string: "https://mfriends.myschoolapp.com/app/#login/request")!)
+            UIApplication.shared.openURL(URL(string: Preferences().baseURL + "/app/#login/request")!)
         }
     }
 
@@ -332,6 +334,7 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
         
         guard self.authentication() else {
             Answers.logLogin(withMethod: "Default", success: false, customAttributes: [:])
+            self.indicatorView.isHidden = true
             return
         }
         
@@ -382,6 +385,7 @@ extension firstTimeLaunchController {
         
         Preferences().username = username
         Preferences().password = password
+        Preferences().loginTime = nil
         let (success, token, _) = loginAuthentication()
         if token == "Incorrect password" {
             self.errorMessage(presentMessage: "The username/password is incorrect. Please check your spelling.")

@@ -51,9 +51,11 @@ class courseFillController: UIViewController {
         
         if Preferences().schoolName == "CMH" {
             self.newGetCourse()
-            setProgressTo(value: 33)
+            setProgressTo(value: 25)
             ClassView().getProfilePhoto()
-            setProgressTo(value: 66)
+            setProgressTo(value: 50)
+            self.fillRoomFromMySchool()
+            setProgressTo(value: 75)
             self.getScheduleFromMySchool()
             setProgressTo(value: 100)
             DispatchQueue.main.async {
@@ -274,9 +276,6 @@ class courseFillController: UIViewController {
                                         return
                                     }
                                     
-                                    DispatchQueue.main.async {
-                                        self.setProgressTo(value: 0.5)
-                                    }
                                     self.createScheduleFromMySchool(json: json)
                                 } catch {
                                     presentErrorMessage(presentMessage: error.localizedDescription, layout: .cardView)
@@ -290,11 +289,68 @@ class courseFillController: UIViewController {
         semaphore.wait()
     }
     
+    func fillRoomFromMySchool() {
+        let coursePath = userDocumentPath.appending("/CourseList.plist")
+        var courseList = NSArray(contentsOfFile: coursePath) as? [[String: Any]] ?? [[String: Any]()]
+        let group = DispatchGroup()
+        for (index, course) in courseList.enumerated() {
+            DispatchQueue.global().async(group: group, execute: {
+                var modifiedCourse = course
+                let room = self.getRoom(sectionID: ClassView().getLeadSectionID(classDict: course) ?? 0)
+                modifiedCourse["roomNumber"] = room
+                courseList[index] = modifiedCourse
+            })
+        }
+        
+        group.wait()
+        
+        NSArray(array: courseList).write(toFile: coursePath, atomically: true)
+    }
+    
+    func getRoom(sectionID: Int) -> String {
+        var roomNumber = ""
+        let urlString = Preferences().baseURL + "/api/datadirect/SectionInfoView/?format=json&sectionId=" + String(sectionID) + "&associationId=1"
+        let semaphore = DispatchSemaphore(value: 0)
+        
+        Alamofire.request(urlString).response(queue: DispatchQueue.global()) { (response) in
+            guard response.error == nil else {
+                presentErrorMessage(presentMessage: response.error!.localizedDescription, layout: .cardView)
+                semaphore.signal()
+                return
+            }
+            
+            do {
+                guard let courseInfoListArray = try JSONSerialization.jsonObject(with: response.data ?? Data(), options: .allowFragments) as? [[String: Any]] else {
+                    presentErrorMessage(presentMessage: "JSON incorrect format", layout: .cardView)
+                    semaphore.signal()
+                    return
+                }
+                
+                if let courseInfoList = courseInfoListArray.first {
+                    if let roomNumberReceived = courseInfoList["Room"] as? String {
+                        roomNumber = roomNumberReceived
+                    }
+                }
+            } catch {
+                presentErrorMessage(presentMessage: error.localizedDescription, layout: .cardView)
+            }
+            
+            semaphore.signal()
+        }
+        
+        semaphore.wait()
+        return roomNumber
+    }
+    
     func createScheduleFromMySchool(json: [[String: Any]]) {
+        let coursePath = userDocumentPath.appending("/CourseList.plist")
+        let courseList = NSArray(contentsOfFile: coursePath) as? [[String: Any]] ?? [[String: Any]()]
+        
         var sortedClass = [String: [[String: Any]]]()
         let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US")
         for classObject in json {
-            formatter.dateFormat = "MM/dd/yyyy hh:mm a"
+            formatter.dateFormat = "M/dd/yyyy hh:mm a"
             let endTimeString = classObject["end"] as? String ?? ""
             guard let endTime = formatter.date(from: endTimeString) else {
                 continue
@@ -324,6 +380,16 @@ class courseFillController: UIViewController {
                     modifiedClassObject[key] = ""
                 }
             }
+            
+            if let correspondingCourse = courseList.filter({ (a) -> Bool in
+                return a["className"] as? String ?? "" == modifiedClassObject["className"] as! String
+            }).first {
+                modifiedClassObject["teacherName"] = correspondingCourse["teacherName"] as? String ?? ""
+                modifiedClassObject["roomNumber"] = correspondingCourse["roomNumber"] as? String ?? ""
+                modifiedClassObject["index"] = correspondingCourse["index"] as? Int ?? ""
+            }
+            
+            
             
             formatter.dateFormat = "yyyyMMdd"
             let dateString = formatter.string(from: startTime)

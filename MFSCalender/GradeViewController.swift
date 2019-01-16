@@ -224,15 +224,25 @@ class gradeViewController: UITableViewController {
         group.wait()
         
         var markingPeriodID: String {
-            switch quarterSelected {
-            case .first:
-                return "6893"
-            case .second:
-                return "6894"
-            case .third:
-                return "6895"
-            case .forth:
-                return "6896"
+            if Preferences().schoolName == "MFS" {
+                switch quarterSelected {
+                case .first:
+                    return "6893"
+                case .second:
+                    return "6894"
+                case .third:
+                    return "6895"
+                case .forth:
+                    return "6896"
+                }
+            } else if Preferences().schoolName == "CMH" {
+                if quarterSelected == .first {
+                    return "7215"
+                } else {
+                    return "7217"
+                }
+            } else {
+                return ""
             }
         }
         

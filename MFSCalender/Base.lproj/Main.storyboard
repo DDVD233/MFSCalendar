@@ -2796,6 +2796,7 @@
                     </tableView>
                     <connections>
                         <outlet property="currentQuarter" destination="a0k-pl-4C0" id="2ln-Ni-eVb"/>
+                        <outlet property="quarterLabel" destination="JNv-Hn-mlE" id="wIl-Du-YNg"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Eyl-gt-CPN" userLabel="First Responder" sceneMemberID="firstResponder"/>

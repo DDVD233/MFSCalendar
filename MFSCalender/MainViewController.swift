@@ -354,7 +354,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
 //            stopTimer()
 //        }
         
-        getListClasses(day: dayCheck())
+        getListClasses()
         setupTheHeader()
 
         DispatchQueue.main.async {
@@ -478,7 +478,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
 
     }
 
-    func getListClasses(day: String) {
+    func getListClasses() {
         self.listClasses = school.classesOnADayAfter(date: Date())
     }
     
@@ -609,19 +609,17 @@ extension Main: UICollectionViewDelegate, UICollectionViewDataSource, UICollecti
         let row = indexPath.row
         let classData = listClasses[row]
         let className = classData["className"] as? String
-        let teacher = classData["teacherName"] as? String
+        let teacher = classData["teacherName"] as? String ?? ""
         
         cell.roomNumber.text = classData["roomNumber"] as? String ?? ""
 
         cell.teacher.text = teacher
         cell.className.text = className
         
-        if let period = classData["period"] as? Int {
-            if row == 0 || row == 1 {
-                cell.period.text = school.periodTimerString(time: Date(), index: row)
-            } else {
-                cell.period.text = school.meetTimeForPeriod(periodObject: classData)
-            }
+        if row == 0 || row == 1 {
+            cell.period.text = school.periodTimerString(time: Date(), index: row)
+        } else {
+            cell.period.text = school.meetTimeForPeriod(periodObject: classData)
         }
 
 //        if let leadSectionId = ClassView().getLeadSectionID(classDict: classData) {

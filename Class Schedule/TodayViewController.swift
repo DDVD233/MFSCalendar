@@ -61,21 +61,6 @@ class TodayViewController: UIViewController, NCWidgetProviding, UITableViewDeleg
         print(self.listClasses)
     }
 
-    func dayCheck() -> String {
-        var dayOfSchool: String? = nil
-        let date = Date()
-        let formatter = DateFormatter()
-        let plistPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-        let path = plistPath.appending("/Day.plist")
-        let dayDict = NSDictionary(contentsOfFile: path)
-        formatter.dateFormat = "yyyyMMdd"
-        let checkDate = formatter.string(from: date)
-
-        dayOfSchool = dayDict?[checkDate] as? String ?? "No School"
-
-        return dayOfSchool!
-    }
-
     //    the number of the cell
     func tableView(_ tableView: UITableView, numberOfRowsInSection selection: Int) -> Int {
         return self.listClasses.count

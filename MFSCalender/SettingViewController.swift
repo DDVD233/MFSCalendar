@@ -10,11 +10,17 @@ import UIKit
 
 class settingViewController: UITableViewController, UIActionSheetDelegate {
     @IBOutlet var currentQuarter: UISegmentedControl!
+    @IBOutlet var quarterLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         currentQuarter.selectedSegmentIndex = Preferences().currentQuarter - 1
+        if Preferences().schoolName == "CMH" {
+            currentQuarter.removeSegment(at: 2, animated: false)
+            currentQuarter.removeSegment(at: 2, animated: false)
+            quarterLabel.text = "Semester"
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {

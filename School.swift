@@ -52,16 +52,16 @@ public class School {
         var timerString: String = ""
         guard let period = classesOnADayAfter(date: time)[safe: index] else { return "" }
         SwiftDate.defaultRegion = Region.local
-        let currentTime = DateInRegion()
+        let currentTime = DateInRegion(time, region: Region.local)
         print(currentTime)
         
         let startTimeInt = period["startTime"] as? Int ?? 0
-        let startTime = DateInRegion().dateBySet([Calendar.Component.hour : Int(startTimeInt/100),
+        let startTime = currentTime.dateBySet([Calendar.Component.hour : Int(startTimeInt/100),
                                                   Calendar.Component.minute: Int(startTimeInt%100),
                                                   Calendar.Component.second: 0])!
         
         let endTimeInt = period["endTime"] as? Int ?? 0
-        let endTime = DateInRegion().dateBySet([Calendar.Component.hour : Int(endTimeInt/100),
+        let endTime = currentTime.dateBySet([Calendar.Component.hour : Int(endTimeInt/100),
                                                   Calendar.Component.minute: Int(endTimeInt%100),
                                                   Calendar.Component.second: 0])!
         
@@ -108,9 +108,9 @@ public class School {
         var amString = ""
         if hour > 12 {
             hour -= 12
-            amString = "AM"
-        } else {
             amString = "PM"
+        } else {
+            amString = "AM"
         }
         
         let minute = Int(time%100)
