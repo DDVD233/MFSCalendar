@@ -73,18 +73,7 @@ class ADay: UIViewController, IndicatorInfoProvider {
             self.listClasses = school.getClassDataAt(date: date!)
             print(listClasses)
         } else if daySelected != nil {
-            NSLog("Day: %@", daySelected!)
-            let plistPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-            let fileName = "/Class" + daySelected! + ".plist"
-            NSLog(fileName)
-            let path = plistPath.appending(fileName)
-            NSLog(path)
-            
-            if let data = NSArray(contentsOfFile: path) as? [[String: Any]] {
-                self.listClasses = data
-            }
-            
-            print(listClasses)
+            self.listClasses = school.getClassDataAt(day: daySelected!)
         } else {
             self.listClasses = []
         }

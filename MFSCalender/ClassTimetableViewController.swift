@@ -16,11 +16,10 @@ class timeTableParentViewController: SegmentedPagerTabStripViewController {
     
     override public func viewControllers(for pagerTabStripController: PagerTabStripViewController) -> [UIViewController] {
         var arrayToReturn = [UIViewController]()
-        for alphabet in "ABCDEF" {
+        for alphabet in school.dayLetterList {
             let viewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier :"timeTableViewController") as! ADay
             
             viewController.daySelected = String(alphabet)
-            
             arrayToReturn.append(viewController)
         }
         return arrayToReturn

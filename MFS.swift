@@ -10,6 +10,11 @@ import Foundation
 
 public class MFS: School {
     
+    override init() {
+        super.init()
+        self.dayLetterList = "ABCDEF"
+    }
+    
     override func getClassDataAt(date: Date) -> [[String: Any]] {
         //var period = period
         listClasses = [[String: Any]]()
@@ -39,7 +44,18 @@ public class MFS: School {
         return listClasses
     }
     
-    
+    override func getClassDataAt(day: String) -> [[String: Any]] {
+        NSLog("Day: %@", day)
+        let fileName = "/Class" + day + ".plist"
+        let path = userDocumentPath.appending(fileName)
+        
+        if let data = NSArray(contentsOfFile: path) as? [[String: Any]] {
+            self.listClasses = data
+            return data
+        }
+        
+        return [[String: Any]]()
+    }
     
     func dayCheck(date: Date) -> String {
         var dayOfSchool: String? = nil

@@ -349,6 +349,8 @@ class courseFillController: UIViewController {
         var sortedClass = [String: [[String: Any]]]()
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "en_US")
+        
+        var dayDict = [String: String]()
         for classObject in json {
             formatter.dateFormat = "M/dd/yyyy hh:mm a"
             let endTimeString = classObject["end"] as? String ?? ""
@@ -362,7 +364,35 @@ class courseFillController: UIViewController {
                 
             }
             
-            guard startTimeString != endTimeString else { continue }
+            formatter.dateFormat = "yyyyMMdd"
+            let dateString = formatter.string(from: startTime)
+            
+            if startTimeString == endTimeString {
+                // All Day Event
+                let title = classObject["title"] as? String ?? ""
+                if title.lowercased().contains("day") {
+                    var dayString = ""
+                    if title.contains("A-") || title.contains("A ") {
+                        dayString = "A"
+                    } else if title.contains("B-") || title.contains("B ") {
+                        dayString = "B"
+                    }
+                    
+                    if title.contains("Assembly") {
+                        dayString.insert("A", at: dayString.startIndex)
+                    } else if title.contains("Late Start") {
+                        dayString.insert("L", at: dayString.startIndex)
+                    } else if title.contains("Mass") {
+                        dayString.insert("M", at: dayString.startIndex)
+                    } else if title.contains("GPS") {
+                        dayString.insert("G", at: dayString.startIndex)
+                    }
+                    
+                    dayDict[dateString] = dayString
+                }
+                
+                continue
+            }
             
             var modifiedClassObject = classObject
             
@@ -389,14 +419,14 @@ class courseFillController: UIViewController {
                 modifiedClassObject["index"] = correspondingCourse["index"] as? Int ?? ""
             }
             
-            
-            
-            formatter.dateFormat = "yyyyMMdd"
-            let dateString = formatter.string(from: startTime)
             var classArray = sortedClass[dateString] ?? [[String: Any]]()
             classArray.append(modifiedClassObject)
             sortedClass[dateString] = classArray
         }
+        
+        let dayPlistName = "/Day.plist"
+        let dayPlistPath = userDocumentPath.appending(dayPlistName)
+        NSDictionary(dictionary: dayDict).write(toFile: dayPlistPath, atomically: true)
         
         for (key, classArray) in sortedClass {
             var sortedClassArray = classArray.sorted { (a, b) -> Bool in
@@ -902,5 +932,36 @@ class courseFillController: UIViewController {
 //        })
         task.resume()
         semaphore.wait()
+    }
+}
+
+fileprivate extension StringProtocol where Index == String.Index {
+    func index(of string: Self, options: String.CompareOptions = []) -> Index? {
+        return range(of: string, options: options)?.lowerBound
+    }
+    func endIndex(of string: Self, options: String.CompareOptions = []) -> Index? {
+        return range(of: string, options: options)?.upperBound
+    }
+    func indexes(of string: Self, options: String.CompareOptions = []) -> [Index] {
+        var result: [Index] = []
+        var start = startIndex
+        while start < endIndex,
+            let range = self[start..<endIndex].range(of: string, options: options) {
+                result.append(range.lowerBound)
+                start = range.lowerBound < range.upperBound ? range.upperBound :
+                    index(range.lowerBound, offsetBy: 1, limitedBy: endIndex) ?? endIndex
+        }
+        return result
+    }
+    func ranges(of string: Self, options: String.CompareOptions = []) -> [Range<Index>] {
+        var result: [Range<Index>] = []
+        var start = startIndex
+        while start < endIndex,
+            let range = self[start..<endIndex].range(of: string, options: options) {
+                result.append(range)
+                start = range.lowerBound < range.upperBound ? range.upperBound :
+                    index(range.lowerBound, offsetBy: 1, limitedBy: endIndex) ?? endIndex
+        }
+        return result
     }
 }

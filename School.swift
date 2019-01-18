@@ -22,7 +22,16 @@ import SwiftDate
  **/
 public class School {
     var listClasses = [[String: Any]]()
+    var dayLetterList: String
+    
+    init() {
+        dayLetterList = ""
+    }
     func getClassDataAt(date: Date) -> [[String: Any]] {
+        return listClasses
+    }
+    
+    func getClassDataAt(day: String) -> [[String: Any]] {
         return listClasses
     }
     
@@ -120,6 +129,19 @@ public class School {
         }
         let timeString = String(hour) + ":" + minuteString + amString
         return timeString
+    }
+    
+    func checkDate(checkDate: Date) -> String {
+        let formatter = DateFormatter()
+        let path = userDocumentPath.appending("/Day.plist")
+        guard let dayDict = NSDictionary(contentsOfFile: path) as? [String: String] else {
+            return ""
+        }
+        formatter.dateFormat = "yyyyMMdd"
+        let checkDateString = formatter.string(from: checkDate)
+        let day = dayDict[checkDateString] ?? "No School"
+        
+        return day
     }
 }
 

@@ -132,7 +132,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         }
         
         DispatchQueue.global().async {
-            self.teacherSideScheduleFix()
+            self.adaptationScheduleFix()
         }
         
         
@@ -212,16 +212,14 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         }
     }
     
-    func teacherSideScheduleFix() {
+    func adaptationScheduleFix() {
         let preferences = Preferences()
-        if preferences.dataBuild < 1076 {
+        if preferences.dataBuild < 1600 {
             preferences.dataBuild = Int(Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "") ?? 0
             LoginView().getProfile()
-            if !preferences.isStudent {
-                DispatchQueue.main.async {
-                    let vc = self.storyboard?.instantiateViewController(withIdentifier: "courseFillController")
-                    self.present(vc!, animated: true, completion: nil)
-                }
+            DispatchQueue.main.async {
+                let vc = self.storyboard?.instantiateViewController(withIdentifier: "courseFillController")
+                self.present(vc!, animated: true, completion: nil)
             }
         }
     }
@@ -440,7 +438,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
 
 
     func setupTheHeader() {
-        let day = dayCheck()
+        let day = school.checkDate(checkDate: Date())
         
         DispatchQueue.main.async {
             let date = Date()
@@ -460,15 +458,10 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
                 today = formatter.string(from: date)
             }
             
-            if Preferences().schoolName == "MFS" {
-                if day == "No School" {
-                    self.dayLabel.text = "No school today,"
-                } else {
-                    self.dayLabel.text = "Today is " + day + " Day,"
-                }
-    
+            if day == "No School" {
+                self.dayLabel.text = "No school today,"
             } else {
-                self.dayLabel.text = "Today is "
+                self.dayLabel.text = "Today is " + day + " Day,"
             }
             
             self.welcomeLabel.text = "Welcome back, \(Preferences().firstName ?? "") !"
@@ -551,23 +544,6 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         semaphore.wait()
 
     }
-
-    func dayCheck() -> String {
-        var dayOfSchool: String? = nil
-        let date = Date()
-        let formatter = DateFormatter()
-        let plistPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-        let path = plistPath.appending("/Day.plist")
-        guard let dayDict = NSDictionary(contentsOfFile: path) as? [String: String] else {
-            return "No School"
-        }
-        formatter.dateFormat = "yyyyMMdd"
-        let checkDate = formatter.string(from: date)
-
-        dayOfSchool = dayDict[checkDate] ?? "No School"
-        return dayOfSchool!
-    }
-
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -656,6 +632,7 @@ extension Main {
     //Refresh day data and event data. Update version number.
     //刷新Day和Event数据，并更新版本号
     func refreshData() {
+        guard Preferences().schoolName == "MFS" else { return }
         let semaphore = DispatchSemaphore.init(value: 0)
 
         provider.request(MyService.getCalendarData, completion: { result in

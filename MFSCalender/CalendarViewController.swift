@@ -131,7 +131,6 @@ class CalendarViewController: SegmentedPagerTabStripViewController, UIGestureRec
 
     @IBAction func backToToday(_ sender: Any) {
         self.calendarView.select(Date())
-        let _ = self.checkDate(checkDate: Date())
         self.dataFetching()
         self.eventDataFetching()
         self.homeworkDataFetching()
@@ -153,18 +152,6 @@ class CalendarViewController: SegmentedPagerTabStripViewController, UIGestureRec
             }
         }
         return shouldBegin
-    }
-
-    func checkDate(checkDate: Date) -> String {
-        let plistPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-        let path = plistPath.appending("/Day.plist")
-        let dayDict = NSDictionary(contentsOfFile: path)
-        self.formatter.dateFormat = "yyyyMMdd"
-        let checkDate = self.formatter.string(from: checkDate)
-
-        let day = dayDict?[checkDate] as? String ?? "No School"
-
-        return day
     }
     
     func dataFetching() {
@@ -222,23 +209,18 @@ extension CalendarViewController: FSCalendarDelegate, FSCalendarDataSource {
             self.reloadPagerTabStripView()
         }
         
-        let _ = self.checkDate(checkDate: date)
         dataFetching()
         eventDataFetching()
         homeworkDataFetching()
     }
 
     func calendar(_ calendar: FSCalendar, subtitleFor date: Date) -> String? {
-        if Preferences().schoolName == "MFS" {
-            let day = checkDate(checkDate: date)
-            if day == "No School" {
-                return nil
-            } else {
-                return day
-            }
+        let day = school.checkDate(checkDate: date)
+        if day == "No School" {
+            return nil
+        } else {
+            return day
         }
-        
-        return nil
     }
     
     func calendar(_ calendar: FSCalendar, boundingRectWillChange bounds: CGRect, animated: Bool) {

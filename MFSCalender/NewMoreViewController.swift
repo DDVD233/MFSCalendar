@@ -14,6 +14,8 @@ import Crashlytics
 import SafariServices
 
 class NewMoreViewController: UICollectionViewController  {
+    var contentList = [String]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 //        if Preferences().isiPhoneX {
@@ -21,6 +23,15 @@ class NewMoreViewController: UICollectionViewController  {
 //        } else {
 //            hidesBottomBarWhenPushed = false
 //        }
+        if Preferences().schoolName == "MFS" {
+            contentList = ["My Courses", "Lunch Menu", "Service Hour", "Logout", "About", "Settings", "Step Challenge"]
+        } else {
+            contentList = ["My Courses", "Lunch Menu", "Logout", "About", "Settings"]
+        }
+        
+        if Preferences().isDev {
+            contentList.append("DON'T TOUCH")
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -44,11 +55,7 @@ extension NewMoreViewController {
         if section == 0 {
             return 1
         } else {
-            if Preferences().isDev {
-                return 8
-            } else {
-                return 7
-            }
+            return contentList.count
         }
     }
     
@@ -79,31 +86,26 @@ extension NewMoreViewController {
             }
             
             cell.imageView.contentMode = .scaleAspectFit
+            let row = indexPath.row
+            let contentTitle = contentList[safe: row]
+            cell.nameLabel.text = contentTitle
             
-            switch indexPath.row {
-            case 0:
-                cell.nameLabel.text = "My Courses"
+            switch contentTitle {
+            case "My Courses":
                 cell.imageView.image = UIImage(named: "MenuCourses.png")
-            case 1:
-                cell.nameLabel.text = "Lunch Menu"
+            case "Lunch Menu":
                 cell.imageView.image = UIImage(named: "MenuLunch.png")
-            case 2:
-                cell.nameLabel.text = "Service Hour"
+            case "Service Hour":
                 cell.imageView.image = UIImage(named: "MenuService.png")
-            case 3:
-                cell.nameLabel.text = "Logout"
+            case "Logout":
                 cell.imageView.image = UIImage(named: "MenuLogout.png")
-            case 4:
-                cell.nameLabel.text = "About"
+            case "About":
                 cell.imageView.image = UIImage(named: "MenuAbout.png")
-            case 5:
-                cell.nameLabel.text = "Settings"
+            case "Settings":
                 cell.imageView.image = UIImage(named: "MenuSettings.png")
-            case 6:
-                cell.nameLabel.text = "Step Challenge"
+            case "Step Challenge":
                 cell.imageView.image = UIImage(named: "running.png")
-            case 7:
-                cell.nameLabel.text = "DON'T TOUCH"
+            case "DON'T TOUCH":
                 cell.imageView.image = UIImage(named: "MenuWarning.png")
             default:
                 break
@@ -141,37 +143,38 @@ extension NewMoreViewController {
                 show(profileVC, sender: self)
             }
         } else if indexPath.section == 1 {
-            switch indexPath.row {
-            case 0:
+            let contentTitle = contentList[safe: indexPath.row]
+            switch contentTitle {
+            case "My Courses":
                 if let courseVC = storyboard?.instantiateViewController(withIdentifier: "courseList") {
                     show(courseVC, sender: self)
                 }
-            case 1:
+            case "Lunch Menu":
                 DispatchQueue.global().async {
                     self.getLunchMenu()
                 }
-            case 2:
+            case "Service Hour":
                 DispatchQueue.global().async {
                     self.serviceHour()
                 }
-            case 3:
+            case "Logout":
                 if let cell = collectionView.cellForItem(at: indexPath) {
                     logout(sender: cell)
                 }
-            case 4:
+            case "About":
                 if let infoVC = storyboard?.instantiateViewController(withIdentifier: "about") {
                     show(infoVC, sender: self)
                 }
-            case 5:
+            case "Settings":
                 if let settingsVC = storyboard?.instantiateViewController(withIdentifier: "settings") {
                     show(settingsVC, sender: self)
                 }
-            case 6:
+            case "Step Challenge":
                 if let stepChallengeVC = storyboard?.instantiateViewController(withIdentifier: "stepChallenge") {
                     guard Preferences().schoolName == "MFS" else { return }
                     show(stepChallengeVC, sender: self)
                 }
-            case 7:
+            case "DON'T TOUCH":
                 userDefaults.set(false, forKey: "didShowMobileServe")
                 self.tabBarController?.selectedIndex = 0
             default:
@@ -288,9 +291,69 @@ extension NewMoreViewController {
     }
     
     func getLunchMenu() {
-        let lunchMenuURL = URL(string: "http://www.sagedining.com/sites/menu/menu.php?org=moorestownfriendsschool")!
-        let safariViewController = SFSafariViewController(url: lunchMenuURL)
-        self.present(safariViewController, animated: true, completion: nil)
+        switch Preferences().schoolName {
+        case "MFS":
+            let lunchMenuURL = URL(string: "http://www.sagedining.com/sites/menu/menu.php?org=moorestownfriendsschool")!
+            let safariViewController = SFSafariViewController(url: lunchMenuURL)
+            self.present(safariViewController, animated: true, completion: nil)
+        case "CMH":
+            DispatchQueue.main.async {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = true
+                SVProgressHUD.show()
+            }
+            
+            guard loginAuthentication().success else {
+                return
+            }
+            
+            let requestURL = URL(string: Preferences().baseURL + "/api/link/forresourceboard/?format=json&categoryId=51487&itemCount=0")!
+            let semaphore = DispatchSemaphore(value: 0)
+            
+            let task = URLSession.shared.dataTask(with: requestURL, completionHandler: { (data, response, error) in
+                self.navigationController?.cancelProgress()
+                guard error == nil else {
+                    presentErrorMessage(presentMessage: error!.localizedDescription, layout: .cardView)
+                    return
+                }
+                
+                do {
+//                    print(String(data: data!, encoding: .utf8))
+                    guard let json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? [[String: Any]] else {
+                        presentErrorMessage(presentMessage: "Internal error: incorrect data format", layout: .statusLine)
+                        return
+                    }
+                    
+                    guard let itemData = json[0]["ItemData"] as? [[String: Any]] else {
+                        presentErrorMessage(presentMessage: "Internal error: ItemData not found", layout: .statusLine)
+                        return
+                    }
+                    guard let lunchObject = itemData.filter({ ($0["ShortDescription"] as? String ?? "").contains("Lunch Menu") }).first else {
+                        presentErrorMessage(presentMessage: "Cannot find lunch menu", layout: .statusLine)
+                        return
+                    }
+                    
+                    guard var lunchUrl = lunchObject["Url"] as? String else {
+                        return
+                    }
+                    
+                    NetworkOperations().openLink(url: &lunchUrl, from: self)
+                } catch {
+                    presentErrorMessage(presentMessage: error.localizedDescription, layout: .statusLine)
+                }
+                
+                semaphore.signal()
+            })
+            
+            task.resume()
+            semaphore.wait()
+            
+            DispatchQueue.main.async {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                SVProgressHUD.dismiss()
+            }
+        default:
+            return
+        }
     }
     
     func logout(sender: UIView) {

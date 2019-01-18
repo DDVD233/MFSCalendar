@@ -9,6 +9,12 @@
 import Foundation
 
 class CMH: School {
+    
+    override init() {
+        super.init()
+        self.dayLetterList = "AB"
+    }
+    
     override func getClassDataAt(date: Date) -> [[String: Any]] {
         //var period = period
         listClasses = [[String: Any]]()
@@ -26,5 +32,19 @@ class CMH: School {
         listClasses = allClasses
         
         return listClasses
+    }
+    
+    override func getClassDataAt(day: String) -> [[String: Any]] {
+        let dayDictPath = userDocumentPath.appending("/Day.plist")
+        guard let dayDict = NSDictionary(contentsOfFile: dayDictPath) as? [String: String] else { return [[String: Any]]() }
+        
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyyMMdd"
+        let today = formatter.string(from: Date())
+        
+        guard let date = dayDict.filter({ $0.value == day &&
+            (Int($0.key) ?? 0 ) > (Int(today) ?? 0) }).first?.key else { return [[String: Any]]() }
+        let schedulePath = userDocumentPath.appending("/Class" + date + ".plist")
+        return NSArray(contentsOfFile: schedulePath) as? [[String: Any]] ?? [[String: Any]]()
     }
 }
