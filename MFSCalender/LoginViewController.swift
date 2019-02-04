@@ -83,13 +83,19 @@ class LoginView {
                     Preferences().isStudent = false
                     if let studentInfo = resDict["StudentInfo"] as? [String: Any] {
 //                        //TODO
-//                        print(studentInfo)
+                        print(studentInfo)
                         if let graduationYear = studentInfo["GradYear"] as? String {
-                                Preferences().isStudent = true
-
-//                                let gradYearInt = Int(graduationYear)
-//                                let year = DateInRegion().year
-//                                Preferences().gradeLevel = 
+                            Preferences().isStudent = true
+                            print(graduationYear)
+                            let gradYearInt = Int(graduationYear)!
+                            var year = DateInRegion().year
+                            // For example, if I'm a senior who will graduate in 2019.
+                            // Then my gradelevel should be 12 - (2019-2019) = 12
+                            // It may be a bit hard to understand. But just think about it.
+                            if DateInRegion().month > 8 {
+                                year += 1
+                            }
+                            Preferences().gradeLevel = 12 - (gradYearInt - year)
                         }
                     }
                     

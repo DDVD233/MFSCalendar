@@ -1,7 +1,9 @@
 //
 //  CMH.swift
 //  MFSMobile
-//
+//  This is the CMH school class.
+//  Any school-specific functions/variables should go there.
+//  Be sure to override all the functions in the parent class.
 //  Created by 戴元平 on 1/15/19.
 //  Copyright © 2019 David. All rights reserved.
 //

@@ -1,6 +1,8 @@
 //
 //  MFSClasses.swift
-//  MFSMobile
+//  This is the MFS school class.
+//  Any school-specific functions/variables should go there.
+//  Be sure to override all the functions in the parent class. 
 //
 //  Created by David Dai on 2/15/18.
 //  Copyright © 2018 David. All rights reserved.
@@ -35,7 +37,7 @@ public class MFS: School {
         let weekDay = dateFormatter.string(from: date)
         //let lunch = ["className": "Lunch", "roomNumber": "DH/C", "teacher": "", "period": 11] as [String: Any]
         if listClasses.count >= 6 && weekDay == "Wed" {
-            let meetingForWorship = ["className": "Meeting For Worship", "roomNumber": "Meeting House", "teacher": "", "period": 4] as [String: Any]
+            let meetingForWorship = ["className": "Meeting For Worship", "roomNumber": "Meeting House", "teacher": "", "period": 4, "startTime": 1042, "endTime": 1124] as [String: Any]
             listClasses[3] = meetingForWorship
         }
         
