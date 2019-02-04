@@ -2807,7 +2807,7 @@
         <scene sceneID="RfK-T2-m1d">
             <objects>
                 <tableViewController storyboardIdentifier="about" title="About" useStoryboardIdentifierAsRestorationIdentifier="YES" id="3kg-Bk-lvv" customClass="aboutView" customModule="MFSMobile" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" allowsSelection="NO" rowHeight="44" estimatedRowHeight="40" sectionHeaderHeight="18" sectionFooterHeight="18" id="BL3-4k-nFQ">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="40" sectionHeaderHeight="18" sectionFooterHeight="18" id="BL3-4k-nFQ">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
@@ -3076,11 +3076,11 @@
                             </tableViewSection>
                             <tableViewSection id="s6R-hL-XXm">
                                 <cells>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="130" id="Q48-TL-A3t">
-                                        <rect key="frame" x="0.0" y="1271.5" width="375" height="130"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="Q48-TL-A3t">
+                                        <rect key="frame" x="0.0" y="1271.5" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Q48-TL-A3t" id="56H-8S-euw">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="129.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Ayk-c0-vF6">

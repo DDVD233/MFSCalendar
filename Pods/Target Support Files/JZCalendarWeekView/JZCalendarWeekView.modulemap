@@ -1,0 +1,6 @@
+framework module JZCalendarWeekView {
+  umbrella header "JZCalendarWeekView-umbrella.h"
+
+  export *
+  module * { export * }
+}

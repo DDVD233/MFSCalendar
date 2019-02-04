@@ -24,7 +24,6 @@ class aboutView: UITableViewController, MFMailComposeViewControllerDelegate {
     override func viewDidAppear(_ animated: Bool) {
         let podAckFile = Bundle.main.url(forResource: "Acknowledgements", withExtension: "markdown")!
         let down = Down(markdownString: try! String(contentsOf: podAckFile))
-        tableView.estimatedRowHeight = 50
         
         if let attributedString = try? down.toAttributedString() {
             dependenciesTextView.attributedText = attributedString
@@ -36,6 +35,14 @@ class aboutView: UITableViewController, MFMailComposeViewControllerDelegate {
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableView.automaticDimension
+    }
+    
+    override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.section == 3 {
+            return 1000
+        } else {
+            return 55
+        }
     }
     
     @IBAction func sendEmail(_ sender: Any) {

@@ -1,0 +1,737 @@
+//
+//  JZBaseWeekView.swift
+//  JZCalendarWeekView
+//
+//  Created by Jeff Zhang on 28/3/18.
+//  Copyright © 2018 Jeff Zhang. All rights reserved.
+//
+
+public protocol JZBaseViewDelegate: class {
+    
+    /// When initDate changed, this function will be called. You can get the current date by adding numOfDays on initDate
+    ///
+    /// - Parameters:
+    ///   - weekView: current JZBaseWeekView
+    ///   - initDate: the new value of initDate
+    func initDateDidChange(_ weekView: JZBaseWeekView, initDate: Date)
+}
+
+extension JZBaseViewDelegate {
+    // Keep it optional
+    func initDateDidChange(_ weekView: JZBaseWeekView, initDate: Date) {}
+}
+
+open class JZBaseWeekView: UIView {
+    
+    public var collectionView: JZCollectionView!
+    public var flowLayout: JZWeekViewFlowLayout!
+    
+    /**
+     - The initial date of current collectionView. When page is not scrolling, the inital date is always
+     (numOfDays) days before current page first date, which means the start of the collectionView, not the current page first date
+     - The core structure of JZCalendarWeekView is 3 pages, previous-current-next
+     - If you want to update this value instead of using [updateWeekView(to date: Date)](), please **make sure the date is startOfDay**.
+    */
+    public var initDate: Date! {
+        didSet {
+            baseDelegate?.initDateDidChange(self, initDate: initDate)
+        }
+    }
+    
+    /// Make sure the endDate is always greater than startDate
+    /// If call updateView to a date, which is not in the range, you weekview won't be able to scroll
+    public var scrollableRange: (startDate: Date?, endDate: Date?) {
+        didSet {
+            self.scrollableRange = (self.scrollableRange.startDate?.startOfDay, self.scrollableRange.endDate?.startOfDay)
+            setHorizontalEdgesOffsetX()
+        }
+    }
+    public var numOfDays: Int!
+    public var scrollType: JZScrollType!
+    public var currentTimelineType: JZCurrentTimelineType! {
+        didSet {
+            let viewClass = currentTimelineType == .section ? JZCurrentTimelineSection.self : JZCurrentTimelinePage.self
+            self.collectionView.register(viewClass, forSupplementaryViewOfKind: JZSupplementaryViewKinds.currentTimeline, withReuseIdentifier: JZSupplementaryViewKinds.currentTimeline)
+        }
+    }
+    public var firstDayOfWeek: DayOfWeek?
+    public var allEventsBySection: [Date: [JZBaseEvent]]! {
+        didSet {
+            self.isAllDaySupported = allEventsBySection is [Date: [JZAllDayEvent]]
+            if isAllDaySupported {
+                setupAllDayEvents()
+            }
+        }
+    }
+    public var notAllDayEventsBySection = [Date: [JZAllDayEvent]]()
+    public var allDayEventsBySection = [Date: [JZAllDayEvent]]()
+    
+    public weak var baseDelegate: JZBaseViewDelegate?
+    open var contentViewWidth: CGFloat {
+        return frame.width - flowLayout.rowHeaderWidth - flowLayout.contentsMargin.left - flowLayout.contentsMargin.right
+    }
+    private var isFirstAppear: Bool = true
+    internal var isAllDaySupported: Bool!
+    internal var initialContentOffset = CGPoint.zero
+    internal var scrollSections:CGFloat!
+    
+    // Scrollable Range
+    internal var scrollableEdges: (leftX: CGFloat?, rightX: CGFloat?)
+    private var isDirectionLocked = false
+    
+    override public init(frame: CGRect) {
+        super.init(frame: frame)
+        setup()
+    }
+    
+    required public init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        setup()
+    }
+        
+    open func setup() {
+        
+        flowLayout = JZWeekViewFlowLayout()
+        flowLayout.delegate = self
+        
+        collectionView = JZCollectionView(frame: bounds, collectionViewLayout: flowLayout)
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.isDirectionalLockEnabled = true
+        collectionView.bounces = false
+        collectionView.showsVerticalScrollIndicator = false
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.backgroundColor = UIColor.white
+        addSubview(collectionView)
+        collectionView.setAnchorConstraintsFullSizeTo(view: self)
+        
+        registerViewClasses()
+    }
+    
+    /// Override this function to customise items, supplimentaryViews and decorationViews
+    open func registerViewClasses() {
+        // supplementary
+        self.collectionView.registerSupplimentaryViews([JZColumnHeader.self, JZCornerHeader.self, JZRowHeader.self, JZAllDayHeader.self])
+        
+        // decoration
+        flowLayout.registerDecorationViews([JZColumnHeaderBackground.self, JZRowHeaderBackground.self,
+                                            JZAllDayHeaderBackground.self, JZAllDayCorner.self])
+        flowLayout.register(JZGridLine.self, forDecorationViewOfKind: JZDecorationViewKinds.verticalGridline)
+        flowLayout.register(JZGridLine.self, forDecorationViewOfKind: JZDecorationViewKinds.horizontalGridline)
+    }
+   
+    open override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        flowLayout.sectionWidth = getSectionWidth()
+        initialContentOffset = collectionView.contentOffset
+    }
+
+    /// Was going to use toDecimal1Value as well, but the CGFloat is always got the wrong precision
+    /// In order to make sure the width of all sections is the same, add few points to CGFloat
+    private func getSectionWidth() -> CGFloat {
+        var sectionWidth = contentViewWidth / CGFloat(numOfDays)
+        let remainder = sectionWidth.truncatingRemainder(dividingBy: 1)
+        switch remainder {
+        case 0...0.25:
+            sectionWidth = sectionWidth.rounded(.down)
+        case 0.25...0.75:
+            sectionWidth = sectionWidth.rounded(.down) + 0.5
+        default:
+            sectionWidth = sectionWidth.rounded(.up)
+        }
+        // Maximum added width for row header should be 0.25 * numberOfRows
+        let rowHeaderWidth = frame.width - flowLayout.contentsMargin.left - flowLayout.contentsMargin.right - sectionWidth * CGFloat(numOfDays)
+        flowLayout.rowHeaderWidth = rowHeaderWidth
+        return sectionWidth
+    }
+    
+    /**
+     Basic Setup method for JZCalendarWeekView,it **must** be called.
+     
+     - Parameters:
+        - numOfDays: Number of days in a page
+        - setDate: The initial set date, the first date in current page except WeekView (numOfDays = 7)
+        - allEvents: The dictionary of all the events for present. JZWeekViewHelper.getIntraEventsByDate can help transform the data
+        - firstDayOfWeek: First day of a week, **only works when numOfDays is 7**. Default value is Sunday
+        - scrollType: The horizontal scroll type for this view. Default value is pageScroll
+        - currentTimelineType: The current time line type for this view. Default value is section
+        - visibleTime: WeekView will be scroll to this time, when it appears the **first time**. This visibleTime only determines **y** offset. Defaut value is current time.
+        - scrollableRange: The scrollable area for this weekView, both start and end dates are included, set nil as unlimited in one side
+    */
+    open func setupCalendar(numOfDays: Int,
+                            setDate: Date,
+                            allEvents: [Date:[JZBaseEvent]],
+                            scrollType: JZScrollType = .pageScroll,
+                            firstDayOfWeek :DayOfWeek? = nil,
+                            currentTimelineType: JZCurrentTimelineType = .section,
+                            visibleTime: Date = Date(),
+                            scrollableRange: (startDate: Date?, endDate: Date?)? = (nil, nil)) {
+        
+        self.numOfDays = numOfDays
+        if numOfDays == 7 {
+            updateFirstDayOfWeek(setDate: setDate, firstDayOfWeek: firstDayOfWeek ?? .Sunday)
+        } else {
+            self.initDate = setDate.startOfDay.add(component: .day, value: -numOfDays)
+        }
+        self.allEventsBySection = allEvents
+        self.scrollType = scrollType
+        self.scrollableRange.startDate = scrollableRange?.startDate
+        self.scrollableRange.endDate = scrollableRange?.endDate
+        self.currentTimelineType = currentTimelineType
+        
+        DispatchQueue.main.async { [unowned self] in
+            self.layoutSubviews()
+            self.forceReload(reloadEvents: allEvents)
+            
+            if self.isFirstAppear {
+                self.isFirstAppear = false
+                self.scrollWeekView(to: visibleTime)
+            }
+        }
+    }
+    
+    open func setupAllDayEvents() {
+        notAllDayEventsBySection.removeAll()
+        allDayEventsBySection.removeAll()
+        for (date, events) in allEventsBySection {
+            let allDayEvents = events as! [JZAllDayEvent]
+            notAllDayEventsBySection[date] = allDayEvents.filter { !$0.isAllDay }
+            allDayEventsBySection[date] = allDayEvents.filter{ $0.isAllDay }
+        }
+    }
+    
+    /// This function is used to update the AllDayBar height
+    ///
+    /// - Parameter isScrolling: Whether the collectionView is scrolling now
+    open func updateAllDayBar(isScrolling: Bool) {
+        guard isAllDaySupported else { return }
+        var maxEventsCount: Int = 0
+        getDatesInCurrentPage(isScrolling: isScrolling).forEach {
+            let count = allDayEventsBySection[$0]?.count ?? 0
+            if count > maxEventsCount {
+                maxEventsCount = count
+            }
+        }
+        let newAllDayHeader = getAllDayHeaderHeight(maxEventsCount: maxEventsCount)
+        if newAllDayHeader != flowLayout.allDayHeaderHeight {
+            // Check whether we need update the allDayHeaderHeight
+            if !isScrolling || !willEffectContentSize(difference: flowLayout.allDayHeaderHeight - newAllDayHeader) {
+                flowLayout.allDayHeaderHeight = newAllDayHeader
+            }
+        }
+    }
+    
+    /// You can simply override this method to customise your preferred AllDayHeader height rule.
+    ///
+    /// If the actual height(contentSize height) is higher than this one, then the AllDayHeader will become scrollable.
+    /// - Parameter maxEventsCount: Among all days appeared in current page, the maximum all-day events count in one day
+    open func getAllDayHeaderHeight(maxEventsCount: Int) -> CGFloat {
+        return flowLayout.defaultAllDayOneLineHeight * CGFloat(min(maxEventsCount, 2))
+    }
+    
+    /// Update collectionViewLayout with custom flowLayout. For some other values like gridThickness and contentsMargin, please inherit from JZWeekViewFlowLayout to change the default value
+    /// - Parameter flowLayout: Custom CalendarWeekView flowLayout
+    open func updateFlowLayout(_ flowLayout: JZWeekViewFlowLayout) {
+        self.flowLayout.hourHeight = flowLayout.hourHeight
+        self.flowLayout.rowHeaderWidth = flowLayout.rowHeaderWidth
+        self.flowLayout.columnHeaderHeight = flowLayout.columnHeaderHeight
+        self.flowLayout.hourGridDivision = flowLayout.hourGridDivision
+        self.flowLayout.invalidateLayoutCache()
+        self.flowLayout.invalidateLayout()
+    }
+    
+    /// Reload the collectionView and flowLayout
+    /// - Parameters:
+    ///   - reloadEvents: If provided new events, current events will be reloaded. Default value is nil.
+    open func forceReload(reloadEvents: [Date: [JZBaseEvent]]? = nil) {
+        if let events = reloadEvents { self.allEventsBySection = events }
+
+        DispatchQueue.main.async { [weak self] in
+            guard let strongSelf = self else { return }
+            strongSelf.updateAllDayBar(isScrolling: false)
+            // initial day is one page before the settle day
+            strongSelf.collectionView.setContentOffsetWithoutDelegate(CGPoint(x:strongSelf.contentViewWidth, y:strongSelf.getYOffset()), animated: false)
+            strongSelf.flowLayout.invalidateLayoutCache()
+            strongSelf.collectionView.reloadData()
+            strongSelf.setHorizontalEdgesOffsetX()
+        }
+    }
+    
+    /// Notice: A temporary solution to fix the scroll from bottom issue when isScrolling
+    /// The issue is because the decreased height value will cause the system to change the collectionView contentOffset, but the affected contentOffset will
+    /// greater than the contentSize height, and the view will show some abnormal updates, this value will be used with isScrolling to check whether the in scroling change will be applied
+    private func willEffectContentSize(difference: CGFloat) -> Bool {
+        return collectionView.contentOffset.y + difference + collectionView.bounds.height > collectionView.contentSize.height
+    }
+    
+    /// Fix collectionView scroll from bottom (contentsize height decreased) wrong offset issue
+    private func getYOffset() -> CGFloat {
+        guard isAllDaySupported else { return collectionView.contentOffset.y }
+        let bottomOffset = flowLayout.collectionViewContentSize.height - collectionView.bounds.height
+        if collectionView.contentOffset.y > bottomOffset {
+            return bottomOffset
+        } else {
+            return collectionView.contentOffset.y
+        }
+    }
+    
+    /// Reload the WeekView to date with no animation (Horizontally).
+    /// If the date you set is out of scrollableRange, it will update to that date, but it won't be able to scroll.
+    ///
+    /// The vertical animated scroll method is *scrollWeekView(to time: Date)*.
+    /// - Parameters:
+    ///    - date: this date is the current date in one-day view rather than initDate
+    open func updateWeekView(to date: Date) {
+        self.initDate = date.startOfDay.add(component: .day, value: -numOfDays)
+        DispatchQueue.main.async { [unowned self] in
+            self.layoutSubviews()
+            self.forceReload()
+        }
+    }
+    
+    /// Vertically scroll collectionView to the specific time in a day.
+    /// If the time you set is too late, it will only reach the bottom 24:00 as the maximum value.
+    ///
+    /// The horizontal update method is *updateWeekView(to date: Date)*.
+    ///
+    /// - Parameter time: Only **hour and min** will be calulated for the Y offset
+    open func scrollWeekView(to time: Date) {
+        let components = Calendar.current.dateComponents([.hour, .minute], from: time)
+        let hour = CGFloat(components.hour!) + CGFloat(components.minute!) / 60
+        let setTimeY = hour * flowLayout.hourHeight + flowLayout.contentsMargin.top
+        let maxOffsetY = collectionView.contentSize.height - collectionView.frame.height + flowLayout.columnHeaderHeight + flowLayout.allDayHeaderHeight + flowLayout.contentsMargin.bottom + flowLayout.contentsMargin.top
+        collectionView.setContentOffsetWithoutDelegate(CGPoint(x: collectionView.contentOffset.x,
+                                                               y: max(0, min(setTimeY, maxOffsetY))), animated: false)
+    }
+    
+    /// Get current event with item indexPath
+    ///
+    /// - Parameter indexPath: The indexPath of an item in collectionView
+    open func getCurrentEvent(with indexPath: IndexPath) -> JZBaseEvent? {
+        let date = flowLayout.dateForColumnHeader(at: indexPath)
+        return isAllDaySupported ? notAllDayEventsBySection[date]?[indexPath.row] : allEventsBySection[date]?[indexPath.row]
+    }
+    
+    open func getDatesInCurrentPage(isScrolling: Bool) -> [Date] {
+        var dates = [Date]()
+        if !isScrolling {
+            for i in numOfDays..<2*numOfDays {
+                dates.append(initDate.set(day: initDate.day + i))
+            }
+            return dates
+        }
+        // Sometimes end scrolling will cause some 0.xxx offset margin
+        let margin: CGFloat = 2
+        var startDate = getDateForX(xCollectionView: collectionView.contentOffset.x + margin + flowLayout.rowHeaderWidth)
+        let endDate = getDateForX(xCollectionView: collectionView.contentOffset.x + frame.width - margin)
+        repeat {
+            dates.append(startDate)
+            startDate = startDate.add(component: .day, value: 1)
+        } while startDate <= endDate
+       
+        return dates
+    }
+    
+    /**
+        Used to Refresh the weekView when viewWillTransition
+     
+        **Must override viewWillTransition in the ViewController and call this function**
+    */
+    open func refreshWeekView() {
+        updateWeekView(to: self.initDate.add(component: .day, value: numOfDays))
+    }
+    
+    open func updateFirstDayOfWeek(setDate: Date, firstDayOfWeek: DayOfWeek?) {
+        guard let firstDayOfWeek = firstDayOfWeek, numOfDays == 7 else { return }
+        let setDayOfWeek = setDate.getDayOfWeek()
+        var diff = setDayOfWeek.rawValue - firstDayOfWeek.rawValue
+        if diff < 0 { diff = 7 - abs(diff) }
+        self.initDate = setDate.startOfDay.add(component: .day, value: -numOfDays - diff)
+        self.firstDayOfWeek = firstDayOfWeek
+    }
+    
+    /// Get Date for specific section.
+    /// The 0 section start from previous page, which means the first date section in current page should be **numOfDays**.
+    open func getDateForSection(_ section: Int) -> Date {
+        return Calendar.current.date(byAdding: .day, value: section, to: initDate)!
+    }
+    
+    /**
+     Get date excluding time from points
+     NOTICE: No need consider rowHeaderWidth, because that part is not considered in contentOffset
+        - Parameters:
+            - xCollectionView: x position in collectionView
+     */
+    open func getDateForX(xCollectionView: CGFloat) -> Date {
+        let section = Int((xCollectionView - flowLayout.rowHeaderWidth) / flowLayout.sectionWidth)
+        return getDateForSection(section)
+    }
+    
+    /// Get time from point y position
+    /// - Parameters:
+    ///    - yCollectionView: y position in collectionView
+    open func getDateForY(yCollectionView: CGFloat) -> (Int, Int) {
+        let adjustedY = yCollectionView - flowLayout.columnHeaderHeight - flowLayout.contentsMargin.top - flowLayout.allDayHeaderHeight
+        let hour = Int(adjustedY / flowLayout.hourHeight)
+        let minute = Int((adjustedY / flowLayout.hourHeight - CGFloat(hour)) * 60)
+        return (hour, minute)
+    }
+    
+    /**
+     Get date from current point, can be used for gesture recognizer
+        - Parameters:
+            - pointCollectionView: current point position in collectionView
+     */
+    open func getDateForPoint(pointCollectionView: CGPoint) -> Date {
+        
+        let yearMonthDay = getDateForX(xCollectionView: pointCollectionView.x)
+        let hourMinute = getDateForY(yCollectionView: pointCollectionView.y)
+        
+        return yearMonthDay.set(hour: hourMinute.0, minute: hourMinute.1, second: 0)
+    }
+    
+    /// Get weekview scroll direction (directionalLockEnabled)
+    fileprivate func getScrollDirection() -> ScrollDirection {
+        var scrollDirection: ScrollDirection
+        
+        if initialContentOffset.x != collectionView.contentOffset.x &&
+            initialContentOffset.y != collectionView.contentOffset.y {
+            scrollDirection = .crazy
+        } else {
+            if initialContentOffset.x > collectionView.contentOffset.x {
+                scrollDirection = .left
+            } else if initialContentOffset.x < collectionView.contentOffset.x {
+                scrollDirection = .right
+            } else if initialContentOffset.y > collectionView.contentOffset.y {
+                scrollDirection = .up
+            } else if initialContentOffset.y < collectionView.contentOffset.y {
+                scrollDirection = .down
+            } else {
+                scrollDirection = .none
+            }
+        }
+        return scrollDirection
+    }
+    
+    /// Get scroll direction axis
+    fileprivate var scrollDirectionAxis: ScrollDirection {
+        switch getScrollDirection() {
+        case .left, .right:
+            return .horizontal
+        case .up, .down:
+            return .vertical
+        case .crazy:
+            return .crazy
+        default:
+            return .none
+        }
+    }
+}
+
+
+extension JZBaseWeekView: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
+    // In order to keep efficiency, only 3 pages exist at the same time, previous-current-next
+    open func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 3 * numOfDays
+    }
+    
+    open func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        let date = flowLayout.dateForColumnHeader(at: IndexPath(item: 0, section: section))
+        
+        if let events = allEventsBySection[date] {
+            return isAllDaySupported ? notAllDayEventsBySection[date]!.count : events.count
+        } else {
+            return 0
+        }
+    }
+    
+    open func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        preconditionFailure("This method must be overridden")
+    }
+    
+    open func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        let view: UICollectionReusableView
+        
+        switch kind {
+            
+        case JZSupplementaryViewKinds.columnHeader:
+            let columnHeader = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: kind, for: indexPath) as! JZColumnHeader
+            columnHeader.updateView(date: flowLayout.dateForColumnHeader(at: indexPath))
+            view = columnHeader
+            
+        case JZSupplementaryViewKinds.rowHeader:
+            let rowHeader = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: kind, for: indexPath) as! JZRowHeader
+            rowHeader.updateView(date: flowLayout.timeForRowHeader(at: indexPath))
+            view = rowHeader
+            
+        case JZSupplementaryViewKinds.cornerHeader:
+            let cornerHeader = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: kind, for: indexPath) as! JZCornerHeader
+            view = cornerHeader
+            
+        case JZSupplementaryViewKinds.allDayHeader:
+            let alldayHeader = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: kind, for: indexPath) as! JZAllDayHeader
+            alldayHeader.updateView(views: [])
+            view = alldayHeader
+            
+        case JZSupplementaryViewKinds.currentTimeline:
+            if currentTimelineType == .page {
+                let currentTimeline = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: kind, for: indexPath) as! JZCurrentTimelinePage
+                view = getPageTypeCurrentTimeline(timeline: currentTimeline, indexPath: indexPath)
+            } else {
+                let currentTimeline = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: kind, for: indexPath) as! JZCurrentTimelineSection
+                view = getSectionTypeCurrentTimeline(timeline: currentTimeline, indexPath: indexPath)
+            }
+        default:
+            view = UICollectionReusableView()
+        }
+        return view
+    }
+    
+    open func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        initialContentOffset = scrollView.contentOffset
+    }
+    
+    open func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        if scrollDirectionAxis == .vertical || scrollDirectionAxis == .none { return }
+        targetContentOffset.pointee = scrollView.contentOffset
+        pagingEffect(scrollView: scrollView, velocity: velocity)
+    }
+    
+    // This function will be called when veritical scrolling ends
+    open func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        isDirectionLocked = false
+    }
+    
+    // This function will be called by setting content offset (pagingEffect function)
+    open func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+        loadPage()
+    }
+    
+    open func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+        var lockedDirection: ScrollDirection!
+        
+        if !isDirectionLocked {
+            let isScrollingHorizontally = abs(scrollView.contentOffset.x - initialContentOffset.x) > abs(scrollView.contentOffset.y - initialContentOffset.y)
+            lockedDirection = isScrollingHorizontally ? .vertical : .horizontal
+            isDirectionLocked = true
+        }
+        
+        // forbid scrolling two directions together
+        if scrollDirectionAxis == .crazy {
+            let newOffset = lockedDirection == .vertical ? CGPoint(x: scrollView.contentOffset.x, y: initialContentOffset.y) :
+                                                           CGPoint(x: initialContentOffset.x, y: scrollView.contentOffset.y)
+            scrollView.contentOffset = newOffset
+        }
+        
+        // All Day Bar update
+        guard flowLayout.sectionWidth != nil && scrollDirectionAxis != .vertical else { return }
+        checkScrollableRange(contentOffsetX: scrollView.contentOffset.x)
+        updateAllDayBar(isScrolling: true)
+    }
+    
+    private func checkScrollableRange(contentOffsetX: CGFloat) {
+        if let leftX = scrollableEdges.leftX, contentOffsetX < leftX {
+            collectionView.setContentOffset(CGPoint(x: leftX, y: collectionView.contentOffset.y), animated: false)
+        }
+        
+        if let rightX = scrollableEdges.rightX, contentOffsetX > rightX {
+            collectionView.setContentOffset(CGPoint(x: rightX, y: collectionView.contentOffset.y), animated: false)
+        }
+    }
+    
+    
+    /// This method will be called automatically when ForceReload or resetting the scrollableRange value
+    /// **If you want to reset the scrollType, numsOfDays, initDate without calling forceReload, you should call this method**
+    public func setHorizontalEdgesOffsetX() {
+        let currentPageFirstDate = initDate.add(component: .day, value: numOfDays)
+        let currentPageLastDate = initDate.add(component: .day, value: numOfDays * 2 - 1)
+        
+        if let endDate = scrollableRange.endDate, endDate < currentPageFirstDate {
+            // out of range
+            scrollableEdges.leftX = contentViewWidth
+        } else {
+            if let startDate = scrollableRange.startDate {
+                if startDate >= currentPageFirstDate {
+                    scrollableEdges.leftX = contentViewWidth
+                } else {
+                    let firstDateInView = initDate!
+                    if scrollType == .pageScroll || startDate <= firstDateInView {
+                        scrollableEdges.leftX = nil
+                    } else {
+                        let days = Date.daysBetween(start: initDate, end: startDate, ignoreHours: true)
+                        scrollableEdges.leftX = (flowLayout.sectionWidth ?? 0) * CGFloat(days)
+                    }
+                }
+            } else {
+                scrollableEdges.leftX = nil
+            }
+        }
+        
+        if let startDate = scrollableRange.startDate, startDate > currentPageLastDate {
+            // out of range
+            scrollableEdges.rightX = contentViewWidth
+        } else {
+            if let endDate = scrollableRange.endDate {
+                if endDate <= currentPageLastDate {
+                    scrollableEdges.rightX = contentViewWidth
+                } else {
+                    let lastDateInView = initDate.add(component: .day, value: numOfDays * 3 - 1)
+                    if scrollType == .pageScroll || endDate >= lastDateInView {
+                        scrollableEdges.rightX = nil
+                    } else {
+                        let days = Date.daysBetween(start: initDate, end: endDate, ignoreHours: true)
+                        scrollableEdges.rightX = (flowLayout.sectionWidth ?? 0) * CGFloat(days - numOfDays + 1)
+                    }
+                }
+            } else {
+                scrollableEdges.rightX = nil
+            }
+        }
+    }
+    
+    /// It is used for scroll paging effect, scrollTypes sectionScroll and pageScroll applied here
+    private func pagingEffect(scrollView: UIScrollView, velocity: CGPoint) {
+        let yCurrentOffset = scrollView.contentOffset.y
+        let xCurrentOffset = scrollView.contentOffset.x
+        let setOffsetX: CGFloat
+        
+        let scrollXDistance = initialContentOffset.x - xCurrentOffset
+        // scroll one section
+        if scrollType == .sectionScroll {
+            let sectionWidth = flowLayout.sectionWidth!
+            scrollSections = (scrollXDistance/sectionWidth).rounded()
+            setOffsetX = initialContentOffset.x - sectionWidth * scrollSections
+        } else {
+            // Only for pageScroll
+            let scrollProportion: CGFloat = 1/4
+            let isVelocitySatisfied = abs(velocity.x) > 0.2
+            // scroll a whole page
+            if scrollXDistance >= 0 {
+                if scrollXDistance >= scrollProportion * contentViewWidth || isVelocitySatisfied {
+                    setOffsetX = initialContentOffset.x - contentViewWidth
+                } else {
+                    setOffsetX = initialContentOffset.x
+                }
+            } else {
+                if -scrollXDistance >= scrollProportion * contentViewWidth || isVelocitySatisfied {
+                    setOffsetX = initialContentOffset.x + contentViewWidth
+                } else {
+                    setOffsetX = initialContentOffset.x
+                }
+            }
+        }
+        if setOffsetX.isEqual(to: scrollView.contentOffset.x) {
+            // If setOffsetX equals to current offsetX, then scrollViewDidEndScrollingAnimation will not be called, should update view here
+            loadPage()
+        } else {
+            // page will be loaded in scrollViewDidEndScrollingAnimation
+            scrollView.setContentOffset(CGPoint(x: setOffsetX, y: yCurrentOffset), animated: true)
+        }
+    }
+    
+    /// Load the page after horizontal scroll action.
+    /// Can be overrided to do some operations before reload.
+    open func loadPage() {
+        scrollType == .pageScroll ? loadPagePageScroll() : loadPageSectionScroll()
+        isDirectionLocked = false
+    }
+    
+    // sectionScroll load page depends on scrollSections
+    private func loadPageSectionScroll() {
+        if scrollSections != 0 {
+            initDate = initDate.add(component: .day, value: -Int(scrollSections))
+            self.forceReload()
+        }
+    }
+
+    /// pageScroll loading next page or previous page (Only three pages (3*numOfDays) exist at the same time)
+    private func loadPagePageScroll() {
+        let maximumOffset = collectionView.contentSize.width - collectionView.frame.width
+        let currentOffset = collectionView.contentOffset.x
+    
+        if maximumOffset <= currentOffset {
+            //load next page
+            loadNextOrPrevPage(isNext: true)
+        }
+        if currentOffset <= 0 {
+            //load previous page
+            loadNextOrPrevPage(isNext: false)
+        }
+    }
+    
+    private func loadNextOrPrevPage(isNext: Bool) {
+        let addValue = isNext ? numOfDays : -numOfDays
+        self.initDate = self.initDate.add(component: .day, value: addValue!)
+        self.forceReload()
+    }
+    
+    /// Only for loading page in sectionScroll type
+    private func loadPageWithScrollSections(needCalulateScrollSections: Bool) {
+        if needCalulateScrollSections {
+            setScrollSections(scrollXDistance: initialContentOffset.x - collectionView.contentOffset.x)
+        }
+        if scrollSections != 0 {
+            initDate = initDate.add(component: .day, value: -Int(scrollSections))
+            self.forceReload()
+        }
+    }
+    
+    private func setScrollSections(scrollXDistance: CGFloat) {
+        let sectionWidth = flowLayout.sectionWidth!
+        scrollSections = (scrollXDistance/sectionWidth).rounded()
+    }
+    
+    /// Get the section Type current timeline
+    open func getSectionTypeCurrentTimeline(timeline: JZCurrentTimelineSection, indexPath: IndexPath) -> UICollectionReusableView {
+        let date = flowLayout.dateForColumnHeader(at: indexPath)
+        timeline.isHidden = !date.isToday
+        return timeline
+    }
+    
+    /// Get the page Type current timeline
+    /// Rules are quite confused for now
+    open func getPageTypeCurrentTimeline(timeline: JZCurrentTimelinePage, indexPath: IndexPath) -> UICollectionReusableView {
+        let date = flowLayout.dateForColumnHeader(at: indexPath)
+        let daysToToday = Date.daysBetween(start: date, end: Date(), ignoreHours: true)
+        timeline.isHidden = abs(daysToToday) > numOfDays - 1
+        timeline.updateView(needShowBallView: daysToToday == 0)
+        return timeline
+    }
+}
+
+extension JZBaseWeekView: WeekViewFlowLayoutDelegate {
+    
+    public func collectionView(_ collectionView: UICollectionView, layout: JZWeekViewFlowLayout, dayForSection section: Int) -> Date {
+        return getDateForSection(section)
+    }
+    
+    public func collectionView(_ collectionView: UICollectionView, layout: JZWeekViewFlowLayout, startTimeForItemAtIndexPath indexPath: IndexPath) -> Date {
+        let date = flowLayout.dateForColumnHeader(at: indexPath)
+        
+        if let events = allEventsBySection[date] {
+            let event = isAllDaySupported ? notAllDayEventsBySection[date]![indexPath.item] : events[indexPath.item]
+            return event.intraStartDate
+        } else {
+            fatalError("Cannot get events")
+        }
+    }
+    
+    public func collectionView(_ collectionView: UICollectionView, layout: JZWeekViewFlowLayout, endTimeForItemAtIndexPath indexPath: IndexPath) -> Date {
+        let date = flowLayout.dateForColumnHeader(at: indexPath)
+        
+        if let events = allEventsBySection[date] {
+            let event = isAllDaySupported ? notAllDayEventsBySection[date]![indexPath.item] : events[indexPath.item]
+            return event.intraEndDate
+        } else {
+            fatalError("Cannot get events")
+        }
+    }
+    
+    //TODO: Only used when multiple cell types are used and need different overlap rules => layoutItemsAttributes
+    public func collectionView(_ collectionView: UICollectionView, layout: JZWeekViewFlowLayout, cellTypeForItemAtIndexPath indexPath: IndexPath) -> String {
+        return JZSupplementaryViewKinds.eventCell
+    }
+}
