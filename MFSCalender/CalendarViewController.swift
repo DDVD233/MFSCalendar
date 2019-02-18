@@ -107,7 +107,7 @@ class CalendarViewController: SegmentedPagerTabStripViewController, UIGestureRec
             if let thisViewController = viewController as? ADay {
                 thisViewController.tableView.panGestureRecognizer.require(toFail: scopeGesture)
             } else if let thisViewController = viewController as? eventViewController {
-                thisViewController.eventView.panGestureRecognizer.require(toFail: scopeGesture)
+//                thisViewController.eventView.panGestureRecognizer.require(toFail: scopeGesture)
             } else if let thisViewController = viewController as? homeworkViewController {
                 thisViewController.homeworkTable.panGestureRecognizer.require(toFail: scopeGesture)
             }
@@ -140,7 +140,7 @@ class CalendarViewController: SegmentedPagerTabStripViewController, UIGestureRec
     func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         let shouldBegin =
             ((classViewController.tableView.contentOffset.y <= -classViewController.tableView.contentInset.top) &&
-            (eventViewController.eventView.contentOffset.y <= -eventViewController.eventView.contentInset.top)) && (homeworkViewController.homeworkTable.contentOffset.y <= -homeworkViewController.homeworkTable.contentInset.top)
+            (eventViewController.newEventView.content <= -eventViewController.newEventView.contentInset.top)) && (homeworkViewController.homeworkTable.contentOffset.y <= -homeworkViewController.homeworkTable.contentInset.top)
         if shouldBegin {
             let velocity = (gestureRecognizer as! UIPanGestureRecognizer).velocity(in: self.view)
 //            往上拉->日历拉长。
