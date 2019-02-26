@@ -91,7 +91,6 @@ class LoginView {
                             var year = DateInRegion().year
                             // For example, if I'm a senior who will graduate in 2019.
                             // Then my gradelevel should be 12 - (2019-2019) = 12
-                            // It may be a bit hard to understand. But just think about it.
                             if DateInRegion().month > 8 {
                                 year += 1
                             }
