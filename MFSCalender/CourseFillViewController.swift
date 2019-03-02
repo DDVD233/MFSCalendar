@@ -831,8 +831,13 @@ class courseFillController: UIViewController {
         let path = plistPath.appending(fileName)
         var listClasses = NSArray(contentsOfFile: path) as! [[String: Any]]
         
-        let lunch = ["className": "Lunch", "period": 7, "roomNumber": "DH/C", "teacher": ""] as [String : Any]
-        listClasses[6] = lunch
+        if Preferences().gradeLevel > 8 && Preferences().gradeLevel <= 12 {
+            let lunch = ["className": "Lunch", "period": 7, "roomNumber": "DH/C", "teacher": ""] as [String : Any]
+            listClasses[6] = lunch
+        } else if Preferences().gradeLevel > 0 && Preferences().gradeLevel <= 8 {
+            let lunch = ["className": "Lunch", "period": 6, "roomNumber": "DH/C", "teacher": ""] as [String : Any]
+            listClasses[5] = lunch
+        }
         
         if letter == "B" {
             let assembly = ["className": "Assembly", "period": 5, "roomNumber": "Auditorium", "teacher": ""] as [String : Any]

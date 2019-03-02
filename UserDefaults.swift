@@ -141,6 +141,24 @@ public class Preferences {
         }
     }
     
+    public var emailName: String? {
+        get {
+            return userDefaults.string(forKey: "emailName" )
+        }
+        set(value) {
+            userDefaults.set(value, forKey: "emailName" )
+        }
+    }
+    
+    public var emailPassword: String? {
+        get {
+            return userDefaults.string(forKey: "emailPassword" )
+        }
+        set(value) {
+            userDefaults.set(value, forKey: "emailPassword" )
+        }
+    }
+    
     public var refreshDate: String? {
         get {
             return userDefaults.string(forKey: "refreshDate" )

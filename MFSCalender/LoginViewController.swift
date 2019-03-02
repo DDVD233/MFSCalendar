@@ -130,44 +130,6 @@ class LoginView {
         }
         
         semaphore.wait()
-        
-//        let urlString = "https://mfriends.myschoolapp.com" + photoLink
-//        let url = URL(string: urlString)
-//        //create request.
-//        var request3 = URLRequest(url: url!)
-//        request3.timeoutInterval = 5
-//        let downloadTask = URLSession.shared.downloadTask(with: request3, completionHandler: { (location: URL?, response: URLResponse?, error: Error?) -> Void in
-//            if error == nil {
-//                //Temp location:
-//                print("location:\(String(describing: location))")
-//                let locationPath = location!.path
-//                //Copy to User Directory
-//                let photoPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-//                let path = photoPath.appending("/ProfilePhoto.png")
-//                //Init FileManager
-//                let fileManager = FileManager.default
-//                if fileManager.fileExists(atPath: path) {
-//                    do {
-//                        try fileManager.removeItem(atPath: path)
-//                    } catch {
-//                        NSLog("File does not exist! (Which is impossible)")
-//                    }
-//                }
-//                try! fileManager.moveItem(atPath: locationPath, toPath: path)
-//                print("new location:\(path)")
-//                userDefaults.set(false, forKey: "didDownloadFullSizeImage")
-//            } else {
-//                DispatchQueue.main.async {
-//                    let presentMessage = error!.localizedDescription + " Please check your internet connection."
-//                    presentErrorMessage(presentMessage: presentMessage, layout: .statusLine)
-//                }
-//            }
-//            // semaphore.signal()
-//        })
-//
-//        //使用resume方法启动任务
-//        downloadTask.resume()
-        // semaphore.wait()
     }
 }
 
@@ -231,20 +193,19 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
 
     override func viewDidAppear(_ animated: Bool) {
         let isFirstTimeLogin = Preferences().isFirstTimeLogin
-//        if isFirstTimeLogin {
-//            let loginNotice = SCLAlertView()
-//            loginNotice.addButton("Go to myMFS website", action: {
-//                if #available(iOS 10.0, *) {
-//                    UIApplication.shared.open(URL(string: "https://mfriends.myschoolapp.com/app/#login")!, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: nil)
-//                } else {
-//                    UIApplication.shared.openURL(URL(string: "https://mfriends.myschoolapp.com/app/#login")!)
-//                    // Fallback on earlier versions
-//                }
-//            })
-//            loginNotice.showInfo("Welcome", subTitle: "Welcome to MFS Mobile. Please use your myMFS account to log in.", animationStyle: .bottomToTop)
-//
-//            Preferences().isFirstTimeLogin = false
-//        }
+        if isFirstTimeLogin {
+            Preferences().isFirstTimeLogin = false
+            let loginNotice = SCLAlertView()
+            loginNotice.addButton("Go to myMFS website", action: {
+                if #available(iOS 10.0, *) {
+                    UIApplication.shared.open(URL(string: "https://mfriends.myschoolapp.com/app/#login")!, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: nil)
+                } else {
+                    UIApplication.shared.openURL(URL(string: "https://mfriends.myschoolapp.com/app/#login")!)
+                    // Fallback on earlier versions
+                }
+            })
+            loginNotice.showInfo("Welcome", subTitle: "Welcome to MFS Mobile. Please use your myMFS account to log in.", animationStyle: .bottomToTop)
+        }
     }
 
     @objc func keyboardNotification(notification: NSNotification) {
