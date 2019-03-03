@@ -17,6 +17,11 @@ class EmailLoginViewController: UIViewController {
     @IBOutlet var indicatorView: UIView!
     @IBOutlet var NVIndicator: NVActivityIndicatorView!
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        indicatorView.isHidden = true
+    }
+    
     @IBAction func login(_ sender: Any) {
         let nameText = name.text
         let passwordText = password.text
@@ -36,7 +41,9 @@ class EmailLoginViewController: UIViewController {
         case "Success":
             let preferences = Preferences()
             preferences.emailName = nameText!
-            preferences.password = passwordText!
+            preferences.emailPassword = passwordText!
+            let parentVC = parent as! EmailViewController
+            parentVC.addEmailListView()
         case "WrongPassword":
             presentErrorMessage(presentMessage: "The username/password is incorrect. Please check your spelling.", layout: .cardView)
         case "InternalError":
@@ -62,7 +69,7 @@ class EmailLoginViewController: UIViewController {
             return ""
         }
         
-        let accountCheckURL = Preferences().davidBaseURL + "/email/authenticate/" + usernameTextUrlEscaped + "/" + passwordTextUrlEscaped
+        let accountCheckURL = "http://127.0.0.1:5050" + "/email/authenticate/" + usernameTextUrlEscaped + "/" + passwordTextUrlEscaped
         let url = NSURL(string: accountCheckURL)
         let request = URLRequest(url: url! as URL)
         

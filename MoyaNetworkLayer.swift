@@ -31,6 +31,7 @@ enum MyService {
     case getSteps(date: String)
     case reportSteps(steps: String, username: String, link: String)
     case getStepPoints(username: String)
+    case getAllEmails(username: String, password: String)
 }
 
 fileprivate let assetDir: URL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!
@@ -45,6 +46,8 @@ extension MyService: TargetType {
         switch self {
         case .getCalendarData, .getCalendarEvent, .dataVersionCheck, .meetTimeSearch, .getQuarterSchedule, .getSteps, .reportSteps, .getStepPoints:
             return URL(string: Preferences().davidBaseURL)!
+        case .getAllEmails:
+            return URL(string: "http://127.0.0.1:5050")!
         default:
             return URL(string: Preferences().baseURL)!
         }
@@ -84,6 +87,8 @@ extension MyService: TargetType {
             return "/recordSteps"
         case .getStepPoints(let username):
             return "/getStepPoints/" + username
+        case .getAllEmails(let username, let password):
+            return "/email/all/" + username + "/" + password
         }
     }
 
