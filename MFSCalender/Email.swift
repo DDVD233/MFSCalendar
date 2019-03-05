@@ -14,11 +14,13 @@ class Email {
     let body: String
     let subject: String
     let timeStamp: Int
-    init(senderName: String, senderAddress: String, body: String, subject: String, timeStamp: Int) {
+    let isRead: Bool
+    init(senderName: String, senderAddress: String, body: String, subject: String, timeStamp: Int, isRead: Bool) {
         self.senderName = senderName
         self.senderAddress = senderAddress
         self.body = body
         self.subject = subject
         self.timeStamp = timeStamp
+        self.isRead = isRead
     }
 }

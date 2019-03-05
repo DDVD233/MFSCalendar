@@ -74,6 +74,12 @@ extension String {
     var utf8Encoded: Data {
         return self.data(using: .utf8)!
     }
+    
+    func removeNewLine() -> String {
+        let str = self.replacingOccurrences(of: "^\\n*", with: "", options: .regularExpression)
+        print(str)
+        return str
+    }
 
     func convertToHtml(isTitle: Bool = false) -> NSAttributedString? {
         let font = UIFont.systemFont(ofSize: 15).fontName

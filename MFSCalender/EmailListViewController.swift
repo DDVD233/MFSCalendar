@@ -8,6 +8,8 @@
 
 import UIKit
 import SwiftDate
+import DGElasticPullToRefresh
+import DZNEmptyDataSet
 
 class EmailListViewController: UIViewController {
     var emailList = [[String: Any]]()
@@ -18,11 +20,24 @@ class EmailListViewController: UIViewController {
     //              }
     //            }
     @IBOutlet var emailTable: UITableView!
+    var isUpdatingEmail = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.emailTable.dataSource = self
         self.emailTable.delegate = self
+        self.emailTable.emptyDataSetSource = self
+        self.emailTable.emptyDataSetDelegate = self
+        self.parent?.navigationItem.title = "Inbox"
+        
+        let loadingview = DGElasticPullToRefreshLoadingViewCircle()
+        loadingview.tintColor = UIColor.white
+        emailTable.dg_addPullToRefreshWithActionHandler({ [weak self] () -> Void in
+            self?.getAllEmails()
+            self?.emailTable.dg_stopLoading()
+            }, loadingView: loadingview)
+        emailTable.dg_setPullToRefreshFillColor(UIColor(hexString: 0xFF7E79))
+        emailTable.dg_setPullToRefreshBackgroundColor(emailTable.backgroundColor!)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -30,10 +45,15 @@ class EmailListViewController: UIViewController {
     }
     
     func getAllEmails() {
-        emailList = [[String: Any]]()
+        isUpdatingEmail = true
+        self.parent?.navigationItem.title = "Updating..."
+        self.emailTable.reloadEmptyDataSet()
         let emailName = Preferences().emailName
         let emailPassword = Preferences().emailPassword
         provider.request(MyService.getAllEmails(username: emailName!, password: emailPassword!)) { (result) in
+            self.isUpdatingEmail = false
+            self.emailTable.reloadEmptyDataSet()
+            self.parent?.navigationItem.title = "Inbox"
             switch result {
             case .success(let response):
                 do {
@@ -44,13 +64,17 @@ class EmailListViewController: UIViewController {
                     guard let json = try JSONSerialization.jsonObject(with: response.data, options: .allowFragments) as? [[String: Any]] else {
                         return
                     }
+                    self.emailList = [[String: Any]]()
                     
+                    print(json.count)
+//                    print(json)
                     for items in json {
                         let email = Email(senderName: items["senderName"] as? String ?? "",
                                           senderAddress: items["senderAddress"] as? String ?? "",
                                           body: items["body"] as? String ?? "",
                                           subject: items["subject"] as? String ?? "",
-                                          timeStamp: items["timestamp"] as? Int ?? 0)
+                                          timeStamp: items["timestamp"] as? Int ?? 0,
+                                          isRead: (items["isRead"] as? Int ?? 1) == 1)
                         let receivedDate = DateInRegion.init(seconds: TimeInterval(email.timeStamp))
                         let now = DateInRegion()
                         var title = ""
@@ -60,6 +84,10 @@ class EmailListViewController: UIViewController {
                             title = "Yesterday"
                         } else if receivedDate.isAfterDate(now.dateAt(.startOfWeek), granularity: .second) {
                             title = "This Week"
+                        } else if receivedDate.isAfterDate((now - 1.weeks).dateAt(.startOfWeek), granularity: .second) {
+                            title = "Last Week"
+                        } else {
+                            title = "Earlier"
                         }
                         
                         if let arrayIndex = self.emailList.firstIndex(where: { (dict) -> Bool in
@@ -87,6 +115,36 @@ class EmailListViewController: UIViewController {
     }
 }
 
+extension EmailListViewController: DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
+    func image(forEmptyDataSet scrollView: UIScrollView!) -> UIImage! {
+        return UIImage(named: "No_homework.png")?.imageResize(sizeChange: CGSize(width: 95, height: 95))
+    }
+    
+    func title(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
+        let attr = [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: UIFont.TextStyle.headline)]
+        
+        var str = "There is no email to display."
+        if isUpdatingEmail {
+            str = "Updating emails..."
+        }
+        return NSAttributedString(string: str, attributes: attr)
+    }
+    
+    func buttonTitle(forEmptyDataSet scrollView: UIScrollView!, for state: UIControl.State) -> NSAttributedString! {
+        if isUpdatingEmail {
+            return NSAttributedString()
+        }
+        
+        let buttonTitleString = NSAttributedString(string: "Refresh...", attributes: [NSAttributedString.Key.foregroundColor: UIColor(hexString: 0xFF7E79)])
+        
+        return buttonTitleString
+    }
+    
+    func emptyDataSet(_ scrollView: UIScrollView!, didTap button: UIButton!) {
+        self.getAllEmails()
+    }
+}
+
 extension EmailListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 44
@@ -97,7 +155,7 @@ extension EmailListViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return emailList[section].count
+        return (emailList[section]["data"] as? [Email] ?? [Email]()).count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -110,9 +168,15 @@ extension EmailListViewController: UITableViewDelegate, UITableViewDataSource {
         }
         cell.subject.text = emailObject.subject
         cell.senderName.text = emailObject.senderName
-        cell.body.text = emailObject.body
+        cell.body.text = emailObject.body.convertToHtml()?.string.removeNewLine() ?? ""
+        
+        cell.unreadIndicator.isHidden = emailObject.isRead
         
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 120
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
