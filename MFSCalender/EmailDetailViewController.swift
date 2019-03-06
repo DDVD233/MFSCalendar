@@ -55,7 +55,7 @@ extension EmailDetailViewController: UITableViewDelegate, UITableViewDataSource 
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
+        return 3
     }
     
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -81,7 +81,7 @@ extension EmailDetailViewController: UITableViewDelegate, UITableViewDataSource 
             return UITableViewCell()
         }
         switch indexPath.row {
-        case 1:
+        case 2:
             let cell = emailDetailTable.dequeueReusableCell(withIdentifier: "emailDetailBodyCell", for: indexPath) as! EmailDetailBodyCell
             let webConfiguration = WKWebViewConfiguration()
             cell.webView = WKWebView(frame: .zero, configuration: webConfiguration)
@@ -104,10 +104,20 @@ extension EmailDetailViewController: UITableViewDelegate, UITableViewDataSource 
             cell.layoutIfNeeded()
             
             return cell
-        case 0:
+        case 1:
             let cell = emailDetailTable.dequeueReusableCell(withIdentifier: "emailHeaderCell", for: indexPath) as! EmailHeaderCell
             cell.headerLabel.text = emailObject.subject
             
+            return cell
+        case 0:
+            let cell = emailDetailTable.dequeueReusableCell(withIdentifier: "emailAuthorCell", for: indexPath) as! EmailAuthorCell
+            cell.fromLabel.text = "From: " + emailObject.senderName
+            var toLabel = "To: "
+            for mailbox in emailObject.toRecepients {
+                toLabel += mailbox.name + "; "
+            }
+            
+            cell.toLabel.text = toLabel
             return cell
         default:
             return UITableViewCell()
@@ -150,4 +160,9 @@ class EmailDetailBodyCell: UITableViewCell, WKNavigationDelegate {
 
 class EmailHeaderCell: UITableViewCell {
     @IBOutlet var headerLabel: UILabel!
+}
+
+class EmailAuthorCell: UITableViewCell {
+    @IBOutlet var fromLabel: UILabel!
+    @IBOutlet var toLabel: UILabel!
 }

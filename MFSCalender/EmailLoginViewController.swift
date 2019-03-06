@@ -11,7 +11,7 @@ import SkyFloatingLabelTextField
 import NVActivityIndicatorView
 import NotificationCenter
 
-class EmailLoginViewController: UIViewController {
+class EmailLoginViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet var name: SkyFloatingLabelTextField!
     @IBOutlet var password: SkyFloatingLabelTextField!
@@ -27,10 +27,16 @@ class EmailLoginViewController: UIViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardNotification(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+        name.delegate = self
+        password.delegate = self
     }
     
     deinit {
         NotificationCenter.default.removeObserver(self)
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        return textField.resignFirstResponder()
     }
     
     @objc func keyboardNotification(notification: NSNotification) {
@@ -75,6 +81,7 @@ class EmailLoginViewController: UIViewController {
     }
     
     @IBAction func login(_ sender: Any) {
+        self.view.endEditing(true)
         let nameText = name.text
         let passwordText = password.text
         guard nameText.existsAndNotEmpty() else {

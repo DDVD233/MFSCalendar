@@ -10,7 +10,7 @@ import UIKit
 
 class EmailViewController: UIViewController {
     let emailLoginVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "EmailLoginVC") as! EmailLoginViewController
-    let emailListVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "EmailListVC") as! EmailListViewController
+    let emailListVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "EmailListVC")
     override func viewDidLoad() {
         super.viewDidLoad()
         if Preferences().emailPassword == nil {
@@ -18,12 +18,12 @@ class EmailViewController: UIViewController {
             self.addChild(emailLoginVC)
             self.view.addSubview(emailLoginVC.view)
         } else {
-            self.navigationController?.isNavigationBarHidden = false
             addEmailListView()
         }
     }
     
     func addEmailListView() {
+        self.navigationController?.isNavigationBarHidden = false
         self.addChild(emailListVC)
         self.view.addSubview(emailListVC.view)
     }
