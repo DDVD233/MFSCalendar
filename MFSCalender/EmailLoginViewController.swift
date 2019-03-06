@@ -121,7 +121,7 @@ class EmailLoginViewController: UIViewController {
             return ""
         }
         
-        let accountCheckURL = "http://127.0.0.1:5050" + "/email/authenticate/" + usernameTextUrlEscaped + "/" + passwordTextUrlEscaped
+        let accountCheckURL = Preferences().davidBaseURL + "/email/authenticate/" + usernameTextUrlEscaped + "/" + passwordTextUrlEscaped
         let url = NSURL(string: accountCheckURL)
         let request = URLRequest(url: url! as URL)
         

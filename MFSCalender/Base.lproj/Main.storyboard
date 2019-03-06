@@ -1090,25 +1090,7 @@
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="AdX-1o-8cd" id="MDn-O2-zxM">
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="290.66666666666669"/>
                                             <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="9ij-8e-LXV">
-                                                    <rect key="frame" x="20" y="21" width="374" height="249"/>
-                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                                                </textView>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstItem="9ij-8e-LXV" firstAttribute="top" secondItem="MDn-O2-zxM" secondAttribute="topMargin" constant="10" id="Pxb-98-iPP"/>
-                                                <constraint firstItem="9ij-8e-LXV" firstAttribute="leading" secondItem="MDn-O2-zxM" secondAttribute="leadingMargin" id="Zvr-Y4-Ayk"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="9ij-8e-LXV" secondAttribute="trailing" id="kuE-Tk-71e"/>
-                                                <constraint firstAttribute="bottomMargin" secondItem="9ij-8e-LXV" secondAttribute="bottom" constant="10" id="ola-ic-ivB"/>
-                                            </constraints>
                                         </tableViewCellContentView>
-                                        <connections>
-                                            <outlet property="bodyTextView" destination="9ij-8e-LXV" id="OZb-CG-OzT"/>
-                                            <outlet property="textView" destination="9ij-8e-LXV" id="KJW-tS-Lde"/>
-                                        </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="simpleCell" textLabel="FBN-NM-KHs" rowHeight="50" style="IBUITableViewCellStyleDefault" id="QXl-ro-R7J">
                                         <rect key="frame" x="0.0" y="346.33333333333331" width="414" height="50"/>
@@ -1127,7 +1109,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="titleCell" rowHeight="76" id="cwN-gB-Ucd">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="emailHeaderCell" rowHeight="76" id="cwN-gB-Ucd" customClass="EmailHeaderCell" customModule="MFSMobile" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="396.33333333333331" width="414" height="76"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="cwN-gB-Ucd" id="bwd-Lt-XcA">
@@ -1148,6 +1130,9 @@
                                                 <constraint firstAttribute="trailingMargin" secondItem="ooY-hM-yuu" secondAttribute="trailing" id="yFt-pg-swy"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="headerLabel" destination="ooY-hM-yuu" id="CNK-fl-p01"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                                 <connections>
@@ -1164,6 +1149,9 @@
                             <constraint firstItem="YBw-mW-OVP" firstAttribute="top" secondItem="MmL-z6-j5g" secondAttribute="top" id="bmY-Qf-BuC"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="emailDetailTable" destination="YBw-mW-OVP" id="kww-0e-W4h"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fgT-Bd-odI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -3926,7 +3914,11 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" barStyle="black" id="9y7-IL-4cw">
                         <rect key="frame" x="0.0" y="20" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <color key="barTintColor" red="1" green="0.49327188729999999" blue="0.47399842739999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </textAttributes>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>

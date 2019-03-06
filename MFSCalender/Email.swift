@@ -25,4 +25,24 @@ class Email {
         self.isRead = isRead
         self.id = id
     }
+    
+    init(dict: [String: Any]) {
+        self.senderName = dict["senderName"] as? String ?? ""
+        self.senderAddress = dict["senderAddress"] as? String ?? ""
+        self.body = dict["body"] as? String ?? ""
+        self.subject = dict["subject"] as? String ?? ""
+        self.timeStamp = dict["timestamp"] as? Int ?? 0
+        self.isRead = (dict["isRead"] as? Int ?? 1) == 1
+        self.id = dict["id"] as? String ?? ""
+    }
+    
+    init() {
+        self.senderName = ""
+        self.senderAddress = ""
+        self.body = ""
+        self.subject = ""
+        self.timeStamp = 0
+        self.isRead = false
+        self.id = ""
+    }
 }

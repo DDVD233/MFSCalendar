@@ -69,13 +69,7 @@ class EmailListViewController: UIViewController {
                     print(json.count)
 //                    print(json)
                     for items in json {
-                        let email = Email(senderName: items["senderName"] as? String ?? "",
-                                          senderAddress: items["senderAddress"] as? String ?? "",
-                                          body: items["body"] as? String ?? "",
-                                          subject: items["subject"] as? String ?? "",
-                                          timeStamp: items["timestamp"] as? Int ?? 0,
-                                          isRead: (items["isRead"] as? Int ?? 1) == 1,
-                                          id: items["id"] as? String ?? "")
+                        let email = Email(dict: items)
                         let receivedDate = DateInRegion.init(seconds: TimeInterval(email.timeStamp))
                         let now = DateInRegion()
                         var title = ""
@@ -185,7 +179,8 @@ extension EmailListViewController: UITableViewDelegate, UITableViewDataSource {
         }
         
         Preferences().emailIDToDisplay = emailObject.id
-        
+        let emailDetailVC = self.storyboard!.instantiateViewController(withIdentifier: "emailDetailVC") as! EmailDetailViewController
+        show(emailDetailVC, sender: self)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

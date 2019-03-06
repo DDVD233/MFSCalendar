@@ -48,7 +48,7 @@ extension MyService: TargetType {
         case .getCalendarData, .getCalendarEvent, .dataVersionCheck, .meetTimeSearch, .getQuarterSchedule, .getSteps, .reportSteps, .getStepPoints:
             return URL(string: Preferences().davidBaseURL)!
         case .getAllEmails, .getEmailWithID:
-            return URL(string: "http://127.0.0.1:5050")!
+            return URL(string: Preferences().davidBaseURL)!
         default:
             return URL(string: Preferences().baseURL)!
         }
@@ -91,7 +91,7 @@ extension MyService: TargetType {
         case .getAllEmails(let username, let password):
             return "/email/all/" + username + "/" + password
         case .getEmailWithID:
-            return "/email/SearchByID"
+            return "/email/searchByID"
         }
     }
 
@@ -139,12 +139,9 @@ extension MyService: TargetType {
     }
 
     var parameterEncoding: ParameterEncoding {
-        switch self {
-        default:
-            return URLEncoding.default
-//        URLEncoding.default: Send parameters in URL for GET, DELETE and HEAD. For other HTTP methods, parameters will be sent in request body
-//        URLEncoding.queryString: Always sends parameters in URL, regardless of which HTTP method is used
-        }
+        return URLEncoding.default
+//      URLEncoding.default: Send parameters in URL for GET, DELETE and HEAD. For other HTTP methods, parameters will be sent in request body
+//      URLEncoding.queryString: Always sends parameters in URL, regardless of which HTTP method is used
     }
 
     var sampleData: Data {
