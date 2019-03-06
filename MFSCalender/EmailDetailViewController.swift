@@ -59,20 +59,21 @@ extension EmailDetailViewController: UITableViewDelegate, UITableViewDataSource 
     }
     
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.row == 0 {
+            return 50
+        } else {
+            return 200
+        }
+//        return UITableView.automaticDimension
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableView.automaticDimension
 //        if indexPath.row == 0 {
 //            return 50
 //        } else {
 //            return 200
 //        }
-        return UITableView.automaticDimension
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.row == 0 {
-            return 50
-        } else {
-            return 300
-        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -135,10 +136,15 @@ class EmailDetailBodyCell: UITableViewCell, WKNavigationDelegate {
                     self.webView.snp.makeConstraints({ (make) in
                         make.height.equalTo(height as! CGFloat)
                     })
+                    
+                    let parent = self.parentViewController as! EmailDetailViewController
+                    parent.emailDetailTable.beginUpdates()
+                    self.layoutIfNeeded()
+                    parent.emailDetailTable.endUpdates()
                 })
             }
         })
-        self.layoutIfNeeded()
+        
     }
 }
 
