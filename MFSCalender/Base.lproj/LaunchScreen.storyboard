@@ -103,7 +103,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Email" image="MailIcon.png" id="Inl-Se-UAq"/>
+                    <tabBarItem key="tabBarItem" title="Email" image="Email" id="Inl-Se-UAq"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HYQ-VO-lDG" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -136,8 +136,8 @@
     </scenes>
     <resources>
         <image name="CalendarUnselected" width="50" height="50"/>
+        <image name="Email" width="50" height="50"/>
         <image name="Homework" width="50" height="50"/>
-        <image name="MailIcon.png" width="256" height="256"/>
         <image name="Today" width="50" height="50"/>
         <image name="TodaySelected" width="50" height="50"/>
     </resources>

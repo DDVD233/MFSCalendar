@@ -74,7 +74,8 @@ class EmailListViewController: UIViewController {
                                           body: items["body"] as? String ?? "",
                                           subject: items["subject"] as? String ?? "",
                                           timeStamp: items["timestamp"] as? Int ?? 0,
-                                          isRead: (items["isRead"] as? Int ?? 1) == 1)
+                                          isRead: (items["isRead"] as? Int ?? 1) == 1,
+                                          id: items["id"] as? String ?? "")
                         let receivedDate = DateInRegion.init(seconds: TimeInterval(email.timeStamp))
                         let now = DateInRegion()
                         var title = ""
@@ -173,6 +174,18 @@ extension EmailListViewController: UITableViewDelegate, UITableViewDataSource {
         cell.unreadIndicator.isHidden = emailObject.isRead
         
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let emailListInSection = emailList[indexPath.section]["data"] as? [Email] else {
+            return
+        }
+        guard let emailObject = emailListInSection[safe: indexPath.row] else {
+            return
+        }
+        
+        Preferences().emailIDToDisplay = emailObject.id
+        
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

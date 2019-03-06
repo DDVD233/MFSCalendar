@@ -159,6 +159,15 @@ public class Preferences {
         }
     }
     
+    public var emailIDToDisplay: String? {
+        get {
+            return userDefaults.string(forKey: "emailIDToDisplay" )
+        }
+        set(value) {
+            userDefaults.set(value, forKey: "emailIDToDisplay" )
+        }
+    }
+    
     public var refreshDate: String? {
         get {
             return userDefaults.string(forKey: "refreshDate" )

@@ -32,6 +32,7 @@ enum MyService {
     case reportSteps(steps: String, username: String, link: String)
     case getStepPoints(username: String)
     case getAllEmails(username: String, password: String)
+    case getEmailWithID(username: String, password: String, id: String)
 }
 
 fileprivate let assetDir: URL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!
@@ -46,7 +47,7 @@ extension MyService: TargetType {
         switch self {
         case .getCalendarData, .getCalendarEvent, .dataVersionCheck, .meetTimeSearch, .getQuarterSchedule, .getSteps, .reportSteps, .getStepPoints:
             return URL(string: Preferences().davidBaseURL)!
-        case .getAllEmails:
+        case .getAllEmails, .getEmailWithID:
             return URL(string: "http://127.0.0.1:5050")!
         default:
             return URL(string: Preferences().baseURL)!
@@ -89,6 +90,8 @@ extension MyService: TargetType {
             return "/getStepPoints/" + username
         case .getAllEmails(let username, let password):
             return "/email/all/" + username + "/" + password
+        case .getEmailWithID:
+            return "/email/SearchByID"
         }
     }
 
@@ -106,7 +109,7 @@ extension MyService: TargetType {
 
     var method: Moya.Method {
         switch self {
-        case .reportSteps:
+        case .reportSteps, .getEmailWithID:
             return .post
         default:
             return .get
@@ -129,6 +132,8 @@ extension MyService: TargetType {
             return ["name": username, "link": link, "steps": steps]
         case .getSchedule(let userID, let startTime, let endTime):
             return ["format": "json", "viewerID": userID, "personaId": "2", "viewerPersonaId": "2", "start": startTime, "end": endTime]
+        case .getEmailWithID(let username, let password, let id):
+            return ["name": username, "password": password, "id": id]
         default: return nil
         }
     }

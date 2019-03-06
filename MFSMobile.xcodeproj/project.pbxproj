@@ -47,6 +47,7 @@
 		E472A1641EFB735C00EF5A74 /* ClassListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E472A1631EFB735C00EF5A74 /* ClassListViewController.swift */; };
 		E4765E171F7D74AF009F60F0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E484E65A1EFA337F0056F2D5 /* InfoPlist.strings */; };
 		E4775A411F9A5022002170C7 /* MenuWarning.png in Resources */ = {isa = PBXBuildFile; fileRef = E4775A401F9A500C002170C7 /* MenuWarning.png */; };
+		E47C297C222EEBA700EA8264 /* EmailDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E47C297B222EEBA700EA8264 /* EmailDetailViewController.swift */; };
 		E48333CA20112A1F00BE2FEA /* AppLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = E48333C920112A1F00BE2FEA /* AppLogo.png */; };
 		E484E6551EFA33260056F2D5 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E484E6541EFA33260056F2D5 /* Localizable.strings */; };
 		E489F6C71F5A821E00F2269F /* ProjectPublicFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E489F6C61F5A821E00F2269F /* ProjectPublicFunctions.swift */; };
@@ -194,6 +195,7 @@
 		E472A1611EFB72EA00EF5A74 /* SettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		E472A1631EFB735C00EF5A74 /* ClassListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClassListViewController.swift; sourceTree = "<group>"; };
 		E4775A401F9A500C002170C7 /* MenuWarning.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MenuWarning.png; sourceTree = "<group>"; };
+		E47C297B222EEBA700EA8264 /* EmailDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailDetailViewController.swift; sourceTree = "<group>"; };
 		E48333C920112A1F00BE2FEA /* AppLogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AppLogo.png; sourceTree = "<group>"; };
 		E484E6541EFA33260056F2D5 /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		E484E6591EFA337F0056F2D5 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -446,6 +448,7 @@
 				E4CE9F88222B40A20031AB49 /* EmailViewController.swift */,
 				E4CE9F8C222B47E70031AB49 /* EmailListViewController.swift */,
 				E4CE9F8A222B46BA0031AB49 /* Email.swift */,
+				E47C297B222EEBA700EA8264 /* EmailDetailViewController.swift */,
 			);
 			name = "Email View";
 			sourceTree = "<group>";
@@ -1021,6 +1024,7 @@
 				E4C46A2E1ED50CD3007F8F1A /* CourseFillViewController.swift in Sources */,
 				E4CE9F8B222B46BA0031AB49 /* Email.swift in Sources */,
 				E453F0D11EA137D900BCE58D /* CalendarViewController.swift in Sources */,
+				E47C297C222EEBA700EA8264 /* EmailDetailViewController.swift in Sources */,
 				E4288E1420360F6600E4488D /* MFS.swift in Sources */,
 				E48A0A3C214AC842005ABB87 /* MailViewController.swift in Sources */,
 				E4CE9F86222B31240031AB49 /* EmailLoginViewController.swift in Sources */,
