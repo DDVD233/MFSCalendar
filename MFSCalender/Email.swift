@@ -6,7 +6,8 @@
 //  Copyright © 2019 David. All rights reserved.
 //
 
-import Foundation
+import UIKit
+import CoreData
 
 class Email {
     let senderName: String
@@ -45,6 +46,25 @@ class Email {
         self.toRecepients = toRecepients
     }
     
+    init(emailRecord: EmailRecord) {
+        self.senderName = emailRecord.senderName ?? ""
+        self.senderAddress = emailRecord.senderAddress ?? ""
+        self.body = emailRecord.body ?? ""
+        self.subject = emailRecord.subject ?? ""
+        self.timeStamp = Int(emailRecord.timeStamp)
+        self.isRead = emailRecord.isRead
+        self.id = emailRecord.id ?? ""
+        let toRecepientsString = emailRecord.receiversAddress ?? ""
+        var mailBoxes = [Mailbox]()
+        
+        for recepient in toRecepientsString.components(separatedBy: ";") {
+            let separated = recepient.components(separatedBy: "&")
+            let mailBox = Mailbox(name: separated[1], address: separated[0])
+            mailBoxes.append(mailBox)
+        }
+        self.toRecepients = mailBoxes
+    }
+    
     init() {
         self.senderName = ""
         self.senderAddress = ""
@@ -54,6 +74,35 @@ class Email {
         self.isRead = false
         self.id = ""
         self.toRecepients = [Mailbox]()
+    }
+    
+    func save() {
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let context = appDelegate.persistentContainer.viewContext
+        context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+        let emailRecord = NSEntityDescription.insertNewObject(forEntityName: "EmailRecord", into: context) as! EmailRecord
+        emailRecord.senderName = senderName
+        emailRecord.senderAddress = senderAddress
+        emailRecord.subject = subject
+        emailRecord.timeStamp = Int64(timeStamp)
+        emailRecord.body = body
+        emailRecord.id = id
+        emailRecord.isRead = isRead
+        
+        var receivers = ""
+        for box in toRecepients {
+            receivers += box.address
+            receivers += "&"
+            receivers += box.name
+            receivers += ";"
+        }
+        emailRecord.receiversAddress = receivers
+        
+        do {
+            try context.save()
+        } catch {
+            print(error.localizedDescription)
+        }
     }
 }
 

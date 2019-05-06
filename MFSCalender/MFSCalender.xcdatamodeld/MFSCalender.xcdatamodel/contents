@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1"
-       systemVersion="11A491" minimumToolsVersion="Automatic" sourceLanguage="Swift"
-       userDefinedModelVersionIdentifier="">
-    <elements/>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14490.99" systemVersion="18E226" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="EmailRecord" representedClassName="EmailRecord" syncable="YES" codeGenerationType="class">
+        <attribute name="body" attributeType="String" syncable="YES"/>
+        <attribute name="id" attributeType="String" syncable="YES"/>
+        <attribute name="isRead" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="receiversAddress" attributeType="String" syncable="YES"/>
+        <attribute name="senderAddress" attributeType="String" syncable="YES"/>
+        <attribute name="senderName" attributeType="String" syncable="YES"/>
+        <attribute name="subject" attributeType="String" syncable="YES"/>
+        <attribute name="timeStamp" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <elements>
+        <element name="EmailRecord" positionX="-63" positionY="-18" width="128" height="165"/>
+    </elements>
 </model>

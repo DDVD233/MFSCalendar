@@ -48,7 +48,7 @@ class aboutView: UITableViewController, MFMailComposeViewControllerDelegate {
     }
     
     @IBAction func openGithub(_ sender: Any) {
-        UIApplication.shared.openURL(URL(string: "https://github.com/zjdavid/MFSCalendar")!)
+        UIApplication.shared.open(URL(string: "https://github.com/zjdavid/MFSCalendar")!, options: [:], completionHandler: nil)
     }
     
     func configuredMailComposeViewController() -> MFMailComposeViewController {

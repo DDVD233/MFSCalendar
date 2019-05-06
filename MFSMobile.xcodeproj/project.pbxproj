@@ -493,6 +493,7 @@
 				E470C37E21EE355A00E5C358 /* School.swift */,
 				E489F6C61F5A821E00F2269F /* ProjectPublicFunctions.swift */,
 				E48CE0971F9FA6BB007B53D0 /* UserDefaults.swift */,
+				E4EBD9951F9BAAED0046CAD1 /* AirshipConfig.plist */,
 				E4F86B2F1DF0E20C00CAD72B /* MFSCalendar */,
 				E48D4E031E61FC26008B0A97 /* Class Schedule Widget */,
 				E48F15511F745BF400A36904 /* MFSCalendarTests */,
@@ -518,7 +519,6 @@
 		E4F86B2F1DF0E20C00CAD72B /* MFSCalendar */ = {
 			isa = PBXGroup;
 			children = (
-				E4EBD9951F9BAAED0046CAD1 /* AirshipConfig.plist */,
 				E4CA1DAC1F5007C40061784A /* Acknowledgements.markdown */,
 				E45510EE1F4D6F09001CF9BE /* GroupPossibleContent.plist */,
 				E4B340071F0905EB00D6039A /* GoogleService-Info.plist */,
@@ -711,6 +711,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 				"zh-Hans",
@@ -1109,7 +1110,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Class Schedule/Class Schedule.entitlements";
 				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				INFOPLIST_FILE = "Class Schedule/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.dwei.ClassSchedule;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1128,7 +1129,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Class Schedule/Class Schedule.entitlements";
 				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				INFOPLIST_FILE = "Class Schedule/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.dwei.ClassSchedule;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1350,7 +1351,7 @@
 				CODE_SIGN_ENTITLEMENTS = MFSCalender/MFSCalender.entitlements;
 				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				INFOPLIST_FILE = MFSCalender/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.dwei;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1368,7 +1369,7 @@
 				CODE_SIGN_ENTITLEMENTS = MFSCalender/MFSCalender.entitlements;
 				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				INFOPLIST_FILE = MFSCalender/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.dwei;
 				PRODUCT_NAME = "$(TARGET_NAME)";

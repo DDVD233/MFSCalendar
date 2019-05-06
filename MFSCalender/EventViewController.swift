@@ -90,7 +90,6 @@ extension eventViewController: UITableViewDelegate, UITableViewDataSource {
         return self.listEvents.count
     }
     
-    
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "eventTable", for: indexPath as IndexPath) as! customEventCell
         let row = indexPath.row

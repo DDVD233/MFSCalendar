@@ -2,6 +2,12 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:EmailRecord+CoreDataClass.swift">
+   </FileRef>
+   <FileRef
+      location = "group:EmailRecord+CoreDataProperties.swift">
+   </FileRef>
+   <FileRef
       location = "group:/Users/daiyuanping/Desktop/temp/MFSCalendar/MFSMobile.xcodeproj">
    </FileRef>
    <FileRef

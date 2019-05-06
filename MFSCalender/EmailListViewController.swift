@@ -18,7 +18,7 @@ class EmailListViewController: UIViewController {
     //                        title: titleString
     //                        data: Array { Email }
     //              }
-    //            }
+    // }
     @IBOutlet var emailTable: UITableView!
     var isUpdatingEmail = false
     
@@ -41,7 +41,12 @@ class EmailListViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        getAllEmails()
+        if (Date() - (Preferences().lastEmailUpdate ?? Date())).timeInterval > 300 {
+            getAllEmails()
+        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
     }
     
     func getAllEmails() {
@@ -51,6 +56,7 @@ class EmailListViewController: UIViewController {
         let emailName = Preferences().emailName
         let emailPassword = Preferences().emailPassword
         provider.request(MyService.getAllEmails(username: emailName!, password: emailPassword!)) { (result) in
+            Preferences().lastEmailUpdate = Date()
             self.isUpdatingEmail = false
             self.emailTable.reloadEmptyDataSet()
             self.parent?.navigationItem.title = "Inbox"
@@ -64,41 +70,8 @@ class EmailListViewController: UIViewController {
                     guard let json = try JSONSerialization.jsonObject(with: response.data, options: .allowFragments) as? [[String: Any]] else {
                         return
                     }
-                    self.emailList = [[String: Any]]()
                     
-                    print(json.count)
-//                    print(json)
-                    for items in json {
-                        let email = Email(dict: items)
-                        let receivedDate = DateInRegion.init(seconds: TimeInterval(email.timeStamp))
-                        let now = DateInRegion()
-                        var title = ""
-                        if receivedDate.isAfterDate(now.dateAtStartOf(.day), granularity: .second) {
-                            title = "Today"
-                        } else if receivedDate.isAfterDate((now - 1.days).dateAtStartOf(.day), granularity: .second) {
-                            title = "Yesterday"
-                        } else if receivedDate.isAfterDate(now.dateAt(.startOfWeek), granularity: .second) {
-                            title = "This Week"
-                        } else if receivedDate.isAfterDate((now - 1.weeks).dateAt(.startOfWeek), granularity: .second) {
-                            title = "Last Week"
-                        } else {
-                            title = "Earlier"
-                        }
-                        
-                        if let arrayIndex = self.emailList.firstIndex(where: { (dict) -> Bool in
-                            return dict["title"] as? String == title
-                        }) {
-                            var arrayForTitle = self.emailList[arrayIndex]
-                            var dataList = arrayForTitle["data"] as? [Email] ?? [Email]()
-                            dataList.append(email)
-                            arrayForTitle["data"] = dataList
-                            self.emailList[arrayIndex] = arrayForTitle
-                        } else {
-                            let arrayToAdd = ["title": title, "data": [email]] as [String : Any]
-                            self.emailList.append(arrayToAdd)
-                        }
-                    }
-                    
+                    self.processEmailData(json: json)
                     self.emailTable.reloadData()
                 } catch {
                     presentErrorMessage(presentMessage: error.localizedDescription, layout: .cardView)
@@ -106,6 +79,46 @@ class EmailListViewController: UIViewController {
             case .failure(let error):
                 presentErrorMessage(presentMessage: error.localizedDescription, layout: .cardView)
             }
+        }
+    }
+    
+    func processEmailData(json: [[String: Any]]) {
+        self.emailList = [[String: Any]]()
+        
+        for items in json {
+            let email = Email(dict: items)
+            email.save()
+            addEmailRecordToList(email: email)
+        }
+    }
+    
+    func addEmailRecordToList(email: Email) {
+        let receivedDate = DateInRegion.init(seconds: TimeInterval(email.timeStamp))
+        let now = DateInRegion()
+        var title = ""
+        if receivedDate.isAfterDate(now.dateAtStartOf(.day), granularity: .second) {
+            title = "Today"
+        } else if receivedDate.isAfterDate((now - 1.days).dateAtStartOf(.day), granularity: .second) {
+            title = "Yesterday"
+        } else if receivedDate.isAfterDate(now.dateAt(.startOfWeek), granularity: .second) {
+            title = "This Week"
+        } else if receivedDate.isAfterDate((now - 1.weeks).dateAt(.startOfWeek), granularity: .second) {
+            title = "Last Week"
+        } else {
+            title = "Earlier"
+        }
+        
+        if let arrayIndex = self.emailList.firstIndex(where: { (dict) -> Bool in
+            return dict["title"] as? String == title
+        }) {
+            var arrayForTitle = self.emailList[arrayIndex]
+            var dataList = arrayForTitle["data"] as? [Email] ?? [Email]()
+            dataList.append(email)
+            arrayForTitle["data"] = dataList
+            self.emailList[arrayIndex] = arrayForTitle
+        } else {
+            let arrayToAdd = ["title": title, "data": [email]] as [String : Any]
+            self.emailList.append(arrayToAdd)
         }
     }
 }

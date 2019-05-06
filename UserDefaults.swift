@@ -402,4 +402,13 @@ public class Preferences {
             userDefaults.set(value, forKey: "reviewDate" )
         }
     }
+    
+    public var lastEmailUpdate: Date? {
+        get {
+            return userDefaults.object(forKey: "lastEmailUpdate" ) as? Date
+        }
+        set(value) {
+            userDefaults.set(value, forKey: "lastEmailUpdate" )
+        }
+    }
 }

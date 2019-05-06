@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="TWf-dU-uxH">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="TWf-dU-uxH">
     <device id="retina5_5" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -1109,7 +1109,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="emailHeaderCell" rowHeight="76" id="cwN-gB-Ucd" customClass="EmailHeaderCell" customModule="MFSMobile" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="emailHeaderCell" rowHeight="76" id="cwN-gB-Ucd" customClass="EmailHeaderCell" customModule="MFSMobile" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="396.33333333333331" width="414" height="76"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="cwN-gB-Ucd" id="bwd-Lt-XcA">
@@ -1134,7 +1134,7 @@
                                             <outlet property="headerLabel" destination="ooY-hM-yuu" id="CNK-fl-p01"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="emailAuthorCell" rowHeight="96.000000000000114" id="lVc-Kl-EOe" customClass="EmailAuthorCell" customModule="MFSMobile" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="emailAuthorCell" rowHeight="96.000000000000114" id="lVc-Kl-EOe" customClass="EmailAuthorCell" customModule="MFSMobile" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="472.33333333333326" width="414" height="96"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="lVc-Kl-EOe" id="yoY-UZ-F2n">
@@ -2522,7 +2522,7 @@
                     </userDefinedRuntimeAttributes>
                 </view>
             </objects>
-            <point key="canvasLocation" x="10530.4" y="560.86956521739137"/>
+            <point key="canvasLocation" x="9441" y="133"/>
         </scene>
         <!--Grade View Controller-->
         <scene sceneID="1iS-Gw-pKI">
@@ -3105,7 +3105,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="About Me" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hyr-Cw-9vl">
-                                                    <rect key="frame" x="50" y="62.333333333333336" width="55" height="14.333333333333321"/>
+                                                    <rect key="frame" x="50" y="62.333333333333343" width="55" height="14.333333333333314"/>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
                                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
@@ -3900,13 +3900,6 @@
                     <view key="view" contentMode="scaleToFill" id="Paf-tB-Zit">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pcc-MM-xuw">
-                                <rect key="frame" x="315" y="28" width="42" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Log in"/>
-                            </button>
-                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </view>
                 </viewController>
@@ -3967,21 +3960,21 @@
     </scenes>
     <resources>
         <image name="AppLogo.png" width="1024" height="1024"/>
-        <image name="Arrowhead-Right.png" width="256" height="256"/>
+        <image name="Arrowhead-Right.png" width="192" height="192"/>
         <image name="CMH Logo.png" width="867" height="867"/>
-        <image name="Calendar" width="75" height="75"/>
-        <image name="CalendarUnselected" width="75" height="75"/>
-        <image name="Email" width="75" height="75"/>
-        <image name="EmailSelected" width="75" height="75"/>
-        <image name="Homework" width="75" height="75"/>
-        <image name="HomeworkSelected" width="75" height="75"/>
+        <image name="Calendar" width="25" height="25"/>
+        <image name="CalendarUnselected" width="25" height="25"/>
+        <image name="Email" width="25" height="25"/>
+        <image name="EmailSelected" width="25" height="25"/>
+        <image name="Homework" width="25" height="25"/>
+        <image name="HomeworkSelected" width="25" height="25"/>
         <image name="LargeIcon.png" width="1118" height="1117"/>
         <image name="MFS Logo.jpg" width="300" height="300"/>
         <image name="MSIntro.png" width="2019" height="2627"/>
         <image name="School.jpg" width="1080" height="1921"/>
-        <image name="Timetable" width="75" height="75"/>
-        <image name="TimetableSelected" width="75" height="75"/>
-        <image name="Today" width="75" height="75"/>
-        <image name="TodaySelected" width="75" height="75"/>
+        <image name="Timetable" width="25" height="25"/>
+        <image name="TimetableSelected" width="25" height="25"/>
+        <image name="Today" width="25" height="25"/>
+        <image name="TodaySelected" width="25" height="25"/>
     </resources>
 </document>
