@@ -57,8 +57,11 @@ class Email {
         let toRecepientsString = emailRecord.receiversAddress ?? ""
         var mailBoxes = [Mailbox]()
         
+        print(toRecepientsString)
         for recepient in toRecepientsString.components(separatedBy: ";") {
             let separated = recepient.components(separatedBy: "&")
+            guard separated.count >= 2 else { continue }
+            print(separated)
             let mailBox = Mailbox(name: separated[1], address: separated[0])
             mailBoxes.append(mailBox)
         }

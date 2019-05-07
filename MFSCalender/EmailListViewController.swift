@@ -10,6 +10,7 @@ import UIKit
 import SwiftDate
 import DGElasticPullToRefresh
 import DZNEmptyDataSet
+import CoreData
 
 class EmailListViewController: UIViewController {
     var emailList = [[String: Any]]()
@@ -41,12 +42,27 @@ class EmailListViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        readEmailRecordFromCoreData()
         if (Date() - (Preferences().lastEmailUpdate ?? Date())).timeInterval > 300 {
             getAllEmails()
         }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
+    }
+    
+    func readEmailRecordFromCoreData() {
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let context = appDelegate.persistentContainer.viewContext
+        let emailsFetch = NSFetchRequest<NSFetchRequestResult>(entityName: "EmailRecord")
+        
+        do {
+            let fetchedEmails = try context.fetch(emailsFetch) as! [EmailRecord]
+            processEmailData(recordList: fetchedEmails)
+        } catch {
+            fatalError("Failed to fetch Classes: \(error)")
+        }
     }
     
     func getAllEmails() {
@@ -87,6 +103,16 @@ class EmailListViewController: UIViewController {
         
         for items in json {
             let email = Email(dict: items)
+            email.save()
+            addEmailRecordToList(email: email)
+        }
+    }
+    
+    func processEmailData(recordList: [EmailRecord]) {
+        self.emailList = [[String: Any]]()
+        
+        for record in recordList {
+            let email = Email(emailRecord: record)
             email.save()
             addEmailRecordToList(email: email)
         }
