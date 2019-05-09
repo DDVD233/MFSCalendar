@@ -376,8 +376,6 @@ extension gradeViewController {
                 break
             }
         default:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "gradeDetail", for: indexPath) as! gradeDetailCell
-            
             // The section begins at 1, while the array index begins at 0.
             let section = indexPath.section - 1
             guard groupedGradeKeys.indices.contains(section) else { break }
@@ -388,8 +386,15 @@ extension gradeViewController {
             let gradeObject = gradeInSection[row]
             
             print(gradeObject)
+            var cell: GradeDetailCellProtocol!
+            if let additionalInfo = gradeObject["AdditionalInfo"] as? String {
+                cell = tableView.dequeueReusableCell(withIdentifier: "gradeDetailWithComments", for: indexPath) as! gradeDetailCellWithInfo
+                (cell as! gradeDetailCellWithInfo).additionalInfo.attributedText = additionalInfo.convertToHtml()
+            } else {
+                cell = tableView.dequeueReusableCell(withIdentifier: "gradeDetail", for: indexPath) as! gradeDetailCell
+            }
             
-            let additionalInfo = 
+            
             
             let name = gradeObject["AssignmentShortDescription"] as? String ?? ""
             cell.name.attributedText = name.convertToHtml()
@@ -481,10 +486,23 @@ extension gradeViewController: IndicatorInfoProvider {
     }
 }
 
-class gradeDetailCell: UITableViewCell {
+class gradeDetailCell: UITableViewCell, GradeDetailCellProtocol {
     @IBOutlet var date: UILabel!
     @IBOutlet var name: UILabel!
     @IBOutlet var grade: UILabel!
+}
+
+class gradeDetailCellWithInfo: UITableViewCell, GradeDetailCellProtocol {
+    @IBOutlet var date: UILabel!
+    @IBOutlet var name: UILabel!
+    @IBOutlet var grade: UILabel!
+    @IBOutlet var additionalInfo: UITextView!
+}
+
+protocol GradeDetailCellProtocol: UITableViewCell {
+    var date: UILabel! { get set }
+    var name: UILabel! { get set }
+    var grade: UILabel! { get set }
 }
 
 class gradeBarChartCell: UITableViewCell {

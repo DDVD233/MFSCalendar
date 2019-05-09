@@ -2627,7 +2627,7 @@
                                     <outlet property="name" destination="arN-ek-zeF" id="dYU-g7-9u4"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="gray" indentationWidth="10" reuseIdentifier="gradeDetailWithComments" rowHeight="104" id="J1r-ON-6OK" customClass="gradeDetailCell" customModule="MFSMobile" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="gray" indentationWidth="10" reuseIdentifier="gradeDetailWithComments" rowHeight="104" id="J1r-ON-6OK" customClass="gradeDetailCellWithInfo" customModule="MFSMobile" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="372.33333333333337" width="375" height="104"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="J1r-ON-6OK" id="aSU-wu-WcF">
@@ -2653,7 +2653,7 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" scrollEnabled="NO" text="Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="oPZ-Vi-pf5">
-                                            <rect key="frame" x="5" y="47" width="370" height="51.666666666666657"/>
+                                            <rect key="frame" x="20" y="47" width="355" height="51.666666666666657"/>
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -2664,7 +2664,7 @@
                                         <constraint firstItem="49n-vH-q96" firstAttribute="top" secondItem="aSU-wu-WcF" secondAttribute="topMargin" constant="5" id="DnU-eI-hcO"/>
                                         <constraint firstItem="hOV-gt-8od" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="MXW-Yw-wpi" secondAttribute="trailing" constant="5" id="OHt-aT-rGr"/>
                                         <constraint firstItem="49n-vH-q96" firstAttribute="trailing" secondItem="aSU-wu-WcF" secondAttribute="trailingMargin" constant="-5" id="QxA-ZC-nIx"/>
-                                        <constraint firstItem="oPZ-Vi-pf5" firstAttribute="leading" secondItem="aSU-wu-WcF" secondAttribute="leading" constant="5" id="SWO-3o-StV"/>
+                                        <constraint firstItem="oPZ-Vi-pf5" firstAttribute="leading" secondItem="aSU-wu-WcF" secondAttribute="leading" constant="20" id="SWO-3o-StV"/>
                                         <constraint firstAttribute="bottom" secondItem="oPZ-Vi-pf5" secondAttribute="bottom" constant="5" id="Sgg-DM-Vfa"/>
                                         <constraint firstItem="hOV-gt-8od" firstAttribute="top" secondItem="aSU-wu-WcF" secondAttribute="topMargin" constant="5" id="cXQ-89-qab"/>
                                         <constraint firstItem="MXW-Yw-wpi" firstAttribute="leading" secondItem="aSU-wu-WcF" secondAttribute="leadingMargin" constant="5" id="esN-8h-Awd"/>
@@ -2675,6 +2675,7 @@
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
+                                    <outlet property="additionalInfo" destination="oPZ-Vi-pf5" id="GmL-jm-K7W"/>
                                     <outlet property="date" destination="hOV-gt-8od" id="M8l-fJ-Y4l"/>
                                     <outlet property="grade" destination="49n-vH-q96" id="Dqp-Cb-PNd"/>
                                     <outlet property="name" destination="MXW-Yw-wpi" id="pr5-le-lIH"/>

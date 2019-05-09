@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="BSearchViewController">
+            <connections>
+                <outlet property="noUsersFoundLabel" destination="HVG-QS-2ME" id="Rie-Jo-LKv"/>
+                <outlet property="noUsersFoundView" destination="JsS-ef-lBV" id="8cL-yZ-ZGg"/>
+                <outlet property="tableView" destination="RHx-Ni-2pY" id="iVu-lH-fR2"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="RHx-Ni-2pY">
+                    <rect key="frame" x="0.0" y="8" width="375" height="659"/>
+                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <connections>
+                        <outlet property="dataSource" destination="-1" id="45h-db-2ml"/>
+                        <outlet property="delegate" destination="-1" id="RD8-oc-OSN"/>
+                    </connections>
+                </tableView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JsS-ef-lBV" userLabel="No Users View">
+                    <rect key="frame" x="0.0" y="8" width="375" height="659"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No users found for this search" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HVG-QS-2ME">
+                            <rect key="frame" x="8" y="8" width="359" height="643"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <color key="textColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstItem="HVG-QS-2ME" firstAttribute="top" secondItem="JsS-ef-lBV" secondAttribute="top" constant="8" id="LIJ-wq-vSk"/>
+                        <constraint firstAttribute="bottom" secondItem="HVG-QS-2ME" secondAttribute="bottom" constant="8" id="kEw-l0-Gm4"/>
+                        <constraint firstAttribute="trailing" secondItem="HVG-QS-2ME" secondAttribute="trailing" constant="8" id="lNL-e0-OVS"/>
+                        <constraint firstItem="HVG-QS-2ME" firstAttribute="leading" secondItem="JsS-ef-lBV" secondAttribute="leading" constant="8" id="ySO-og-07q"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="RHx-Ni-2pY" secondAttribute="trailing" id="0bV-YC-sCY"/>
+                <constraint firstItem="JsS-ef-lBV" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="8" id="1sa-GS-4vm"/>
+                <constraint firstItem="RHx-Ni-2pY" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="8" id="Chu-AS-7GU"/>
+                <constraint firstItem="RHx-Ni-2pY" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="Ko0-uI-CSG"/>
+                <constraint firstItem="JsS-ef-lBV" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="M98-HU-0Lj"/>
+                <constraint firstAttribute="bottom" secondItem="JsS-ef-lBV" secondAttribute="bottom" id="Osd-Uh-uvN"/>
+                <constraint firstAttribute="trailing" secondItem="JsS-ef-lBV" secondAttribute="trailing" id="PH0-zY-8YJ"/>
+                <constraint firstAttribute="bottom" secondItem="RHx-Ni-2pY" secondAttribute="bottom" priority="750" id="QcP-8Z-724"/>
+            </constraints>
+            <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+            <point key="canvasLocation" x="83" y="380"/>
+        </view>
+    </objects>
+</document>

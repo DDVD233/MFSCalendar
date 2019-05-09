@@ -1,0 +1,6 @@
+framework module KeepLayout {
+  umbrella header "ChatSDKKeepLayout-umbrella.h"
+
+  export *
+  module * { export * }
+}
