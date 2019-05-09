@@ -1,6 +1,6 @@
 osx_image: xcode9
 language: swift
-xcode_project: MFSMobile.xcworkspace # path to your xcodeproj folder
+xcode_project: MFSMobile.xcodeproj # path to your xcodeproj folder
 xcode_scheme: MFSMobile
 before_install:
 - gem install cocoapods --pre --no-rdoc --no-ri --no-document --quiet

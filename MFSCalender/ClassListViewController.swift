@@ -42,6 +42,11 @@ class classListController: UIViewController, UIViewControllerPreviewingDelegate 
 //        }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        updateClassList()
+    }
+    
     @objc func showOrHideGrade() {
         if !isShowingGrade {
             self.navigationItem.rightBarButtonItem!.title = "Hide Grade"
@@ -85,7 +90,12 @@ class classListController: UIViewController, UIViewControllerPreviewingDelegate 
     }
     
     func updateClassList() {
-        
+        NetworkOperations().getCourseFromMyMFS {
+            guard canUpdateView(viewController: self) else { return }
+            DispatchQueue.main.async {
+                self.classListCollectionView.reloadData()
+            }
+        }
     }
     
     func classObjectAt(indexPath: IndexPath) -> [String: Any]? {

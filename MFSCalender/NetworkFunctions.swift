@@ -42,8 +42,7 @@ class NetworkOperations {
         semaphore.wait()
     }
     
-    func getCourseFromMyMFS(completion: @escaping () -> Void) -> DispatchSemaphore {
-        let semaphore = DispatchSemaphore.init(value: 0)
+    func getCourseFromMyMFS(completion: @escaping () -> Void) {
         //create request.
         let config = URLSessionConfiguration.default
         config.requestCachePolicy = .reloadIgnoringLocalCacheData
@@ -54,7 +53,7 @@ class NetworkOperations {
         let (_, _, userId) = loginAuthentication()
         
         guard let durationId = Preferences().durationID else {
-            return semaphore
+            return
         }
         
         let urlString = Preferences().baseURL + "/api/datadirect/ParentStudentUserAcademicGroupsGet?userId=\(userId)&schoolYearLabel=2018+-+2019&memberLevel=3&persona=2&durationList=\(durationId)"
@@ -66,7 +65,6 @@ class NetworkOperations {
         let downloadTask = session.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
             if error == nil {
                 guard var courseData = try! JSON(data: data!).arrayObject else {
-                    semaphore.signal()
                     return
                 }
                 
@@ -96,11 +94,9 @@ class NetworkOperations {
             } else {
                 presentErrorMessage(presentMessage: error!.localizedDescription, layout: .statusLine)
             }
-            semaphore.signal()
         })
         
         downloadTask.resume()
-        return semaphore
     }
     
     func loginUsingPost() -> [HTTPCookie]? {
