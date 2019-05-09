@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import UICircularProgressRing
 
 
 class classListController: UIViewController, UIViewControllerPreviewingDelegate {
@@ -16,6 +17,7 @@ class classListController: UIViewController, UIViewControllerPreviewingDelegate 
 
     var majorClasslist = [[String: Any]]()
     var minorClassList = [[String: Any]]()
+    var isShowingGrade = false
 
 
     override func viewDidLoad() {
@@ -29,15 +31,29 @@ class classListController: UIViewController, UIViewControllerPreviewingDelegate 
             sortClasses(classList: classList)
         }
         
-        if #available(iOS 9.0, *) {
-            if self.traitCollection.forceTouchCapability == .available {
-                registerForPreviewing(with: self, sourceView: classListCollectionView)
-            }
+        if self.traitCollection.forceTouchCapability == .available {
+            registerForPreviewing(with: self, sourceView: classListCollectionView)
         }
+        
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Show Grade", style: .plain, target: self, action: #selector(showOrHideGrade))
         
 //        if #available(iOS 11.0, *) {
 //            setLargeTitle(on: self)
 //        }
+    }
+    
+    @objc func showOrHideGrade() {
+        if !isShowingGrade {
+            self.navigationItem.rightBarButtonItem!.title = "Hide Grade"
+            isShowingGrade = true
+        } else {
+            self.navigationItem.rightBarButtonItem!.title = "Show Grade"
+            isShowingGrade = false
+        }
+        
+        DispatchQueue.main.async {
+            self.classListCollectionView.reloadData()
+        }
     }
 
     func sortClasses(classList: NSArray) {
@@ -68,6 +84,10 @@ class classListController: UIViewController, UIViewControllerPreviewingDelegate 
         }
     }
     
+    func updateClassList() {
+        
+    }
+    
     func classObjectAt(indexPath: IndexPath) -> [String: Any]? {
         switch indexPath.section {
         case 0:
@@ -76,14 +96,12 @@ class classListController: UIViewController, UIViewControllerPreviewingDelegate 
             } else {
                 return nil
             }
-        case 1:
+        default:
             if minorClassList.indices.contains(indexPath.row) {
                 return minorClassList[indexPath.row]
             } else {
                 return nil
             }
-        default:
-            return nil
         }
     }
 }
@@ -105,14 +123,27 @@ extension classListController: UICollectionViewDataSource, UICollectionViewDeleg
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "classListViewCell", for: indexPath) as! classListViewCell
 
         guard var classObject = classObjectAt(indexPath: indexPath) else {
-            return cell
+            return UICollectionViewCell()
         }
-
+        
+        var cell: ClassListCell!
+        
+        if !isShowingGrade {
+            cell = collectionView.dequeueReusableCell(withReuseIdentifier: "classListViewCell", for: indexPath) as! classListViewCell
+        } else {
+            cell = collectionView.dequeueReusableCell(withReuseIdentifier: "classListViewCellWithGrade", for: indexPath) as! ClassListViewWithGradeCell
+            let grade = Float(classObject["cumgrade"] as? String ?? "0") ?? 0.0
+            let cellWithRing = cell as! ClassListViewWithGradeCell
+            cellWithRing.gradeRing.font = UIFont.boldSystemFont(ofSize: 24)
+            DispatchQueue.main.async {
+                cellWithRing.gradeRing.startProgress(to: CGFloat(grade), duration: 1.0)
+            }
+        }
+        
         cell.title.text = classObject["className"] as? String
-
+        
         if let sectionId = ClassView().getLeadSectionID(classDict: classObject) {
             print(sectionId)
             let imagePath = path.appending("/\(sectionId)_profile.png")
@@ -124,17 +155,21 @@ extension classListController: UICollectionViewDataSource, UICollectionViewDeleg
                 cell.backgroundImage.isHidden = true
                 cell.darkCover.isHidden = true
             }
-
+            
             cell.backgroundImage.contentMode = .scaleAspectFill
         }
-
+        
         return cell
+
+        
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard var classObject = classObjectAt(indexPath: indexPath) else { return }
         
         Preferences().indexForCourseToPresent = classObject["index"] as? Int ?? 0
+        let vc = storyboard!.instantiateViewController(withIdentifier: "classDetailViewController")
+        show(vc, sender: self)
     }
     
     @available(iOS 9.0, *)
@@ -159,7 +194,7 @@ extension classListController: UICollectionViewDataSource, UICollectionViewDeleg
     }
 
     func collectionView(_ collectionView: UICollectionView, didHighlightItemAt indexPath: IndexPath) {
-        let cell = collectionView.cellForItem(at: indexPath) as! classListViewCell
+        let cell = collectionView.cellForItem(at: indexPath) as! ClassListCell
 
         cell.title.textColor = UIColor.gray
 
@@ -169,7 +204,7 @@ extension classListController: UICollectionViewDataSource, UICollectionViewDeleg
     }
 
     func collectionView(_ collectionView: UICollectionView, didUnhighlightItemAt indexPath: IndexPath) {
-        let cell = collectionView.cellForItem(at: indexPath) as! classListViewCell
+        let cell = collectionView.cellForItem(at: indexPath) as! ClassListCell
 
         cell.title.textColor = UIColor.white
 
@@ -194,18 +229,34 @@ extension classListController: UICollectionViewDataSource, UICollectionViewDeleg
 extension classListController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let viewSize = Layout().squareSize()
-        return CGSize(width: viewSize, height: viewSize)
+        if isShowingGrade {
+            return CGSize(width: viewSize, height: viewSize * 1.5)
+        } else {
+            return CGSize(width: viewSize, height: viewSize)
+        }
     }
 }
 
-class classListViewCell: UICollectionViewCell {
+class classListViewCell: UICollectionViewCell, ClassListCell {
     @IBOutlet var backgroundImage: UIImageView!
     @IBOutlet var title: UILabel!
-
     @IBOutlet var darkCover: UIView!
-    
     @IBOutlet var contentRect: UIView!
-    
+}
+
+class ClassListViewWithGradeCell: UICollectionViewCell, ClassListCell {
+    @IBOutlet var backgroundImage: UIImageView!
+    @IBOutlet var darkCover: UIView!
+    @IBOutlet var title: UILabel!
+    @IBOutlet var contentRect: UIView!
+    @IBOutlet var gradeRing: UICircularProgressRing!
+}
+
+protocol ClassListCell: UICollectionViewCell {
+    var backgroundImage: UIImageView! { get set }
+    var title: UILabel! { get set }
+    var darkCover: UIView! { get set }
+    var contentRect: UIView! { get set }
 }
 
 class classListHeaderViewCell: UICollectionReusableView {

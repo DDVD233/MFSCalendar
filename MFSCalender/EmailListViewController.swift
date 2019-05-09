@@ -41,15 +41,12 @@ class EmailListViewController: UIViewController {
         emailTable.dg_setPullToRefreshBackgroundColor(emailTable.backgroundColor!)
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(true)
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         readEmailRecordFromCoreData()
         if (Date() - (Preferences().lastEmailUpdate ?? Date())).timeInterval > 300 {
             getAllEmails()
         }
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
     }
     
     func readEmailRecordFromCoreData() {
@@ -60,6 +57,7 @@ class EmailListViewController: UIViewController {
         do {
             let fetchedEmails = try context.fetch(emailsFetch) as! [EmailRecord]
             processEmailData(recordList: fetchedEmails)
+            emailTable.reloadData()
         } catch {
             fatalError("Failed to fetch Classes: \(error)")
         }
@@ -79,7 +77,7 @@ class EmailListViewController: UIViewController {
             switch result {
             case .success(let response):
                 do {
-                    guard self.viewIfLoaded?.window != nil else {
+                    guard canUpdateView(viewController: self) else {
                         return
                     }
                     
@@ -88,7 +86,9 @@ class EmailListViewController: UIViewController {
                     }
                     
                     self.processEmailData(json: json)
-                    self.emailTable.reloadData()
+                    DispatchQueue.main.async {
+                        self.emailTable.reloadData()
+                    }
                 } catch {
                     presentErrorMessage(presentMessage: error.localizedDescription, layout: .cardView)
                 }

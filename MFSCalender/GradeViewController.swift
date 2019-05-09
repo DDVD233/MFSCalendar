@@ -39,9 +39,9 @@ class gradeViewController: UITableViewController {
     
 
     var cumGrade: Float = 0 {
-        didSet {
+        didSet(value) {
             DispatchQueue.main.async {
-                self.cumGradeProgressRing.startProgress(to: CGFloat(self.cumGrade), duration: 1.0)
+                self.cumGradeProgressRing.startProgress(to: CGFloat(value), duration: 1.0)
             }
         }
     }
@@ -537,10 +537,10 @@ extension gradeViewController: ChartViewDelegate {
         guard gradeList.indices.contains(masterIndex) else { return }
         let gradeObject = gradeList[masterIndex]
         guard let assignmentType = gradeObject["AssignmentType"] as? String else { return }
-        let sectionIndex = Int(groupedGradeKeys.index(of: assignmentType) ?? 0) + 1
+        let sectionIndex = Int(groupedGradeKeys.firstIndex(of: assignmentType) ?? 0) + 1
         
         guard let gradeInSection = groupedGradeList[assignmentType] else { return }
-        guard let rowArrayIndex = gradeInSection.index(where: { $0["index"] as? Int == masterIndex }) else { return }
+        guard let rowArrayIndex = gradeInSection.firstIndex(where: { $0["index"] as? Int == masterIndex }) else { return }
         let rowIndex = Int(rowArrayIndex)
         
         let indexPath = IndexPath(row: rowIndex, section: sectionIndex)

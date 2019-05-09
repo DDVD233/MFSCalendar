@@ -7,7 +7,7 @@
 //
 //  Hard code 一时爽，代码重构火葬场。 --戴维于2019年1月15日
 
-import Foundation
+import UIKit
 import SwiftDate
 
 public let userDefaults = UserDefaults(suiteName: "group.org.dwei.MFSCalendar")!
@@ -20,6 +20,10 @@ var school: School {
             return MFS()
         }
     }
+}
+
+public func canUpdateView(viewController: UIViewController) -> Bool {
+    return (viewController.viewIfLoaded?.window != nil)
 }
 
 //func getMeetTime(period: Int) -> String {

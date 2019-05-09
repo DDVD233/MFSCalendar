@@ -10,6 +10,7 @@ import UIKit
 import Alamofire
 import JSQWebViewController
 import SafariServices
+import SwiftyJSON
 
 class NetworkOperations {
     func getQuarterSchedule() {
@@ -39,6 +40,67 @@ class NetworkOperations {
         }
         
         semaphore.wait()
+    }
+    
+    func getCourseFromMyMFS(completion: @escaping () -> Void) -> DispatchSemaphore {
+        let semaphore = DispatchSemaphore.init(value: 0)
+        //create request.
+        let config = URLSessionConfiguration.default
+        config.requestCachePolicy = .reloadIgnoringLocalCacheData
+        config.urlCache = nil
+        
+        let session = URLSession.init(configuration: config)
+        
+        let (_, _, userId) = loginAuthentication()
+        
+        guard let durationId = Preferences().durationID else {
+            return semaphore
+        }
+        
+        let urlString = Preferences().baseURL + "/api/datadirect/ParentStudentUserAcademicGroupsGet?userId=\(userId)&schoolYearLabel=2018+-+2019&memberLevel=3&persona=2&durationList=\(durationId)"
+        print(urlString)
+        
+        let url = URL(string: urlString)
+        let request = URLRequest(url: url!)
+        
+        let downloadTask = session.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
+            if error == nil {
+                guard var courseData = try! JSON(data: data!).arrayObject else {
+                    semaphore.signal()
+                    return
+                }
+                
+                print(courseData)
+                
+                for (index, item) in courseData.enumerated() {
+                    guard var course = item as? Dictionary<String, Any?> else {
+                        continue
+                    }
+                    print(course)
+                    course["className"] = course["sectionidentifier"] as? String
+                    course["teacherName"] = course["groupownername"] as? String
+                    course["index"] = index
+                    //                    If I do not delete nill value, it will not be able to write to plist.
+                    for (key, value) in course {
+                        if (value as? NSNull) == NSNull() {
+                            course[key] = ""
+                        }
+                    }
+                    courseData[index] = course
+                }
+                
+                let coursePath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
+                let path = coursePath.appending("/CourseList.plist")
+                NSArray(array: courseData).write(to: URL.init(fileURLWithPath: path), atomically: true)
+                completion()
+            } else {
+                presentErrorMessage(presentMessage: error!.localizedDescription, layout: .statusLine)
+            }
+            semaphore.signal()
+        })
+        
+        downloadTask.resume()
+        return semaphore
     }
     
     func loginUsingPost() -> [HTTPCookie]? {
