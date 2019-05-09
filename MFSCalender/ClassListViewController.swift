@@ -90,7 +90,10 @@ class classListController: UIViewController, UIViewControllerPreviewingDelegate 
     }
     
     func updateClassList() {
-        NetworkOperations().getCourseFromMyMFS {
+        NetworkOperations().getCourseFromMyMFS { (courseData) in
+            let coursePath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
+            let path = coursePath.appending("/CourseList.plist")
+            NSArray(array: courseData).write(to: URL.init(fileURLWithPath: path), atomically: true)
             guard canUpdateView(viewController: self) else { return }
             DispatchQueue.main.async {
                 self.classListCollectionView.reloadData()

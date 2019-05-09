@@ -17,6 +17,15 @@ class CMH: School {
         self.dayLetterList = "AB"
     }
     
+    // MAINTAIN: This value must be updated every year.
+    override func getMarkingPeriodID(quarter: Int) -> Int {
+        if quarter == 1 {
+            return 7215
+        } else {
+            return 7217
+        }
+    }
+    
     override func getClassDataAt(date: Date) -> [[String: Any]] {
         //var period = period
         listClasses = [[String: Any]]()

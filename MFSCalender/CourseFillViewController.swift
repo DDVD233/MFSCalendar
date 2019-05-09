@@ -51,7 +51,10 @@ class courseFillController: UIViewController {
         
         if Preferences().schoolName == "CMH" {
             let semaphore = DispatchSemaphore.init(value: 0)
-            NetworkOperations().getCourseFromMyMFS {
+            NetworkOperations().getCourseFromMyMFS { (courseData) in
+                let coursePath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
+                let path = coursePath.appending("/CourseList.plist")
+                NSArray(array: courseData).write(to: URL.init(fileURLWithPath: path), atomically: true)
                 semaphore.signal()
             }
             semaphore.wait()
@@ -117,7 +120,10 @@ class courseFillController: UIViewController {
         }
         
         let semaphore = DispatchSemaphore.init(value: 0)
-        NetworkOperations().getCourseFromMyMFS {
+        NetworkOperations().getCourseFromMyMFS { (courseData) in
+            let coursePath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
+            let path = coursePath.appending("/CourseList.plist")
+            NSArray(array: courseData).write(to: URL.init(fileURLWithPath: path), atomically: true)
             semaphore.signal()
         }
         semaphore.wait()
@@ -170,7 +176,10 @@ class courseFillController: UIViewController {
         
         DispatchQueue.global().async(group: group, execute: {
             let semaphore = DispatchSemaphore.init(value: 0)
-            NetworkOperations().getCourseFromMyMFS {
+            NetworkOperations().getCourseFromMyMFS { (courseData) in
+                let coursePath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
+                let path = coursePath.appending("/CourseList.plist")
+                NSArray(array: courseData).write(to: URL.init(fileURLWithPath: path), atomically: true)
                 semaphore.signal()
             }
             semaphore.wait()

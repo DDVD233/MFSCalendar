@@ -35,13 +35,13 @@ class gradeViewController: UITableViewController {
     
     
     let dateFormatter = DateFormatter()
-    var quarterSelected: Quarters = .first
+    var quarterSelected: Int = 1
     
 
     var cumGrade: Float = 0 {
-        didSet(value) {
+        didSet {
             DispatchQueue.main.async {
-                self.cumGradeProgressRing.startProgress(to: CGFloat(value), duration: 1.0)
+                self.cumGradeProgressRing.startProgress(to: CGFloat(self.cumGrade), duration: 1.0)
             }
         }
     }
@@ -76,33 +76,25 @@ class gradeViewController: UITableViewController {
     }
     
     func setQuarterBasedOnCurrentQuarter() {
-        switch Preferences().currentQuarter {
-        case 1:
-            quarterSelected = .first
-        case 2:
-            quarterSelected = .second
-        case 3:
-            quarterSelected = .third
-        case 4:
-            quarterSelected = .forth
-        default:
-            quarterSelected = .first
-        }
+        quarterSelected = Preferences().currentQuarter
     }
     
     @objc func changeQuarter(sender: UIButton) {
         switch quarterSelected {
-        case .first:
-            quarterSelected = .second
+        case 1:
+            quarterSelected = 2
             sender.setTitle("2nd Quarter", for: .normal)
-        case .second:
-            quarterSelected = .third
+        case 2:
+            quarterSelected = 3
             sender.setTitle("3rd Quarter", for: .normal)
-        case .third:
-            quarterSelected = .forth
+        case 3:
+            quarterSelected = 4
             sender.setTitle("4th Quarter", for: .normal)
-        case .forth:
-            quarterSelected = .first
+        case 4:
+            quarterSelected = 1
+            sender.setTitle("1st Quarter", for: .normal)
+        default:
+            quarterSelected = 1
             sender.setTitle("1st Quarter", for: .normal)
         }
         
@@ -121,7 +113,7 @@ class gradeViewController: UITableViewController {
         let group = DispatchGroup()
         
         DispatchQueue.global().async(group: group, execute: {
-            self.cumGrade = Float(self.getcumGrade()) ?? 0
+            self.getcumGrade()
         })
         
         DispatchQueue.global().async(group: group, execute: {
@@ -223,28 +215,7 @@ class gradeViewController: UITableViewController {
         
         group.wait()
         
-        var markingPeriodID: String {
-            if Preferences().schoolName == "MFS" {
-                switch quarterSelected {
-                case .first:
-                    return "6893"
-                case .second:
-                    return "6894"
-                case .third:
-                    return "6895"
-                case .forth:
-                    return "6896"
-                }
-            } else if Preferences().schoolName == "CMH" {
-                if quarterSelected == .first {
-                    return "7215"
-                } else {
-                    return "7217"
-                }
-            } else {
-                return ""
-            }
-        }
+        let markingPeriodID = String(school.getMarkingPeriodID(quarter: quarterSelected))
         
         let url = Preferences().baseURL + "/api/datadirect/GradeBookPerformanceAssignmentStudentList/?sectionId=\(sectionID)&markingPeriodId=\(markingPeriodID)&studentUserId=\(userID)"
         
@@ -299,56 +270,14 @@ class gradeViewController: UITableViewController {
         groupedGradeList = groupedData
     }
 
-    func getcumGrade() -> String {
-
-        guard loginAuthentication().success else {
-            return ""
-        }
-
-        let userId = loginAuthentication().userId
-
-//        let leadSectionId = ClassView().getLeadSectionID(classDict: classObject)
+    func getcumGrade() {
         let className = classObject["className"] as? String ?? ""
-
-        var cumGrade = ""
-
-        let durationId: String = Preferences().durationID ?? ""
-
-        let session = URLSession.shared
-        let url = Preferences().baseURL + "/api/datadirect/ParentStudentUserAcademicGroupsGet?userId=\(userId)&schoolYearLabel=2018+-+2019&memberLevel=3&persona=2&durationList=\(durationId)&markingPeriodId="
-        let request = URLRequest(url: URL(string: url)!)
-        let semaphore = DispatchSemaphore.init(value: 0)
-
-        let dataTask = session.dataTask(with: request, completionHandler: {
-            (data, response, error) -> Void in
-            if error == nil {
-                let json = JSON(data!)
-                print(json)
-
-                for (_, subJson): (String, JSON) in json {
-                    if subJson["sectionidentifier"].stringValue == className {
-                        cumGrade = subJson["cumgrade"].stringValue
-                        print("CumGrade: \(cumGrade)")
-                    }
-                }
-            } else {
-                DispatchQueue.main.async {
-                    let presentMessage = error!.localizedDescription + " Please check your internet connection."
-                    let view = MessageView.viewFromNib(layout: .cardView)
-                    view.configureTheme(.error)
-                    let icon = "😱"
-                    view.configureContent(title: "Error!", body: presentMessage, iconText: icon)
-                    view.button?.isHidden = true
-                    let config = SwiftMessages.Config()
-                    SwiftMessages.show(config: config, view: view)
-                }
+        let durationId = school.getDurationNumber(quarter: quarterSelected)
+        NetworkOperations().getCourseFromMyMFS(durationId: String(durationId), completion: { (courseData) in
+            if let presentingClass = courseData.filter({ $0["sectionidentifier"] as? String ?? "" == className }).first {
+                self.cumGrade = Float(presentingClass["cumgrade"] as? String ?? "") ?? 0.0
             }
-            semaphore.signal()
         })
-
-        dataTask.resume()
-        semaphore.wait()
-        return cumGrade
     }
 }
 
@@ -376,6 +305,7 @@ extension gradeViewController {
             case 0:
                 let cell = self.tableView.dequeueReusableCell(withIdentifier: "chartsView") as! gradeBarChartCell
                 
+                cell.chartView.clear()
                 cell.chartView.delegate = self
                 cell.chartView.drawBarShadowEnabled = false
                 cell.chartView.maxVisibleCount = 10
@@ -457,6 +387,10 @@ extension gradeViewController {
             guard gradeInSection.indices.contains(indexPath.row) else { break }
             let gradeObject = gradeInSection[row]
             
+            print(gradeObject)
+            
+            let additionalInfo = 
+            
             let name = gradeObject["AssignmentShortDescription"] as? String ?? ""
             cell.name.attributedText = name.convertToHtml()
             
@@ -498,16 +432,7 @@ extension gradeViewController {
             view.titleLabel.text = "Overview"
             let quarterButton = UIButton()
             
-            switch quarterSelected {
-            case .first:
-                quarterButton.setTitle("1st Quarter", for: .normal)
-            case .second:
-                quarterButton.setTitle("2nd Quarter", for: .normal)
-            case .third:
-                quarterButton.setTitle("3rd Quarter", for: .normal)
-            case .forth:
-                quarterButton.setTitle("4th Quarter", for: .normal)
-            }
+            quarterButton.setTitle("Quarter " + String(quarterSelected), for: .normal)
             
             view.addSubview(quarterButton)
             quarterButton.titleLabel?.font = UIFont.systemFont(ofSize: 15)

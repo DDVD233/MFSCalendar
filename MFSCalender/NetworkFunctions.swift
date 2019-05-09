@@ -42,7 +42,7 @@ class NetworkOperations {
         semaphore.wait()
     }
     
-    func getCourseFromMyMFS(completion: @escaping () -> Void) {
+    func getCourseFromMyMFS(durationId: String = Preferences().durationID ?? "", completion: @escaping ([[String: Any]]) -> Void) {
         //create request.
         let config = URLSessionConfiguration.default
         config.requestCachePolicy = .reloadIgnoringLocalCacheData
@@ -52,11 +52,12 @@ class NetworkOperations {
         
         let (_, _, userId) = loginAuthentication()
         
-        guard let durationId = Preferences().durationID else {
-            return
-        }
+//        guard let durationId = Preferences().durationID else {
+//            return
+//        }
         
-        let urlString = Preferences().baseURL + "/api/datadirect/ParentStudentUserAcademicGroupsGet?userId=\(userId)&schoolYearLabel=2018+-+2019&memberLevel=3&persona=2&durationList=\(durationId)"
+        let schoolYear = school.getSchoolYear()
+        let urlString = Preferences().baseURL + "/api/datadirect/ParentStudentUserAcademicGroupsGet?userId=\(userId)&schoolYearLabel=\(String(schoolYear))+-+\(String(schoolYear + 1))&memberLevel=3&persona=2&durationList=\(durationId)"
         print(urlString)
         
         let url = URL(string: urlString)
@@ -64,33 +65,31 @@ class NetworkOperations {
         
         let downloadTask = session.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
             if error == nil {
-                guard var courseData = try! JSON(data: data!).arrayObject else {
+                guard var courseData = try? JSONSerialization.jsonObject(with: data ?? Data(), options: .allowFragments) as? [[String: Any]] else {
                     return
                 }
                 
-                print(courseData)
-                
                 for (index, item) in courseData.enumerated() {
-                    guard var course = item as? Dictionary<String, Any?> else {
-                        continue
-                    }
+                    var course = item
                     print(course)
+                    
+                    // To Solve compatibility issue
                     course["className"] = course["sectionidentifier"] as? String
                     course["teacherName"] = course["groupownername"] as? String
                     course["index"] = index
-                    //                    If I do not delete nill value, it will not be able to write to plist.
+                    //   If I do not delete nill value, it will not be able to write to plist.
                     for (key, value) in course {
                         if (value as? NSNull) == NSNull() {
                             course[key] = ""
                         }
                     }
-                    courseData[index] = course
+                    courseData[index] = item
                 }
                 
                 let coursePath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
                 let path = coursePath.appending("/CourseList.plist")
                 NSArray(array: courseData).write(to: URL.init(fileURLWithPath: path), atomically: true)
-                completion()
+                completion(courseData)
             } else {
                 presentErrorMessage(presentMessage: error!.localizedDescription, layout: .statusLine)
             }

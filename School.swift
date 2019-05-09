@@ -35,6 +35,27 @@ public class School {
         return listClasses
     }
     
+    func getMarkingPeriodID(quarter: Int) -> Int {
+        assert(false, "This method must be overriden!")
+    }
+    
+    func getDurationNumber(quarter: Int) -> Int {
+        let quarterDataPath = Bundle.main.url(forResource: "QuarterSchedule" + (Preferences().schoolName ?? ""), withExtension: "plist")!
+        guard let quarterData = NSArray(contentsOf: quarterDataPath) as? [[String: Any]] else {
+            return 0
+        }
+        
+        guard let quarterDict = quarterData.filter({ $0["Quarter"] as? Int ?? 0 == quarter }).first else { return 0 }
+        
+        return quarterDict["ReferenceNumber"] as? Int ?? 0
+    }
+    
+    func getSchoolYear() -> Int {
+        let year = Date().year
+        let month = Date().month
+        return (month > 6) ? year : year-1
+    }
+    
     func classesOnADayAfter(date time: Date) -> [[String: Any]] {
         let classData = getClassDataAt(date: time)
         

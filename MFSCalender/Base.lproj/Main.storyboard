@@ -2528,7 +2528,7 @@
         <scene sceneID="1iS-Gw-pKI">
             <objects>
                 <tableViewController storyboardIdentifier="gradeViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="nOl-7j-hMf" customClass="gradeViewController" customModule="MFSMobile" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="300" sectionHeaderHeight="18" sectionFooterHeight="18" id="PYn-eU-6Xv">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" id="PYn-eU-6Xv">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -2590,7 +2590,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qav-cm-dna">
-                                            <rect key="frame" x="169.66666666666666" y="14" width="36" height="21"/>
+                                            <rect key="frame" x="209.66666666666666" y="14" width="36" height="21"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
@@ -2618,7 +2618,7 @@
                                         <constraint firstItem="reN-G7-IAC" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="qav-cm-dna" secondAttribute="trailing" constant="5" id="g2m-8E-JGu"/>
                                         <constraint firstItem="reN-G7-IAC" firstAttribute="trailing" secondItem="Q3y-nQ-AI5" secondAttribute="trailingMargin" constant="-5" id="hJN-0r-wSa"/>
                                         <constraint firstItem="arN-ek-zeF" firstAttribute="leading" secondItem="Q3y-nQ-AI5" secondAttribute="leadingMargin" constant="5" id="oom-Dz-WaZ"/>
-                                        <constraint firstItem="qav-cm-dna" firstAttribute="centerX" secondItem="Q3y-nQ-AI5" secondAttribute="centerX" id="tW4-pl-wVu"/>
+                                        <constraint firstItem="qav-cm-dna" firstAttribute="centerX" secondItem="Q3y-nQ-AI5" secondAttribute="centerX" constant="40" id="tW4-pl-wVu"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
@@ -2627,8 +2627,61 @@
                                     <outlet property="name" destination="arN-ek-zeF" id="dYU-g7-9u4"/>
                                 </connections>
                             </tableViewCell>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="gray" indentationWidth="10" reuseIdentifier="gradeDetailWithComments" rowHeight="104" id="J1r-ON-6OK" customClass="gradeDetailCell" customModule="MFSMobile" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="372.33333333333337" width="375" height="104"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="J1r-ON-6OK" id="aSU-wu-WcF">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="103.66666666666667"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Date" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hOV-gt-8od">
+                                            <rect key="frame" x="209.66666666666666" y="16" width="36" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MXW-Yw-wpi">
+                                            <rect key="frame" x="21" y="15.999999999999998" width="45" height="20.333333333333329"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Grade" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="49n-vH-q96">
+                                            <rect key="frame" x="307" y="16" width="47" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" scrollEnabled="NO" text="Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="oPZ-Vi-pf5">
+                                            <rect key="frame" x="5" y="47" width="370" height="51.666666666666657"/>
+                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                        </textView>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="trailing" secondItem="oPZ-Vi-pf5" secondAttribute="trailing" id="9od-Xh-30J"/>
+                                        <constraint firstItem="49n-vH-q96" firstAttribute="top" secondItem="aSU-wu-WcF" secondAttribute="topMargin" constant="5" id="DnU-eI-hcO"/>
+                                        <constraint firstItem="hOV-gt-8od" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="MXW-Yw-wpi" secondAttribute="trailing" constant="5" id="OHt-aT-rGr"/>
+                                        <constraint firstItem="49n-vH-q96" firstAttribute="trailing" secondItem="aSU-wu-WcF" secondAttribute="trailingMargin" constant="-5" id="QxA-ZC-nIx"/>
+                                        <constraint firstItem="oPZ-Vi-pf5" firstAttribute="leading" secondItem="aSU-wu-WcF" secondAttribute="leading" constant="5" id="SWO-3o-StV"/>
+                                        <constraint firstAttribute="bottom" secondItem="oPZ-Vi-pf5" secondAttribute="bottom" constant="5" id="Sgg-DM-Vfa"/>
+                                        <constraint firstItem="hOV-gt-8od" firstAttribute="top" secondItem="aSU-wu-WcF" secondAttribute="topMargin" constant="5" id="cXQ-89-qab"/>
+                                        <constraint firstItem="MXW-Yw-wpi" firstAttribute="leading" secondItem="aSU-wu-WcF" secondAttribute="leadingMargin" constant="5" id="esN-8h-Awd"/>
+                                        <constraint firstItem="hOV-gt-8od" firstAttribute="centerX" secondItem="aSU-wu-WcF" secondAttribute="centerX" constant="40" id="fLJ-xc-fAm"/>
+                                        <constraint firstItem="49n-vH-q96" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="hOV-gt-8od" secondAttribute="trailing" constant="5" id="qAO-Ts-ADH"/>
+                                        <constraint firstItem="oPZ-Vi-pf5" firstAttribute="top" secondItem="hOV-gt-8od" secondAttribute="bottom" constant="10" id="rLn-Kw-Ssv"/>
+                                        <constraint firstItem="MXW-Yw-wpi" firstAttribute="top" secondItem="aSU-wu-WcF" secondAttribute="topMargin" constant="5" id="z1l-7S-jKa"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="date" destination="hOV-gt-8od" id="M8l-fJ-Y4l"/>
+                                    <outlet property="grade" destination="49n-vH-q96" id="Dqp-Cb-PNd"/>
+                                    <outlet property="name" destination="MXW-Yw-wpi" id="pr5-le-lIH"/>
+                                </connections>
+                            </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="tableHeader" rowHeight="44" id="EVe-45-aoX" customClass="homeworkTableHeader" customModule="MFSMobile" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="372.33333333333337" width="375" height="44"/>
+                                <rect key="frame" x="0.0" y="476.33333333333337" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="EVe-45-aoX" id="qif-yM-rg8">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="43.666666666666664"/>
@@ -2654,7 +2707,7 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="chartsView" rowHeight="280" id="beY-tN-BE0" customClass="gradeBarChartCell" customModule="MFSMobile" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="416.33333333333337" width="375" height="280"/>
+                                <rect key="frame" x="0.0" y="520.33333333333337" width="375" height="280"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="beY-tN-BE0" id="1eY-nf-0dt">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="279.66666666666669"/>
@@ -2689,7 +2742,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="g1B-BB-Gl3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="6774" y="1218"/>
+            <point key="canvasLocation" x="6773.6000000000004" y="1217.7339901477833"/>
         </scene>
         <!--Class Topic View Controller-->
         <scene sceneID="pDN-vR-dIX">
