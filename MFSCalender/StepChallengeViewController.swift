@@ -88,7 +88,7 @@ class StepChallengeViewController: UIViewController {
             switch result {
             case .success(let response):
                 let totalPoints = String.init(data: response.data, encoding: .utf8) ?? ""
-                print(response.request?.url)
+//                print(response.request?.url)
                 DispatchQueue.main.async {
                     self.pointLabel.text = totalPoints
                 }

@@ -42,7 +42,7 @@ class NetworkOperations {
         semaphore.wait()
     }
     
-    func getCourseFromMyMFS(durationId: String = Preferences().durationID ?? "", completion: @escaping ([[String: Any]]) -> Void) {
+    func getCourseFromMyMFS(durationId: String = Preferences().durationID ?? "", completion: @escaping ([[String: Any?]]) -> Void) {
         //create request.
         let config = URLSessionConfiguration.default
         config.requestCachePolicy = .reloadIgnoringLocalCacheData
@@ -65,7 +65,7 @@ class NetworkOperations {
         
         let downloadTask = session.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
             if error == nil {
-                guard var courseData = try? JSONSerialization.jsonObject(with: data ?? Data(), options: .allowFragments) as? [[String: Any]] else {
+                guard var courseData = try? JSONSerialization.jsonObject(with: data ?? Data(), options: .allowFragments) as? [[String: Any?]] else {
                     return
                 }
                 
@@ -77,13 +77,13 @@ class NetworkOperations {
                     course["className"] = course["sectionidentifier"] as? String
                     course["teacherName"] = course["groupownername"] as? String
                     course["index"] = index
-                    //   If I do not delete nill value, it will not be able to write to plist.
+                    //   If I do not delete nil value, it will not be able to write to plist.
                     for (key, value) in course {
-                        if (value as? NSNull) == NSNull() {
+                        if value == nil {
                             course[key] = ""
                         }
                     }
-                    courseData[index] = item
+                    courseData[index] = course
                 }
                 
                 let coursePath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path

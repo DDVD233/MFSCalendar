@@ -51,6 +51,7 @@ class gradeViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         cumGradeProgressRing.font = UIFont.boldSystemFont(ofSize: 32)
+        cumGradeProgressRing.valueFormatter = UICircularProgressRingFormatter(showFloatingPoint: true)
         setQuarterBasedOnCurrentQuarter()
     }
 

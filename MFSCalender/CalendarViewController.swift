@@ -149,6 +149,8 @@ class CalendarViewController: SegmentedPagerTabStripViewController, UIGestureRec
                 return velocity.y < 0
             case .week:
                 return velocity.y > 0
+            @unknown default:
+                fatalError("What is this?")
             }
         }
         return shouldBegin

@@ -177,8 +177,8 @@ class courseFillController: UIViewController {
         DispatchQueue.global().async(group: group, execute: {
             let semaphore = DispatchSemaphore.init(value: 0)
             NetworkOperations().getCourseFromMyMFS { (courseData) in
-                let coursePath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-                let path = coursePath.appending("/CourseList.plist")
+                print(courseData)
+                let path = userDocumentPath.appending("/CourseList.plist")
                 NSArray(array: courseData).write(to: URL.init(fileURLWithPath: path), atomically: true)
                 semaphore.signal()
             }
@@ -282,10 +282,10 @@ class courseFillController: UIViewController {
                             switch result {
                             case .success(let response):
                                 do {
-                                    print(response.request?.url)
+//                                    print(response.request?.url)
                                     guard let json = try JSONSerialization.jsonObject(with: response.data, options: .allowFragments) as? [[String: Any]] else {
                                         presentErrorMessage(presentMessage: "JSON Format Incorrect", layout: .cardView)
-                                        print(String(data: response.data, encoding: .utf8))
+//                                        print(String(data: response.data, encoding: .utf8))
                                         return
                                     }
                                     

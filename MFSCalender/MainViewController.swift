@@ -141,7 +141,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         isVisible = true
         
-        UIApplication.shared.statusBarStyle = .lightContent
+//        UIApplication.shared.statusBarStyle = .lightContent
     }
 
     override func viewDidAppear(_ animated: Bool) {

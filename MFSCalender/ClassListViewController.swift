@@ -150,6 +150,7 @@ extension classListController: UICollectionViewDataSource, UICollectionViewDeleg
             let grade = Float(classObject["cumgrade"] as? String ?? "0") ?? 0.0
             let cellWithRing = cell as! ClassListViewWithGradeCell
             cellWithRing.gradeRing.font = UIFont.boldSystemFont(ofSize: 24)
+            cellWithRing.gradeRing.valueFormatter = UICircularProgressRingFormatter(showFloatingPoint: true)
             DispatchQueue.main.async {
                 cellWithRing.gradeRing.startProgress(to: CGFloat(grade), duration: 1.0)
             }
