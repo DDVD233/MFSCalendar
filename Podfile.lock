@@ -219,7 +219,6 @@ PODS:
   - p2.OAuth2 (4.2.0)
   - Protobuf (3.7.0)
   - Reachability (3.2)
-  - ReachabilitySwift (4.3.1)
   - Result (4.1.0)
   - RXPromise (1.0.5)
   - SAMKeychain (1.5.3)
@@ -268,7 +267,6 @@ DEPENDENCIES:
   - Moya
   - NVActivityIndicatorView
   - p2.OAuth2
-  - ReachabilitySwift
   - SCLAlertView
   - SDWebImage (~> 4.0)
   - SkyFloatingLabelTextField
@@ -331,7 +329,6 @@ SPEC REPOS:
     - p2.OAuth2
     - Protobuf
     - Reachability
-    - ReachabilitySwift
     - Result
     - RXPromise
     - SAMKeychain
@@ -400,7 +397,6 @@ SPEC CHECKSUMS:
   p2.OAuth2: d5ea9b928fc5d10d088d419db6f3380578b6f866
   Protobuf: 7a877b7f3e5964e3fce995e2eb323dbc6831bb5a
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
-  ReachabilitySwift: 4032e2f59586e11e3b0ebe15b167abdd587a388b
   Result: bd966fac789cc6c1563440b348ab2598cc24d5c7
   RXPromise: b1e6d6d747db2e0dc53f11ba2a0fbff2456d25e5
   SAMKeychain: 483e1c9f32984d50ca961e26818a534283b4cd5c
@@ -421,6 +417,6 @@ SPEC CHECKSUMS:
   VENTokenField: 5a19b838fb97f040e3d4c93f584b4adeaf3fc1ee
   XLPagerTabStrip: 61c57fd61f611ee5f01ff1495ad6fbee8bf496c5
 
-PODFILE CHECKSUM: 8825bc28572d9aa99bb74df73e5847084c6dfbd7
+PODFILE CHECKSUM: 77b4f9c2e5848709a2fcb54a09d4ac75262e49c0
 
 COCOAPODS: 1.5.2
