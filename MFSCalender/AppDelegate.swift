@@ -12,6 +12,7 @@ import Firebase
 import Fabric
 import Crashlytics
 import AirshipKit
+import ChatSDK
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -30,6 +31,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         UIApplication.shared.setMinimumBackgroundFetchInterval(1800)
         
+        let config = BConfiguration.init();
+        config.rootPath = "test"
+        
+        config.allowUsersToCreatePublicChats = true
+        BChatSDK.initialize(config, app: application, options: launchOptions)
+        self.window = UIWindow.init(frame: UIScreen.main.bounds)
+        self.window?.rootViewController = BChatSDK.ui()?.splashScreenNavigationController()
+        self.window?.makeKeyAndVisible();
+
         //setPushNotification()
         
         return true
@@ -63,6 +73,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        print("Channel ID: " + (UAPus ?? "None"))
     }
     
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        BChatSDK.application(application, didRegisterForRemoteNotificationsWithDeviceToken: deviceToken)
+    }
+    
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        BChatSDK.application(application, didReceiveRemoteNotification: userInfo)
+    }
+    
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any]) {
+        BChatSDK.application(application, didReceiveRemoteNotification: userInfo)
+    }
+    
+    func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
+        return BChatSDK.application(application, open: url, sourceApplication: sourceApplication, annotation: annotation)
+    }
+    
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+        return BChatSDK.application(app, open: url, options: options)
+    }
+    
     func logUser() {
 //        Crashlytics.sharedInstance().setUserEmail("user@fabric.io")
 //        Crashlytics.sharedInstance().setUserIdentifier("12345")
@@ -70,22 +100,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let lastName = Preferences().lastName ?? ""
         let fullName = firstName + lastName
         Crashlytics.sharedInstance().setUserName(fullName)
-    }
-
-
-    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
-        if url.host == "classDetail", let indexString = url.query {
-            if let index = Int(indexString) {
-                Preferences().indexForCourseToPresent = index
-                let storyboard = UIStoryboard.init(name: "Main", bundle: nil)
-                let mainViewController = storyboard.instantiateInitialViewController()
-                let classDetailViewController = storyboard.instantiateViewController(withIdentifier: "classDetailViewController")
-                app.keyWindow?.rootViewController?.show(classDetailViewController, sender: mainViewController)
-                return true
-            }
-        }
-
-        return false
     }
 
     func applicationWillResignActive(_ application: UIApplication) {

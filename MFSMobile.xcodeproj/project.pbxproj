@@ -75,7 +75,6 @@
 		E4ADC9EE1E882172002A46F7 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4ADC9ED1E882172002A46F7 /* Extensions.swift */; };
 		E4B340041F0891AE00D6039A /* ClassPagerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B340031F0891AE00D6039A /* ClassPagerViewController.swift */; };
 		E4B340061F08942000D6039A /* classTopicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B340051F08942000D6039A /* classTopicViewController.swift */; };
-		E4B340081F0905EB00D6039A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E4B340071F0905EB00D6039A /* GoogleService-Info.plist */; };
 		E4B6F4C11F746AE600F56C4D /* MFSCalendarUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48F15601F7467D900A36904 /* MFSCalendarUITests.swift */; };
 		E4B9378120C71DE500F0A225 /* NetworkFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B9378020C71DE500F0A225 /* NetworkFunctions.swift */; };
 		E4BD88961F35973C0000FEF3 /* TargetPublicFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BD88951F35973C0000FEF3 /* TargetPublicFunctions.swift */; };
@@ -90,6 +89,7 @@
 		E4CE9F8B222B46BA0031AB49 /* Email.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CE9F8A222B46BA0031AB49 /* Email.swift */; };
 		E4CE9F8D222B47E70031AB49 /* EmailListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CE9F8C222B47E70031AB49 /* EmailListViewController.swift */; };
 		E4D3A1AE1E123D0200F709DC /* periodPicker.plist in Resources */ = {isa = PBXBuildFile; fileRef = E4D3A1AD1E123D0200F709DC /* periodPicker.plist */; };
+		E4D5E4102285C6520012C56C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E4D5E40F2285C6510012C56C /* GoogleService-Info.plist */; };
 		E4DAB5B11F6386640013D943 /* HomeworkDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4DAB5B01F6386640013D943 /* HomeworkDetailViewController.swift */; };
 		E4E8B21A1F1C5AF200913DAE /* GradeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E8B2191F1C5AF200913DAE /* GradeViewController.swift */; };
 		E4EBD9961F9BAAED0046CAD1 /* AirshipConfig.plist in Resources */ = {isa = PBXBuildFile; fileRef = E4EBD9951F9BAAED0046CAD1 /* AirshipConfig.plist */; };
@@ -259,7 +259,6 @@
 		E4ADC9ED1E882172002A46F7 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		E4B340031F0891AE00D6039A /* ClassPagerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClassPagerViewController.swift; sourceTree = "<group>"; };
 		E4B340051F08942000D6039A /* classTopicViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = classTopicViewController.swift; sourceTree = "<group>"; };
-		E4B340071F0905EB00D6039A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		E4B340091F0905F400D6039A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		E4B9378020C71DE500F0A225 /* NetworkFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkFunctions.swift; sourceTree = "<group>"; };
 		E4BD88951F35973C0000FEF3 /* TargetPublicFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TargetPublicFunctions.swift; sourceTree = "<group>"; };
@@ -274,6 +273,7 @@
 		E4CE9F8A222B46BA0031AB49 /* Email.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Email.swift; sourceTree = "<group>"; };
 		E4CE9F8C222B47E70031AB49 /* EmailListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailListViewController.swift; sourceTree = "<group>"; };
 		E4D3A1AD1E123D0200F709DC /* periodPicker.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = periodPicker.plist; sourceTree = "<group>"; };
+		E4D5E40F2285C6510012C56C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		E4DAB5B01F6386640013D943 /* HomeworkDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeworkDetailViewController.swift; sourceTree = "<group>"; };
 		E4E8B2191F1C5AF200913DAE /* GradeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GradeViewController.swift; sourceTree = "<group>"; };
 		E4EBD9951F9BAAED0046CAD1 /* AirshipConfig.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = AirshipConfig.plist; sourceTree = "<group>"; };
@@ -519,9 +519,9 @@
 		E4F86B2F1DF0E20C00CAD72B /* MFSCalendar */ = {
 			isa = PBXGroup;
 			children = (
+				E4D5E40F2285C6510012C56C /* GoogleService-Info.plist */,
 				E4CA1DAC1F5007C40061784A /* Acknowledgements.markdown */,
 				E45510EE1F4D6F09001CF9BE /* GroupPossibleContent.plist */,
-				E4B340071F0905EB00D6039A /* GoogleService-Info.plist */,
 				E470C38C21EEC94000E5C358 /* QuarterScheduleMFS.plist */,
 				E470C38E21EECAC700E5C358 /* QuarterScheduleCMH.plist */,
 				E484E6541EFA33260056F2D5 /* Localizable.strings */,
@@ -769,6 +769,7 @@
 				E495229F1F96CD6900C17A83 /* MenuLunch.png in Resources */,
 				E4F0B37C200F814D00003A3D /* MenuSettings.png in Resources */,
 				E4765E171F7D74AF009F60F0 /* InfoPlist.strings in Resources */,
+				E4D5E4102285C6520012C56C /* GoogleService-Info.plist in Resources */,
 				E43611C721A4C35C00994A10 /* runningColor.png in Resources */,
 				E4CA1DAE1F50097D0061784A /* Acknowledgements.markdown in Resources */,
 				E4A880BD1DF279BB00816AB7 /* MFS Logo.jpg in Resources */,
@@ -796,7 +797,6 @@
 				E41DE2F81EFA4293001155E9 /* No_homework.png in Resources */,
 				E48333CA20112A1F00BE2FEA /* AppLogo.png in Resources */,
 				E413AB0E1EE89441001EB189 /* Achievement.png in Resources */,
-				E4B340081F0905EB00D6039A /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

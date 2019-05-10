@@ -34,7 +34,7 @@ class EmailDetailViewController: UIViewController, WKUIDelegate {
                         return
                     }
                     self.emailToDisplay = Email(dict: json)
-                    print(self.emailToDisplay?.subject)
+//                    print(self.emailToDisplay?.subject)
                     self.emailDetailTable.reloadData()
                 } catch {
                     presentErrorMessage(presentMessage: error.localizedDescription, layout: .cardView)
