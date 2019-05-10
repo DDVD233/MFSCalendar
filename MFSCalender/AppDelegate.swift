@@ -22,7 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        FirebaseApp.configure()
+//        FirebaseApp.configure()
         Fabric.with([Crashlytics()])
         logUser()
         if (UIDevice().userInterfaceIdiom == .phone) && (UIScreen.main.nativeBounds.height == 2436) {
@@ -33,14 +33,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let config = BConfiguration.init();
         config.rootPath = "test"
+        config.googleMapsApiKey = "AIzaSyAcNgntmKUbMZRAgany5xwTU6zRh-zfDtg"
         
-        config.allowUsersToCreatePublicChats = true
+        config.allowUsersToCreatePublicChats = false
         BChatSDK.initialize(config, app: application, options: launchOptions)
-        self.window = UIWindow.init(frame: UIScreen.main.bounds)
-        self.window?.rootViewController = BChatSDK.ui()?.splashScreenNavigationController()
-        self.window?.makeKeyAndVisible();
+//        self.window = UIWindow.init(frame: UIScreen.main.bounds)
+//        self.window?.rootViewController = BChatSDK.ui()?.splashScreenNavigationController()
+//        self.window?.makeKeyAndVisible();
 
         //setPushNotification()
+        if BChatSDK.auth()!.isAuthenticated() {
+            BChatSDK.auth()?.authenticate()
+        }
         
         return true
     }
