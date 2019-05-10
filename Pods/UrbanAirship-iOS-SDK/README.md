@@ -21,7 +21,7 @@ One of our engineers will verify receipt of the agreement before approving your 
 
 ## Installation
 
-Xcode 8.0+ is required for all projects and the static library. Projects must target >= iOS8.
+Xcode 10.0+ is required for all projects and the static library. Projects must target >= iOS 10.
 
 ### CocoaPods
 
@@ -115,6 +115,18 @@ For other installation methods, please checkout - [Getting started guide](http:/
 
 
 ## Quickstart
+
+### An Important Note about Location Permissions
+
+As of Spring 2019, Apple has begun rejecting applications that use, or appear to use, Core Location services
+without supplying usage descriptions in their `Info.plist` files. The Urban Airship SDK contains lightweight
+wrappers around Core Location APIs, but does not collect location data by default unless foreground or background 
+location is explicitly enabled in `UALocationManager`. To avoid this, you should add usage description strings to
+your `Info.plist` file under the `NSLocationAlwaysUsageDescription`, `NSLocationWhenInUseUsageDescription`, and `NSLocationAlwaysAndWhenInUseUsageDescription` keys.
+
+If your app does not use the location features of the SDK, these descriptions will not be visible to the user, and
+are simply an extra step required to satisfy Apple's submission requirements. On the other hand, if your app does
+use these features, see the [Location](https://docs.urbanairship.com/platform/ios/location/) setup instructions.
 
 ### Capabilities
 

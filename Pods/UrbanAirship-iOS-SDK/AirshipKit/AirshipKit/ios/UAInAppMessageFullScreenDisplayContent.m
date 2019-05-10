@@ -1,4 +1,4 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import "UAirship.h"
 #import "UAInAppMessageFullScreenDisplayContent+Internal.h"
@@ -11,7 +11,6 @@
 NS_ASSUME_NONNULL_BEGIN
 
 // JSON keys
-NSString *const UAInAppMessageFullScreenActionsKey = @"actions";
 NSString *const UAInAppMessageFullScreenDisplayContentDomain = @"com.urbanairship.full_screen_display_content";
 
 NSString *const UAInAppMessageFullScreenContentLayoutHeaderMediaBodyValue = @"header_media_body";
@@ -80,7 +79,7 @@ NSUInteger const UAInAppMessageFullScreenMaxButtons = 5;
 @property(nonatomic, strong, nullable) UAInAppMessageTextInfo *body;
 @property(nonatomic, strong, nullable) UAInAppMessageMediaInfo *media;
 @property(nonatomic, strong, nullable) UAInAppMessageButtonInfo *footer;
-@property(nonatomic, copy, nullable) NSArray<UAInAppMessageButtonInfo *> *buttons;
+@property(nonatomic, strong, nullable) NSArray<UAInAppMessageButtonInfo *> *buttons;
 @property(nonatomic, assign) UAInAppMessageButtonLayoutType buttonLayout;
 @property(nonatomic, assign) UAInAppMessageFullScreenContentLayoutType contentLayout;
 @property(nonatomic, strong) UIColor *backgroundColor;
@@ -287,7 +286,7 @@ NSUInteger const UAInAppMessageFullScreenMaxButtons = 5;
     self = [super init];
 
     if (![builder isValid]) {
-        UA_LDEBUG(@"UAInAppMessageFullScreenDisplayContent could not be initialized, builder has missing or invalid parameters.");
+        UA_LERR(@"UAInAppMessageFullScreenDisplayContent could not be initialized, builder has missing or invalid parameters.");
         return nil;
     }
 
@@ -352,14 +351,14 @@ NSUInteger const UAInAppMessageFullScreenMaxButtons = 5;
     return [json copy];
 }
 
-- (UAInAppMessageFullScreenDisplayContent *)extend:(void(^)(UAInAppMessageFullScreenDisplayContentBuilder *builder))builderBlock {
+- (nullable UAInAppMessageFullScreenDisplayContent *)extend:(void(^)(UAInAppMessageFullScreenDisplayContentBuilder *builder))builderBlock {
     if (builderBlock) {
         UAInAppMessageFullScreenDisplayContentBuilder *builder = [UAInAppMessageFullScreenDisplayContentBuilder builderWithDisplayContent:self];
         builderBlock(builder);
         return [[UAInAppMessageFullScreenDisplayContent alloc] initWithBuilder:builder];
     }
 
-    UA_LINFO(@"Extended %@ with nil builderBlock. Returning self.", self);
+    UA_LDEBUG(@"Extended %@ with nil builderBlock. Returning self.", self);
     return self;
 }
 

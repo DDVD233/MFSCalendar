@@ -1,4 +1,4 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import "UATagGroupsLookupManager+Internal.h"
 #import "UATagGroupsLookupAPIClient+Internal.h"
@@ -145,7 +145,7 @@ NSString * const UATagGroupsLookupManagerErrorDomain = @"com.urbanairship.tag_gr
                                             cachedResponse:self.cache.response
                                          completionHandler:^(UATagGroupsLookupResponse *response) {
                                              if (response.status != 200) {
-                                                 UA_LERR(@"Failed to refresh the cache. Status: %lu", (unsigned long)response.status);
+                                                 UA_LTRACE(@"Failed to refresh the cache. Status: %lu", (unsigned long)response.status);
                                              } else {
                                                  self.cache.response = response;
                                                  self.cache.requestedTagGroups = tagGroups;
@@ -163,14 +163,14 @@ NSString * const UATagGroupsLookupManagerErrorDomain = @"com.urbanairship.tag_gr
         return completionHandler(nil, error);
     }
 
-    if (![UAirship push].channelID) {
-        error = [self errorWithCode:UATagGroupsLookupManagerErrorCodeChannelRequired message:@"Channel ID is required"];
-        return completionHandler(nil, error);
-    }
-
     // Requesting only device tag groups when channel tag registration is enabled
     if ([requestedTagGroups containsOnlyDeviceTags] && [UAirship push].isChannelTagRegistrationEnabled) {
         return completionHandler([self overrideDeviceTags:requestedTagGroups], error);
+    }
+
+    if (![UAirship push].channelID) {
+        error = [self errorWithCode:UATagGroupsLookupManagerErrorCodeChannelRequired message:@"Channel ID is required"];
+        return completionHandler(nil, error);
     }
 
     __block NSDate *cacheRefreshDate = self.cache.refreshDate;

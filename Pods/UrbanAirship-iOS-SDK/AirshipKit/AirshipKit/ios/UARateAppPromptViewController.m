@@ -1,8 +1,9 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import "UARateAppPromptViewController+Internal.h"
 #import "UAUtils+Internal.h"
 #import "NSString+UALocalizationAdditions.h"
+#import "UADispatcher+Internal.h"
 
 @interface UARateAppPromptViewController ()
 
@@ -58,14 +59,14 @@
 
     self.completionHandler = completionHandler;
 
-    dispatch_async(dispatch_get_main_queue(), ^{
+   [[UADispatcher mainDispatcher] dispatchAsync:^{
         UIViewController *topController = [UAUtils topController];
         self.popoverPresentationController.sourceView = topController.view;
 
         [topController presentViewController:self animated:YES completion:^{
 
         }];
-    });
+   }];
 }
 
 -(void)viewWillAppear:(BOOL)animated {

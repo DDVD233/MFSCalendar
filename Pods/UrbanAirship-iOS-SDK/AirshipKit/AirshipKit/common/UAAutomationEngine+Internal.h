@@ -1,11 +1,13 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
+#import <UIKit/UIKit.h>
 #import "UAAutomationStore+Internal.h"
 #import "UAAnalytics+Internal.h"
 #import "UAScheduleEdits.h"
 #import "UASchedule.h"
 #import "UAScheduleInfo.h"
 #import "UATimerScheduler+Internal.h"
+#import "UADispatcher+Internal.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -113,12 +115,18 @@ typedef NS_ENUM(NSInteger, UAAutomationSchedulePrepareResult) {
  * @param automationStore An initialized UAAutomationStore
  * @param timerScheduler A timer scheduler
  * @param notificationCenter The notification center.
+ * @param dispatcher The dispatcher to dispatch main queue blocks.
+ * @param application The main application.
+ * @param date The UADate instance.
+ *
  * @return Initialized Automation Engine instance
  */
 + (instancetype)automationEngineWithAutomationStore:(UAAutomationStore *)automationStore
                                      timerScheduler:(UATimerScheduler *)timerScheduler
-                                 notificationCenter:(NSNotificationCenter *)notificationCenter;
-
+                                 notificationCenter:(NSNotificationCenter *)notificationCenter
+                                         dispatcher:(UADispatcher *)dispatcher
+                                        application:(UIApplication *)application
+                                               date:(UADate *)date;
 
 /**
  * Starts the Automation Engine.
@@ -193,11 +201,18 @@ typedef NS_ENUM(NSInteger, UAAutomationSchedulePrepareResult) {
         completionHandler:(void (^)(UASchedule * __nullable))completionHandler;
 
 /**
- * Gets all schedules.
+ * Gets all unended schedules.
  *
  * @param completionHandler The completion handler with the result.
  */
 - (void)getSchedules:(void (^)(NSArray<UASchedule *> *))completionHandler;
+
+/**
+ * Gets all schedules, including schedules that have ended.
+ *
+ * @param completionHandler The completion handler with the result.
+ */
+- (void)getAllSchedules:(void (^)(NSArray<UASchedule *> *))completionHandler;
 
 /**
  * Gets all schedules of the given group.

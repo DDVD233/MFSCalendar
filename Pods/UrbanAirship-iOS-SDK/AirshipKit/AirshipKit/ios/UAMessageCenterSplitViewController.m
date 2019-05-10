@@ -1,4 +1,4 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import "UAMessageCenterSplitViewController.h"
 #import "UAMessageCenterListViewController.h"
@@ -25,7 +25,8 @@
 - (void)configure {
 
     self.listViewController = [[UAMessageCenterListViewController alloc] initWithNibName:@"UAMessageCenterListViewController"
-                                                                     bundle:[UAirship resources]];
+                                                                                  bundle:[UAirship resources]
+                                                                     splitViewController:self];
     self.listNav = [[UINavigationController alloc] initWithRootViewController:self.listViewController];
     self.viewControllers = @[self.listNav];
     

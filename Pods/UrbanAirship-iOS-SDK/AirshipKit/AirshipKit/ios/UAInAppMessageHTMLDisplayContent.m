@@ -1,8 +1,9 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import "UAInAppMessageHTMLDisplayContent+Internal.h"
 #import "UAColorUtils+Internal.h"
 #import "UAGlobal.h"
+#import "UAUtils+Internal.h"
 
 NSString *const UAInAppMessageHTMLDisplayContentDomain = @"com.urbanairship.html_display_content";
 NSString *const UAInAppMessageURLKey = @"url";
@@ -27,7 +28,7 @@ NSString *const UAInAppMessageURLKey = @"url";
         self.url = content.url;
         self.backgroundColor = content.backgroundColor;
         self.dismissButtonColor = content.dismissButtonColor;
-        self.borderRadius = content.borderRadius;
+        self.borderRadiusPoints = content.borderRadiusPoints;
         self.allowFullScreenDisplay = content.allowFullScreenDisplay;
     }
 
@@ -48,21 +49,29 @@ NSString *const UAInAppMessageURLKey = @"url";
     return YES;
 }
 
+- (NSUInteger)borderRadius {
+    return self.borderRadiusPoints;
+}
+
+- (void)setBorderRadius:(NSUInteger)borderRadius {
+    self.borderRadiusPoints = borderRadius;
+}
+
 @end
 
 @interface UAInAppMessageHTMLDisplayContent ()
 
-@property(nonatomic, copy) NSString *url;
+@property(nonatomic, strong) NSString *url;
 @property(nonatomic, strong) UIColor *backgroundColor;
 @property(nonatomic, strong) UIColor *dismissButtonColor;
-@property(nonatomic, assign) NSUInteger borderRadius;
+@property(nonatomic, assign) CGFloat borderRadiusPoints;
 @property(nonatomic, assign) BOOL allowFullScreenDisplay;
 
 @end
 
 @implementation UAInAppMessageHTMLDisplayContent
 
-+ (instancetype)displayContentWithBuilderBlock:(void (^)(UAInAppMessageHTMLDisplayContentBuilder *))builderBlock {
++ (nullable instancetype)displayContentWithBuilderBlock:(void (^)(UAInAppMessageHTMLDisplayContentBuilder *))builderBlock {
     UAInAppMessageHTMLDisplayContentBuilder *builder = [[UAInAppMessageHTMLDisplayContentBuilder alloc] init];
 
     if (builderBlock) {
@@ -72,7 +81,7 @@ NSString *const UAInAppMessageURLKey = @"url";
     return [[UAInAppMessageHTMLDisplayContent alloc] initWithBuilder:builder];
 }
 
-+ (instancetype)displayContentWithJSON:(id)json error:(NSError * _Nullable __autoreleasing *)error {
++ (nullable instancetype)displayContentWithJSON:(id)json error:(NSError * _Nullable __autoreleasing *)error {
     UAInAppMessageHTMLDisplayContentBuilder *builder = [[UAInAppMessageHTMLDisplayContentBuilder alloc] init];
 
     if (![json isKindOfClass:[NSDictionary class]]) {
@@ -129,7 +138,7 @@ NSString *const UAInAppMessageURLKey = @"url";
             }
             return nil;
         }
-        builder.borderRadius = [borderRadius unsignedIntegerValue];
+        builder.borderRadiusPoints = [borderRadius doubleValue];
     }
 
     id allowFullScreenDisplay = json[UAInAppMessageHTMLAllowsFullScreenKey];
@@ -164,7 +173,7 @@ NSString *const UAInAppMessageURLKey = @"url";
     self = [super init];
 
     if (![builder isValid]) {
-        UA_LDEBUG(@"UAInAppMessageHTMLScreenDisplayContent could not be initialized, builder has missing or invalid parameters.");
+        UA_LERR(@"UAInAppMessageHTMLScreenDisplayContent could not be initialized, builder has missing or invalid parameters.");
         return nil;
     }
 
@@ -173,7 +182,7 @@ NSString *const UAInAppMessageURLKey = @"url";
         self.backgroundColor = builder.backgroundColor;
         self.dismissButtonColor = builder.dismissButtonColor;
         self.allowFullScreenDisplay = builder.allowFullScreenDisplay;
-        self.borderRadius = builder.borderRadius;
+        self.borderRadiusPoints = builder.borderRadiusPoints;
     }
 
     return self;
@@ -185,20 +194,20 @@ NSString *const UAInAppMessageURLKey = @"url";
     [json setValue:self.url forKey:UAInAppMessageURLKey];
     [json setValue:[UAColorUtils hexStringWithColor:self.backgroundColor] forKey:UAInAppMessageBackgroundColorKey];
     [json setValue:[UAColorUtils hexStringWithColor:self.dismissButtonColor] forKey:UAInAppMessageDismissButtonColorKey];
-    [json setValue:@(self.borderRadius) forKey:UAInAppMessageBorderRadiusKey];
+    [json setValue:@(self.borderRadiusPoints) forKey:UAInAppMessageBorderRadiusKey];
     [json setValue:@(self.allowFullScreenDisplay) forKey:UAInAppMessageHTMLAllowsFullScreenKey];
 
     return [json copy];
 }
 
-- (UAInAppMessageHTMLDisplayContent *)extend:(void(^)(UAInAppMessageHTMLDisplayContentBuilder *builder))builderBlock {
+- (nullable UAInAppMessageHTMLDisplayContent *)extend:(void(^)(UAInAppMessageHTMLDisplayContentBuilder *builder))builderBlock {
     if (builderBlock) {
         UAInAppMessageHTMLDisplayContentBuilder *builder = [UAInAppMessageHTMLDisplayContentBuilder builderWithDisplayContent:self];
         builderBlock(builder);
         return [[UAInAppMessageHTMLDisplayContent alloc] initWithBuilder:builder];
     }
 
-    UA_LINFO(@"Extended %@ with nil builderBlock. Returning self.", self);
+    UA_LDEBUG(@"Extended %@ with nil builderBlock. Returning self.", self);
     return self;
 }
 
@@ -232,7 +241,7 @@ NSString *const UAInAppMessageURLKey = @"url";
         return NO;
     }
 
-    if (self.borderRadius != content.borderRadius) {
+    if (![UAUtils float:self.borderRadiusPoints isEqualToFloat:content.borderRadiusPoints withAccuracy:0.01]) {
         return NO;
     }
 
@@ -248,7 +257,7 @@ NSString *const UAInAppMessageURLKey = @"url";
     result = 31 * result + [self.url hash];
     result = 31 * result + [[UAColorUtils hexStringWithColor:self.backgroundColor] hash];
     result = 31 * result + [[UAColorUtils hexStringWithColor:self.dismissButtonColor] hash];
-    result = 31 * result + self.borderRadius;
+    result = 31 * result + self.borderRadiusPoints;
     result = 31 * result + self.allowFullScreenDisplay;
 
     return result;
@@ -260,6 +269,10 @@ NSString *const UAInAppMessageURLKey = @"url";
 
 - (UAInAppMessageDisplayType)displayType {
     return UAInAppMessageDisplayTypeHTML;
+}
+
+- (NSUInteger)borderRadius {
+    return self.borderRadiusPoints;
 }
 
 @end

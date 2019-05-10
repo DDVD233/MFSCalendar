@@ -1,4 +1,4 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import <UIKit/UIKit.h>
 #import "UAInAppMessageTextInfo.h"
@@ -34,36 +34,60 @@ extern NSUInteger const UAInAppMessageButtonInfoIDLimit;
 
 /**
  * Button label.
+ *
+ * Required
  */
-@property(nonatomic, strong) UAInAppMessageTextInfo *label;
+@property(nonatomic, strong, nullable) UAInAppMessageTextInfo *label;
 
 /**
- * Button identifier. Required. Must be between [1-100] characters.
+ * Button identifier.
+ *
+ * Required. Must be between [1-100] characters.
  */
-@property(nonatomic, copy) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /**
- * Button tap behavior. Defaults to UAInAppMessageButtonInfoBehaviorDismiss.
+ * Button tap behavior.
+ *
+ * Optional. Defaults to UAInAppMessageButtonInfoBehaviorDismiss.
  */
 @property(nonatomic, assign) UAInAppMessageButtonInfoBehaviorType behavior;
 
 /**
- * Button border radius. Defaults to 0.
+ * The button's border radius.
+ *
+ * Optional. Defaults to 0.
+ *
+ * @deprecated Deprecated - to be removed in SDK version 11.0. Please use `borderRadiusPoints`.
  */
-@property(nonatomic, assign) NSUInteger borderRadius;
+@property(nonatomic, assign) NSUInteger borderRadius DEPRECATED_MSG_ATTRIBUTE("Deprecated - to be removed in SDK version 11.0. Please use borderRadiusPoints.");
 
 /**
- * Button background color. Defaults to transparent.
+ * The button's border radius. Use to set the border radius
+ * to non-integer values.
+ *
+ * Optional. Defaults to 0.
+ */
+@property(nonatomic, assign) CGFloat borderRadiusPoints;
+
+/**
+ * Button background color.
+ *
+ * Optional. Defaults to transparent.
  */
 @property(nonatomic, strong) UIColor *backgroundColor;
 
 /**
- * Button border color. Defaults to transparent.
+ * Button border color.
+ *
+ * Optional. Defaults to transparent.
  */
 @property(nonatomic, strong) UIColor *borderColor;
 
 /**
  * Button actions.
+ *
+ * Optional.
  */
 @property(nonatomic, copy, nullable) NSDictionary *actions;
 
@@ -78,44 +102,53 @@ extern NSUInteger const UAInAppMessageButtonInfoIDLimit;
 
 /**
  * Defines an in-app message button.
+ *
+ * @note This object is built using `UAInAppMessageButtonInfoBuilder`.
  */
 @interface UAInAppMessageButtonInfo : NSObject
 
 /**
  * Button label.
  */
-@property(nonatomic, strong, readonly, nullable) UAInAppMessageTextInfo *label;
+@property(nonatomic, readonly) UAInAppMessageTextInfo *label;
 
 /**
  * Button identifier.
  */
-@property(nonatomic, copy, readonly, nullable) NSString *identifier;
+@property(nonatomic, readonly) NSString *identifier;
 
 /**
- * Button tap behavior. Defaults to UAInAppMessageButtonInfoBehaviorDismiss.
+ * Button tap behavior.
  */
-@property(nonatomic, assign, readonly) UAInAppMessageButtonInfoBehaviorType behavior;
+@property(nonatomic, readonly) UAInAppMessageButtonInfoBehaviorType behavior;
 
 /**
- * Button border radius. Defaults to 0.
+ * The button's border radius.
+ *
+ * @deprecated Deprecated - to be removed in SDK version 11.0. Please use `borderRadiusPoints`.
  */
-@property(nonatomic, assign, readonly) NSUInteger borderRadius;
+@property(nonatomic, readonly) NSUInteger borderRadius DEPRECATED_MSG_ATTRIBUTE("Deprecated - to be removed in SDK version 11.0. Please use borderRadiusPoints.");
 
 /**
- * Button background color. Defaults to transparent.
+ * The button's border radius. Use to set the border radius
+ * to non-integer values.
  */
-@property(nonatomic, strong, readonly, nullable) UIColor *backgroundColor;
+@property(nonatomic, readonly) CGFloat borderRadiusPoints;
 
 /**
- * Button border color. Defaults to transparent.
+ * Button background color.
  */
-@property(nonatomic, strong, readonly, nullable) UIColor *borderColor;
+@property(nonatomic, readonly) UIColor *backgroundColor;
+
+/**
+ * Button border color.
+ */
+@property(nonatomic, readonly) UIColor *borderColor;
 
 /**
  * Button actions.
  */
-@property(nonatomic, copy, readonly, nullable) NSDictionary *actions;
-
+@property(nonatomic, nullable, readonly) NSDictionary *actions;
 
 /**
  * Creates an in-app message button info with a builder block.
@@ -130,7 +163,7 @@ extern NSUInteger const UAInAppMessageButtonInfoIDLimit;
  * @param builderBlock The builder block.
  * @return An extended instance of UAInAppMessageButtonInfo.
  */
-- (UAInAppMessageButtonInfo *)extend:(void(^)(UAInAppMessageButtonInfoBuilder *builder))builderBlock;
+- (nullable UAInAppMessageButtonInfo *)extend:(void(^)(UAInAppMessageButtonInfoBuilder *builder))builderBlock;
 
 @end
 

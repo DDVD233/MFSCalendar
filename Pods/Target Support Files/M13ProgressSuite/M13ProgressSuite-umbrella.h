@@ -10,7 +10,6 @@
 #endif
 #endif
 
-#import "UIApplication+M13ProgressSuite.h"
 #import "M13ProgressConsole.h"
 #import "M13ProgressHUD.h"
 #import "UIImage+ImageEffects.h"

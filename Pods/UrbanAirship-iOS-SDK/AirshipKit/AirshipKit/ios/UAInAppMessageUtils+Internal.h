@@ -1,4 +1,4 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
@@ -113,6 +113,15 @@
  * @return The normalized dictionary of style values.
  */
 + (NSDictionary *)normalizeStyleDictionary:(NSDictionary *)keyedValues;
+
+
+/**
+ * Checks if binary data represents a gif.
+ *
+ * @param data The image data to be checked.
+ * @return YES if binary data represesents a gif, NO otherwise.
+ */
++ (BOOL)isGifData:(NSData *)data;
 
 
 @end

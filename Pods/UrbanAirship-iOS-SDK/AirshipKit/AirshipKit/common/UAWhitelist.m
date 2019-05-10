@@ -1,4 +1,4 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import "UAWhitelist.h"
 #import "UAGlobal.h"
@@ -151,7 +151,7 @@ typedef BOOL (^UAWhitelistMatcher)(NSURL *);
     NSURL *url = [NSURL URLWithString:pattern];
 
     if (!url) {
-        UA_LDEBUG(@"unable to parse URL for pattern: %@", pattern);
+        UA_LERR(@"unable to parse URL for pattern: %@", pattern);
         return nil;
     }
 
@@ -175,7 +175,7 @@ typedef BOOL (^UAWhitelistMatcher)(NSURL *);
     NSURL *url = [NSURL URLWithString:pattern];
 
     if (!url){
-        UA_LDEBUG(@"unable to parse URL for pattern: %@", pattern);
+        UA_LERR(@"unable to parse URL for pattern: %@", pattern);
         return nil;
     }
 
@@ -199,7 +199,7 @@ typedef BOOL (^UAWhitelistMatcher)(NSURL *);
     NSURL *url = [NSURL URLWithString:pattern];
 
     if (!url) {
-        UA_LDEBUG(@"unable to parse URL for pattern: %@", pattern);
+        UA_LERR(@"unable to parse URL for pattern: %@", pattern);
         return nil;
     }
 
@@ -287,7 +287,7 @@ typedef BOOL (^UAWhitelistMatcher)(NSURL *);
 - (BOOL)addEntry:(NSString *)patternString scope:(UAWhitelistScope)scope {
 
     if (!patternString || ![self validatePattern:patternString]) {
-        UA_LWARN(@"Invalid whitelist pattern: %@", patternString);
+        UA_LERR(@"Invalid whitelist pattern: %@", patternString);
         return NO;
     }
 
@@ -307,7 +307,7 @@ typedef BOOL (^UAWhitelistMatcher)(NSURL *);
 
     // If any of these are nil, something went wrong
     if (!schemeMatcher || !hostMatcher || !pathMatcher) {
-        UA_LINFO(@"Unable to build pattern matchers for whitelist entry: %@", patternString);
+        UA_LERR(@"Unable to build pattern matchers for whitelist entry: %@", patternString);
         return NO;
     }
 
@@ -348,8 +348,9 @@ typedef BOOL (^UAWhitelistMatcher)(NSURL *);
     
     // if the url is whitelisted, allow the delegate to reject the whitelisting
     if (match) {
-        if ([self.delegate respondsToSelector:@selector(acceptWhitelisting:scope:)]) {
-            match = [self.delegate acceptWhitelisting:url scope:scope];
+        id<UAWhitelistDelegate> delegate = self.delegate;
+        if ([delegate respondsToSelector:@selector(acceptWhitelisting:scope:)]) {
+            match = [delegate acceptWhitelisting:url scope:scope];
         }
     }
     

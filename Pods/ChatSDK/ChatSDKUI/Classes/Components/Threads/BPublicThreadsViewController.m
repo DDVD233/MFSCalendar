@@ -37,6 +37,7 @@
     
     // Add new group button
     if(BChatSDK.shared.configuration.allowUsersToCreatePublicChats) {
+        
         self.navigationItem.rightBarButtonItem =  [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
                                                                                                 target:self
                                                                                                 action:@selector(createThread)];
@@ -88,7 +89,10 @@
 
 -(void) reloadData {
     [_threads removeAllObjects];
-    [_threads addObjectsFromArray:[BChatSDK.core threadsWithType:bThreadTypePublicGroup]];
+    
+    NSArray * threads = [BChatSDK.core threadsWithType:bThreadTypePublicGroup];
+    [_threads addObjectsFromArray:threads];
+    
     [super reloadData];
 }
 

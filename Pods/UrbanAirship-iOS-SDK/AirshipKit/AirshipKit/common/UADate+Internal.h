@@ -1,4 +1,4 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import <Foundation/Foundation.h>
 
@@ -11,10 +11,9 @@ NS_ASSUME_NONNULL_BEGIN
 @interface UADate : NSObject
 
 /**
- * Returns current date and time.
- * @return An NSDate object for current date and time.
+ * The current date and time.
  */
-- (NSDate *)now;
+@property (nonatomic, readonly) NSDate *now;
 
 @end
 

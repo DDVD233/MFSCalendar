@@ -1,4 +1,4 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import "UAInAppMessageCustomDisplayContent+Internal.h"
 
@@ -6,7 +6,7 @@ NSString *const UAInAppMessageCustomDisplayContentKey = @"custom";
 NSString *const UAInAppMessageCustomDisplayContentDomain = @"com.urbanairship.custom_display_content";
 
 @interface UAInAppMessageCustomDisplayContent()
-@property (nonatomic, copy) NSDictionary *value;
+@property (nonatomic, copy, nonnull) NSDictionary *value;
 @end
 
 @implementation UAInAppMessageCustomDisplayContent
@@ -58,7 +58,12 @@ NSString *const UAInAppMessageCustomDisplayContentDomain = @"com.urbanairship.cu
         return NO;
     }
 
-    return [self.value isEqualToDictionary:((UAInAppMessageCustomDisplayContent *)object).value];
+    UAInAppMessageCustomDisplayContent *obj = (UAInAppMessageCustomDisplayContent *)object;
+    if (self.value != obj.value && ![self.value isEqual:obj.value]) {
+        return NO;
+    }
+    
+    return YES;
 }
 
 - (NSUInteger)hash {

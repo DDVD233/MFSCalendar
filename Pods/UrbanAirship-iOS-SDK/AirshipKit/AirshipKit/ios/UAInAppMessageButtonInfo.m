@@ -1,9 +1,10 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import "UAInAppMessageButtonInfo+Internal.h"
 #import "UAInAppMessageTextInfo+Internal.h"
 #import "UAGlobal.h"
 #import "UAColorUtils+Internal.h"
+#import "UAUtils+Internal.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -24,12 +25,12 @@ NSString *const UAInAppMessageButtonInfoBehaviorDismissValue = @"dismiss";
 
 @interface UAInAppMessageButtonInfo ()
 @property(nonatomic, strong) UAInAppMessageTextInfo *label;
-@property(nonatomic, copy) NSString *identifier;
+@property(nonatomic, strong) NSString *identifier;
 @property(nonatomic, assign) UAInAppMessageButtonInfoBehaviorType behavior;
 @property(nonatomic, strong) UIColor *backgroundColor;
 @property(nonatomic, strong) UIColor *borderColor;
-@property(nonatomic, assign) NSUInteger borderRadius;
-@property(nonatomic, copy, nullable) NSDictionary *actions;
+@property(nonatomic, assign) CGFloat borderRadiusPoints;
+@property(nonatomic, strong, nullable) NSDictionary *actions;
 @end
 
 @implementation UAInAppMessageButtonInfoBuilder
@@ -51,7 +52,7 @@ NSString *const UAInAppMessageButtonInfoBehaviorDismissValue = @"dismiss";
         self.label = info.label;
         self.identifier = info.identifier;
         self.behavior = info.behavior;
-        self.borderRadius = info.borderRadius;
+        self.borderRadiusPoints = info.borderRadiusPoints;
         self.backgroundColor = info.backgroundColor;
         self.borderColor = info.borderColor;
         self.actions = info.actions;
@@ -78,15 +79,23 @@ NSString *const UAInAppMessageButtonInfoBehaviorDismissValue = @"dismiss";
     return YES;
 }
 
+- (NSUInteger)borderRadius {
+    return self.borderRadiusPoints;
+}
+
+- (void)setBorderRadius:(NSUInteger)borderRadius {
+    self.borderRadiusPoints = borderRadius;
+}
+
 @end
 
 @implementation UAInAppMessageButtonInfo
 
-- (instancetype)initWithBuilder:(UAInAppMessageButtonInfoBuilder *)builder {
+- (nullable instancetype)initWithBuilder:(UAInAppMessageButtonInfoBuilder *)builder {
     self = [super init];
 
     if (![builder isValid]) {
-        UA_LDEBUG(@"UAInAppMessageButtonInfo instance could not be initialized, builder has missing or invalid parameters.");
+        UA_LERR(@"UAInAppMessageButtonInfo instance could not be initialized, builder has missing or invalid parameters.");
         return nil;
     }
 
@@ -95,7 +104,7 @@ NSString *const UAInAppMessageButtonInfoBehaviorDismissValue = @"dismiss";
         self.identifier = builder.identifier;
         self.behavior = builder.behavior;
         self.backgroundColor = builder.backgroundColor;
-        self.borderRadius = builder.borderRadius;
+        self.borderRadiusPoints = builder.borderRadiusPoints;
         self.borderColor = builder.borderColor;
         self.actions = builder.actions;
     }
@@ -211,18 +220,18 @@ NSString *const UAInAppMessageButtonInfoBehaviorDismissValue = @"dismiss";
         builder.borderColor = [UAColorUtils colorWithHexString:borderColorHex];
     }
 
-    id borderRadius = json[UAInAppMessageButtonInfoBorderRadiusKey];
-    if (borderRadius) {
-        if (![borderRadius isKindOfClass:[NSNumber class]]) {
+    id borderRadiusPoints = json[UAInAppMessageButtonInfoBorderRadiusKey];
+    if (borderRadiusPoints) {
+        if (![borderRadiusPoints isKindOfClass:[NSNumber class]]) {
             if (error) {
-                NSString *msg = [NSString stringWithFormat:@"Button border radius must be a number. Invalid value: %@", borderRadius];
+                NSString *msg = [NSString stringWithFormat:@"Button border radius must be a number. Invalid value: %@", borderRadiusPoints];
                 *error =  [NSError errorWithDomain:UAInAppMessageButtonInfoDomain
                                               code:UAInAppMessageButtonInfoErrorCodeInvalidJSON
                                           userInfo:@{NSLocalizedDescriptionKey:msg}];
             }
             return nil;
         }
-        builder.borderRadius = [borderRadius unsignedIntegerValue];
+        builder.borderRadiusPoints = [borderRadiusPoints doubleValue];
     }
 
     // Actions
@@ -260,7 +269,7 @@ NSString *const UAInAppMessageButtonInfoBehaviorDismissValue = @"dismiss";
 
     [json setValue:[self.label toJSON] forKey:UAInAppMessageButtonInfoLabelKey];
     [json setValue:self.identifier forKey:UAInAppMessageButtonInfoIdentifierKey];
-    [json setValue:@(self.borderRadius) forKey:UAInAppMessageButtonInfoBorderRadiusKey];
+    [json setValue:@(self.borderRadiusPoints) forKey:UAInAppMessageButtonInfoBorderRadiusKey];
 
     switch (self.behavior) {
         case UAInAppMessageButtonInfoBehaviorCancel:
@@ -282,14 +291,14 @@ NSString *const UAInAppMessageButtonInfoBehaviorDismissValue = @"dismiss";
     return [json copy];
 }
 
-- (UAInAppMessageButtonInfo *)extend:(void(^)(UAInAppMessageButtonInfoBuilder *builder))builderBlock {
+- (nullable UAInAppMessageButtonInfo *)extend:(void(^)(UAInAppMessageButtonInfoBuilder *builder))builderBlock {
     if (builderBlock) {
         UAInAppMessageButtonInfoBuilder *builder = [UAInAppMessageButtonInfoBuilder builderWithInfo:self];
         builderBlock(builder);
         return [[UAInAppMessageButtonInfo alloc] initWithBuilder:builder];
     }
 
-    UA_LINFO(@"Extended %@ with nil builderBlock. Returning self.", self);
+    UA_LDEBUG(@"Extended %@ with nil builderBlock. Returning self.", self);
     return self;
 }
 
@@ -332,6 +341,10 @@ NSString *const UAInAppMessageButtonInfoBehaviorDismissValue = @"dismiss";
     if (self.actions != info.actions && ![self.actions isEqualToDictionary:info.actions]) {
         return NO;
     }
+    
+    if (![UAUtils float:self.borderRadiusPoints isEqualToFloat:info.borderRadiusPoints withAccuracy:0.01]) {
+        return NO;
+    }
 
     return YES;
 }
@@ -344,12 +357,17 @@ NSString *const UAInAppMessageButtonInfoBehaviorDismissValue = @"dismiss";
     result = 31 * result + [self.backgroundColor hash];
     result = 31 * result + [self.borderColor hash];
     result = 31 * result + [self.actions hash];
+    result = 31 * result + self.borderRadiusPoints;
 
     return result;
 }
 
 - (NSString *)description {
     return [NSString stringWithFormat:@"<UAInAppMessageButtonInfo: %@>", [self toJSON]];
+}
+
+- (NSUInteger)borderRadius {
+    return self.borderRadiusPoints;
 }
 
 @end

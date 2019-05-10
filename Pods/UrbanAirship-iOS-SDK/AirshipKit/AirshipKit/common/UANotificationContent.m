@@ -1,4 +1,4 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import "UANotificationContent.h"
 #import "NSString+UALocalizationAdditions.h"
@@ -8,12 +8,15 @@
 @property (nonatomic, copy, nullable) NSString *alertTitle;
 @property (nonatomic, copy, nullable) NSString *alertBody;
 @property (nonatomic, copy, nullable) NSString *sound;
-@property (nonatomic, assign, nullable) NSNumber *badge;
+@property (nonatomic, strong, nullable) NSNumber *badge;
 @property (nonatomic, strong, nullable) NSNumber *contentAvailable;
+@property (nonatomic, copy, nullable) NSString *summaryArgument;
+@property (nonatomic, strong, nullable) NSNumber *summaryArgumentCount;
+@property (nonatomic, copy, nullable) NSString *threadIdentifier;
 @property (nonatomic, copy, nullable) NSString *categoryIdentifier;
 @property (nonatomic, copy, nullable) NSString *launchImage;
 @property (nonatomic, copy, nonnull) NSDictionary *notificationInfo;
-@property (nonatomic, strong, nullable) UNNotification *notification NS_AVAILABLE_IOS(10.0);
+@property (nonatomic, strong, nullable) UNNotification *notification;
 @end
 
 @implementation UANotificationContent
@@ -41,6 +44,12 @@
 
                     // Launch Image
                     self.launchImage = alert[@"launch-image"];
+
+                    // Summary Arg
+                    self.summaryArgument = alert[@"summary-arg"];
+
+                    // Summary Arg Count
+                    self.summaryArgumentCount = alert[@"summary-arg-count"];
                 }
             }
 
@@ -52,6 +61,9 @@
 
             // Category
             self.categoryIdentifier = apsDict[@"category"];
+
+            // Thread
+            self.threadIdentifier = apsDict[@"thread-id"];
         }
 
         // Original notification
@@ -62,7 +74,7 @@
 }
 
 
-- (instancetype)initWithUNNotification:(UNNotification *)notification NS_AVAILABLE_IOS(10.0) {
+- (instancetype)initWithUNNotification:(UNNotification *)notification {
     self = [super init];
     if (self) {
 #if !TARGET_OS_TV   // body, title, category and userInfo not available on tvOS
@@ -70,6 +82,12 @@
         self.alertTitle = notification.request.content.title;
         self.categoryIdentifier = notification.request.content.categoryIdentifier;
         self.notificationInfo = notification.request.content.userInfo;
+        self.threadIdentifier = notification.request.content.threadIdentifier;
+
+        if (@available(iOS 12.0, *)) {
+            self.summaryArgument = notification.request.content.summaryArgument;
+            self.summaryArgumentCount = [NSNumber numberWithUnsignedLong:notification.request.content.summaryArgumentCount];
+        }
 #endif
         self.badge = notification.request.content.badge;
         self.notification = notification;

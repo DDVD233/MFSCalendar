@@ -1,4 +1,4 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import "UAInboxMessageList+Internal.h"
 
@@ -11,6 +11,7 @@
 #import "UAUtils+Internal.h"
 #import "UAUser.h"
 #import "UAURLProtocol.h"
+#import "UADate+Internal.h"
 
 NSString * const UAInboxMessageListWillUpdateNotification = @"com.urbanairship.notification.message_list_will_update";
 NSString * const UAInboxMessageListUpdatedNotification = @"com.urbanairship.notification.message_list_updated";
@@ -19,6 +20,9 @@ typedef void (^UAInboxMessageFetchCompletionHandler)(NSArray *);
 
 @interface UAInboxMessageList()
 @property (nonatomic, strong) NSNotificationCenter *notificationCenter;
+@property (nonatomic, strong) UADispatcher *dispatcher;
+@property (nonatomic, strong) UADate *date;
+
 @end
 
 @implementation UAInboxMessageList
@@ -27,7 +31,14 @@ typedef void (^UAInboxMessageFetchCompletionHandler)(NSArray *);
 
 #pragma mark Create Inbox
 
-- (instancetype)initWithUser:(UAUser *)user client:(UAInboxAPIClient *)client config:(UAConfig *)config inboxStore:(UAInboxStore *)inboxStore notificationCenter:(NSNotificationCenter *)notificationCenter {
+- (instancetype)initWithUser:(UAUser *)user
+                      client:(UAInboxAPIClient *)client
+                      config:(UAConfig *)config
+                  inboxStore:(UAInboxStore *)inboxStore
+          notificationCenter:(NSNotificationCenter *)notificationCenter
+                  dispatcher:(UADispatcher *)dispatcher
+                  date:(UADate *)date {
+
     self = [super init];
 
     if (self) {
@@ -39,6 +50,8 @@ typedef void (^UAInboxMessageFetchCompletionHandler)(NSArray *);
         self.unreadCount = -1;
         self.messages = @[];
         self.notificationCenter = notificationCenter;
+        self.dispatcher = dispatcher;
+        self.date = date;
     }
 
     return self;
@@ -46,11 +59,32 @@ typedef void (^UAInboxMessageFetchCompletionHandler)(NSArray *);
 
 + (instancetype)messageListWithUser:(UAUser *)user client:(UAInboxAPIClient *)client config:(UAConfig *)config {
     UAInboxStore *inboxStore = [UAInboxStore storeWithName:[NSString stringWithFormat:kUACoreDataStoreName, config.appKey]];
-    return [UAInboxMessageList messageListWithUser:user client:client config:config inboxStore:inboxStore notificationCenter:[NSNotificationCenter defaultCenter]];
+
+    return [UAInboxMessageList messageListWithUser:user
+                                             client:client
+                                             config:config
+                                         inboxStore:inboxStore
+                                 notificationCenter:[NSNotificationCenter defaultCenter]
+                                         dispatcher:[UADispatcher mainDispatcher]
+                                               date:[[UADate alloc] init]];
 }
 
-+ (instancetype)messageListWithUser:(UAUser *)user client:(UAInboxAPIClient *)client config:(UAConfig *)config inboxStore:(UAInboxStore *)inboxStore notificationCenter:(nonnull NSNotificationCenter *)notificationCenter {
-    return [[UAInboxMessageList alloc] initWithUser:user client:client config:config inboxStore:inboxStore notificationCenter:notificationCenter];
++ (instancetype)messageListWithUser:(UAUser *)user
+                             client:(UAInboxAPIClient *)client
+                             config:(UAConfig *)config
+                         inboxStore:(UAInboxStore *)inboxStore
+                 notificationCenter:(NSNotificationCenter *)notificationCenter
+                         dispatcher:(UADispatcher *)dispatcher
+                               date:(UADate *)date {
+
+    
+    return [[UAInboxMessageList alloc] initWithUser:user
+                                             client:client
+                                             config:config
+                                         inboxStore:inboxStore
+                                 notificationCenter:notificationCenter
+                                         dispatcher:dispatcher
+                                               date:date];
 }
 
 #pragma mark Accessors
@@ -99,14 +133,15 @@ typedef void (^UAInboxMessageFetchCompletionHandler)(NSArray *);
 - (UADisposable *)retrieveMessageListWithSuccessBlock:(UAInboxMessageListCallbackBlock)successBlock
                                      withFailureBlock:(UAInboxMessageListCallbackBlock)failureBlock {
 
-    if (!self.user.isCreated) {
-        return nil;
-    }
 
     UA_LDEBUG("Retrieving message list.");
 
-    self.retrieveOperationCount++;
-    [self sendMessageListWillUpdateNotification];
+    UA_WEAKIFY(self)
+    [self.dispatcher dispatchAsyncIfNecessary:^{
+        UA_STRONGIFY(self)
+        self.retrieveOperationCount++;
+        [self sendMessageListWillUpdateNotification];
+    }];
 
     __block UAInboxMessageListCallbackBlock retrieveMessageListSuccessBlock = successBlock;
     __block UAInboxMessageListCallbackBlock retrieveMessageListFailureBlock = failureBlock;
@@ -117,59 +152,52 @@ typedef void (^UAInboxMessageFetchCompletionHandler)(NSArray *);
     }];
 
     void (^completionBlock)(BOOL) = ^(BOOL success){
-        if (self.retrieveOperationCount > 0) {
-            self.retrieveOperationCount--;
-        }
+        UA_STRONGIFY(self)
 
-        if (success) {
-            if (retrieveMessageListSuccessBlock) {
-                retrieveMessageListSuccessBlock();
+        // Always refresh the listing even if it's a failure
+        [self refreshInboxWithCompletionHandler:^ {
+            if (self.retrieveOperationCount > 0) {
+                self.retrieveOperationCount--;
             }
-        } else {
-            if (retrieveMessageListFailureBlock) {
-                retrieveMessageListFailureBlock();
+            if (success) {
+                if (retrieveMessageListSuccessBlock) {
+                    retrieveMessageListSuccessBlock();
+                }
+            } else {
+                if (retrieveMessageListFailureBlock) {
+                    retrieveMessageListFailureBlock();
+                }
             }
-        }
-
-        [self sendMessageListUpdatedNotification];
+            [self sendMessageListUpdatedNotification];
+        }];
     };
 
-    // Fetch new messages
-    UA_WEAKIFY(self)
+    // Fetch
     [self.client retrieveMessageListOnSuccess:^(NSUInteger status, NSArray *messages) {
         UA_STRONGIFY(self)
 
         // Sync client state
         [self syncLocalMessageState];
 
-        if (status == 200) {
-            UA_LDEBUG(@"Refreshing message list.");
+        UA_LDEBUG(@"Retrieve message list succeeded with status: %lu", (unsigned long)status);
 
+        if (status == 200) {
             [self.inboxStore syncMessagesWithResponse:messages completionHandler:^(BOOL success) {
                 UA_STRONGIFY(self)
                 if (!success) {
                     [self.client clearLastModifiedTime];
                     completionBlock(NO);
-                    return;
-                }
-
-                // Push changes onto the main context
-                [self refreshInboxWithCompletionHandler:^{
+                } else {
                     completionBlock(YES);
-                }];
+                }
             }];
         } else {
-            UA_LDEBUG(@"Retrieve message list succeeded with status: %lu", (unsigned long)status);
-            dispatch_async(dispatch_get_main_queue(), ^{
-                completionBlock(YES);
-            });
+            // 304
+            completionBlock(YES);
         }
-
     } onFailure:^(){
         UA_LDEBUG(@"Retrieve message list failed");
-        dispatch_async(dispatch_get_main_queue(), ^{
-            completionBlock(NO);
-        });
+        completionBlock(NO);
     }];
 
     return disposable;
@@ -183,19 +211,21 @@ typedef void (^UAInboxMessageFetchCompletionHandler)(NSArray *);
 
     NSArray *messageIDs = [messages valueForKeyPath:@"messageID"];
 
-    for (UAInboxMessage *message in messages) {
-        message.unread = NO;
-    }
-
-    self.batchOperationCount++;
-    [self sendMessageListWillUpdateNotification];
+    UA_WEAKIFY(self)
+    [self.dispatcher dispatchAsyncIfNecessary:^{
+        UA_STRONGIFY(self)
+        for (UAInboxMessage *message in messages) {
+            message.unread = NO;
+        }
+        self.batchOperationCount++;
+        [self sendMessageListWillUpdateNotification];
+    }];
 
     __block UAInboxMessageListCallbackBlock inboxMessageListCompletionBlock = completionHandler;
     UADisposable *disposable = [UADisposable disposableWithBlock:^{
         inboxMessageListCompletionBlock = nil;
     }];
 
-    UA_WEAKIFY(self)
     [self.inboxStore fetchMessagesWithPredicate:[NSPredicate predicateWithFormat:@"messageID IN %@", messageIDs]
                               completionHandler:^(NSArray<UAInboxMessageData *> *data) {
                                   UA_STRONGIFY(self)
@@ -231,22 +261,28 @@ typedef void (^UAInboxMessageFetchCompletionHandler)(NSArray *);
 
     NSArray *messageIDs = [messages valueForKeyPath:@"messageID"];
 
-    self.batchOperationCount++;
-    [self sendMessageListWillUpdateNotification];
+
+    UA_WEAKIFY(self)
+    [self.dispatcher dispatchAsyncIfNecessary:^{
+        UA_STRONGIFY(self)
+        for (UAInboxMessage *message in messages) {
+            message.unread = NO;
+        }
+        self.batchOperationCount++;
+        [self sendMessageListWillUpdateNotification];
+    }];
 
     __block UAInboxMessageListCallbackBlock inboxMessageListCompletionBlock = completionHandler;
     UADisposable *disposable = [UADisposable disposableWithBlock:^{
         inboxMessageListCompletionBlock = nil;
     }];
 
-
-    UA_WEAKIFY(self)
     [self.inboxStore fetchMessagesWithPredicate:[NSPredicate predicateWithFormat:@"messageID IN %@", messageIDs]
                               completionHandler:^(NSArray<UAInboxMessageData *> *data) {
 
                                   UA_STRONGIFY(self)
 
-                                  UA_LDEBUG(@"Marking messages as deleted %@.", messageIDs);
+                                  UA_LTRACE(@"Marking messages as deleted %@.", messageIDs);
                                   for (UAInboxMessageData *messageData in data) {
                                       messageData.deletedClient = YES;
                                   }
@@ -291,7 +327,7 @@ typedef void (^UAInboxMessageFetchCompletionHandler)(NSArray *);
  */
 - (void)refreshInboxWithCompletionHandler:(void (^)(void))completionHandler {
     NSString *predicateFormat = @"(messageExpiration == nil || messageExpiration >= %@) && (deletedClient == NO || deletedClient == nil)";
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:predicateFormat, [NSDate date]];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:predicateFormat, [self.date now]];
 
     UA_WEAKIFY(self)
     [self.inboxStore fetchMessagesWithPredicate:predicate
@@ -305,23 +341,20 @@ typedef void (^UAInboxMessageFetchCompletionHandler)(NSArray *);
                                       if (message.unread) {
                                           unreadCount ++;
                                       }
-                                      // Add messsage's body url to the cachable urls
-                                      [UAURLProtocol addCachableURL:message.messageBodyURL];
 
                                       [messages addObject:message];
                                   }
 
-                                  UA_LINFO(@"Inbox messages updated.");
+                                  [self.dispatcher dispatchAsync:^{
+                                      UA_LDEBUG(@"Inbox messages updated.");
+                                      UA_LTRACE(@"Loaded saved messages: %@.", messages);
+                                      self.unreadCount = unreadCount;
+                                      self.messages = messages;
 
-                                  UA_LTRACE(@"Loaded saved messages: %@.", messages);
-                                  self.unreadCount = unreadCount;
-                                  self.messages = messages;
-
-                                  if (completionHandler) {
-                                      dispatch_async(dispatch_get_main_queue(), ^{
+                                      if (completionHandler) {
                                           completionHandler();
-                                      });
-                                  }
+                                      }
+                                  }];
                               }];
 }
 
@@ -342,7 +375,7 @@ typedef void (^UAInboxMessageFetchCompletionHandler)(NSArray *);
                                   NSArray *messageURLs = [data valueForKeyPath:@"messageURL"];
                                   NSArray *messageIDs = [data valueForKeyPath:@"messageID"];
 
-                                  UA_LDEBUG(@"Synchronizing locally read messages %@ on server.", messageIDs);
+                                  UA_LTRACE(@"Synchronizing locally read messages %@ on server.", messageIDs);
 
                                   [self.client performBatchMarkAsReadForMessageURLs:messageURLs onSuccess:^{
 
@@ -353,10 +386,10 @@ typedef void (^UAInboxMessageFetchCompletionHandler)(NSArray *);
                                                                         messageData.unread = NO;
                                                                     }
 
-                                                                    UA_LDEBUG(@"Successfully synchronized locally read messages on server.");
+                                                                    UA_LTRACE(@"Successfully synchronized locally read messages on server.");
                                                                 }];
                                   } onFailure:^() {
-                                      UA_LDEBUG(@"Failed to synchronize locally read messages on server.");
+                                      UA_LTRACE(@"Failed to synchronize locally read messages on server.");
                                   }];
 
                               }];
@@ -381,12 +414,12 @@ typedef void (^UAInboxMessageFetchCompletionHandler)(NSArray *);
                                   NSArray *messageURLs = [data valueForKeyPath:@"messageURL"];
                                   NSArray *messageIDs = [data valueForKeyPath:@"messageID"];
 
-                                  UA_LDEBUG(@"Synchronizing locally deleted messages %@ on server.", messageIDs);
+                                  UA_LTRACE(@"Synchronizing locally deleted messages %@ on server.", messageIDs);
 
                                   [self.client performBatchDeleteForMessageURLs:messageURLs onSuccess:^{
-                                      UA_LDEBUG(@"Successfully synchronized locally deleted messages on server.");
+                                      UA_LTRACE(@"Successfully synchronized locally deleted messages on server.");
                                   } onFailure:^() {
-                                      UA_LDEBUG(@"Failed to synchronize locally deleted messages on server.");
+                                      UA_LTRACE(@"Failed to synchronize locally deleted messages on server.");
                                   }];
                               }];
 }

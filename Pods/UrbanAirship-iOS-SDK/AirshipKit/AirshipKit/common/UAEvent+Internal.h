@@ -1,4 +1,4 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import "UAEvent.h"
 
@@ -73,6 +73,13 @@ NS_ASSUME_NONNULL_BEGIN
  * @return The current notification types as a string array.
  */
 - (NSArray *)notificationTypes;
+
+/**
+ * Gets the current notification authorization as a string.
+ *
+ * @return The current notification authorization as a string.
+ */
+- (NSString *)notificationAuthorization;
 
 
 @end

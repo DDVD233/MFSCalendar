@@ -153,8 +153,8 @@ public class RelativeFormatter: DateToStringTrasformable {
 	///
 	/// - Parameter lang: language file type
 	public static func addLanguage(_ lang: RelativeFormatterLang.Type) {
-		self.shared.languagesMap[lang.identifier] = lang // replace or add
-		self.shared.languagesCache.removeValue(forKey: lang.identifier) // cleanup cache
+		shared.languagesMap[lang.identifier] = lang // replace or add
+		shared.languagesCache.removeValue(forKey: lang.identifier) // cleanup cache
 	}
 
 	/// Return the language table for a specified locale.
@@ -162,22 +162,25 @@ public class RelativeFormatter: DateToStringTrasformable {
 	///
 	/// - Parameter locale: locale to load
 	/// - Returns: language table
-	private func language(forLocale locale: Locale) -> RelativeFormatterLang {
-		let localeId = (locale.collatorIdentifier ?? Locales.english.toLocale().collatorIdentifier!)
-		guard let table = self.languagesCache[localeId] else {
-			var tableType = self.languagesMap[localeId]
-			if tableType == nil {
-				tableType = self.languagesMap[localeId.components(separatedBy: "-").first!]
-				if tableType == nil {
-					return language(forLocale: Locales.english.toLocale())
-				}
-			}
-			let instanceOfTable = tableType!.init()
-			self.languagesCache[localeId] = instanceOfTable
-			return instanceOfTable
-		}
-		return table
-	}
+    private func language(forLocale locale: Locale) -> RelativeFormatterLang {
+        let localeId = (locale.collatorIdentifier ?? Locales.english.toLocale().collatorIdentifier!)
+        guard let table = languagesCache[localeId] else {
+            var tableType = languagesMap[localeId]
+            if tableType == nil {
+                tableType = languagesMap[localeId.components(separatedBy: "_").first!]
+                if tableType == nil {
+                    tableType = languagesMap[localeId.components(separatedBy: "-").first!]
+                }
+                if tableType == nil {
+                    return language(forLocale: Locales.english.toLocale())
+                }
+            }
+            let instanceOfTable = tableType!.init()
+            languagesCache[localeId] = instanceOfTable
+            return instanceOfTable
+        }
+        return table
+    }
 
 	/// Implementation of the protocol for DateToStringTransformable.
 	public static func format(_ date: DateRepresentable, options: Any?) -> String {
@@ -238,7 +241,7 @@ public class RelativeFormatter: DateToStringTrasformable {
 			amount = round(amount / granularity) * granularity
 		}
 
-		let value: Double = -1.0 * Double(elapsed.sign) * round(amount)
+		let value: Double = -1.0 * Double(elapsed.sign) * suitableRule.roundingStrategy.roundValue(amount)
 		let formatString = relativeFormat(locale: locale, flavour: flavour, value: value, unit: suitableRule.unit)
 		return formatString.replacingOccurrences(of: "{0}", with: String(Int(abs(value))))
 	}
@@ -257,10 +260,29 @@ public class RelativeFormatter: DateToStringTrasformable {
 			return ""
 		}
 
-		// Choose either "past" or "future" based on time `value` sign.
-		// If "past" is same as "future" then they're stored as "other".
-		// If there's only "other" then it's being collapsed.
-		let quantifierKey = (value <= 0 ? "past" : "future")
+    // Choose either "previous", "past", "current", "next" or "future" based on time `value` sign.
+    // If "next" is not present, we fallback on "future"
+    // If "previous" is not present, we fallback on "past"
+    // If "current" is not present, we fallback on "past"
+    // If "past" is same as "future" then they're stored as "other".
+    // If there's only "other" then it's being collapsed.
+    let quantifierKey: String
+
+    switch value {
+    case -1 where unitRules["previous"] != nil: // If it is previous value -1, and previous unitRule exist
+      quantifierKey = "previous"
+    case 0 where unitRules["current"] != nil: // If it is current value 0, and current unitRule exist
+      quantifierKey = "current"
+    case ...0: // If value is up to 0 included, also fallback when current or previous isn't found
+      quantifierKey = "past"
+    case 1 where unitRules["next"] != nil: // If it is next value 1, and next unitRule exist
+      quantifierKey = "next"
+    case 1...: // If it is future value >0, and fallback if next isn't found
+      quantifierKey = "future"
+    default: // Should never happen
+      fatalError()
+    }
+
 		if let fixedValue = unitRules[quantifierKey] as? String {
 			return fixedValue
 		} else if let quantifierRules = unitRules[quantifierKey] as? [String: Any] {
@@ -268,7 +290,11 @@ public class RelativeFormatter: DateToStringTrasformable {
 			// "other" rule is supposed to always be present.
 			// If only "other" rule is present then "rules" is not an object and is a string.
 			let quantifier = (table.quantifyKey(forValue: abs(value)) ?? .other).rawValue
-			return (quantifierRules[quantifier] as? String ?? "")
+			if let relativeFormat = quantifierRules[quantifier] as? String {
+				return relativeFormat
+			} else {
+				return quantifierRules[RelativeFormatter.PluralForm.other.rawValue] as? String ?? ""
+			}
 		} else {
 			return ""
 		}
@@ -371,7 +397,7 @@ public class RelativeFormatter: DateToStringTrasformable {
 
 	/// Evaluate threshold.
 	private static func threshold(from fromRule: Gradation.Rule?, to toRule: Gradation.Rule, now: TimeInterval) -> Double? {
-		var threshold: Double? = nil
+		var threshold: Double?
 
 		// Allows custom thresholds when moving
 		// from a specific step to a specific step.

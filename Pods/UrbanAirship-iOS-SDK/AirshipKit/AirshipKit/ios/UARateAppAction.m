@@ -1,12 +1,13 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import <StoreKit/StoreKit.h>
 
-#import "UARateAppAction.h"
+#import "UARateAppAction+Internal.h"
 #import "UAirship.h"
 #import "UAConfig.h"
 #import "UAPreferenceDataStore+Internal.h"
 #import "UARateAppPromptViewController+Internal.h"
+#import "UASystemVersion+Internal.h"
 
 @interface UARateAppAction ()
 
@@ -68,8 +69,11 @@ NSString *const UARateAppLinkPromptTimestampsKey = @"RateAppActionLinkPromptCoun
 }
 
 -(BOOL)parseArguments:(UAActionArguments *)arguments {
+    if (self.systemVersion == nil) {
+        self.systemVersion = [UASystemVersion systemVersion];
+    }
 
-    legacy = ![[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){10, 3, 0}];
+    legacy = ![self.systemVersion isGreaterOrEqualToVersion:@"10.3.0"];
 
     id showLinkPrompt;
     id linkPromptTitle;
@@ -77,7 +81,7 @@ NSString *const UARateAppLinkPromptTimestampsKey = @"RateAppActionLinkPromptCoun
     id itunesID;
 
     if (arguments.value != nil && ![arguments.value isKindOfClass:[NSDictionary class]]) {
-        UA_LWARN(@"Unable to parse arguments: %@", arguments);
+        UA_LERR(@"Unable to parse arguments: %@", arguments);
         return NO;
     }
 
@@ -87,50 +91,50 @@ NSString *const UARateAppLinkPromptTimestampsKey = @"RateAppActionLinkPromptCoun
     itunesID = [arguments.value objectForKey:UARateAppItunesIDKey] ?: [[UAirship shared].config itunesID];
 
     if (!showLinkPrompt) {
-        UA_LWARN(@"show_link_prompt not provided in arguments: %@, show_link_prompt is required.", arguments);
+        UA_LERR(@"show_link_prompt not provided in arguments: %@, show_link_prompt is required.", arguments);
         return NO;
     }
 
     if (![showLinkPrompt isKindOfClass:[NSNumber class]]) {
-        UA_LWARN(@"Parsed an invalid show_link_prompt from arguments: %@. show_link_prompt must be an NSNumber or BOOL.", arguments);
+        UA_LERR(@"Parsed an invalid show_link_prompt from arguments: %@. show_link_prompt must be an NSNumber or BOOL.", arguments);
         return NO;
     }
 
     if (linkPromptTitle) {
         if (![linkPromptTitle isKindOfClass:[NSString class]]) {
-            UA_LWARN(@"Parsed an invalid link prompt title from arguments: %@. Link prompt title must be an NSString.", arguments);
+            UA_LERR(@"Parsed an invalid link prompt title from arguments: %@. Link prompt title must be an NSString.", arguments);
             return NO;
         }
 
         if ([linkPromptTitle length] > kMaxTitleChars) {
-            UA_LWARN(@"Parsed an invalid link prompt title from arguments: %@. Link prompt title must be shorter than 24 characters in length.", arguments);
+            UA_LERR(@"Parsed an invalid link prompt title from arguments: %@. Link prompt title must be shorter than 24 characters in length.", arguments);
             return NO;
         }
     }
 
     if (linkPromptBody) {
         if (![linkPromptBody isKindOfClass:[NSString class]]) {
-            UA_LWARN(@"Parsed an invalid link prompt body from arguments: %@. Link prompt body must be an NSString.", arguments);
+            UA_LERR(@"Parsed an invalid link prompt body from arguments: %@. Link prompt body must be an NSString.", arguments);
             return NO;
         }
 
         if ([linkPromptBody length] > kMaxBodyChars) {
-            UA_LWARN(@"Parsed an invalid link prompt body from arguments: %@. Link prompt body must be shorter than 50 characters in length.", arguments);
+            UA_LERR(@"Parsed an invalid link prompt body from arguments: %@. Link prompt body must be shorter than 50 characters in length.", arguments);
             return NO;
         }
     }
 
     if (!itunesID) {
-        UA_LWARN(@"iTunes ID is required.");
+        UA_LERR(@"iTunes ID is required.");
         return NO;
     } else {
         if (![itunesID isKindOfClass:[NSString class]]) {
-            UA_LWARN(@"Parsed an invalid itunes ID from arguments: %@. Link itunes ID must be an NSString.", arguments);
+            UA_LERR(@"Parsed an invalid itunes ID from arguments: %@. Link itunes ID must be an NSString.", arguments);
             return NO;
         }
 
         if ([itunesID length] == 0) {
-            UA_LWARN(@"Parsed an invalid itunes ID from arguments: %@ - itunes ID must not be an empty string.", arguments);
+            UA_LERR(@"Parsed an invalid itunes ID from arguments: %@ - itunes ID must not be an empty string.", arguments);
             return NO;
         }
     }
@@ -163,17 +167,15 @@ NSString *const UARateAppLinkPromptTimestampsKey = @"RateAppActionLinkPromptCoun
     UAPreferenceDataStore *dataStore = [UAPreferenceDataStore preferenceDataStoreWithKeyPrefix:[UAirship shared].config.appKey];
     NSNumber *todayTimestamp = [NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]];
 
-    NSMutableArray *timestamps = [NSMutableArray arrayWithArray:[self getTimestampsForKey:key]];
-
     // Remove timestamps more than a year old
-    for (NSNumber *timestamp in timestamps) {
-        if ((todayTimestamp.doubleValue - timestamp.doubleValue) > kSecondsInYear) {
-            [timestamps removeObject:timestamp];
-        }
-    }
+    NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(id  _Nullable evaluatedObject, NSDictionary<NSString *,id> * _Nullable bindings) {
+        NSNumber *timestamp = evaluatedObject;
+        return (todayTimestamp.doubleValue - timestamp.doubleValue) <= kSecondsInYear;
+    }];
 
     // Store timestamp for this call
-    [timestamps addObject:todayTimestamp];
+    NSArray *timestamps = [[[self getTimestampsForKey:key] filteredArrayUsingPredicate:predicate] arrayByAddingObject:todayTimestamp];
+
     [dataStore setObject:timestamps forKey:key];
 }
 
@@ -200,13 +202,7 @@ NSString *const UARateAppLinkPromptTimestampsKey = @"RateAppActionLinkPromptCoun
         return;
     }
 
-    if ([[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){10, 0, 0}]) {
-        if (@available(iOS 10.0, *)) {
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:linkString] options:@{} completionHandler:nil];
-        }
-    } else {
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:linkString]];
-    }
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:linkString] options:@{} completionHandler:nil];
 }
 
 // Rate app action for iOS 8+ with application's track ID using a store URL link

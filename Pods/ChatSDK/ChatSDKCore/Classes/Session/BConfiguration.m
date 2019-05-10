@@ -63,6 +63,7 @@
 @synthesize inviteByEmailBody;
 @synthesize inviteBySMSBody;
 @synthesize audioMessageMaxLengthSeconds;
+@synthesize maxImageDimension;
 
 @synthesize xmppPort;
 @synthesize xmppDomain;
@@ -73,6 +74,11 @@
 @synthesize textInputViewMaxLines;
 @synthesize textInputViewMaxCharacters;
 @synthesize shouldAskForNotificationsPermission;
+@synthesize xmppAuthType;
+
+@synthesize nearbyUserDistanceBands;
+@synthesize publicChatRoomLifetimeMinutes;
+@synthesize nearbyUsersMinimumLocationChangeToUpdateServer;
 
 -(instancetype) init {
     if((self = [super init])) {
@@ -146,6 +152,8 @@
         
         userChatInfoEnabled = YES;
         
+        maxImageDimension = 600;
+        
         inviteByEmailTitle = [BSettingsManager property: bEmailTitle forModule: @"contact_book"];
         inviteByEmailBody = [BSettingsManager property: bEmailBody forModule: @"contact_book"];
         inviteBySMSBody = [BSettingsManager property: bSMSBody forModule: @"contact_book"];
@@ -163,6 +171,15 @@
         
         textInputViewMaxCharacters = 0;
         textInputViewMaxLines = 5;
+        
+        xmppAuthType = @"default";
+
+        _termsOfServiceURL = @"https://chatsdk.co/terms-and-conditions";
+        
+        nearbyUserDistanceBands = @[@1000, @5000, @10000, @50000];
+        nearbyUsersMinimumLocationChangeToUpdateServer = 50;
+        
+        publicChatRoomLifetimeMinutes = 7 * 60 * 24;
         
     }
     return self;

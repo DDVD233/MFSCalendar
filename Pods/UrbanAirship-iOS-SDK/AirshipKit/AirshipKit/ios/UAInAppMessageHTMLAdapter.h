@@ -1,8 +1,10 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import <Foundation/Foundation.h>
 #import "UAInAppMessageAdapterProtocol.h"
 #import "UAInAppMessageHTMLStyle.h"
+
+NS_ASSUME_NONNULL_BEGIN
 
 /**
  * HTML in-app message display adapter.
@@ -20,3 +22,5 @@ extern NSString *const UAHTMLStyleFileName;
 @property(nonatomic, strong, nullable) UAInAppMessageHTMLStyle *style;
 
 @end
+
+NS_ASSUME_NONNULL_END

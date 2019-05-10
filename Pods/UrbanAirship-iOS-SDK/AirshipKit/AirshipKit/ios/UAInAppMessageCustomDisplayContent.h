@@ -1,4 +1,4 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import <Foundation/Foundation.h>
 #import "UAInAppMessageDisplayContent.h"
@@ -12,6 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  * The custom content.
+ *
+ * Optional.
  */
 @property (nonatomic, readonly) NSDictionary *value;
 

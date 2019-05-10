@@ -27,48 +27,48 @@ public extension Int {
 	}
 
 	/// Create a `DateComponents` with `self` value set as nanoseconds
-	public var nanoseconds: DateComponents {
-		return self.toDateComponents(type: .nanosecond)
+	var nanoseconds: DateComponents {
+		return toDateComponents(type: .nanosecond)
 	}
 
 	/// Create a `DateComponents` with `self` value set as seconds
-	public var seconds: DateComponents {
-		return self.toDateComponents(type: .second)
+	var seconds: DateComponents {
+		return toDateComponents(type: .second)
 	}
 
 	/// Create a `DateComponents` with `self` value set as minutes
-	public var minutes: DateComponents {
-		return self.toDateComponents(type: .minute)
+	var minutes: DateComponents {
+		return toDateComponents(type: .minute)
 	}
 
 	/// Create a `DateComponents` with `self` value set as hours
-	public var hours: DateComponents {
-		return self.toDateComponents(type: .hour)
+	var hours: DateComponents {
+		return toDateComponents(type: .hour)
 	}
 
 	/// Create a `DateComponents` with `self` value set as days
-	public var days: DateComponents {
-		return self.toDateComponents(type: .day)
+	var days: DateComponents {
+		return toDateComponents(type: .day)
 	}
 
 	/// Create a `DateComponents` with `self` value set as weeks
-	public var weeks: DateComponents {
-		return self.toDateComponents(type: .weekOfYear)
+	var weeks: DateComponents {
+		return toDateComponents(type: .weekOfYear)
 	}
 
 	/// Create a `DateComponents` with `self` value set as months
-	public var months: DateComponents {
-		return self.toDateComponents(type: .month)
+	var months: DateComponents {
+		return toDateComponents(type: .month)
 	}
 
 	/// Create a `DateComponents` with `self` value set as years
-	public var years: DateComponents {
-		return self.toDateComponents(type: .year)
+	var years: DateComponents {
+		return toDateComponents(type: .year)
 	}
 
 	/// Create a `DateComponents` with `self` value set as quarters
-	public var quarters: DateComponents {
-		return self.toDateComponents(type: .quarter)
+	var quarters: DateComponents {
+		return toDateComponents(type: .quarter)
 	}
 
 }

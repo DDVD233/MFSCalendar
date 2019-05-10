@@ -170,21 +170,16 @@
                     
                     [BChatSDK.core save];
 
-                    [BChatSDK.hook executeHookWithName:bHookMessageRecieved data:@{bHookMessageReceived_PMessage: message.model}];
+                    if(BChatSDK.readReceipt) {
+                        [BChatSDK.readReceipt updateReadReceiptsForThread:self.model];
+                    }
 
                     if (newMessage) {
-                        // TODO: Maybe change here
-                        
                         dispatch_async(dispatch_get_main_queue(), ^{
-                            [[NSNotificationCenter defaultCenter] postNotificationName:bNotificationMessageAdded
-                                                                                object:Nil
-                                                                              userInfo:@{bNotificationMessageAddedKeyMessage: message.model}];
+                            [BHookNotification notificationMessageReceived: message.model];
                             
-                            NSLog(@"Message: %@, %@", message.model.textString, message.model.date);
+//                            NSLog(@"Message: %@, %@", message.model.textString, message.model.date);
                             
-                            if(BChatSDK.readReceipt) {
-                                [BChatSDK.readReceipt updateReadReceiptsForThread:self.model];
-                            }
                         });
                     }
                     [promise resolveWithResult:self];
@@ -194,7 +189,7 @@
                 }
             }];
         });
-        
+                
         query = [FIRDatabaseReference threadMessagesRef:strongSelf.model.entityID];
         [query queryOrderedByChild:bDate];
         
@@ -244,8 +239,9 @@
 
     FIRDatabaseReference * ref = [FIRDatabaseReference threadMetaRef:_model.entityID];
     [ref observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * snapshot) {
-        if(snapshot.value != [NSNull null]) {
-            for(NSString * key in snapshot.value) {
+        if(snapshot.value != [NSNull null] && [snapshot.value isKindOfClass: [NSDictionary class]]) {
+            NSDictionary * dict = (NSDictionary *) snapshot.value;
+            for(NSString * key in dict.allKeys) {
                 [_model setMetaValue:snapshot.value[key] forKey:key];
                 [[NSNotificationCenter defaultCenter] postNotificationName:bNotificationThreadMetaUpdated object:Nil];
             }
@@ -493,10 +489,15 @@
 }
 
 -(NSDictionary *) serialize {
-    return @{bDetailsPath: @{bCreationDate: [FIRServerValue timestamp],
-                             bUserNameKey: _model.name ? _model.name : @"",
-                             bTypeV4: _model.type,
-                             bCreatorEntityID: _model.creator.entityID}};
+    return @{bDetailsPath: self.serializeMeta};
+}
+
+-(NSDictionary *) serializeMeta {
+    return @{bCreationDate: [FIRServerValue timestamp],
+             bUserNameKey: [NSString safe:_model.name],
+             bTypeV4: _model.type,
+             bImageURL: [NSString safe: [_model.meta valueForKey:bImageURL]],
+             bCreatorEntityID: _model.creator.entityID};
 }
 
 -(void) deserialize: (NSDictionary *) value {
@@ -510,6 +511,11 @@
     
     if(typev4) {
         _model.type = typev4;
+    }
+    
+    NSString * imageURL = value[bImageURL];
+    if (imageURL) {
+        [_model setMetaValue:imageURL forKey:bImageURL];
     }
     
     NSString * creatorEntityID = value[bCreatorEntityID];
@@ -537,14 +543,13 @@
 -(RXPromise *) push {
     RXPromise * promise = [RXPromise new];
     
-    FIRDatabaseReference * ref = Nil;
-    if(_model.entityID) {
-        ref = [FIRDatabaseReference threadRef:_model.entityID];
+    if(!_model.entityID || !_model.entityID.length) {
+        _model.entityID = [[FIRDatabaseReference threadsRef] childByAutoId].key;
     }
-    else {
-        ref = [[FIRDatabaseReference threadsRef] childByAutoId];
-        _model.entityID = ref.key;
-    }
+    
+    FIRDatabaseReference * ref = [FIRDatabaseReference threadRef:_model.entityID];
+    FIRDatabaseReference * metaRef = [FIRDatabaseReference threadMetaRef:_model.entityID];
+    
     
     [ref updateChildValues:self.serialize withCompletionBlock:^(NSError * error, FIRDatabaseReference * ref) {
         if (!error) {
@@ -555,6 +560,10 @@
             [promise rejectWithReason:error];
         }
     }];
+    
+    // Also update the meta ref - we do this for forwards compatibility
+    // in the future we will move everything to the meta area
+    [metaRef updateChildValues:self.serializeMeta];
     
     return promise;
 }
@@ -612,7 +621,7 @@
     [ref observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * snapshot) {
         if(snapshot.value != [NSNull null]) {
             NSString * messageText = snapshot.value[bMessagePayload];
-            [[NSNotificationCenter defaultCenter] postNotificationName:bNotificationThreadLastMessageUpdated object:Nil userInfo:@{bNotificationThreadLastMessageUpdated_Text: messageText ? messageText : @""}];
+            [[NSNotificationCenter defaultCenter] postNotificationName:bNotificationThreadLastMessageUpdated object:Nil userInfo:@{bNotificationThreadLastMessageUpdated_Text: [NSString safe: messageText]}];
         }
     }];
 }

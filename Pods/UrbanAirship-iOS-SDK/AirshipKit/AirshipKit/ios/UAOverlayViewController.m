@@ -1,4 +1,4 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import "UAOverlayViewController.h"
 
@@ -8,6 +8,7 @@
 #import "UAirship.h"
 #import "UAGlobal.h"
 #import "UAInboxMessage.h"
+#import "UAUser+Internal.h"
 
 #import "UAWKWebViewNativeBridge.h"
 
@@ -295,8 +296,7 @@ static NSMutableSet *overlayControllers_ = nil;
 }
 
 + (void)showMessage:(UAInboxMessage *)message {
-    NSDictionary *headers = @{@"Authorization":[UAUtils userAuthHeaderString]};
-    [UAOverlayViewController showMessage:message withHeaders:headers];
+    [UAOverlayViewController showMessage:message withHeaders:nil];
 }
 
 + (void)showMessage:(UAInboxMessage *)message withHeaders:(NSDictionary *)headers {
@@ -343,10 +343,7 @@ static NSMutableSet *overlayControllers_ = nil;
         self.nativeBridge = [[UAWKWebViewNativeBridge alloc] init];
         self.nativeBridge.forwardDelegate = self;
         self.overlayView.webView.navigationDelegate = self.nativeBridge;
-
-        if (@available(iOS 10.0, tvOS 10.0, *)) {
-            [self.overlayView.webView.configuration setDataDetectorTypes:WKDataDetectorTypeNone];
-        }
+        [self.overlayView.webView.configuration setDataDetectorTypes:WKDataDetectorTypeNone];
     }
 
     return self;
@@ -361,26 +358,50 @@ static NSMutableSet *overlayControllers_ = nil;
 }
 
 - (void)load {
+    [self showOverlay];
+    [self.overlayView.loadingIndicatorView show];
 
-    NSMutableURLRequest *requestObj = [NSMutableURLRequest requestWithURL:self.url];
+    UA_WEAKIFY(self)
+    void (^loadRequest)(void) = ^{
+        UA_STRONGIFY(self)
+        NSMutableURLRequest *requestObj = [NSMutableURLRequest requestWithURL:self.url];
 
-    for (id key in self.headers) {
-        id value = [self.headers objectForKey:key];
-        if (![key isKindOfClass:[NSString class]] || ![value isKindOfClass:[NSString class]]) {
-            UA_LERR(@"Invalid header value.  Only string values are accepted for header names and values.");
-            continue;
+        for (id key in self.headers) {
+            id value = [self.headers objectForKey:key];
+            if (![key isKindOfClass:[NSString class]] || ![value isKindOfClass:[NSString class]]) {
+                UA_LWARN(@"Invalid header value.  Only string values are accepted for header names and values.");
+                continue;
+            }
+
+            [requestObj addValue:value forHTTPHeaderField:key];
         }
 
-        [requestObj addValue:value forHTTPHeaderField:key];
+        [requestObj setTimeoutInterval:30];
+
+        [self.overlayView.webView stopLoading];
+        [self.overlayView.webView loadRequest:requestObj];
+    };
+
+    if (self.message) {
+        UA_WEAKIFY(self)
+        [[UAirship inboxUser] getUserData:^(UAUserData *userData) {
+            UA_STRONGIFY(self)
+            NSDictionary *auth = @{@"Authorization":[UAUtils userAuthHeaderString:userData]};
+
+            if (!self.headers) {
+                self.headers = auth;
+            } else {
+                NSMutableDictionary *appended = [NSMutableDictionary dictionaryWithDictionary:self.headers];
+                [appended addEntriesFromDictionary:auth];
+                self.headers = appended;
+            }
+
+            loadRequest();
+
+        } dispatcher:[UADispatcher mainDispatcher]];
+    } else {
+        loadRequest();
     }
-
-    [requestObj setTimeoutInterval:30];
-
-    [self.overlayView.webView stopLoading];
-    [self.overlayView.webView loadRequest:requestObj];
-    [self showOverlay];
-
-    [self.overlayView.loadingIndicatorView show];
 }
 
 - (void)showOverlay {
@@ -465,14 +486,14 @@ static NSMutableSet *overlayControllers_ = nil;
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 20.0 * NSEC_PER_SEC), dispatch_get_main_queue(), ^(void){
         UA_STRONGIFY(self)
         if (self) {
-            UA_LINFO(@"Retrying url: %@", self.url);
+            UA_LDEBUG(@"Retrying url: %@", self.url);
             [self load];
         }
     });
 }
 
 - (void)closeWindowAnimated:(BOOL)animated {
-    UA_LDEBUG(@"Closing overlay controller: %@", [self.url absoluteString]);
+    UA_LTRACE(@"Closing overlay controller: %@", [self.url absoluteString]);
     [self finish:animated];
 }
 

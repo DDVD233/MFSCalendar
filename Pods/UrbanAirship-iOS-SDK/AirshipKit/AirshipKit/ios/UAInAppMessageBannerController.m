@@ -1,4 +1,4 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import "UAirship.h"
 #import "UAUtils+Internal.h"
@@ -136,7 +136,7 @@ CGFloat const BannerExcessiveSafeAreaPadding = 14;
 
 - (void)showWithParentView:(UIView *)parentView completionHandler:(void (^)(UAInAppMessageResolution * _Nonnull))completionHandler {
     if (self.isShowing) {
-        UA_LWARN(@"In-app message banner has already been displayed");
+        UA_LTRACE(@"In-app message banner has already been displayed");
         return;
     }
 
@@ -199,18 +199,18 @@ CGFloat const BannerExcessiveSafeAreaPadding = 14;
 }
 
 - (void)dismissWithResolution:(UAInAppMessageResolution *)resolution  {
-    if (self.showCompletionHandler) {
-        self.showCompletionHandler(resolution);
-        self.showCompletionHandler = nil;
-    }
-
     [self beginTeardown];
 
-    dispatch_async(dispatch_get_main_queue(), ^{
+    [[UADispatcher mainDispatcher] dispatchAsync:^{
         [self bannerView:self.bannerView animateOutWithParentView:self.bannerView.superview completionHandler:^{
             [self finishTeardown];
+
+            if (self.showCompletionHandler) {
+                self.showCompletionHandler(resolution);
+                self.showCompletionHandler = nil;
+            }            
         }];
-    });
+    }];
 }
 
 - (void)messageTapped {
@@ -221,7 +221,7 @@ CGFloat const BannerExcessiveSafeAreaPadding = 14;
                                          situation:UASituationManualInvocation
                                           metadata:nil
                                  completionHandler:^(UAActionResult *result) {
-                                     UA_LINFO(@"Message tap actions finished running.");
+                                     UA_LTRACE(@"Message tap actions finished running.");
                                  }];
     }
 
@@ -546,7 +546,7 @@ CGFloat const BannerExcessiveSafeAreaPadding = 14;
 #pragma mark Timer
 
 - (void)scheduleDismissalTimer {
-    NSTimeInterval timeInterval = ((double)self.displayContent.duration / 1000);
+    NSTimeInterval timeInterval = ((double)self.displayContent.durationSeconds);
 
     self.dismissalTimer = [NSTimer scheduledTimerWithTimeInterval:timeInterval
                                                            target:self
@@ -598,4 +598,5 @@ CGFloat const BannerExcessiveSafeAreaPadding = 14;
 @end
 
 NS_ASSUME_NONNULL_END
+
 

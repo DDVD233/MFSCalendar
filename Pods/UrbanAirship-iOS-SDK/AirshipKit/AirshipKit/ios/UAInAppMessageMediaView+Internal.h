@@ -1,4 +1,4 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import <UIKit/UIKit.h>
 #import "UAInAppMessageMediaInfo.h"
@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
  * window visible again when the full screen video is closed. Handles problem with full screen
  * video appearing behind modal message. Use whenever a message is creating a new UIWindow.
  *
- * Defaults to NO.
+ * Defaults to `NO`.
  */
 @property (nonatomic, assign) BOOL hideWindowWhenVideoIsFullScreen;
 
@@ -40,11 +40,14 @@ NS_ASSUME_NONNULL_BEGIN
 + (instancetype)mediaViewWithMediaInfo:(UAInAppMessageMediaInfo *)mediaInfo;
 
 /**
- * Factory method for creating an in-app message media view with an image.
+ * Factory method for creating an in-app message media view with image data.
  *
- * @param image The image.
+ * @param mediaInfo The media info.
+ * @param imageData The image data.
  */
-+ (instancetype)mediaViewWithImage:(UIImage *)image;
+
++ (instancetype)mediaViewWithMediaInfo:(UAInAppMessageMediaInfo *)mediaInfo imageData:(NSData *)imageData;
+
 
 
 @end

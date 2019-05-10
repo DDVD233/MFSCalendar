@@ -1,7 +1,8 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import "UAUtils+Internal.h"
 #import "UAActionResult.h"
+#import "UADispatcher+Internal.h"
 
 // Frameworks
 #import <CommonCrypto/CommonDigest.h>
@@ -70,6 +71,24 @@
 
 + (NSString *)deviceID {
     return [UAKeychainUtils getDeviceID];
+}
+
++ (void)getDeviceID:(void (^)(NSString *))completionHandler dispatcher:(nullable UADispatcher *)dispatcher {
+    [[UADispatcher backgroundDispatcher] dispatchAsync:^{
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+        NSString *deviceID = [self deviceID];
+#pragma GCC diagnostic pop
+        UADispatcher *completionDispatcher = dispatcher ? : [UADispatcher mainDispatcher];
+
+        [completionDispatcher dispatchAsync:^{
+            completionHandler(deviceID);
+        }];
+    }];
+}
+
++ (void)getDeviceID:(void (^)(NSString *))completionHandler {
+    [self getDeviceID:completionHandler dispatcher:nil];
 }
 
 + (NSString *)deviceModelName {
@@ -152,6 +171,13 @@
               [[response allHeaderFields] description],
               [response description]);
 }
+
+#if !TARGET_OS_TV   // Inbox not supported on tvOS
++ (NSString *)userAuthHeaderString:(UAUserData *)userData {
+    return [UAUtils authHeaderStringWithName:userData.username
+                                    password:userData.password];
+}
+#endif
 
 #if !TARGET_OS_TV   // Inbox not supported on tvOS
 + (NSString *)userAuthHeaderString {
@@ -361,6 +387,25 @@
     }
 
     return NSOrderedSame;
+}
+
+/**
+ * A utility method that compares two floating points and returns `YES` if the
+ * difference between them is less than or equal to the specified accuracy.
+ * This allows for minor differences due to errors injected through the
+ * transformation of floating point values to and from JSON.
+ */
++ (BOOL)float:(CGFloat)float1 isEqualToFloat:(CGFloat)float2 withAccuracy:(CGFloat)accuracy {
+    if (float1 == float2) {
+        return YES;
+    }
+    
+    CGFloat diff = fabs(float1 - float2);
+    if (diff > fabs(accuracy)) {
+        return NO;
+    }
+    
+    return YES;
 }
 
 @end

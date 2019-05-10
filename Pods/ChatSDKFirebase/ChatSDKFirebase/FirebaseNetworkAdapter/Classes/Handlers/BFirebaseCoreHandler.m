@@ -21,6 +21,7 @@
 }
 
 -(void) setUserOnline {
+    [super setUserOnline];
     id<PUser> user = self.currentUserModel;
     if(!user || !user.entityID) {
         return;
@@ -29,14 +30,17 @@
 }
 
 -(void) setUserOffline {
+    [super setUserOffline];
     id<PUser> user = self.currentUserModel;
     if(!user || !user.entityID) {
         return;
     }
+
+    [BHookNotification notificationUserWillDisconnect];
+    
     [[CCUserWrapper userWithModel:user] goOffline];
 }
 -(void) goOnline {
-    [super goOnline];
     [FIRDatabaseReference goOnline];
     if (self.currentUserModel) {
         [self setUserOnline];
@@ -47,25 +51,29 @@
     [FIRDatabaseReference goOffline];
 }
 
--(void)observeUser: (NSString *)entityID {
-    id<PUser> contactModel = [BChatSDK.db fetchOrCreateEntityWithID:entityID withType:bUserEntity];
-    [[CCUserWrapper userWithModel:contactModel] metaOn];
-    [[CCUserWrapper userWithModel:contactModel] onlineOn];
+-(RXPromise *)observeUser: (NSString *)entityID {
+    id<PUser> userModel = [BChatSDK.db fetchOrCreateEntityWithID:entityID withType:bUserEntity];
+    [[CCUserWrapper userWithModel:userModel] onlineOn];
+    return [[CCUserWrapper userWithModel:userModel] metaOn];
 }
 
--(RXPromise *) createThreadWithUsers: (NSArray *) users name: (NSString *) name threadCreated: (void(^)(NSError * error, id<PThread> thread)) threadCreated {
+-(RXPromise *) createThreadWithUsers: (NSArray *) users
+                                name: (NSString *) name
+                                type: (bThreadType) type
+                         forceCreate: (BOOL) force
+                       threadCreated: (void(^)(NSError * error, id<PThread> thread)) threadCreated {
     
     id<PThread> threadModel = [self fetchThreadWithUsers: users];
-    if (threadModel && threadCreated != Nil) {
+    if (threadModel && threadCreated != Nil && !force) {
         threadCreated(Nil, threadModel);
         return [RXPromise resolveWithResult:Nil];
     }
     else {
-        threadModel = [self createThreadWithUsers:users name:name];
+        threadModel = [self createThreadWithUsers:users name:name type: type];
         CCThreadWrapper * thread = [CCThreadWrapper threadWithModel:threadModel];
         
         return [thread push].thenOnMain(^id(id<PThread> thread) {
-            
+                        
             // Add the users to the thread
             if (threadCreated != Nil) {
                 threadCreated(Nil, thread);
@@ -82,11 +90,6 @@
         });
     }
 }
-
--(RXPromise *) createThreadWithUsers: (NSArray *) users threadCreated: (void(^)(NSError * error, id<PThread> thread)) threadCreated {
-    return [self createThreadWithUsers:users name:nil threadCreated:threadCreated];
-}
-
 
 -(RXPromise *) addUsers: (NSArray *) users toThread: (id<PThread>) threadModel {
     
@@ -141,11 +144,16 @@
         [BChatSDK.encryption encryptMessage:messageModel];
     }
 
-    // Send a push notification for the message
-    [BChatSDK.push pushForMessage:messageModel];
-
+    [BHookNotification notificationMessageWillSend:messageModel];
+    
     // Create the new CCMessage wrapper
     return [[CCMessageWrapper messageWithModel:messageModel] send].thenOnMain(^id(id success) {
+        
+        // Send a push notification for the message
+        NSDictionary * pushData = [BChatSDK.push pushDataForMessage:messageModel];
+        [BChatSDK.push sendPushNotification:pushData];
+        
+        [BHookNotification notificationMessageDidSend:messageModel];
         return success;
     }, Nil);
     

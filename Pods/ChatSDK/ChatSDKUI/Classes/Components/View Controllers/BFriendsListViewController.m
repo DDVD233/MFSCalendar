@@ -114,7 +114,7 @@
             [self dismissViewControllerAnimated:YES completion:nil];
         }
     }];
-    [BChatSDK.hook addHook:_internetConnectionHook withName:bHookInternetConnectivityChanged];
+    [BChatSDK.hook addHook:_internetConnectionHook withName:bHookInternetConnectivityDidChange];
     
     [self reloadData];
 }
@@ -141,7 +141,7 @@
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-    [BChatSDK.hook removeHook:_internetConnectionHook withName:bHookInternetConnectivityChanged];
+    [BChatSDK.hook removeHook:_internetConnectionHook];
 }
 
 -(void) composeMessage {

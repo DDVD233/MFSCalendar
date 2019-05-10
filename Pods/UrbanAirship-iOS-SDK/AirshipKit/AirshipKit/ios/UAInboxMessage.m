@@ -1,8 +1,10 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import "UAInboxMessage+Internal.h"
 #import "UAInboxMessageList+Internal.h"
 #import "UAUtils+Internal.h"
+#import "UAUser+Internal.h"
+#import "UAirship.h"
 
 @interface UAInboxMessage()
 @property (nonatomic, copy) NSString *messageID;
@@ -15,6 +17,7 @@
 @property (nonatomic, copy) NSDictionary *extra;
 @property (nonatomic, copy) NSDictionary *rawMessageObject;
 @property (nonatomic, weak) UAInboxMessageList *messageList;
+@property (nonatomic, strong) UADate *date;
 @end
 
 @implementation UAInboxMessageBuilder
@@ -37,6 +40,7 @@
         self.title = builder.title;
         self.contentType = builder.contentType;
         self.messageList = builder.messageList;
+        self.date = builder.date ? : [[UADate alloc] init];
     }
     return self;
 }
@@ -77,7 +81,7 @@
 
 - (BOOL)isExpired {
     if (self.messageExpiration) {
-        NSComparisonResult result = [self.messageExpiration compare:[NSDate date]];
+        NSComparisonResult result = [self.messageExpiration compare:self.date.now];
         return (result == NSOrderedAscending || result == NSOrderedSame);
     }
 
@@ -89,10 +93,11 @@
 #pragma mark Quick Look methods
 
 - (BOOL)waitWithTimeoutInterval:(NSTimeInterval)interval pollingWebView:(UIWebView *)webView {
-    NSDate *timeoutDate = [NSDate dateWithTimeIntervalSinceNow:interval];
+    NSDate *timeoutDate = [NSDate dateWithTimeInterval:interval sinceDate:self.date.now];
+
     // The webView may not have begun loading at this point
     BOOL loadingStarted = webView.loading;
-    while ([timeoutDate timeIntervalSinceNow] > 0) {
+    while ([timeoutDate timeIntervalSinceDate:self.date.now] > 0) {
         if (!loadingStarted && webView.loading) {
             loadingStarted = YES;
         } else if (loadingStarted && !webView.loading) {
@@ -100,17 +105,19 @@
             break;
         }
         [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
-                                 beforeDate:[NSDate dateWithTimeIntervalSinceNow:0.1]];
+                                 beforeDate:[NSDate dateWithTimeInterval:0.1 sinceDate:self.date.now]];
     }
 
-    return [timeoutDate timeIntervalSinceNow] > 0;
+    return [timeoutDate timeIntervalSinceDate:self.date.now] > 0;
 }
 
 - (id)debugQuickLookObject {
 
     UIWebView *webView = [[UIWebView alloc] initWithFrame:[UIScreen mainScreen].bounds];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:self.messageBodyURL];
-    NSString *auth = [UAUtils userAuthHeaderString];
+
+    UAUserData *userData = [[UAirship inboxUser] getUserDataSync];
+    NSString *auth = [UAUtils userAuthHeaderString:userData];
     [request setValue:auth forHTTPHeaderField:@"Authorization"];
 
     // Load the message body, spin the run loop and poll the webView with a 5 second timeout.

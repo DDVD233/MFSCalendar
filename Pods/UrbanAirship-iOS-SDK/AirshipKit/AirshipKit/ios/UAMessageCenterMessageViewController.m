@@ -1,4 +1,4 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import "UAMessageCenterMessageViewController.h"
 #import "UAWKWebViewNativeBridge.h"
@@ -12,7 +12,8 @@
 #import "UAMessageCenterLocalization.h"
 #import "UABeveledLoadingIndicator.h"
 #import "UAInAppMessageUtils+Internal.h"
-
+#import "UADispatcher+Internal.h"
+#import "UAUser+Internal.h"
 
 #define kMessageUp 0
 #define kMessageDown 1
@@ -109,10 +110,8 @@ typedef enum MessageState {
     self.webView.navigationDelegate = self.nativeBridge;
     self.webView.allowsLinkPreview = ![UAirship messageCenter].disableMessageLinkPreviewAndCallouts;
 
-    if (@available(iOS 10.0, tvOS 10.0, *)) {
-        // Allow the webView to detect data types (e.g. phone numbers, addresses) at will
-        [self.webView.configuration setDataDetectorTypes:WKDataDetectorTypeAll];
-    }
+    // Allow the webView to detect data types (e.g. phone numbers, addresses) at will
+    [self.webView.configuration setDataDetectorTypes:WKDataDetectorTypeAll];
 
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:UAMessageCenterLocalizedString(@"ua_delete")
                                                                                style:UIBarButtonItemStylePlain
@@ -128,13 +127,10 @@ typedef enum MessageState {
             [self coverWithBlankViewAndShowLoadingIndicator];
             break;
         case TO_LOAD:
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
             [self loadMessage:self.message onlyIfChanged:NO];
-#pragma GCC diagnostic pop
             break;
         default:
-            UA_LWARN(@"WARNING: messageState = %u. Should be \"NONE\", \"FETCHING\", or \"TO_LOAD\"",self.messageState);
+            UA_LWARN(@"MessageState = %u. Should be \"NONE\", \"FETCHING\", or \"TO_LOAD\"",self.messageState);
             break;
     }
     
@@ -185,7 +181,7 @@ typedef enum MessageState {
 
 - (void)delete:(id)sender {
     if (self.messageState != LOADED) {
-        UA_LWARN(@"WARNING: messageState = %u. Should be \"LOADED\"",self.messageState);
+        UA_LWARN(@"MessageState = %u. Should be \"LOADED\"",self.messageState);
     }
     if (self.message) {
         self.messageState = NONE;
@@ -225,11 +221,11 @@ typedef enum MessageState {
         self.loadingAnimations();
     }
 
-    [self.loadingIndicatorView setHidden:NO];
+    [self.loadingIndicatorContainerView setHidden:NO];
 }
 
 - (void)hideLoadingIndicator {
-    [self.loadingIndicatorView setHidden:YES];
+    [self.loadingIndicatorContainerView setHidden:YES];
 }
 
 static NSString *urlForBlankPage = @"about:blank";
@@ -239,29 +235,38 @@ static NSString *urlForBlankPage = @"about:blank";
 }
 
 - (void)loadMessageForID:(NSString *)messageID onlyIfChanged:(BOOL)onlyIfChanged onError:(void (^)(void))errorCompletion {
+    if (!messageID) {
+        [self coverWithMessageAndHideLoadingIndicator:UAMessageCenterLocalizedString(@"ua_message_not_selected")];
+        return;
+    }
+    
+    UAInboxMessage *message = [[UAirship inbox].messageList messageForID:messageID];
+
+    if (message) {
+        [self loadMessage:message onlyIfChanged:onlyIfChanged];
+        return;
+    }
+
     // start by covering the view and showing the loading indicator
     [self coverWithBlankViewAndShowLoadingIndicator];
-    
+
     // Refresh the list to see if the message is available in the cloud
     self.messageState = FETCHING;
 
     UA_WEAKIFY(self);
 
     [[UAirship inbox].messageList retrieveMessageListWithSuccessBlock:^{
-         dispatch_async(dispatch_get_main_queue(),^{
-             UA_STRONGIFY(self)
+        [[UADispatcher mainDispatcher] dispatchAsync:^{
+            UA_STRONGIFY(self)
 
             UAInboxMessage *message = [[UAirship inbox].messageList messageForID:messageID];
-            if (message) {
+            if (message && !message.isExpired) {
                 // display the message
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
                 [self loadMessage:message onlyIfChanged:onlyIfChanged];
-#pragma GCC diagnostic pop
             } else {
                 // if the message no longer exists, clean up and show an error dialog
                 [self hideLoadingIndicator];
-                
+
                 [self displayNoLongerAvailableAlertOnOK:^{
                     UA_STRONGIFY(self);
                     self.messageState = NONE;
@@ -272,9 +277,9 @@ static NSString *urlForBlankPage = @"about:blank";
                 }];
             }
             return;
-        });
+        }];
     } withFailureBlock:^{
-        dispatch_async(dispatch_get_main_queue(),^{
+        [[UADispatcher mainDispatcher] dispatchAsync:^{
             UA_STRONGIFY(self);
             
             [self hideLoadingIndicator];
@@ -282,13 +287,10 @@ static NSString *urlForBlankPage = @"about:blank";
             if (errorCompletion) {
                 errorCompletion();
             }
-        });
+        }];
         return;
     }];
 }
-
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-implementations"
 - (void)loadMessage:(UAInboxMessage *)message onlyIfChanged:(BOOL)onlyIfChanged {
     if (!message) {
         if (self.messageState == LOADING) {
@@ -324,18 +326,20 @@ static NSString *urlForBlankPage = @"about:blank";
         }
     }
 }
-#pragma GCC diagnostic pop
 
 - (void)loadMessageIntoWebView {
     self.title = self.message.title;
     
     NSMutableURLRequest *requestObj = [NSMutableURLRequest requestWithURL:self.message.messageBodyURL];
     requestObj.timeoutInterval = 60;
-    
-    NSString *auth = [UAUtils userAuthHeaderString];
-    [requestObj setValue:auth forHTTPHeaderField:@"Authorization"];
-    
-    [self.webView loadRequest:requestObj];
+
+    UA_WEAKIFY(self)
+    [[UAirship inboxUser] getUserData:^(UAUserData *userData) {
+        UA_STRONGIFY(self)
+        NSString *auth = [UAUtils userAuthHeaderString:userData];
+        [requestObj setValue:auth forHTTPHeaderField:@"Authorization"];
+        [self.webView loadRequest:requestObj];
+    } dispatcher:[UADispatcher mainDispatcher]];
 }
 
 - (void)displayNoLongerAvailableAlertOnOK:(void (^)(void))okCompletion {
@@ -391,7 +395,7 @@ static NSString *urlForBlankPage = @"about:blank";
 
 - (void)webView:(WKWebView *)wv decidePolicyForNavigationResponse:(WKNavigationResponse *)navigationResponse decisionHandler:(void (^)(WKNavigationResponsePolicy))decisionHandler {
     if (self.messageState != LOADING) {
-        UA_LWARN(@"WARNING: messageState = %u. Should be \"LOADING\"",self.messageState);
+        UA_LWARN(@"MessageState = %u. Should be \"LOADING\"",self.messageState);
     }
     if ([navigationResponse.response isKindOfClass:[NSHTTPURLResponse class]]) {
         NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)navigationResponse.response;
@@ -404,10 +408,15 @@ static NSString *urlForBlankPage = @"about:blank";
                 UA_WEAKIFY(self);
                 [self displayFailedToLoadAlertOnOK:nil onRetry:^{
                     UA_STRONGIFY(self);
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
                     [self loadMessage:self.message onlyIfChanged:NO];
-#pragma GCC diagnostic pop
+                }];
+            } else if (status == 410) {
+                // Gone: message has been permanently deleted from the backend.
+                // Alert the user that message is no longer available.
+                UA_WEAKIFY(self)
+                [self displayNoLongerAvailableAlertOnOK:^{
+                    UA_STRONGIFY(self)
+                    [self uncoverAndHideLoadingIndicator];
                 }];
             } else {
                 // Display a generic alert
@@ -427,7 +436,7 @@ static NSString *urlForBlankPage = @"about:blank";
 
 - (void)webView:(WKWebView *)wv didFinishNavigation:(WKNavigation *)navigation {
     if (self.messageState != LOADING) {
-        UA_LWARN(@"WARNING: messageState = %u. Should be \"LOADING\"",self.messageState);
+        UA_LWARN(@"MessageState = %u. Should be \"LOADING\"",self.messageState);
     }
     
     if ([UAirship messageCenter].disableMessageLinkPreviewAndCallouts) {
@@ -451,25 +460,23 @@ static NSString *urlForBlankPage = @"about:blank";
 
 - (void)webView:(WKWebView *)wv didFailNavigation:(WKNavigation *)navigation withError:(NSError *)error {
     if (self.messageState != LOADING) {
-        UA_LWARN(@"WARNING: messageState = %u. Should be \"LOADING\"",self.messageState);
+        UA_LWARN(@"MessageState = %u. Should be \"LOADING\"",self.messageState);
     }
     if (error.code == NSURLErrorCancelled) {
         return;
     }
+
     UA_LDEBUG(@"Failed to load message: %@", error);
     
     self.messageState = NONE;
-    
+
     [self hideLoadingIndicator];
 
     // Display a retry alert
     UA_WEAKIFY(self);
     [self displayFailedToLoadAlertOnOK:nil onRetry:^{
         UA_STRONGIFY(self);
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
         [self loadMessage:self.message onlyIfChanged:NO];
-#pragma GCC diagnostic pop
     }];
 }
 

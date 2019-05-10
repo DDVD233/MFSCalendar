@@ -1,4 +1,4 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import "UAGlobal.h"
 #import "UAInAppMessageUtils+Internal.h"
@@ -6,6 +6,7 @@
 #import "UAActionRunner+Internal.h"
 #import "UAUtils+Internal.h"
 #import "UAirship.h"
+#import "UADispatcher+Internal.h"
 
 NSString *const UADefaultSerifFont = @"Times New Roman";
 NSString *const UAInAppMessageAdapterCacheName = @"UAInAppMessageAdapterCache";
@@ -222,9 +223,9 @@ CGFloat const CloseButtonHeight = 30;
 
     // Call completion handler on main queue
     void (^complete)(NSString *, UAInAppMessagePrepareResult) = ^(NSString * key, UAInAppMessagePrepareResult result) {
-        dispatch_async(dispatch_get_main_queue(), ^{
+       [[UADispatcher mainDispatcher] dispatchAsync:^{
             completionHandler(key, result);
-        });
+       }];
     };
 
     [[[NSURLSession sharedSession]
@@ -288,6 +289,17 @@ CGFloat const CloseButtonHeight = 30;
 #pragma mark -
 #pragma mark Helpers
 
++ (BOOL)isGifData:(NSData *)data {
+    BOOL isGifData = NO;
+    if (data.length > 3) {
+        uint8_t *bytes = (uint8_t *)data.bytes;
+        isGifData = ((bytes[0] == 'g' || bytes[0] == 'G') &&
+                     (bytes[1] == 'i' || bytes[1] == 'I') &&
+                     (bytes[2] == 'f' || bytes[2] == 'F'));
+    }
+    return isGifData;
+}
+
 + (NSDictionary *)attributesWithTextInfo:(UAInAppMessageTextInfo *)textInfo textStyle:(UAInAppMessageTextStyle *)style {
     NSMutableDictionary *attributes = [NSMutableDictionary dictionary];
 
@@ -296,7 +308,7 @@ CGFloat const CloseButtonHeight = 30;
     [attributes setObject:font forKey:NSFontAttributeName];
 
     // Underline
-    if (textInfo.style == UAInAppMessageTextInfoStyleUnderline) {
+    if ((textInfo.style & UAInAppMessageTextInfoStyleUnderline) == UAInAppMessageTextInfoStyleUnderline) {
         [attributes setObject:[NSNumber numberWithInt:NSUnderlineStyleSingle] forKey:NSUnderlineStyleAttributeName];
     }
 
@@ -342,11 +354,11 @@ CGFloat const CloseButtonHeight = 30;
 
     UIFontDescriptorSymbolicTraits traits = 0;
 
-    if (textInfo.style == UAInAppMessageTextInfoStyleBold) {
+    if ((textInfo.style & UAInAppMessageTextInfoStyleBold) == UAInAppMessageTextInfoStyleBold) {
         traits = traits | UIFontDescriptorTraitBold;
     }
 
-    if (textInfo.style == UAInAppMessageTextInfoStyleItalic) {
+    if ((textInfo.style & UAInAppMessageTextInfoStyleItalic) == UAInAppMessageTextInfoStyleItalic) {
         traits = traits | UIFontDescriptorTraitItalic;
     }
 
@@ -355,7 +367,7 @@ CGFloat const CloseButtonHeight = 30;
 
     UIFontDescriptor *fontDescriptor = [UIFontDescriptor fontDescriptorWithFontAttributes:attributes];
 
-    return [UIFont fontWithDescriptor:fontDescriptor size:textInfo.size];
+    return [UIFont fontWithDescriptor:fontDescriptor size:textInfo.sizePoints];
 }
 
 + (NSString *)resolveFontFamily:(NSArray *)fontFamilies {
@@ -389,7 +401,7 @@ CGFloat const CloseButtonHeight = 30;
                                          situation:UASituationManualInvocation
                                           metadata:nil
                                  completionHandler:^(UAActionResult *result) {
-                                     UA_LINFO(@"Button actions finished running.");
+                                     UA_LTRACE(@"Button actions finished running.");
                                  }];
     }
 }
@@ -426,7 +438,6 @@ CGFloat const CloseButtonHeight = 30;
         return;
     }
 
-
     // Prefetch image
     [UAInAppMessageUtils prefetchContentsOfURL:mediaURL
                                      WithCache:imageCache
@@ -435,8 +446,7 @@ CGFloat const CloseButtonHeight = 30;
                                  if (cacheKey){
                                      NSData *data = [imageCache objectForKey:cacheKey];
                                      if (data) {
-                                         UIImage *prefetchedImage = [UIImage imageWithData:data];
-                                         mediaView = [UAInAppMessageMediaView mediaViewWithImage:prefetchedImage];
+                                         mediaView = [UAInAppMessageMediaView mediaViewWithMediaInfo:media imageData:data];
                                      }
                                  }
                                  completionHandler(result,mediaView);

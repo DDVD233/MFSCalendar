@@ -1,4 +1,4 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import "UAWKWebViewNativeBridge.h"
 #import "UAUser.h"
@@ -83,13 +83,14 @@
  * Called when the navigation is complete.
  */
 - (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation {
-    id strongDelegate = self.forwardDelegate;
-    if ([strongDelegate respondsToSelector:@selector(webView:didFinishNavigation:)]) {
-        [strongDelegate webView:webView didFinishNavigation:navigation];
-    }
-    
-    [self populateJavascriptEnvironmentIfWhitelisted:webView requestURL:webView.URL];
-
+    UA_WEAKIFY(self)
+    [self populateJavascriptEnvironmentIfWhitelisted:webView requestURL:webView.URL completionHandler:^{
+        UA_STRONGIFY(self)
+        id strongDelegate = self.forwardDelegate;
+        if ([strongDelegate respondsToSelector:@selector(webView:didFinishNavigation:)]) {
+            [strongDelegate webView:webView didFinishNavigation:navigation];
+        }
+    }];
 }
 
 /**

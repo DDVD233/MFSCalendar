@@ -1,4 +1,4 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import <Foundation/Foundation.h>
 
@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (assign) BOOL componentEnabled;
 
-@property (readonly) Class remoteConfigClass;
+@property (readonly, nullable) Class remoteConfigClass;
 
 /**
  * Init method.

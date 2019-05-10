@@ -1,4 +1,4 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import <Foundation/Foundation.h>
 #import "UAInAppMessage.h"
@@ -7,6 +7,7 @@
 #import "UAInAppMessageAdapterProtocol.h"
 #import "UAComponent.h"
 #import "UAInAppMessageScheduleEdits.h"
+#import "UAInAppMessageDisplayCoordinator.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -21,6 +22,14 @@ NS_ASSUME_NONNULL_BEGIN
 ///---------------------------------------------------------------------------------------
 /// @name In App Messaging Delegate Methods
 ///---------------------------------------------------------------------------------------
+
+/**
+ * Allows the delegate to provide a custom display coordinator for the provided message.
+ *
+ * @param message The message.
+ * @return An object implementing the UAInAppMessageDisplayCoordinator protocol.
+ */
+- (id<UAInAppMessageDisplayCoordinator>)displayCoordinatorForMessage:(UAInAppMessage *)message;
 
 /**
  * Allows the delegate to extend a message before display.
@@ -116,7 +125,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  * Gets schedules with the provided identifier.
  *
- * @param identifier The scheduler identifier corresponding to the in-app message to be canceled.
+ * @param identifier The scheduler identifier corresponding to the in-app message to be fetched.
  * @param completionHandler The completion handler to be called when fetch operation completes.
  */
 - (void)getScheduleWithID:(NSString *)identifier completionHandler:(void (^)(UASchedule *))completionHandler;
@@ -130,6 +139,13 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)getSchedulesWithMessageID:(NSString *)messageID completionHandler:(void (^)(NSArray<UASchedule *> *))completionHandler;
 
 /**
+ * Gets all schedules, including schedules that have ended.
+ *
+ * @param completionHandler The completion handler to be called when fetch operation completes.
+ */
+- (void)getAllSchedules:(void (^)(NSArray<UASchedule *> *))completionHandler;
+
+/**
  * Edits a schedule.
  *
  * @param identifier A schedule identifier.
@@ -139,6 +155,16 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)editScheduleWithID:(NSString *)identifier
                      edits:(UAInAppMessageScheduleEdits *)edits
          completionHandler:(void (^)(UASchedule * __nullable))completionHandler;
+
+/**
+ * Check display audience conditions.
+ *
+ * @param audience The specified audience
+ * @param completionHandler Passed `YES` if the current user is a member of the specified audience,
+ *                                 `NO` if the current user is not a member of the specified audience.
+ *                                 Error is non-nil if there was an error evaluating the audience.
+ */
+- (void)checkAudience:(UAInAppMessageAudience *)audience completionHandler:(void (^)(BOOL, NSError * _Nullable))completionHandler;
 
 @end
 

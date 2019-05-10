@@ -630,9 +630,9 @@
 				E4F86B2B1DF0E20C00CAD72B /* Resources */,
 				E48D4E101E61FC26008B0A97 /* Embed App Extensions */,
 				E40D87BD1E8894910082523D /* Embed Watch Content */,
-				38B39BD1028F8E29BE39F059 /* [CP] Embed Pods Frameworks */,
 				E4B3400B1F090A8A00D6039A /* ShellScript */,
 				E465A32A1F96F645000303D6 /* Build Auto Increment */,
+				B5BA5A5B83B80628F3349EF3 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -821,13 +821,13 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		38B39BD1028F8E29BE39F059 /* [CP] Embed Pods Frameworks */ = {
+		B5BA5A5B83B80628F3349EF3 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MFSMobile/Pods-MFSMobile-frameworks.sh",
+				"${SRCROOT}/Pods/Target Support Files/Pods-MFSMobile/Pods-MFSMobile-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/AFNetworking/AFNetworking.framework",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/Charts/Charts.framework",
@@ -931,7 +931,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MFSMobile/Pods-MFSMobile-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MFSMobile/Pods-MFSMobile-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		C00B6DBCAB10894AA9BA0467 /* [CP] Check Pods Manifest.lock */ = {

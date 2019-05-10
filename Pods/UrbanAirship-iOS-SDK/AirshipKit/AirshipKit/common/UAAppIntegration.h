@@ -1,4 +1,4 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import <UIKit/UIKit.h>
 #import <UserNotifications/UserNotifications.h>
@@ -31,7 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (void)userNotificationCenter:(UNUserNotificationCenter *)center
    didReceiveNotificationResponse:(UNNotificationResponse *)response
-         withCompletionHandler:(void(^)(void))completionHandler NS_AVAILABLE_IOS(10.0);
+         withCompletionHandler:(void(^)(void))completionHandler;
 #endif
 
 /**
@@ -46,7 +46,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (void)userNotificationCenter:(UNUserNotificationCenter *)center
        willPresentNotification:(UNNotification *)notification
-         withCompletionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler NS_AVAILABLE_IOS(10.0);
+         withCompletionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler;
 
 
 ///---------------------------------------------------------------------------------------
@@ -89,49 +89,6 @@ NS_ASSUME_NONNULL_BEGIN
  * @param completionHandler The completion handler.
  */
 + (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler;
-
-#if !TARGET_OS_TV   // UIUserNotificationSettings not available on tvOS
-/**
- * Must be called by the UIApplicationDelegate's
- * application:didRegisterUserNotificationSettings:.
- *
- * Note: This method is relevant only for apps targeting iOS 8 and iOS 9.
- *
- * @param application The application instance.
- * @param notificationSettings The user notification settings.
- * @deprecated Deprecated in iOS 10.
- */
-+ (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings NS_DEPRECATED_IOS(8_0, 10_0, "Deprecated in iOS 10");
-#endif
-
-#if !TARGET_OS_TV   // Delegate methods unavailable in tvOS
-/**
- * Must be called by the UIApplicationDelegate's
- * application:handleActionWithIdentifier:forRemoteNotification:completionHandler
- *
- * Note: This method is relevant only for apps targeting iOS 8 and iOS 9.
- *
- * @param application The application instance.
- * @param identifier The action identifier.
- * @param userInfo The remote notification.
- * @param handler The completion handler
- */
-+ (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forRemoteNotification:(NSDictionary *)userInfo completionHandler:(void (^)(void))handler;
-
-/**
- * Must be called by the UIApplicationDelegate's
- * application:handleActionWithIdentifier:forRemoteNotification:withResponseInfo:completionHandler
- *
- * Note: This method is relevant only for apps targeting iOS 8 and iOS 9.
- *
- * @param application The application instance.
- * @param identifier The action identifier.
- * @param userInfo The remote notification.
- * @param responseInfo The user response info.
- * @param handler The completion handler
- */
-+ (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forRemoteNotification:(NSDictionary *)userInfo withResponseInfo:(nullable NSDictionary *)responseInfo completionHandler:(void (^)(void))handler;
-#endif
 
 @end
 

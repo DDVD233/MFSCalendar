@@ -1,4 +1,4 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import "UADisplayInboxAction.h"
 #import "UAActionArguments.h"
@@ -8,6 +8,7 @@
 #import "UAInboxMessageList.h"
 #import "UAInboxUtils.h"
 #import "UAMessageCenter.h"
+#import "UADispatcher+Internal.h"
 
 #define kUADisplayInboxActionMessageIDPlaceHolder @"auto"
 
@@ -67,9 +68,9 @@
         if (arguments.situation == UASituationLaunchedFromPush) {
             id<UAInboxDelegate> inboxDelegate = [UAirship inbox].delegate;
             if ([inboxDelegate respondsToSelector:@selector(showMessageForID:)]) {
-                dispatch_async(dispatch_get_main_queue(), ^{
+                [[UADispatcher mainDispatcher] dispatchAsync:^{
                     [inboxDelegate showMessageForID:messageID];
-                });
+                }];
                 completionHandler([UAActionResult resultWithValue:nil withFetchResult:UAActionFetchResultNoData]);
                 return;
             }
@@ -99,51 +100,37 @@
  */
 - (void)displayInboxMessage:(UAInboxMessage *)message situation:(UASituation)situation {
     id<UAInboxDelegate> inboxDelegate = [UAirship inbox].delegate;
-    
+//
     switch (situation) {
         case UASituationForegroundPush:
             if ([inboxDelegate respondsToSelector:@selector(richPushMessageAvailable:)]) {
-                dispatch_async(dispatch_get_main_queue(), ^{
+                [[UADispatcher mainDispatcher] dispatchAsync:^{
                     [inboxDelegate richPushMessageAvailable:message];
-                });
+                }];
             }
             break;
         case UASituationLaunchedFromPush:
             if ([inboxDelegate respondsToSelector:@selector(showMessageForID:)]) {
-                dispatch_async(dispatch_get_main_queue(), ^{
+                [[UADispatcher mainDispatcher] dispatchAsync:^{
                     [inboxDelegate showMessageForID:message.messageID];
-                });
-            } else if ([inboxDelegate respondsToSelector:@selector(showInboxMessage:)]) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [inboxDelegate showInboxMessage:message];
-                });
-#pragma GCC diagnostic pop
+                }];
             } else {
-                dispatch_async(dispatch_get_main_queue(), ^{
+                [[UADispatcher mainDispatcher] dispatchAsync:^{
                     [[UAirship messageCenter] displayMessageForID:message.messageID];
-                });
+                }];
             }
             break;
         case UASituationManualInvocation:
         case UASituationWebViewInvocation:
         case UASituationForegroundInteractiveButton:
             if ([inboxDelegate respondsToSelector:@selector(showMessageForID:)]) {
-                dispatch_async(dispatch_get_main_queue(), ^{
+               [[UADispatcher mainDispatcher] dispatchAsync:^{
                     [inboxDelegate showMessageForID:message.messageID];
-                });
-            } else if ([inboxDelegate respondsToSelector:@selector(showInboxMessage:)]) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [inboxDelegate showInboxMessage:message];
-                });
-#pragma GCC diagnostic pop
+               }];
             } else {
-                dispatch_async(dispatch_get_main_queue(), ^{
+               [[UADispatcher mainDispatcher] dispatchAsync:^{
                     [[UAirship messageCenter] displayMessageForID:message.messageID];
-                });
+                }];
             }
             break;
         case UASituationBackgroundPush:
@@ -166,13 +153,13 @@
     
     id<UAInboxDelegate> inboxDelegate = [UAirship inbox].delegate;
     if ([inboxDelegate respondsToSelector:@selector(showInbox)]) {
-        dispatch_async(dispatch_get_main_queue(), ^{
+       [[UADispatcher mainDispatcher] dispatchAsync:^{
             [inboxDelegate showInbox];
-        });
+        }];
     } else {
-        dispatch_async(dispatch_get_main_queue(), ^{
+       [[UADispatcher mainDispatcher] dispatchAsync:^{
             [[UAirship messageCenter] display];
-        });
+       }];
     }
 }
 

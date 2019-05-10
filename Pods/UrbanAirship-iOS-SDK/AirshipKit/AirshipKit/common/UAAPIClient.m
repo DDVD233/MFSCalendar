@@ -1,11 +1,11 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import "UAAPIClient+Internal.h"
 #import "UARequestSession+Internal.h"
 #import "UAConfig.h"
 #import "UAirship.h"
 
-NSUInteger const UAAPIClientStatusDisabled = 0;
+NSUInteger const UAAPIClientStatusUnavailable = 0;
 
 @interface UAAPIClient()
 @property (nonatomic, strong) UAConfig *config;

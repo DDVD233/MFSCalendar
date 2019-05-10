@@ -1,4 +1,4 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import <Foundation/Foundation.h>
 #import "UAConfig.h"
@@ -10,9 +10,9 @@ NS_ASSUME_NONNULL_BEGIN
 @interface UAAPIClient : NSObject
 
 /**
- * Status code to indicate the API client is disabled
+ * Status code to indicate the API client is disabled or otherwise unavailable
  */
-extern NSUInteger const UAAPIClientStatusDisabled;
+extern NSUInteger const UAAPIClientStatusUnavailable;
 
 /**
  * The UAConfig instance.

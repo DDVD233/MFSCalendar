@@ -15,7 +15,7 @@ public extension DateFormatter {
 	///   - region: region used to pre-configure the cell.
 	///   - format: optional format used to set the `dateFormat` property.
 	/// - Returns: date formatter instance
-	public static func sharedFormatter(forRegion region: Region?, format: String? = nil) -> DateFormatter {
+	static func sharedFormatter(forRegion region: Region?, format: String? = nil) -> DateFormatter {
 		let name = "SwiftDate_\(NSStringFromClass(DateFormatter.self))"
 		let formatter: DateFormatter = threadSharedObject(key: name, create: { return DateFormatter() })
 		if let region = region {
@@ -32,8 +32,8 @@ public extension DateFormatter {
 	/// - Parameter locale: locale to set
 	/// - Returns: number formatter instance
 	@available(iOS 9.0, macOS 10.11, *)
-	public static func sharedOrdinalNumberFormatter(locale: LocaleConvertible) -> NumberFormatter {
-		var formatter: NumberFormatter? = nil
+	static func sharedOrdinalNumberFormatter(locale: LocaleConvertible) -> NumberFormatter {
+		var formatter: NumberFormatter?
 		let name = "SwiftDate_\(NSStringFromClass(NumberFormatter.self))"
 		formatter = threadSharedObject(key: name, create: { return NumberFormatter() })
 		formatter!.numberStyle = .ordinal
@@ -55,7 +55,7 @@ internal func threadSharedObject<T: AnyObject>(key: String, create: () -> T) -> 
 		return cachedObj
 	} else {
 		let newObject = create()
-		Thread.current	.threadDictionary[key] = newObject
+		Thread.current.threadDictionary[key] = newObject
 		return newObject
 	}
 }
@@ -99,8 +99,11 @@ public struct DateFormats {
 		"dddd, MMMM D, yyyy LT",
 		"yyyyyy-MM-dd",
 		"yyyy-MM-dd",
-		"GGGG-[W]WW-E",
-		"GGGG-[W]WW",
+		"yyyy-'W'ww-E",
+		"GGGG-'['W']'ww-E",
+		"yyyy-'W'ww",
+		"GGGG-'['W']'ww",
+		"yyyy'W'ww",
 		"yyyy-ddd",
 		"HH:mm:ss.SSSS",
 		"HH:mm:ss",
@@ -125,8 +128,8 @@ public struct DateFormats {
 	/// The RSS formatted date "EEE, d MMM yyyy HH:mm:ss ZZZ" i.e. "Fri, 09 Sep 2011 15:26:08 +0200"
 	public static let rss: String = "EEE, d MMM yyyy HH:mm:ss ZZZ"
 
-	/// The http header formatted date "EEE, dd MM yyyy HH:mm:ss ZZZ" i.e. "Tue, 15 Nov 1994 12:45:26 GMT"
-	public static let httpHeader: String = "EEE, dd MM yyyy HH:mm:ss ZZZ"
+	/// The http header formatted date "EEE, dd MMM yyyy HH:mm:ss zzz" i.e. "Tue, 15 Nov 1994 12:45:26 GMT"
+	public static let httpHeader: String = "EEE, dd MMM yyyy HH:mm:ss zzz"
 
 	/// A generic standard format date i.e. "EEE MMM dd HH:mm:ss Z yyyy"
 	public static let standard: String = "EEE MMM dd HH:mm:ss Z yyyy"
@@ -136,7 +139,7 @@ public struct DateFormats {
 
 	/// Reset the list of auto formats to the initial settings.
 	public static func resetAutoFormats() {
-		self.autoFormats = DateFormats.builtInAutoFormat
+		autoFormats = DateFormats.builtInAutoFormat
 	}
 
 	/// Parse a new string optionally passing the format in which is encoded. If no format is passed
@@ -155,7 +158,7 @@ public struct DateFormats {
 	public static func parse(string: String, formats: [String], region: Region) -> Date? {
 		let formatter = DateFormatter.sharedFormatter(forRegion: region)
 
-		var parsedDate: Date? = nil
+		var parsedDate: Date?
 		for format in formats {
 			formatter.dateFormat = format
 			formatter.locale = region.locale
@@ -171,7 +174,7 @@ public struct DateFormats {
 // MARK: - Calendar Extension
 
 public extension Calendar.Component {
-	
+
 	internal static func toSet(_ src: [Calendar.Component]) -> Set<Calendar.Component> {
 		var l: Set<Calendar.Component> = []
 		src.forEach { l.insert($0) }
@@ -196,19 +199,10 @@ public extension Calendar.Component {
 		case .nanosecond: return NSCalendar.Unit.nanosecond
 		case .calendar: return NSCalendar.Unit.calendar
 		case .timeZone: return NSCalendar.Unit.timeZone
+		@unknown default:
+			fatalError("Unsupported type \(self)")
 		}
 	}
-}
-
-/// This define the weekdays for some functions.
-public enum WeekDay: Int {
-	case sunday = 1
-	case monday = 2
-	case tuesday	= 3
-	case wednesday	= 4
-	case thursday	= 5
-	case friday = 6
-	case saturday	= 7
 }
 
 /// Rounding mode for dates.
@@ -273,7 +267,7 @@ public struct TimeCalculationOptions {
 	}
 }
 
-//MARK: - compactMap for Swift 4.0 (not necessary > 4.0)
+// MARK: - compactMap for Swift 4.0 (not necessary > 4.0)
 
 #if swift(>=4.1)
 #else

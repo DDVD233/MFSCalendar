@@ -1,4 +1,4 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import "UAirship.h"
 #import "UAUtils+Internal.h"
@@ -361,14 +361,16 @@ double const DefaultModalAnimationDuration = 0.2;
 
 - (void)buttonTapped:(id)sender {
     // Check for close button
+    UAInAppMessageResizableViewController *resizableParent = self.resizableParent;
+    
     if ([sender isKindOfClass:[UAInAppMessageDismissButton class]]) {
-        [self.resizableParent dismissWithResolution:[UAInAppMessageResolution userDismissedResolution]];
+        [resizableParent dismissWithResolution:[UAInAppMessageResolution userDismissedResolution]];
         return;
     }
 
     UAInAppMessageButton *button = (UAInAppMessageButton *)sender;
     [UAInAppMessageUtils runActionsForButton:button];
-    [self.resizableParent dismissWithResolution:[UAInAppMessageResolution buttonClickResolutionWithButtonInfo:button.buttonInfo]];
+    [resizableParent dismissWithResolution:[UAInAppMessageResolution buttonClickResolutionWithButtonInfo:button.buttonInfo]];
 }
 
 @end

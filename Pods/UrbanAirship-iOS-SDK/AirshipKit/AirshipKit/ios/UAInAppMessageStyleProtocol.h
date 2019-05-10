@@ -1,4 +1,4 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import <Foundation/Foundation.h>
 #import "UAPadding.h"
@@ -20,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  * Factory method to create a style from a provided plist.
  */
-+ (instancetype)styleWithContentsOfFile:(nullable NSString *)path;
++ (nullable instancetype)styleWithContentsOfFile:(nullable NSString *)path;
 
 @end
 

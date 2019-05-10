@@ -1,4 +1,4 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import "UAInAppMessageResizableViewController+Internal.h"
 #import "UAirship.h"
@@ -203,7 +203,7 @@ double const DefaultResizableViewAnimationDuration = 0.2;
 
 - (void)showWithCompletionHandler:(void (^)(UAInAppMessageResolution * _Nonnull))completionHandler {
     if (self.isShowing) {
-        UA_LWARN(@"In-app message resizable view has already been displayed");
+        UA_LTRACE(@"In-app message resizable view has already been displayed");
         return;
     }
 
@@ -244,11 +244,6 @@ double const DefaultResizableViewAnimationDuration = 0.2;
 }
 
 - (void)dismissWithResolution:(UAInAppMessageResolution *)resolution {
-    if (self.showCompletionHandler) {
-        self.showCompletionHandler(resolution);
-        self.showCompletionHandler = nil;
-    }
-
     UA_WEAKIFY(self);
     [UIView animateWithDuration:DefaultResizableViewAnimationDuration animations:^{
         self.view.alpha = 0;
@@ -261,6 +256,11 @@ double const DefaultResizableViewAnimationDuration = 0.2;
         self.isShowing = NO;
         [self.view removeFromSuperview];
         self.topWindow = nil;
+
+        if (self.showCompletionHandler) {
+            self.showCompletionHandler(resolution);
+            self.showCompletionHandler = nil;
+        }
     }];
 }
 

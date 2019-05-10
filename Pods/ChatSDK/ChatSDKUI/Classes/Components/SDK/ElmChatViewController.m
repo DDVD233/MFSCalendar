@@ -48,6 +48,9 @@
             UITapGestureRecognizer * titleTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(navigationBarTapped)];
             [self.navigationItem.titleView addGestureRecognizer:titleTapRecognizer];
         }
+        
+        _notificationList = [BNotificationObserverList new];
+
     }
     return self;
 }
@@ -71,25 +74,9 @@
 }
 
 -(void) registerMessageCells {
-    
-    // Default message types
-    
-    [self.tableView registerClass:[BTextMessageCell class] forCellReuseIdentifier:@(bMessageTypeText).stringValue];
-    [self.tableView registerClass:[BImageMessageCell class] forCellReuseIdentifier:@(bMessageTypeImage).stringValue];
-    [self.tableView registerClass:[BLocationCell class] forCellReuseIdentifier:@(bMessageTypeLocation).stringValue];
-    [self.tableView registerClass:[BSystemMessageCell class] forCellReuseIdentifier:@(bMessageTypeSystem).stringValue];
-    
-    // Some optional message types
-    if ([delegate respondsToSelector:@selector(customCellTypes)]) {
-        for (NSArray * cell in delegate.customCellTypes) {
-            [self.tableView registerClass:cell.firstObject forCellReuseIdentifier:[cell.lastObject stringValue]];
-        }
-    }
-    
-    for(NSArray * cell in BChatSDK.ui.customMessageCellTypes) {
+    for(NSArray * cell in BChatSDK.ui.messageCellTypes) {
         [self.tableView registerClass:cell.firstObject forCellReuseIdentifier:[cell.lastObject stringValue]];
     }
-    
 }
 
 // The naivgation bar has three functions
@@ -153,29 +140,25 @@
 }
 
 -(void) setMessages: (NSArray<BMessageSection *> *) messages {
-    
-    BOOL scroll = NO;   
+    BOOL scroll = NO;
     if ((tableView.contentSize.height - tableView.frame.size.height) - tableView.contentOffset.y <= bTableViewRefreshHeight) {
         scroll = YES;
     }
-    
     [self setMessages:messages scrollToBottom:scroll];
 }
 
 -(void) setMessages: (NSArray<BMessageSection *> *) messages scrollToBottom: (BOOL) scroll {
     _messages = messages;
-    [self.tableView reloadData];
-    if (scroll) {
-        [self scrollToBottomOfTable:YES];
-    }
-        
+    [self reloadData:scroll];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     // Large titles will interfere with the custom navigation bar
-    self.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeNever;
+    if (@available(iOS 11.0, *)) {
+        self.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeNever;
+    }
     
     // Keep the table header at the top
     if ([self respondsToSelector:@selector(setEdgesForExtendedLayout:)]) {
@@ -285,6 +268,11 @@
 
 -(void) viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
+
+    // Make sure the bottom inset is correct
+    if (!_keyboardVisible) {
+        _sendBarView.keepBottomInset.equal = [self textInputViewBottomInset];
+    }
 }
 
 - (void) didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation{
@@ -378,11 +366,10 @@
         });
     }]];
     
-    _internetConnectionHook = [BHook hook:^(NSDictionary * data) {
+    [_notificationList add: [BChatSDK.hook addHook:[BHook hook:^(NSDictionary * data) {
         __typeof__(self) strongSelf = weakSelf;
         [strongSelf updateInterfaceForReachabilityStateChange];
-    }];
-    [BChatSDK.hook addHook:_internetConnectionHook withName:bHookInternetConnectivityChanged];
+    }] withName:bHookInternetConnectivityDidChange]];
     
     // Observe for keyboard appear and disappear notifications
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:Nil];
@@ -393,9 +380,7 @@
 
 -(void) removeObservers {
     [_notificationList dispose];
-    
-    [BChatSDK.hook removeHook:_internetConnectionHook withName:bHookInternetConnectivityChanged];
-    
+        
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:Nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidShowNotification object:Nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:Nil];
@@ -408,19 +393,19 @@
 // Layout out the bubbles. Do this after the cell's been made so we have
 // access to the cell dimensions
 -(void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if ([cell respondsToSelector:@selector(willDisplayCell)]) {
-        [cell performSelector:@selector(willDisplayCell)];
-    }
     // Allow the table to support different background colors
     cell.backgroundColor = [UIColor clearColor];
     cell.contentView.backgroundColor = [UIColor clearColor];
+    if ([cell respondsToSelector:@selector(willDisplayCell)]) {
+        [cell performSelector:@selector(willDisplayCell)];
+    }
 }
 
 // Set the message height based on the text height
 - (CGFloat)tableView:(UITableView *)tableView_ heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     id<PElmMessage> message = [self messageForIndexPath:indexPath];
     if(message) {
-        return [BMessageCell cellHeight:message maxWidth:[BMessageCell maxTextWidth:message]];
+        return [BMessageCell cellHeight:message];
     }
     else {
         return 0;
@@ -510,7 +495,7 @@
         [cell showActivityIndicator];
         
         NSURL * url = [NSURL URLWithString:file[bMessageFileURL]];
-        [BFileCache cacheFileFromURL:url withFileName:file[bMessageTextKey] andCacheName:cell.message.entityID]
+        [BFileCache cacheFileFromURL:url withFileName:file[bMessageText] andCacheName:cell.message.entityID]
         .thenOnMain(^id(NSURL * cacheUrl) {
             NSLog(@"Cache URL: %@", [cacheUrl absoluteString]);
             [cell setMessage:cell.message];
@@ -534,71 +519,6 @@
         [_documentInteractionController setName:name];
     }
     [_documentInteractionController presentPreviewAnimated:YES];
-}
-
-#pragma Message Delegate
-
--(RXPromise *) sendTextMessage: (NSString *) message withMeta: (NSDictionary *)meta {
-    
-    // Typing indicator
-    // Once a user sends a message they are no longer typing
-    [self userFinishedTypingWithState: bChatStateActive];
-    
-    NSString * newMessage = [message stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    return [self handleMessageSend:[delegate  sendText:newMessage withMeta:meta]];
-}
-
--(RXPromise *) sendTextMessage: (NSString *) message {
-    return [self sendTextMessage:message withMeta:Nil];
-}
-
--(RXPromise *) sendImageMessage: (UIImage *) image {
-    [self addObservers];
-    return [self handleMessageSend:[delegate sendImage: image]];
-}
-
--(RXPromise *) handleMessageSend: (RXPromise *) promise {
-    [self reloadData];
-    return promise.thenOnMain(^id(id success) {
-        [self scrollToBottomOfTable:YES];
-        return Nil;
-    }, ^id(NSError * error) {
-        [self handleMessageSend:[delegate sendSystemMessage: error.localizedDescription]];
-        return Nil;
-    });
-}
-
--(void) sendAudioMessage: (NSData *) data duration: (double) seconds {
-    
-    if (seconds > 1) {
-        [self handleMessageSend:[delegate sendAudio:data withDuration:seconds]];
-    }
-    else {
-        // TODO: Make the tost position above the text bar programatically
-        [self.view makeToast:[NSBundle t:bHoldToSendAudioMessageError]
-                    duration:2
-                    position:[NSValue valueWithCGPoint: CGPointMake(self.view.frame.size.width / 2.0, self.view.frame.size.height - 120)]];
-
-    }
-    
-    [self reloadData];
-}
-
--(RXPromise *) sendVideoMessage: (NSData *) data withCoverImage: (UIImage *) image {
-    [self addObservers];
-    return [self handleMessageSend:[delegate sendVideo:data withCoverImage:image]];
-}
-
-- (RXPromise *) sendStickerMessage: (NSString *)stickerName {
-    return [self handleMessageSend:[delegate sendSticker: stickerName]];
-}
-
-- (RXPromise *) sendFileMessage: (NSDictionary *)file {
-    return [self handleMessageSend:[delegate sendFile: file]];
-}
-
--(RXPromise *) sendLocationMessage: (CLLocation *) location {
-    return [self handleMessageSend:[delegate sendLocation: location]];
 }
 
 -(BOOL) showOptions {
@@ -639,17 +559,18 @@
     return self;
 }
 
+
 // TODO: Change this to handleMessageSend
--(void) chatOptionActionExecuted:(RXPromise *)promise {
-    
-    [self handleMessageSend:promise];
-    __weak __typeof__(self) weakSelf = self;
-    promise.thenOnMain(^id(id success) {
-        __typeof__(self) strongSelf = weakSelf;
-        [strongSelf reloadData];
-        return Nil;
-    }, Nil);
-}
+//-(void) chatOptionActionExecuted:(RXPromise *)promise {
+//
+//    [self handleMessageSend:promise];
+//    __weak __typeof__(self) weakSelf = self;
+//    promise.thenOnMain(^id(id success) {
+//        __typeof__(self) strongSelf = weakSelf;
+//        [strongSelf reloadData];
+//        return Nil;
+//    }, Nil);
+//}
 
 #pragma  Picture selection
 
@@ -723,6 +644,8 @@
 
 // Move the toolbar up
 -(void) keyboardWillShow: (NSNotification *) notification {
+    
+    _keyboardVisible = YES;
     
     // Get the keyboard size
     CGRect keyboardBounds = [[notification.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
@@ -811,10 +734,9 @@
 }
 
 -(float) textInputViewBottomInset {
-    // Fix for the iPhone X
     // Move the text input up to avoid the bottom area
-    if([UIScreen mainScreen].nativeBounds.size.height == 2436) {
-        return 30;
+    if (@available(iOS 11, *)) {
+        return self.view.safeAreaInsets.bottom;
     }
     return 0;
 }
@@ -824,6 +746,7 @@
     // the toolbar again
     tableView.keepBottomOffsetTo(_sendBarView).equal = -_sendBarView.fh;
     [_keyboardOverlay removeFromSuperview];
+    _keyboardVisible = NO;
 
 }
 
@@ -854,9 +777,14 @@
 }
 
 -(void) reloadData {
-    [tableView reloadData];
-    [self scrollToBottomOfTable:YES];
+    [self reloadData:YES];
 }
+
+-(void) reloadData: (BOOL) scroll {
+    [tableView reloadData];
+    [self scrollToBottomOfTable:scroll];
+}
+
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     
@@ -881,13 +809,7 @@
 
 #pragma Utility Methods
 
--(void) dataUpdated {
-    [tableView reloadData];
-    [self scrollToBottomOfTable:YES];
-}
-
 - (void) navigationBarTapped {
-    
     [delegate navigationBarTapped];
 }
 

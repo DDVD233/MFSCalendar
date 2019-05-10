@@ -18,7 +18,7 @@
 #import "CCThreadWrapper.h"
 #import "CCUserWrapper.h"
 #import "CCMessageWrapper.h"
-#import "BStateManager.h"
+#import "BFirebaseEventHandler.h"
 #import "BFirebaseUsersHandler.h"
 #import "BEntity.h"
 
@@ -32,5 +32,6 @@
 #import "BFirebaseModerationHandler.h"
 #import "BFirebasePublicThreadHandler.h"
 #import "BFirebaseUsersHandler.h"
+#import "BFirebaseContactHandler.h"
 
 #endif /* ChatFirebaseAdapter_h */

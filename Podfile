@@ -1,5 +1,4 @@
 project 'MFSMobile.xcodeproj'
-source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '10.0'
 use_frameworks!
 # Main 
@@ -25,9 +24,9 @@ target 'MFSMobile' do
   pod 'Fabric'
   pod 'Crashlytics'
   pod 'Alamofire'
-  pod 'SDWebImage'
+  pod 'SDWebImage', "~> 4.0"
   pod 'Moya'
-  pod 'M13ProgressSuite'
+  pod 'M13ProgressSuite', "= 1.2.5"
   pod 'SnapKit'
   pod 'JSQWebViewController'
   pod 'Down'

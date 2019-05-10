@@ -1,4 +1,4 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import "UAScheduleAction.h"
 #import "UAirship.h"
@@ -31,7 +31,7 @@
 
     UAActionScheduleInfo *scheduleInfo = [UAActionScheduleInfo scheduleInfoWithJSON:arguments.value error:&error];
     if (!scheduleInfo) {
-        UA_LWARN(@"Unable to schedule actions. Invalid schedule payload: %@", scheduleInfo);
+        UA_LERR(@"Unable to schedule actions. Invalid schedule payload: %@", scheduleInfo);
         completionHandler([UAActionResult resultWithError:error]);
         return;
     }

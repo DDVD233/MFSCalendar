@@ -1,4 +1,4 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import "UAModules+Internal.h"
 #import "UAirship+Internal.h"
@@ -44,7 +44,7 @@ NSString * const UAModulesLocation = @"location";
 - (nullable UAComponent *)airshipComponentForModuleName:(NSString *)moduleName {
     NSString *airshipProperty = self.moduleMap[moduleName];
     if (!airshipProperty.length) {
-        UA_LERR(@"No module with name: %@", moduleName);
+        UA_LWARN(@"No module with name: %@", moduleName);
         return nil;
     }
 
@@ -71,7 +71,13 @@ NSString * const UAModulesLocation = @"location";
         UARemoteConfig *combinedConfig;
 
         for (UARemoteDataPayload *payload in payloads) {
-            UARemoteConfig *config = [component.remoteConfigClass configWithJSON:payload.data];
+            Class remoteConfigClass = component.remoteConfigClass;
+            if (!remoteConfigClass) {
+                UA_LERR(@"Unable to get remote config class for module name: %@, payload: %@", key, payload);
+                continue;
+            }
+            
+            UARemoteConfig *config = [remoteConfigClass configWithJSON:payload.data];
 
             if (!config) {
                 UA_LERR(@"Unable to produce config for module name: %@, payload: %@", key, payload);

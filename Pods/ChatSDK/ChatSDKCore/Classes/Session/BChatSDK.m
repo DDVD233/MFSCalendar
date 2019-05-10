@@ -15,7 +15,9 @@
 @implementation BChatSDK
 
 @synthesize configuration = _configuration;
-@synthesize interfaceManager = _interfaceManager;
+@synthesize interfaceAdapter = _interfaceAdapter;
+@synthesize storageAdapter = _storageAdapter;
+@synthesize networkAdapter = _networkAdapter;
 
 static BChatSDK * instance;
 
@@ -34,40 +36,80 @@ static BChatSDK * instance;
 
 -(instancetype) init {
     if((self = [super init])) {
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(appDidResignActive)
+                                                     name:UIApplicationWillResignActiveNotification
+                                                   object:Nil];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(appDidBecomeActive)
+                                                     name:UIApplicationDidBecomeActiveNotification
+                                                   object:Nil];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(saveData)
+                                                     name:UIApplicationWillTerminateNotification
+                                                   object:Nil];
+        _moduleHelper = [BModuleHelper new];
     }
     return self;
 }
 
-+(void) initialize: (BConfiguration *) config app:(UIApplication *)application options:(NSDictionary *)launchOptions interfaceAdapter: (id<PInterfaceFacade>) adapter {
-    [self shared]->_configuration = config;
-    
-    [BModuleHelper activateCoreModules];
-    if(adapter) {
-        [self shared]->_interfaceManager = adapter;
-    }
-    [BModuleHelper activateModules];
++(void) initialize: (BConfiguration *) config app:(UIApplication *)application options:(NSDictionary *)launchOptions interfaceAdapter: (id<PInterfaceAdapter>) adapter {
+    [self.shared initialize:config app:application options:launchOptions interfaceAdapter: adapter];
     [self application:application didFinishLaunchingWithOptions:launchOptions];
+}
+
+-(void) initialize: (BConfiguration *) config app:(UIApplication *)application options:(NSDictionary *)launchOptions interfaceAdapter: (id<PInterfaceAdapter>) adapter {
+    _configuration = config;
     
-    [[self shared] clearDataIfNecessary];
-    
-    if (config.clearDataWhenRootPathChanges) {
+    [_moduleHelper activateCoreModules];
+    if(adapter) {
+        _interfaceAdapter = adapter;
     }
+    [_moduleHelper activateModules];
+    
+    [self clearDataIfNecessary];
 }
 
 +(void) initialize: (BConfiguration *) config app:(UIApplication *)application options:(NSDictionary *)launchOptions {
     [self initialize:config app:application options:launchOptions interfaceAdapter:Nil];
 }
 
-+(void) activateModules {
-    [BModuleHelper activateModules];
+-(void) appDidResignActive {
+    if(self.networkAdapter) {
+        [self.networkAdapter.core save];
+        [self.networkAdapter.core goOffline];
+    }
 }
 
-+(void) activateModulesForFirebase {
-    [BModuleHelper activateModulesForFirebase];
+-(void) appDidBecomeActive {
+    if(self.networkAdapter) {
+        // TODO: Check this
+        [self.networkAdapter.core goOnline];
+    }
 }
 
-+(void) activateModulesForXMPP {
-    [BModuleHelper activateModulesForXMPP];
+-(void) saveData {
+    if (self.networkAdapter) {
+        [self.networkAdapter.core save];
+    }
+}
+
+-(BOOL) activateModuleForName: (NSString *) name {
+    return [_moduleHelper activateModuleForName:name];
+}
+
+-(void) activateModules {
+    [_moduleHelper activateModules];
+}
+
+-(void) activateModulesForFirebase {
+    [_moduleHelper activateModulesForFirebase];
+}
+
+-(void) activateModulesForXMPP {
+    [_moduleHelper activateModulesForXMPP];
 }
 
 // If the configuration isn't set, return a default value
@@ -118,6 +160,10 @@ static BChatSDK * instance;
     return YES;
 }
 
+-(void) preventAutomaticActivationForModule: (NSString *) moduleName {
+    [_moduleHelper excludeModules:@[moduleName]];
+}
+
 // Authenticate using a Firebase token
 +(RXPromise *) authenticateWithToken: (NSString *) token {
     return [BIntegrationHelper authenticateWithToken:token];
@@ -135,7 +181,7 @@ static BChatSDK * instance;
 }
 
 +(BConfiguration *) config {
-    return [self shared].configuration;
+    return self.shared.configuration;
 }
 
 -(void) clearDataIfNecessary {
@@ -254,6 +300,10 @@ static BChatSDK * instance;
     return BChatSDK.core.currentUserModel;
 }
 
++(NSString *) currentUserID {
+    return self.currentUser.entityID;
+}
+
 +(BOOL) isMe: (id<PUser>) user {
     return [[self currentUser].entityID isEqualToString:user.entityID];
 }
@@ -266,16 +316,16 @@ static BChatSDK * instance;
     return self.a.hook;
 }
 
-+(id<BNetworkFacade>) a {
-    return [BNetworkManager sharedManager].a;
++(id<PNetworkAdapter>) a {
+    return self.shared.networkAdapter;
 }
 
-+(id<PInterfaceFacade>) ui {
-    return [self shared]->_interfaceManager;
++(id<PInterfaceAdapter>) ui {
+    return self.shared.interfaceAdapter;
 }
 
-+(id<BStorageAdapter>) db {
-    return [BStorageManager sharedManager].a;
++(id<PStorageAdapter>) db {
+    return self.shared.storageAdapter;
 }
 
 +(id<PFileMessageHandler>) fileMessage {
@@ -284,6 +334,10 @@ static BChatSDK * instance;
 
 +(id<PEncryptionHandler>) encryption {
     return self.a.encryption;
+}
+
++(id<PEventHandler>) event {
+    return self.a.event;
 }
 
 +(id<PInternetConnectivityHandler>) connectivity {

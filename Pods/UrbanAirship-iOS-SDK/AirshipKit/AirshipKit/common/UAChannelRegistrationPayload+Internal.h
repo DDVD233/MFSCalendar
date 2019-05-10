@@ -1,4 +1,4 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import <Foundation/Foundation.h>
 
@@ -66,11 +66,6 @@ extern NSString *const UABackgroundEnabledJSONKey;
  * The tags for this device.
  */
 @property (nonatomic, strong, nullable) NSArray<NSString *> *tags;
-
-/**
- * The alias for this device.
- */
-@property (nonatomic, copy, nullable) NSString *alias;
 
 /**
  * Quiet time settings for this device.

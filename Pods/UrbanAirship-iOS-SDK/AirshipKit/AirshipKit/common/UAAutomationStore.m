@@ -1,4 +1,4 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import "NSManagedObjectContext+UAAdditions+Internal.h"
 #import "UAAutomationStore+Internal.h"
@@ -15,10 +15,12 @@
 #import "UAConfig.h"
 #import "UAUtils+Internal.h"
 #import "UAJSONSerialization+Internal.h"
+#import "UAScheduleDataMigrator+Internal.h"
 
 @interface UAAutomationStore ()
 @property (nonatomic, strong) NSManagedObjectContext *managedContext;
 @property (nonatomic, copy) NSString *storeName;
+@property (nonatomic, strong) UADate *date;
 @property (nonatomic, assign) NSUInteger scheduleLimit;
 @property (nonatomic, assign) BOOL inMemory;
 @property (nonatomic, assign) BOOL finished;
@@ -26,23 +28,29 @@
 
 @implementation UAAutomationStore
 
-- (instancetype)initWithStoreName:(NSString *)storeName scheduleLimit:(NSUInteger)scheduleLimit inMemory:(BOOL)inMemory {
+- (instancetype)initWithStoreName:(NSString *)storeName scheduleLimit:(NSUInteger)scheduleLimit inMemory:(BOOL)inMemory date:(UADate *)date {
     self = [super init];
 
     if (self) {
         self.storeName = storeName;
         self.scheduleLimit = scheduleLimit;
         self.inMemory = inMemory;
+        self.date = date;
         self.finished = NO;
 
         NSURL *modelURL = [[UAirship resources] URLForResource:@"UAAutomation" withExtension:@"momd"];
         self.managedContext = [NSManagedObjectContext managedObjectContextForModelURL:modelURL
                                                                       concurrencyType:NSPrivateQueueConcurrencyType];
 
+        UA_WEAKIFY(self)
         void (^completion)(BOOL, NSError*) = ^void(BOOL success, NSError *error) {
             if (!success) {
                 UA_LERR(@"Failed to create automation persistent store: %@", error);
+                return;
             }
+
+            UA_STRONGIFY(self);
+            [self migrateData];
         };
 
         if (inMemory) {
@@ -60,22 +68,53 @@
     return self;
 }
 
-+ (instancetype)automationStoreWithStoreName:(NSString *)storeName scheduleLimit:(NSUInteger)scheduleLimit inMemory:(BOOL)inMemory {
-    return [[UAAutomationStore alloc] initWithStoreName:storeName scheduleLimit:scheduleLimit inMemory:inMemory];
++ (instancetype)automationStoreWithStoreName:(NSString *)storeName scheduleLimit:(NSUInteger)scheduleLimit inMemory:(BOOL)inMemory date:(UADate *)date {
+    return [[UAAutomationStore alloc] initWithStoreName:storeName scheduleLimit:scheduleLimit inMemory:inMemory date:date];
 }
 
 + (instancetype)automationStoreWithStoreName:(NSString *)storeName scheduleLimit:(NSUInteger)scheduleLimit {
-    return [[UAAutomationStore alloc] initWithStoreName:storeName scheduleLimit:scheduleLimit inMemory:NO];
+    return [[UAAutomationStore alloc] initWithStoreName:storeName scheduleLimit:scheduleLimit inMemory:NO date:[[UADate alloc] init]];
 }
 
 - (void)protectedDataAvailable {
     if (!self.managedContext.persistentStoreCoordinator.persistentStores.count) {
+        UA_WEAKIFY(self)
         [self.managedContext addPersistentSqlStore:self.storeName completionHandler:^(BOOL success, NSError *error) {
             if (!success) {
                 UA_LERR(@"Failed to create automation persistent store: %@", error);
+                return;
             }
+
+            UA_STRONGIFY(self);
+            [self migrateData];
         }];
     }
+}
+
+- (void)migrateData {
+    [self safePerformBlock:^(BOOL isSafe) {
+        if (!isSafe) {
+            return;
+        }
+
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"UAScheduleData"];
+        request.predicate = [NSPredicate predicateWithFormat:@"dataVersion < %d", UAScheduleDataVersion];
+        NSError *error;
+        NSArray *result = [self.managedContext executeFetchRequest:request error:&error];
+
+        if (error) {
+            UA_LERR(@"Error fetching schedules %@", error);
+            return;
+        }
+
+        for (UAScheduleData *scheduleData in result) {
+            [UAScheduleDataMigrator migrateScheduleData:scheduleData
+                                             oldVersion:[scheduleData.dataVersion unsignedIntegerValue]
+                                             newVersion:UAScheduleDataVersion];
+        }
+
+        [self.managedContext safeSave];
+    }];
 }
 
 - (void)safePerformBlock:(void (^)(BOOL))block {
@@ -149,12 +188,12 @@
 }
 
 - (void)getSchedules:(NSString *)groupID completionHandler:(void (^)(NSArray<UAScheduleData *> *))completionHandler {
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"group == %@ && end >= %@", groupID, [NSDate date]];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"group == %@ && end >= %@", groupID, self.date.now];
     [self fetchSchedulesWithPredicate:predicate limit:self.scheduleLimit completionHandler:completionHandler];
 }
 
 - (void)getSchedules:(void (^)(NSArray<UAScheduleData *> *))completionHandler {
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"end >= %@", [NSDate date]];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"end >= %@", self.date.now];
     [self fetchSchedulesWithPredicate:predicate limit:self.scheduleLimit completionHandler:completionHandler];
 }
 
@@ -164,15 +203,19 @@
 }
 
 - (void)getSchedule:(NSString *)scheduleID completionHandler:(void (^)(UAScheduleData *))completionHandler {
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"identifier == %@ && end >= %@", scheduleID, [NSDate date]];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"identifier == %@ && end >= %@", scheduleID, self.date.now];
     [self fetchSchedulesWithPredicate:predicate limit:1 completionHandler:^(NSArray<UAScheduleData *> *result) {
         completionHandler(result.count == 1 ? result.firstObject : nil);
     }];
 }
 
 - (void)getActiveExpiredSchedules:(void (^)(NSArray<UAScheduleData *> *))completionHandler {
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"end <= %@ && executionState != %d", [NSDate date], UAScheduleStateFinished];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"end <= %@ && executionState != %d", self.date.now, UAScheduleStateFinished];
     [self fetchSchedulesWithPredicate:predicate limit:self.scheduleLimit completionHandler:completionHandler];
+}
+
+- (void)getAllSchedules:(void (^)(NSArray<UAScheduleData *> *))completionHandler {
+    [self fetchSchedulesWithPredicate:nil limit:self.scheduleLimit completionHandler:completionHandler];
 }
 
 - (void)getActiveTriggers:(NSString *)scheduleID
@@ -184,7 +227,7 @@
     NSString *format = @"(schedule.identifier LIKE %@ AND type = %ld AND start <= %@) AND ((delay != nil AND schedule.executionState in %@) OR (delay == nil AND schedule.executionState == %d))";
 
     NSArray *cancelTriggerState = @[@(UAScheduleStateTimeDelayed), @(UAScheduleStateWaitingScheduleConditions), @(UAScheduleStatePreparingSchedule)];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:format, scheduleID, type, [NSDate date], cancelTriggerState, UAScheduleStateIdle];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:format, scheduleID, type, self.date.now, cancelTriggerState, UAScheduleStateIdle];
 
     [self fetchTriggersWithPredicate:predicate completionHandler:completionHandler];
 }
@@ -295,6 +338,7 @@
     scheduleData.end = schedule.info.end;
     scheduleData.interval = @(schedule.info.interval);
     scheduleData.editGracePeriod = @(schedule.info.editGracePeriod);
+    scheduleData.dataVersion = @(UAScheduleDataVersion);
 
     if (schedule.info.delay) {
         scheduleData.delay = [self createDelayDataFromDelay:schedule.info.delay scheduleStart:schedule.info.start schedule:scheduleData];

@@ -351,7 +351,7 @@ extension gradeViewController {
                             yValues.append(dataEntry)
                         }
                         
-                        let dataSet = BarChartDataSet(values: yValues, label: assignmentType)
+                        let dataSet = BarChartDataSet(entries: yValues, label: assignmentType)
                         dataSet.setColor(HomeworkView().colorForTheType(type: assignmentType), alpha: 0.7)
                         dataSet.valueFont = UIFont.systemFont(ofSize: 12)
                         

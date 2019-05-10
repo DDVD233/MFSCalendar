@@ -1,4 +1,4 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import <Foundation/Foundation.h>
 #import "UAInAppMessageDisplayContent.h"
@@ -13,6 +13,11 @@ NS_ASSUME_NONNULL_BEGIN
 extern NSUInteger const UAInAppMessageIDLimit;
 
 /**
+ * Message name limit (100 characters).
+ */
+extern NSUInteger const UAInAppMessageNameLimit;
+
+/**
  * Builder class for UAInAppMessage.
  */
 @interface UAInAppMessageBuilder : NSObject
@@ -22,28 +27,41 @@ extern NSUInteger const UAInAppMessageIDLimit;
 ///---------------------------------------------------------------------------------------
 
 /**
- * Message identifier. Required. Must be between [1-100] characters.
+ * Message identifier. Must be between [1-100] characters.
+ *
+ * Required.
  */
 @property(nonatomic, copy, nullable) NSString *identifier;
 
-
+/**
+ * Message name. Optional. Must be between [1-100] characters.
+ */
+@property(nonatomic, copy, nullable) NSString *name;
 /**
  * The display content for the message.
+ *
+ * Required.
  */
 @property(nonatomic, strong, nullable) UAInAppMessageDisplayContent *displayContent;
 
 /**
- * The extras for the messages.
+ * Extra information for the message.
+ *
+ * Optional.
  */
 @property(nonatomic, copy, nullable) NSDictionary *extras;
 
 /**
-* The display actions for the message.
-*/
+ * The display actions for the message.
+ *
+ * Optional.
+ */
 @property(nonatomic, copy, nullable) NSDictionary *actions;
 
 /**
- * The audience conditions for the messages.
+ * The audience conditions for the message.
+ *
+ * Optional.
  */
 @property(nonatomic, strong, nullable) UAInAppMessageAudience *audience;
 
@@ -57,6 +75,8 @@ extern NSUInteger const UAInAppMessageIDLimit;
 
 /**
  * Model object representing in-app message data.
+ *
+ * @note This object is built using `UAInAppMessageBuilder`.
  */
 @interface UAInAppMessage : NSObject
 
@@ -65,9 +85,14 @@ extern NSUInteger const UAInAppMessageIDLimit;
 ///---------------------------------------------------------------------------------------
 
 /**
-* The unique identifier for the message.
-*/
-@property(nonatomic, copy, readonly) NSString *identifier;
+ * The unique identifier for the message.
+ */
+@property(nonatomic, readonly) NSString *identifier;
+
+/**
+ * Message name. Optional. Must be between [1-100] characters.
+ */
+@property(nonatomic, copy, nullable, readonly) NSString *name;
 
 /**
  * The display type.
@@ -77,22 +102,26 @@ extern NSUInteger const UAInAppMessageIDLimit;
 /**
  * The display content for the message.
  */
-@property(nonatomic, strong, readonly) UAInAppMessageDisplayContent *displayContent;
+@property(nonatomic, readonly) UAInAppMessageDisplayContent *displayContent;
 
 /**
- * The extras for the messages.
+ * Extra information for the message.
  */
-@property(nonatomic, copy, nullable, readonly) NSDictionary *extras;
+@property(nonatomic, nullable, readonly) NSDictionary *extras;
 
 /**
- * Display actons.
+ * Display actions.
  */
-@property(nonatomic, copy, nullable, readonly) NSDictionary *actions;
+@property(nonatomic, nullable, readonly) NSDictionary *actions;
 
 /**
- * The audience conditions for the messages.
+ * The audience conditions for the message.
  */
-@property(nonatomic, strong, nullable, readonly) UAInAppMessageAudience *audience;
+@property(nonatomic, nullable, readonly) UAInAppMessageAudience *audience;
+
+///---------------------------------------------------------------------------------------
+/// @name In App Message Methods
+///---------------------------------------------------------------------------------------
 
 /**
  * Class factory method for constructing an in-app message
@@ -101,7 +130,7 @@ extern NSUInteger const UAInAppMessageIDLimit;
  * @param builderBlock the builder block.
  * @return A fully configured instance of UAInAppMessage.
  */
-+ (instancetype)messageWithBuilderBlock:(void(^)(UAInAppMessageBuilder *builder))builderBlock;
++ (nullable instancetype)messageWithBuilderBlock:(void(^)(UAInAppMessageBuilder *builder))builderBlock;
 
 /**
  * Extends a message with a builder block.
@@ -109,7 +138,7 @@ extern NSUInteger const UAInAppMessageIDLimit;
  * @param builderBlock The builder block.
  * @return An extended instance of UAInAppMessage.
  */
-- (UAInAppMessage *)extend:(void(^)(UAInAppMessageBuilder *builder))builderBlock;
+- (nullable UAInAppMessage *)extend:(void(^)(UAInAppMessageBuilder *builder))builderBlock;
 
 @end
 

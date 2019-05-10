@@ -34,6 +34,7 @@
 #define bLastMessage @"lastMessage"
 #define bUserName @"userName"
 #define bReadPath @"read"
+#define bImageURL @"image-url"
 
 #define bCreationDate @"creation-date"
 #define bMessage @"message"
@@ -51,6 +52,7 @@
 #define bUsersPath @"users"
 #define bMessagesPath @"messages"
 #define bThreadsPath @"threads"
+#define bContactsPath @"contacts"
 #define bPublicThreadsPath @"public-threads"
 #define bMetaPath @"meta"
 #define bOnlinePath @"online"
@@ -79,7 +81,7 @@
 #define bUserPhoneKey @"phone"
 #define bUserPrefixKey @"user"
 #define bUserImageURLKey @"pictureURL"
-#define bUserThumbnailURLKey @"pictureURLThumbnail"
+#define bUserPictures @"pictures"
 
 #define bUserPrivilegeKey @"privilege"
 #define bUserNameLowercase @"name-lowercase"

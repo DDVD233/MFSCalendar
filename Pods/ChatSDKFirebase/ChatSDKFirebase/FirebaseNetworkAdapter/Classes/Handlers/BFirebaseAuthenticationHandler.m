@@ -13,21 +13,20 @@
 
 @implementation BFirebaseAuthenticationHandler
 
-
 // Note: this method gets called often
 // Each time the main tab bar appears the app check that
 // the user is authenticated
--(RXPromise *) authenticateWithCachedToken {
-    
+-(RXPromise *) authenticate {
+
     [BChatSDK.core goOnline];
     
-    BOOL authenticated = [self userAuthenticated];
+    BOOL authenticated = [self isAuthenticated];
     if (authenticated) {
         
 //        [[FIRAuth auth] signOut:Nil];
         
         // If the user listeners have been added then authenticate completed successfully
-        if(_userAuthenticatedThisSession) {
+        if(_isAuthenticatedThisSession) {
             return [RXPromise resolveWithResult:BChatSDK.currentUser];
         }
         else {
@@ -39,7 +38,7 @@
     }
 }
 
--(BOOL) userAuthenticated {
+-(BOOL) isAuthenticated {
     
     // Return if there is a current user authenticated
     return [FIRAuth auth].currentUser != Nil;
@@ -55,24 +54,21 @@
     
     // Stop observing the user
     if(user) {
-        NSDictionary * data = @{bHookWillLogout_PUser: user};
-        [BChatSDK.hook executeHookWithName:bHookWillLogout data:data];
-
-        [BStateManager userOff: user.entityID];
+        [BHookNotification notificationWillLogout:user];
+        [BChatSDK.event currentUserOff: user.entityID];
     }
     
     NSError * error = Nil;
     if([[FIRAuth auth] signOut:&error]) {
 
-        _userAuthenticatedThisSession = NO;
+        _isAuthenticatedThisSession = NO;
         [self setLoginInfo:Nil];
         [BChatSDK.core goOffline];
         
         [[NSNotificationCenter  defaultCenter] postNotificationName:bNotificationBadgeUpdated object:Nil];
         
         if (user) {
-            NSDictionary * data = @{bHookDidLogout_PUser: user};
-            [BChatSDK.hook executeHookWithName:bHookDidLogout data:data];
+            [BHookNotification notificationDidLogout:user];
         }
         
         [promise resolveWithResult:Nil];
@@ -85,12 +81,14 @@
 
 -(RXPromise *) authenticate: (BAccountDetails *) details {
     
+    [BChatSDK.core goOnline];
+    
     RXPromise * promise = [RXPromise new];
     
     // Create a completion block to handle the login result
-    void(^handleResult)(FIRAuthDataResult * firebaseUser, NSError * error) = ^(FIRAuthDataResult * firebaseUser, NSError * error) {
+    void(^handleResult)(FIRAuthDataResult * result, NSError * error) = ^(FIRAuthDataResult * result, NSError * error) {
         if (!error) {
-            [promise resolveWithResult:firebaseUser.user];
+            [promise resolveWithResult:result.user];
         }
         else {
             [promise rejectWithReason:error];
@@ -206,26 +204,35 @@
         // Save the authentication ID for the current user
         // Set the current user
         [strongSelf setLoginInfo:@{bAuthenticationIDKey: uid,
-                             bTokenKey: token ? token : @""}];
+                             bTokenKey: [NSString safe: token]}];
         
         CCUserWrapper * user = [CCUserWrapper userWithAuthUserData:firebaseUser];
         if (details.name && !user.model.name) {
             [user.model setName:details.name];
         }
         
-        if (!strongSelf->_userAuthenticatedThisSession) {
-            strongSelf->_userAuthenticatedThisSession = YES;
+        if (!strongSelf->_isAuthenticatedThisSession) {
+            strongSelf->_isAuthenticatedThisSession = YES;
             // Update the user from the remote server
             return [user once].thenOnMain(^id(id<PUserWrapper> user_) {
-            
-                [BChatSDK.hook executeHookWithName:bHookUserAuthFinished data:@{bHookUserAuthFinished_PUser: user.model}];
+
+                // If the user was authenticated automatically
+                if (!details) {
+                    [BHookNotification notificationDidAuthenticate:user.model];
+                }
+                else if (details.type == bAccountTypeRegister) {
+                    [BHookNotification notificationDidSignUp:user.model];
+                }
+                else {
+                    [BHookNotification notificationDidLogin:user.model];
+                }
                 
                 [BChatSDK.core save];
                 
                 NSLog(@"User On: %@", user.entityID);
                 
                 // Add listeners here
-                [BStateManager userOn: user.entityID];
+                [BChatSDK.event currentUserOn:user.entityID];
                 
                 [BChatSDK.core setUserOnline];
                 

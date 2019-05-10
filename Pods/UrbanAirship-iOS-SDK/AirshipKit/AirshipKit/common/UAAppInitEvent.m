@@ -1,4 +1,4 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import <UIKit/UIKit.h>
 #import "UAAppInitEvent+Internal.h"
@@ -26,13 +26,13 @@
     [data setValue:analytics.conversionRichPushID forKey:@"rich_push_id"];
 
 #if !TARGET_OS_TV   // Inbox not supported on tvOS
-    [data setValue:[UAirship inboxUser].username forKey:@"user_id"];
     [data setValue:[self carrierName] forKey:@"carrier"];
 #endif
 
     [data setValue:[UAUtils connectionType] forKey:@"connection_type"];
 
     [data setValue:[self notificationTypes] forKey:@"notification_types"];
+    [data setValue:[self notificationAuthorization] forKey:@"notification_authorization"];
 
     NSTimeZone *localtz = [NSTimeZone defaultTimeZone];
     [data setValue:[NSNumber numberWithDouble:[localtz secondsFromGMT]] forKey:@"time_zone"];

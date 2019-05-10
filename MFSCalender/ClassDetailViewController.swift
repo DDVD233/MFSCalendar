@@ -12,7 +12,6 @@ import SwiftMessages
 import SwiftyJSON
 import DGElasticPullToRefresh
 import Alamofire
-import M13ProgressSuite
 import SnapKit
 import SafariServices
 import SVProgressHUD

@@ -1,4 +1,4 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import "UAMessageCenterListViewController.h"
 #import "UAMessageCenterListCell.h"
@@ -11,6 +11,7 @@
 #import "UAMessageCenterLocalization.h"
 #import "UAMessageCenterStyle.h"
 #import "UAConfig.h"
+#import "UADispatcher+Internal.h"
 
 /*
  * List-view image controls: default image path and cache values
@@ -102,12 +103,23 @@
  */
 @property (nonatomic, strong) dispatch_queue_t iconFetchQueue;
 
+/**
+ * Split view controller managing the inbox and message views
+ */
+@property (nonatomic, weak) UISplitViewController *splitViewController;
+
 @end
 
 @implementation UAMessageCenterListViewController
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+    return [self initWithNibName:nibNameOrNil bundle:nibBundleOrNil splitViewController:nil];
+}
+
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil splitViewController:(UISplitViewController *)splitViewController {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+        self.splitViewController = splitViewController;
+        
         self.iconCache = [[NSCache alloc] init];
         self.iconCache.countLimit = kUAIconImageCacheMaxCount;
         self.iconCache.totalCostLimit = kUAIconImageCacheMaxByteCost;
@@ -218,31 +230,24 @@
 }
 
 - (void)refreshStateChanged:(UIRefreshControl *)sender {
-
-    // Nothing to refresh if there's no user
-    if (![UAirship inboxUser].isCreated) {
-        [sender endRefreshing];
-    }
-
     if (sender.refreshing) {
         self.refreshControlAnimating = YES;
         UA_WEAKIFY(self)
         void (^retrieveMessageCompletionBlock)(void) = ^(void){
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [CATransaction begin];
-                [CATransaction setCompletionBlock: ^{
-                    UA_STRONGIFY(self)
+            [CATransaction begin];
+            [CATransaction setCompletionBlock: ^{
+                UA_STRONGIFY(self)
 
-                    // refresh animation has finished
-                    self.refreshControlAnimating = NO;
-                    [self chooseMessageDisplayAndReload];
-                }];
-                [sender endRefreshing];
-                [CATransaction commit];
-            });
+                // refresh animation has finished
+                self.refreshControlAnimating = NO;
+                [self chooseMessageDisplayAndReload];
+            }];
+            [sender endRefreshing];
+            [CATransaction commit];
         };
 
-        [[UAirship inbox].messageList retrieveMessageListWithSuccessBlock:retrieveMessageCompletionBlock withFailureBlock:retrieveMessageCompletionBlock];
+        [[UAirship inbox].messageList retrieveMessageListWithSuccessBlock:retrieveMessageCompletionBlock
+                                                         withFailureBlock:retrieveMessageCompletionBlock];
     } else {
         self.refreshControlAnimating = NO;
     }
@@ -487,11 +492,8 @@
     if (!self.messageViewController) {
         [self createMessageViewController];
     }
-    
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-    [self.messageViewController loadMessage:message onlyIfChanged:YES];
-#pragma GCC diagnostic pop
+
+    [self.messageViewController loadMessageForID:message.messageID onlyIfChanged:YES onError:errorCompletion];
 
     if (message) {
         // only display the message if there is a message to display
@@ -670,17 +672,13 @@
     UA_WEAKIFY(self);
     if (sender == self.markAsReadButtonItem) {
         [[UAirship inbox].messageList markMessagesRead:selectedMessages completionHandler:^{
-            dispatch_async(dispatch_get_main_queue(),^{
-                UA_STRONGIFY(self)
-                [self refreshAfterBatchUpdate];
-            });
+            UA_STRONGIFY(self)
+            [self refreshAfterBatchUpdate];
         }];
     } else {
         [[UAirship inbox].messageList markMessagesDeleted:selectedMessages completionHandler:^{
-            dispatch_async(dispatch_get_main_queue(),^{
-                UA_STRONGIFY(self)
-                [self refreshAfterBatchUpdate];
-            });
+            UA_STRONGIFY(self)
+            [self refreshAfterBatchUpdate];
         }];
     }
 }
@@ -783,10 +781,8 @@
     if (message) {
         UA_WEAKIFY(self);
        [[UAirship inbox].messageList markMessagesDeleted:@[message] completionHandler:^{
-           dispatch_async(dispatch_get_main_queue(),^{
-               UA_STRONGIFY(self)
-               [self refreshAfterBatchUpdate];
-           });
+           UA_STRONGIFY(self)
+           [self refreshAfterBatchUpdate];
         }];
     }
 }
@@ -920,17 +916,12 @@
 #pragma mark NSNotificationCenter callbacks
 
 - (void)messageListUpdated {
-    UA_WEAKIFY(self);
-    dispatch_async(dispatch_get_main_queue(), ^{
-        UA_STRONGIFY(self)
+    // copy the back-end list of messages as it can change from under the UI
+    [self copyMessages];
 
-        // copy the back-end list of messages as it can change from under the UI
-        [self copyMessages];
-        
-        if (!self.refreshControlAnimating) {
-            [self chooseMessageDisplayAndReload];
-        }
-    });
+    if (!self.refreshControlAnimating) {
+        [self chooseMessageDisplayAndReload];
+    }
 }
 
 - (void)chooseMessageDisplayAndReload {
@@ -947,10 +938,10 @@
         if (!messageToDisplay && self.selectedIndexPath) {
             messageToDisplay = [self messageForID:[self messageAtIndex:[self validateIndexPath:self.selectedIndexPath].row].messageID];
         }
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-        [self.messageViewController loadMessage:messageToDisplay onlyIfChanged:YES];
-#pragma GCC diagnostic pop
+
+        [self.messageViewController loadMessageForID:messageToDisplay.messageID onlyIfChanged:YES onError:^{
+            UA_LERR(@"Message load via chooseMessageDisplayAndReload resulted in error");
+        }];
 
         self.selectedMessage = messageToDisplay;
         
@@ -981,20 +972,18 @@
 }
 
 - (UIViewController *)primaryViewControllerForExpandingSplitViewController:(UISplitViewController *)splitViewController {
-    self.collapsed = NO;
     // Delay selection by a beat, to allow rotation to finish
 
     UA_WEAKIFY(self)
-    dispatch_async(dispatch_get_main_queue(), ^{
+   [[UADispatcher mainDispatcher] dispatchAsync:^{
         UA_STRONGIFY(self)
         [self handlePreviouslySelectedIndexPathsAnimated:YES];
-    });
+   }];
     // Returning nil causes the split view controller to default to the the existing primary view controller
     return nil;
 }
 
 - (UIViewController *)primaryViewControllerForCollapsingSplitViewController:(UISplitViewController *)splitViewController {
-    self.collapsed = YES;
     // Returning nil causes the split view controller to default to the the existing secondary view controller
     return nil;
 }
@@ -1054,9 +1043,6 @@
 
         NSURL *iconListURL = [NSURL URLWithString:iconListURLString];
 
-        // Tell the cache to remember the URL
-        [UAURLProtocol addCachableURL:iconListURL];
-
         // NOTE: All add/remove operations on the cache & in-progress set should be done
         // on the main thread. They'll be cleared below in a dispatch_async/main queue block.
 
@@ -1084,7 +1070,7 @@
             UIImage *iconImage = [UIImage imageWithData:iconImageData];
             iconImage = [self scaleImage:iconImage toSize:iconSize];
 
-            dispatch_async(dispatch_get_main_queue(), ^{
+           [[UADispatcher mainDispatcher] dispatchAsync:^{
                 // Recapture self for the duration of this block
                 UA_STRONGIFY(self)
 
@@ -1106,7 +1092,7 @@
                 
                 // Clear the request marker
                 [self.currentIconURLRequests removeObjectForKey:iconListURLString];
-            });
+           }];
         });
     }
 }
@@ -1117,6 +1103,13 @@
 - (NSString *)iconURLStringForMessage:(UAInboxMessage *) message {
     NSDictionary *icons = [message.rawMessageObject objectForKey:@"icons"];
     return [icons objectForKey:@"list_icon"];
+}
+
+- (BOOL)collapsed {
+    if (self.splitViewController) {
+        return self.splitViewController.collapsed;
+    }
+    return YES;
 }
 
 @end

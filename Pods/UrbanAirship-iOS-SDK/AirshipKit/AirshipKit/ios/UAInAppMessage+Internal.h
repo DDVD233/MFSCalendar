@@ -1,4 +1,4 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import <Foundation/Foundation.h>
 #import "UAInAppMessage.h"
@@ -62,7 +62,7 @@ typedef NS_ENUM(NSInteger, UAInAppMessageSource) {
 extern NSString *const UAInAppMessageIDKey;
 extern NSString *const UAInAppMessageDisplayTypeKey;
 extern NSString *const UAInAppMessageDisplayContentKey;
-extern NSString *const UAInAppMessageExtrasKey;
+extern NSString *const UAInAppMessageExtraKey;
 extern NSString *const UAInAppMessageAudienceKey;
 extern NSString *const UAInAppMessageActionsKey;
 extern NSString *const UAInAppMessageCampaignsKey;

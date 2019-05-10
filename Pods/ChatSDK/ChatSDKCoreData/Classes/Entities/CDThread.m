@@ -66,21 +66,22 @@
 }
 
 -(NSArray *) loadMoreMessages: (NSInteger) numberOfMessages {
+    NSMutableArray * messageList = self.messagesWorkingList;
     
-    NSInteger count = _messagesWorkingList.count + numberOfMessages;
+    NSInteger count = messageList.count + numberOfMessages;
     count = MAX(count, BChatSDK.config.chatMessagesToLoad);
     
     // Get the next batch of messages
-    [_messagesWorkingList removeAllObjects];
+    [messageList removeAllObjects];
     
     // We want to get the count newest messages so we sent ascending to NO
     // Then we have to reverse the order of the list...
-    [_messagesWorkingList addObjectsFromArray:[self loadMessagesWithCount:count ascending:NO]];
+    [messageList addObjectsFromArray:[self loadMessagesWithCount:count ascending:YES]];
     
     // Now we need to reverse the order of the list
-    [self reverse:_messagesWorkingList];
+//    [self reverse:_messagesWorkingList];
     
-    return _messagesWorkingList;
+    return messageList;
 }
 
 -(void) optimize {
@@ -196,14 +197,22 @@
 }
 
 -(void) markRead {
+    
+    BOOL didMarkRead = NO;
+    
     for(id<PMessage> message in self.messages) {
-        message.read = @YES;
-        
-        // TODO: Should we have this here? Maybe this gets called too soon
-        // but it's a good backup in case the app closes before we save
-        message.delivered = @YES;
+        if (!message.read.boolValue) {
+            message.read = @YES;
+            
+            // TODO: Should we have this here? Maybe this gets called too soon
+            // but it's a good backup in case the app closes before we save
+            message.delivered = @YES;
+            didMarkRead = YES;
+        }
     }
-    [[NSNotificationCenter defaultCenter] postNotificationName:bNotificationThreadRead object:Nil];
+    if (didMarkRead) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:bNotificationThreadRead object:Nil];
+    }
 }
 
 -(int) unreadMessageCount {
@@ -256,7 +265,7 @@
 }
 
 -(void) setMetaValue: (id) value forKey: (NSString *) key {
-    [self updateMeta:@{key: value ? value : @""}];
+    [self updateMeta:@{key: [NSString safe: value]}];
 }
 
 // TODO: Move this to UI module
@@ -274,7 +283,7 @@
     for (id<PUser> user in tempUsers) {
         
         // Check if the user picture has been uploaded
-        if (!user.thumbnail) {
+        if (!user.image) {
             [users removeObject:user];
         }
     }
@@ -293,12 +302,12 @@
     else if (users.count == 1) {
         // Only one user left so use their picture
         id<PUser> user = users.firstObject;
-        return [UIImage imageWithData:user.thumbnail];
+        return [UIImage imageWithData:user.image];
     }
     else {
         
         // When we get the user thumbnail image we make sure it is the size we want so resize it to be 100 x 100
-        UIImage * image1 = [[UIImage imageWithData:((id<PUser>)users.firstObject).thumbnail] resizeImageToSize:CGSizeMake(100, 100)];
+        UIImage * image1 = [[UIImage imageWithData:((id<PUser>)users.firstObject).image] resizeImageToSize:CGSizeMake(100, 100)];
         
         // Then crop the image
         image1 = [image1 croppedImage:CGRectMake(25, 0, 49, 100)];
@@ -307,7 +316,7 @@
         if (users.count == 2) {
             
             // When we get the user thumbnail image we make sure it is the size we want so resize it to be 100 x 100
-            UIImage * image2 = [[UIImage imageWithData:((id<PUser>)users.lastObject).thumbnail] resizeImageToSize:CGSizeMake(100, 100)];
+            UIImage * image2 = [[UIImage imageWithData:((id<PUser>)users.lastObject).image] resizeImageToSize:CGSizeMake(100, 100)];
             
             // Then crop the image
             image2 = [image2 croppedImage:CGRectMake(25, 0, 49, 100)];
@@ -321,8 +330,8 @@
         else {
             
             // Thumbnails done by using parse change
-            UIImage * image2 = [UIImage imageWithData:((id<PUser>)users[1]).thumbnail];
-            UIImage * image3 = [UIImage imageWithData:((id<PUser>)users[2]).thumbnail];
+            UIImage * image2 = [UIImage imageWithData:((id<PUser>)users[1]).image];
+            UIImage * image3 = [UIImage imageWithData:((id<PUser>)users[2]).image];
             
             // Combine the images
             UIGraphicsBeginImageContextWithOptions(CGSizeMake(100, 100), NO, 0.0);

@@ -1,4 +1,4 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import <objc/runtime.h>
 
@@ -24,10 +24,14 @@
         self.productionLogLevel = UALogLevelError;
         self.inProduction = NO;
         self.detectProvisioningMode = NO;
+        self.requestAuthorizationToUseNotifications = YES;
         self.automaticSetupEnabled = YES;
         self.analyticsEnabled = YES;
         self.profilePath = [[NSBundle mainBundle] pathForResource:@"embedded" ofType:@"mobileprovision"];
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
         self.cacheDiskSizeInMB = 100;
+#pragma GCC diagnostic pop
         self.clearUserOnAppRestore = NO;
         self.whitelist = @[];
         self.clearNamedUserOnAppRestore = NO;
@@ -63,11 +67,15 @@
 
         _inProduction = config.inProduction;
         _detectProvisioningMode = config.detectProvisioningMode;
+        _requestAuthorizationToUseNotifications = config.requestAuthorizationToUseNotifications;
 
         _automaticSetupEnabled = config.automaticSetupEnabled;
         _analyticsEnabled = config.analyticsEnabled;
         _profilePath = config.profilePath;
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
         _cacheDiskSizeInMB = config.cacheDiskSizeInMB;
+#pragma GCC diagnostic pop
         _clearUserOnAppRestore = config.clearUserOnAppRestore;
         _whitelist = config.whitelist;
         _clearNamedUserOnAppRestore = config.clearNamedUserOnAppRestore;
@@ -96,6 +104,7 @@
             "Production Log Level: %ld\n"
             "Resolved Log Level: %ld\n"
             "Detect Provisioning Mode: %d\n"
+            "Request Authorization To Use Notifications: %@\n"
             "Analytics Enabled: %d\n"
             "Analytics URL: %@\n"
             "Device API URL: %@\n"
@@ -124,11 +133,15 @@
             (long)self.productionLogLevel,
             (long)self.logLevel,
             self.detectProvisioningMode,
+            self.requestAuthorizationToUseNotifications ? @"YES" : @"NO",
             self.analyticsEnabled,
             self.analyticsURL,
             self.deviceAPIURL,
             self.remoteDataAPIURL,
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
             (unsigned long)self.cacheDiskSizeInMB,
+#pragma GCC diagnostic pop
             self.landingPageContentURL,
             self.automaticSetupEnabled,
             self.clearUserOnAppRestore,
@@ -306,7 +319,7 @@
             UA_LDEBUG(@"No profile found, but not a simulator: inProduction = YES");
             _usesProductionPushServer =  @(YES);
         } else {
-            UA_LERR(@"No profile found. Unable to automatically detect provisioning mode in the simulator. Falling back to inProduction as set: %d", _inProduction);
+            UA_LWARN(@"No profile found. Unable to automatically detect provisioning mode in the simulator. Falling back to inProduction as set: %d", _inProduction);
             _usesProductionPushServer =  @(_inProduction);
         }
     }
@@ -325,7 +338,7 @@
     UA_LTRACE(@"Profile path: %@", profilePath);
 
     if (err) {
-        UA_LERR(@"No mobile provision profile found or the profile could not be read. Defaulting to production mode.");
+        UA_LWARN(@"No mobile provision profile found or the profile could not be read. Defaulting to production mode.");
         return YES;
     }
 
@@ -364,7 +377,7 @@
 
     // Let the dev know if there's not an APS entitlement in the profile. Something is terribly wrong.
     if (!apsEnvironment) {
-        UA_LERR(@"aps-environment value is not set. If this is not a simulator, ensure that the app is properly provisioned for push");
+        UA_LWARN(@"aps-environment value is not set. If this is not a simulator, ensure that the app is properly provisioned for push");
     }
 
     return YES;// For safety, assume production unless the profile is explicitly set to development

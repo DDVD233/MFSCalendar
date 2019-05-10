@@ -1,4 +1,4 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
@@ -62,7 +62,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, strong) NSDate *expiry;
 
 /**
- * Optional key value extras.
+ * Optional key value extra.
  */
 @property(nonatomic, copy, nullable) NSDictionary *extra;
 

@@ -1,4 +1,4 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import <zlib.h>
 
@@ -75,6 +75,10 @@
     }
 
     return self;
+}
+
++ (instancetype)requestWithBuilder:(UARequestBuilder *)builder {
+    return [[self alloc] initWithBuilder:builder];
 }
 
 + (instancetype)requestWithBuilderBlock:(void(^)(UARequestBuilder *builder))builderBlock {

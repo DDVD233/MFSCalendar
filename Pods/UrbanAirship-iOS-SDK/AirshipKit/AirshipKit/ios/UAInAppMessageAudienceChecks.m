@@ -1,4 +1,4 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import "UAInAppMessageAudienceChecks+Internal.h"
 #import "UAInAppMessageAudience+Internal.h"
@@ -51,7 +51,7 @@
     }
     
     // Location opt-in
-    if (audience.locationOptIn && ([audience.locationOptIn boolValue] != [self isLocationOptedIn])) {
+    if (audience.locationOptIn && ([audience.locationOptIn boolValue] != UAirship.location.isLocationOptedIn)) {
         return NO;
     }
     
@@ -72,34 +72,20 @@
             NSLocale *audienceLocale = [NSLocale localeWithLocaleIdentifier:audienceLanguageID];
 
             // check language code
-            NSString *currentLanguageCode;
-            NSString *audienceLanguageCode;
-            if (@available(iOS 10.0, tvOS 10.0, *)) {
-                currentLanguageCode = currentLocale.languageCode;
-                audienceLanguageCode = audienceLocale.languageCode;
-            } else {
-                NSDictionary *currentComponents = [NSLocale componentsFromLocaleIdentifier:currentLocale.localeIdentifier];
-                currentLanguageCode = currentComponents[NSLocaleLanguageCode];
-                NSDictionary *audienceComponents = [NSLocale componentsFromLocaleIdentifier:audienceLocale.localeIdentifier];
-                audienceLanguageCode = audienceComponents[NSLocaleLanguageCode];
-            }
+            NSString *currentLanguageCode = currentLocale.languageCode;
+            NSString *audienceLanguageCode = audienceLocale.languageCode;
+
             if (![currentLanguageCode isEqualToString:audienceLanguageCode]) {
                 continue;
             }
-            NSString *currentCountryCode;
-            NSString *audienceCountryCode;
-            if (@available(iOS 10.0, tvOS 10.0, *)) {
-                currentCountryCode = currentLocale.countryCode;
-                audienceCountryCode = audienceLocale.countryCode;
-            } else {
-                NSDictionary *currentComponents = [NSLocale componentsFromLocaleIdentifier:currentLocale.localeIdentifier];
-                currentCountryCode = currentComponents[NSLocaleCountryCode];
-                NSDictionary *audienceComponents = [NSLocale componentsFromLocaleIdentifier:audienceLocale.localeIdentifier];
-                audienceCountryCode = audienceComponents[NSLocaleCountryCode];
-            }
+
+            NSString *currentCountryCode = currentLocale.countryCode;
+            NSString *audienceCountryCode = audienceLocale.countryCode;
+
             if (audienceCountryCode && ![currentCountryCode isEqualToString:audienceCountryCode]) {
                 continue;
             }
+
             return YES;
         }
         return NO;
@@ -121,21 +107,6 @@
     return [self checkDisplayAudienceConditions:audience tagGroups:[UATagGroups tagGroupsWithTags:@{}]];
 }
 
-+ (BOOL)isLocationOptedIn {
-    if (![UAirship location].locationUpdatesEnabled) {
-        return NO;
-    }
-
-    switch ([CLLocationManager authorizationStatus]) {
-        case kCLAuthorizationStatusDenied:
-        case kCLAuthorizationStatusRestricted:
-        case kCLAuthorizationStatusNotDetermined:
-            return NO;
-        case kCLAuthorizationStatusAuthorizedAlways:
-        case kCLAuthorizationStatusAuthorizedWhenInUse:
-            return YES;
-    }
-}
 
 + (BOOL)isNotificationsOptedIn {
     return [UAirship push].userPushNotificationsEnabled && [UAirship push].authorizedNotificationSettings != UAAuthorizedNotificationSettingsNone;

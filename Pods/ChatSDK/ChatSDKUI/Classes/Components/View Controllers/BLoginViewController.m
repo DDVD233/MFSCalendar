@@ -38,15 +38,23 @@
     [super viewDidLoad];
     
     // First check to see if the user is already authenticated
-    [self showHUD: [NSBundle t:bAuthenticating]];
-    [BChatSDK.auth authenticateWithCachedToken].thenOnMain(^id(id success) {
-        [self authenticationFinished];
-        return Nil;
-    }, ^id(NSError * error) {
-        [self hideHUD];
-        return Nil;
-    });
+//    [self showHUD: [NSBundle t:bAuthenticating]];
+//    [BChatSDK.auth authenticate].thenOnMain(^id(id success) {
+//        [self authenticationFinished];
+//        return Nil;
+//    }, ^id(NSError * error) {
+//        [self hideHUD];
+//        return Nil;
+//    });
     
+    // Localization
+    self.emailField.placeholder = [NSBundle t:bEmail];
+    self.passwordField.placeholder = [NSBundle t:bPassword];
+    [self.loginButton setTitle:[NSBundle t:bLogin] forState:UIControlStateNormal];
+    [self.registerButton setTitle:[NSBundle t:bRegister] forState:UIControlStateNormal];
+    [self.forgotPasswordButton setTitle:[NSBundle t:bForgotPassword] forState:UIControlStateNormal];
+    [self.termsAndConditionsButton setTitle:[NSBundle t:bTermsAndConditions] forState:UIControlStateNormal];
+
     UIButton * activeSocialButton = Nil;
     
     if (![BChatSDK.auth accountTypeEnabled:bAccountTypeFacebook]) {
@@ -93,8 +101,8 @@
         self.emailField.placeholder = BChatSDK.config.loginUsernamePlaceholder;
     }
     
-    if(BChatSDK.config.loginScreenLogoImage) {
-        self.chatImageView.image = BChatSDK.config.loginScreenLogoImage;
+    if(BChatSDK.config.logoImage) {
+        self.chatImageView.image = BChatSDK.config.logoImage;
     }
     if(BChatSDK.config.loginScreenAppName) {
         self.titleLabel.text = BChatSDK.config.loginScreenAppName;

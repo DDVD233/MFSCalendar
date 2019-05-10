@@ -1,4 +1,4 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import "UAInAppMessage+Internal.h"
 #import "UAInAppMessageBannerDisplayContent+Internal.h"
@@ -10,6 +10,8 @@
 #import "UAGlobal.h"
 
 NSUInteger const UAInAppMessageIDLimit = 100;
+NSUInteger const UAInAppMessageNameLimit = 100;
+
 
 @implementation UAInAppMessageBuilder
 
@@ -18,6 +20,7 @@ NSUInteger const UAInAppMessageIDLimit = 100;
 
     if (self) {
         self.identifier = message.identifier;
+        self.name = message.name;
         self.displayContent = message.displayContent;
         self.extras = message.extras;
         self.actions = message.actions;
@@ -39,6 +42,11 @@ NSUInteger const UAInAppMessageIDLimit = 100;
         return NO;
     }
 
+    if (self.name && (self.name.length < 1 || self.name.length > UAInAppMessageNameLimit)) {
+        UA_LERR(@"If provided, in-app message name must be between [1, 100] characters");
+        return NO;
+    }
+    
     if (!self.displayContent) {
         UA_LERR(@"Messages require display content.");
         return NO;
@@ -50,11 +58,12 @@ NSUInteger const UAInAppMessageIDLimit = 100;
 @end
 
 @interface UAInAppMessage()
-@property(nonatomic, copy) NSString *identifier;
+@property(nonatomic, strong) NSString *identifier;
+@property(nonatomic, copy) NSString *name;
 @property(nonatomic, strong) UAInAppMessageDisplayContent *displayContent;
-@property(nonatomic, copy, nullable) NSDictionary *extras;
+@property(nonatomic, strong, nullable) NSDictionary *extras;
 @property(nonatomic, strong, nullable) UAInAppMessageAudience *audience;
-@property(nonatomic, copy, nullable) NSDictionary *actions;
+@property(nonatomic, strong, nullable) NSDictionary *actions;
 @end
 
 @implementation UAInAppMessage
@@ -67,11 +76,12 @@ NSString * const UAInAppMessageErrorDomain = @"com.urbanairship.in_app_message";
 NSString *const UAInAppMessageIDKey = @"message_id";
 NSString *const UAInAppMessageDisplayTypeKey = @"display_type";
 NSString *const UAInAppMessageDisplayContentKey = @"display";
-NSString *const UAInAppMessageExtrasKey = @"extras";
+NSString *const UAInAppMessageExtraKey = @"extra";
 NSString *const UAInAppMessageAudienceKey = @"audience";
 NSString *const UAInAppMessageActionsKey = @"actions";
 NSString *const UAInAppMessageCampaignsKey = @"campaigns";
 NSString *const UAInAppMessageSourceKey = @"source";
+NSString *const UAInAppMessageNameKey = @"name";
 
 NSString *const UAInAppMessageDisplayTypeBannerValue = @"banner";
 NSString *const UAInAppMessageDisplayTypeFullScreenValue = @"fullscreen";
@@ -117,6 +127,21 @@ NSString *const UAInAppMessageSourceLegacyPushValue = @"legacy-push";
         builder.identifier = identifier;
     }
 
+    id name = json[UAInAppMessageNameKey];
+    if (name) {
+        if (![name isKindOfClass:[NSString class]]) {
+            if (error) {
+                NSString *msg = [NSString stringWithFormat:@"Message name must be a string. Invalid value: %@", name];
+                *error =  [NSError errorWithDomain:UAInAppMessageErrorDomain
+                                              code:UAInAppMessageErrorCodeInvalidJSON
+                                          userInfo:@{NSLocalizedDescriptionKey:msg}];
+            }
+            
+            return nil;
+        }
+        builder.name = name;
+    }
+    
     id displayContentDict = json[UAInAppMessageDisplayContentKey];
     if (displayContentDict) {
         if (![displayContentDict isKindOfClass:[NSDictionary class]]) {
@@ -161,11 +186,11 @@ NSString *const UAInAppMessageSourceLegacyPushValue = @"legacy-push";
         }
     }
     
-    id extras = json[UAInAppMessageExtrasKey];
+    id extras = json[UAInAppMessageExtraKey];
     if (extras) {
         if (![extras isKindOfClass:[NSDictionary class]]) {
             if (error) {
-                NSString *msg = [NSString stringWithFormat:@"Message extras must be a dictionary. Invalid value: %@", extras];
+                NSString *msg = [NSString stringWithFormat:@"Message extra must be a dictionary. Invalid value: %@", extras];
                 *error =  [NSError errorWithDomain:UAInAppMessageErrorDomain
                                               code:UAInAppMessageErrorCodeInvalidJSON
                                           userInfo:@{NSLocalizedDescriptionKey:msg}];
@@ -245,7 +270,6 @@ NSString *const UAInAppMessageSourceLegacyPushValue = @"legacy-push";
         builder.source = defaultSource;
     }
 
-
     if (![builder isValid]) {
         if (error) {
             NSString *msg = [NSString stringWithFormat:@"Invalid message JSON: %@", json];
@@ -259,7 +283,7 @@ NSString *const UAInAppMessageSourceLegacyPushValue = @"legacy-push";
     return [[UAInAppMessage alloc] initWithBuilder:builder];
 }
 
-+ (instancetype)messageWithBuilderBlock:(void(^)(UAInAppMessageBuilder *builder))builderBlock {
++ (nullable instancetype)messageWithBuilderBlock:(void(^)(UAInAppMessageBuilder *builder))builderBlock {
     UAInAppMessageBuilder *builder = [[UAInAppMessageBuilder alloc] init];
 
     if (builderBlock) {
@@ -269,16 +293,17 @@ NSString *const UAInAppMessageSourceLegacyPushValue = @"legacy-push";
     return [[UAInAppMessage alloc] initWithBuilder:builder];
 }
 
-- (instancetype)initWithBuilder:(UAInAppMessageBuilder *)builder {
+- (nullable instancetype)initWithBuilder:(UAInAppMessageBuilder *)builder {
     self = [super init];
     
     if (![builder isValid]) {
-        UA_LDEBUG(@"UAInAppMessage could not be initialized, builder has missing or invalid parameters.");
+        UA_LERR(@"UAInAppMessage could not be initialized, builder has missing or invalid parameters.");
         return nil;
     }
     
     if (self) {
         self.identifier = builder.identifier;
+        self.name = builder.name;
         self.displayContent = builder.displayContent;
         self.extras = builder.extras;
         self.audience = builder.audience;
@@ -298,14 +323,14 @@ NSString *const UAInAppMessageSourceLegacyPushValue = @"legacy-push";
     return _campaigns;
 }
 
-- (UAInAppMessage *)extend:(void(^)(UAInAppMessageBuilder *builder))builderBlock {
+- (nullable UAInAppMessage *)extend:(void(^)(UAInAppMessageBuilder *builder))builderBlock {
     if (builderBlock) {
         UAInAppMessageBuilder *builder = [UAInAppMessageBuilder builderWithMessage:self];
         builderBlock(builder);
         return [[UAInAppMessage alloc] initWithBuilder:builder];
     }
 
-    UA_LINFO(@"Extended %@ with nil builderBlock. Returning self.", self);
+    UA_LDEBUG(@"Extended %@ with nil builderBlock. Returning self.", self);
     return self;
 }
 
@@ -315,6 +340,7 @@ NSString *const UAInAppMessageSourceLegacyPushValue = @"legacy-push";
     NSMutableDictionary *data = [NSMutableDictionary dictionary];
     
     [data setValue:self.identifier forKey:UAInAppMessageIDKey];
+    [data setValue:self.name forKey: UAInAppMessageNameKey];
     switch (self.displayType) {
         case UAInAppMessageDisplayTypeBanner:
             [data setValue:UAInAppMessageDisplayTypeBannerValue forKey:UAInAppMessageDisplayTypeKey];
@@ -349,7 +375,7 @@ NSString *const UAInAppMessageSourceLegacyPushValue = @"legacy-push";
 
     [data setValue:[self.displayContent toJSON] forKey:UAInAppMessageDisplayContentKey];
     [data setValue:[self.audience toJSON] forKey:UAInAppMessageAudienceKey];
-    [data setValue:self.extras forKey:UAInAppMessageExtrasKey];
+    [data setValue:self.extras forKey:UAInAppMessageExtraKey];
     [data setValue:self.actions forKey:UAInAppMessageActionsKey];
     [data setValue:self.campaigns forKey:UAInAppMessageCampaignsKey];
 
@@ -361,6 +387,10 @@ NSString *const UAInAppMessageSourceLegacyPushValue = @"legacy-push";
         return NO;
     }
 
+    if (self.name != message.name && ![self.name isEqualToString:message.name]) {
+        return NO;
+    }
+    
     // Do we need to check type here first? make sure
     if (![self.displayContent isEqual:message.displayContent]) {
         return NO;
@@ -405,6 +435,7 @@ NSString *const UAInAppMessageSourceLegacyPushValue = @"legacy-push";
 - (NSUInteger)hash {
     NSUInteger result = 1;
     result = 31 * result + [self.identifier hash];
+    result = 31 * result + [self.name hash];
     result = 31 * result + [self.displayContent hash];
     result = 31 * result + [self.extras hash];
     result = 31 * result + [self.audience hash];

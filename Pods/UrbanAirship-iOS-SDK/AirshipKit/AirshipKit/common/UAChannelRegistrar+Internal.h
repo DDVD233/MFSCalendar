@@ -1,4 +1,4 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import <UIKit/UIKit.h>
 
@@ -7,6 +7,7 @@
 @class UAConfig;
 @class UAPreferenceDataStore;
 @class UADate;
+@class UADispatcher;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -22,9 +23,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  * Get registration payload for current channel
- * @return registration payload for channel
+ *
+ * @note This method will be called on the main thread.
+ *
+ * @param completionHandler A completion handler which will be passed the created registration payload.
+ * @param dispatcher The dispatcher to call the completion handler on.
  */
-- (UAChannelRegistrationPayload *)createChannelPayload;
+- (void)createChannelPayload:(void (^)(UAChannelRegistrationPayload *))completionHandler
+                  dispatcher:(nullable UADispatcher *)dispatcher;
 
 /**
  * Called when the channel registrar failed to register.
@@ -76,6 +82,8 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  * Register the device with Urban Airship.
  *
+ * @note This method will execute asynchronously on the main thread.
+ *
  * @param forcefully YES to force the registration.
  */
 - (void)registerForcefully:(BOOL)forcefully;
@@ -87,6 +95,11 @@ NS_ASSUME_NONNULL_BEGIN
  * delegate calls.
  */
 - (void)cancelAllRequests;
+
+/**
+* Removes the existing channel and forces a registration to create a new one.
+*/
+- (void)resetChannel;
 
 ///---------------------------------------------------------------------------------------
 /// @name Channel Registrar Properties
@@ -108,6 +121,8 @@ NS_ASSUME_NONNULL_BEGIN
  * @param channelLocation The initial channel location string.
  * @param channelAPIClient The channel API client.
  * @param date The UADate object.
+ * @param dispatcher The dispatcher to dispatch main queue blocks.
+ * @param application The application.
  * @return A new channel registrar instance.
  */
 + (instancetype)channelRegistrarWithConfig:(UAConfig *)config
@@ -116,7 +131,9 @@ NS_ASSUME_NONNULL_BEGIN
                                  channelID:(NSString *)channelID
                            channelLocation:(NSString *)channelLocation
                           channelAPIClient:(UAChannelAPIClient *)channelAPIClient
-                                      date:(UADate *)date;
+                                      date:(UADate *)date
+                                dispatcher:(UADispatcher *)dispatcher
+                               application:(UIApplication *)application;
 
 ///---------------------------------------------------------------------------------------
 /// @name Channel Registrar Properties (for testing)

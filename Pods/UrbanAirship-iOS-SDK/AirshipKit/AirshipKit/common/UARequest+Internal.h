@@ -1,4 +1,4 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import <Foundation/Foundation.h>
 #import "UADisposable.h"
@@ -73,6 +73,13 @@ NS_ASSUME_NONNULL_BEGIN
  * The request body.
  */
 @property (nonatomic, readonly, nullable) NSData *body;
+
+/**
+ * Factory method to create a request.
+ * @param builder A UARequestBuilder
+ * @return A UARequest instance.
+ */
++ (instancetype)requestWithBuilder:(UARequestBuilder *)builder;
 
 /**
  * Factory method to create a request.

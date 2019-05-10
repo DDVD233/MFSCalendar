@@ -1,4 +1,4 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import "UAScheduleInfo.h"
 
@@ -82,7 +82,7 @@ extern NSString *const UAScheduleInfoEditGracePeriodKey;
 /**
  * Schedule's triggers.
  */
-@property(nonatomic, copy) NSArray *triggers;
+@property(nonatomic, strong) NSArray *triggers;
 
 /**
  * Schedule's limit.
@@ -92,12 +92,12 @@ extern NSString *const UAScheduleInfoEditGracePeriodKey;
 /**
  * Schedule's start time.
  */
-@property(nonatomic, strong) NSDate *start;
+@property(nonatomic, strong, nullable) NSDate *start;
 
 /**
  * Schedule's end time.
  */
-@property(nonatomic, strong) NSDate *end;
+@property(nonatomic, strong, nullable) NSDate *end;
 
 /**
  * Schedule's delay.

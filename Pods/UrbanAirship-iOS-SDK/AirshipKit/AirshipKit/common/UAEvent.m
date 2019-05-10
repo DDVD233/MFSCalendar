@@ -1,4 +1,4 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import "UAEvent+Internal.h"
 #import "UAPush.h"
@@ -89,9 +89,30 @@ static dispatch_once_t netInfoDispatchToken_;
     if ((UAAuthorizedNotificationSettingsNotificationCenter & authorizedSettings) > 0) {
         [notificationTypes addObject:@"notification_center"];
     }
+    
+    if ((UAAuthorizedNotificationSettingsCriticalAlert & authorizedSettings) > 0) {
+        [notificationTypes addObject:@"critical_alert"];
+    }
 #endif
 
     return notificationTypes;
+}
+
+- (NSString *)notificationAuthorization {
+    UAAuthorizationStatus authorizationStatus = [UAirship push].authorizationStatus;
+    
+    switch (authorizationStatus) {
+        case UAAuthorizationStatusNotDetermined:
+            return @"not_determined";
+        case UAAuthorizationStatusDenied:
+            return @"denied";
+        case UAAuthorizationStatusAuthorized:
+            return @"authorized";
+        case UAAuthorizationStatusProvisional:
+            return @"provisional";
+    }
+    
+    return @"not_determined";
 }
 
 - (NSUInteger)jsonEventSize {

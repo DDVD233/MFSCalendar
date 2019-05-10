@@ -1,4 +1,4 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import "UAEnableFeatureAction.h"
 #import "UAirship.h"
@@ -45,28 +45,21 @@ NSString *const UAEnableBackgroundLocationActionValue = @"background_location";
 }
 
 - (void)isNotificationsAuthorized:(void (^)(BOOL))callback {
-    [[UAirship push].pushRegistration getAuthorizedSettingsWithCompletionHandler:^(UAAuthorizedNotificationSettings authorizedSettings) {
+    [[UAirship push].pushRegistration getAuthorizedSettingsWithCompletionHandler:^(UAAuthorizedNotificationSettings authorizedSettings, UAAuthorizationStatus status) {
         callback(authorizedSettings != UAAuthorizedNotificationSettingsNone);
     }];
 }
 
 - (BOOL)isLocationDeniedOrRestricted {
-    switch ([CLLocationManager authorizationStatus]) {
-        case kCLAuthorizationStatusDenied:
-        case kCLAuthorizationStatusRestricted:
-            return YES;
-        case kCLAuthorizationStatusNotDetermined:
-        case kCLAuthorizationStatusAuthorizedAlways:
-        case kCLAuthorizationStatusAuthorizedWhenInUse:
-            return NO;
-    }
+    return UAirship.location.isLocationDeniedOrRestricted;
 }
 
-- (void)navigateToSystemSettings {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
-#pragma GCC diagnostic pop
+- (void)navigateToSystemSettingsWithCompletionHandler:(UAActionCompletionHandler)completionHandler {
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]
+                                       options:@{}
+                             completionHandler:^(BOOL success) {
+                                 completionHandler([UAActionResult emptyResult]);
+                             }];
 }
 
 - (void)enableUserNotifications:(UAActionCompletionHandler)completionHandler {
@@ -74,8 +67,7 @@ NSString *const UAEnableBackgroundLocationActionValue = @"background_location";
     if ([UAirship push].userPromptedForNotifications) {
         [self isNotificationsAuthorized:^(BOOL authorized) {
             if (!authorized) {
-                [self navigateToSystemSettings];
-                completionHandler([UAActionResult emptyResult]);
+                [self navigateToSystemSettingsWithCompletionHandler:completionHandler];
             }
         }];
     } else {
@@ -84,23 +76,23 @@ NSString *const UAEnableBackgroundLocationActionValue = @"background_location";
 }
 
 - (void)enableBackgroundLocation:(UAActionCompletionHandler)completionHandler {
-    [UAirship location].locationUpdatesEnabled = YES;
-    [UAirship location].backgroundLocationUpdatesAllowed = YES;
+    UAirship.location.locationUpdatesEnabled = YES;
+    UAirship.location.backgroundLocationUpdatesAllowed = YES;
 
     if ([self isLocationDeniedOrRestricted]) {
-        [self navigateToSystemSettings];
+        [self navigateToSystemSettingsWithCompletionHandler:completionHandler];
+    } else {
+        completionHandler([UAActionResult emptyResult]);
     }
-
-    completionHandler([UAActionResult emptyResult]);
 }
 
 - (void)enableLocation:(UAActionCompletionHandler)completionHandler {
-    [UAirship location].locationUpdatesEnabled = YES;
+    UAirship.location.locationUpdatesEnabled = YES;
     if ([self isLocationDeniedOrRestricted]) {
-        [self navigateToSystemSettings];
+        [self navigateToSystemSettingsWithCompletionHandler:completionHandler];
+    } else {
+        completionHandler([UAActionResult emptyResult]);
     }
-
-    completionHandler([UAActionResult emptyResult]);
 }
 
 @end

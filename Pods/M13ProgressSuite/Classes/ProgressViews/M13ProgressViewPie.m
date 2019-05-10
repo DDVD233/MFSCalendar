@@ -85,7 +85,7 @@
     
     //Set defaut sizes
     _backgroundRingWidthOverriden = NO;
-    _backgroundRingWidth = fmaxf((float)self.bounds.size.width * .025f, 1.0);
+    _backgroundRingWidth = fmaxf(self.bounds.size.width * .025, 1.0);
     
     self.animationDuration = .3;
     
@@ -158,7 +158,7 @@
     if (animated == NO) {
         if (_displayLink) {
             //Kill running animations
-            [_displayLink invalidate];
+            [_displayLink removeFromRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
             _displayLink = nil;
         }
         [super setProgress:progress animated:animated];
@@ -169,7 +169,7 @@
         _animationToValue = progress;
         if (!_displayLink) {
             //Create and setup the display link
-            [self.displayLink invalidate];
+            [self.displayLink removeFromRunLoop:NSRunLoop.mainRunLoop forMode:NSRunLoopCommonModes];
             self.displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(animateProgress:)];
             [self.displayLink addToRunLoop:NSRunLoop.mainRunLoop forMode:NSRunLoopCommonModes];
         } /*else {
@@ -181,18 +181,18 @@
 - (void)animateProgress:(CADisplayLink *)displayLink
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        CGFloat dt = (displayLink.timestamp - self.animationStartTime) / self.animationDuration;
+        CGFloat dt = (displayLink.timestamp - _animationStartTime) / self.animationDuration;
         if (dt >= 1.0) {
             //Order is important! Otherwise concurrency will cause errors, because setProgress: will detect an animation in progress and try to stop it by itself. Once over one, set to actual progress amount. Animation is over.
-            [self.displayLink invalidate];
+            [self.displayLink removeFromRunLoop:NSRunLoop.mainRunLoop forMode:NSRunLoopCommonModes];
             self.displayLink = nil;
-            [super setProgress:self.animationToValue animated:NO];
+            [super setProgress:_animationToValue animated:NO];
             [self setNeedsDisplay];
             return;
         }
         
         //Set progress
-        [super setProgress:self.animationFromValue + dt * (self.animationToValue - self.animationFromValue) animated:YES];
+        [super setProgress:_animationFromValue + dt * (_animationToValue - _animationFromValue) animated:YES];
         [self setNeedsDisplay];
         
     });
@@ -230,9 +230,9 @@
             [CATransaction begin];
             [_iconLayer addAnimation:[self hideAnimation] forKey:kM13ProgressViewPieHideKey];
             [CATransaction setCompletionBlock:^{
-                self.currentAction = action;
+                _currentAction = action;
                 [self drawIcon];
-                [self.iconLayer addAnimation:[self showAnimation] forKey:kM13ProgressViewPieShowKey];
+                [_iconLayer addAnimation:[self showAnimation] forKey:kM13ProgressViewPieShowKey];
             }];
             [CATransaction commit];
         }
@@ -254,9 +254,9 @@
             [CATransaction begin];
             [_iconLayer addAnimation:[self hideAnimation] forKey:kM13ProgressViewPieHideKey];
             [CATransaction setCompletionBlock:^{
-                self.currentAction = action;
+                _currentAction = action;
                 [self drawIcon];
-                [self.iconLayer addAnimation:[self showAnimation] forKey:kM13ProgressViewPieShowKey];
+                [_iconLayer addAnimation:[self showAnimation] forKey:kM13ProgressViewPieShowKey];
             }];
             [CATransaction commit];
         }
@@ -272,7 +272,7 @@
         
         //Create the rotation animation
         CABasicAnimation *rotationAnimation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
-        rotationAnimation.toValue = [NSNumber numberWithFloat: (float)(M_PI * 2.0)];
+        rotationAnimation.toValue = [NSNumber numberWithFloat: M_PI * 2.0];
         rotationAnimation.duration = 1;
         rotationAnimation.cumulative = YES;
         rotationAnimation.repeatCount = HUGE_VALF;
@@ -290,7 +290,7 @@
         [_indeterminateLayer addAnimation:[self hideAnimation] forKey:kM13ProgressViewPieHideKey];
         [CATransaction setCompletionBlock:^{
             //Remove the rotation animation and reset the background
-            [self.backgroundLayer removeAnimationForKey:@"rotationAnimation"];
+            [_backgroundLayer removeAnimationForKey:@"rotationAnimation"];
             [self drawBackground];
         }];
         [CATransaction commit];
@@ -337,7 +337,7 @@
     
     //Update line widths if not overriden
     if (!_backgroundRingWidthOverriden) {
-        _backgroundRingWidth = fmaxf((float)self.frame.size.width * .025f, 1.0);
+        _backgroundRingWidth = fmaxf(self.frame.size.width * .025, 1.0);
     }
     
     //Redraw
@@ -443,8 +443,8 @@
 - (void)drawBackground
 {
     //Create parameters to draw background
-    float startAngle = - (float)M_PI_2;
-    float endAngle = (float)(startAngle + (2.0 * M_PI));
+    float startAngle = - M_PI_2;
+    float endAngle = startAngle + (2.0 * M_PI);
     CGPoint center = CGPointMake(self.bounds.size.width / 2.0, self.bounds.size.width / 2.0);
     CGFloat radius = (self.bounds.size.width - _backgroundRingWidth) / 2.0;
     
@@ -461,8 +461,8 @@
 - (void)drawProgress
 {
     //Create parameters to draw progress
-    float startAngle = - (float)M_PI_2;
-    float endAngle = (float)(startAngle + (2.0 * M_PI * self.progress));
+    float startAngle = - M_PI_2;
+    float endAngle = startAngle + (2.0 * M_PI * self.progress);
     CGPoint center = CGPointMake(self.bounds.size.width / 2.0, self.bounds.size.width / 2.0);
     CGFloat radius = (self.bounds.size.width - _backgroundRingWidth) / 2.0;
     
@@ -492,8 +492,8 @@
 - (void)drawIndeterminate
 {
     //Create parameters to draw progress
-    float startAngle = - (float)M_PI_2;
-    float endAngle = (float)(startAngle + (2.0 * M_PI * .2));
+    float startAngle = - M_PI_2;
+    float endAngle = startAngle + (2.0 * M_PI * .2);
     CGPoint center = CGPointMake(self.bounds.size.width / 2.0, self.bounds.size.width / 2.0);
     CGFloat radius = (self.bounds.size.width - _backgroundRingWidth) / 2.0;
     

@@ -1,4 +1,4 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import "UAInbox+Internal.h"
 #import "UAirship.h"
@@ -26,12 +26,10 @@
                                                      name:UIApplicationWillEnterForegroundNotification
                                                    object:nil];
 
-        if (!self.user.isCreated) {
-            [[NSNotificationCenter defaultCenter] addObserver:self
-                                                     selector:@selector(userCreated)
-                                                         name:UAUserCreatedNotification
-                                                       object:nil];
-        }
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(userCreated)
+                                                     name:UAUserCreatedNotification
+                                                   object:nil];
 
         [self.messageList loadSavedMessages];
 
@@ -50,7 +48,7 @@
     return self;
 }
 
-+ (instancetype) inboxWithUser:(UAUser *)user config:(UAConfig *)config dataStore:(UAPreferenceDataStore *)dataStore {
++ (instancetype)inboxWithUser:(UAUser *)user config:(UAConfig *)config dataStore:(UAPreferenceDataStore *)dataStore {
     return [[UAInbox alloc] initWithUser:user config:config dataStore:dataStore];
 }
 

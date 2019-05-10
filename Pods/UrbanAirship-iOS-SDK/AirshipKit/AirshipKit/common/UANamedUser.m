@@ -1,4 +1,4 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import "UANamedUser+Internal.h"
 #import "UANamedUserAPIClient+Internal.h"
@@ -159,7 +159,7 @@ NSString *const UANamedUserLastUpdatedTokenKey = @"UANamedUserLastUpdatedToken";
 }
 
 - (void)forceUpdate {
-    UA_LDEBUG(@"NamedUser - force named user update.");
+    UA_LTRACE(@"NamedUser - force named user update.");
     self.changeToken = [NSUUID UUID].UUIDString;
     [self update];
 }

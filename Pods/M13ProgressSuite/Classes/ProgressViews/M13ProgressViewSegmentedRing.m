@@ -89,7 +89,7 @@
     self.backgroundColor = [UIColor clearColor];
     
     //Set defaut sizes
-    _progressRingWidth = fmaxf((float)self.bounds.size.width * .25f, 1.0);
+    _progressRingWidth = fmaxf(self.bounds.size.width * .25, 1.0);
     _progressRingWidthOverriden = NO;
     _segmentSeparationAngleOverriden = NO;
     self.animationDuration = .3;
@@ -138,8 +138,7 @@
 - (void)setPrimaryColor:(UIColor *)primaryColor
 {
     [super setPrimaryColor:primaryColor];
-    _progressLayer.strokeColor = [[UIColor clearColor] CGColor];
-    _progressLayer.fillColor = self.primaryColor.CGColor;
+    _progressLayer.strokeColor = self.primaryColor.CGColor;
     _iconLayer.fillColor = self.primaryColor.CGColor;
     [self setNeedsDisplay];
 }
@@ -210,7 +209,7 @@
     if (animated == NO) {
         if (_displayLink) {
             //Kill running animations
-            [_displayLink invalidate];
+            [_displayLink removeFromRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
             _displayLink = nil;
         }
         [super setProgress:progress animated:animated];
@@ -221,7 +220,7 @@
         _animationToValue = progress;
         if (!_displayLink) {
             //Create and setup the display link
-            [self.displayLink invalidate];
+            [self.displayLink removeFromRunLoop:NSRunLoop.mainRunLoop forMode:NSRunLoopCommonModes];
             self.displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(animateProgress:)];
             [self.displayLink addToRunLoop:NSRunLoop.mainRunLoop forMode:NSRunLoopCommonModes];
         } /*else {
@@ -233,18 +232,18 @@
 - (void)animateProgress:(CADisplayLink *)displayLink
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        CGFloat dt = (displayLink.timestamp - self.animationStartTime) / self.animationDuration;
+        CGFloat dt = (displayLink.timestamp - _animationStartTime) / self.animationDuration;
         if (dt >= 1.0) {
             //Order is important! Otherwise concurrency will cause errors, because setProgress: will detect an animation in progress and try to stop it by itself. Once over one, set to actual progress amount. Animation is over.
-            [self.displayLink invalidate];
+            [self.displayLink removeFromRunLoop:NSRunLoop.mainRunLoop forMode:NSRunLoopCommonModes];
             self.displayLink = nil;
-            [super setProgress:self.animationToValue animated:NO];
+            [super setProgress:_animationToValue animated:NO];
             [self setNeedsDisplay];
             return;
         }
         
         //Set progress
-        [super setProgress:self.animationFromValue + dt * (self.animationToValue - self.animationFromValue) animated:YES];
+        [super setProgress:_animationFromValue + dt * (_animationToValue - _animationFromValue) animated:YES];
         [self setNeedsDisplay];
         
     });
@@ -274,9 +273,9 @@
             [CATransaction begin];
             [_iconLayer addAnimation:[self hideAnimation] forKey:kM13ProgressViewSegmentedRingHideKey];
             [CATransaction setCompletionBlock:^{
-                self.currentAction = action;
+                _currentAction = action;
                 [self drawIcon];
-                [self.iconLayer addAnimation:[self showAnimation] forKey:kM13ProgressViewSegmentedRingShowKey];
+                [_iconLayer addAnimation:[self showAnimation] forKey:kM13ProgressViewSegmentedRingShowKey];
             }];
             [CATransaction commit];
         }
@@ -294,9 +293,9 @@
             [CATransaction begin];
             [_iconLayer addAnimation:[self hideAnimation] forKey:kM13ProgressViewSegmentedRingHideKey];
             [CATransaction setCompletionBlock:^{
-                self.currentAction = action;
+                _currentAction = action;
                 [self drawIcon];
-                [self.iconLayer addAnimation:[self showAnimation] forKey:kM13ProgressViewSegmentedRingShowKey];
+                [_iconLayer addAnimation:[self showAnimation] forKey:kM13ProgressViewSegmentedRingShowKey];
             }];
             [CATransaction commit];
         }
@@ -310,13 +309,13 @@
         
         //Create the rotation animation
         CABasicAnimation *rotationAnimation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
-        rotationAnimation.toValue = [NSNumber numberWithFloat: (float)(M_PI * 2.0)];
+        rotationAnimation.toValue = [NSNumber numberWithFloat: M_PI * 2.0];
         rotationAnimation.duration = 5 * self.animationDuration;
         rotationAnimation.cumulative = YES;
         rotationAnimation.repeatCount = HUGE_VALF;
         
         CABasicAnimation *rotationAnimationProgress = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
-        rotationAnimationProgress.toValue = [NSNumber numberWithFloat: (float)(M_PI * 2.0)];
+        rotationAnimationProgress.toValue = [NSNumber numberWithFloat: M_PI * 2.0];
         rotationAnimationProgress.duration = 5 * self.animationDuration;
         rotationAnimationProgress.cumulative = YES;
         rotationAnimationProgress.repeatCount = HUGE_VALF;
@@ -333,8 +332,8 @@
         [_percentageLabel.layer addAnimation:[self showAnimation] forKey:kM13ProgressViewSegmentedRingShowKey];
         [CATransaction setCompletionBlock:^{
             //Remove the rotation animation and reset the background
-            [self.backgroundLayer removeAnimationForKey:@"rotationAnimation"];
-            [self.progressLayer removeAnimationForKey:@"rotationAnimation"];
+            [_backgroundLayer removeAnimationForKey:@"rotationAnimation"];
+            [_progressLayer removeAnimationForKey:@"rotationAnimation"];
             [self drawBackground];
             [self drawProgress];
         }];
@@ -384,7 +383,7 @@
     
     //Update line widths if not overriden
     if (!_progressRingWidthOverriden) {
-        _progressRingWidth = fmaxf((float)(self.frame.size.width * .25), 1.0);
+        _progressRingWidth = fmaxf(self.frame.size.width * .25, 1.0);
     }
     
     [self updateAngles];
@@ -418,14 +417,14 @@
     //Calculate the outer ring angle for the progress segment.*/
     outerRingAngle = ((2.0 * M_PI) / (float)_numberOfSegments) - _segmentSeparationAngle;
     //Calculate the angle gap for the inner ring
-    _segmentSeparationInnerAngle = 2.0f * asinf((float)((self.bounds.size.width / 2.0) * sinf((float)_segmentSeparationAngle / 2.0f)) / (((float)self.bounds.size.width / 2.0f) - (float)_progressRingWidth));
+    _segmentSeparationInnerAngle = 2.0 * asinf(((self.bounds.size.width / 2.0) * sinf(_segmentSeparationAngle / 2.0)) / ((self.bounds.size.width / 2.0) - _progressRingWidth));
     //Calculate the inner ring angle for the progress segment.*/
     innerRingAngle = ((2.0 * M_PI) / (float)_numberOfSegments) - _segmentSeparationInnerAngle;
 }
 
 - (NSInteger)numberOfFullSegments
 {
-    return (NSInteger)floorf((float)(self.progress * _numberOfSegments));
+    return (NSInteger)floorf(self.progress * _numberOfSegments);
 }
 
 #pragma mark Drawing
@@ -585,7 +584,7 @@
     CGPathRelease(pathRef);
 
     //Update label
-    _percentageLabel.text = [_percentageFormatter stringFromNumber:[NSNumber numberWithFloat:(float)self.progress]];
+    _percentageLabel.text = [_percentageFormatter stringFromNumber:[NSNumber numberWithFloat:self.progress]];
 }
 
 - (void)drawIcon

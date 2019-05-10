@@ -25,11 +25,7 @@ SOFTWARE.
 import Foundation
 import CoreFoundation
 
-#if SWIFT_PACKAGE
-import SwiftClibxml2
-#else
 import libxmlKanna
-#endif
 
 extension String.Encoding {
     var IANACharSetName: String? {
@@ -176,7 +172,7 @@ internal final class libxmlHTMLDocument: HTMLDocument {
         }
 
         xmlDocDumpMemory(docPtr, &buf, size)
-        let html = String(cString: UnsafePointer(buf!))
+        let html = String(cString: UnsafePointer<UInt8>(buf!))
         return html
     }
     
@@ -308,7 +304,7 @@ internal final class libxmlXMLDocument: XMLDocument {
         }
 
         xmlDocDumpMemory(docPtr, &buf, size)
-        let html = String(cString: UnsafePointer(buf!))
+        let html = String(cString: UnsafePointer<UInt8>(buf!))
         return html
     }
     

@@ -1,4 +1,4 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import "UAChannelRegistrar+Internal.h"
 #import "UAChannelAPIClient+Internal.h"
@@ -8,6 +8,7 @@
 #import "UAConfig.h"
 #import "UAPreferenceDataStore+Internal.h"
 #import "UADate+Internal.h"
+#import "UADispatcher+Internal.h"
 
 NSTimeInterval const k24HoursInSeconds = 24 * 60 * 60;
 
@@ -68,6 +69,16 @@ NSString *const UALastSuccessfulPayloadKey = @"payload-key";
  */
 @property (nonatomic, strong) UADate *date;
 
+/**
+ * The dispatcher to dispatch main queue blocks.
+ */
+@property (nonnull, strong) UADispatcher *dispatcher;
+
+/**
+ * The application
+ */
+@property (nonnull, strong) UIApplication *application;
+
 @end
 
 UAConfig *config;
@@ -77,13 +88,17 @@ UAConfig *config;
 - (id)initWithDataStore:(UAPreferenceDataStore *)dataStore
                delegate:(id<UAChannelRegistrarDelegate>)delegate
        channelAPIClient:(UAChannelAPIClient *)channelAPIClient
-                   date:(UADate *)date {
+                   date:(UADate *)date
+             dispatcher:(UADispatcher *)dispatcher
+            application:(UIApplication *)application {
     self = [super init];
     if (self) {
         self.dataStore = dataStore;
         self.delegate = delegate;
         self.channelAPIClient = channelAPIClient;
         self.date = date;
+        self.dispatcher = dispatcher;
+        self.application = application;
 
         self.isRegistrationInProgress = NO;
         self.registrationBackgroundTask = UIBackgroundTaskInvalid;
@@ -95,10 +110,12 @@ UAConfig *config;
 + (instancetype)channelRegistrarWithConfig:(UAConfig *)config
                                  dataStore:(UAPreferenceDataStore *)dataStore
                                   delegate:(id<UAChannelRegistrarDelegate>)delegate {
-    return [[UAChannelRegistrar alloc] initWithDataStore:dataStore
-                                                delegate:delegate
-                                        channelAPIClient:[UAChannelAPIClient clientWithConfig:config]
-                                                    date:[[UADate alloc] init]];
+    return [[self alloc] initWithDataStore:dataStore
+                                  delegate:delegate
+                          channelAPIClient:[UAChannelAPIClient clientWithConfig:config]
+                                      date:[[UADate alloc] init]
+                                dispatcher:[UADispatcher mainDispatcher]
+                               application:[UIApplication sharedApplication]];
 }
 
 // Constructor for unit tests
@@ -108,15 +125,19 @@ UAConfig *config;
                                  channelID:(NSString *)channelID
                            channelLocation:(NSString *)channelLocation
                           channelAPIClient:(UAChannelAPIClient *)channelAPIClient
-                                      date:(UADate *)date {
-    UAChannelRegistrar *channelRegistrar =  [[UAChannelRegistrar alloc] initWithDataStore:dataStore
-                                                delegate:delegate
-                                        channelAPIClient:channelAPIClient
-                                                    date:date];
+                                      date:(UADate *)date
+                                dispatcher:(UADispatcher *)dispatcher
+                               application:(UIApplication *)application {
+
+    UAChannelRegistrar *channelRegistrar =  [[self alloc] initWithDataStore:dataStore
+                                                                   delegate:delegate
+                                                           channelAPIClient:channelAPIClient
+                                                                       date:date
+                                                                 dispatcher:dispatcher
+                                                                application:application];
     channelRegistrar.channelID = channelID;
     channelRegistrar.channelLocation = channelLocation;
     return channelRegistrar;
-
 }
 
 #pragma mark -
@@ -128,35 +149,54 @@ UAConfig *config;
         return;
     }
 
-    UAChannelRegistrationPayload *payload = [self.delegate createChannelPayload];
-    if (!forcefully && ![self shouldUpdateRegistration:payload]) {
-        UA_LDEBUG(@"Ignoring registration request, registration is up to date.");
-        return;
-    } else if (![self beginRegistrationBackgroundTask]) {
-        UA_LDEBUG(@"Unable to perform registration, background task not granted.");
-        return;
-    }
+    UA_WEAKIFY(self)
+    [self.delegate createChannelPayload:^(UAChannelRegistrationPayload *payload) {
+        if (self.isRegistrationInProgress) {
+            UA_LDEBUG(@"Ignoring registration request, one already in progress.");
+            return;
+        }
 
-    // proceed with registration
-    self.isRegistrationInProgress = YES;
-    if (!self.channelID || !self.channelLocation) {
-        [self createChannelWithPayload:payload];
-    } else {
-        [self updateChannelWithPayload:payload];
-    }
+        UA_STRONGIFY(self)
+        if (!forcefully && ![self shouldUpdateRegistration:payload]) {
+            UA_LDEBUG(@"Ignoring registration request, registration is up to date.");
+            return;
+        } else if (![self beginRegistrationBackgroundTask]) {
+            UA_LDEBUG(@"Unable to perform registration, background task not granted.");
+            return;
+        }
+
+        // Proceed with registration
+        self.isRegistrationInProgress = YES;
+
+        if (!self.channelID || !self.channelLocation) {
+            [self createChannelWithPayload:payload];
+        } else {
+            [self updateChannelWithPayload:payload];
+        }
+    } dispatcher:self.dispatcher];
 }
 
 - (void)cancelAllRequests {
     [self.channelAPIClient cancelAllRequests];
-    
+
     // If a registration was in progress, its undeterministic if it succeeded
     // or not, so just clear the last success payload and time.
     if (self.isRegistrationInProgress) {
         self.lastSuccessfulPayload = nil;
         self.lastSuccessfulUpdateDate = [NSDate distantPast];
     }
-    
+
     self.isRegistrationInProgress = NO;
+}
+
+- (void)resetChannel {
+    [self cancelAllRequests];
+
+    UA_LDEBUG(@"Clearing previous channel.");
+    [self.dataStore removeObjectForKey:UAPushChannelLocationKey];
+    [self.dataStore removeObjectForKey:UAPushChannelIDKey];
+
+    [self registerForcefully:YES];
 }
 
 #pragma mark -
@@ -166,17 +206,17 @@ UAConfig *config;
     NSTimeInterval timeSinceLastUpdate = [[self.date now] timeIntervalSinceDate:self.lastSuccessfulUpdateDate];
 
     if (self.lastSuccessfulPayload == nil) {
-        UA_LDEBUG(@"Should update registration. Last payload is nil.");
+        UA_LTRACE(@"Should update registration. Last payload is nil.");
         return true;
     }
 
     if (![payload isEqualToPayload:self.lastSuccessfulPayload]) {
-        UA_LDEBUG(@"Should update registration. Channel registration payload has changed.");
+        UA_LTRACE(@"Should update registration. Channel registration payload has changed.");
         return true;
     }
 
     if (timeSinceLastUpdate >= k24HoursInSeconds) {
-        UA_LDEBUG(@"Should update registration. Time since last registration time is greater than 24 hours.");
+        UA_LTRACE(@"Should update registration. Time since last registration time is greater than 24 hours.");
         return true;
     }
 
@@ -185,19 +225,21 @@ UAConfig *config;
 
 - (BOOL)beginRegistrationBackgroundTask {
     if (self.registrationBackgroundTask == UIBackgroundTaskInvalid) {
-        self.registrationBackgroundTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+        UA_WEAKIFY(self)
+        self.registrationBackgroundTask = [self.application beginBackgroundTaskWithExpirationHandler:^{
+            UA_STRONGIFY(self)
             [self cancelAllRequests];
-            [[UIApplication sharedApplication] endBackgroundTask:self.registrationBackgroundTask];
+            [self.application endBackgroundTask:self.registrationBackgroundTask];
             self.registrationBackgroundTask = UIBackgroundTaskInvalid;
         }];
     }
-    
+
     return (BOOL) self.registrationBackgroundTask != UIBackgroundTaskInvalid;
 }
 
 - (void)endRegistrationBackgroundTask {
     if (self.registrationBackgroundTask != UIBackgroundTaskInvalid) {
-        [[UIApplication sharedApplication] endBackgroundTask:self.registrationBackgroundTask];
+        [self.application endBackgroundTask:self.registrationBackgroundTask];
         self.registrationBackgroundTask = UIBackgroundTaskInvalid;
     }
 }
@@ -205,28 +247,28 @@ UAConfig *config;
 // Must be called on main queue
 - (void)updateChannelWithPayload:(UAChannelRegistrationPayload *)payload {
     UA_WEAKIFY(self);
-    
+
     UAChannelAPIClientUpdateSuccessBlock updateChannelSuccessBlock = ^{
         UA_STRONGIFY(self);
-        dispatch_async(dispatch_get_main_queue(), ^{
+        [self.dispatcher dispatchAsync:^{
             UA_STRONGIFY(self);
             [self succeededWithPayload:payload];
-        });
+        }];
     };
-    
+
     UAChannelAPIClientFailureBlock updateChannelFailureBlock = ^(NSUInteger statusCode) {
         UA_STRONGIFY(self);
-        dispatch_async(dispatch_get_main_queue(), ^{
+        [self.dispatcher dispatchAsync:^{
             UA_STRONGIFY(self);
             if (statusCode == 409) {
-                UA_LDEBUG(@"Channel conflict, recreating.");
+                UA_LTRACE(@"Channel conflict, recreating.");
                 [self createChannelWithPayload:payload];
             } else {
                 [self failedWithPayload:payload];
             }
-        });
+        }];
     };
-    
+
     [self.channelAPIClient updateChannelWithLocation:self.channelLocation
                                          withPayload:payload
                                            onSuccess:updateChannelSuccessBlock
@@ -236,10 +278,10 @@ UAConfig *config;
 // Must be called on main queue
 - (void)createChannelWithPayload:(UAChannelRegistrationPayload *)payload {
     UA_WEAKIFY(self);
-    
+
     UAChannelAPIClientCreateSuccessBlock createChannelSuccessBlock = ^(NSString *newChannelID, NSString *newChannelLocation, BOOL existing) {
         UA_STRONGIFY(self);
-        dispatch_async(dispatch_get_main_queue(), ^{
+        [self.dispatcher dispatchAsync:^{
             UA_STRONGIFY(self);
             if (!newChannelID || !newChannelLocation) {
                 UA_LDEBUG(@"Channel ID: %@ or channel location: %@ is missing. Channel creation failed", newChannelID, newChannelLocation);
@@ -248,22 +290,22 @@ UAConfig *config;
                 UA_LDEBUG(@"Channel %@ created successfully. Channel location: %@.", newChannelID, newChannelLocation);
                 self.channelID = newChannelID;
                 self.channelLocation = newChannelLocation;
-                
+
                 [self.delegate channelCreated:newChannelID channelLocation:newChannelLocation existing:existing];
                 [self succeededWithPayload:payload];
             }
-        });
+        }];
     };
-    
+
     UAChannelAPIClientFailureBlock createChannelFailureBlock = ^(NSUInteger statusCode) {
         UA_STRONGIFY(self);
         UA_LDEBUG(@"Channel creation failed.");
-        dispatch_async(dispatch_get_main_queue(), ^{
+        [self.dispatcher dispatchAsync:^{
             UA_STRONGIFY(self);
             [self failedWithPayload:payload];
-        });
+        }];
     };
-    
+
     [self.channelAPIClient createChannelWithPayload:payload
                                           onSuccess:createChannelSuccessBlock
                                           onFailure:createChannelFailureBlock];
@@ -271,36 +313,31 @@ UAConfig *config;
 
 // Must be called on main queue
 - (void)failedWithPayload:(UAChannelRegistrationPayload *)payload {
-    if (!self.isRegistrationInProgress) {
-        return;
-    }
-
     self.isRegistrationInProgress = NO;
-
     [self.delegate registrationFailed];
-    
     [self endRegistrationBackgroundTask];
 }
 
 // Must be called on main queue
 - (void)succeededWithPayload:(UAChannelRegistrationPayload *)payload {
-    if (!self.isRegistrationInProgress) {
-        return;
-    }
-
     self.lastSuccessfulPayload = payload;
     self.lastSuccessfulUpdateDate = [self.date now];
-    self.isRegistrationInProgress = NO;
 
-    [self.delegate registrationSucceeded];
-    
-    UAChannelRegistrationPayload *currentPayload = [self.delegate createChannelPayload];
-    if ([self shouldUpdateRegistration:currentPayload]) {
-        [self updateChannelWithPayload:currentPayload];
-    } else {
-        [self endRegistrationBackgroundTask];
-    }
+    id<UAChannelRegistrarDelegate> delegate = self.delegate;
+    [delegate registrationSucceeded];
+
+    UA_WEAKIFY(self)
+    [delegate createChannelPayload:^(UAChannelRegistrationPayload *currentPayload) {
+        UA_STRONGIFY(self)
+        if ([self shouldUpdateRegistration:currentPayload]) {
+            [self updateChannelWithPayload:currentPayload];
+        } else {
+            self.isRegistrationInProgress = NO;
+            [self endRegistrationBackgroundTask];
+        }
+    } dispatcher:self.dispatcher];
 }
+
 
 #pragma mark -
 #pragma mark Get/Set Methods
@@ -332,7 +369,7 @@ UAConfig *config;
 }
 
 - (NSString *)channelLocation {
-    // Get the channel ID from data store instead of
+    // Get the channel location from data store instead of
     // the channelID property, because that may cause an infinite loop.
     if ([self.dataStore stringForKey:UAPushChannelIDKey]) {
         return [self.dataStore stringForKey:UAPushChannelLocationKey];
@@ -364,3 +401,4 @@ UAConfig *config;
 }
 
 @end
+

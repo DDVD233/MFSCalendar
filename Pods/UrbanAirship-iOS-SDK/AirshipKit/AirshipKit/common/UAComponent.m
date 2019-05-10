@@ -1,4 +1,4 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import "UAComponent+Internal.h"
 #import "UAPreferenceDataStore+Internal.h"
@@ -60,7 +60,7 @@ BOOL const UAComponentEnabledDefault = YES;
     // placeholder - sub-classes should override if they want remote config updates
 }
 
-- (Class)remoteConfigClass {
+- (nullable Class)remoteConfigClass {
     // placeholder - sub-classes should override if they want remote config updates
     return nil;
 }

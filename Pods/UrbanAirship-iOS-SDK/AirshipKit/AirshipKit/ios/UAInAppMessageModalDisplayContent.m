@@ -1,4 +1,4 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import "UAInAppMessageModalDisplayContent+Internal.h"
 #import "UAInAppMessageTextInfo+Internal.h"
@@ -6,11 +6,11 @@
 #import "UAInAppMessageButtonInfo+Internal.h"
 #import "UAColorUtils+Internal.h"
 #import "UAGlobal.h"
+#import "UAUtils+Internal.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 // JSON keys
-NSString *const UAInAppMessageModalActionsKey = @"actions";
 NSString *const UAInAppMessageModalDisplayContentDomain = @"com.urbanairship.modal_display_content";
 
 NSString *const UAInAppMessageModalContentLayoutHeaderMediaBodyValue = @"header_media_body";
@@ -46,7 +46,7 @@ NSUInteger const UAInAppMessageModalMaxButtons = 2;
         self.contentLayout = content.contentLayout;
         self.backgroundColor = content.backgroundColor;
         self.dismissButtonColor = content.dismissButtonColor;
-        self.borderRadius = content.borderRadius;
+        self.borderRadiusPoints = content.borderRadiusPoints;
         self.allowFullScreenDisplay = content.allowFullScreenDisplay;
     }
 
@@ -71,6 +71,14 @@ NSUInteger const UAInAppMessageModalMaxButtons = 2;
     return YES;
 }
 
+- (NSUInteger)borderRadius {
+    return self.borderRadiusPoints;
+}
+
+- (void)setBorderRadius:(NSUInteger)borderRadius {
+    self.borderRadiusPoints = borderRadius;
+}
+
 @end
 
 @interface UAInAppMessageModalDisplayContent()
@@ -79,12 +87,12 @@ NSUInteger const UAInAppMessageModalMaxButtons = 2;
 @property(nonatomic, strong, nullable) UAInAppMessageTextInfo *body;
 @property(nonatomic, strong, nullable) UAInAppMessageMediaInfo *media;
 @property(nonatomic, strong, nullable) UAInAppMessageButtonInfo *footer;
-@property(nonatomic, copy, nullable) NSArray<UAInAppMessageButtonInfo *> *buttons;
+@property(nonatomic, strong, nullable) NSArray<UAInAppMessageButtonInfo *> *buttons;
 @property(nonatomic, assign) UAInAppMessageButtonLayoutType buttonLayout;
 @property(nonatomic, assign) UAInAppMessageModalContentLayoutType contentLayout;
 @property(nonatomic, strong) UIColor *backgroundColor;
 @property(nonatomic, strong) UIColor *dismissButtonColor;
-@property(nonatomic, assign) NSUInteger borderRadius;
+@property(nonatomic, assign) CGFloat borderRadiusPoints;
 @property(nonatomic, assign) BOOL allowFullScreenDisplay;
 
 @end
@@ -269,7 +277,7 @@ NSUInteger const UAInAppMessageModalMaxButtons = 2;
             }
             return nil;
         }
-        builder.borderRadius = [borderRadius unsignedIntegerValue];
+        builder.borderRadiusPoints = [borderRadius doubleValue];
     }
 
     id allowFullScreenDisplay = json[UAInAppMessageModalAllowsFullScreenKey];
@@ -311,7 +319,7 @@ NSUInteger const UAInAppMessageModalMaxButtons = 2;
     self = [super init];
 
     if (![builder isValid]) {
-        UA_LDEBUG(@"UAInAppMessageModalDisplayContent could not be initialized, builder has missing or invalid parameters.");
+        UA_LERR(@"UAInAppMessageModalDisplayContent could not be initialized, builder has missing or invalid parameters.");
         return nil;
     }
 
@@ -325,7 +333,7 @@ NSUInteger const UAInAppMessageModalMaxButtons = 2;
         self.contentLayout = builder.contentLayout;
         self.backgroundColor = builder.backgroundColor;
         self.dismissButtonColor = builder.dismissButtonColor;
-        self.borderRadius = builder.borderRadius;
+        self.borderRadiusPoints = builder.borderRadiusPoints;
         self.allowFullScreenDisplay = builder.allowFullScreenDisplay;
     }
 
@@ -341,7 +349,7 @@ NSUInteger const UAInAppMessageModalMaxButtons = 2;
     [json setValue:[UAColorUtils hexStringWithColor:self.backgroundColor] forKey:UAInAppMessageBackgroundColorKey];
     [json setValue:[UAColorUtils hexStringWithColor:self.dismissButtonColor] forKey:UAInAppMessageDismissButtonColorKey];
     [json setValue:[self.footer toJSON] forKey:UAInAppMessageFooterKey];
-    [json setValue:@(self.borderRadius) forKey:UAInAppMessageBorderRadiusKey];
+    [json setValue:@(self.borderRadiusPoints) forKey:UAInAppMessageBorderRadiusKey];
     [json setValue:@(self.allowFullScreenDisplay) forKey:UAInAppMessageModalAllowsFullScreenKey];
 
     NSMutableArray *buttonsJSONs = [NSMutableArray array];
@@ -380,14 +388,14 @@ NSUInteger const UAInAppMessageModalMaxButtons = 2;
     return [json copy];
 }
 
-- (UAInAppMessageModalDisplayContent *)extend:(void(^)(UAInAppMessageModalDisplayContentBuilder *builder))builderBlock {
+- (nullable UAInAppMessageModalDisplayContent *)extend:(void(^)(UAInAppMessageModalDisplayContentBuilder *builder))builderBlock {
     if (builderBlock) {
         UAInAppMessageModalDisplayContentBuilder *builder = [UAInAppMessageModalDisplayContentBuilder builderWithDisplayContent:self];
         builderBlock(builder);
         return [[UAInAppMessageModalDisplayContent alloc] initWithBuilder:builder];
     }
 
-    UA_LINFO(@"Extended %@ with nil builderBlock. Returning self.", self);
+    UA_LDEBUG(@"Extended %@ with nil builderBlock. Returning self.", self);
     return self;
 }
 
@@ -444,10 +452,9 @@ NSUInteger const UAInAppMessageModalMaxButtons = 2;
         return NO;
     }
 
-    if (self.borderRadius != content.borderRadius) {
+    if (![UAUtils float:self.borderRadiusPoints isEqualToFloat:content.borderRadiusPoints withAccuracy:0.01]) {
         return NO;
     }
-
 
     if (self.allowFullScreenDisplay != content.allowFullScreenDisplay) {
         return NO;
@@ -467,7 +474,7 @@ NSUInteger const UAInAppMessageModalMaxButtons = 2;
     result = 31 * result + self.contentLayout;
     result = 31 * result + [[UAColorUtils hexStringWithColor:self.backgroundColor] hash];
     result = 31 * result + [[UAColorUtils hexStringWithColor:self.dismissButtonColor] hash];
-    result = 31 * result + self.borderRadius;
+    result = 31 * result + self.borderRadiusPoints;
     result = 31 * result + self.allowFullScreenDisplay;
 
     return result;
@@ -479,6 +486,10 @@ NSUInteger const UAInAppMessageModalMaxButtons = 2;
 
 -(UAInAppMessageDisplayType)displayType {
     return UAInAppMessageDisplayTypeModal;
+}
+
+- (NSUInteger)borderRadius {
+    return self.borderRadiusPoints;
 }
 
 @end

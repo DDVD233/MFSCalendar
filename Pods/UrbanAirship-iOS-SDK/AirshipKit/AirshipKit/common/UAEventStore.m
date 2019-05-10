@@ -1,4 +1,4 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import "UAEventData+Internal.h"
 #import "NSJSONSerialization+UAAdditions.h"
@@ -114,17 +114,8 @@ NSString *const UAEventDataEntityName = @"UAEventData";
         request.predicate = [NSPredicate predicateWithFormat:@"identifier IN %@", eventIDs];
 
         NSError *error;
-
-        if ([[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){9, 0, 0}]) {
-            NSBatchDeleteRequest *deleteRequest = [[NSBatchDeleteRequest alloc] initWithFetchRequest:request];
-            [self.managedContext executeRequest:deleteRequest error:&error];
-        } else {
-            request.includesPropertyValues = NO;
-            NSArray *events = [self.managedContext executeFetchRequest:request error:&error];
-            for (NSManagedObject *event in events) {
-                [self.managedContext deleteObject:event];
-            }
-        }
+        NSBatchDeleteRequest *deleteRequest = [[NSBatchDeleteRequest alloc] initWithFetchRequest:request];
+        [self.managedContext executeRequest:deleteRequest error:&error];
 
         if (error) {
             UA_LERR(@"Error deleting analytics events %@", error);
@@ -144,17 +135,8 @@ NSString *const UAEventDataEntityName = @"UAEventData";
         NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:UAEventDataEntityName];
 
         NSError *error;
-
-        if ([[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){9, 0, 0}]) {
-            NSBatchDeleteRequest *deleteRequest = [[NSBatchDeleteRequest alloc] initWithFetchRequest:request];
-            [self.managedContext executeRequest:deleteRequest error:&error];
-        } else {
-            request.includesPropertyValues = NO;
-            NSArray *events = [self.managedContext executeFetchRequest:request error:&error];
-            for (NSManagedObject *event in events) {
-                [self.managedContext deleteObject:event];
-            }
-        }
+        NSBatchDeleteRequest *deleteRequest = [[NSBatchDeleteRequest alloc] initWithFetchRequest:request];
+        [self.managedContext executeRequest:deleteRequest error:&error];
 
         if (error) {
             UA_LERR(@"Error deleting analytics events %@", error);
@@ -203,7 +185,7 @@ NSString *const UAEventDataEntityName = @"UAEventData";
         return;
     }
 
-    UA_LDEBUG(@"Migrating old analytic store.");
+    UA_LTRACE(@"Migrating old analytic store.");
 
     NSArray *events = nil;
     do {

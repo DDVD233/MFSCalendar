@@ -1,4 +1,4 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import "UARemoteDataAPIClient+Internal.h"
 #import "UAPreferenceDataStore+Internal.h"
@@ -16,10 +16,14 @@
 
 @synthesize URL = _URL;
 
+NSString * const kRemoteDataPath = @"api/remote-data/app";
+
 NSString * const kUALastRemoteDataModifiedTime = @"UALastRemoteDataModifiedTime";
 
-- (UARemoteDataAPIClient *)initWithConfig:(UAConfig *)config dataStore:(UAPreferenceDataStore *)dataStore {
-    self = [super initWithConfig:config session:[UARequestSession sessionWithConfig:config]];
+- (UARemoteDataAPIClient *)initWithConfig:(UAConfig *)config
+                                dataStore:(UAPreferenceDataStore *)dataStore
+                                  session:(UARequestSession *)session {
+    self = [super initWithConfig:config session:session];
     
     if (self) {
         self.dataStore = dataStore;
@@ -29,7 +33,17 @@ NSString * const kUALastRemoteDataModifiedTime = @"UALastRemoteDataModifiedTime"
 }
 
 + (UARemoteDataAPIClient *)clientWithConfig:(UAConfig *)config dataStore:(UAPreferenceDataStore *)dataStore {
-    return [[[self class] alloc] initWithConfig:config dataStore:dataStore];
+    return [[self alloc] initWithConfig:config
+                              dataStore:dataStore
+                                session:[UARequestSession sessionWithConfig:config]];
+}
+
++ (UARemoteDataAPIClient *)clientWithConfig:(UAConfig *)config
+                                  dataStore:(UAPreferenceDataStore *)dataStore
+                                    session:(UARequestSession *)session {
+    return [[self alloc] initWithConfig:config
+                              dataStore:dataStore
+                                session:session];
 }
 
 - (UADisposable *)fetchRemoteData:(UARemoteDataRefreshSuccessBlock)successBlock onFailure:(UARemoteDataRefreshFailureBlock)failureBlock {
@@ -41,11 +55,10 @@ NSString * const kUALastRemoteDataModifiedTime = @"UALastRemoteDataModifiedTime"
     __block UARemoteDataRefreshFailureBlock refreshRemoteDataFailureBlock = failureBlock;
     
     UADisposable *disposable = [UADisposable disposableWithBlock:^{
-        UA_LDEBUG(@"disposed");
+        UA_LTRACE(@"Remote data refresh blocks disposed");
         refreshRemoteDataSuccessBlock = nil;
         refreshRemoteDataFailureBlock = nil;
     }];
-    
 
     [self.session dataTaskWithRequest:refreshRequest retryWhere:^BOOL(NSData * _Nullable data, NSURLResponse * _Nullable response) {
         return [response hasRetriableStatus];
@@ -141,10 +154,29 @@ NSString * const kUALastRemoteDataModifiedTime = @"UALastRemoteDataModifiedTime"
         return _URL;
     }
 
-    NSURLQueryItem *queryItem = [NSURLQueryItem queryItemWithName:@"sdk_version" value:[UAirshipVersion get]];
+    NSURLQueryItem *languageItem = [NSURLQueryItem queryItemWithName:@"language"
+                                                               value:[[NSLocale autoupdatingCurrentLocale] objectForKey:NSLocaleLanguageCode]];
+    NSURLQueryItem *countryItem = [NSURLQueryItem queryItemWithName:@"country"
+                                                              value:[[NSLocale autoupdatingCurrentLocale] objectForKey: NSLocaleCountryCode]];
+    NSURLQueryItem *versionItem = [NSURLQueryItem queryItemWithName:@"sdk_version"
+                                                              value:[UAirshipVersion get]];
+
     NSURLComponents *components = [NSURLComponents componentsWithString:self.config.remoteDataAPIURL];
-    components.path = [NSString stringWithFormat:@"/api/remote-data/app/%@/%@", self.config.appKey, @"ios"];
-    components.queryItems = @[queryItem];
+
+    // api/remote-data/app/{appkey}/{platform}?sdk_version={version}&language={language}&country={country}
+    components.path = [NSString stringWithFormat:@"/%@/%@/%@", kRemoteDataPath, self.config.appKey, @"ios"];
+
+    NSMutableArray *queryItems = [NSMutableArray arrayWithObject:versionItem];
+
+    if (languageItem.value != nil && languageItem.value.length != 0) {
+        [queryItems addObject:languageItem];
+    }
+
+    if (countryItem.value != nil && countryItem.value.length != 0) {
+        [queryItems addObject:countryItem];
+    }
+
+    components.queryItems = queryItems;
 
     _URL = [components URL];
     return _URL;

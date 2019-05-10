@@ -1,4 +1,4 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
@@ -31,8 +31,10 @@ NS_ASSUME_NONNULL_BEGIN
  * Gets the Urban Airship Device ID.
  *
  * @return The device ID, or an empty string if the ID cannot be retrieved or created.
+ *
+ * @deprecated Deprecated - to be removed in SDK version 11.0.
  */
-+ (NSString *)deviceID;
++ (NSString *)deviceID DEPRECATED_MSG_ATTRIBUTE("Deprecated - to be removed in SDK version 11.0.");
 
 #if !TARGET_OS_TV   // Inbox not supported on tvOS
 /**
@@ -42,9 +44,9 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * @return An HTTP Basic Auth header string value for the user's credentials.
  */
-+ (NSString *)userAuthHeaderString;
-#endif
++ (NSString *)userAuthHeaderString DEPRECATED_MSG_ATTRIBUTE("Deprecated - to be removed in SDK version 11.0.");
 
+#endif
 
 /**
  * Returns a basic auth header string.

@@ -12,6 +12,7 @@ import SVProgressHUD
 import Alamofire
 import Crashlytics
 import SafariServices
+import M13ProgressSuite
 
 class NewMoreViewController: UICollectionViewController  {
     var contentList = [String]()

@@ -1,4 +1,4 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import "UAChannelCapture.h"
 #import "NSString+UALocalizationAdditions.h"
@@ -8,18 +8,16 @@
 #import "UA_Base64.h"
 #import "UAPreferenceDataStore+Internal.h"
 #import "UAUtils+Internal.h"
+#import "UADispatcher+Internal.h"
 
 NSString *const UAChannelCaptureEnabledKey = @"UAChannelCaptureEnabled";
 
 @interface UAChannelCapture()
-
 @property (nonatomic, strong) UAPush *push;
 @property (nonatomic, strong) UAConfig *config;
 @property (nonatomic, strong) UAPreferenceDataStore *dataStore;
 @property bool enableChannelCapture;
-
 @end
-
 
 @implementation UAChannelCapture
 
@@ -93,10 +91,8 @@ NSString *const UAChannelPlaceHolder = @"CHANNEL";
         }
     }
 
-    if (@available(iOS 10.0, tvOS 10.0, *)) {
-        if (![UIPasteboard generalPasteboard].hasStrings) {
-            return;
-        }
+    if (![UIPasteboard generalPasteboard].hasStrings) {
+        return;
     }
 
     NSString *pasteBoardString = [UIPasteboard generalPasteboard].string;
@@ -138,10 +134,10 @@ NSString *const UAChannelPlaceHolder = @"CHANNEL";
         }
 
         // Move back to the main queue to clear the clipboard and display the alert
-        dispatch_async(dispatch_get_main_queue(), ^{
+        [[UADispatcher mainDispatcher] dispatchAsync:^{
             [UIPasteboard generalPasteboard].string = @"";
             [self showAlertWithUrl:url];
-        });
+        }];
     });
 
 }
@@ -170,12 +166,16 @@ NSString *const UAChannelPlaceHolder = @"CHANNEL";
 
 
     if (url) {
-
         UIAlertAction *urlAction  = [UIAlertAction actionWithTitle:[@"ua_notification_button_copy" localizedStringWithTable:@"UrbanAirship" defaultValue:@"Copy"]
                                                              style:UIAlertActionStyleDefault
                                                            handler:^(UIAlertAction *action) {
-                                                               [[UIApplication sharedApplication] openURL:url];
-                                                               UA_LINFO(@"Opened url: %@", url.absoluteString);
+                                                               [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:^(BOOL success) {
+                                                                   if (success) {
+                                                                       UA_LINFO(@"Opened url: %@", url.absoluteString);
+                                                                   } else {
+                                                                       UA_LDEBUG(@"Failed to open url: %@", url.absoluteString);
+                                                                   }
+                                                               }];
                                                            }];
         [controller addAction:urlAction];
     }
@@ -205,4 +205,5 @@ NSString *const UAChannelPlaceHolder = @"CHANNEL";
 }
 
 @end
+
 

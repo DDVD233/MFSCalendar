@@ -1,7 +1,4 @@
-/* Copyright 2018 Urban Airship and Contributors */
-
-#import <CoreLocation/CoreLocation.h>
-
+/* Copyright Urban Airship and Contributors */
 #import "UAirship+Internal.h"
 
 #import "UAUser+Internal.h"
@@ -143,13 +140,10 @@ BOOL uaLoudImpErrorLoggingEnabled = YES;
         // UIPasteboard is not available in tvOS
         self.channelCapture = [UAChannelCapture channelCaptureWithConfig:config push:self.sharedPush dataStore:self.dataStore];
 
-       // Only create the default message center if running iOS 8 and above
-        if ([[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){8, 0, 0}]) {
-            if ([UAirship resources]) {
-                self.sharedMessageCenter = [UAMessageCenter messageCenterWithConfig:self.config];
-            } else {
-                UA_LINFO(@"Unable to initialize default message center: AirshipResources is missing");
-            }
+        if ([UAirship resources]) {
+            self.sharedMessageCenter = [UAMessageCenter messageCenterWithConfig:self.config];
+        } else {
+            UA_LWARN(@"Unable to initialize default message center: AirshipResources is missing");
         }
 #endif
     }
@@ -209,17 +203,18 @@ BOOL uaLoudImpErrorLoggingEnabled = YES;
     UA_LINFO(@"UAirship Take Off! Lib Version: %@ App Key: %@ Production: %@.",
              [UAirshipVersion get], config.appKey, config.inProduction ?  @"YES" : @"NO");
 
-
     // Data store
     UAPreferenceDataStore *dataStore = [UAPreferenceDataStore preferenceDataStoreWithKeyPrefix:[NSString stringWithFormat:@"com.urbanairship.%@.", config.appKey]];
     [dataStore migrateUnprefixedKeys:@[UALibraryVersion]];
 
     // Cache
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
     if (config.cacheDiskSizeInMB > 0) {
         UA_LTRACE("Registering UAURLProtocol.");
         [NSURLProtocol registerClass:[UAURLProtocol class]];
     }
-
+#pragma GCC diagnostic pop
 
     // Clearing the key chain
     if ([[NSUserDefaults standardUserDefaults] boolForKey:UAResetKeychainKey]) {
@@ -235,26 +230,25 @@ BOOL uaLoudImpErrorLoggingEnabled = YES;
         [[NSUserDefaults standardUserDefaults] setBool:NO forKey:UAResetKeychainKey];
     }
 
-    NSString *previousDeviceId = [dataStore stringForKey:@"deviceId"];
-    NSString *currentDeviceId = [UAKeychainUtils getDeviceID];
+    [UAUtils getDeviceID:^(NSString *currentDeviceID) {
+        NSString *previousDeviceID = [dataStore stringForKey:@"deviceId"];
 
-    if (previousDeviceId && ![previousDeviceId isEqualToString:currentDeviceId]) {
-        // Device ID changed since the last open. Most likely due to an app restore
-        // on a different device.
-        UA_LDEBUG(@"Device ID changed.");
+        if (previousDeviceID && ![previousDeviceID isEqualToString:currentDeviceID]) {
+            // Device ID changed since the last open. Most likely due to an app restore
+            // on a different device.
+            UA_LDEBUG(@"Device ID changed.");
 
-        UA_LDEBUG(@"Clearing previous channel.");
-        [dataStore removeObjectForKey:UAPushChannelLocationKey];
-        [dataStore removeObjectForKey:UAPushChannelIDKey];
-
-        if (config.clearUserOnAppRestore) {
-            UA_LDEBUG(@"Deleting the keychain credentials");
-            [UAKeychainUtils deleteKeychainValue:config.appKey];
+            [sharedAirship_.sharedPush resetChannel];
+#if !TARGET_OS_TV
+            if (config.clearUserOnAppRestore) {
+                [sharedAirship_.sharedInboxUser resetUser];
+            }
+#endif
         }
-    }
 
-    // Save the Device ID to the data store to detect when it changes
-    [dataStore setObject:currentDeviceId forKey:@"deviceId"];
+        // Save the Device ID to the data store to detect when it changes
+        [dataStore setObject:currentDeviceID forKey:@"deviceId"];
+    } dispatcher:[UADispatcher mainDispatcher]];
 
     // Create Airship
     [UAirship setSharedAirship:[[UAirship alloc] initWithConfig:config dataStore:dataStore]];
@@ -294,10 +288,10 @@ BOOL uaLoudImpErrorLoggingEnabled = YES;
     if (appDidFinishLaunchingNotification_) {
         // Set up can occur after takeoff, so handle the launch notification on the
         // next run loop to allow app setup to finish
-        dispatch_async(dispatch_get_main_queue(), ^() {
+        [[UADispatcher mainDispatcher] dispatchAsync: ^() {
             [UAirship handleAppDidFinishLaunchingNotification:appDidFinishLaunchingNotification_];
             appDidFinishLaunchingNotification_ = nil;
-        });
+        }];
     }
 }
 
@@ -310,12 +304,12 @@ BOOL uaLoudImpErrorLoggingEnabled = YES;
 
         // Log takeoff errors on the next run loop to give time for apps that
         // use class loader to call takeoff.
-        dispatch_async(dispatch_get_main_queue(), ^() {
+        [[UADispatcher mainDispatcher] dispatchAsync:^{
             if (!sharedAirship_) {
                 UA_LERR(@"[UAirship takeOff] was not called in application:didFinishLaunchingWithOptions:");
                 UA_LERR(@"Please ensure that [UAirship takeOff] is called synchronously before application:didFinishLaunchingWithOptions: returns");
             }
-        });
+        }];
 
         return;
     }
@@ -328,6 +322,7 @@ BOOL uaLoudImpErrorLoggingEnabled = YES;
         [sharedAirship_.sharedAnalytics launchedFromNotification:remoteNotification];
     }
 
+
 #endif
     // Init event
     [sharedAirship_.sharedAnalytics addEvent:[UAAppInitEvent event]];
@@ -337,7 +332,6 @@ BOOL uaLoudImpErrorLoggingEnabled = YES;
     dispatch_async(dispatch_get_main_queue(), ^() {
         [sharedAirship_.sharedPush updateRegistration];
     });
-
 }
 
 + (void)handleAppTerminationNotification:(NSNotification *)notification {
@@ -354,9 +348,6 @@ BOOL uaLoudImpErrorLoggingEnabled = YES;
     if (!sharedAirship_) {
         return;
     }
-
-    // Invalidate UAAnalytics timer and cancel all queued operations
-    [sharedAirship_.sharedAnalytics cancelUpload];
 
     // Finally, release the airship!
     [UAirship setSharedAirship:nil];

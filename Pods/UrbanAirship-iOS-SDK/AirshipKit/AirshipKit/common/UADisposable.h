@@ -1,4 +1,4 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import <Foundation/Foundation.h>
 
@@ -12,7 +12,7 @@ typedef void (^UADisposalBlock)(void);
 /**
  * A convenience class for creating self-referencing cancellation tokens.
  *
- * @note: It is left up to the creator to determine what is disposed of and
+ * @note It is left up to the creator to determine what is disposed of and
  * under what circumstances.  This includes threading and memory management concerns.
  */
 @interface UADisposable : NSObject

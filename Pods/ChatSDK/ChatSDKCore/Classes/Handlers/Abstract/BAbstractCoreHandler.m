@@ -30,22 +30,7 @@
     // Set the URLs for the images and save it in CoreData
     [BChatSDK.db beginUndoGroup];
     
-    id<PMessage> message = [BChatSDK.db createMessageEntity];
-    
-    id<PThread> thread = [BChatSDK.db fetchEntityWithID:threadID withType:bThreadEntity];
-    
-    message.type = @(bMessageTypeText);
-    [message setTextString:text];
-    
-    message.date = [NSDate date];
-    message.userModel = self.currentUserModel;
-    message.delivered = @NO;
-    message.read = @YES;
-    message.flagged = @NO;
-    message.meta = meta;
-    
-    [thread addMessage: message];
-    
+    id<PMessage> message = [[[[BMessageBuilder textMessage:text] meta:meta] thread:threadID] build];
     return [self sendMessage:message];
 }
 
@@ -95,8 +80,16 @@
             }
         }
         else if (thread.type.intValue & bThreadFilterPublic) {
-            if(thread.type.intValue & type) {
-                [threads addObject:thread];
+            if (BChatSDK.config.publicChatRoomLifetimeMinutes == 0) {
+                [threads addObjectsFromArray:thread];
+            } else {
+                NSDate * now = [NSDate date];
+                NSTimeInterval interval = [now timeIntervalSinceDate:thread.creationDate];
+                if (interval < BChatSDK.config.publicChatRoomLifetimeMinutes * 60) {
+                    [threads addObject:thread];
+                } else {
+                    [thread markRead];
+                }
             }
         }
     }
@@ -121,33 +114,10 @@
 }
 
 -(void) sendLocalSystemMessageWithText:(NSString *)text type: (bSystemMessageType) type withThreadEntityID:(NSString *)threadID {
-    
-    // Set the URLs for the images and save it in CoreData
-    id<PMessage> message = [BChatSDK.db createMessageEntity];
-    message.entityID = [BCoreUtilities getUUID];
-    
-    message.type = @(bMessageTypeSystem);
-    //message.text = text;
-    [message setTextString:text];
-    
-    id<PThread> thread = [BChatSDK.db fetchEntityWithID:threadID withType:bThreadEntity];
-
-    message.date = [NSDate date];
-    message.userModel = self.currentUserModel;
-    message.delivered = @YES;
-    message.read = @YES;
-    message.flagged = @NO;
-    message.type = @(type);
-
-    [thread addMessage: message];
-
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [[NSNotificationCenter defaultCenter] postNotificationName:bNotificationMessageAdded
-                                                            object:Nil
-                                                          userInfo:@{bNotificationMessageAddedKeyMessage: message}];
-    });
-    
+    id<PMessage> message = [[[BMessageBuilder systemMessage:text type:type] thread:threadID] build];
+    [BHookNotification notificationMessageDidSend: message];
 }
+
 
 -(id<PUser>) userForEntityID: (NSString *) entityID {
     // Get the user and make sure it's updated
@@ -181,7 +151,12 @@
  * @brief Mark the user as online
  */
 -(void) setUserOnline {
-    assert(NO);
+    if (BChatSDK.currentUser) {
+        BChatSDK.currentUser.online = @YES;
+        if(BChatSDK.lastOnline && [BChatSDK.lastOnline respondsToSelector:@selector(setLastOnlineForUser:)]) {
+            [BChatSDK.lastOnline setLastOnlineForUser:self.currentUserModel];
+        }
+    }
 }
 
 /**
@@ -197,16 +172,14 @@
  * @brief Disconnect from the server
  */
 -(void) goOnline {
-    if(BChatSDK.lastOnline && [BChatSDK.lastOnline respondsToSelector:@selector(setLastOnlineForUser:)]) {
-        [BChatSDK.lastOnline setLastOnlineForUser:self.currentUserModel];
-    }
+    assert(NO);
 }
 
 // TODO: Consider removing / refactoring this
 /**
  * @brief Subscribe to a user's updates
  */
--(void)observeUser: (NSString *)entityID {
+-(RXPromise *)observeUser: (NSString *)entityID {
     assert(NO);
 }
 
@@ -217,13 +190,36 @@
  */
 -(RXPromise *) createThreadWithUsers: (NSArray *) users
                                 name: (NSString *) name
+                                type: (bThreadType) type
+                         forceCreate: (BOOL) force
                        threadCreated: (void(^)(NSError * error, id<PThread> thread)) threadCreated {
     assert(NO);
 }
 
 -(RXPromise *) createThreadWithUsers: (NSArray *) users
-                       threadCreated: (void(^)(NSError * error, id<PThread> thread)) thread {
-    assert(NO);
+                                name: (NSString *) name
+                         forceCreate: (BOOL) force
+                       threadCreated: (void(^)(NSError * error, id<PThread> thread)) threadCreated {
+    return [self createThreadWithUsers:users
+                                  name:name
+                                  type:bThreadTypeNone
+                           forceCreate:force
+                         threadCreated:threadCreated];
+}
+
+
+-(RXPromise *) createThreadWithUsers: (NSArray *) users
+                                name: (NSString *) name
+                       threadCreated: (void(^)(NSError * error, id<PThread> thread)) threadCreated {
+    return [self createThreadWithUsers:users
+                                  name:name
+                           forceCreate:NO
+                         threadCreated:threadCreated];
+}
+
+-(RXPromise *) createThreadWithUsers: (NSArray *) users
+                       threadCreated: (void(^)(NSError * error, id<PThread> thread)) threadCreated {
+    return [self createThreadWithUsers:users name:nil threadCreated:threadCreated];
 }
 
 /**
@@ -266,7 +262,9 @@
 }
 
 - (void)setUserOffline {
-    assert(NO);
+    if (BChatSDK.currentUser) {
+        BChatSDK.currentUser.online = @NO;
+    }
 }
 
 -(id<PThread>) fetchThreadWithUsers: (NSArray *) users {
@@ -311,6 +309,11 @@
 }
 
 -(id<PThread>) createThreadWithUsers: (NSArray *) users name: (NSString *) name {
+    return [self createThreadWithUsers:users name:name type:bThreadTypeNone];
+}
+
+-(id<PThread>) createThreadWithUsers: (NSArray *) users name: (NSString *) name type: (bThreadType) type {
+
     id<PUser> currentUser = self.currentUserModel;
     
     NSMutableArray * usersToAdd = [NSMutableArray arrayWithArray:users];
@@ -324,8 +327,15 @@
     id<PThread> threadModel = [BChatSDK.db createThreadEntity];
     threadModel.creationDate = [NSDate date];
     threadModel.creator = currentUser;
-    threadModel.type = usersToAdd.count == 2 ? @(bThreadType1to1) : @(bThreadTypePrivateGroup);
-    threadModel.name = name;
+    if (type != bThreadTypeNone) {
+        threadModel.type = @(type);
+    } else {
+        threadModel.type = usersToAdd.count == 2 ? @(bThreadType1to1) : @(bThreadTypePrivateGroup);
+    }
+    
+    if (name) {
+        threadModel.name = name;
+    }
     
     for (id<PUser> user in usersToAdd) {
         [threadModel addUser:user];

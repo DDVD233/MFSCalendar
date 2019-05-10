@@ -1,4 +1,4 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import "UANamedUserAPIClient+Internal.h"
 #import "UAConfig.h"

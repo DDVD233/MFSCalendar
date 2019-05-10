@@ -10,10 +10,9 @@ import UIKit
 import SwiftMessages
 import UserNotifications
 import DZNEmptyDataSet
-import Reachability
+//import Reachability
 import SwiftDate
-import ChameleonFramework
-
+ 
 
 class customEventCellDashboard: UITableViewCell {
 
@@ -90,7 +89,6 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     
     let eventViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier :"eventViewController") as! eventViewController
 
-    let reachability = Reachability()!
     var screenWidth = UIScreen.main.bounds.width
 
     override func viewDidLoad() {
@@ -125,11 +123,11 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
             print("Cannot initialize data because the user did not logged in")
         }
         
-        if Reachability()?.connection == .wifi {
-            DispatchQueue.global().async {
-                self.updateData()
-            }
+//        if Reachability()?.connection == .wifi {
+        DispatchQueue.global().async {
+            self.updateData()
         }
+//        }
         
         DispatchQueue.global().async {
             self.adaptationScheduleFix()
@@ -143,7 +141,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         isVisible = true
         
-        self.setStatusBarStyle(.lightContent)
+        UIApplication.shared.statusBarStyle = .lightContent
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -163,7 +161,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         
         refreshDisplayedData()
         DispatchQueue.global().async {
-            if Reachability()?.connection != .none && self.doRefreshData() {
+            if self.doRefreshData() {
                 NSLog("Refresh Data")
                 DispatchQueue.main.async {
                     self.presentCourseFillView()
@@ -257,9 +255,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         }
         
         DispatchQueue.global().async {
-            if self.reachability.connection == .wifi {
-                NetworkOperations().downloadLargeProfilePhoto()
-            }
+            NetworkOperations().downloadLargeProfilePhoto()
         }
         
         if Preferences().isInStepChallenge {

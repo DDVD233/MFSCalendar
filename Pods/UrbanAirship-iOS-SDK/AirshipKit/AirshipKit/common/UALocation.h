@@ -1,4 +1,4 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
@@ -73,6 +73,31 @@ NS_ASSUME_NONNULL_BEGIN
  * Returns the last received location. Can be nil if no location has been received.
  */
 @property (nonatomic, readonly, nullable) CLLocation *lastLocation;
+
+///---------------------------------------------------------------------------------------
+/// @name Location Methods
+///---------------------------------------------------------------------------------------
+
+/**
+ * Check if user has opted in to location updates.
+ *
+ * @return YES if UALocation location updates are enabled and the user has authorized the app to use location services
+ */
+- (BOOL)isLocationOptedIn;
+
+/**
+ * Check if user has denied the app's request to use location services.
+ *
+ * @return YES if UALocation location updates are enabled and the user has authorized the app to use location services
+ */
+- (BOOL)isLocationDeniedOrRestricted;
+
+/**
+ * Return a string describing the app's authorization status for location services.
+ *
+ * @return NSString describing the app's authorization status for location services
+ */
+- (NSString *)locationPermissionDescription;
 
 NS_ASSUME_NONNULL_END
 

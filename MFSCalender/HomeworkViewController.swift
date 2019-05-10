@@ -16,8 +16,6 @@ import DGElasticPullToRefresh
 import XLPagerTabStrip
 import Alamofire
 import Crashlytics
-import M13ProgressSuite
-import ChameleonFramework
 import StoreKit
 
 
@@ -108,8 +106,6 @@ class homeworkViewController: UITableViewController, UIViewControllerPreviewingD
         DispatchQueue.main.async {
             UIApplication.shared.isNetworkActivityIndicatorVisible = true
             self.navigationController?.showProgress()
-            self.navigationController?.setPrimaryColor(UIColor(hexString: 0xFF7E79))
-            self.navigationController?.setSecondaryColor(UIColor.white)
             self.navigationController?.setIndeterminate(true)
             self.tableView.reloadEmptyDataSet()
         }

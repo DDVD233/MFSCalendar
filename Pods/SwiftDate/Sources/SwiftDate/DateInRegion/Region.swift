@@ -28,8 +28,8 @@ public struct Region: Decodable, Encodable, Equatable, Hashable, CustomStringCon
 		return "{calendar='\(calendar.identifier)', timezone='\(timeZone.identifier)', locale='\(locale.identifier)'}"
 	}
 
-	public var hashValue: Int {
-		return self.calendar.hashValue
+	public func hash(into hasher: inout Hasher) {
+		hasher.combine(calendar)
 	}
 
 	// MARK: Initialization
@@ -58,7 +58,7 @@ public struct Region: Decodable, Encodable, Equatable, Hashable, CustomStringCon
 		let tz = (components.timeZone ?? Zones.current.toTimezone())
 		let cal = (components.calendar ?? Calendars.gregorian.toCalendar())
 		let loc = (cal.locale ?? Locales.current.toLocale())
-		self.init(calendar: cal, zone: tz, locale: loc)
+        self.init(calendar: cal, zone: tz, locale: loc)
 	}
 
 	public static var UTC: Region {
@@ -131,7 +131,7 @@ public struct Region: Decodable, Encodable, Equatable, Hashable, CustomStringCon
 		let calId = Calendar.Identifier( try values.decode(String.self, forKey: .calendar))
 		let tz = (TimeZone(identifier: try values.decode(String.self, forKey: .timezone)) ?? SwiftDate.defaultRegion.timeZone)
 		let lc = Locale(identifier: try values.decode(String.self, forKey: .locale))
-		self.calendar = Calendar.newCalendar(calId, configure: {
+		calendar = Calendar.newCalendar(calId, configure: {
 			$0.timeZone = tz
 			$0.locale = lc
 		})

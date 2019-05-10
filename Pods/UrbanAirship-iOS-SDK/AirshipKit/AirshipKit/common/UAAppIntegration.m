@@ -1,4 +1,4 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import "UAAppIntegration.h"
 #import "UAirship+Internal.h"
@@ -55,18 +55,12 @@
     [[UAirship push] application:application didFailToRegisterForRemoteNotificationsWithError:error];
 }
 
-#if !TARGET_OS_TV   // UIUserNotificationSettings is not available on tvOS
-+ (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings {
-    [[UAirship push] application:application didRegisterUserNotificationSettings:notificationSettings];
-}
-#endif
-
 + (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
     switch(application.applicationState) {
         UA_LTRACE(@"Received remote notification: %@", userInfo);
         case UIApplicationStateActive:
-            if ([[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){10, 0, 0}] && ![UAUtils isSilentPush:userInfo]) {
-                // Handled by the new userNotificationCenter:willPresentNotification:withCompletionHandler:
+            if (![UAUtils isSilentPush:userInfo]) {
+                // Handled by the userNotificationCenter:willPresentNotification:withCompletionHandler:
                 completionHandler(UIBackgroundFetchResultNoData);
                 break;
             }
@@ -79,53 +73,15 @@
             break;
 
         case UIApplicationStateBackground:
+        case UIApplicationStateInactive:
             // Background push
             [self handleIncomingNotification:[UANotificationContent notificationWithNotificationInfo:userInfo]
                       foregroundPresentation:NO
                            completionHandler:completionHandler];
             break;
-
-        case UIApplicationStateInactive:
-
-            /*
-             * iOS 10+ will only ever call application:receivedRemoteNotification:fetchCompletion as a result of content-available push
-             */
-            if ([[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){10, 0, 0}] || [UAUtils isSilentPush:userInfo]) {
-                [self handleIncomingNotification:[UANotificationContent notificationWithNotificationInfo:userInfo]
-                          foregroundPresentation:NO
-                               completionHandler:completionHandler];
-            } else {
-                UANotificationResponse *response = [UANotificationResponse notificationResponseWithNotificationInfo:userInfo
-                                                                                                   actionIdentifier:UANotificationDefaultActionIdentifier
-                                                                                                       responseText:nil];
-
-                [self handleNotificationResponse:response
-                               completionHandler:^() {
-                                   completionHandler(UIBackgroundFetchResultNoData);
-                               }];
-            }
     }
 
 }
-
-#if !TARGET_OS_TV   // Delegate methods unavailable in tvOS
-+ (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forRemoteNotification:(NSDictionary *)userInfo completionHandler:(void (^)(void))handler {
-    [self application:application handleActionWithIdentifier:identifier forRemoteNotification:userInfo withResponseInfo:nil completionHandler:handler];
-}
-
-+ (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forRemoteNotification:(NSDictionary *)userInfo withResponseInfo:(NSDictionary *)responseInfo completionHandler:(void (^)(void))handler {
-    UA_LTRACE(@"Handling notification action: %@", identifier);
-
-    NSString *responseText = responseInfo ? responseInfo[UIUserNotificationActionResponseTypedTextKey] : nil;
-    UANotificationResponse *response = [UANotificationResponse notificationResponseWithNotificationInfo:userInfo
-                                                                                       actionIdentifier:identifier
-                                                                                        responseText:responseText];
-   [self handleNotificationResponse:response completionHandler:^(void) {
-       handler();
-   }];
-}
-#endif
-
 
 #pragma mark -
 #pragma mark NSNotification methods
@@ -134,7 +90,6 @@
     UA_LDEBUG(@"Notification center will present notification: %@", notification);
 
     UNNotificationPresentationOptions options = [[UAirship push] presentationOptionsForNotification:notification];
-    completionHandler(options);
 
     if (![UAirship shared].config.automaticSetupEnabled) {
         [self handleForegroundNotification:notification mergedOptions:options withCompletionHandler:^{
@@ -161,7 +116,7 @@
 #pragma mark -
 #pragma mark Notification handling
 
-+ (void)handleForegroundNotification:(UNNotification *)notification mergedOptions:(UNNotificationPresentationOptions)options withCompletionHandler:(void(^)(void))completionHandler NS_AVAILABLE_IOS(10.0) {
++ (void)handleForegroundNotification:(UNNotification *)notification mergedOptions:(UNNotificationPresentationOptions)options withCompletionHandler:(void(^)(void))completionHandler {
     BOOL foregroundPresentation = (options & UNNotificationPresentationOptionAlert) > 0;
 
     UANotificationContent *notificationContent = [UANotificationContent notificationWithUNNotification:notification];

@@ -1,4 +1,4 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright Urban Airship and Contributors */
 
 #import <UIKit/UIKit.h>
 
@@ -22,16 +22,6 @@ NS_ASSUME_NONNULL_BEGIN
  * Block that will be invoked when this class receives a closeWindow message from the webView.
  */
 @property (nonatomic, copy) void (^closeBlock)(BOOL animated);
-
-/**
- * Load a UAInboxMessage.
- * @param message The message to load and display.
- * @param onlyIfChanged Only load the message if it is different from the currently displayed message
- *
- * @deprecated Deprecated - to be removed in SDK version 10.0
- */
-
-- (void)loadMessage:(nullable UAInboxMessage *)message onlyIfChanged:(BOOL)onlyIfChanged  DEPRECATED_MSG_ATTRIBUTE("Deprecated - to be removed in SDK version 10.0");
 
 /**
  * Load a UAInboxMessage by message ID.

@@ -24,11 +24,7 @@ SOFTWARE.
 */
 import Foundation
 
-#if SWIFT_PACKAGE
-import SwiftClibxml2
-#else
 import libxmlKanna
-#endif
 
 /**
 libxmlHTMLNode
@@ -44,7 +40,7 @@ internal final class libxmlHTMLNode: XMLElement {
     var toHTML: String? {
         let buf = xmlBufferCreate()
         htmlNodeDump(buf, docPtr, nodePtr)
-        let html = String(cString: UnsafePointer((buf?.pointee.content)!))
+        let html = String(cString: UnsafePointer<UInt8>((buf?.pointee.content)!))
         xmlBufferFree(buf)
         return html
     }
@@ -52,7 +48,7 @@ internal final class libxmlHTMLNode: XMLElement {
     var toXML: String? {
         let buf = xmlBufferCreate()
         xmlNodeDump(buf, docPtr, nodePtr, 0, 0)
-        let html = String(cString: UnsafePointer((buf?.pointee.content)!))
+        let html = String(cString: UnsafePointer<UInt8>((buf?.pointee.content)!))
         xmlBufferFree(buf)
         return html
     }
