@@ -11,7 +11,9 @@
 #endif
 
 #import "M13ProgressConsole.h"
+#import "UIImage+ImageEffects.h"
 #import "M13ProgressHUD.h"
+#import "UIImage+ImageEffects.h"
 #import "UIImage+ImageEffects.h"
 #import "UINavigationController+M13ProgressViewBar.h"
 #import "M13ProgressView.h"

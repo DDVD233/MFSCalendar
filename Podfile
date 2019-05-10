@@ -17,7 +17,6 @@ target 'MFSMobile' do
   pod 'M13Checkbox'
   pod 'SwiftDate'
   pod 'DGElasticPullToRefresh'
-  pod 'ReachabilitySwift'
   pod 'XLPagerTabStrip'
   pod 'Firebase/Core'
   pod 'Firebase/Performance'
