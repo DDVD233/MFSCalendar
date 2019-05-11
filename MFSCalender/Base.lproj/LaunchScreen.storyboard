@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="O1K-uV-Ctu">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="O1K-uV-Ctu">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -90,7 +90,7 @@
             </objects>
             <point key="canvasLocation" x="2600" y="1158"/>
         </scene>
-        <!--Email-->
+        <!--Chat-->
         <scene sceneID="WBl-Fc-Hyr">
             <objects>
                 <viewController id="ySI-Cw-FyH" sceneMemberID="viewController">
@@ -103,7 +103,9 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Email" image="Email" id="Inl-Se-UAq"/>
+                    <tabBarItem key="tabBarItem" title="Chat" image="Chat" id="Inl-Se-UAq">
+                        <inset key="imageInsets" minX="0.0" minY="3" maxX="0.0" maxY="-3"/>
+                    </tabBarItem>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HYQ-VO-lDG" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -135,10 +137,10 @@
         </scene>
     </scenes>
     <resources>
-        <image name="CalendarUnselected" width="50" height="50"/>
-        <image name="Email" width="50" height="50"/>
-        <image name="Homework" width="50" height="50"/>
-        <image name="Today" width="50" height="50"/>
-        <image name="TodaySelected" width="50" height="50"/>
+        <image name="CalendarUnselected" width="25" height="25"/>
+        <image name="Chat" width="25" height="25"/>
+        <image name="Homework" width="25" height="25"/>
+        <image name="Today" width="25" height="25"/>
+        <image name="TodaySelected" width="25" height="25"/>
     </resources>
 </document>
