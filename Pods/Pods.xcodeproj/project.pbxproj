@@ -15946,6 +15946,29 @@
 			attributes = {
 				LastSwiftUpdateCheck = 0930;
 				LastUpgradeCheck = 0930;
+				TargetAttributes = {
+					1C65E6E2052E5FAC566EA4EC74FC3563 = {
+						DevelopmentTeam = HWH6G9P2V2;
+					};
+					26C97E5783D29B08F51621E25F635B74 = {
+						DevelopmentTeam = HWH6G9P2V2;
+					};
+					43B2F98C6EBF143538D75EFC66212571 = {
+						DevelopmentTeam = HWH6G9P2V2;
+					};
+					4BADAF9BB3F222183390EFFCD5361EC3 = {
+						DevelopmentTeam = HWH6G9P2V2;
+					};
+					94D139EBF04F8627542F1A960DD2918F = {
+						DevelopmentTeam = HWH6G9P2V2;
+					};
+					C22708F63D836D88D7CC9DD74E4C99D3 = {
+						DevelopmentTeam = HWH6G9P2V2;
+					};
+					C5E157017C1E713A482D045F186A6712 = {
+						DevelopmentTeam = HWH6G9P2V2;
+					};
+				};
 			};
 			buildConfigurationList = 2D8E8EC45A3A1A1D94AE762CB5028504 /* Build configuration list for PBXProject "Pods" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -19330,6 +19353,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/TOCropViewController";
+				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				INFOPLIST_FILE = "Target Support Files/TOCropViewController/ResourceBundle-TOCropViewControllerBundle-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				PRODUCT_NAME = TOCropViewControllerBundle;
@@ -19633,6 +19657,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/UrbanAirship-iOS-SDK";
+				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				INFOPLIST_FILE = "Target Support Files/UrbanAirship-iOS-SDK/ResourceBundle-AirshipResources-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				PRODUCT_NAME = AirshipResources;
@@ -19680,6 +19705,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/XLPagerTabStrip";
+				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				INFOPLIST_FILE = "Target Support Files/XLPagerTabStrip/ResourceBundle-XLPagerTabStrip-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				PRODUCT_NAME = XLPagerTabStrip;
@@ -20587,6 +20613,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/ChatSDK";
+				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				INFOPLIST_FILE = "Target Support Files/ChatSDK/ResourceBundle-ChatUI-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				PRODUCT_NAME = ChatUI;
@@ -21274,6 +21301,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/XLPagerTabStrip";
+				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				INFOPLIST_FILE = "Target Support Files/XLPagerTabStrip/ResourceBundle-XLPagerTabStrip-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				PRODUCT_NAME = XLPagerTabStrip;
@@ -21674,6 +21702,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/UrbanAirship-iOS-SDK";
+				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				INFOPLIST_FILE = "Target Support Files/UrbanAirship-iOS-SDK/ResourceBundle-AirshipResources-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				PRODUCT_NAME = AirshipResources;
@@ -21690,6 +21719,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/ChatSDK";
+				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				INFOPLIST_FILE = "Target Support Files/ChatSDK/ResourceBundle-ChatCore-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				PRODUCT_NAME = ChatCore;
@@ -21802,6 +21832,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/ChatSDK";
+				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				INFOPLIST_FILE = "Target Support Files/ChatSDK/ResourceBundle-ChatCoreData-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				PRODUCT_NAME = ChatCoreData;
@@ -21981,6 +22012,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/ChatSDK";
+				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				INFOPLIST_FILE = "Target Support Files/ChatSDK/ResourceBundle-ChatCore-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				PRODUCT_NAME = ChatCore;
@@ -22219,6 +22251,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/ChatSDK";
+				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				INFOPLIST_FILE = "Target Support Files/ChatSDK/ResourceBundle-ChatCoreData-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				PRODUCT_NAME = ChatCoreData;
@@ -22362,6 +22395,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/ChatSDK";
+				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				INFOPLIST_FILE = "Target Support Files/ChatSDK/ResourceBundle-ChatUI-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				PRODUCT_NAME = ChatUI;
@@ -22733,6 +22767,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/TOCropViewController";
+				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				INFOPLIST_FILE = "Target Support Files/TOCropViewController/ResourceBundle-TOCropViewControllerBundle-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				PRODUCT_NAME = TOCropViewControllerBundle;
@@ -22815,6 +22850,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/SwiftMessages";
+				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				INFOPLIST_FILE = "Target Support Files/SwiftMessages/ResourceBundle-SwiftMessages-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				PRODUCT_NAME = SwiftMessages;
@@ -22863,6 +22899,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/SwiftMessages";
+				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				INFOPLIST_FILE = "Target Support Files/SwiftMessages/ResourceBundle-SwiftMessages-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				PRODUCT_NAME = SwiftMessages;

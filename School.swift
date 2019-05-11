@@ -37,6 +37,7 @@ public class School {
     
     func getMarkingPeriodID(quarter: Int) -> Int {
         assert(false, "This method must be overriden!")
+        return 0
     }
     
     func getDurationNumber(quarter: Int) -> Int {
