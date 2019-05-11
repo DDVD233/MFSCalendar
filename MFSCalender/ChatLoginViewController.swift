@@ -29,7 +29,8 @@ class ChatLoginViewController: UIViewController, UITextFieldDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardNotification(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
         password.delegate = self
-    usernameLabel.text = Preferences().email
+        usernameLabel.text = Preferences().email
+        password.text = Preferences().password
     }
     
     deinit {

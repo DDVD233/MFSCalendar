@@ -31,13 +31,31 @@ class ChatViewController: UIViewController {
         self.view.addSubview(chatLoginViewController.view)
     }
     
+    @objc func showContactPage() {
+        let contactsViewController = BChatSDK.ui()!.contactsViewController()! as! BContactsViewController
+//        contactsViewController.navigationItem.rightBarButtonItem?.tintColor = UIColor.white
+//        contactsViewController.navigationItem.backBarButtonItem?.tintColor = UIColor.white
+        show(contactsViewController, sender: self)
+    }
+    
     func setUpViews() {
         self.navigationController?.isNavigationBarHidden = false
         let privateThreadsViewController = BChatSDK.ui()!.privateThreadsViewController()!
         self.addChild(privateThreadsViewController)
         self.view.addSubview(privateThreadsViewController.view)
-        self.navigationItem.rightBarButtonItem = privateThreadsViewController.navigationItem.rightBarButtonItem
-        self.navigationItem.rightBarButtonItem?.tintColor = UIColor.white
+        
+        var barButtonItems = [UIBarButtonItem]()
+        barButtonItems.append(privateThreadsViewController.navigationItem.rightBarButtonItem!)
+        
+        let contactButton = UIBarButtonItem(title: "Contact", style: .done, target: self, action: #selector(showContactPage))
+        barButtonItems.append(contactButton)
+        
+        for button in barButtonItems {
+            button.tintColor = UIColor.white
+        }
+        
+        self.navigationItem.rightBarButtonItems = barButtonItems
+        
         let pref = Preferences()
         let name = (pref.firstName ?? "") + " " + (pref.lastName ?? "")
         let photoPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
