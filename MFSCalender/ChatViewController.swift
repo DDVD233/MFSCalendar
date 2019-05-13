@@ -34,6 +34,14 @@ class ChatViewController: UIViewController {
         let profileImage = UIImage(contentsOfFile: path)
         
         let photoLink = pref.baseURL + (userDefaults.string(forKey: "largePhotoLink") ?? "")
+        
+        let schoolName = pref.schoolName ?? ""
+        BChatSDK.core()?.currentUserModel()?.setMetaValue(schoolName, forKey: "School")
+        
+//        let predicate = NSPredicate.init(format: "type = %@", 0)
+        let entities = BChatSDK.db()!.fetchEntities(withName: bUserConnectionEntity)
+        print(entities as Any)
+        
         BIntegrationHelper.updateUser(withName: name, image: profileImage, url: photoLink)
     }
     

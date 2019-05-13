@@ -36,48 +36,49 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         config.googleMapsApiKey = "AIzaSyAcNgntmKUbMZRAgany5xwTU6zRh-zfDtg"
         
         config.allowUsersToCreatePublicChats = false
+        config.shouldAskForNotificationsPermission = false
         BChatSDK.initialize(config, app: application, options: launchOptions)
 //        self.window = UIWindow.init(frame: UIScreen.main.bounds)
 //        self.window?.rootViewController = BChatSDK.ui()?.splashScreenNavigationController()
 //        self.window?.makeKeyAndVisible();
 
         //setPushNotification()
-        if BChatSDK.auth()!.isAuthenticated() {
+        if BChatSDK.auth()?.isAuthenticated() ?? false {
             _ = BChatSDK.auth()?.authenticate()
         }
         
-        BChatSDK.shared()!.interfaceAdapter = MyAppInterfaceAdapter()
+        BChatSDK.shared()?.interfaceAdapter = MyAppInterfaceAdapter()
         
         return true
     }
     
-    func setPushNotification() {
-        UAirship.takeOff()
-        UAirship.push().userPushNotificationsEnabled = true
-        if #available(iOS 10.0, *) {
-            UAirship.push().defaultPresentationOptions = [.alert, .badge, .sound]
-        } else {
-            // Fallback on earlier versions
-        }
-        if Preferences().isDev {
-            UAirship.push().addTag("developer")
-        }
-        
-        if let firstName = Preferences().firstName, let lastName = Preferences().lastName {
-            UAirship.namedUser().identifier = firstName + " " + lastName
-        }
-        
-        let classPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-        let path = classPath.appending("/CourseList.plist")
-        if let classList = NSArray(contentsOfFile: path) as? [[String: Any]] {
-            for classes in classList {
-                if let classID = classes["id"] as? String {
-                    UAirship.push().addTags([classID], group: "registeredClass")
-                }
-            }
-        }
-//        print("Channel ID: " + (UAPus ?? "None"))
-    }
+//    func setPushNotification() {
+//        UAirship.takeOff()
+//        UAirship.push().userPushNotificationsEnabled = true
+//        if #available(iOS 10.0, *) {
+//            UAirship.push().defaultPresentationOptions = [.alert, .badge, .sound]
+//        } else {
+//            // Fallback on earlier versions
+//        }
+//        if Preferences().isDev {
+//            UAirship.push().addTag("developer")
+//        }
+//        
+//        if let firstName = Preferences().firstName, let lastName = Preferences().lastName {
+//            UAirship.namedUser().identifier = firstName + " " + lastName
+//        }
+//        
+//        let classPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
+//        let path = classPath.appending("/CourseList.plist")
+//        if let classList = NSArray(contentsOfFile: path) as? [[String: Any]] {
+//            for classes in classList {
+//                if let classID = classes["id"] as? String {
+//                    UAirship.push().addTags([classID], group: "registeredClass")
+//                }
+//            }
+//        }
+////        print("Channel ID: " + (UAPus ?? "None"))
+//    }
     
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         BChatSDK.application(application, didRegisterForRemoteNotificationsWithDeviceToken: deviceToken)

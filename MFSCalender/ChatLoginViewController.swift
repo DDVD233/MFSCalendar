@@ -98,20 +98,12 @@ class ChatLoginViewController: UIViewController, UITextFieldDelegate {
         
         let loginDetail = BAccountDetails.username(Preferences().email ?? "", password: passwordText)
         _ = BChatSDK.auth()!.authenticate(loginDetail)?.thenOnMain!({(result: Any?) -> Any? in
-            let parentVC = self.parent as! ChatViewController
-            parentVC.setUpViews()
-            DispatchQueue.main.async {
-                self.indicatorView.isHidden = true
-            }
+            self.presentChatView()
             return result
         }, {(error: Error?) -> Any? in
             let signupDetail = BAccountDetails.signUp(Preferences().email ?? "", password: passwordText)
             _ = BChatSDK.auth()!.authenticate(signupDetail)?.thenOnMain({(result: Any?) -> Any? in
-                let parentVC = self.parent as! ChatViewController
-                parentVC.setUpViews()
-                DispatchQueue.main.async {
-                    self.indicatorView.isHidden = true
-                }
+                self.presentChatView()
                 return result
             }, {(error: Error?) -> Any? in
                 presentErrorMessage(presentMessage: error?.localizedDescription ?? "", layout: .cardView)
@@ -122,5 +114,15 @@ class ChatLoginViewController: UIViewController, UITextFieldDelegate {
             })
             return error
         })
+    }
+    
+    func presentChatView() {
+        let parentVC = self.parent as! ChatViewController
+        BChatSDK.push()!.registerForPushNotifications(with: UIApplication.shared, launchOptions: nil)
+        DispatchQueue.main.async {
+            self.indicatorView.isHidden = true
+        }
+        
+        parentVC.setUpViews()
     }
 }
