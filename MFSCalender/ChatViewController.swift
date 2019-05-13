@@ -8,9 +8,11 @@
 
 import UIKit
 import ChatSDK
+import ChatSDKFirebase
 import SnapKit
 
 class ChatViewController: UIViewController {
+    @IBOutlet var mainView: UIView!
     override func viewDidLoad() {
         super.viewDidLoad()
         if !BChatSDK.auth()!.isAuthenticated() {
@@ -27,6 +29,7 @@ class ChatViewController: UIViewController {
     }
     
     func updateUserInfo() {
+        BChatSDK.push()!.registerForPushNotifications(with: UIApplication.shared, launchOptions: nil)
         let pref = Preferences()
         let name = (pref.firstName ?? "") + " " + (pref.lastName ?? "")
         let photoPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
@@ -38,9 +41,13 @@ class ChatViewController: UIViewController {
         let schoolName = pref.schoolName ?? ""
         BChatSDK.core()?.currentUserModel()?.setMetaValue(schoolName, forKey: "School")
         
-//        let predicate = NSPredicate.init(format: "type = %@", 0)
-        let entities = BChatSDK.db()!.fetchEntities(withName: bUserConnectionEntity)
-        print(entities as Any)
+        BFirebaseSearchHandler().users(forIndexes: ["School"], withValue: schoolName, limit: 999) { (user) in
+            if user != nil {
+                _ = BChatSDK.contact()?.addContact(user!, with: bUserConnectionTypeContact)
+            }
+            
+            print("-----------------")
+        }
         
         BIntegrationHelper.updateUser(withName: name, image: profileImage, url: photoLink)
     }
@@ -49,7 +56,7 @@ class ChatViewController: UIViewController {
         self.navigationController?.isNavigationBarHidden = true
         let chatLoginViewController = storyboard!.instantiateViewController(withIdentifier: "ChatLoginVC") as! ChatLoginViewController
         self.addChild(chatLoginViewController)
-        self.view.addSubview(chatLoginViewController.view)
+        self.mainView.addSubview(chatLoginViewController.view)
     }
     
     @objc func showContactPage() {
@@ -60,10 +67,12 @@ class ChatViewController: UIViewController {
     }
     
     func setUpViews() {
+        updateUserInfo()
+    
         self.navigationController?.isNavigationBarHidden = false
         let privateThreadsViewController = BChatSDK.ui()!.privateThreadsViewController()!
         self.addChild(privateThreadsViewController)
-        self.view.addSubview(privateThreadsViewController.view)
+        self.mainView.addSubview(privateThreadsViewController.view)
         
         var barButtonItems = [UIBarButtonItem]()
         barButtonItems.append(privateThreadsViewController.navigationItem.rightBarButtonItem!)
@@ -84,10 +93,10 @@ class ChatViewController: UIViewController {
         }
         
         privateThreadsViewController.view.snp.makeConstraints { (make) in
-            make.top.equalToSuperview()
-            make.bottom.equalToSuperview()
-            make.leftMargin.equalToSuperview()
-            make.rightMargin.equalToSuperview()
+            make.top.equalTo(mainView.snp.top)
+            make.bottom.equalTo(mainView.snp.bottom)
+            make.left.equalTo(mainView.snp.left)
+            make.right.equalTo(mainView.snp.right)
         }
         
         privateThreadsViewController.view.translatesAutoresizingMaskIntoConstraints = false

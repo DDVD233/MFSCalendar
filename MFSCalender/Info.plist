@@ -46,7 +46,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>2278</string>
+	<string>2298</string>
 	<key>Fabric</key>
 	<dict>
 		<key>APIKey</key>
@@ -84,8 +84,12 @@
 	<string>Your steps data will be used in the Step Challenge.</string>
 	<key>NSHealthUpdateUsageDescription</key>
 	<string>Your steps data will be used in the Step Challenge.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Users may share their location with their friends.</string>
 	<key>NSLocationUsageDescription</key>
-	<string>Users may send their location to their friends.</string>
+	<string>Users may share their location with their friends.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Users may share their location with their friends.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>The app may use photo library to submit homework.</string>
 	<key>NSRemindersUsageDescription</key>

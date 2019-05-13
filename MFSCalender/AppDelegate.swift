@@ -43,8 +43,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        self.window?.makeKeyAndVisible();
 
         //setPushNotification()
-        if BChatSDK.auth()?.isAuthenticated() ?? false {
-            _ = BChatSDK.auth()?.authenticate()
+        if BChatSDK.auth()!.isAuthenticated() {
+            _ = BChatSDK.auth()!.authenticate()
         }
         
         BChatSDK.shared()?.interfaceAdapter = MyAppInterfaceAdapter()
@@ -63,11 +63,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        if Preferences().isDev {
 //            UAirship.push().addTag("developer")
 //        }
-//        
+//
 //        if let firstName = Preferences().firstName, let lastName = Preferences().lastName {
 //            UAirship.namedUser().identifier = firstName + " " + lastName
 //        }
-//        
+//
 //        let classPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
 //        let path = classPath.appending("/CourseList.plist")
 //        if let classList = NSArray(contentsOfFile: path) as? [[String: Any]] {

@@ -41,17 +41,17 @@ class MainTabBarViewController: UITabBarController, UITabBarControllerDelegate {
             }
         }
         
-        NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: bNotificationPresentChatView), object: nil, queue: nil) { (notification) in
-            DispatchQueue.main.async {
-                if BChatSDK.config()!.shouldOpenChatWhenPushNotificationClicked {
-                    if !BChatSDK.config()!.shouldOpenChatWhenPushNotificationClickedOnlyIfTabBarVisible || (canUpdateView(viewController: self)) {
-                        if let thread = notification.userInfo?[bNotificationPresentChatView_PThread] as? PThread {
-                            self.presentChatViewWithThread(thread: thread)
-                        }
-                    }
-                }
-            }
-        }
+//        NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: bNotificationPresentChatView), object: nil, queue: nil) { (notification) in
+//            DispatchQueue.main.async {
+//                if BChatSDK.config()!.shouldOpenChatWhenPushNotificationClicked {
+//                    if !BChatSDK.config()!.shouldOpenChatWhenPushNotificationClickedOnlyIfTabBarVisible || (canUpdateView(viewController: self)) {
+//                        if let thread = notification.userInfo?[bNotificationPresentChatView_PThread] as? PThread {
+//                            self.presentChatViewWithThread(thread: thread)
+//                        }
+//                    }
+//                }
+//            }
+//        }
         
         let badge = UserDefaults.standard.integer(forKey: bMessagesBadgeValueKey)
         self.setPrivateThreadsbadge(badge: badge)
@@ -123,6 +123,8 @@ class MainTabBarViewController: UITabBarController, UITabBarControllerDelegate {
             guard let threadObj = thread as? PThread else { continue }
             for message in threadObj.allMessages() {
                 guard let messageObj = message as? PMessage else { continue }
+                print(messageObj.readStatus?())
+                print(messageObj.read())
                 if !(messageObj.read()?.boolValue ?? true) {
                     i += 1
                 }
