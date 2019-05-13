@@ -57,6 +57,7 @@ extension MyService: TargetType {
         switch self {
                 //myMFS
         case .downloadLargeProfilePhoto(let link):
+            print(link)
             return "\(link)"
         case .getProfile(let userID, _):
             return "/api/user/\(userID)/"

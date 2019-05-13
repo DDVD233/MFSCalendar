@@ -22,6 +22,19 @@ class ChatViewController: UIViewController {
         }, {(error: Error?) -> Any? in
             return error
         })
+        
+        updateUserInfo()
+    }
+    
+    func updateUserInfo() {
+        let pref = Preferences()
+        let name = (pref.firstName ?? "") + " " + (pref.lastName ?? "")
+        let photoPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
+        let path = photoPath.appending("/ProfilePhoto.png")
+        let profileImage = UIImage(contentsOfFile: path)
+        
+        let photoLink = pref.baseURL + (userDefaults.string(forKey: "largePhotoLink") ?? "")
+        BIntegrationHelper.updateUser(withName: name, image: profileImage, url: photoLink)
     }
     
     func setUpLoginViews() {
@@ -55,13 +68,6 @@ class ChatViewController: UIViewController {
         }
         
         self.navigationItem.rightBarButtonItems = barButtonItems
-        
-        let pref = Preferences()
-        let name = (pref.firstName ?? "") + " " + (pref.lastName ?? "")
-        let photoPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-        let path = photoPath.appending("/ProfilePhoto.png")
-        let profileImage = UIImage(contentsOfFile: path)
-        BIntegrationHelper.updateUser(withName: name, image: profileImage, url: nil)
         
         title = "Chat"
         if #available(iOS 11.0, *) {

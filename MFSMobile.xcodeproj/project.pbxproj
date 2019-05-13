@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		7ED7944ABD6D3326AAD92DBA /* Pods_MFSMobile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DF673FDDB9EA200FEA7BD2D /* Pods_MFSMobile.framework */; };
 		8479CAF7D2DEA636A485F8F4 /* Pods_Class_Schedule.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FEC0DC0AD43DB47806205F3 /* Pods_Class_Schedule.framework */; };
+		E4106373228772E000A8F280 /* ChatInterfaceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4106372228772E000A8F280 /* ChatInterfaceManager.swift */; };
 		E412E2BB201261B80082540B /* EventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E412E2BA201261B80082540B /* EventViewController.swift */; };
 		E413AB0E1EE89441001EB189 /* Achievement.png in Resources */ = {isa = PBXBuildFile; fileRef = E413AB0D1EE89441001EB189 /* Achievement.png */; };
 		E413AB101EE89683001EB189 /* questionmark.png in Resources */ = {isa = PBXBuildFile; fileRef = E413AB0F1EE89683001EB189 /* questionmark.png */; };
@@ -24,6 +25,7 @@
 		E43611BD21A47CF900994A10 /* running.png in Resources */ = {isa = PBXBuildFile; fileRef = E43611BC21A47CF900994A10 /* running.png */; };
 		E43611C521A4B9D300994A10 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E43611C421A4B9D300994A10 /* HealthKit.framework */; };
 		E43611C721A4C35C00994A10 /* runningColor.png in Resources */ = {isa = PBXBuildFile; fileRef = E43611C621A4C35C00994A10 /* runningColor.png */; };
+		E4369F722289927B006462F3 /* MainTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4369F712289927B006462F3 /* MainTabBarViewController.swift */; };
 		E436EDC41F96E3AF00395DA5 /* MenuService.png in Resources */ = {isa = PBXBuildFile; fileRef = E436EDC31F96E3A000395DA5 /* MenuService.png */; };
 		E440F1BC1EEA7F4E004AFD0B /* MoyaNetworkLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E440F1BB1EEA7F4E004AFD0B /* MoyaNetworkLayer.swift */; };
 		E445E73E1EAD8B7D00794560 /* MoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E445E73D1EAD8B7D00794560 /* MoreViewController.swift */; };
@@ -164,6 +166,7 @@
 		9C9307D95D24FE30AFAEDD40 /* Pods_MFSCalendar.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MFSCalendar.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A4CA14223E8B31A5B7F590F6 /* Pods-MFSMobile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MFSMobile.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MFSMobile/Pods-MFSMobile.debug.xcconfig"; sourceTree = "<group>"; };
 		B710C5F6924F68DB86B70E20 /* Pods-MFSCalendar.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MFSCalendar.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MFSCalendar/Pods-MFSCalendar.debug.xcconfig"; sourceTree = "<group>"; };
+		E4106372228772E000A8F280 /* ChatInterfaceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatInterfaceManager.swift; sourceTree = "<group>"; };
 		E412E2BA201261B80082540B /* EventViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventViewController.swift; sourceTree = "<group>"; };
 		E413AB0D1EE89441001EB189 /* Achievement.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Achievement.png; sourceTree = "<group>"; };
 		E413AB0F1EE89683001EB189 /* questionmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = questionmark.png; sourceTree = "<group>"; };
@@ -179,6 +182,7 @@
 		E43611BC21A47CF900994A10 /* running.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = running.png; sourceTree = "<group>"; };
 		E43611C421A4B9D300994A10 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 		E43611C621A4C35C00994A10 /* runningColor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = runningColor.png; sourceTree = "<group>"; };
+		E4369F712289927B006462F3 /* MainTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarViewController.swift; sourceTree = "<group>"; };
 		E436EDC31F96E3A000395DA5 /* MenuService.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MenuService.png; sourceTree = "<group>"; };
 		E440F1BB1EEA7F4E004AFD0B /* MoyaNetworkLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MoyaNetworkLayer.swift; path = ../MoyaNetworkLayer.swift; sourceTree = "<group>"; };
 		E44484D71E13A105002C68D5 /* MFSCalender.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MFSCalender.entitlements; sourceTree = "<group>"; };
@@ -344,6 +348,16 @@
 				590942F30CD5FEC4B0E89AB5 /* Pods-Class Schedule.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		E4106371228772B000A8F280 /* Chat View */ = {
+			isa = PBXGroup;
+			children = (
+				E4D5E4112285DA620012C56C /* ChatViewController.swift */,
+				E4106372228772E000A8F280 /* ChatInterfaceManager.swift */,
+				E4D5E4132285ECE30012C56C /* ChatLoginViewController.swift */,
+			);
+			name = "Chat View";
 			sourceTree = "<group>";
 		};
 		E472A15E1EFB6F3C00EF5A74 /* More View */ = {
@@ -545,9 +559,9 @@
 				E4CE9F87222B31320031AB49 /* Email View */,
 				E47E0C5E21EF733C00C1F01B /* Homeowrk View */,
 				E472A15E1EFB6F3C00EF5A74 /* More View */,
+				E4106371228772B000A8F280 /* Chat View */,
 				E4F86B341DF0E20C00CAD72B /* Main.storyboard */,
-				E4D5E4112285DA620012C56C /* ChatViewController.swift */,
-				E4D5E4132285ECE30012C56C /* ChatLoginViewController.swift */,
+				E4369F712289927B006462F3 /* MainTabBarViewController.swift */,
 				E470C38421EE6A5E00E5C358 /* SchoolSelectionViewController.swift */,
 				E419C50C21ADB63400CE8B3A /* CapstoneAd.swift */,
 				E43611BA21A45BFE00994A10 /* StepChallengeViewController.swift */,
@@ -1059,10 +1073,12 @@
 				E445E73E1EAD8B7D00794560 /* MoreViewController.swift in Sources */,
 				E4C46A2E1ED50CD3007F8F1A /* CourseFillViewController.swift in Sources */,
 				E4CE9F8B222B46BA0031AB49 /* Email.swift in Sources */,
+				E4106373228772E000A8F280 /* ChatInterfaceManager.swift in Sources */,
 				E453F0D11EA137D900BCE58D /* CalendarViewController.swift in Sources */,
 				E47C297C222EEBA700EA8264 /* EmailDetailViewController.swift in Sources */,
 				E4288E1420360F6600E4488D /* MFS.swift in Sources */,
 				E48A0A3C214AC842005ABB87 /* MailViewController.swift in Sources */,
+				E4369F722289927B006462F3 /* MainTabBarViewController.swift in Sources */,
 				E4CE9F86222B31240031AB49 /* EmailLoginViewController.swift in Sources */,
 				E4F8D4E41EF0DD2200F47525 /* HomeworkViewController.swift in Sources */,
 				E489F6C71F5A821E00F2269F /* ProjectPublicFunctions.swift in Sources */,

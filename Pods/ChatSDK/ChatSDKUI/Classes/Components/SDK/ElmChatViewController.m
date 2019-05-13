@@ -100,7 +100,7 @@
     _subtitleLabel = [[UILabel alloc] init];
     _subtitleLabel.textAlignment = NSTextAlignmentCenter;
     _subtitleLabel.font = [UIFont italicSystemFontOfSize:12.0];
-    _subtitleLabel.textColor = [UIColor lightGrayColor];
+    _subtitleLabel.textColor = [UIColor whiteColor];
     
     [containerView addSubview:_subtitleLabel];
     

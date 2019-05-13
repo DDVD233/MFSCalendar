@@ -91,95 +91,36 @@ class ChatLoginViewController: UIViewController, UITextFieldDelegate {
             return
         }
         
+        DispatchQueue.main.async {
+            self.indicatorView.isHidden = false
+            self.NVIndicator.startAnimating()
+        }
+        
         let loginDetail = BAccountDetails.username(Preferences().email ?? "", password: passwordText)
         _ = BChatSDK.auth()!.authenticate(loginDetail)?.thenOnMain!({(result: Any?) -> Any? in
             let parentVC = self.parent as! ChatViewController
             parentVC.setUpViews()
+            DispatchQueue.main.async {
+                self.indicatorView.isHidden = true
+            }
             return result
         }, {(error: Error?) -> Any? in
             let signupDetail = BAccountDetails.signUp(Preferences().email ?? "", password: passwordText)
             _ = BChatSDK.auth()!.authenticate(signupDetail)?.thenOnMain({(result: Any?) -> Any? in
                 let parentVC = self.parent as! ChatViewController
                 parentVC.setUpViews()
+                DispatchQueue.main.async {
+                    self.indicatorView.isHidden = true
+                }
                 return result
             }, {(error: Error?) -> Any? in
                 presentErrorMessage(presentMessage: error?.localizedDescription ?? "", layout: .cardView)
+                DispatchQueue.main.async {
+                    self.indicatorView.isHidden = true
+                }
                 return error
             })
             return error
         })
-        
-//        switch authenticationResult {
-//        case "Success":
-//            let preferences = Preferences()
-////            preferences.emailName = nameText!
-//            preferences.emailPassword = passwordText!
-//            let parentVC = parent as! EmailViewController
-//            parentVC.addEmailListView()
-//        case "WrongPassword":
-//            presentErrorMessage(presentMessage: "The username/password is incorrect. Please check your spelling.", layout: .cardView)
-//        case "InternalError":
-//            presentErrorMessage(presentMessage: "The server is not working. Please contact David.", layout: .cardView)
-//        default:
-//            break
-//        }
     }
-    
-    
-    
-    func authenticate(nameText: String, passwordText: String) -> String {
-        DispatchQueue.main.async {
-            self.indicatorView.isHidden = false
-            self.NVIndicator.startAnimating()
-        }
-        
-        guard let usernameTextUrlEscaped = nameText.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) else {
-            presentErrorMessage(presentMessage: "Cannot convert to URL String", layout: .statusLine)
-            return ""
-        }
-        
-        guard let passwordTextUrlEscaped = passwordText.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) else {
-            presentErrorMessage(presentMessage: "Cannot convert to URL String", layout: .statusLine)
-            return ""
-        }
-        
-        let accountCheckURL = Preferences().davidBaseURL + "/email/authenticate/" + usernameTextUrlEscaped + "/" + passwordTextUrlEscaped
-        let url = NSURL(string: accountCheckURL)
-        let request = URLRequest(url: url! as URL)
-        
-        let config = URLSessionConfiguration.default
-        config.requestCachePolicy = .reloadIgnoringLocalCacheData
-        config.urlCache = nil
-        
-        let session = URLSession.init(configuration: config)
-        
-        let semaphore = DispatchSemaphore.init(value: 0)
-        var result = ""
-        let task: URLSessionDataTask = session.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
-            if error == nil {
-                guard data != nil else {
-                    DispatchQueue.main.async {
-                        presentErrorMessage(presentMessage: "Failed. Please check your internet", layout: .cardView)
-                    }
-                    semaphore.signal()
-                    return
-                }
-                result = String(data: data!, encoding: .utf8) ?? ""
-            } else {
-                DispatchQueue.main.async {
-                    let presentMessage = (error?.localizedDescription)! + " Please check your internet connection."
-                    presentErrorMessage(presentMessage: presentMessage, layout: .cardView)
-                }
-                
-            }
-            semaphore.signal()
-            
-        })
-        
-        task.resume()
-        semaphore.wait()
-        return result
-    }
-    
-    
 }

@@ -538,7 +538,7 @@ extension classDetailViewController {
             }
             semaphore.signal()
         })
-        //使用resume方法启动任务
+        
         dataTask.resume()
         semaphore.wait()
     }

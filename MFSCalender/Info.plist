@@ -46,7 +46,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>2228</string>
+	<string>2267</string>
 	<key>Fabric</key>
 	<dict>
 		<key>APIKey</key>
@@ -76,12 +76,16 @@
 	</dict>
 	<key>NSCalendarsUsageDescription</key>
 	<string>Add events to calendar</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Users may use their camera to take photos and send them to their friends.</string>
 	<key>NSHealthClinicalHealthRecordsShareUsageDescription</key>
 	<string>Your steps data will be used in the Step Challenge.</string>
 	<key>NSHealthShareUsageDescription</key>
 	<string>Your steps data will be used in the Step Challenge.</string>
 	<key>NSHealthUpdateUsageDescription</key>
 	<string>Your steps data will be used in the Step Challenge.</string>
+	<key>NSLocationUsageDescription</key>
+	<string>Users may send their location to their friends.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>The app may use photo library to submit homework.</string>
 	<key>NSRemindersUsageDescription</key>

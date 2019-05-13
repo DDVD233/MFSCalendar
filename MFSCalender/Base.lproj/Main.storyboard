@@ -1214,7 +1214,7 @@
         <!--MainTab-->
         <scene sceneID="zsE-KG-zES">
             <objects>
-                <tabBarController restorationIdentifier="MainTab" storyboardIdentifier="MainTab" title="MainTab" id="TWf-dU-uxH" sceneMemberID="viewController">
+                <tabBarController restorationIdentifier="MainTab" storyboardIdentifier="MainTab" title="MainTab" id="TWf-dU-uxH" customClass="MainTabBarViewController" customModule="MFSMobile" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBar key="tabBar" contentMode="scaleToFill" id="MTU-pR-tsF">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>

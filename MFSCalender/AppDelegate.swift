@@ -43,8 +43,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         //setPushNotification()
         if BChatSDK.auth()!.isAuthenticated() {
-            BChatSDK.auth()?.authenticate()
+            _ = BChatSDK.auth()?.authenticate()
         }
+        
+        BChatSDK.shared()!.interfaceAdapter = MyAppInterfaceAdapter()
         
         return true
     }
