@@ -13,6 +13,8 @@ import Alamofire
 import Crashlytics
 import SafariServices
 import M13ProgressSuite
+import ChatSDK
+import SCLAlertView
 
 class NewMoreViewController: UICollectionViewController  {
     var contentList = [String]()
@@ -358,26 +360,40 @@ extension NewMoreViewController {
     }
     
     func logout(sender: UIView) {
-        let logOutActionSheet = UIAlertController(title: nil, message: "Are you sure you want to log out?", preferredStyle: .actionSheet)
+        let logOutActionSheet = UIAlertController(title: nil, message: "Do you want to log out Class Chat or the app?", preferredStyle: .actionSheet)
         
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (alertAction) -> Void in
-            NSLog("Canceled")
+        let logoutClassChatAction = UIAlertAction(title: "Log out Class Chat", style: .cancel) { (alertAction) -> Void in
+            _ = BIntegrationHelper.logout()?.thenOnMain({ (result) in
+                let loginNotice = SCLAlertView()
+                loginNotice.showInfo("Success", subTitle: "You've successfully logged out of Class Chat.", animationStyle: .bottomToTop)
+                return result
+            }, { error in
+                presentErrorMessage(presentMessage: error?.localizedDescription ?? "Unknown Error", layout: .cardView)
+                return error
+            })
+            NSLog("Class Chat Logged Out")
         }
         
-        let logOutAction = UIAlertAction(title: "Log Out", style: .default) { (alertAction) -> Void in
+        let logOutAction = UIAlertAction(title: "Log Out the App", style: .default) { (alertAction) -> Void in
             NSLog("Logged Out")
-            let preferences = Preferences()
-            preferences.didLogin = false
-            preferences.courseInitialized = false
-            preferences.firstName = nil
-            preferences.lastName = nil
-            preferences.lockerNumber = nil
-            preferences.lockerCombination = nil
-            let vc = self.storyboard?.instantiateViewController(withIdentifier: "MainTab")
-            self.present(vc!, animated: false, completion: nil)
+            _ = BIntegrationHelper.logout()?.thenOnMain({ result in
+                let preferences = Preferences()
+                preferences.didLogin = false
+                preferences.courseInitialized = false
+                preferences.firstName = nil
+                preferences.lastName = nil
+                preferences.lockerNumber = nil
+                preferences.lockerCombination = nil
+                let vc = self.storyboard?.instantiateViewController(withIdentifier: "MainTab")
+                self.present(vc!, animated: false, completion: nil)
+                return result
+            }, { error in
+                presentErrorMessage(presentMessage: error?.localizedDescription ?? "Unknown Error", layout: .cardView)
+                return error
+            })
         }
         
-        logOutActionSheet.addAction(cancelAction)
+        logOutActionSheet.addAction(logoutClassChatAction)
         logOutActionSheet.addAction(logOutAction)
         
         logOutActionSheet.popoverPresentationController?.sourceView = sender
