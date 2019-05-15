@@ -99,16 +99,14 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         self.bottomView.layer.shadowOpacity = 0.15
         self.bottomView.layer.shadowOffset = CGSize.zero
         self.bottomView.layer.shadowRadius = 15
-
+        
         self.classView.delegate = self
         self.classView.dataSource = self
         self.classView.emptyDataSetSource = self
         self.classView.emptyDataSetDelegate = self
-        
-        
-        
         self.addChild(eventViewController)
         self.eventViewContainer.addSubview(eventViewController.view)
+        
         
         let preferences = Preferences()
         if preferences.firstName == nil || !preferences.didOpenAfterUpdate {

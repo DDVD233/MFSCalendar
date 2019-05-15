@@ -362,7 +362,11 @@ extension NewMoreViewController {
     func logout(sender: UIView) {
         let logOutActionSheet = UIAlertController(title: nil, message: "Do you want to log out Class Chat or the app?", preferredStyle: .actionSheet)
         
-        let logoutClassChatAction = UIAlertAction(title: "Log out Class Chat", style: .cancel) { (alertAction) -> Void in
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
+            NSLog("Canceled")
+        }
+        
+        let logoutClassChatAction = UIAlertAction(title: "Log out Class Chat", style: .default) { (alertAction) -> Void in
             _ = BIntegrationHelper.logout()?.thenOnMain({ (result) in
                 let loginNotice = SCLAlertView()
                 loginNotice.showInfo("Success", subTitle: "You've successfully logged out of Class Chat.", animationStyle: .bottomToTop)
@@ -395,6 +399,7 @@ extension NewMoreViewController {
         
         logOutActionSheet.addAction(logoutClassChatAction)
         logOutActionSheet.addAction(logOutAction)
+        logOutActionSheet.addAction(cancelAction)
         
         logOutActionSheet.popoverPresentationController?.sourceView = sender
         logOutActionSheet.popoverPresentationController?.sourceRect = sender.frame

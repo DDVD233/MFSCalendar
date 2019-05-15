@@ -205,6 +205,8 @@
         // Set the current user
         [strongSelf setLoginInfo:@{bAuthenticationIDKey: uid,
                              bTokenKey: [NSString safe: token]}];
+        NSLog(@"%@", uid);
+        NSLog(@"%@", token);
         
         CCUserWrapper * user = [CCUserWrapper userWithAuthUserData:firebaseUser];
         if (details.name && !user.model.name) {

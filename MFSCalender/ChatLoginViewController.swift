@@ -11,6 +11,7 @@ import SkyFloatingLabelTextField
 import NVActivityIndicatorView
 import NotificationCenter
 import ChatSDK
+import ChatSDKFirebase
 
 class ChatLoginViewController: UIViewController, UITextFieldDelegate {
     
@@ -118,11 +119,13 @@ class ChatLoginViewController: UIViewController, UITextFieldDelegate {
     
     func presentChatView() {
         let parentVC = self.parent as! ChatViewController
-        BChatSDK.push()!.registerForPushNotifications(with: UIApplication.shared, launchOptions: nil)
-        DispatchQueue.main.async {
-            self.indicatorView.isHidden = true
-        }
+        BChatSDK.core()!.save()
+//        _ = BChatSDK.a()?.auth()
         
+        let currentUser = BChatSDK.currentUser()
+        _ = AppDelegate().application(UIApplication.shared, didFinishLaunchingWithOptions: nil)
+        BHookNotification.notificationDidAuthenticate(currentUser!)
+        self.indicatorView.isHidden = true
         parentVC.setUpViews()
     }
 }

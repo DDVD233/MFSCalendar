@@ -13,19 +13,28 @@ import SnapKit
 
 class ChatViewController: UIViewController {
     @IBOutlet var mainView: UIView!
+    var loginView: UIView? = nil
     override func viewDidLoad() {
         super.viewDidLoad()
+        if BChatSDK.auth()!.isAuthenticated() {
+            _ = BChatSDK.auth()!.authenticate()!.thenOnMain!({(result: Any?) -> Any? in
+            self.setUpViews()
+            return result
+            }, {(error: Error?) -> Any? in
+            return error
+            })
+            
+            updateUserInfo()
+        } else {
+            setUpLoginViews()
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         if !BChatSDK.auth()!.isAuthenticated() {
             setUpLoginViews()
         }
-        _ = BChatSDK.auth()!.authenticate()!.thenOnMain!({(result: Any?) -> Any? in
-            self.setUpViews()
-            return result
-        }, {(error: Error?) -> Any? in
-            return error
-        })
-        
-        updateUserInfo()
     }
     
     func updateUserInfo() {
@@ -44,6 +53,7 @@ class ChatViewController: UIViewController {
         BFirebaseSearchHandler().users(forIndexes: ["School"], withValue: schoolName, limit: 999) { (user) in
             if user != nil {
                 _ = BChatSDK.contact()?.addContact(user!, with: bUserConnectionTypeContact)
+                BChatSDK.core()!.observeUser(user!.entityID())
             }
             
             print("-----------------")
@@ -56,7 +66,8 @@ class ChatViewController: UIViewController {
         self.navigationController?.isNavigationBarHidden = true
         let chatLoginViewController = storyboard!.instantiateViewController(withIdentifier: "ChatLoginVC") as! ChatLoginViewController
         self.addChild(chatLoginViewController)
-        self.mainView.addSubview(chatLoginViewController.view)
+        loginView = chatLoginViewController.view
+        self.view.addSubview(loginView!)
     }
     
     @objc func showContactPage() {
@@ -68,6 +79,9 @@ class ChatViewController: UIViewController {
     
     func setUpViews() {
         updateUserInfo()
+        if loginView != nil {
+            loginView!.removeFromSuperview()
+        }
     
         self.navigationController?.isNavigationBarHidden = false
         let privateThreadsViewController = BChatSDK.ui()!.privateThreadsViewController()!

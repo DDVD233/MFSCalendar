@@ -16,6 +16,10 @@ import ChatSDK
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
+//    override init() {
+//        super.init()
+//        FirebaseApp.configure()
+//    }
 
     var window: UIWindow?
 
@@ -23,72 +27,52 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
 //        FirebaseApp.configure()
+        
+        let config = BConfiguration.init();
+        config.rootPath = "test"
+        config.googleMapsApiKey = "AIzaSyAcNgntmKUbMZRAgany5xwTU6zRh-zfDtg"
+        config.allowUsersToCreatePublicChats = false
+        config.shouldAskForNotificationsPermission = false
+        BChatSDK.initialize(config, app: application, options: launchOptions)
+        if BChatSDK.auth()!.isAuthenticated() {
+            _ = BChatSDK.auth()!.authenticate()
+            BChatSDK.push()!.registerForPushNotifications(with: application, launchOptions: launchOptions)
+        }
         Fabric.with([Crashlytics()])
         logUser()
         if (UIDevice().userInterfaceIdiom == .phone) && (UIScreen.main.nativeBounds.height == 2436) {
             Preferences().isiPhoneX = true
         }
-        
-        UIApplication.shared.setMinimumBackgroundFetchInterval(1800)
-        
-        let config = BConfiguration.init();
-        config.rootPath = "test"
-        config.googleMapsApiKey = "AIzaSyAcNgntmKUbMZRAgany5xwTU6zRh-zfDtg"
-        
-        config.allowUsersToCreatePublicChats = false
-        config.shouldAskForNotificationsPermission = false
-        BChatSDK.initialize(config, app: application, options: launchOptions)
 //        self.window = UIWindow.init(frame: UIScreen.main.bounds)
 //        self.window?.rootViewController = BChatSDK.ui()?.splashScreenNavigationController()
 //        self.window?.makeKeyAndVisible();
 
         //setPushNotification()
-        if BChatSDK.auth()!.isAuthenticated() {
-            _ = BChatSDK.auth()!.authenticate()
-        }
         
         BChatSDK.shared()?.interfaceAdapter = MyAppInterfaceAdapter()
         
         return true
     }
     
-//    func setPushNotification() {
-//        UAirship.takeOff()
-//        UAirship.push().userPushNotificationsEnabled = true
-//        if #available(iOS 10.0, *) {
-//            UAirship.push().defaultPresentationOptions = [.alert, .badge, .sound]
-//        } else {
-//            // Fallback on earlier versions
-//        }
-//        if Preferences().isDev {
-//            UAirship.push().addTag("developer")
-//        }
-//
-//        if let firstName = Preferences().firstName, let lastName = Preferences().lastName {
-//            UAirship.namedUser().identifier = firstName + " " + lastName
-//        }
-//
-//        let classPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-//        let path = classPath.appending("/CourseList.plist")
-//        if let classList = NSArray(contentsOfFile: path) as? [[String: Any]] {
-//            for classes in classList {
-//                if let classID = classes["id"] as? String {
-//                    UAirship.push().addTags([classID], group: "registeredClass")
-//                }
-//            }
-//        }
-////        print("Channel ID: " + (UAPus ?? "None"))
-//    }
-    
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         BChatSDK.application(application, didRegisterForRemoteNotificationsWithDeviceToken: deviceToken)
+        print("RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRegistered!")
+        Messaging.messaging().apnsToken = deviceToken
+    }
+    
+    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+        print("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFailToRegister")
     }
     
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        print("Received!!!!!!!!")
+        print(userInfo)
         BChatSDK.application(application, didReceiveRemoteNotification: userInfo)
     }
     
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any]) {
+        print("Received!!!!!!!!")
+        print(userInfo)
         BChatSDK.application(application, didReceiveRemoteNotification: userInfo)
     }
     
@@ -105,7 +89,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        Crashlytics.sharedInstance().setUserIdentifier("12345")
         let firstName = Preferences().firstName ?? ""
         let lastName = Preferences().lastName ?? ""
-        let fullName = firstName + lastName
+        let fullName = firstName + " " + lastName
         Crashlytics.sharedInstance().setUserName(fullName)
     }
 
@@ -178,16 +162,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
-    func application(_ application: UIApplication,
-                     performFetchWithCompletionHandler completionHandler:
-        @escaping (UIBackgroundFetchResult) -> Void) {
-        // Check for new data.
-        if Preferences().isInStepChallenge {
-            StepChallenge().reportSteps()
-        }
-        
-        completionHandler(.newData)
-    }
+//    func application(_ application: UIApplication,
+//                     performFetchWithCompletionHandler completionHandler:
+//        @escaping (UIBackgroundFetchResult) -> Void) {
+//        // Check for new data.
+//        if Preferences().isInStepChallenge {
+//            StepChallenge().reportSteps()
+//        }
+//
+//        completionHandler(.newData)
+//    }
 
     // MARK: - Core Data stack
 
@@ -235,6 +219,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
-
 }
 
