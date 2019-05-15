@@ -46,7 +46,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>2424</string>
+	<string>2459</string>
 	<key>Fabric</key>
 	<dict>
 		<key>APIKey</key>
@@ -90,8 +90,10 @@
 	<string>Users may share their location with their friends.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Users may share their location with their friends.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Users can save photos posted in the app to their phone</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>The app may use photo library to submit homework.</string>
+	<string>The app may use photo library to submit homework or send to friends.</string>
 	<key>NSRemindersUsageDescription</key>
 	<string>Add events to calendar</string>
 	<key>UIBackgroundModes</key>

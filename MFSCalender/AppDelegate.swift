@@ -33,6 +33,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         config.googleMapsApiKey = "AIzaSyAcNgntmKUbMZRAgany5xwTU6zRh-zfDtg"
         config.allowUsersToCreatePublicChats = false
         config.shouldAskForNotificationsPermission = false
+        config.messageHistoryDownloadLimit = 500
+        config.messageColorReply = "eeeeee"
+        config.messageColorMe = "ff7e79"
+        config.messageTextColorMe = "ffffff"
+        config.chatMessagesToLoad = 200
         BChatSDK.initialize(config, app: application, options: launchOptions)
         if BChatSDK.auth()!.isAuthenticated() {
             _ = BChatSDK.auth()!.authenticate()

@@ -24,6 +24,9 @@
     self.messageTextView.userInteractionEnabled = NO;
     self.unreadView.layer.borderWidth = 1.0;
     self.unreadView.layer.cornerRadius = self.unreadView.fh / 2.0;
+    self.unreadView.layer.borderColor = [BCoreUtilities colorWithHexString:bUnreadIndicatorColor].CGColor;
+    self.unreadView.layer.backgroundColor = [BCoreUtilities colorWithHexString:bUnreadIndicatorColor].CGColor;
+    
     
     self.unreadMessagesLabel.layer.cornerRadius = 5;
     self.unreadMessagesLabel.clipsToBounds = YES;

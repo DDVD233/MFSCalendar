@@ -10,6 +10,7 @@ import UIKit
 import ChatSDK
 import ChatSDKFirebase
 import SnapKit
+import SafariServices
 
 class ChatViewController: UIViewController {
     @IBOutlet var mainView: UIView!
@@ -100,6 +101,8 @@ class ChatViewController: UIViewController {
         
         self.navigationItem.rightBarButtonItems = barButtonItems
         
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "Help"), style: .done, target: self, action: #selector(displayHelpPage))
+        
         title = "Chat"
         if #available(iOS 11.0, *) {
             self.navigationController?.navigationBar.prefersLargeTitles = true
@@ -114,5 +117,11 @@ class ChatViewController: UIViewController {
         }
         
         privateThreadsViewController.view.translatesAutoresizingMaskIntoConstraints = false
+    }
+    
+    @objc func displayHelpPage() {
+        let url = URL(string: "https://classmaster.app/help-2/")!
+        let safariViewController = SFSafariViewController(url: url)
+        present(safariViewController, animated: true, completion: nil)
     }
 }

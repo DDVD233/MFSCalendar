@@ -54,6 +54,7 @@
     [super setMessage:message withColorWeight:colorWeight];
     
     textView.text = message.textString;
+    textView.scrollEnabled = NO;
     
     if(BChatSDK.config.messageTextColorMe && message.userModel.isMe) {
         textView.textColor = [BCoreUtilities colorWithHexString:BChatSDK.config.messageTextColorMe];

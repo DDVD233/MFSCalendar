@@ -8,6 +8,7 @@
 
 import UIKit
 import ChatSDK
+import SCLAlertView
 
 class MyAppInterfaceAdapter: BDefaultInterfaceAdapter {
     
@@ -30,4 +31,13 @@ class MyChatViewController: BChatViewController {
         self.titleLabel.textColor = UIColor.white
     }
     
+    override func setMessageFlagged(_ message: PElmMessage!, isFlagged flagged: Bool) -> RXPromise! {
+        if flagged {
+            return BChatSDK.moderation()!.unflagMessage(message.entityID())
+        } else {
+            let flagNotice = SCLAlertView()
+            flagNotice.showInfo("Success", subTitle: "You have successfully flagged the message! We will process this report as soon as possible.", animationStyle: .bottomToTop)
+            return BChatSDK.moderation()!.flagMessage(message.entityID())
+        }
+    }
 }
