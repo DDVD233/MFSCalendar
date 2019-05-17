@@ -127,5 +127,6 @@ class ChatLoginViewController: UIViewController, UITextFieldDelegate {
         BHookNotification.notificationDidAuthenticate(currentUser!)
         self.indicatorView.isHidden = true
         parentVC.setUpViews()
+        self.view.removeFromSuperview()
     }
 }

@@ -148,6 +148,7 @@ extension classListController: UICollectionViewDataSource, UICollectionViewDeleg
         } else {
             cell = collectionView.dequeueReusableCell(withReuseIdentifier: "classListViewCellWithGrade", for: indexPath) as! ClassListViewWithGradeCell
             let grade = Float(classObject["cumgrade"] as? String ?? "0") ?? 0.0
+//            grade = 90.00
             let cellWithRing = cell as! ClassListViewWithGradeCell
             cellWithRing.gradeRing.font = UIFont.boldSystemFont(ofSize: 24)
             cellWithRing.gradeRing.valueFormatter = UICircularProgressRingFormatter(showFloatingPoint: true)

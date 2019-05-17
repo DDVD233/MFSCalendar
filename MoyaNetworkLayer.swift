@@ -21,6 +21,7 @@ enum MyService {
     case getClassContentData(contentName: String, sectionId: String)
     case sectionInfoView(sectionID: String)
     case getSchedule(userID: String, startTime: String, endTime: String)
+    case getQuarterScheduleAndCurrentPeriod(userID: String)
 
     //Dwei
     case getCalendarData
@@ -71,6 +72,8 @@ extension MyService: TargetType {
             return "/api/datadirect/SectionInfoView/"
         case .getSchedule:
             return "/api/DataDirect/ScheduleList/"
+        case .getQuarterScheduleAndCurrentPeriod:
+            return "/api/DataDirect/StudentGroupTermList/"
 
                 // Dwei
         case .getCalendarData:
@@ -135,6 +138,10 @@ extension MyService: TargetType {
             return ["format": "json", "viewerID": userID, "personaId": "2", "viewerPersonaId": "2", "start": startTime, "end": endTime]
         case .getEmailWithID(let username, let password, let id):
             return ["name": username, "password": password, "id": id]
+        case .getQuarterScheduleAndCurrentPeriod(let userID):
+            let schoolYear = school.getSchoolYear()
+            let schoolYearLabel = String(schoolYear) + "+-+" + String(schoolYear + 1)
+            return ["studentUserId": userID, "schoolYearLabel": schoolYearLabel, "personaId" : "2"]
         default: return nil
         }
     }

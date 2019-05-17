@@ -32,7 +32,6 @@ class CapstoneAdViewController: UIViewController {
             
             if (granted) && (error == nil) {
                 print("granted \(granted)")
-                print("error \(error)")
                 
                 let event:EKEvent = EKEvent(eventStore: eventStore)
                 

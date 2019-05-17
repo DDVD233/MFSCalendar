@@ -80,14 +80,11 @@ class ChatViewController: UIViewController {
     
     func setUpViews() {
         updateUserInfo()
-        if loginView != nil {
-            loginView!.removeFromSuperview()
-        }
-    
         self.navigationController?.isNavigationBarHidden = false
         let privateThreadsViewController = BChatSDK.ui()!.privateThreadsViewController()!
         self.addChild(privateThreadsViewController)
         self.mainView.addSubview(privateThreadsViewController.view)
+        self.view.bringSubviewToFront(self.mainView)
         
         var barButtonItems = [UIBarButtonItem]()
         barButtonItems.append(privateThreadsViewController.navigationItem.rightBarButtonItem!)
