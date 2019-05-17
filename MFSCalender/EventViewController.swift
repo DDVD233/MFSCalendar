@@ -42,9 +42,7 @@ class eventViewController: UIViewController, DZNEmptyDataSetSource, DZNEmptyData
     
     func eventDataFetching() {
         self.eventView.separatorStyle = .singleLine
-        let plistPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-        let fileName = "/Events.plist"
-        let path = plistPath.appending(fileName)
+        let path = FileList.events.filePath
         guard let eventData = NSDictionary(contentsOfFile: path) as? [String: [[String: Any]]] else {
             self.listEvents = []
             reloadData()

@@ -52,8 +52,7 @@ class courseFillController: UIViewController {
         if Preferences().schoolName == "CMH" {
             let semaphore = DispatchSemaphore.init(value: 0)
             NetworkOperations().getCourseFromMyMFS { (courseData) in
-                let coursePath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-                let path = coursePath.appending("/CourseList.plist")
+                let path = FileList.courseList.filePath
                 NSArray(array: courseData).write(to: URL.init(fileURLWithPath: path), atomically: true)
                 semaphore.signal()
             }
@@ -121,8 +120,7 @@ class courseFillController: UIViewController {
         
         let semaphore = DispatchSemaphore.init(value: 0)
         NetworkOperations().getCourseFromMyMFS { (courseData) in
-            let coursePath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-            let path = coursePath.appending("/CourseList.plist")
+            let path = FileList.courseList.filePath
             NSArray(array: courseData).write(to: URL.init(fileURLWithPath: path), atomically: true)
             semaphore.signal()
         }
@@ -178,7 +176,7 @@ class courseFillController: UIViewController {
             let semaphore = DispatchSemaphore.init(value: 0)
             NetworkOperations().getCourseFromMyMFS { (courseData) in
                 print(courseData)
-                let path = userDocumentPath.appending("/CourseList.plist")
+                let path = FileList.courseList.filePath
                 NSArray(array: courseData).write(to: URL.init(fileURLWithPath: path), atomically: true)
                 semaphore.signal()
             }
@@ -303,7 +301,7 @@ class courseFillController: UIViewController {
     }
     
     func fillRoomFromMySchool() {
-        let coursePath = userDocumentPath.appending("/CourseList.plist")
+        let coursePath = FileList.courseList.filePath
         var courseList = NSArray(contentsOfFile: coursePath) as? [[String: Any]] ?? [[String: Any]()]
         let group = DispatchGroup()
         for (index, course) in courseList.enumerated() {
@@ -356,7 +354,7 @@ class courseFillController: UIViewController {
     }
     
     func createScheduleFromMySchool(json: [[String: Any]]) {
-        let coursePath = userDocumentPath.appending("/CourseList.plist")
+        let coursePath = FileList.courseList.filePath
         let courseList = NSArray(contentsOfFile: coursePath) as? [[String: Any]] ?? [[String: Any]()]
         
         var sortedClass = [String: [[String: Any]]]()
@@ -437,8 +435,7 @@ class courseFillController: UIViewController {
             sortedClass[dateString] = classArray
         }
         
-        let dayPlistName = "/Day.plist"
-        let dayPlistPath = userDocumentPath.appending(dayPlistName)
+        let dayPlistPath = FileList.day.filePath
         NSDictionary(dictionary: dayDict).write(toFile: dayPlistPath, atomically: true)
         
         for (key, classArray) in sortedClass {
@@ -452,8 +449,7 @@ class courseFillController: UIViewController {
                 sortedClassArray[index] = modifiedClassObject
             }
             
-            let fileName = "/Class" + key + ".plist"
-            let path = userDocumentPath.appending(fileName)
+            let path = FileList.classDate(date: key).filePath
             
             NSArray(array: sortedClassArray).write(toFile: path, atomically: true)
         }
@@ -532,8 +528,7 @@ class courseFillController: UIViewController {
                 continue
             }
             
-            let coursePath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-            let path = coursePath.appending("/CourseList.plist")
+            let path = FileList.courseList.filePath
             if let coursesList = NSArray(contentsOfFile: path)! as? Array<Dictionary<String, Any>> {
                 if let courseIndex = coursesList.firstIndex(where: { ($0["className"] as? String ?? "").contains(className) &&
                                                                 $0["teacherName"] as? String == teacherName
@@ -554,8 +549,7 @@ class courseFillController: UIViewController {
                     continue
                 }
                 
-                let fileName = "/Class" + day + ".plist"
-                let path = userDocumentPath.appending(fileName)
+                let path = FileList.classDate(date: day).filePath
                 
                 guard var classOfDay = NSArray(contentsOfFile: path) as? Array<Dictionary<String, Any>> else {
                     continue
@@ -573,8 +567,7 @@ class courseFillController: UIViewController {
     }
     
     func fillAdditionalInformarion() {
-        let coursePath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-        let path = coursePath.appending("/CourseList.plist")
+        let path = FileList.courseList.filePath
         guard let courseList = NSMutableArray(contentsOfFile: path) as? Array<NSMutableDictionary> else {
             return
         }
@@ -648,17 +641,14 @@ class courseFillController: UIViewController {
     }
 
     func clearData(day: String) {
-        let coursePath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-        let fileName = "/Class" + day + ".plist"
-        let path = coursePath.appending(fileName)
+        let path = FileList.classDate(date: day).filePath
         let blankArray = Array(repeating: [String: Any?](), count: 9)
         NSArray(array: blankArray).write(toFile: path, atomically: true)
     }
 
     func createSchedule(fillLowPriority: Int) -> Bool {
         var success = false
-        let coursePath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-        let path = coursePath.appending("/CourseList.plist")
+        let path = FileList.courseList.filePath
         guard var coursesObject = NSArray(contentsOfFile: path)! as? Array<Dictionary<String, Any>> else {
             return false
         }
@@ -750,8 +740,7 @@ class courseFillController: UIViewController {
             let day = meetTime[0, 0]
             var period = Int(meetTime[1, 1])!
             period = (period < 7) ? period : period + 1 // If before lunch, then period, otherwise period + 1.
-            let fileName = "/Class" + day + ".plist"
-            let path = userDocumentPath.appending(fileName)
+            let path = FileList.classDate(date: day).filePath
             
             guard var classOfDay = NSArray(contentsOfFile: path) as? Array<Dictionary<String, Any>> else {
                 continue
@@ -774,9 +763,7 @@ class courseFillController: UIViewController {
 
 //    Finish creating schedule
     func fillStudyHallAndLunch(letter: String) {
-        let plistPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-        let fileName = "/Class" + letter + ".plist"
-        let path = plistPath.appending(fileName)
+        let path = FileList.classDate(date: letter).filePath
         var listClasses = NSArray(contentsOfFile: path) as! [[String: Any]]
         
         if Preferences().gradeLevel > 8 && Preferences().gradeLevel <= 12 {

@@ -36,7 +36,7 @@ class classTopicViewController: UIViewController {
             let fileManager = FileManager.default
 
             let path = fileManager.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-            let topicPath = path.appending("/topics_\(String(self.leadSectionIdInt)).plist")
+            let topicPath = FileList.topicsLeadSectionID(leadSectionID: String(self.leadSectionIdInt)).filePath
 
             if fileManager.fileExists(atPath: topicPath) {
                 if let dataFromFile = NSArray(contentsOfFile: topicPath) as? Array<Dictionary<String, Any>> {
@@ -130,7 +130,7 @@ class classTopicViewController: UIViewController {
                 }
                 
                 let path = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-                let topicPath = path.appending("/topics_\(String(leadSectionIdInt)).plist")
+                let topicPath = FileList.topicsLeadSectionID(leadSectionID: String(self.leadSectionIdInt)).filePath
                 NSArray(array: json).write(toFile: topicPath, atomically: true)
             } catch {
                 presentErrorMessage(presentMessage: error.localizedDescription, layout: .statusLine)

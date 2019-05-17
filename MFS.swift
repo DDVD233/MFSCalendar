@@ -38,9 +38,7 @@ public class MFS: School {
         listClasses = [[String: Any]]()
         let day = dayCheck(date: date)
         
-        let plistPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-        let fileName = "/Class" + day + ".plist"
-        let path = plistPath.appending(fileName)
+        let path = FileList.classDate(date: day).filePath
         
         guard let allClasses = NSArray(contentsOfFile: path) as? Array<Dictionary<String, Any>> else {
             return listClasses
@@ -64,8 +62,7 @@ public class MFS: School {
     
     override func getClassDataAt(day: String) -> [[String: Any]] {
         NSLog("Day: %@", day)
-        let fileName = "/Class" + day + ".plist"
-        let path = userDocumentPath.appending(fileName)
+        let path = FileList.classDate(date: day).filePath
         
         if let data = NSArray(contentsOfFile: path) as? [[String: Any]] {
             self.listClasses = data
@@ -79,7 +76,7 @@ public class MFS: School {
         var dayOfSchool: String? = nil
         let formatter = DateFormatter()
         let plistPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-        let path = plistPath.appending("/Day.plist")
+        let path = FileList.day.filePath
         let dayDict = NSDictionary(contentsOfFile: path)
         formatter.dateFormat = "yyyyMMdd"
         let checkDate = formatter.string(from: date)

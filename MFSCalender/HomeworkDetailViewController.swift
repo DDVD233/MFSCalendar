@@ -170,7 +170,7 @@ extension homeworKDetailViewController: UITableViewDelegate, UITableViewDataSour
                 return
             }
             
-            let courseListPath = userDocumentPath + "/CourseList.plist"
+            let courseListPath = FileList.courseList.filePath
             guard let courseList = NSArray(contentsOfFile: courseListPath) as? [[String: Any]] else {
                 return
             }

@@ -377,8 +377,7 @@ extension firstTimeLaunchController {
                 do {
                     let resDict = try response.mapJSON() as! NSDictionary
 
-                    let plistPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-                    let path = plistPath.appending("/Day.plist")
+                    let path = FileList.day.filePath
                     resDict.write(toFile: path, atomically: true)
                 } catch {
                     presentErrorMessage(presentMessage: error.localizedDescription, layout: MessageView.Layout.statusLine)

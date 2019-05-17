@@ -263,8 +263,7 @@ class ClassView {
     }
     
     func getProfilePhoto() {
-        let path = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-        let coursePath = path.appending("/CourseList.plist")
+        let coursePath = FileList.courseList.filePath
         
         guard let courseList = NSArray(contentsOfFile: coursePath) as? Array<Dictionary<String, Any>> else {
             return
@@ -317,8 +316,7 @@ class ClassView {
     }
     
     func getTheClassToPresent() -> Dictionary<String, Any>? {
-        let classPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-        let path = classPath.appending("/CourseList.plist")
+        let path = FileList.courseList.filePath
         guard let classList = NSArray(contentsOfFile: path) as? Array<Dictionary<String, Any>> else {
             return nil
         }

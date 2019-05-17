@@ -33,8 +33,7 @@ class CMH: School {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyyMMdd"
         let dateString = formatter.string(from: date)
-        let fileName = "/Class" + dateString + ".plist"
-        let path = userDocumentPath.appending(fileName)
+        let path = FileList.classDate(date: dateString).filePath
         
         guard let allClasses = NSArray(contentsOfFile: path) as? Array<Dictionary<String, Any>> else {
             return listClasses
@@ -46,7 +45,7 @@ class CMH: School {
     }
     
     override func getClassDataAt(day: String) -> [[String: Any]] {
-        let dayDictPath = userDocumentPath.appending("/Day.plist")
+        let dayDictPath = FileList.day.filePath
         guard let dayDict = NSDictionary(contentsOfFile: dayDictPath) as? [String: String] else { return [[String: Any]]() }
         
         let formatter = DateFormatter()
@@ -55,7 +54,7 @@ class CMH: School {
         
         guard let date = dayDict.filter({ $0.value == day &&
             (Int($0.key) ?? 0 ) > (Int(today) ?? 0) }).first?.key else { return [[String: Any]]() }
-        let schedulePath = userDocumentPath.appending("/Class" + date + ".plist")
+        let schedulePath = FileList.classDate(date: date).filePath
         return NSArray(contentsOfFile: schedulePath) as? [[String: Any]] ?? [[String: Any]]()
     }
 }

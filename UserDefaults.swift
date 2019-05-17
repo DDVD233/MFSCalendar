@@ -42,6 +42,15 @@ public class Preferences {
         }
     }
     
+//    public var termSuffix: String? {
+//        get {
+//            return userDefaults.string(forKey: "termSuffix")
+//        }
+//        set(value) {
+//            userDefaults.set(value, forKey: "termSuffix" )
+//        }
+//    }
+    
     public var photoLink: String? {
         get {
             return userDefaults.string(forKey: "photoLink")
@@ -210,6 +219,15 @@ public class Preferences {
         }
         set(value) {
             userDefaults.set(value, forKey: "currentQuarter" )
+        }
+    }
+    
+    public var currentQuarterOnline: Int {
+        get {
+            return userDefaults.integer(forKey: "currentQuarterOnline" )
+        }
+        set(value) {
+            userDefaults.set(value, forKey: "currentQuarterOnline" )
         }
     }
     

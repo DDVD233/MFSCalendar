@@ -638,7 +638,7 @@ extension Main {
                         return
                     }
 
-                    let dayFile = userDocumentPath.appending("/Day.plist")
+                    let dayFile = FileList.day.filePath
 
                     print("Info: Day Data refreshed")
                     NSDictionary(dictionary: dayData).write(toFile: dayFile, atomically: true)

@@ -155,7 +155,7 @@ public class School {
     
     func checkDate(checkDate: Date) -> String {
         let formatter = DateFormatter()
-        let path = userDocumentPath.appending("/Day.plist")
+        let path = FileList.day.filePath
         guard let dayDict = NSDictionary(contentsOfFile: path) as? [String: String] else {
             return ""
         }

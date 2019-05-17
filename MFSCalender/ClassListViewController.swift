@@ -25,8 +25,7 @@ class classListController: UIViewController, UIViewControllerPreviewingDelegate 
         self.classListCollectionView.delegate = self
         self.classListCollectionView.dataSource = self
 
-        let classPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-        let path = classPath.appending("/CourseList.plist")
+        let path = FileList.courseList.filePath
         if let classList = NSArray(contentsOfFile: path) {
             sortClasses(classList: classList)
         }
@@ -91,8 +90,7 @@ class classListController: UIViewController, UIViewControllerPreviewingDelegate 
     
     func updateClassList() {
         NetworkOperations().getCourseFromMyMFS { (courseData) in
-            let coursePath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-            let path = coursePath.appending("/CourseList.plist")
+            let path = FileList.courseList.filePath
             NSArray(array: courseData).write(to: URL.init(fileURLWithPath: path), atomically: true)
             guard canUpdateView(viewController: self) else { return }
             DispatchQueue.main.async {

@@ -86,8 +86,7 @@ class NetworkOperations {
                     courseData[index] = course
                 }
                 
-                let coursePath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-                let path = coursePath.appending("/CourseList.plist")
+                let path = FileList.courseList.filePath
                 NSArray(array: courseData).write(to: URL.init(fileURLWithPath: path), atomically: true)
                 completion(courseData)
             } else {
@@ -228,6 +227,37 @@ class NetworkOperations {
                     NSLog("Failed downloading large profile photo because: \(error)")
                 }
             })
+        }
+    }
+    
+    func downloadQuarterScheduleFromMySchool(completiton: @escaping () -> Void) {
+        let userID = loginAuthentication().userId
+        provider.request(MyService.getQuarterScheduleAndCurrentPeriod(userID: userID)) { (result) in
+            switch result {
+            case .success(let response):
+                do {
+                    guard let json = try JSONSerialization.jsonObject(with: response.data, options: .allowFragments) as? [[String: Any]] else {
+                        presentErrorMessage(presentMessage: "Quarter File Incorrect Format.", layout: .cardView)
+                        return
+                    }
+                    
+                    for (index, value) in json.enumerated() {
+                        guard let currentIndicator = value["CurrentInd"] as? Int else { continue }
+                        if currentIndicator == 1 {
+                            Preferences().currentQuarterOnline = index
+                        }
+                    }
+                    
+                    let quarterFilePath = FileList.quarterSchedule.filePath
+                    NSArray(array: json).write(toFile: quarterFilePath, atomically: true)
+                } catch {
+                    presentErrorMessage(presentMessage: error.localizedDescription, layout: .cardView)
+                }
+            case .failure(let error):
+                presentErrorMessage(presentMessage: error.localizedDescription, layout: .cardView)
+            }
+            
+            completiton()
         }
     }
 }
