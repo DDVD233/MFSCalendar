@@ -41,14 +41,16 @@ public class School {
     }
     
     func getDurationNumber(quarter: Int) -> Int {
-        let quarterDataPath = Bundle.main.url(forResource: "QuarterSchedule" + (Preferences().schoolName ?? ""), withExtension: "plist")!
-        guard let quarterData = NSArray(contentsOf: quarterDataPath) as? [[String: Any]] else {
+        let quarterDataPath = FileList.quarterSchedule.filePath
+        guard let quarterData = NSArray(contentsOfFile: quarterDataPath) as? [[String: Any]] else {
             return 0
         }
         
-        guard let quarterDict = quarterData.filter({ $0["Quarter"] as? Int ?? 0 == quarter }).first else { return 0 }
+        guard quarterData.count >= quarter else {
+            return 0
+        }
         
-        return quarterDict["ReferenceNumber"] as? Int ?? 0
+        return quarterData[quarter - 1]["DurationId"] as? Int ?? 0
     }
     
     func getSchoolYear() -> Int {

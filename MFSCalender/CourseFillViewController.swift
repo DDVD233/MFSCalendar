@@ -50,38 +50,47 @@ class courseFillController: UIViewController {
         }
         
         if Preferences().schoolName == "CMH" {
-            let semaphore = DispatchSemaphore.init(value: 0)
-            NetworkOperations().getCourseFromMyMFS { (courseData) in
-                let path = FileList.courseList.filePath
-                NSArray(array: courseData).write(to: URL.init(fileURLWithPath: path), atomically: true)
-                semaphore.signal()
+            DispatchQueue.global().async {
+                self.importCourseMySchool()
             }
-            semaphore.wait()
-            setProgressTo(value: 25)
-            ClassView().getProfilePhoto()
-            setProgressTo(value: 50)
-            self.fillRoomFromMySchool()
-            setProgressTo(value: 75)
-            self.getScheduleFromMySchool()
-            setProgressTo(value: 100)
-            DispatchQueue.main.async {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                self.topLabel.text = "Success"
-                self.bottomLabel.text = "Successfully updated"
-            }
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2), execute: {
-                self.viewDismiss()
-            })
         } else {
             DispatchQueue.global().async {
-                if Preferences().isStudent {
-                    self.importCourseStudent()
-                } else {
-                    self.importCourseTeacher()
-                }
+                self.importCourseNetClassroom()
             }
         }
+    }
+    
+    func importCourseMySchool() {
+        let semaphore = DispatchSemaphore.init(value: 0)
+        NetworkOperations().getCourseFromMyMFS { (courseData) in
+            let path = FileList.courseList.filePath
+            NSArray(array: courseData).write(to: URL.init(fileURLWithPath: path), atomically: true)
+            semaphore.signal()
+        }
+        semaphore.wait()
+        setProgressTo(value: 50)
+        
+        let group = DispatchGroup()
+        DispatchQueue.global().async(group: group) {
+            ClassView().getProfilePhoto()
+        }
+        
+        DispatchQueue.global().async(group: group) {
+            self.fillRoomFromMySchool()
+            self.getScheduleFromMySchool()
+        }
+        group.wait()
+        setProgressTo(value: 100)
+        
+        DispatchQueue.main.async {
+            UIApplication.shared.isNetworkActivityIndicatorVisible = false
+            self.topLabel.text = "Success"
+            self.bottomLabel.text = "Successfully updated"
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2), execute: {
+            self.viewDismiss()
+        })
     }
     
     // Get the quarter data from mySchool Server. Format: Array(Dict(OfferingType: Int, DurationId: Int, DurationDescription: String, CurrentInd: Int))
@@ -97,60 +106,9 @@ class courseFillController: UIViewController {
         pref.durationDescription = pref.currentDurationDescriptionOnline
     }
     
-    func importCourseTeacher() {
+    func importCourseNetClassroom() {
         DispatchQueue.main.async {
             UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        }
-        
-        let semaphore = DispatchSemaphore.init(value: 0)
-        NetworkOperations().getCourseFromMyMFS { (courseData) in
-            let path = FileList.courseList.filePath
-            NSArray(array: courseData).write(to: URL.init(fileURLWithPath: path), atomically: true)
-            semaphore.signal()
-        }
-        semaphore.wait()
-        
-        fillAdditionalInformarion()
-        setProgressTo(value: 33)
-        
-        for alphabet in "ABCDEF" {
-            clearData(day: String(alphabet))
-        }
-        guard createSchedule(fillLowPriority: 0) else {
-            viewDismiss()
-            return
-        }
-        setProgressTo(value: 66)
-        
-        guard createSchedule(fillLowPriority: 1) else {
-            return
-        }
-        for alphabet in "ABCDEF" {
-            self.fillStudyHallAndLunch(letter: String(alphabet))
-        }
-        
-        ClassView().getProfilePhoto()
-        versionCheck()
-        setProgressTo(value: 100)
-        DispatchQueue.main.async {
-            UIApplication.shared.isNetworkActivityIndicatorVisible = false
-            self.topLabel.text = "Success"
-            self.bottomLabel.text = "Successfully updated"
-        }
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2), execute: {
-            self.viewDismiss()
-        })
-    }
-    
-    func importCourseStudent() {
-        DispatchQueue.main.async {
-            UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        }
-        
-        if !self.NCIsRunning() {
-            self.importCourseTeacher()
-            return
         }
         
         let group = DispatchGroup()
@@ -254,6 +212,7 @@ class courseFillController: UIViewController {
         return isRunning
     }
     
+    // Get Schedule starting from 1 year ago to 1 year ahead.
     func getScheduleFromMySchool() {
         let startTime = String(Int((DateInRegion() - 1.years).date.timeIntervalSince1970))
         let endTime = String(Int((DateInRegion() + 1.years).date.timeIntervalSince1970))
@@ -261,24 +220,24 @@ class courseFillController: UIViewController {
         
         provider.request(MyService.getSchedule(userID: Preferences().userID ?? "", startTime: startTime, endTime: endTime),
                          callbackQueue: DispatchQueue.global(), progress: nil) { (result) in
-                            switch result {
-                            case .success(let response):
-                                do {
-//                                    print(response.request?.url)
-                                    guard let json = try JSONSerialization.jsonObject(with: response.data, options: .allowFragments) as? [[String: Any]] else {
-                                        presentErrorMessage(presentMessage: "JSON Format Incorrect", layout: .cardView)
-//                                        print(String(data: response.data, encoding: .utf8))
-                                        return
-                                    }
-                                    
-                                    self.createScheduleFromMySchool(json: json)
-                                } catch {
-                                    presentErrorMessage(presentMessage: error.localizedDescription, layout: .cardView)
-                                }
-                            case .failure(let error):
-                                presentErrorMessage(presentMessage: error.localizedDescription, layout: .cardView)
-                            }
-                            semaphore.signal()
+            switch result {
+            case .success(let response):
+                do {
+        //                                    print(response.request?.url)
+                    guard let json = try JSONSerialization.jsonObject(with: response.data, options: .allowFragments) as? [[String: Any]] else {
+                        presentErrorMessage(presentMessage: "JSON Format Incorrect", layout: .cardView)
+        //                                        print(String(data: response.data, encoding: .utf8))
+                        return
+                    }
+                    
+                    self.createScheduleFromMySchool(json: json)
+                } catch {
+                    presentErrorMessage(presentMessage: error.localizedDescription, layout: .cardView)
+                }
+            case .failure(let error):
+                presentErrorMessage(presentMessage: error.localizedDescription, layout: .cardView)
+            }
+            semaphore.signal()
         }
         
         semaphore.wait()
@@ -367,12 +326,13 @@ class courseFillController: UIViewController {
                 let title = classObject["title"] as? String ?? ""
                 if title.lowercased().contains("day") {
                     var dayString = ""
+                    // This is only for CMH. May remove this later.
                     if title.contains("A-") || title.contains("A ") {
                         dayString = "A"
                     } else if title.contains("B-") || title.contains("B ") {
                         dayString = "B"
                     }
-                    
+
                     if title.contains("Assembly") {
                         dayString.insert("A", at: dayString.startIndex)
                     } else if title.contains("Late Start") {
@@ -382,10 +342,10 @@ class courseFillController: UIViewController {
                     } else if title.contains("GPS") {
                         dayString.insert("G", at: dayString.startIndex)
                     }
-                    
+
                     dayDict[dateString] = dayString
                 }
-                
+
                 continue
             }
             

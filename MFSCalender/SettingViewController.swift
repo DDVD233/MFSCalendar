@@ -65,12 +65,9 @@ class settingViewController: UITableViewController, UIActionSheetDelegate {
         }
         
         let changeQuarterAction = UIAlertAction(title: "Yes, change it!", style: .default) { (alertAction) -> Void in
-            NSLog("Quarter Changed")
             print(self.currentQuarter.selectedSegmentIndex)
-            Preferences().currentQuarter = self.currentQuarter.selectedSegmentIndex + 1
-            Preferences().courseInitialized = false
-            Preferences().doUpdateQuarter = false
-            self.tabBarController?.selectedIndex = 0
+            self.changeQuarterTo(quarter: self.currentQuarter.selectedSegmentIndex + 1)
+            NSLog("Quarter Changed")
         }
         
         quarterActionSheet.addAction(cancelAction)
@@ -82,5 +79,20 @@ class settingViewController: UITableViewController, UIActionSheetDelegate {
         }
         
         self.present(quarterActionSheet, animated: true, completion: nil)
+    }
+    
+    func changeQuarterTo(quarter: Int) {
+        Preferences().currentQuarter = quarter
+        let quarterScheduleListPath = FileList.quarterSchedule.filePath
+        if let quarterSchedule = NSArray(contentsOfFile: quarterScheduleListPath) as? [[String: Any]] {
+            if quarterSchedule.count >= quarter {
+                Preferences().durationID = String(quarterSchedule[quarter - 1]["DurationId"] as? Int ?? 0)
+                Preferences().durationDescription = quarterSchedule[quarter - 1]["DurationDescription"] as? String
+            }
+        }
+        
+        Preferences().courseInitialized = false
+        Preferences().doUpdateQuarter = false
+        self.tabBarController?.selectedIndex = 0
     }
 }

@@ -242,13 +242,21 @@ class NetworkOperations {
                         return
                     }
                     
+                    var didFindQuarter = false
                     for (index, value) in json.enumerated() {
                         guard let currentIndicator = value["CurrentInd"] as? Int else { continue }
                         if currentIndicator == 1 {
+                            didFindQuarter = true
                             Preferences().currentQuarterOnline = index + 1
                             Preferences().currentDurationIDOnline = value["DurationId"] as? Int ?? 0
                             Preferences().currentDurationDescriptionOnline = value["DurationDescription"] as? String
                         }
+                    }
+                    
+                    if !didFindQuarter {
+                        Preferences().currentQuarterOnline = 1
+                        Preferences().currentDurationIDOnline = 0
+                        Preferences().currentDurationDescriptionOnline = ""
                     }
                     
                     let quarterFilePath = FileList.quarterSchedule.filePath
