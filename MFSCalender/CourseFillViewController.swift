@@ -84,33 +84,17 @@ class courseFillController: UIViewController {
         }
     }
     
-    // Get the quarter data from David Server. Format: Array(Dict(Quarter: Int, BeginDate: Int, ReferenceNumber: Int))
+    // Get the quarter data from mySchool Server. Format: Array(Dict(OfferingType: Int, DurationId: Int, DurationDescription: String, CurrentInd: Int))
     func setQuarter() {
-        
-        let quarterDataPath = Bundle.main.url(forResource: "QuarterSchedule" + (Preferences().schoolName ?? ""), withExtension: "plist")!
-        guard let quarterData = NSArray(contentsOf: quarterDataPath) as? [[String: Any]] else {
-            presentErrorMessage(presentMessage: "Quarter data not found", layout: .cardView)
-            return
+        let semaphore = DispatchSemaphore.init(value: 0)
+        NetworkOperations().downloadQuarterScheduleFromMySchool {
+            semaphore.signal()
         }
         
-        for quarter in quarterData {
-            guard let beginDateInt = quarter["BeginDate"] as? Int else {
-                return
-            }
-            
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "yyyyMMdd"
-            
-            guard let beginDate = dateFormatter.date(from: String(beginDateInt)) else {
-                return
-            }
-            
-            if Date().isAfterDate(beginDate, granularity: .day) {
-                let preferences = Preferences()
-                preferences.currentQuarter = quarter["Quarter"] as! Int
-                preferences.durationID = String(describing: quarter["ReferenceNumber"] as! Int)
-            }
-        }
+        let pref = Preferences()
+        pref.currentQuarter = pref.currentQuarterOnline
+        pref.durationID = String(pref.currentDurationIDOnline)
+        pref.durationDescription = pref.currentDurationDescriptionOnline
     }
     
     func importCourseTeacher() {

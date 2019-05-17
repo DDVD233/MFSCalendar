@@ -230,7 +230,7 @@ class NetworkOperations {
         }
     }
     
-    func downloadQuarterScheduleFromMySchool(completiton: @escaping () -> Void) {
+    func downloadQuarterScheduleFromMySchool(completion: @escaping () -> Void) {
         let userID = loginAuthentication().userId
         provider.request(MyService.getQuarterScheduleAndCurrentPeriod(userID: userID)) { (result) in
             switch result {
@@ -238,13 +238,16 @@ class NetworkOperations {
                 do {
                     guard let json = try JSONSerialization.jsonObject(with: response.data, options: .allowFragments) as? [[String: Any]] else {
                         presentErrorMessage(presentMessage: "Quarter File Incorrect Format.", layout: .cardView)
+                        completion()
                         return
                     }
                     
                     for (index, value) in json.enumerated() {
                         guard let currentIndicator = value["CurrentInd"] as? Int else { continue }
                         if currentIndicator == 1 {
-                            Preferences().currentQuarterOnline = index
+                            Preferences().currentQuarterOnline = index + 1
+                            Preferences().currentDurationIDOnline = value["DurationId"] as? Int ?? 0
+                            Preferences().currentDurationDescriptionOnline = value["DurationDescription"] as? String
                         }
                     }
                     
@@ -257,7 +260,7 @@ class NetworkOperations {
                 presentErrorMessage(presentMessage: error.localizedDescription, layout: .cardView)
             }
             
-            completiton()
+            completion()
         }
     }
 }

@@ -159,6 +159,24 @@ public class Preferences {
         }
     }
     
+    public var currentDurationDescriptionOnline: String? {
+        get {
+            return userDefaults.string(forKey: "currentDurationDescriptionOnline" )
+        }
+        set(value) {
+            userDefaults.set(value, forKey: "currentDurationDescriptionOnline" )
+        }
+    }
+    
+    public var durationDescription: String? {
+        get {
+            return userDefaults.string(forKey: "durationDescription" )
+        }
+        set(value) {
+            userDefaults.set(value, forKey: "durationDescription" )
+        }
+    }
+    
     public var emailPassword: String? {
         get {
             return userDefaults.string(forKey: "emailPassword" )
@@ -228,6 +246,15 @@ public class Preferences {
         }
         set(value) {
             userDefaults.set(value, forKey: "currentQuarterOnline" )
+        }
+    }
+    
+    public var currentDurationIDOnline: Int {
+        get {
+            return userDefaults.integer(forKey: "currentDurationIDOnline" )
+        }
+        set(value) {
+            userDefaults.set(value, forKey: "currentDurationIDOnline" )
         }
     }
     
