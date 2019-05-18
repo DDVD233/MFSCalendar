@@ -18,13 +18,13 @@ class CMH: School {
     }
     
     // MAINTAIN: This value must be updated every year.
-    override func getMarkingPeriodID(quarter: Int) -> Int {
-        if quarter == 1 {
-            return 7215
-        } else {
-            return 7217
-        }
-    }
+//    override func getMarkingPeriodID(quarter: Int) -> Int {
+//        if quarter == 1 {
+//            return 7215
+//        } else {
+//            return 7217
+//        }
+//    }
     
     override func getClassDataAt(date: Date) -> [[String: Any]] {
         //var period = period

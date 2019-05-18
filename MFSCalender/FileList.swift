@@ -14,7 +14,7 @@ enum FileList {
     case courseList
     case events
     case topicsLeadSectionID(leadSectionID: String)
-    case quarterSchedule
+    case quarterSchedule // Format: Array(Dict(OfferingType: Int, DurationId: Int, DurationDescription: String, CurrentInd: Int))
 }
 
 extension FileList {
@@ -37,5 +37,9 @@ extension FileList {
     
     var filePath: String {
         return userDocumentPath + "/" + fileName
+    }
+    
+    var arrayList: [Any] {
+        return NSArray(contentsOfFile: filePath) as? [Any] ?? [Any]()
     }
 }

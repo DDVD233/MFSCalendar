@@ -18,20 +18,20 @@ public class MFS: School {
     }
     
     // MAINTAIN: This value must be updated every year.
-    override func getMarkingPeriodID(quarter: Int) -> Int {
-        switch quarter {
-        case 1:
-            return 6893
-        case 2:
-            return 6894
-        case 3:
-            return 6895
-        case 4:
-            return 6896
-        default:
-            return 0
-        }
-    }
+//    override func getMarkingPeriodID(quarter: Int) -> Int {
+//        switch quarter {
+//        case 1:
+//            return 6893
+//        case 2:
+//            return 6894
+//        case 3:
+//            return 6895
+//        case 4:
+//            return 6896
+//        default:
+//            return 0
+//        }
+//    }
     
     override func getClassDataAt(date: Date) -> [[String: Any]] {
         //var period = period

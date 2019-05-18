@@ -232,43 +232,59 @@ class NetworkOperations {
     
     func downloadQuarterScheduleFromMySchool(completion: @escaping () -> Void) {
         let userID = loginAuthentication().userId
-        provider.request(MyService.getQuarterScheduleAndCurrentPeriod(userID: userID)) { (result) in
-            switch result {
-            case .success(let response):
-                do {
-                    guard let json = try JSONSerialization.jsonObject(with: response.data, options: .allowFragments) as? [[String: Any]] else {
-                        presentErrorMessage(presentMessage: "Quarter File Incorrect Format.", layout: .cardView)
-                        completion()
-                        return
-                    }
-                    
-                    var didFindQuarter = false
-                    for (index, value) in json.enumerated() {
-                        guard let currentIndicator = value["CurrentInd"] as? Int else { continue }
-                        if currentIndicator == 1 {
-                            didFindQuarter = true
-                            Preferences().currentQuarterOnline = index + 1
-                            Preferences().currentDurationIDOnline = value["DurationId"] as? Int ?? 0
-                            Preferences().currentDurationDescriptionOnline = value["DurationDescription"] as? String
-                        }
-                    }
-                    
-                    if !didFindQuarter {
-                        Preferences().currentQuarterOnline = 1
-                        Preferences().currentDurationIDOnline = 0
-                        Preferences().currentDurationDescriptionOnline = ""
-                    }
-                    
-                    let quarterFilePath = FileList.quarterSchedule.filePath
-                    NSArray(array: json).write(toFile: quarterFilePath, atomically: true)
-                } catch {
-                    presentErrorMessage(presentMessage: error.localizedDescription, layout: .cardView)
-                }
-            case .failure(let error):
-                presentErrorMessage(presentMessage: error.localizedDescription, layout: .cardView)
+        let schoolYear = school.getSchoolYear()
+        let schoolYearLabel = String(schoolYear) + "+-+" + String(schoolYear + 1)
+        let url = Preferences().baseURL + "/api/DataDirect/StudentGroupTermList/?studentUserId=\(userID)&schoolYearLabel=\(schoolYearLabel)&personaId=2"
+        
+        let task = URLSession.shared.dataTask(with: URL(string: url)!) { (data, response, error) in
+            guard error == nil else {
+                presentErrorMessage(presentMessage: error!.localizedDescription, layout: .statusLine)
+                completion()
+                return
             }
             
+            do {
+                guard var json = try JSONSerialization.jsonObject(with: data ?? Data(), options: .allowFragments) as? [[String: Any]] else {
+                    presentErrorMessage(presentMessage: "Quarter File Incorrect Format.", layout: .cardView)
+                    completion()
+                    return
+                }
+                
+                json.removeAll(where: { ($0["OfferingType"] as? Int ?? 1) != 1 })
+                print(json)
+//                print(response.request?.url)
+                var didFindQuarter = false
+                for (index, value) in json.enumerated() {
+                    guard let currentIndicator = value["CurrentInd"] as? Int else { continue }
+                    if currentIndicator == 1 {
+                        didFindQuarter = true
+                        let newQuarterOnline = index + 1
+                        if newQuarterOnline != Preferences().currentQuarterOnline {
+                            // Quarter Changed
+                            Preferences().currentQuarterOnline = newQuarterOnline
+                            Preferences().courseInitialized = false
+                        }
+                        
+                        Preferences().currentDurationIDOnline = value["DurationId"] as? Int ?? 0
+                        Preferences().currentDurationDescriptionOnline = value["DurationDescription"] as? String
+                    }
+                }
+                
+                if !didFindQuarter {
+                    Preferences().currentQuarterOnline = 1
+                    Preferences().currentDurationIDOnline = 0
+                    Preferences().currentDurationDescriptionOnline = ""
+                }
+                
+                let quarterFilePath = FileList.quarterSchedule.filePath
+                NSArray(array: json).write(toFile: quarterFilePath, atomically: true)
+            } catch {
+                print(error.localizedDescription)
+                presentErrorMessage(presentMessage: error.localizedDescription, layout: .cardView)
+            }
             completion()
         }
+        
+        task.resume()
     }
 }

@@ -35,10 +35,10 @@ public class School {
         return listClasses
     }
     
-    func getMarkingPeriodID(quarter: Int) -> Int {
-        assert(false, "This method must be overriden!")
-        return 0
-    }
+//    func getMarkingPeriodID(quarter: Int) -> Int {
+//        assert(false, "This method must be overriden!")
+//        return 0
+//    }
     
     func getDurationNumber(quarter: Int) -> Int {
         let quarterDataPath = FileList.quarterSchedule.filePath

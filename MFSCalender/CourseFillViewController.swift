@@ -49,13 +49,13 @@ class courseFillController: UIViewController {
             Preferences().doUpdateQuarter = true
         }
         
-        if Preferences().schoolName == "CMH" {
+        if Preferences().schoolName == "MFS" {
             DispatchQueue.global().async {
-                self.importCourseMySchool()
+                self.importCourseNetClassroom()
             }
         } else {
             DispatchQueue.global().async {
-                self.importCourseNetClassroom()
+                self.importCourseMySchool()
             }
         }
     }
@@ -100,12 +100,14 @@ class courseFillController: UIViewController {
             semaphore.signal()
         }
         
+        semaphore.wait()
         let pref = Preferences()
         pref.currentQuarter = pref.currentQuarterOnline
         pref.durationID = String(pref.currentDurationIDOnline)
         pref.durationDescription = pref.currentDurationDescriptionOnline
     }
     
+    // @Legacy This is only for NetClassroom System.
     func importCourseNetClassroom() {
         DispatchQueue.main.async {
             UIApplication.shared.isNetworkActivityIndicatorVisible = true
@@ -768,6 +770,7 @@ class courseFillController: UIViewController {
         NSArray(array: listClasses).write(toFile: path, atomically: true)
     }
 
+    // @Legacy This is only for NetClassroom System. 
     func versionCheck() {
         let semaphore = DispatchSemaphore.init(value: 0)
         
@@ -791,29 +794,7 @@ class courseFillController: UIViewController {
             
             semaphore.signal()
         })
-        
-//        provider.request(MyService.dataVersionCheck, completion: { result in
-//            switch result {
-//            case let .success(response):
-//                guard let version = try? response.mapString() else {
-//                    semaphore.signal()
-//                    return
-//                }
-//                
-//                guard let versionNumber = Int(version) else {
-//                    semaphore.signal()
-//                    return
-//                }
-//                
-//                print("Version: ", versionNumber)
-//                userDefaults?.set(versionNumber, forKey: "version")
-//                NSLog("Data refreshed to %#", version)
-//            case let .failure(error):
-//                presentErrorMessage(presentMessage: error.localizedDescription, layout: .CardView)
-//            }
-//            
-//            semaphore.signal()
-//        })
+    
         task.resume()
         semaphore.wait()
     }

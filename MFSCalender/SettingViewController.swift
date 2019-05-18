@@ -15,12 +15,21 @@ class settingViewController: UITableViewController, UIActionSheetDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        currentQuarter.selectedSegmentIndex = Preferences().currentQuarter - 1
-        if Preferences().schoolName == "CMH" {
-            currentQuarter.removeSegment(at: 2, animated: false)
-            currentQuarter.removeSegment(at: 2, animated: false)
-            quarterLabel.text = "Semester"
+        setupSegmentedControl()
+    }
+    
+    func setupSegmentedControl() {
+        let quarterScheduleListPath = FileList.quarterSchedule.filePath
+        if let quarterSchedule = NSArray(contentsOfFile: quarterScheduleListPath) as? [[String: Any]] {
+            currentQuarter.removeAllSegments()
+            for (index, quarterDict) in quarterSchedule.enumerated() {
+                let description = (quarterDict["DurationDescription"] as? String ?? "")[0, 2]
+                currentQuarter.insertSegment(withTitle: description, at: index, animated: false)
+            }
+            
+            currentQuarter.selectedSegmentIndex = Preferences().currentQuarter - 1
         }
+        
     }
 
     override func viewWillAppear(_ animated: Bool) {

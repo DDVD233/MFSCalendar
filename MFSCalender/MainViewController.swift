@@ -94,19 +94,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         SwiftDate.defaultRegion = Region.local
-        
-        self.bottomView.layer.shadowColor = UIColor.black.cgColor
-        self.bottomView.layer.shadowOpacity = 0.15
-        self.bottomView.layer.shadowOffset = CGSize.zero
-        self.bottomView.layer.shadowRadius = 15
-        
-        self.classView.delegate = self
-        self.classView.dataSource = self
-        self.classView.emptyDataSetSource = self
-        self.classView.emptyDataSetDelegate = self
-        self.addChild(eventViewController)
-        self.eventViewContainer.addSubview(eventViewController.view)
-        
+        setUpUI()
         
         let preferences = Preferences()
         if preferences.firstName == nil || !preferences.didOpenAfterUpdate {
@@ -115,7 +103,6 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         }
         
         if Preferences().didLogin && Preferences().courseInitialized {
-
             NSLog("Already Logged in.")
         } else {
             print("Cannot initialize data because the user did not logged in")
@@ -169,20 +156,6 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
             }
         }
         
-        if Preferences().schoolName == "CMH" {
-            removeTab(at: 3)
-        }
-        
-//        if Preferences().doPresentServiceView {
-//            self.tabBarController?.selectedIndex = 4
-//        }
-//
-//        if !userDefaults.bool(forKey: "didShowMobileServe") && Preferences().isStudent {
-//            userDefaults.set(true, forKey: "didShowMobileServe")
-//            if let mobileServeIntro = storyboard?.instantiateViewController(withIdentifier: "mobileServeIntro") {
-//                self.present(mobileServeIntro, animated: true)
-//            }
-//        }
         let notification = NotificationCenter.default
         notification.addObserver(forName: UIApplication.willResignActiveNotification, object: nil, queue: OperationQueue.current, using: { _ in
             self.stopTimer()
@@ -193,10 +166,18 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         startTimer()
     }
     
-    func removeTab(at index: Int) {
-        guard let viewControllers = self.tabBarController?.viewControllers as? NSMutableArray else { return }
-        viewControllers.removeObject(at: index)
-        self.tabBarController?.viewControllers = (viewControllers as! [UIViewController])
+    func setUpUI() {
+        self.bottomView.layer.shadowColor = UIColor.black.cgColor
+        self.bottomView.layer.shadowOpacity = 0.15
+        self.bottomView.layer.shadowOffset = CGSize.zero
+        self.bottomView.layer.shadowRadius = 15
+        
+        self.classView.delegate = self
+        self.classView.dataSource = self
+        self.classView.emptyDataSetSource = self
+        self.classView.emptyDataSetDelegate = self
+        self.addChild(eventViewController)
+        self.eventViewContainer.addSubview(eventViewController.view)
     }
     
     func presentAdIfNeeded() {
@@ -233,10 +214,12 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         DispatchQueue.global().async(group: group, execute: {
             NetworkOperations().refreshEvents()
         })
-
-        DispatchQueue.global().async(group: group, execute: {
-            self.refreshData()
-        })
+        
+        if Preferences().schoolName ?? "" == "MFS" {
+            DispatchQueue.global().async(group: group, execute: {
+                self.refreshData()
+            })
+        }
 
         group.wait()
         
@@ -254,6 +237,12 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         
         DispatchQueue.global().async {
             NetworkOperations().downloadLargeProfilePhoto()
+        }
+        
+        DispatchQueue.global().async {
+            NetworkOperations().downloadQuarterScheduleFromMySchool {
+                print("Downloaded Schedule From mySchool")
+            }
         }
         
         if Preferences().isInStepChallenge {
@@ -625,6 +614,7 @@ extension Main: UICollectionViewDelegate, UICollectionViewDataSource, UICollecti
 extension Main {
     //Refresh day data and event data. Update version number.
     //刷新Day和Event数据，并更新版本号
+    // @Legacy This is only for NetClassroom System. 
     func refreshData() {
         guard Preferences().schoolName == "MFS" else { return }
         let semaphore = DispatchSemaphore.init(value: 0)

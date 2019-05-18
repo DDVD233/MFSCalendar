@@ -224,6 +224,45 @@ class ClassView {
         }
     }
     
+    func getMarkingPeriodID(durationID: String, leadSectionID: String, completion: @escaping (Int) -> Void) {
+        let userID = loginAuthentication().userId
+        let url = Preferences().baseURL +  "/api/gradebook/GradeBookMyDayMarkingPeriods?durationSectionList=[{\"DurationId\":\(durationID),\"LeadSectionList\":[{\"LeadSectionId\":\(leadSectionID)}]}]&userId=\(userID)&personaId=2"
+        print(url)
+        let escapedURL = url.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+//        print
+        
+        let task = URLSession.shared.dataTask(with: URL(string: escapedURL)!) { (data, response, error) in
+            guard error == nil else {
+                presentErrorMessage(presentMessage: error!.localizedDescription, layout: .statusLine)
+                completion(0)
+                return
+            }
+            do {
+                guard let json = try JSONSerialization.jsonObject(with: data ?? Data(), options: .allowFragments) as? [[String: Any]] else {
+                    presentErrorMessage(presentMessage: "JSON incorrect format", layout: .statusLine)
+                    completion(0)
+                    return
+                }
+                
+                print(json)
+                
+                if json.count == 0 {
+                    completion(0)
+                }
+                
+                completion(json[0]["MarkingPeriodId"] as? Int ?? 0)
+                return
+            } catch {
+                presentErrorMessage(presentMessage: error.localizedDescription, layout: .statusLine)
+                
+            }
+            
+            completion(0)
+        }
+        
+        task.resume()
+    }
+    
     func getLeadSectionIDFromSectionInfo(sectionID: String) -> String {
         let semaphoreSectionID = DispatchSemaphore(value: 0)
         var sectionID = sectionID

@@ -300,7 +300,9 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
         
         guard self.authentication() else {
             Answers.logLogin(withMethod: "Default", success: false, customAttributes: [:])
-            self.indicatorView.isHidden = true
+            DispatchQueue.main.async {
+                self.indicatorView.isHidden = true
+            }
             return
         }
         

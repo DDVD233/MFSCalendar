@@ -56,9 +56,8 @@ extension MyService: TargetType {
     }
     var path: String {
         switch self {
-                //myMFS
+        // MAINTAIN: All functions below are from mySchool. Update these functions if any of them are updated on the myschool site.
         case .downloadLargeProfilePhoto(let link):
-            print(link)
             return "\(link)"
         case .getProfile(let userID, _):
             return "/api/user/\(userID)/"
@@ -72,8 +71,10 @@ extension MyService: TargetType {
             return "/api/datadirect/SectionInfoView/"
         case .getSchedule:
             return "/api/DataDirect/ScheduleList/"
-        case .getQuarterScheduleAndCurrentPeriod:
-            return "/api/DataDirect/StudentGroupTermList/"
+        case .getQuarterScheduleAndCurrentPeriod(let userID):
+            let schoolYear = school.getSchoolYear()
+            let schoolYearLabel = String(schoolYear) + "+-+" + String(schoolYear + 1)
+            return "/api/DataDirect/StudentGroupTermList/?studentUserId=\(userID)&schoolYearLabel=\(schoolYearLabel)&personaId=2"
 
                 // Dwei
         case .getCalendarData:
@@ -138,10 +139,6 @@ extension MyService: TargetType {
             return ["format": "json", "viewerID": userID, "personaId": "2", "viewerPersonaId": "2", "start": startTime, "end": endTime]
         case .getEmailWithID(let username, let password, let id):
             return ["name": username, "password": password, "id": id]
-        case .getQuarterScheduleAndCurrentPeriod(let userID):
-            let schoolYear = school.getSchoolYear()
-            let schoolYearLabel = String(schoolYear) + "+-+" + String(schoolYear + 1)
-            return ["studentUserId": userID, "schoolYearLabel": schoolYearLabel, "personaId" : "2"]
         default: return nil
         }
     }
