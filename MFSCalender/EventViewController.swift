@@ -10,12 +10,13 @@ import UIKit
 import DZNEmptyDataSet
 import XLPagerTabStrip
 import SafariServices
+import CoreData
 
 class eventViewController: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate, IndicatorInfoProvider {
     
     @IBOutlet var eventView: UITableView!
     let formatter = DateFormatter()
-    var listEvents = [[String: Any]]()
+    var listEvents = [Events]()
     var selectedDate: Date? = nil
     
     override func viewDidLoad() {
@@ -42,31 +43,34 @@ class eventViewController: UIViewController, DZNEmptyDataSetSource, DZNEmptyData
     
     func eventDataFetching() {
         self.eventView.separatorStyle = .singleLine
-        let path = FileList.events.filePath
-        guard let eventData = NSDictionary(contentsOfFile: path) as? [String: [[String: Any]]] else {
-            self.listEvents = []
-            reloadData()
-            return
-        }
         
         guard let thisSelectedDate = selectedDate else {
             print("No Date")
             return
         }
+        
+        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        let fetchRequest: NSFetchRequest<Events> = Events.fetchRequest()
+        let dateAtStartOfDay = thisSelectedDate.dateAtStartOf(.day)
+        let dateAtEndOfDay = thisSelectedDate.dateAtStartOf(.day)
+        
+        let predicate = NSPredicate(format: "(startDate < %@) AND (endDate > %@)", dateAtStartOfDay as CVarArg, dateAtEndOfDay as CVarArg)
+        fetchRequest.predicate = predicate
+        let result = try! context.fetch(fetchRequest)
+        
         self.formatter.dateFormat = "yyyyMMdd"
-        let eventDate = formatter.string(from: thisSelectedDate)
-        guard let events = eventData[eventDate] else {
-            self.listEvents = []
-            reloadData()
-            return
-        }
-        self.listEvents = events
+        self.listEvents = result
         reloadData()
     }
     
     func reloadData() {
         if Preferences().schoolName == "MFS" {
-            self.listEvents.insert(["summary": "1st Period Announcement", "isAllDay": 1], at: 0)
+            let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+            let event = Events(context: context)
+            event.setValue("1st Period Announcement", forKey: "title")
+            event.setValue(Date(), forKey: "startDate")
+            event.setValue(Date(), forKey: "endDate")
+            self.listEvents.insert(event, at: 0)
         }
         
         DispatchQueue.main.async {
@@ -101,7 +105,7 @@ extension eventViewController: UITableViewDelegate, UITableViewDataSource {
         guard self.listEvents.indices.contains(row) else { return cell }
         let rowDict = self.listEvents[row]
         
-        guard let summary = rowDict["summary"] as? String else {
+        guard let summary = rowDict.title else {
             return UITableViewCell()
         }
         cell.ClassName.text = summary
@@ -109,7 +113,7 @@ extension eventViewController: UITableViewDelegate, UITableViewDataSource {
         let letter = String(describing: summary[...summary.startIndex])
         cell.PeriodNumber.text = letter
         
-        let location = rowDict["location"] as? String ?? ""
+        let location = rowDict.location ?? ""
         if location.hasSuffix("place fields") || location.hasSuffix("Place Fields") {
             cell.RoomNumber.text = ""
         } else {

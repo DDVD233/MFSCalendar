@@ -319,7 +319,12 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
         }
         
         DispatchQueue.global().async(group: group) {
-            NetworkOperations().refreshEvents()
+            let semaphore = DispatchSemaphore(value: 0)
+            NetworkOperations().refreshEvents(completion: {
+                semaphore.signal()
+            })
+            
+            semaphore.wait()
         }
         
         DispatchQueue.global().async(group: group) {

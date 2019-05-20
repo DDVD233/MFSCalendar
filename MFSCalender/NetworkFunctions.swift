@@ -11,6 +11,8 @@ import Alamofire
 import JSQWebViewController
 import SafariServices
 import SwiftyJSON
+import SwiftDate
+import CoreData
 
 class NetworkOperations {
     func getQuarterSchedule() {
@@ -200,21 +202,135 @@ class NetworkOperations {
         }
     }
     
-    func refreshEvents() {
-        let semaphore = DispatchSemaphore.init(value: 0)
+    func refreshEvents(completion: @escaping () -> Void = { () in }) {
+        downloadEventIDList { (idList) in
+            guard let idListToRequest = idList else {
+                presentErrorMessage(presentMessage: "Failed to obtain an id list.", layout: .statusLine)
+                return
+            }
+            
+            self.downloadEventsFromMySchool(idList: idListToRequest, completion: completion)
+        }
+    }
+    
+    func downloadEventsFromMySchool(idList: [String], completion: @escaping () -> Void) {
+        let startDate = Date() - 3.months
+        let endDate = Date() + 8.months
         
-        provider.request(MyService.getCalendarEvent, completion: { result in
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MM/dd/yyyy"
+        let startDateString = formatter.string(from: startDate)
+        let endDateString = formatter.string(from: endDate)
+        let delegate = UIApplication.shared.delegate as! AppDelegate
+        let context = delegate.persistentContainer.viewContext
+        
+        formatter.dateFormat = "M/dd/yyyy h:mm a"
+        provider.request(MyService.downloadEventsFromMySchool(startDate: startDateString, endDate: endDateString, idList: idList), callbackQueue: DispatchQueue.global()) { (result) in
             switch result {
-            case .success(_):
-                print("Info: event data refreshed")
+            case .success(let response):
+                do {
+                    guard let json = try JSONSerialization.jsonObject(with: response.data, options: .allowFragments) as? [[String: Any]] else {
+                        presentErrorMessage(presentMessage: "JSON incorrect format", layout: .statusLine)
+                        completion()
+                        return
+                    }
+                    
+                    print(json)
+                    
+                    for event in json {
+                        guard let startDate = formatter.date(from: event["StartDate"] as? String ?? "") else { continue }
+                        guard let endDate = formatter.date(from: event["EndDate"] as? String ?? "") else { continue }
+                        guard let title = event["Title"] as? String else { continue }
+                        guard let eventId = event["EventId"] as? Int else { continue }
+                        
+                        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Events")
+                        let predicate = NSPredicate(format: "(eventId == %d)", eventId)
+                        
+                        fetchRequest.predicate = predicate
+                        let res = try! context.fetch(fetchRequest)
+                        
+                        if res.count == 0 {
+                            let entity = NSEntityDescription.entity(forEntityName: "Events", in: context)
+                            let newEvent = NSManagedObject(entity: entity!, insertInto: context)
+                            newEvent.setValue(startDate, forKey: "startDate")
+                            newEvent.setValue(endDate, forKey: "endDate")
+                            newEvent.setValue(title, forKey: "title")
+                            newEvent.setValue(eventId, forKey: "eventId")
+                            
+                            let briefDescription = event["BriefDescription"] as? String ?? ""
+                            newEvent.setValue(briefDescription, forKey: "briefDescription")
+                            
+                            let location = event["Location"] as? String ?? ""
+                            newEvent.setValue(location, forKey: "location")
+                            
+                            let groupName = event["GroupName"] as? String ?? ""
+                            newEvent.setValue(groupName, forKey: "groupName")
+                        }
+                    }
+                    
+                    try! context.save()
+                    completion()
+                    return
+                } catch {
+                    presentErrorMessage(presentMessage: error.localizedDescription, layout: .statusLine)
+                }
             case let .failure(error):
                 presentErrorMessage(presentMessage: error.localizedDescription, layout: .statusLine)
             }
             
-            semaphore.signal()
-        })
+            completion()
+            return
+        }
+    }
+    
+    func downloadEventIDList(completion: @escaping ([String]?) -> Void) {
+        guard loginAuthentication().success else {
+            completion(nil)
+            return
+        }
         
-        semaphore.wait()
+        let startDate = Date() - 3.months
+        let endDate = Date() + 5.months
+        
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MM/dd/yyyy"
+        let startDateString = formatter.string(from: startDate)
+        let endDateString = formatter.string(from: endDate)
+        provider.request(MyService.getEventsIDList(startDate: startDateString, endDate: endDateString), callbackQueue: DispatchQueue.global()) { (result) in
+            switch result {
+            case .success(let response):
+                do {
+                    guard let json = try JSONSerialization.jsonObject(with: response.data, options: .allowFragments) as? [[String: Any]] else {
+                        presentErrorMessage(presentMessage: "JSON incorrect format", layout: .statusLine)
+                        print(String(data: response.data, encoding: .utf8))
+                        completion(nil)
+                        return
+                    }
+                    
+                    print(json)
+                    var idList = [String]()
+                    for calendar in json {
+                        guard let filters = calendar["Filters"] as? [[String: Any]] else { continue }
+                        for filter in filters {
+                            if let calendarId = filter["CalendarId"] as? String {
+                                idList.append(calendarId)
+                            }
+                        }
+                    }
+                    
+                    print(idList)
+                    completion(idList)
+                    return
+                } catch {
+                    presentErrorMessage(presentMessage: error.localizedDescription, layout: .statusLine)
+                }
+            case let .failure(error):
+                presentErrorMessage(presentMessage: error.localizedDescription, layout: .statusLine)
+            }
+            
+            completion(nil)
+            return
+        }
     }
     
     func downloadLargeProfilePhoto() {

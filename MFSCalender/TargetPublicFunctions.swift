@@ -9,6 +9,7 @@
 import Foundation
 import SwiftMessages
 import SwiftyJSON
+import SwiftDate
 import Alamofire
 import M13Checkbox
 import SafariServices
@@ -413,30 +414,20 @@ class ClassView {
 class EventView {
     let formatter = DateFormatter()
     
-    func getTimeInterval(rowDict: [String: Any]) -> String {
-        let isAllDay = rowDict["isAllDay"] as? Int ?? 0
-        if isAllDay == 1 {
+    func getTimeInterval(rowDict: Events) -> String {
+        let startDate = rowDict.startDate ?? Date()
+        let endDate = rowDict.endDate ?? Date()
+        if ((endDate - startDate).hour ?? 23) >= 23 || (((endDate - startDate).minute ?? 0) <= 1) {
             return "All Day"
-        } else {
-            let tEnd = rowDict["tEnd"] as? Int ?? 0
-            updateFormatterFormat(time: tEnd)
-            guard let timeEnd = formatter.date(from: String(tEnd)) else {
-                return ""
-            }
-            
-            let tStart = rowDict["tStart"] as? Int ?? 0
-            updateFormatterFormat(time: tStart)
-            guard let timeStart = formatter.date(from: String(tStart)) else {
-                return ""
-            }
-            
-            formatter.dateFormat = "h:mm a"
-            let startString = formatter.string(from: timeStart)
-            let endString = formatter.string(from: timeEnd)
-            return startString + " - " + endString
         }
+        
+        formatter.dateFormat = "h:mm a"
+        let startString = formatter.string(from: startDate)
+        let endString = formatter.string(from: endDate)
+        return startString + " - " + endString
     }
     
+    @available(*, deprecated, message: "No longer used")
     private func updateFormatterFormat(time: Int) {
         if time > 99999 {
             formatter.dateFormat = "HHmmss"

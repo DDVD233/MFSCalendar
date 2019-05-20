@@ -21,19 +21,20 @@ enum MyService {
     case getClassContentData(contentName: String, sectionId: String)
     case sectionInfoView(sectionID: String)
     case getSchedule(userID: String, startTime: String, endTime: String)
-    case getQuarterScheduleAndCurrentPeriod(userID: String)
+    case getEventsIDList(startDate: String, endDate: String)
+    case downloadEventsFromMySchool(startDate: String, endDate: String, idList: [String])
 
     //Dwei
     case getCalendarData
     case getCalendarEvent
     case dataVersionCheck
-    case getQuarterSchedule
-    case meetTimeSearch(classId: String)
+    case getQuarterSchedule  // Deprecated
+    case meetTimeSearch(classId: String) // Deprecated
     case getSteps(date: String)
     case reportSteps(steps: String, username: String, link: String)
     case getStepPoints(username: String)
-    case getAllEmails(username: String, password: String)
-    case getEmailWithID(username: String, password: String, id: String)
+    case getAllEmails(username: String, password: String)  // Not Yet Used
+    case getEmailWithID(username: String, password: String, id: String)  // Not Yet Used
 }
 
 fileprivate let assetDir: URL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!
@@ -71,10 +72,11 @@ extension MyService: TargetType {
             return "/api/datadirect/SectionInfoView/"
         case .getSchedule:
             return "/api/DataDirect/ScheduleList/"
-        case .getQuarterScheduleAndCurrentPeriod(let userID):
-            let schoolYear = school.getSchoolYear()
-            let schoolYearLabel = String(schoolYear) + "+-+" + String(schoolYear + 1)
-            return "/api/DataDirect/StudentGroupTermList/?studentUserId=\(userID)&schoolYearLabel=\(schoolYearLabel)&personaId=2"
+        case .getEventsIDList:
+            return "/api/mycalendar/list/"
+        case .downloadEventsFromMySchool:
+            return "/api/mycalendar/events"
+        
 
                 // Dwei
         case .getCalendarData:
@@ -139,9 +141,13 @@ extension MyService: TargetType {
             return ["format": "json", "viewerID": userID, "personaId": "2", "viewerPersonaId": "2", "start": startTime, "end": endTime]
         case .getEmailWithID(let username, let password, let id):
             return ["name": username, "password": password, "id": id]
+        case .getEventsIDList(let startDate, let endDate):
+            return ["startDate": startDate, "endDate": endDate, "settingsTypeId": "1", "calendarSetId": "1"]
         default: return nil
         }
     }
+    
+    
 
     var parameterEncoding: ParameterEncoding {
         return URLEncoding.default
@@ -163,6 +169,10 @@ extension MyService: TargetType {
         switch self {
         case .downloadLargeProfilePhoto, .getCalendarEvent:
             return .downloadDestination(downloadDestination)
+        case .downloadEventsFromMySchool(let startDate, let endDate, let idList):
+            let filterString = idList.joined(separator: ",")
+            let parameter = ["startDate": startDate, "endDate": endDate, "filterString": filterString, "showPractice": "false"] as [String : Any]
+            return .requestParameters(parameters: parameter, encoding: URLEncoding.queryString)
         default:
             return .requestParameters(parameters: parameters ?? [:], encoding: parameterEncoding)
         }

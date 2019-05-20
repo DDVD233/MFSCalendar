@@ -2,6 +2,12 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:Events+CoreDataClass.swift">
+   </FileRef>
+   <FileRef
+      location = "group:Events+CoreDataProperties.swift">
+   </FileRef>
+   <FileRef
       location = "group:EmailRecord+CoreDataClass.swift">
    </FileRef>
    <FileRef
