@@ -236,12 +236,25 @@ class NetworkOperations {
                     }
                     
                     print(json)
+                    print(json.count)
                     
                     for event in json {
-                        guard let startDate = formatter.date(from: event["StartDate"] as? String ?? "") else { continue }
-                        guard let endDate = formatter.date(from: event["EndDate"] as? String ?? "") else { continue }
-                        guard let title = event["Title"] as? String else { continue }
-                        guard let eventId = event["EventId"] as? Int else { continue }
+                        guard let startDate = formatter.date(from: event["StartDate"] as? String ?? "") else {
+                            continue
+                        }
+                        var endDate: Date {
+                            if let dateFromString = formatter.date(from: event["EndDate"] as? String ?? "") {
+                                return dateFromString
+                            } else {
+                                return startDate
+                            }
+                        }
+                        guard let title = event["Title"] as? String else {
+                            continue
+                        }
+                        guard let eventId = event["EventId"] as? Int else {
+                            continue
+                        }
                         
                         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Events")
                         let predicate = NSPredicate(format: "(eventId == %d)", eventId)

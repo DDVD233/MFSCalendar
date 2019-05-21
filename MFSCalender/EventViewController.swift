@@ -66,10 +66,9 @@ class eventViewController: UIViewController, DZNEmptyDataSetSource, DZNEmptyData
     func reloadData() {
         if Preferences().schoolName == "MFS" {
             let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-            let event = Events(context: context)
+            let event = Events(entity: NSEntityDescription.entity(forEntityName: "Events", in: context)!, insertInto: nil)
             event.setValue("1st Period Announcement", forKey: "title")
-            event.setValue(Date(), forKey: "startDate")
-            event.setValue(Date(), forKey: "endDate")
+            
             self.listEvents.insert(event, at: 0)
         }
         

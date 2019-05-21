@@ -24,7 +24,8 @@ extension Events {
     @NSManaged public var briefDescription: String?
     @NSManaged public var eventId: Int64
     
-    init(startDate: NSDate? = nil, endDate: NSDate? = nil, title: String? = nil, location: String? = nil, groupName: String? = nil, briefDescription: String? = nil, eventId: Int64 = nil) {
+    convenience init(startDate: Date? = nil, endDate: Date? = nil, title: String? = nil, location: String? = nil, groupName: String? = nil, briefDescription: String? = nil, eventId: Int64 = 0) {
+        self.init()
         self.startDate = startDate
         self.briefDescription = briefDescription
         self.endDate = endDate
