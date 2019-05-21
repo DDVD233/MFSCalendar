@@ -268,6 +268,7 @@ class NetworkOperations {
                             newEvent.setValue(startDate, forKey: "startDate")
                             newEvent.setValue(endDate, forKey: "endDate")
                             newEvent.setValue(title, forKey: "title")
+                            print(title)
                             newEvent.setValue(eventId, forKey: "eventId")
                             
                             let briefDescription = event["BriefDescription"] as? String ?? ""

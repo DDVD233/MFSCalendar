@@ -33,9 +33,9 @@
     self.statusImageView.layer.cornerRadius = 6;
     [self setStateLabelText:@""];
     
-    [self.profileImageView sd_setImageWithURL:[NSURL URLWithString: user.imageURL]
-                             placeholderImage:user.imageAsImage
-                                      options:SDWebImageLowPriority & SDWebImageScaleDownLargeImages];
+//    [self.profileImageView sd_setImageWithURL:[NSURL URLWithString: user.imageURL]
+//                             placeholderImage:user.imageAsImage
+//                                      options:SDWebImageLowPriority & SDWebImageScaleDownLargeImages];
     
     self.title.text = user.name;
     self.subtitle.text = user.statusText;

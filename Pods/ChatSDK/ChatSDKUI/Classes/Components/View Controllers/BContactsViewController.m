@@ -82,15 +82,15 @@
 
     [self updateButtonStatusForInternetConnection];
 
-    [_notificationList add:[[NSNotificationCenter defaultCenter] addObserverForName:bNotificationUserUpdated
-                                                                             object:Nil
-                                                                              queue:Nil
-                                                                         usingBlock:^(NSNotification * notification) {
-                                                                             dispatch_async(dispatch_get_main_queue(), ^{
-                                                                                 __typeof__(self) strongSelf = weakSelf;
-                                                                                 [strongSelf reloadData];
-                                                                             });
-                                                                         }]];
+//    [_notificationList add:[[NSNotificationCenter defaultCenter] addObserverForName:bNotificationUserUpdated
+//                                                                             object:Nil
+//                                                                              queue:Nil
+//                                                                         usingBlock:^(NSNotification * notification) {
+//                                                                             dispatch_async(dispatch_get_main_queue(), ^{
+//                                                                                 __typeof__(self) strongSelf = weakSelf;
+//                                                                                 [strongSelf reloadData];
+//                                                                             });
+//                                                                         }]];
     
     [_notificationList add:[BChatSDK.hook addHook:[BHook hook:^(NSDictionary * dict) {
         __typeof__(self) strongSelf = weakSelf;

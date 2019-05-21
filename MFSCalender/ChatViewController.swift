@@ -38,31 +38,6 @@ class ChatViewController: UIViewController {
         }
     }
     
-    func updateUserInfo() {
-        BChatSDK.push()!.registerForPushNotifications(with: UIApplication.shared, launchOptions: nil)
-        let pref = Preferences()
-        let name = (pref.firstName ?? "") + " " + (pref.lastName ?? "")
-        let photoPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
-        let path = photoPath.appending("/ProfilePhoto.png")
-        let profileImage = UIImage(contentsOfFile: path)
-        
-        let photoLink = pref.baseURL + (userDefaults.string(forKey: "largePhotoLink") ?? "")
-        
-        let schoolName = pref.schoolName ?? ""
-        BChatSDK.core()?.currentUserModel()?.setMetaValue(schoolName, forKey: "School")
-        
-        BFirebaseSearchHandler().users(forIndexes: ["School"], withValue: schoolName, limit: 999) { (user) in
-            if user != nil {
-                _ = BChatSDK.contact()?.addContact(user!, with: bUserConnectionTypeContact)
-                BChatSDK.core()!.observeUser(user!.entityID())
-            }
-            
-            print("-----------------")
-        }
-        
-        BIntegrationHelper.updateUser(withName: name, image: profileImage, url: photoLink)
-    }
-    
     func setUpLoginViews() {
         self.navigationController?.isNavigationBarHidden = true
         let chatLoginViewController = storyboard!.instantiateViewController(withIdentifier: "ChatLoginVC") as! ChatLoginViewController
@@ -76,6 +51,19 @@ class ChatViewController: UIViewController {
 //        contactsViewController.navigationItem.rightBarButtonItem?.tintColor = UIColor.white
 //        contactsViewController.navigationItem.backBarButtonItem?.tintColor = UIColor.white
         show(contactsViewController, sender: self)
+    }
+    
+    func updateUserInfo() {
+        BChatSDK.push()!.registerForPushNotifications(with: UIApplication.shared, launchOptions: nil)
+        let pref = Preferences()
+        let name = (pref.firstName ?? "") + " " + (pref.lastName ?? "")
+        let photoPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
+        let path = photoPath.appending("/ProfilePhoto.png")
+        let profileImage = UIImage(contentsOfFile: path)
+        
+        let photoLink = pref.baseURL + (userDefaults.string(forKey: "largePhotoLink") ?? "")
+        
+        BIntegrationHelper.updateUser(withName: name, image: profileImage, url: photoLink)
     }
     
     func setUpViews() {

@@ -117,9 +117,36 @@ class ChatLoginViewController: UIViewController, UITextFieldDelegate {
         })
     }
     
+    
+    func updateUserInfo() {
+        BChatSDK.push()!.registerForPushNotifications(with: UIApplication.shared, launchOptions: nil)
+        let pref = Preferences()
+        let name = (pref.firstName ?? "") + " " + (pref.lastName ?? "")
+        let photoPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
+        let path = photoPath.appending("/ProfilePhoto.png")
+        let profileImage = UIImage(contentsOfFile: path)
+        
+        let photoLink = pref.baseURL + (userDefaults.string(forKey: "largePhotoLink") ?? "")
+        
+        let schoolName = pref.schoolName ?? ""
+        BChatSDK.core()?.currentUserModel()?.setMetaValue(schoolName, forKey: "School")
+        
+        BFirebaseSearchHandler().users(forIndexes: ["School"], withValue: schoolName, limit: 999) { (user) in
+            if user != nil {
+                _ = BChatSDK.contact()?.addContact(user!, with: bUserConnectionTypeContact)
+                BChatSDK.core()!.observeUser(user!.entityID())
+            }
+            
+            print("-----------------")
+        }
+        
+        BIntegrationHelper.updateUser(withName: name, image: profileImage, url: photoLink)
+    }
+    
     func presentChatView() {
         let parentVC = self.parent as! ChatViewController
         BChatSDK.core()!.save()
+        updateUserInfo()
 //        _ = BChatSDK.a()?.auth()
         
         let currentUser = BChatSDK.currentUser()
