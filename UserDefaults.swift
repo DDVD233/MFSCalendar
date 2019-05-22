@@ -30,6 +30,7 @@ public class Preferences {
     }
     
     public var baseURL: String {
+        // If not MFS or CMH
         get {
             switch self.schoolName ?? "" {
             case "MFS":
@@ -37,8 +38,12 @@ public class Preferences {
             case "CMH":
                 return "https://catholicmemorial-hs.myschoolapp.com"
             default:
-                return ""
+                return userDefaults.string(forKey: "baseURL" ) ?? ""
             }
+        }
+        
+        set(value) {
+            userDefaults.set(value, forKey: "baseURL" )
         }
     }
     

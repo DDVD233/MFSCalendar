@@ -95,6 +95,7 @@
 		E4D5E4122285DA620012C56C /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D5E4112285DA620012C56C /* ChatViewController.swift */; };
 		E4D5E4142285ECE30012C56C /* ChatLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D5E4132285ECE30012C56C /* ChatLoginViewController.swift */; };
 		E4DAB5B11F6386640013D943 /* HomeworkDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4DAB5B01F6386640013D943 /* HomeworkDetailViewController.swift */; };
+		E4E5504C2295811F00C2F46F /* SupportedSchoolList.plist in Resources */ = {isa = PBXBuildFile; fileRef = E4E5504B2295811F00C2F46F /* SupportedSchoolList.plist */; };
 		E4E8B21A1F1C5AF200913DAE /* GradeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E8B2191F1C5AF200913DAE /* GradeViewController.swift */; };
 		E4EB2998228EE4B900BA1385 /* FileList.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EB2997228EE4B900BA1385 /* FileList.swift */; };
 		E4EB2999228EE5FC00BA1385 /* FileList.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EB2997228EE4B900BA1385 /* FileList.swift */; };
@@ -285,6 +286,7 @@
 		E4D5E4112285DA620012C56C /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
 		E4D5E4132285ECE30012C56C /* ChatLoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatLoginViewController.swift; sourceTree = "<group>"; };
 		E4DAB5B01F6386640013D943 /* HomeworkDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeworkDetailViewController.swift; sourceTree = "<group>"; };
+		E4E5504B2295811F00C2F46F /* SupportedSchoolList.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = SupportedSchoolList.plist; sourceTree = "<group>"; };
 		E4E8B2191F1C5AF200913DAE /* GradeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GradeViewController.swift; sourceTree = "<group>"; };
 		E4EB2997228EE4B900BA1385 /* FileList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileList.swift; sourceTree = "<group>"; };
 		E4EBD9951F9BAAED0046CAD1 /* AirshipConfig.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = AirshipConfig.plist; sourceTree = "<group>"; };
@@ -565,6 +567,7 @@
 				E472A15E1EFB6F3C00EF5A74 /* More View */,
 				E4106371228772B000A8F280 /* Chat View */,
 				E4F86B341DF0E20C00CAD72B /* Main.storyboard */,
+				E4E5504B2295811F00C2F46F /* SupportedSchoolList.plist */,
 				E4369F712289927B006462F3 /* MainTabBarViewController.swift */,
 				E470C38421EE6A5E00E5C358 /* SchoolSelectionViewController.swift */,
 				E419C50C21ADB63400CE8B3A /* CapstoneAd.swift */,
@@ -794,6 +797,7 @@
 				E4765E171F7D74AF009F60F0 /* InfoPlist.strings in Resources */,
 				E4D5E4102285C6520012C56C /* GoogleService-Info.plist in Resources */,
 				E43611C721A4C35C00994A10 /* runningColor.png in Resources */,
+				E4E5504C2295811F00C2F46F /* SupportedSchoolList.plist in Resources */,
 				E4CA1DAE1F50097D0061784A /* Acknowledgements.markdown in Resources */,
 				E4A880BD1DF279BB00816AB7 /* MFS Logo.jpg in Resources */,
 				E470C38F21EECAC700E5C358 /* QuarterScheduleCMH.plist in Resources */,

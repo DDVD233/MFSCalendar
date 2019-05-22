@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>schoolName</key>
+		<string>Ashley Hall</string>
+		<key>schoolURL</key>
+		<string>https://ashleyhall.myschoolapp.com</string>
+		<key>schoolCode</key>
+		<string>AH</string>
+	</dict>
+	<dict>
+		<key>schoolName</key>
+		<string>Miss Porter&apos;s School</string>
+		<key>schoolURL</key>
+		<string>https://porters.myschoolapp.com</string>
+		<key>schoolCode</key>
+		<string>MPS</string>
+	</dict>
+	<dict>
+		<key>schoolName</key>
+		<string>Sanford School</string>
+		<key>schoolURL</key>
+		<string>https://sanfordschool.myschoolapp.com</string>
+		<key>schoolCode</key>
+		<string>SS</string>
+	</dict>
+	<dict>
+		<key>schoolName</key>
+		<string>The Heritage School</string>
+		<key>schoolURL</key>
+		<string>https://heritageschool.myschoolapp.com</string>
+		<key>schoolCode</key>
+		<string>THS</string>
+	</dict>
+	<dict>
+		<key>schoolName</key>
+		<string>The Fessenden School</string>
+		<key>schoolURL</key>
+		<string>https://fessenden.myschoolapp.com</string>
+		<key>schoolCode</key>
+		<string>TFS</string>
+	</dict>
+	<dict>
+		<key>schoolName</key>
+		<string>Moorestown Friends School</string>
+		<key>schoolURL</key>
+		<string>https://mfriends.myschoolapp.com</string>
+		<key>schoolCode</key>
+		<string>MFS</string>
+	</dict>
+	<dict>
+		<key>schoolName</key>
+		<string>Catholic Memorial High School</string>
+		<key>schoolURL</key>
+		<string>https://catholicmemorial-hs.myschoolapp.com</string>
+		<key>schoolCode</key>
+		<string>CMH</string>
+	</dict>
+	<dict>
+		<key>schoolName</key>
+		<string>Miami Country Day School</string>
+		<key>schoolURL</key>
+		<string>https://miamicountryday.myschoolapp.com</string>
+		<key>schoolCode</key>
+		<string>CountryDay</string>
+	</dict>
+	<dict>
+		<key>schoolName</key>
+		<string>St. Paul&apos;s Episcopal Day School</string>
+		<key>schoolURL</key>
+		<string>https://speds.myschoolapp.com</string>
+		<key>schoolCode</key>
+		<string>SPEDS</string>
+	</dict>
+	<dict>
+		<key>schoolName</key>
+		<string>Gonzaga College High School</string>
+		<key>schoolURL</key>
+		<string>https://gonzaga.myschoolapp.com</string>
+		<key>schoolCode</key>
+		<string>GCHS</string>
+	</dict>
+	<dict>
+		<key>schoolName</key>
+		<string></string>
+		<key>schoolURL</key>
+		<string></string>
+		<key>schoolCode</key>
+		<string></string>
+	</dict>
+</array>
+</plist>

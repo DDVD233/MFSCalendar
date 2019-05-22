@@ -15,6 +15,7 @@ enum FileList {
     case events
     case topicsLeadSectionID(leadSectionID: String)
     case quarterSchedule // Format: Array(Dict(OfferingType: Int, DurationId: Int, DurationDescription: String, CurrentInd: Int))
+    case supportedSchoolList
 }
 
 extension FileList {
@@ -32,11 +33,18 @@ extension FileList {
             return "Topics" + leadSectionID + ".plist"
         case .quarterSchedule:
             return "QuarterSchedule.plist"
+        case .supportedSchoolList:
+            return "SupportedSchoolList.plist"
         }
     }
     
     var filePath: String {
-        return userDocumentPath + "/" + fileName
+        switch self {
+        case .supportedSchoolList:
+            return Bundle.main.bundlePath + "/" + fileName
+        default:
+            return userDocumentPath + "/" + fileName
+        }
     }
     
     var arrayList: [Any] {

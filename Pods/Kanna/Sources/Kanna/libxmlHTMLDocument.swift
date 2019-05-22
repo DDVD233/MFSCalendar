@@ -137,67 +137,6 @@ extension String.Encoding {
     }
 }
 
-extension String.Encoding {
-    var IANACharSetName: String? {
-        #if os(Linux)
-        switch self {
-        case .ascii:
-            return "us-ascii"
-        case .iso2022JP:
-            return "iso-2022-jp"
-        case .isoLatin1:
-            return "iso-8859-1"
-        case .isoLatin2:
-            return "iso-8859-2"
-        case .japaneseEUC:
-            return "euc-jp"
-        case .macOSRoman:
-            return "macintosh"
-        case .nextstep:
-            return "x-nextstep"
-        case .nonLossyASCII:
-            return nil
-        case .shiftJIS:
-            return "cp932"
-        case .symbol:
-            return "x-mac-symbol"
-        case .unicode:
-            return "utf-16"
-        case .utf16:
-            return "utf-16"
-        case .utf16BigEndian:
-            return "utf-16be"
-        case .utf32:
-            return "utf-32"
-        case .utf32BigEndian:
-            return "utf-32be"
-        case .utf32LittleEndian:
-            return "utf-32le"
-        case .utf8:
-            return "utf-8"
-        case .windowsCP1250:
-            return "windows-1250"
-        case .windowsCP1251:
-            return "windows-1251"
-        case .windowsCP1252:
-            return "windows-1252"
-        case .windowsCP1253:
-            return "windows-1253"
-        case .windowsCP1254:
-            return "windows-1254"
-        default:
-            return nil
-        }
-        #else
-        let cfenc = CFStringConvertNSStringEncodingToEncoding(self.rawValue)
-        guard let cfencstr = CFStringConvertEncodingToIANACharSetName(cfenc) else {
-            return nil
-        }
-        return String(describing: cfencstr)
-        #endif
-    }
-}
-
 /*
 libxmlHTMLDocument
 */
