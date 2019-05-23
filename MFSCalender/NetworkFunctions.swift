@@ -8,13 +8,13 @@
 
 import UIKit
 import Alamofire
-import JSQWebViewController
 import SafariServices
 import SwiftyJSON
 import SwiftDate
 import CoreData
 
 class NetworkOperations {
+    @available(*, deprecated, message: "Use mySchool Method instead")
     func getQuarterSchedule() {
         let semaphore = DispatchSemaphore(value: 0)
         provider.request(MyService.getQuarterSchedule, callbackQueue: DispatchQueue.global()) { (result) in
@@ -188,21 +188,19 @@ class NetworkOperations {
             url = "http://" + url
         }
         if let urlToOpen = URL(string: url) {
-            if #available(iOS 9.0, *) {
-                let safariViewController = SFSafariViewController(url: urlToOpen)
-                DispatchQueue.main.async {
-                    viewController.present(safariViewController, animated: true, completion: nil)
-                }
-            } else {
-                DispatchQueue.main.async {
-                    let webViewController = WebViewController(url: urlToOpen)
-                    viewController.show(webViewController, sender: viewController)
-                }
+            let safariViewController = SFSafariViewController(url: urlToOpen)
+            DispatchQueue.main.async {
+                viewController.present(safariViewController, animated: true, completion: nil)
             }
         }
     }
     
     func refreshEvents(completion: @escaping () -> Void = { () in }) {
+        guard loginAuthentication().success else {
+            completion()
+            return
+        }
+        
         downloadEventIDList { (idList) in
             guard let idListToRequest = idList else {
                 presentErrorMessage(presentMessage: "Failed to obtain an id list.", layout: .statusLine)
@@ -235,6 +233,7 @@ class NetworkOperations {
                         return
                     }
                     
+                    print(response.request?.url)
                     print(json)
                     print(json.count)
                     
@@ -298,11 +297,6 @@ class NetworkOperations {
     }
     
     func downloadEventIDList(completion: @escaping ([String]?) -> Void) {
-        guard loginAuthentication().success else {
-            completion(nil)
-            return
-        }
-        
         let startDate = Date() - 3.months
         let endDate = Date() + 5.months
         
@@ -361,6 +355,10 @@ class NetworkOperations {
     }
     
     func downloadQuarterScheduleFromMySchool(completion: @escaping () -> Void) {
+        guard loginAuthentication().success else {
+            completion()
+            return
+        }
         let userID = loginAuthentication().userId
         let schoolYear = school.getSchoolYear()
         let schoolYearLabel = String(schoolYear) + "+-+" + String(schoolYear + 1)

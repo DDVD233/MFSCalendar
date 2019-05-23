@@ -196,7 +196,6 @@ PODS:
   - Hakawai/Core (5.1.6)
   - Hakawai/Mentions (5.1.6):
     - Hakawai/Core
-  - JSQWebViewController (6.0.0)
   - Kanna (5.0.0)
   - leveldb-library (1.20)
   - LTMorphingLabel (0.7.0)
@@ -228,7 +227,6 @@ PODS:
   - SDWebImage/Core (4.4.6)
   - SkyFloatingLabelTextField (3.7.0)
   - SnapKit (5.0.0)
-  - Spring (1.0.5)
   - StaticDataTableViewController (2.5.0)
   - SVProgressHUD (2.2.5)
   - SwiftDate (6.0.2)
@@ -252,14 +250,13 @@ DEPENDENCIES:
   - ChatSDKFirebase/FileStorage
   - ChatSDKFirebase/Push
   - Crashlytics
-  - DGElasticPullToRefresh
+  - DGElasticPullToRefresh (from `https://github.com/KennethTsang/DGElasticPullToRefresh.git`)
   - Down
   - DZNEmptyDataSet
   - Fabric
   - Firebase/Core
   - Firebase/Performance
   - FSCalendar
-  - JSQWebViewController
   - Kanna
   - LTMorphingLabel
   - M13Checkbox
@@ -268,10 +265,9 @@ DEPENDENCIES:
   - NVActivityIndicatorView
   - p2.OAuth2
   - SCLAlertView
-  - SDWebImage (~> 4.0)
+  - SDWebImage
   - SkyFloatingLabelTextField
   - SnapKit
-  - Spring
   - SVProgressHUD
   - SwiftDate
   - SwiftMessages
@@ -291,7 +287,6 @@ SPEC REPOS:
     - CountryPicker
     - Crashlytics
     - DateTools
-    - DGElasticPullToRefresh
     - Down
     - DZNEmptyDataSet
     - Fabric
@@ -316,7 +311,6 @@ SPEC REPOS:
     - GoogleUtilities
     - GTMSessionFetcher
     - Hakawai
-    - JSQWebViewController
     - Kanna
     - leveldb-library
     - LTMorphingLabel
@@ -336,7 +330,6 @@ SPEC REPOS:
     - SDWebImage
     - SkyFloatingLabelTextField
     - SnapKit
-    - Spring
     - StaticDataTableViewController
     - SVProgressHUD
     - SwiftDate
@@ -348,6 +341,15 @@ SPEC REPOS:
     - UrbanAirship-iOS-SDK
     - VENTokenField
     - XLPagerTabStrip
+
+EXTERNAL SOURCES:
+  DGElasticPullToRefresh:
+    :git: https://github.com/KennethTsang/DGElasticPullToRefresh.git
+
+CHECKOUT OPTIONS:
+  DGElasticPullToRefresh:
+    :commit: 274c5fe8998e31ea71a4dc250c7edee51e52a978
+    :git: https://github.com/KennethTsang/DGElasticPullToRefresh.git
 
 SPEC CHECKSUMS:
   AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
@@ -384,7 +386,6 @@ SPEC CHECKSUMS:
   GoogleUtilities: f1faafc033ea203adf1783ce00af455bb99d0e5b
   GTMSessionFetcher: 32aeca0aa144acea523e1c8e053089dec2cb98ca
   Hakawai: caf8cceda91548a12552d167e79c7dd88a88a7c2
-  JSQWebViewController: 51041569b75d19dbb6b7fe0b7ae053c32409a9be
   Kanna: a32875df62975f8f4b871e933b4ea1a5c3b8be0f
   leveldb-library: 08cba283675b7ed2d99629a4bc5fd052cd2bb6a5
   LTMorphingLabel: 22147fb1ec2b0306537ccc348b36ea8617179b03
@@ -404,7 +405,6 @@ SPEC CHECKSUMS:
   SDWebImage: 3f3f0c02f09798048c47a5ed0a13f17b063572d8
   SkyFloatingLabelTextField: 4b46db0ab1ccde0919cded29c656e6b4805eda04
   SnapKit: fd22d10eb9aff484d79a8724eab922c1ddf89bcf
-  Spring: 17901566c8ecf3a1327902b940406c64512f9bb1
   StaticDataTableViewController: 0c5c4a47861446dd3cfd52530ae801ec7662ce26
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
   SwiftDate: bbed9b23bfec599bd62b9a305afc554f7bd0eb6f
@@ -417,6 +417,6 @@ SPEC CHECKSUMS:
   VENTokenField: 5a19b838fb97f040e3d4c93f584b4adeaf3fc1ee
   XLPagerTabStrip: 61c57fd61f611ee5f01ff1495ad6fbee8bf496c5
 
-PODFILE CHECKSUM: 77b4f9c2e5848709a2fcb54a09d4ac75262e49c0
+PODFILE CHECKSUM: 18359b359deb4a5ebd9fb818d50323c33171a33e
 
 COCOAPODS: 1.5.2

@@ -30,6 +30,7 @@
 #import "M13ProgressViewSegmentedBar.h"
 #import "M13ProgressViewSegmentedRing.h"
 #import "M13ProgressViewStripedBar.h"
+#import "UIImage+ImageEffects.h"
 
 FOUNDATION_EXPORT double M13ProgressSuiteVersionNumber;
 FOUNDATION_EXPORT const unsigned char M13ProgressSuiteVersionString[];

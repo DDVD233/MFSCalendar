@@ -22,6 +22,7 @@ class SchoolSelectionViewController: UIViewController {
         self.schoolTable.dataSource = self
         
         schoolList = NSArray(contentsOfFile: FileList.supportedSchoolList.filePath) as? [[String: String]] ?? [[String: String]]()
+        schoolList.sort(by: { ($0["schoolName"] ?? "") < ($1["schoolName"] ?? "") })
     }
     
     func showLoginVC() {

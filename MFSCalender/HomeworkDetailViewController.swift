@@ -9,7 +9,6 @@
 import UIKit
 import M13Checkbox
 import SafariServices
-import JSQWebViewController
 import SVProgressHUD
 
 class homeworKDetailViewController: UIViewController, SFSafariViewControllerDelegate, UIDocumentInteractionControllerDelegate {
@@ -214,15 +213,9 @@ extension homeworKDetailViewController: UITableViewDelegate, UITableViewDataSour
             return
         }
         
-        if #available(iOS 9.0, *) {
-            let safari = SFSafariViewController(url: URL(string: link)!)
-            safari.delegate = self
-            present(safari, animated: true, completion: nil)
-        } else {
-            let webView = WebViewController(url: URL(string: link)!)
-            self.show(webView, sender: self)
-            // Fallback on earlier versions
-        }
+        let safari = SFSafariViewController(url: URL(string: link)!)
+        safari.delegate = self
+        present(safari, animated: true, completion: nil)
     }
     
     func openFile(row: Int) {

@@ -172,7 +172,7 @@ extension MyService: TargetType {
         case .downloadEventsFromMySchool(let startDate, let endDate, let idList):
             let filterString = idList.joined(separator: ",")
             let parameter = ["startDate": startDate, "endDate": endDate, "filterString": filterString, "showPractice": "false"] as [String : Any]
-            return .requestParameters(parameters: parameter, encoding: URLEncoding.queryString)
+            return .requestParameters(parameters: parameter, encoding: parameterEncoding)
         default:
             return .requestParameters(parameters: parameters ?? [:], encoding: parameterEncoding)
         }
