@@ -29,32 +29,29 @@ public func getRequestVerification() -> String? {
     let url = URL(string: Preferences().baseURL + "/app#login")!
     let semaphore = DispatchSemaphore.init(value: 0)
     let task = URLSession.shared.dataTask(with: url, completionHandler: {(data, response, error) in
-        semaphore.signal()
+        let _ = loginAuthentication()
+        let htmlReqUrl = URL(string: Preferences().baseURL + "/app/student#studentmyday/assignment-center")!
+        
+        let task2 = URLSession.shared.dataTask(with: htmlReqUrl, completionHandler: {(data, response, error) in
+            do {
+                let doc = try HTML(html: data ?? Data(), encoding: .utf8)
+                requestVerification = doc
+                    .body?
+                    .xpath("//div[@id = '__AjaxAntiForgery']")
+                    .first?.xpath("//input[@name = '__RequestVerificationToken']")
+                    .first?["value"]
+                semaphore.signal()
+            } catch {
+                print(error.localizedDescription)
+                semaphore.signal()
+            }
+        })
+        
+        task2.resume()
     })
     
     task.resume()
     semaphore.wait()
-    
-    let _ = loginAuthentication()
-    
-    let htmlReqUrl = URL(string: Preferences().baseURL + "/app/student#studentmyday/assignment-center")!
-    let semaphore2 = DispatchSemaphore.init(value: 0)
-    let task2 = URLSession.shared.dataTask(with: htmlReqUrl, completionHandler: {(data, response, error) in
-        do {
-            let doc = try HTML(html: data!, encoding: .utf8)
-            requestVerification = doc
-                                  .body?
-                                  .xpath("//div[@id = '__AjaxAntiForgery']")
-                                  .first?.xpath("//input[@name = '__RequestVerificationToken']")
-                                  .first?["value"]
-            semaphore2.signal()
-        } catch {
-            print(error.localizedDescription)
-        }
-    })
-    
-    task2.resume()
-    semaphore2.wait()
     
     return requestVerification
 }

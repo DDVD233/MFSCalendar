@@ -1717,7 +1717,7 @@
                                         </cells>
                                     </collectionView>
                                     <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Upd-iJ-CgO">
-                                        <rect key="frame" x="0.0" y="186" width="375" height="433"/>
+                                        <rect key="frame" x="0.0" y="186" width="375" height="342"/>
                                         <connections>
                                             <segue destination="Dc0-iM-lFO" kind="embed" id="sbo-FP-LLG"/>
                                         </connections>
@@ -1738,8 +1738,8 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="Upd-iJ-CgO" secondAttribute="trailing" id="3tu-fF-IG9"/>
-                                    <constraint firstAttribute="bottom" secondItem="Upd-iJ-CgO" secondAttribute="bottom" id="4C7-Mr-frI"/>
                                     <constraint firstAttribute="trailing" secondItem="xRR-BQ-Vx2" secondAttribute="trailing" constant="20" id="IaE-BY-DGB"/>
+                                    <constraint firstItem="Upd-iJ-CgO" firstAttribute="bottom" secondItem="U8A-Xp-bII" secondAttribute="bottomMargin" id="MkX-Sr-Duo"/>
                                     <constraint firstItem="p4P-pw-RjD" firstAttribute="leading" secondItem="U8A-Xp-bII" secondAttribute="leading" constant="20" id="RAM-J1-sEF"/>
                                     <constraint firstItem="Upd-iJ-CgO" firstAttribute="top" secondItem="xRR-BQ-Vx2" secondAttribute="bottom" id="RgC-uS-Fcl"/>
                                     <constraint firstItem="xRR-BQ-Vx2" firstAttribute="top" secondItem="p4P-pw-RjD" secondAttribute="bottom" constant="10" id="RtR-kE-uHI"/>
@@ -1786,7 +1786,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rQl-dB-ssM" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="7436" y="133"/>
+            <point key="canvasLocation" x="7436" y="132.26600985221674"/>
         </scene>
         <!--Time Table Parent View Controller-->
         <scene sceneID="F3g-hO-I3z">
@@ -2132,13 +2132,13 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="260" text="className" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dzY-df-aKe">
-                                                    <rect key="frame" x="88" y="17" width="262" height="20.333333333333329"/>
+                                                    <rect key="frame" x="88" y="17" width="262" height="20"/>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="time" textAlignment="natural" lineBreakMode="characterWrap" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2hI-c8-LxD">
-                                                    <rect key="frame" x="88" y="38" width="252" height="13"/>
+                                                    <rect key="frame" x="88" y="37.666666666666664" width="252" height="13"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="13" id="nri-n3-c85"/>
                                                     </constraints>
@@ -2147,7 +2147,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Room" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6in-tx-ezS">
-                                                    <rect key="frame" x="88" y="48" width="262" height="20.333333333333329"/>
+                                                    <rect key="frame" x="88" y="47.666666666666664" width="262" height="20.333333333333336"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="20.5" id="JFw-0c-q8c"/>
                                                     </constraints>
@@ -2158,12 +2158,15 @@
                                             </subviews>
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <constraints>
+                                                <constraint firstAttribute="bottomMargin" relation="greaterThanOrEqual" secondItem="6in-tx-ezS" secondAttribute="bottom" constant="1" id="1Em-6D-85D"/>
                                                 <constraint firstItem="dzY-df-aKe" firstAttribute="leading" secondItem="3Bf-CK-3a3" secondAttribute="trailing" constant="8" id="3OD-4C-GnS"/>
                                                 <constraint firstItem="6in-tx-ezS" firstAttribute="top" secondItem="dzY-df-aKe" secondAttribute="bottom" constant="10.5" id="636-d9-53I"/>
                                                 <constraint firstItem="2hI-c8-LxD" firstAttribute="leading" secondItem="3Bf-CK-3a3" secondAttribute="trailing" constant="8" id="9pc-gX-rXy"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="6in-tx-ezS" secondAttribute="trailing" constant="10" id="A5J-ll-ZzJ"/>
                                                 <constraint firstItem="3Bf-CK-3a3" firstAttribute="centerY" secondItem="wwR-mz-cHe" secondAttribute="centerY" id="LOR-Ha-EaD"/>
+                                                <constraint firstItem="3Bf-CK-3a3" firstAttribute="top" relation="greaterThanOrEqual" secondItem="wwR-mz-cHe" secondAttribute="topMargin" constant="1" id="NbY-wL-bda"/>
                                                 <constraint firstItem="dzY-df-aKe" firstAttribute="top" secondItem="wwR-mz-cHe" secondAttribute="topMargin" constant="6" id="QWG-Ci-ebJ"/>
+                                                <constraint firstAttribute="bottomMargin" relation="greaterThanOrEqual" secondItem="3Bf-CK-3a3" secondAttribute="bottom" constant="1" id="cwh-4R-31p"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="2hI-c8-LxD" secondAttribute="trailing" constant="20" id="ibb-Xb-gSu"/>
                                                 <constraint firstItem="2hI-c8-LxD" firstAttribute="top" secondItem="dzY-df-aKe" secondAttribute="bottom" constant="0.5" id="l5y-rD-DdY"/>
                                                 <constraint firstItem="3Bf-CK-3a3" firstAttribute="leading" secondItem="wwR-mz-cHe" secondAttribute="leadingMargin" constant="10" id="nWz-7k-nf2"/>
@@ -4056,7 +4059,7 @@
                         <viewControllerLayoutGuide type="bottom" id="duK-sv-58K"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Aaa-t3-7tw">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="433"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="342"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </view>

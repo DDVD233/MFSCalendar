@@ -176,8 +176,17 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         self.classView.dataSource = self
         self.classView.emptyDataSetSource = self
         self.classView.emptyDataSetDelegate = self
+        
         self.addChild(eventViewController)
         self.eventViewContainer.addSubview(eventViewController.view)
+        eventViewController.view.snp.makeConstraints { (make) in
+            make.top.equalToSuperview()
+            make.bottom.equalToSuperview()
+            make.left.equalToSuperview()
+            make.right.equalToSuperview()
+        }
+        
+        eventViewController.view.translatesAutoresizingMaskIntoConstraints = false
     }
     
     func presentAdIfNeeded() {

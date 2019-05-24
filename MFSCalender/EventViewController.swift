@@ -52,9 +52,10 @@ class eventViewController: UIViewController, DZNEmptyDataSetSource, DZNEmptyData
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         let fetchRequest: NSFetchRequest<Events> = Events.fetchRequest()
         let dateAtStartOfDay = thisSelectedDate.dateAtStartOf(.day)
-        let dateAtEndOfDay = thisSelectedDate.dateAtStartOf(.day)
+        let dateAtEndOfDay = thisSelectedDate.dateAtEndOf(.day)
         
-        let predicate = NSPredicate(format: "(startDate < %@) AND (endDate > %@)", dateAtStartOfDay as CVarArg, dateAtEndOfDay as CVarArg)
+        // Starts before the end of day, ends after the starts of day today.
+        let predicate = NSPredicate(format: "(startDate < %@) AND (endDate > %@)", dateAtEndOfDay as CVarArg, dateAtStartOfDay as CVarArg)
         fetchRequest.predicate = predicate
         let result = try! context.fetch(fetchRequest)
         
@@ -85,6 +86,13 @@ class eventViewController: UIViewController, DZNEmptyDataSetSource, DZNEmptyData
 }
 
 extension eventViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableView.automaticDimension
+    }
+    
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 80
+    }
     
     //    the number of the cell
     func tableView(_ tableView: UITableView, numberOfRowsInSection selection: Int) -> Int {

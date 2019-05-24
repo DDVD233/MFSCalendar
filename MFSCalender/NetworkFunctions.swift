@@ -263,7 +263,7 @@ class NetworkOperations {
                         
                         if res.count == 0 {
                             let entity = NSEntityDescription.entity(forEntityName: "Events", in: context)
-                            let newEvent = NSManagedObject(entity: entity!, insertInto: context)
+                            let newEvent = Events(entity: entity!, insertInto: context)
                             newEvent.setValue(startDate, forKey: "startDate")
                             newEvent.setValue(endDate, forKey: "endDate")
                             newEvent.setValue(title, forKey: "title")
@@ -278,10 +278,11 @@ class NetworkOperations {
                             
                             let groupName = event["GroupName"] as? String ?? ""
                             newEvent.setValue(groupName, forKey: "groupName")
+                            
+                            try! context.save()
                         }
                     }
-                    
-                    try! context.save()
+            
                     completion()
                     return
                 } catch {
