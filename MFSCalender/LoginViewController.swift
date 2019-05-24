@@ -196,15 +196,10 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
         if isFirstTimeLogin {
             Preferences().isFirstTimeLogin = false
             let loginNotice = SCLAlertView()
-            loginNotice.addButton("Go to myMFS website", action: {
-                if #available(iOS 10.0, *) {
-                    UIApplication.shared.open(URL(string: "https://mfriends.myschoolapp.com/app/#login")!, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: nil)
-                } else {
-                    UIApplication.shared.openURL(URL(string: "https://mfriends.myschoolapp.com/app/#login")!)
-                    // Fallback on earlier versions
-                }
+            loginNotice.addButton("Go to mySchool website", action: {
+                UIApplication.shared.open(URL(string: Preferences().baseURL + "/app/#login")!, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: nil)
             })
-            loginNotice.showInfo("Welcome", subTitle: "Welcome to MFS Mobile. Please use your myMFS account to log in.", animationStyle: .bottomToTop)
+            loginNotice.showInfo("Welcome", subTitle: "Welcome to Class Master. Please use your mySchool account to log in.", animationStyle: .bottomToTop)
         }
     }
 

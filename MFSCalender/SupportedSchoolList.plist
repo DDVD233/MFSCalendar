@@ -4,6 +4,38 @@
 <array>
 	<dict>
 		<key>schoolName</key>
+		<string></string>
+		<key>schoolURL</key>
+		<string></string>
+		<key>schoolCode</key>
+		<string></string>
+	</dict>
+	<dict>
+		<key>schoolName</key>
+		<string>Girls Preparatory School</string>
+		<key>schoolURL</key>
+		<string>https://gps.myschoolapp.com</string>
+		<key>schoolCode</key>
+		<string>GPS</string>
+	</dict>
+	<dict>
+		<key>schoolName</key>
+		<string>Archbishop Moeller High School</string>
+		<key>schoolURL</key>
+		<string>https://moeller.myschoolapp.com</string>
+		<key>schoolCode</key>
+		<string>AMHS</string>
+	</dict>
+	<dict>
+		<key>schoolName</key>
+		<string>St. Mildred’s-Lightbourn School</string>
+		<key>schoolURL</key>
+		<string>https://smls.myschoolapp.com</string>
+		<key>schoolCode</key>
+		<string>SMLS</string>
+	</dict>
+	<dict>
+		<key>schoolName</key>
 		<string>Ashley Hall</string>
 		<key>schoolURL</key>
 		<string>https://ashleyhall.myschoolapp.com</string>
@@ -84,11 +116,11 @@
 	</dict>
 	<dict>
 		<key>schoolName</key>
-		<string></string>
+		<string>The Buckley School</string>
 		<key>schoolURL</key>
-		<string></string>
+		<string>https://buckley.myschoolapp.com</string>
 		<key>schoolCode</key>
-		<string></string>
+		<string>TBS</string>
 	</dict>
 </array>
 </plist>
