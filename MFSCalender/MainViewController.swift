@@ -270,7 +270,8 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
             case let .success(response):
                 do {
                     guard let resDict = try response.mapJSON() as? Dictionary<String, Any?> else {
-                        presentErrorMessage(presentMessage: "Internal error: incorrect file format.", layout: .cardView)
+                        
+                        presentErrorMessage(presentMessage: NSLocalizedString("Internal error: incorrect file format.", comment: ""), layout: .cardView)
                         return
                     }
                     
@@ -281,7 +282,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
                         print("Login Error!")
                         if (resDict["ErrorType"] as! String) == "UNAUTHORIZED_ACCESS" {
                             DispatchQueue.main.async {
-                                presentErrorMessage(presentMessage: "The username/password is incorrect. Please check your spelling.", layout: .cardView)
+                                presentErrorMessage(presentMessage: NSLocalizedString("The username/password is incorrect. Please check your spelling.", comment: ""), layout: .cardView)
                             }
                         }
                         
@@ -313,7 +314,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         if let vc = self.storyboard?.instantiateViewController(withIdentifier: "courseFillController") {
             self.present(vc, animated: true, completion: nil)
         } else {
-            presentErrorMessage(presentMessage: "Cannot find course fill page", layout: .statusLine)
+            presentErrorMessage(presentMessage: NSLocalizedString("Cannot find course fill page", comment: ""), layout: .statusLine)
         }
     }
     
@@ -365,7 +366,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     func title(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
         var str: String? = ""
         let attrs: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: UIFont.TextStyle.headline)]
-        str = "No more classes for today!"
+        str = NSLocalizedString("No more classes for today!", comment: "")
 
         return NSAttributedString(string: str!, attributes: attrs)
     }
@@ -405,7 +406,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
             switch result {
             case let .success(response):
                 guard let nversion = try? response.mapString() else {
-                    presentErrorMessage(presentMessage: "Version file nout found", layout: .statusLine)
+                    presentErrorMessage(presentMessage: NSLocalizedString("Version file not found", comment: ""), layout: .statusLine)
                     return
                 }
 
@@ -450,13 +451,16 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
                 today = formatter.string(from: date)
             }
             
-            if day == "No School" {
-                self.dayLabel.text = "No school today,"
+            if day == NSLocalizedString("No School", comment: "") {
+                
+                self.dayLabel.text = NSLocalizedString("No school today,", comment: "")
             } else {
-                self.dayLabel.text = "Today is " + day + " Day,"
+                self.dayLabel.text = NSString.localizedStringWithFormat(NSLocalizedString("Today is %@ Day,", comment: "") as NSString, day) as String
+                
             }
             
-            self.welcomeLabel.text = "Welcome back, \(Preferences().firstName ?? "") !"
+            let firstName = Preferences().firstName ?? ""
+            self.welcomeLabel.text = NSString.localizedStringWithFormat(NSLocalizedString("Welcome back, %@!", comment: "") as NSString, firstName) as String
             
             self.dateLabel.text = today
         }

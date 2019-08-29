@@ -41,7 +41,7 @@ class homeworkViewController: UITableViewController, UIViewControllerPreviewingD
         homeworkTable.emptyDataSetSource = self
         homeworkTable.emptyDataSetDelegate = self
         homeworkTable.delegate = self
-
+//        title = NSLocalizedString("Homework", comment: "")
 
 //        Remove the bottom 1px line on Navigation Bar
 //
@@ -80,21 +80,6 @@ class homeworkViewController: UITableViewController, UIViewControllerPreviewingD
         DispatchQueue.global().async {
             self.getHomework()
         }
-    }
-
-    func errorMessage(presentMessage: String) {
-        let view = MessageView.viewFromNib(layout: .cardView)
-        view.configureTheme(.error)
-        var icon: String? = nil
-        if presentMessage == "The username/password is incorrect. Please check your spelling." {
-            icon = "🤔"
-        } else {
-            icon = "😱"
-        }
-        view.configureContent(title: "Error!", body: presentMessage, iconText: icon!)
-        view.button?.isHidden = true
-        let config = SwiftMessages.Config()
-        SwiftMessages.show(config: config, view: view)
     }
 
     func getHomework() {
@@ -140,13 +125,13 @@ class homeworkViewController: UITableViewController, UIViewControllerPreviewingD
                     NSLog("Data parsing failed")
                     DispatchQueue.main.async {
                         let presentMessage = "The server is not returning the right data. Please contact David."
-                        self.errorMessage(presentMessage: presentMessage)
+                        presentErrorMessage(presentMessage: presentMessage, layout: .cardView)
                     }
                 }
             } else {
                 DispatchQueue.main.async {
-                    let presentMessage = (error?.localizedDescription)! + " Please check your internet connection."
-                    self.errorMessage(presentMessage: presentMessage)
+                    let presentMessage = (error?.localizedDescription)! + NSLocalizedString(" Please check your internet connection.", comment: "")
+                    presentErrorMessage(presentMessage: presentMessage, layout: .cardView)
                 }
             }
             semaphore.signal()
@@ -227,7 +212,7 @@ class homeworkViewController: UITableViewController, UIViewControllerPreviewingD
 
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if scrollView.contentOffset.y < 20 {
-            self.navigationItem.title = "Homework"
+            self.navigationItem.title = NSLocalizedString("Homework", comment: "")
         } else if let indexPath = tableView.indexPathsForVisibleRows?.first {
             let dateString = stringForHeaderInSection(section: indexPath.section)
             self.navigationItem.title = dateString
@@ -273,15 +258,15 @@ class homeworkViewController: UITableViewController, UIViewControllerPreviewingD
         }
         
         if dueDate.isToday {
-            return "Today"
+            return NSLocalizedString("Today", comment: "")
         } else if dueDate.isTomorrow {
-            return "Tomorrow"
+            return NSLocalizedString("Tomorrow", comment: "")
         } else if dueDate.isBeforeDate(Date().dateAt(.endOfWeek), granularity: .day) {
             let weekDay = dueDate.toString(.custom("EEEE"))
-            return "This " + weekDay
+            return NSString.localizedStringWithFormat(NSLocalizedString("This %@", comment: "") as NSString, weekDay) as String
         } else if dueDate.isBeforeDate((Date() + 1.weeks).dateAt(.endOfWeek), granularity: .day) {
             let weekDay = dueDate.toString(.custom("EEEE"))
-            return "Next " + weekDay
+            return NSString.localizedStringWithFormat(NSLocalizedString("Next %@", comment: "") as NSString, weekDay) as String
         } else {
             return dueDate.toString(.custom("EEEE, MMM d, yyyy"))
         }
@@ -457,9 +442,9 @@ extension homeworkViewController: DZNEmptyDataSetSource {
     func title(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
         let attr = [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: UIFont.TextStyle.headline)]
 
-        var str = "There is no homework to display."
+        var str = NSLocalizedString("There is no homework to display.", comment: "")
         if isUpdatingHomework {
-            str = "Updating homework..."
+            str = NSLocalizedString("Updating homework...", comment: "")
         }
         return NSAttributedString(string: str, attributes: attr)
     }
@@ -469,7 +454,7 @@ extension homeworkViewController: DZNEmptyDataSetSource {
             return NSAttributedString()
         }
 
-        let buttonTitleString = NSAttributedString(string: "Refresh...", attributes: [NSAttributedString.Key.foregroundColor: UIColor(hexString: 0xFF7E79)])
+        let buttonTitleString = NSAttributedString(string: NSLocalizedString("Refresh...", comment: ""), attributes: [NSAttributedString.Key.foregroundColor: UIColor(hexString: 0xFF7E79)])
 
         return buttonTitleString
     }

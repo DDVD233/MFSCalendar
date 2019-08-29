@@ -88,7 +88,7 @@ class ChatLoginViewController: UIViewController, UITextFieldDelegate {
         let passwordText = password.text
         
         guard passwordText.existsAndNotEmpty() else {
-            presentErrorMessage(presentMessage: "Please enter your password", layout: .cardView)
+            presentErrorMessage(presentMessage: NSLocalizedString("Please enter your password", comment: ""), layout: .cardView)
             return
         }
         

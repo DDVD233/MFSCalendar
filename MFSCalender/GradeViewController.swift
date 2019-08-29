@@ -354,7 +354,7 @@ extension gradeViewController {
                     cell.chartView.notifyDataSetChanged()
                 }
                 
-                cell.chartView.noDataText = "No grade data is found."
+                cell.chartView.noDataText = NSLocalizedString("No grade data is found.", comment: "")
                 
                 return cell
             default:
@@ -419,7 +419,7 @@ extension gradeViewController {
         let view = tableView.dequeueReusableCell(withIdentifier: "tableHeader") as! homeworkTableHeader
         
         if section == 0 {
-            view.titleLabel.text = "Overview"
+            view.titleLabel.text = NSLocalizedString("Overview", comment: "")
             let quarterButton = UIButton()
             
             let title = (quarterList[safe: quarterSelected - 1] ?? [String: Any]())["DurationDescription"] as? String ?? ""

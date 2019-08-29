@@ -77,7 +77,7 @@ class ChatViewController: UIViewController {
         var barButtonItems = [UIBarButtonItem]()
         barButtonItems.append(privateThreadsViewController.navigationItem.rightBarButtonItem!)
         
-        let contactButton = UIBarButtonItem(title: "Contact", style: .done, target: self, action: #selector(showContactPage))
+        let contactButton = UIBarButtonItem(title: NSLocalizedString("Contact", comment: ""), style: .done, target: self, action: #selector(showContactPage))
         barButtonItems.append(contactButton)
         
         for button in barButtonItems {
@@ -88,7 +88,7 @@ class ChatViewController: UIViewController {
         
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "Help"), style: .done, target: self, action: #selector(displayHelpPage))
         
-        title = "Chat"
+        title = NSLocalizedString("Chat", comment: "")
         if #available(iOS 11.0, *) {
             self.navigationController?.navigationBar.prefersLargeTitles = true
             self.navigationController?.navigationItem.largeTitleDisplayMode = .never

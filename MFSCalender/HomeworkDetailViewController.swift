@@ -219,20 +219,21 @@ extension homeworKDetailViewController: UITableViewDelegate, UITableViewDataSour
     }
     
     func openFile(row: Int) {
+        let noAttachmentFound = NSLocalizedString("No attachment is found.", comment: "")
         guard let downloadList = assignmentList2["DownloadItems"] as? [[String: Any]] else {
-            presentErrorMessage(presentMessage: "No attachment is found.", layout: .statusLine)
+            presentErrorMessage(presentMessage: noAttachmentFound, layout: .statusLine)
             return
         }
         
         guard downloadList.indices.contains(row) else {
-            presentErrorMessage(presentMessage: "No attachment is found.", layout: .statusLine)
+            presentErrorMessage(presentMessage: noAttachmentFound, layout: .statusLine)
             return
         }
         
         let downloadObject = downloadList[row]
         
         guard let url = downloadObject["DownloadUrl"] as? String, let fileName = downloadObject["FriendlyFileName"] as? String else {
-            presentErrorMessage(presentMessage: "No attachment is found.", layout: .statusLine)
+            presentErrorMessage(presentMessage: noAttachmentFound, layout: .statusLine)
             return
         }
         
@@ -245,7 +246,7 @@ extension homeworKDetailViewController: UITableViewDelegate, UITableViewDataSour
         }
         
         guard filePath != nil else {
-            presentErrorMessage(presentMessage: "Attachment cannot be downloaded", layout: .statusLine)
+            presentErrorMessage(presentMessage: NSLocalizedString("Attachment cannot be downloaded", comment: ""), layout: .statusLine)
             return
         }
         

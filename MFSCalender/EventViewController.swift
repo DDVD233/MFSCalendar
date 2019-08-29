@@ -29,7 +29,7 @@ class eventViewController: UIViewController, DZNEmptyDataSetSource, DZNEmptyData
     
     func title(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
         let attr = [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: UIFont.TextStyle.headline)]
-        let str = "There is no event on this day."
+        let str = NSLocalizedString("There is no event on this day.", comment: "")
         self.eventView.separatorStyle = .none
         
         return NSAttributedString(string: str, attributes: attr)
@@ -81,7 +81,7 @@ class eventViewController: UIViewController, DZNEmptyDataSetSource, DZNEmptyData
     }
     
     func indicatorInfo(for pagerTabStripController: PagerTabStripViewController) -> IndicatorInfo {
-        return IndicatorInfo(title: "Events")
+        return IndicatorInfo(title: NSLocalizedString("Events", comment: ""))
     }
 }
 

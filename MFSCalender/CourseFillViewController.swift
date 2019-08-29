@@ -82,15 +82,19 @@ class courseFillController: UIViewController {
         group.wait()
         setProgressTo(value: 100)
         
-        DispatchQueue.main.async {
-            UIApplication.shared.isNetworkActivityIndicatorVisible = false
-            self.topLabel.text = "Success"
-            self.bottomLabel.text = "Successfully updated"
-        }
+        displaySuccessText()
         
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2), execute: {
             self.viewDismiss()
         })
+    }
+    
+    func displaySuccessText() {
+        DispatchQueue.main.async {
+            UIApplication.shared.isNetworkActivityIndicatorVisible = false
+            self.topLabel.text = NSLocalizedString("Success", comment: "")
+            self.bottomLabel.text = NSLocalizedString("Successfully updated", comment: "")
+        }
     }
     
     // Get the quarter data from mySchool Server. Format: Array(Dict(OfferingType: Int, DurationId: Int, DurationDescription: String, CurrentInd: Int))
@@ -160,11 +164,7 @@ class courseFillController: UIViewController {
         }
 
         setProgressTo(value: 100)
-        DispatchQueue.main.async {
-            UIApplication.shared.isNetworkActivityIndicatorVisible = false
-            self.topLabel.text = "Success"
-            self.bottomLabel.text = "Successfully updated"
-        }
+        displaySuccessText()
         
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2), execute: {
             self.viewDismiss()

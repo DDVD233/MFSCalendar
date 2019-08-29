@@ -101,23 +101,23 @@ public class School {
         var difference: TimeInterval? = nil
         
         if currentTime.isBeforeDate(startTime, granularity: .second) {
-            timerString = "Starts in "
+            timerString = NSLocalizedString("Starts in ", comment: "")
             difference = currentTime - startTime
         } else if currentTime.isBeforeDate(endTime, granularity: .second) {
-            timerString = "Ends in "
+            timerString = NSLocalizedString("Ends in ", comment: "")
             difference = currentTime - endTime
         } else {
-            timerString = "Ended "
+            timerString = NSLocalizedString("Ended ", comment: "")
             difference = endTime - currentTime
         }
         
         let minutes = Int(difference!).seconds.in(.minute)!
         
         if minutes > 2 {
-            timerString += String(describing: minutes) + " minutes"
+            timerString += String(describing: minutes) + NSLocalizedString(" minutes", comment: "")
         } else {
             let seconds = Int(difference!)
-            timerString += String(describing: seconds) + " seconds"
+            timerString += String(describing: seconds) + NSLocalizedString(" seconds", comment: "")
         }
         
         return timerString
@@ -163,7 +163,7 @@ public class School {
         }
         formatter.dateFormat = "yyyyMMdd"
         let checkDateString = formatter.string(from: checkDate)
-        let day = dayDict[checkDateString] ?? "No School"
+        let day = dayDict[checkDateString] ?? NSLocalizedString("No School", comment: "")
         
         return day
     }

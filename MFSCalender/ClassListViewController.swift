@@ -48,10 +48,10 @@ class classListController: UIViewController, UIViewControllerPreviewingDelegate 
     
     @objc func showOrHideGrade() {
         if !isShowingGrade {
-            self.navigationItem.rightBarButtonItem!.title = "Hide Grade"
+            self.navigationItem.rightBarButtonItem!.title = NSLocalizedString("Hide Grade", comment: " ")
             isShowingGrade = true
         } else {
-            self.navigationItem.rightBarButtonItem!.title = "Show Grade"
+            self.navigationItem.rightBarButtonItem!.title = NSLocalizedString("Show Grade", comment: "")
             isShowingGrade = false
         }
         
@@ -230,9 +230,9 @@ extension classListController: UICollectionViewDataSource, UICollectionViewDeleg
 
         let view = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "classListHeaderViewCell", for: indexPath) as! classListHeaderViewCell
         if indexPath.section == 0 {
-            view.textLabel.text = "Frequently Used"
+            view.textLabel.text = NSLocalizedString("Frequently Used", comment: "")
         } else {
-            view.textLabel.text = "Others"
+            view.textLabel.text = NSLocalizedString("Others", comment: "")
         }
 
         return view

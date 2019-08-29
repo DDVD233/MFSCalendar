@@ -40,7 +40,7 @@ class LoginView {
                         print("Login Error!")
                         if (resDict["ErrorType"] as! String) == "UNAUTHORIZED_ACCESS" {
                             DispatchQueue.main.async {
-                                presentErrorMessage(presentMessage: "The username/password is incorrect. Please check your spelling.", layout: .cardView)
+                                presentErrorMessage(presentMessage: NSLocalizedString("The username/password is incorrect. Please check your spelling.", comment: ""), layout: .cardView)
                             }
                         }
                         
@@ -199,7 +199,7 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
             loginNotice.addButton("Go to mySchool website", action: {
                 UIApplication.shared.open(URL(string: Preferences().baseURL + "/app/#login")!, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: nil)
             })
-            loginNotice.showInfo("Welcome", subTitle: "Welcome to Class Master. Please use your mySchool account to log in.", animationStyle: .bottomToTop)
+            loginNotice.showInfo(NSLocalizedString("Welcome", comment: ""), subTitle: NSLocalizedString("Welcome to Class Master. Please use your mySchool account to log in.", comment: ""), animationStyle: .bottomToTop)
         }
     }
 
@@ -248,14 +248,14 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
         let view = MessageView.viewFromNib(layout: .cardView)
         view.configureTheme(.error)
         var icon: String? = nil
-        if presentMessage == "The username/password is incorrect. Please check your spelling." {
+        if presentMessage == NSLocalizedString("The username/password is incorrect. Please check your spelling.", comment: "") {
             icon = "🤔"
         } else {
             icon = "😱"
         }
         view.configureContent(title: "Error!", body: presentMessage, iconText: icon!)
-        if presentMessage == "The username/password is incorrect. Please check your spelling." {
-            view.button?.setTitle("Forgot Password", for: .normal)
+        if presentMessage == NSLocalizedString("The username/password is incorrect. Please check your spelling.", comment: "") {
+            view.button?.setTitle(NSLocalizedString("Forgot Password", comment: ""), for: .normal)
             view.button?.addTarget(self, action: #selector(wrongPassword(button:)), for: .touchUpInside)
         } else {
             view.button?.isHidden = true
@@ -356,7 +356,7 @@ extension firstTimeLaunchController {
         Preferences().loginTime = nil
         let (success, token, _) = loginAuthentication()
         if token == "Incorrect password" {
-            self.errorMessage(presentMessage: "The username/password is incorrect. Please check your spelling.")
+            self.errorMessage(presentMessage: NSLocalizedString("The username/password is incorrect. Please check your spelling.", comment: ""))
         } else if !success {
             self.errorMessage(presentMessage: token)
         } else {
@@ -412,7 +412,7 @@ extension firstTimeLaunchController {
                 Preferences().version = versionNumber ?? 0
             case let .failure(error):
                 DispatchQueue.main.async {
-                    let presentMessage = error.localizedDescription + " Please check your internet connection."
+                    let presentMessage = error.localizedDescription + NSLocalizedString(" Please check your internet connection.", comment: "")
                     self.errorMessage(presentMessage: presentMessage)
                 }
             }

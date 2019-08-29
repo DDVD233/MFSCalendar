@@ -85,12 +85,12 @@ class EmailLoginViewController: UIViewController, UITextFieldDelegate {
         let nameText = name.text
         let passwordText = password.text
         guard nameText.existsAndNotEmpty() else {
-            presentErrorMessage(presentMessage: "Please enter your email address", layout: .cardView)
+            presentErrorMessage(presentMessage: NSLocalizedString("Please enter your email address", comment: ""), layout: .cardView)
             return
         }
         
         guard passwordText.existsAndNotEmpty() else {
-            presentErrorMessage(presentMessage: "Please enter your password", layout: .cardView)
+            presentErrorMessage(presentMessage: NSLocalizedString("Please enter your password", comment: ""), layout: .cardView)
             return
         }
         
@@ -104,7 +104,7 @@ class EmailLoginViewController: UIViewController, UITextFieldDelegate {
             let parentVC = parent as! EmailViewController
             parentVC.addEmailListView()
         case "WrongPassword":
-            presentErrorMessage(presentMessage: "The username/password is incorrect. Please check your spelling.", layout: .cardView)
+            presentErrorMessage(presentMessage: NSLocalizedString("The username/password is incorrect. Please check your spelling.", comment: ""), layout: .cardView)
         case "InternalError":
             presentErrorMessage(presentMessage: "The server is not working. Please contact David.", layout: .cardView)
         default:
@@ -144,7 +144,7 @@ class EmailLoginViewController: UIViewController, UITextFieldDelegate {
             if error == nil {
                 guard data != nil else {
                     DispatchQueue.main.async {
-                        presentErrorMessage(presentMessage: "Failed. Please check your internet", layout: .cardView)
+                        presentErrorMessage(presentMessage: NSLocalizedString("Authentication Failed. Please check your internet", comment: ""), layout: .cardView)
                     }
                     semaphore.signal()
                     return
@@ -152,7 +152,7 @@ class EmailLoginViewController: UIViewController, UITextFieldDelegate {
                 result = String(data: data!, encoding: .utf8) ?? ""
             } else {
                 DispatchQueue.main.async {
-                    let presentMessage = (error?.localizedDescription)! + " Please check your internet connection."
+                    let presentMessage = (error?.localizedDescription)! + NSLocalizedString(" Please check your internet connection.", comment: "")
                     presentErrorMessage(presentMessage: presentMessage, layout: .cardView)
                 }
                 

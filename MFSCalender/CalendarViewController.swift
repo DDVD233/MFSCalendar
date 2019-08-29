@@ -79,7 +79,7 @@ class CalendarViewController: SegmentedPagerTabStripViewController, UIGestureRec
 //            hidesBottomBarWhenPushed = false
 //        }
         super.viewDidLoad()
-        self.backButton.title = "Collapse"
+        self.backButton.title = NSLocalizedString("Collapse", comment: "")
         addScopeGesture()
         self.calendarView.select(Date())
         
@@ -120,10 +120,10 @@ class CalendarViewController: SegmentedPagerTabStripViewController, UIGestureRec
 
     @IBAction func expandButton(_ sender: Any) {
         if self.calendarView.scope == .month {
-            self.backButton.title = "Expand"
+            self.backButton.title = NSLocalizedString("Expand", comment: "")
             self.calendarView.setScope(.week, animated: true)
         } else {
-            self.backButton.title = "Collapse"
+            self.backButton.title = NSLocalizedString("Collapse", comment: "")
             self.calendarView.setScope(.month, animated: true)
         }
 
@@ -218,7 +218,7 @@ extension CalendarViewController: FSCalendarDelegate, FSCalendarDataSource {
 
     func calendar(_ calendar: FSCalendar, subtitleFor date: Date) -> String? {
         let day = school.checkDate(checkDate: date)
-        if day == "No School" {
+        if day == NSLocalizedString("No School", comment: "") {
             return nil
         } else {
             return day
@@ -228,9 +228,9 @@ extension CalendarViewController: FSCalendarDelegate, FSCalendarDataSource {
     func calendar(_ calendar: FSCalendar, boundingRectWillChange bounds: CGRect, animated: Bool) {
         self.calendarHeightConstraint.constant = bounds.height
         if self.calendarView.scope == .month {
-            self.backButton.title = "Collapse"
+            self.backButton.title = NSLocalizedString("Collapse", comment: "")
         } else {
-            self.backButton.title = "Expand"
+            self.backButton.title = NSLocalizedString("Expand", comment: "")
         }
         
         self.view.layoutIfNeeded()

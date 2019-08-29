@@ -1,0 +1,12 @@
+
+/* Class = "UITabBarItem"; title = "Today"; ObjectID = "3kw-2D-goI"; */
+"3kw-2D-goI.title" = "今天";
+
+/* Class = "UITabBarItem"; title = "Homework"; ObjectID = "879-k8-qhx"; */
+"879-k8-qhx.title" = "作业";
+
+/* Class = "UITabBarItem"; title = "Chat"; ObjectID = "Inl-Se-UAq"; */
+"Inl-Se-UAq.title" = "聊天";
+
+/* Class = "UITabBarItem"; title = "Calendar"; ObjectID = "vcF-LL-9cP"; */
+"vcF-LL-9cP.title" = "日历";

@@ -1,0 +1,396 @@
+
+/* Class = "UIViewController"; title = "Course List"; ObjectID = "0RJ-yP-WMX"; */
+"0RJ-yP-WMX.title" = "课程表";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "0xK-gp-QVI"; */
+"0xK-gp-QVI.text" = "Label";
+
+/* Class = "UILabel"; text = "N/A"; ObjectID = "19q-6s-urR"; */
+"19q-6s-urR.text" = "N/A";
+
+/* Class = "UILabel"; text = "52"; ObjectID = "1H8-DC-Q5V"; */
+"1H8-DC-Q5V.text" = "52";
+
+/* Class = "UILabel"; text = "Capstone!"; ObjectID = "1dh-6R-nrd"; */
+"1dh-6R-nrd.text" = "Capstone!";
+
+/* Class = "UILabel"; text = "3305"; ObjectID = "1jk-d8-RnA"; */
+"1jk-d8-RnA.text" = "3305";
+
+/* Class = "UINavigationItem"; title = "Homework"; ObjectID = "2Cr-mv-nvG"; */
+"2Cr-mv-nvG.title" = "作业";
+
+/* Class = "UILabel"; text = "time"; ObjectID = "2hI-c8-LxD"; */
+"2hI-c8-LxD.text" = "时间";
+
+/* Class = "UILabel"; text = "Key"; ObjectID = "2xY-fX-ha7"; */
+"2xY-fX-ha7.text" = "Key";
+
+/* Class = "UILabel"; text = "Value"; ObjectID = "36Z-Pr-YWx"; */
+"36Z-Pr-YWx.text" = "Value";
+
+/* Class = "UILabel"; text = "N"; ObjectID = "3Bf-CK-3a3"; */
+"3Bf-CK-3a3.text" = "N";
+
+/* Class = "UITableViewController"; title = "About"; ObjectID = "3kg-Bk-lvv"; */
+"3kg-Bk-lvv.title" = "关于";
+
+/* Class = "UILabel"; text = "Grade"; ObjectID = "49n-vH-q96"; */
+"49n-vH-q96.text" = "成绩";
+
+/* Class = "UITabBarItem"; title = "Timetable"; ObjectID = "4oN-GM-rFw"; */
+"4oN-GM-rFw.title" = "时间表";
+
+/* Class = "UILabel"; text = "Room"; ObjectID = "6in-tx-ezS"; */
+"6in-tx-ezS.text" = "Room";
+
+/* Class = "UIViewController"; title = "Step Challenge"; ObjectID = "74F-zA-lB3"; */
+"74F-zA-lB3.title" = "步数挑战";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "7gf-By-MrG"; */
+"7gf-By-MrG.text" = "Label";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "7he-fP-i1K"; */
+"7he-fP-i1K.text" = "Label";
+
+/* Class = "UIViewController"; title = "Class Information"; ObjectID = "8Ug-j0-Kmo"; */
+"8Ug-j0-Kmo.title" = "课程信息";
+
+/* Class = "UIButton"; normalTitle = " "; ObjectID = "8Wk-gW-WdH"; */
+"8Wk-gW-WdH.normalTitle" = " ";
+
+/* Class = "UILabel"; text = "Period"; ObjectID = "9HT-Ws-hTX"; */
+"9HT-Ws-hTX.text" = "Period";
+
+/* Class = "UIBarButtonItem"; title = "Back"; ObjectID = "9e5-Da-MZM"; */
+"9e5-Da-MZM.title" = "返回";
+
+/* Class = "UIButton"; normalTitle = "Visit My Github Page For this App"; ObjectID = "A5Q-Qk-I4u"; */
+"A5Q-Qk-I4u.normalTitle" = "关于这个app请访问我的Github Page";
+
+/* Class = "UIButton"; normalTitle = "Show More..."; ObjectID = "AIg-f2-PPx"; */
+"AIg-f2-PPx.normalTitle" = "查看更多...";
+
+/* Class = "UITabBarItem"; title = "Chat"; ObjectID = "Aga-Lb-dZZ"; */
+"Aga-Lb-dZZ.title" = "聊天";
+
+/* Class = "UILabel"; text = "Name"; ObjectID = "BUZ-Jh-ASa"; */
+"BUZ-Jh-ASa.text" = "名字";
+
+/* Class = "UILabel"; text = "Build"; ObjectID = "Bad-So-nd2"; */
+"Bad-So-nd2.text" = "Build";
+
+/* Class = "UILabel"; text = "@mfriends.org"; ObjectID = "CC7-74-8vk"; */
+"CC7-74-8vk.text" = "@mfriends.org";
+
+/* Class = "UIViewController"; title = "Email"; ObjectID = "DyU-7f-0CQ"; */
+"DyU-7f-0CQ.title" = "邮箱";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "DzB-X9-PNI"; */
+"DzB-X9-PNI.text" = "Label";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "EJK-Ry-svt"; */
+"EJK-Ry-svt.text" = "Label";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "Ehi-wG-6sB"; */
+"Ehi-wG-6sB.text" = "Label";
+
+/* Class = "UIButton"; normalTitle = "Show More..."; ObjectID = "FEh-ma-Zph"; */
+"FEh-ma-Zph.normalTitle" = "查看更多...";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "FEm-2t-CIb"; */
+"FEm-2t-CIb.text" = "Label";
+
+/* Class = "UIButton"; normalTitle = "Maybe Later"; ObjectID = "FnA-2E-Jq7"; */
+"FnA-2E-Jq7.normalTitle" = "稍后";
+
+/* Class = "UINavigationItem"; title = "Me"; ObjectID = "For-Aw-wrN"; */
+"For-Aw-wrN.title" = "我";
+
+/* Class = "UITabBarItem"; title = "Calendar"; ObjectID = "Ga6-gg-IQU"; */
+"Ga6-gg-IQU.title" = "日历";
+
+/* Class = "UILabel"; text = "About Me"; ObjectID = "Hyr-Cw-9vl"; */
+"Hyr-Cw-9vl.text" = "关于我";
+
+/* Class = "UILabel"; text = "Name"; ObjectID = "Id0-Z3-70o"; */
+"Id0-Z3-70o.text" = "名字";
+
+/* Class = "UILabel"; text = "Total Points"; ObjectID = "J9X-FF-EYx"; */
+"J9X-FF-EYx.text" = "总分";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "JCO-Y8-H3U"; */
+"JCO-Y8-H3U.text" = "Label";
+
+/* Class = "UILabel"; text = "Teacher's Name"; ObjectID = "JNj-nw-gIh"; */
+"JNj-nw-gIh.text" = "教师姓名";
+
+/* Class = "UILabel"; text = "Quarter"; ObjectID = "JNv-Hn-mlE"; */
+"JNv-Hn-mlE.text" = "学期";
+
+/* Class = "UIButton"; normalTitle = "LOG IN"; ObjectID = "KCT-Og-t2k"; */
+"KCT-Og-t2k.normalTitle" = "登录";
+
+/* Class = "UISegmentedControl"; Ksd-Ob-Zri.segmentTitles[0] = "First"; ObjectID = "Ksd-Ob-Zri"; */
+"Ksd-Ob-Zri.segmentTitles[0]" = "第一";
+
+/* Class = "UISegmentedControl"; Ksd-Ob-Zri.segmentTitles[1] = "Second"; ObjectID = "Ksd-Ob-Zri"; */
+"Ksd-Ob-Zri.segmentTitles[1]" = "第二";
+
+/* Class = "UILabel"; text = "Current Class"; ObjectID = "L1A-eY-tem"; */
+"L1A-eY-tem.text" = "当前课程";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "L1l-eQ-GA5"; */
+"L1l-eQ-GA5.text" = "Label";
+
+/* Class = "UILabel"; text = "Special Thanks To:"; ObjectID = "Ll4-VK-RMp"; */
+"Ll4-VK-RMp.text" = "特别鸣谢：";
+
+/* Class = "UIViewController"; title = "Assignment Detail"; ObjectID = "Loo-xY-UXg"; */
+"Loo-xY-UXg.title" = "作业详情";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "MMW-aR-Zs0"; */
+"MMW-aR-Zs0.text" = "Label";
+
+/* Class = "UILabel"; text = "Name"; ObjectID = "MXW-Yw-wpi"; */
+"MXW-Yw-wpi.text" = "名字";
+
+/* Class = "UILabel"; text = "While we are updating your courses"; ObjectID = "Mge-lm-nyj"; */
+"Mge-lm-nyj.text" = "我们正在更新你的课程";
+
+/* Class = "UIButton"; normalTitle = "Register"; ObjectID = "OGx-a2-XTP"; */
+"OGx-a2-XTP.normalTitle" = "注册";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "Pi1-Ui-NJU"; */
+"Pi1-Ui-NJU.text" = "Label";
+
+/* Class = "UIButton"; normalTitle = "LOG IN"; ObjectID = "Prf-DT-sB9"; */
+"Prf-DT-sB9.normalTitle" = "登录";
+
+/* Class = "UICollectionViewController"; title = "Me"; ObjectID = "Q0f-l8-tfz"; */
+"Q0f-l8-tfz.title" = "我";
+
+/* Class = "UILabel"; text = "MFS Mobile"; ObjectID = "R8L-if-2Sq"; */
+"R8L-if-2Sq.text" = "Class Master";
+
+/* Class = "UILabel"; text = "Email"; ObjectID = "RRC-aI-PNR"; */
+"RRC-aI-PNR.text" = "邮箱";
+
+/* Class = "UITableViewController"; title = "Class Detail"; ObjectID = "SIS-mR-Y8t"; */
+"SIS-mR-Y8t.title" = "课程详情";
+
+/* Class = "UIButton"; normalTitle = "Login"; ObjectID = "SiZ-UJ-i2p"; */
+"SiZ-UJ-i2p.normalTitle" = "登录";
+
+/* Class = "UITabBarController"; title = "MainTab"; ObjectID = "TWf-dU-uxH"; */
+"TWf-dU-uxH.title" = "MainTab";
+
+/* Class = "UITextView"; text = "Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda."; ObjectID = "UZ1-Ja-cer"; */
+"UZ1-Ja-cer.text" = "國西人之，政公門早心線中家得……用金大車手也一聽，學印放道保說之去命麼，學小媽，得告總十，利好的是不軍李用公是條會筆之長結大經自房那了學數股我上廣品的？當帶確我。生設個兩社聞的兒化二道邊參，如角現發修家發主利父，濟身交的求音市不起樣不相老視？已打點我風，天你見大十生眼回北車屋性沒員太持於？覺喜變用首方子最這不中然雨大的滿超長用的喜是走家人不樹而，做跑那海影時裡來問藝本有有行字一！東分拿的節人朋種全了行！子告有價生獲只還、才看知一體古工不來車玩據起地一經間所的東乎初年望達影放解，不轉力展們方校大傳裡和收有司以如請臺早是個團如要如來賣後做能、型聲大方生可高理起質非。女不我表大進打身滿的坡企自然？國離獨自連什式類門孩一立血裡回門雖個在印不正今時名命底轉中口傳說則法我國工陸可你名自病簡生多年於下空進";
+
+/* Class = "UITextView"; text = "If you haven't registered for MobileServe yet, please do so as soon as possible. Thanks!"; ObjectID = "VUf-kG-IM0"; */
+"VUf-kG-IM0.text" = "如果你还未注册MobileServe，请尽快注册，谢谢！";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "Vdw-R0-Gj3"; */
+"Vdw-R0-Gj3.text" = "Label";
+
+/* Class = "UIBarButtonItem"; title = "Today"; ObjectID = "Vqp-lJ-jaV"; */
+"Vqp-lJ-jaV.title" = "今天";
+
+/* Class = "UITableViewController"; title = "Settings"; ObjectID = "XRE-Nj-Rag"; */
+"XRE-Nj-Rag.title" = "设置";
+
+/* Class = "UILabel"; text = "Acknowledgement"; ObjectID = "YHJ-2A-3dZ"; */
+"YHJ-2A-3dZ.text" = "感谢";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "ZdZ-Cf-5lE"; */
+"ZdZ-Cf-5lE.text" = "Label";
+
+/* Class = "UIButton"; normalTitle = "Send Email"; ObjectID = "Zoq-dN-cof"; */
+"Zoq-dN-cof.normalTitle" = "发送邮件";
+
+/* Class = "UISegmentedControl"; a0k-pl-4C0.segmentTitles[0] = "First"; ObjectID = "a0k-pl-4C0"; */
+"a0k-pl-4C0.segmentTitles[0]" = "First";
+
+/* Class = "UISegmentedControl"; a0k-pl-4C0.segmentTitles[1] = "Second"; ObjectID = "a0k-pl-4C0"; */
+"a0k-pl-4C0.segmentTitles[1]" = "Second";
+
+/* Class = "UISegmentedControl"; a0k-pl-4C0.segmentTitles[2] = "Third"; ObjectID = "a0k-pl-4C0"; */
+"a0k-pl-4C0.segmentTitles[2]" = "Third";
+
+/* Class = "UISegmentedControl"; a0k-pl-4C0.segmentTitles[3] = "Fourth"; ObjectID = "a0k-pl-4C0"; */
+"a0k-pl-4C0.segmentTitles[3]" = "Fourth";
+
+/* Class = "UITabBarItem"; title = "Today"; ObjectID = "abE-uF-9cL"; */
+"abE-uF-9cL.title" = "今天";
+
+/* Class = "UILabel"; text = "Name"; ObjectID = "arN-ek-zeF"; */
+"arN-ek-zeF.text" = "名字";
+
+/* Class = "UINavigationItem"; title = "A Day"; ObjectID = "bQk-s9-hqs"; */
+"bQk-s9-hqs.title" = "A日";
+
+/* Class = "UITabBarItem"; title = "Homework"; ObjectID = "bSa-Cf-LM5"; */
+"bSa-Cf-LM5.title" = "作业";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "bjt-Fh-sHd"; */
+"bjt-Fh-sHd.text" = "Label";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "cKy-VV-bph"; */
+"cKy-VV-bph.text" = "Label";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "cP4-ar-7rX"; */
+"cP4-ar-7rX.text" = "Label";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "dWf-bM-5jx"; */
+"dWf-bM-5jx.text" = "Label";
+
+/* Class = "UILabel"; text = "className"; ObjectID = "dzY-df-aKe"; */
+"dzY-df-aKe.text" = "课程名";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "eX9-aB-hZR"; */
+"eX9-aB-hZR.text" = "Label";
+
+/* Class = "UIButton"; normalTitle = "LOG IN"; ObjectID = "eff-bQ-VpN"; */
+"eff-bQ-VpN.normalTitle" = "登录";
+
+/* Class = "UITextView"; text = "Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda."; ObjectID = "ejU-Qj-EwQ"; */
+"ejU-Qj-EwQ.text" = "國西人之，政公門早心線中家得……用金大車手也一聽，學印放道保說之去命麼，學小媽，得告總十，利好的是不軍李用公是條會筆之長結大經自房那了學數股我上廣品的？當帶確我。生設個兩社聞的兒化二道邊參，如角現發修家發主利父，濟身交的求音市不起樣不相老視？已打點我風，天你見大十生眼回北車屋性沒員太持於？覺喜變用首方子最這不中然雨大的滿超長用的喜是走家人不樹而，做跑那海影時裡來問藝本有有行字一！東分拿的節人朋種全了行！子告有價生獲只還、才看知一體古工不來車玩據起地一經間所的東乎初年望達影放解，不轉力展們方校大傳裡和收有司以如請臺早是個團如要如來賣後做能、型聲大方生可高理起質非。女不我表大進打身滿的坡企自然？國離獨自連什式類門孩一立血裡回門雖個在印不正今時名命底轉中口傳說則法我國工陸可你名自病簡生多年於下空進";
+
+/* Class = "UILabel"; text = "You can login using your mobileserve account to check your total service hour. Wanna try it out?"; ObjectID = "emS-Zt-K2o"; */
+"emS-Zt-K2o.text" = "You can login using your mobileserve account to check your total service hour. Wanna try it out?";
+
+/* Class = "UITableViewSection"; footerTitle = "Please send me an email or submit an issue on Github if you need any help. "; ObjectID = "f58-G3-a9j"; */
+"f58-G3-a9j.footerTitle" = "Please send me an email or submit an issue on Github if you need any help. ";
+
+/* Class = "UITableViewSection"; headerTitle = "Contact Information"; ObjectID = "f58-G3-a9j"; */
+"f58-G3-a9j.headerTitle" = "联系方式";
+
+/* Class = "UITextView"; text = "MFS Mobile now supports MobileServe!"; ObjectID = "f7u-Pk-F51"; */
+"f7u-Pk-F51.text" = "ClassMaster now supports MobileServe!";
+
+/* Class = "UISegmentedControl"; fR1-y0-Ct9.segmentTitles[0] = "First"; ObjectID = "fR1-y0-Ct9"; */
+"fR1-y0-Ct9.segmentTitles[0]" = "First";
+
+/* Class = "UISegmentedControl"; fR1-y0-Ct9.segmentTitles[1] = "Second"; ObjectID = "fR1-y0-Ct9"; */
+"fR1-y0-Ct9.segmentTitles[1]" = "Second";
+
+/* Class = "UITextView"; text = "- Marcella Thanh-Guyet - Henry Powell - Chris Chen - Italia Vitella - Blythe Salamone - Maddie Mininno - Courtney Tarter - Alaisha Blue - Oscar Wan - Susu Guo - Mia Peng - Annabelle Crescenzo - Lauren Kam - Tylar Pierce - Andrew Rauscher - Jacob Del Angel - Dylan Zhou - Chris Gu"; ObjectID = "g42-Eq-D5j"; */
+"g42-Eq-D5j.text" = "- Marcella Thanh-Guyet - Henry Powell - Chris Chen - Italia Vitella - Blythe Salamone - Maddie Mininno - Courtney Tarter - Alaisha Blue - Oscar Wan - Susu Guo - Mia Peng - Annabelle Crescenzo - Lauren Kam - Tylar Pierce - Andrew Rauscher - Jacob Del Angel - Dylan Zhou - Chris Gu";
+
+/* Class = "UILabel"; text = "Advisor"; ObjectID = "g9s-0k-R1y"; */
+"g9s-0k-R1y.text" = "导师";
+
+/* Class = "UILabel"; text = "Date"; ObjectID = "hOV-gt-8od"; */
+"hOV-gt-8od.text" = "日期";
+
+/* Class = "UILabel"; text = "hiuhiuhiuhiuhiu "; ObjectID = "hz3-Dg-hZ1"; */
+"hz3-Dg-hZ1.text" = "嘿嘿嘿嘿嘿";
+
+/* Class = "UITabBarItem"; title = "Email"; ObjectID = "jsk-uB-gNp"; */
+"jsk-uB-gNp.title" = "邮箱";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "jxe-La-Ofp"; */
+"jxe-La-Ofp.normalTitle" = "按钮";
+
+/* Class = "UIViewController"; title = "Mail"; ObjectID = "kHl-UL-Fwq"; */
+"kHl-UL-Fwq.title" = "邮箱";
+
+/* Class = "UILabel"; text = "Room"; ObjectID = "l4m-jp-B4s"; */
+"l4m-jp-B4s.text" = "Room";
+
+/* Class = "UITableViewController"; title = "Profile"; ObjectID = "laA-fL-7Hp"; */
+"laA-fL-7Hp.title" = "个人资料";
+
+/* Class = "UILabel"; text = "Select Your School"; ObjectID = "lce-Uo-RVe"; */
+"lce-Uo-RVe.text" = "选择你的学校";
+
+/* Class = "UITextView"; text = "- Class of 2017: Andy Pang, Sherry Wang - Class of 2018: Susu Guo, Mia Peng - Class of 2019: Chris Gu, Shuxuan Lyu"; ObjectID = "mhn-Vi-b94"; */
+"mhn-Vi-b94.text" = "- Class of 2018: Andy Pang, Sherry Wang - Class of 2019: Susu Guo, Mia Peng - Class of 2020: Chris Gu, Shuxuan Lyu";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "nJx-v6-03Q"; */
+"nJx-v6-03Q.text" = "Label";
+
+/* Class = "UILabel"; text = "The username/password is incorrect. Please check your spelling."; ObjectID = "o2p-ku-fch"; */
+"o2p-ku-fch.text" = "用户名或密码错误。请检查您的拼写。";
+
+/* Class = "UITextView"; text = "Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test"; ObjectID = "oPZ-Vi-pf5"; */
+"oPZ-Vi-pf5.text" = "测试 测试 测试 测试 测试 测试 测试 测试 测试 测试 测试 测试啦";
+
+/* Class = "UILabel"; text = "hiuhiuhiuhiuhiu uhiuhiuhiuhiuhiuh hiuhiuhiuhiuhiu"; ObjectID = "ooY-hM-yuu"; */
+"ooY-hM-yuu.text" = "嘿嘿嘿嘿嘿";
+
+/* Class = "UIViewController"; title = "Main"; ObjectID = "pL9-2o-whX"; */
+"pL9-2o-whX.title" = "Main";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "pQE-yv-qYi"; */
+"pQE-yv-qYi.text" = "Label";
+
+/* Class = "UILabel"; text = "Please Wait"; ObjectID = "poj-9P-jXp"; */
+"poj-9P-jXp.text" = "请稍等";
+
+/* Class = "UILabel"; text = "Thanks for your support!"; ObjectID = "pv9-7J-xYx"; */
+"pv9-7J-xYx.text" = "感谢你们的支持！";
+
+/* Class = "UIButton"; normalTitle = "OK"; ObjectID = "pwW-U7-lFq"; */
+"pwW-U7-lFq.normalTitle" = "好的";
+
+/* Class = "UILabel"; text = "Title"; ObjectID = "q8B-nI-ogg"; */
+"q8B-nI-ogg.text" = "Title";
+
+/* Class = "UILabel"; text = "Title qwerty"; ObjectID = "qXf-rX-DEx"; */
+"qXf-rX-DEx.text" = "Title qwerty";
+
+/* Class = "UILabel"; text = "Date"; ObjectID = "qav-cm-dna"; */
+"qav-cm-dna.text" = "日期";
+
+/* Class = "UITextView"; text = "Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda. hfieruhafuheaoubcvuaiebrvbcuiasbbvbhadbvjhbjhsbchj iudcuaesfiouhuefawubfueiaw"; ObjectID = "rDN-Pd-9AE"; */
+"rDN-Pd-9AE.text" = "國西人之，政公門早心線中家得……用金大車手也一聽，學印放道保說之去命麼，學小媽，得告總十，利好的是不軍李用公是條會筆之長結大經自房那了學數股我上廣品的？當帶確我。生設個兩社聞的兒化二道邊參，如角現發修家發主利父，濟身交的求音市不起樣不相老視？已打點我風，天你見大十生眼回北車屋性沒員太持於？覺喜變用首方子最這不中然雨大的滿超長用的喜是走家人不樹而，做跑那海影時裡來問藝本有有行字一！東分拿的節人朋種全了行！子告有價生獲只還、才看知一體古工不來車玩據起地一經間所的東乎初年望達影放解，不轉力展們方校大傳裡和收有司以如請臺早是個團如要如來賣後做能、型聲大方生可高理起質非。女不我表大進打身滿的坡企自然？國離獨自連什式類門孩一立血裡回門雖個在印不正今時名命底轉中口傳說則法我國工陸可你名自病簡生多年於下空進";
+
+/* Class = "UILabel"; text = "Capstone Audiences"; ObjectID = "rGR-2j-1LK"; */
+"rGR-2j-1LK.text" = "Capstone 来宾";
+
+/* Class = "UILabel"; text = "Grade"; ObjectID = "reN-G7-IAC"; */
+"reN-G7-IAC.text" = "成绩";
+
+/* Class = "UILabel"; text = "Beta Testers"; ObjectID = "sSB-FL-Hq8"; */
+"sSB-FL-Hq8.text" = "Beta 测试者";
+
+/* Class = "UITextView"; text = "Register for MobileServe"; ObjectID = "t0g-lT-uv4"; */
+"t0g-lT-uv4.text" = "注册MobileServe";
+
+/* Class = "UILabel"; text = "@mfriends.org"; ObjectID = "tMD-iZ-CBx"; */
+"tMD-iZ-CBx.text" = "@mfriends.org";
+
+/* Class = "UILabel"; text = "hiuhiuhiuhiuhiu "; ObjectID = "tR6-lR-srX"; */
+"tR6-lR-srX.text" = "嘿嘿嘿嘿嘿";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "tbc-8a-h4N"; */
+"tbc-8a-h4N.text" = "Label";
+
+/* Class = "UILabel"; text = "Michael Omilian"; ObjectID = "teX-wj-cZK"; */
+"teX-wj-cZK.text" = "Michael Omilian迈克尔·奥米连";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "uqj-Bb-Yyn"; */
+"uqj-Bb-Yyn.text" = "Label";
+
+/* Class = "UILabel"; text = "255"; ObjectID = "uxc-AZ-jZq"; */
+"uxc-AZ-jZq.text" = "255";
+
+/* Class = "UIButton"; normalTitle = "Cancel"; ObjectID = "vAX-ny-rch"; */
+"vAX-ny-rch.normalTitle" = "取消";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "whC-FT-atg"; */
+"whC-FT-atg.text" = "Label";
+
+/* Class = "UILabel"; text = "Cumulative Grade"; ObjectID = "ws8-Ti-aCJ"; */
+"ws8-Ti-aCJ.text" = "总成绩";
+
+/* Class = "UIButton"; normalTitle = "SUBMIT"; ObjectID = "wvd-i8-wpD"; */
+"wvd-i8-wpD.normalTitle" = "提交";
+
+/* Class = "UIButton"; normalTitle = "Add to Calendar"; ObjectID = "xTJ-RK-4kM"; */
+"xTJ-RK-4kM.normalTitle" = "加到日历";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "zxu-Y2-pWy"; */
+"zxu-Y2-pWy.text" = "Label";

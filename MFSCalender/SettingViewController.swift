@@ -67,13 +67,13 @@ class settingViewController: UITableViewController, UIActionSheetDelegate {
     }
     
     @IBAction func changeQuarter(_ sender: Any) {
-        let quarterActionSheet = UIAlertController(title: "Are you sure you want to change quarter?", message: "This will clear all the course data.", preferredStyle: .actionSheet)
+        let quarterActionSheet = UIAlertController(title: NSLocalizedString("Are you sure you want to change quarter?", comment: ""), message: NSLocalizedString("This will clear all the course data.", comment: ""), preferredStyle: .actionSheet)
         
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (alertAction) -> Void in
+        let cancelAction = UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel) { (alertAction) -> Void in
             NSLog("Canceled")
         }
         
-        let changeQuarterAction = UIAlertAction(title: "Yes, change it!", style: .default) { (alertAction) -> Void in
+        let changeQuarterAction = UIAlertAction(title: NSLocalizedString("Yes, change it!", comment: ""), style: .default) { (alertAction) -> Void in
             print(self.currentQuarter.selectedSegmentIndex)
             self.changeQuarterTo(quarter: self.currentQuarter.selectedSegmentIndex + 1)
             NSLog("Quarter Changed")

@@ -97,9 +97,9 @@ class ADay: UIViewController, IndicatorInfoProvider {
     
     func indicatorInfo(for pagerTabStripController: PagerTabStripViewController) -> IndicatorInfo {
         if daySelected != nil {
-            return IndicatorInfo(title: daySelected! + " Day")
+            return IndicatorInfo(title: daySelected! + NSLocalizedString(" Day", comment: ""))
         } else {
-            return IndicatorInfo(title: "Classes")
+            return IndicatorInfo(title: NSLocalizedString("Classes", comment: ""))
         }
     }
 }
@@ -184,7 +184,7 @@ extension ADay: UITableViewDelegate, UITableViewDataSource, UIViewControllerPrev
 extension ADay: DZNEmptyDataSetSource {
     func title(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
         let attr = [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: UIFont.TextStyle.headline)]
-        let str = "There is no class on this day."
+        let str = NSLocalizedString("There is no class on this day.", comment: "")
         self.tableView.separatorStyle = .none
         return NSAttributedString(string: str, attributes: attr)
     }

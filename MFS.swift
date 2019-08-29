@@ -81,7 +81,8 @@ public class MFS: School {
         formatter.dateFormat = "yyyyMMdd"
         let checkDate = formatter.string(from: date)
         
-        dayOfSchool = dayDict?[checkDate] as? String ?? "No School"
+        let noSchoolString = NSLocalizedString("No School", comment: "")
+        dayOfSchool = dayDict?[checkDate] as? String ?? noSchoolString
         
         return dayOfSchool!
     }

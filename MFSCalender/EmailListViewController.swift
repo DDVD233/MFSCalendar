@@ -29,7 +29,7 @@ class EmailListViewController: UIViewController {
         self.emailTable.delegate = self
         self.emailTable.emptyDataSetSource = self
         self.emailTable.emptyDataSetDelegate = self
-        self.parent?.navigationItem.title = "Inbox"
+        self.parent?.navigationItem.title = NSLocalizedString("Inbox", comment: "")
         
         let loadingview = DGElasticPullToRefreshLoadingViewCircle()
         loadingview.tintColor = UIColor.white
@@ -65,7 +65,7 @@ class EmailListViewController: UIViewController {
     
     func getAllEmails() {
         isUpdatingEmail = true
-        self.parent?.navigationItem.title = "Updating..."
+        self.parent?.navigationItem.title = NSLocalizedString("Updating...", comment: "")
         self.emailTable.reloadEmptyDataSet()
         let emailName = Preferences().emailName
         let emailPassword = Preferences().emailPassword
@@ -73,7 +73,7 @@ class EmailListViewController: UIViewController {
             Preferences().lastEmailUpdate = Date()
             self.isUpdatingEmail = false
             self.emailTable.reloadEmptyDataSet()
-            self.parent?.navigationItem.title = "Inbox"
+            self.parent?.navigationItem.title = NSLocalizedString("Inbox", comment: "")
             switch result {
             case .success(let response):
                 do {
@@ -123,15 +123,15 @@ class EmailListViewController: UIViewController {
         let now = DateInRegion()
         var title = ""
         if receivedDate.isAfterDate(now.dateAtStartOf(.day), granularity: .second) {
-            title = "Today"
+            title = NSLocalizedString("Today", comment: "")
         } else if receivedDate.isAfterDate((now - 1.days).dateAtStartOf(.day), granularity: .second) {
-            title = "Yesterday"
+            title = NSLocalizedString("Yesterday", comment: "")
         } else if receivedDate.isAfterDate(now.dateAt(.startOfWeek), granularity: .second) {
-            title = "This Week"
+            title = NSLocalizedString("This Week", comment: "")
         } else if receivedDate.isAfterDate((now - 1.weeks).dateAt(.startOfWeek), granularity: .second) {
-            title = "Last Week"
+            title = NSLocalizedString("Last Week", comment: "")
         } else {
-            title = "Earlier"
+            title = NSLocalizedString("Earlier", comment: "")
         }
         
         if let arrayIndex = self.emailList.firstIndex(where: { (dict) -> Bool in
@@ -157,9 +157,9 @@ extension EmailListViewController: DZNEmptyDataSetSource, DZNEmptyDataSetDelegat
     func title(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
         let attr = [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: UIFont.TextStyle.headline)]
         
-        var str = "There is no email to display."
+        var str = NSLocalizedString("There is no email to display.", comment: "")
         if isUpdatingEmail {
-            str = "Updating emails..."
+            str = NSLocalizedString("Updating emails...", comment: "")
         }
         return NSAttributedString(string: str, attributes: attr)
     }
@@ -169,7 +169,7 @@ extension EmailListViewController: DZNEmptyDataSetSource, DZNEmptyDataSetDelegat
             return NSAttributedString()
         }
         
-        let buttonTitleString = NSAttributedString(string: "Refresh...", attributes: [NSAttributedString.Key.foregroundColor: UIColor(hexString: 0xFF7E79)])
+        let buttonTitleString = NSAttributedString(string: NSLocalizedString("Refresh...", comment: ""), attributes: [NSAttributedString.Key.foregroundColor: UIColor(hexString: 0xFF7E79)])
         
         return buttonTitleString
     }

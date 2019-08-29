@@ -36,7 +36,7 @@ class MyChatViewController: BChatViewController {
             return BChatSDK.moderation()!.unflagMessage(message.entityID())
         } else {
             let flagNotice = SCLAlertView()
-            flagNotice.showInfo("Success", subTitle: "You have successfully flagged the message! We will process this report as soon as possible.", animationStyle: .bottomToTop)
+            flagNotice.showInfo(NSLocalizedString("Success", comment: ""), subTitle: NSLocalizedString("You have successfully flagged the message! We will process this report as soon as possible.", comment: ""), animationStyle: .bottomToTop)
             return BChatSDK.moderation()!.flagMessage(message.entityID())
         }
     }

@@ -42,7 +42,7 @@ class StepChallengeViewController: UIViewController {
             getPoints()
         }
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "History", style: .plain, target: self, action: #selector(history))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: NSLocalizedString("History", comment: ""), style: .plain, target: self, action: #selector(history))
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -157,7 +157,7 @@ extension StepChallengeViewController: DZNEmptyDataSetSource, DZNEmptyDataSetDel
     func title(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
         var str: String? = ""
         let attrs: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: UIFont.TextStyle.headline)]
-        str = "Join Step Challenge!"
+        str = NSLocalizedString("Join Step Challenge!", comment: "")
         
         return NSAttributedString(string: str!, attributes: attrs)
     }
@@ -168,7 +168,7 @@ extension StepChallengeViewController: DZNEmptyDataSetSource, DZNEmptyDataSetDel
     }
     
     func buttonTitle(forEmptyDataSet scrollView: UIScrollView!, for state: UIControl.State) -> NSAttributedString! {
-        let str: String = "Join"
+        let str: String = NSLocalizedString("Join", comment: "")
         let attrs: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: UIFont.TextStyle.headline)]
         
         return NSAttributedString(string: str, attributes: attrs)

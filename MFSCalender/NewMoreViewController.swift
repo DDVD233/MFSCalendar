@@ -18,6 +18,13 @@ import SCLAlertView
 
 class NewMoreViewController: UICollectionViewController  {
     var contentList = [String]()
+    let myCourses = NSLocalizedString("My Courses", comment: "")
+    let lunchMenu = NSLocalizedString("Lunch Menu", comment: "")
+    let serviceHourS = NSLocalizedString("Service Hour", comment: "")
+    let logout = NSLocalizedString("Logout", comment: "")
+    let about = NSLocalizedString("About", comment: "")
+    let settings = NSLocalizedString("Settings", comment: "")
+    let stepChallenge = NSLocalizedString("Step Challenge", comment: "")
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,9 +34,10 @@ class NewMoreViewController: UICollectionViewController  {
 //            hidesBottomBarWhenPushed = false
 //        }
         if Preferences().schoolName == "MFS" {
-            contentList = ["My Courses", "Lunch Menu", "Service Hour", "Logout", "About", "Settings", "Step Challenge"]
+            
+            contentList = [myCourses, lunchMenu, serviceHourS, logout, about, settings, stepChallenge]
         } else {
-            contentList = ["My Courses", "Lunch Menu", "Logout", "About", "Settings"]
+            contentList = [myCourses, lunchMenu, logout, about, settings]
         }
         
         if Preferences().isDev {
@@ -94,19 +102,19 @@ extension NewMoreViewController {
             cell.nameLabel.text = contentTitle
             
             switch contentTitle {
-            case "My Courses":
+            case myCourses:
                 cell.imageView.image = UIImage(named: "MenuCourses.png")
-            case "Lunch Menu":
+            case lunchMenu:
                 cell.imageView.image = UIImage(named: "MenuLunch.png")
-            case "Service Hour":
+            case serviceHourS:
                 cell.imageView.image = UIImage(named: "MenuService.png")
-            case "Logout":
+            case logout:
                 cell.imageView.image = UIImage(named: "MenuLogout.png")
-            case "About":
+            case about:
                 cell.imageView.image = UIImage(named: "MenuAbout.png")
-            case "Settings":
+            case settings:
                 cell.imageView.image = UIImage(named: "MenuSettings.png")
-            case "Step Challenge":
+            case stepChallenge:
                 cell.imageView.image = UIImage(named: "running.png")
             case "DON'T TOUCH":
                 cell.imageView.image = UIImage(named: "MenuWarning.png")
@@ -148,31 +156,31 @@ extension NewMoreViewController {
         } else if indexPath.section == 1 {
             let contentTitle = contentList[safe: indexPath.row]
             switch contentTitle {
-            case "My Courses":
+            case myCourses:
                 if let courseVC = storyboard?.instantiateViewController(withIdentifier: "courseList") {
                     show(courseVC, sender: self)
                 }
-            case "Lunch Menu":
+            case lunchMenu:
                 DispatchQueue.global().async {
                     self.getLunchMenu()
                 }
-            case "Service Hour":
+            case serviceHourS:
                 DispatchQueue.global().async {
                     self.serviceHour()
                 }
-            case "Logout":
+            case logout:
                 if let cell = collectionView.cellForItem(at: indexPath) {
                     logout(sender: cell)
                 }
-            case "About":
+            case about:
                 if let infoVC = storyboard?.instantiateViewController(withIdentifier: "about") {
                     show(infoVC, sender: self)
                 }
-            case "Settings":
+            case settings:
                 if let settingsVC = storyboard?.instantiateViewController(withIdentifier: "settings") {
                     show(settingsVC, sender: self)
                 }
-            case "Step Challenge":
+            case stepChallenge:
                 if let stepChallengeVC = storyboard?.instantiateViewController(withIdentifier: "stepChallenge") {
                     guard Preferences().schoolName == "MFS" else { return }
                     show(stepChallengeVC, sender: self)
@@ -279,7 +287,7 @@ extension NewMoreViewController {
             }
         }
         
-        loginView.showInfo("Log in to Mobileserve", subTitle: "Please use your Mobileserve account to login.", closeButtonTitle: "Cancel", animationStyle: .bottomToTop)
+        loginView.showInfo(NSLocalizedString("Log in to Mobileserve", comment: ""), subTitle: NSLocalizedString("Please use your Mobileserve account to login.", comment: ""), closeButtonTitle: NSLocalizedString("Cancel", comment: ""), animationStyle: .bottomToTop)
     }
     
     func presentServiceHourView(hour: String) {
@@ -360,16 +368,16 @@ extension NewMoreViewController {
     }
     
     func logout(sender: UIView) {
-        let logOutActionSheet = UIAlertController(title: nil, message: "Do you want to log out Class Chat or the app?", preferredStyle: .actionSheet)
+        let logOutActionSheet = UIAlertController(title: nil, message: NSLocalizedString("Do you want to log out Class Chat or the app?", comment: ""), preferredStyle: .actionSheet)
         
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
+        let cancelAction = UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel) { (action) in
             NSLog("Canceled")
         }
         
-        let logoutClassChatAction = UIAlertAction(title: "Log out Class Chat", style: .default) { (alertAction) -> Void in
+        let logoutClassChatAction = UIAlertAction(title: NSLocalizedString("Log out Class Chat", comment: ""), style: .default) { (alertAction) -> Void in
             _ = BIntegrationHelper.logout()?.thenOnMain({ (result) in
                 let loginNotice = SCLAlertView()
-                loginNotice.showInfo("Success", subTitle: "You've successfully logged out of Class Chat.", animationStyle: .bottomToTop)
+                loginNotice.showInfo(NSLocalizedString("Success", comment: ""), subTitle: NSLocalizedString("You've successfully logged out of Class Chat.", comment: ""), animationStyle: .bottomToTop)
                 return result
             }, { error in
                 presentErrorMessage(presentMessage: error?.localizedDescription ?? "Unknown Error", layout: .cardView)
@@ -378,7 +386,7 @@ extension NewMoreViewController {
             NSLog("Class Chat Logged Out")
         }
         
-        let logOutAction = UIAlertAction(title: "Log Out the App", style: .default) { (alertAction) -> Void in
+        let logOutAction = UIAlertAction(title: NSLocalizedString("Log Out the App", comment: ""), style: .default) { (alertAction) -> Void in
             NSLog("Logged Out")
             _ = BIntegrationHelper.logout()?.thenOnMain({ result in
                 let preferences = Preferences()
