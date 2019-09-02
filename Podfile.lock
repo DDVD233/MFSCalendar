@@ -234,6 +234,7 @@ PODS:
     - SwiftMessages/App (= 6.0.2)
   - SwiftMessages/App (6.0.2)
   - SwiftyJSON (5.0.0)
+  - SwipeCellKit (2.6.0)
   - Toast (4.0.0)
   - TOCropViewController (2.5.0)
   - UICircularProgressRing (6.1.0)
@@ -272,6 +273,7 @@ DEPENDENCIES:
   - SwiftDate
   - SwiftMessages
   - SwiftyJSON
+  - SwipeCellKit
   - UICircularProgressRing
   - UrbanAirship-iOS-SDK
   - XLPagerTabStrip
@@ -335,6 +337,7 @@ SPEC REPOS:
     - SwiftDate
     - SwiftMessages
     - SwiftyJSON
+    - SwipeCellKit
     - Toast
     - TOCropViewController
     - UICircularProgressRing
@@ -354,7 +357,7 @@ CHECKOUT OPTIONS:
 SPEC CHECKSUMS:
   AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
   Alamofire: ae5c501addb7afdbb13687d7f2f722c78734c2d3
-  Charts: ec1f57f9340054155691e84d4544a1d239d382c5
+  Charts: e0dd4cd8f257bccf98407b58183ddca8e8d5b578
   ChatSDK: 07626da45247ce86fe90f0a7a44052f713efbcea
   ChatSDKFirebase: 2775ffe48c74987f68c05392cd19c10c5c105d1a
   ChatSDKKeepLayout: 37d06edcd8f4da9676fb24c2f21b36569c067be0
@@ -410,6 +413,7 @@ SPEC CHECKSUMS:
   SwiftDate: bbed9b23bfec599bd62b9a305afc554f7bd0eb6f
   SwiftMessages: 8b3cc68dba2f1c91aac1a74c90b10287aac35371
   SwiftyJSON: 36413e04c44ee145039d332b4f4e2d3e8d6c4db7
+  SwipeCellKit: 935ca28c187ec6e1ffb2b578cf8ddca842bfdcbb
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
   TOCropViewController: d86078d3a57a70c116bf3db7c89c80046a0e5fdf
   UICircularProgressRing: b3eba859a515e4d9d38503eec913f09c28450785
@@ -417,6 +421,6 @@ SPEC CHECKSUMS:
   VENTokenField: 5a19b838fb97f040e3d4c93f584b4adeaf3fc1ee
   XLPagerTabStrip: 61c57fd61f611ee5f01ff1495ad6fbee8bf496c5
 
-PODFILE CHECKSUM: 18359b359deb4a5ebd9fb818d50323c33171a33e
+PODFILE CHECKSUM: 1e31ed7fca6586df4026aac02b0885f471d9078f
 
 COCOAPODS: 1.5.2

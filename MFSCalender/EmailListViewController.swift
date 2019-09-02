@@ -11,6 +11,7 @@ import SwiftDate
 import DGElasticPullToRefresh
 import DZNEmptyDataSet
 import CoreData
+import SwipeCellKit
 
 class EmailListViewController: UIViewController {
     var emailList = [[String: Any]]()
@@ -69,31 +70,33 @@ class EmailListViewController: UIViewController {
         self.emailTable.reloadEmptyDataSet()
         let emailName = Preferences().emailName
         let emailPassword = Preferences().emailPassword
-        provider.request(MyService.getAllEmails(username: emailName!, password: emailPassword!)) { (result) in
-            Preferences().lastEmailUpdate = Date()
-            self.isUpdatingEmail = false
-            self.emailTable.reloadEmptyDataSet()
-            self.parent?.navigationItem.title = NSLocalizedString("Inbox", comment: "")
-            switch result {
-            case .success(let response):
-                do {
-                    guard canUpdateView(viewController: self) else {
-                        return
+        DispatchQueue.global().async {
+            provider.request(MyService.getAllEmails(username: emailName!, password: emailPassword!)) { (result) in
+                Preferences().lastEmailUpdate = Date()
+                self.isUpdatingEmail = false
+                self.emailTable.reloadEmptyDataSet()
+                self.parent?.navigationItem.title = NSLocalizedString("Inbox", comment: "")
+                switch result {
+                case .success(let response):
+                    do {
+                        guard canUpdateView(viewController: self) else {
+                            return
+                        }
+                        
+                        guard let json = try JSONSerialization.jsonObject(with: response.data, options: .allowFragments) as? [[String: Any]] else {
+                            return
+                        }
+                        
+                        self.processEmailData(json: json)
+                        DispatchQueue.main.async {
+                            self.emailTable.reloadData()
+                        }
+                    } catch {
+                        presentErrorMessage(presentMessage: error.localizedDescription, layout: .cardView)
                     }
-                    
-                    guard let json = try JSONSerialization.jsonObject(with: response.data, options: .allowFragments) as? [[String: Any]] else {
-                        return
-                    }
-                    
-                    self.processEmailData(json: json)
-                    DispatchQueue.main.async {
-                        self.emailTable.reloadData()
-                    }
-                } catch {
+                case .failure(let error):
                     presentErrorMessage(presentMessage: error.localizedDescription, layout: .cardView)
                 }
-            case .failure(let error):
-                presentErrorMessage(presentMessage: error.localizedDescription, layout: .cardView)
             }
         }
     }

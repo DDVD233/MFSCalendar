@@ -131,15 +131,15 @@ class ChatLoginViewController: UIViewController, UITextFieldDelegate {
         let schoolName = pref.schoolName ?? ""
         BChatSDK.core()?.currentUserModel()?.setMetaValue(schoolName, forKey: "School")
         
-        BFirebaseSearchHandler().users(forIndexes: ["School"], withValue: schoolName, limit: 999) { (user) in
-            if user != nil {
-                _ = BChatSDK.contact()?.addContact(user!, with: bUserConnectionTypeContact)
-                BChatSDK.core()!.observeUser(user!.entityID())
-            }
-            
-            print("-----------------")
-        }
-        
+//        BFirebaseSearchHandler().users(forIndexes: ["School"], withValue: schoolName, limit: 999) { (user) in
+//            if user != nil {
+//                _ = BChatSDK.contact()?.addContact(user!, with: bUserConnectionTypeContact)
+//                BChatSDK.core()!.observeUser(user!.entityID())
+//            }
+//
+//            print("-----------------")
+//        }
+
         BIntegrationHelper.updateUser(withName: name, image: profileImage, url: photoLink)
     }
     

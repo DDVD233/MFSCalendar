@@ -89,7 +89,7 @@ class classListController: UIViewController, UIViewControllerPreviewingDelegate 
     }
     
     func updateClassList() {
-        NetworkOperations().getCourseFromMyMFS { (courseData) in
+        NetworkOperations().getCourseFromMySchool { (courseData) in
             let path = FileList.courseList.filePath
             NSArray(array: courseData).write(to: URL.init(fileURLWithPath: path), atomically: true)
             guard canUpdateView(viewController: self) else { return }

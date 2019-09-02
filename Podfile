@@ -38,6 +38,7 @@ target 'MFSMobile' do
   pod "ChatSDKFirebase/Adapter"
   pod "ChatSDKFirebase/FileStorage"
   pod "ChatSDKFirebase/Push"
+  pod 'SwipeCellKit'
   # pod 'GSKStretchyHeaderView'
 end
 

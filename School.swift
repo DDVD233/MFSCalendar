@@ -56,6 +56,7 @@ public class School {
     func getSchoolYear() -> Int {
         let year = Date().year
         let month = Date().month
+        // If the date is in fall semester, then the school year is the current year, else it's the year before.
         return (month > 6) ? year : year-1
     }
     

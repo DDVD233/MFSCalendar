@@ -30,6 +30,12 @@
 		E440F1BC1EEA7F4E004AFD0B /* MoyaNetworkLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E440F1BB1EEA7F4E004AFD0B /* MoyaNetworkLayer.swift */; };
 		E445E73E1EAD8B7D00794560 /* MoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E445E73D1EAD8B7D00794560 /* MoreViewController.swift */; };
 		E44632501F9BB020004F8E2E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E4F86B3C1DF0E20C00CAD72B /* LaunchScreen.storyboard */; };
+		E44CC0DB231C30790078191C /* NewChatLoginPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E44CC0D5231C30790078191C /* NewChatLoginPresenter.swift */; };
+		E44CC0DC231C30790078191C /* NewChatLoginWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E44CC0D6231C30790078191C /* NewChatLoginWorker.swift */; };
+		E44CC0DD231C30790078191C /* NewChatLoginRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E44CC0D7231C30790078191C /* NewChatLoginRouter.swift */; };
+		E44CC0DE231C30790078191C /* NewChatLoginModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = E44CC0D8231C30790078191C /* NewChatLoginModels.swift */; };
+		E44CC0DF231C30790078191C /* NewChatLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E44CC0D9231C30790078191C /* NewChatLoginViewController.swift */; };
+		E44CC0E0231C30790078191C /* NewChatLoginInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E44CC0DA231C30790078191C /* NewChatLoginInteractor.swift */; };
 		E44DCD921EB80E0600CEB68A /* School.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E44DCD911EB80E0600CEB68A /* School.jpg */; };
 		E453F0D11EA137D900BCE58D /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E453F0D01EA137D900BCE58D /* CalendarViewController.swift */; };
 		E45476EB1E8B3607004466D0 /* th-menu2.png in Resources */ = {isa = PBXBuildFile; fileRef = E45476EA1E8B3607004466D0 /* th-menu2.png */; };
@@ -84,6 +90,7 @@
 		E4C46A2E1ED50CD3007F8F1A /* CourseFillViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C46A2D1ED50CD3007F8F1A /* CourseFillViewController.swift */; };
 		E4CA1DAE1F50097D0061784A /* Acknowledgements.markdown in Resources */ = {isa = PBXBuildFile; fileRef = E4CA1DAC1F5007C40061784A /* Acknowledgements.markdown */; };
 		E4CE0D742318291300B0CACC /* login.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CE0D732318291300B0CACC /* login.swift */; };
+		E4CE0D7623188B1100B0CACC /* CustomSchoolViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CE0D7523188B1100B0CACC /* CustomSchoolViewController.swift */; };
 		E4CE43991EAC36F3000D743B /* BlankDictionary.plist in Resources */ = {isa = PBXBuildFile; fileRef = E4CE43981EAC36F3000D743B /* BlankDictionary.plist */; };
 		E4CE439B1EAD0D51000D743B /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CE439A1EAD0D51000D743B /* LoginViewController.swift */; };
 		E4CE9F86222B31240031AB49 /* EmailLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CE9F85222B31240031AB49 /* EmailLoginViewController.swift */; };
@@ -191,6 +198,12 @@
 		E440F1BB1EEA7F4E004AFD0B /* MoyaNetworkLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MoyaNetworkLayer.swift; path = ../MoyaNetworkLayer.swift; sourceTree = "<group>"; };
 		E44484D71E13A105002C68D5 /* MFSCalender.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MFSCalender.entitlements; sourceTree = "<group>"; };
 		E445E73D1EAD8B7D00794560 /* MoreViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoreViewController.swift; sourceTree = "<group>"; };
+		E44CC0D5231C30790078191C /* NewChatLoginPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewChatLoginPresenter.swift; sourceTree = "<group>"; };
+		E44CC0D6231C30790078191C /* NewChatLoginWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewChatLoginWorker.swift; sourceTree = "<group>"; };
+		E44CC0D7231C30790078191C /* NewChatLoginRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewChatLoginRouter.swift; sourceTree = "<group>"; };
+		E44CC0D8231C30790078191C /* NewChatLoginModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewChatLoginModels.swift; sourceTree = "<group>"; };
+		E44CC0D9231C30790078191C /* NewChatLoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewChatLoginViewController.swift; sourceTree = "<group>"; };
+		E44CC0DA231C30790078191C /* NewChatLoginInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewChatLoginInteractor.swift; sourceTree = "<group>"; };
 		E44DCD911EB80E0600CEB68A /* School.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = School.jpg; sourceTree = "<group>"; };
 		E453F0D01EA137D900BCE58D /* CalendarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = CalendarViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		E45476EA1E8B3607004466D0 /* th-menu2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "th-menu2.png"; sourceTree = "<group>"; };
@@ -279,6 +292,7 @@
 		E4C46A2D1ED50CD3007F8F1A /* CourseFillViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CourseFillViewController.swift; sourceTree = "<group>"; };
 		E4CA1DAC1F5007C40061784A /* Acknowledgements.markdown */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = Acknowledgements.markdown; sourceTree = "<group>"; };
 		E4CE0D732318291300B0CACC /* login.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = login.swift; sourceTree = "<group>"; };
+		E4CE0D7523188B1100B0CACC /* CustomSchoolViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSchoolViewController.swift; sourceTree = "<group>"; };
 		E4CE43981EAC36F3000D743B /* BlankDictionary.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = BlankDictionary.plist; sourceTree = "<group>"; };
 		E4CE439A1EAD0D51000D743B /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		E4CE9F85222B31240031AB49 /* EmailLoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailLoginViewController.swift; sourceTree = "<group>"; };
@@ -369,6 +383,19 @@
 				E4D5E4132285ECE30012C56C /* ChatLoginViewController.swift */,
 			);
 			name = "Chat View";
+			sourceTree = "<group>";
+		};
+		E44CC0E1231C30F10078191C /* Chat Login */ = {
+			isa = PBXGroup;
+			children = (
+				E44CC0D5231C30790078191C /* NewChatLoginPresenter.swift */,
+				E44CC0D6231C30790078191C /* NewChatLoginWorker.swift */,
+				E44CC0D7231C30790078191C /* NewChatLoginRouter.swift */,
+				E44CC0D8231C30790078191C /* NewChatLoginModels.swift */,
+				E44CC0D9231C30790078191C /* NewChatLoginViewController.swift */,
+				E44CC0DA231C30790078191C /* NewChatLoginInteractor.swift */,
+			);
+			path = "Chat Login";
 			sourceTree = "<group>";
 		};
 		E472A15E1EFB6F3C00EF5A74 /* More View */ = {
@@ -549,6 +576,7 @@
 		E4F86B2F1DF0E20C00CAD72B /* MFSCalendar */ = {
 			isa = PBXGroup;
 			children = (
+				E44CC0E1231C30F10078191C /* Chat Login */,
 				E4D5E40F2285C6510012C56C /* GoogleService-Info.plist */,
 				E4CA1DAC1F5007C40061784A /* Acknowledgements.markdown */,
 				E45510EE1F4D6F09001CF9BE /* GroupPossibleContent.plist */,
@@ -574,6 +602,7 @@
 				E472A15E1EFB6F3C00EF5A74 /* More View */,
 				E4106371228772B000A8F280 /* Chat View */,
 				E4F86B341DF0E20C00CAD72B /* Main.storyboard */,
+				E4CE0D7523188B1100B0CACC /* CustomSchoolViewController.swift */,
 				E4E5504B2295811F00C2F46F /* SupportedSchoolList.plist */,
 				E4369F712289927B006462F3 /* MainTabBarViewController.swift */,
 				E470C38421EE6A5E00E5C358 /* SchoolSelectionViewController.swift */,
@@ -899,6 +928,7 @@
 				"${BUILT_PRODUCTS_DIR}/SwiftDate/SwiftDate.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftMessages/SwiftMessages.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
+				"${BUILT_PRODUCTS_DIR}/SwipeCellKit/SwipeCellKit.framework",
 				"${BUILT_PRODUCTS_DIR}/TOCropViewController/TOCropViewController.framework",
 				"${BUILT_PRODUCTS_DIR}/Toast/Toast.framework",
 				"${BUILT_PRODUCTS_DIR}/UICircularProgressRing/UICircularProgressRing.framework",
@@ -948,6 +978,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftDate.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftMessages.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwipeCellKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TOCropViewController.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Toast.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/UICircularProgressRing.framework",
@@ -1059,6 +1090,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E44CC0DC231C30790078191C /* NewChatLoginWorker.swift in Sources */,
 				E472A1641EFB735C00EF5A74 /* ClassListViewController.swift in Sources */,
 				E4F86B391DF0E20C00CAD72B /* MFSCalender.xcdatamodeld in Sources */,
 				E48D4DF01E61F275008B0A97 /* ADayViewController.swift in Sources */,
@@ -1085,11 +1117,17 @@
 				E445E73E1EAD8B7D00794560 /* MoreViewController.swift in Sources */,
 				E4C46A2E1ED50CD3007F8F1A /* CourseFillViewController.swift in Sources */,
 				E4CE9F8B222B46BA0031AB49 /* Email.swift in Sources */,
+				E4CE0D7623188B1100B0CACC /* CustomSchoolViewController.swift in Sources */,
 				E4106373228772E000A8F280 /* ChatInterfaceManager.swift in Sources */,
+				E44CC0DD231C30790078191C /* NewChatLoginRouter.swift in Sources */,
 				E453F0D11EA137D900BCE58D /* CalendarViewController.swift in Sources */,
 				E47C297C222EEBA700EA8264 /* EmailDetailViewController.swift in Sources */,
+				E44CC0DF231C30790078191C /* NewChatLoginViewController.swift in Sources */,
 				E4288E1420360F6600E4488D /* MFS.swift in Sources */,
 				E48A0A3C214AC842005ABB87 /* MailViewController.swift in Sources */,
+				E44CC0E0231C30790078191C /* NewChatLoginInteractor.swift in Sources */,
+				E44CC0DE231C30790078191C /* NewChatLoginModels.swift in Sources */,
+				E44CC0DB231C30790078191C /* NewChatLoginPresenter.swift in Sources */,
 				E4369F722289927B006462F3 /* MainTabBarViewController.swift in Sources */,
 				E4EB2998228EE4B900BA1385 /* FileList.swift in Sources */,
 				E4CE9F86222B31240031AB49 /* EmailLoginViewController.swift in Sources */,

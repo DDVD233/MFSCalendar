@@ -44,7 +44,7 @@ class NetworkOperations {
         semaphore.wait()
     }
     
-    func getCourseFromMyMFS(durationId: String = Preferences().durationID ?? "", completion: @escaping ([[String: Any?]]) -> Void) {
+    func getCourseFromMySchool(durationId: String = Preferences().durationID ?? "", completion: @escaping ([[String: Any?]]) -> Void) {
         //create request.
         let config = URLSessionConfiguration.default
         config.requestCachePolicy = .reloadIgnoringLocalCacheData
@@ -311,7 +311,7 @@ class NetworkOperations {
                 do {
                     guard let json = try JSONSerialization.jsonObject(with: response.data, options: .allowFragments) as? [[String: Any]] else {
                         presentErrorMessage(presentMessage: "JSON incorrect format", layout: .statusLine)
-                        print(String(data: response.data, encoding: .utf8))
+//                        print(String(data: response.data, encoding: .utf8))
                         completion(nil)
                         return
                     }

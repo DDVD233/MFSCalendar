@@ -723,7 +723,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="10O-Yu-fyX">
-                                <rect key="frame" x="0.0" y="88" width="375" height="641"/>
+                                <rect key="frame" x="0.0" y="88" width="375" height="690"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                         </subviews>
@@ -1234,7 +1234,7 @@
                         <segue destination="yTU-4p-yW1" kind="relationship" relationship="viewControllers" id="zcV-MC-SIr"/>
                         <segue destination="2Rt-XE-Yqg" kind="relationship" relationship="viewControllers" id="CMf-cl-qkQ"/>
                         <segue destination="rt2-9L-AaP" kind="relationship" relationship="viewControllers" id="HmT-L9-n9P"/>
-                        <segue destination="pM2-WX-zzA" kind="relationship" relationship="viewControllers" id="4Bh-8R-Jcs"/>
+                        <segue destination="rAm-Dc-lFm" kind="relationship" relationship="viewControllers" id="kEr-gB-4uc"/>
                         <segue destination="Wod-VY-kcK" kind="relationship" relationship="viewControllers" id="PXW-mz-1cT"/>
                     </connections>
                 </tabBarController>
@@ -4067,6 +4067,117 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8UT-kJ-WeU" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="4141.6000000000004" y="133.13343328335833"/>
+        </scene>
+        <!--Custom School View Controller-->
+        <scene sceneID="2dK-Up-xnc">
+            <objects>
+                <viewController storyboardIdentifier="customSchoolViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="ff2-cm-CIK" customClass="customSchoolViewController" customModule="MFSMobile" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="YLR-27-pHV"/>
+                        <viewControllerLayoutGuide type="bottom" id="HKw-fP-gFG"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="ojO-bZ-jZr">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="School.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="j6s-uR-V9d">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                            </imageView>
+                            <view alpha="0.5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YZe-4s-D03">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                                <color key="backgroundColor" red="0.1228841146" green="0.049153646570000001" blue="0.050382487699999999" alpha="1" colorSpace="calibratedRGB"/>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J5W-Th-Uca">
+                                <rect key="frame" x="20" y="336" width="335" height="50"/>
+                                <color key="backgroundColor" red="1" green="0.40000000600000002" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="aYe-Id-tcA"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
+                                <state key="normal" title="CONFIRM">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="5"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="Confirm:" destination="ff2-cm-CIK" eventType="touchUpInside" id="RYm-FE-Sr0"/>
+                                    <action selector="done:" destination="vao-er-1v4" eventType="touchUpInside" id="yg3-oN-CHG"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="What's the Subdomain of Your mySchool URL?" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="2qq-Vz-9fp">
+                                <rect key="frame" x="43.666666666666657" y="74" width="288" height="63.333333333333343"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Your mySchool URL should look like this:" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4IC-0B-JqF">
+                                <rect key="frame" x="32.666666666666657" y="157.33333333333334" width="310" height="20.333333333333343"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="https://" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XVJ-eI-ALr">
+                                <rect key="frame" x="26" y="197.66666666666666" width="83" height="32"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Subdomain Here" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Ksv-o4-h6Q">
+                                <rect key="frame" x="114" y="197.66666666666666" width="235" height="37"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=".myschoolapp.com" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Peb-gB-R9X">
+                                <rect key="frame" x="26.000000000000014" y="254.66666666666666" width="212.33333333333337" height="31.333333333333343"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="XVJ-eI-ALr" firstAttribute="top" secondItem="4IC-0B-JqF" secondAttribute="bottom" constant="20" id="0X0-EY-Hc9"/>
+                            <constraint firstItem="YZe-4s-D03" firstAttribute="leading" secondItem="ojO-bZ-jZr" secondAttribute="leading" id="1Pp-pg-qkB"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="Ksv-o4-h6Q" secondAttribute="trailing" constant="10" id="1fS-jW-546"/>
+                            <constraint firstAttribute="trailing" secondItem="YZe-4s-D03" secondAttribute="trailing" id="222-Z3-xLq"/>
+                            <constraint firstItem="Ksv-o4-h6Q" firstAttribute="leading" secondItem="XVJ-eI-ALr" secondAttribute="trailing" constant="5" id="3yX-AX-ECz"/>
+                            <constraint firstItem="Ksv-o4-h6Q" firstAttribute="bottom" secondItem="XVJ-eI-ALr" secondAttribute="bottom" constant="5" id="6gx-1p-aP4"/>
+                            <constraint firstItem="4IC-0B-JqF" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="ojO-bZ-jZr" secondAttribute="leadingMargin" constant="10" id="7pH-FR-kCx"/>
+                            <constraint firstAttribute="bottom" secondItem="YZe-4s-D03" secondAttribute="bottom" id="9G2-WV-vgd"/>
+                            <constraint firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="4IC-0B-JqF" secondAttribute="trailing" constant="10" id="BPM-Pp-E56"/>
+                            <constraint firstItem="2qq-Vz-9fp" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="ojO-bZ-jZr" secondAttribute="leadingMargin" constant="20" id="GFx-Bv-gzf"/>
+                            <constraint firstItem="2qq-Vz-9fp" firstAttribute="top" secondItem="YLR-27-pHV" secondAttribute="bottom" constant="30" id="Gik-or-Ekz"/>
+                            <constraint firstItem="J5W-Th-Uca" firstAttribute="top" secondItem="Peb-gB-R9X" secondAttribute="bottom" constant="50" id="IDz-ou-5ZH"/>
+                            <constraint firstItem="XVJ-eI-ALr" firstAttribute="leading" secondItem="ojO-bZ-jZr" secondAttribute="leadingMargin" constant="10" id="IYW-wm-1fT"/>
+                            <constraint firstItem="2qq-Vz-9fp" firstAttribute="centerX" secondItem="ojO-bZ-jZr" secondAttribute="centerX" id="W9Q-Ix-zac"/>
+                            <constraint firstAttribute="bottom" secondItem="j6s-uR-V9d" secondAttribute="bottom" id="Z6U-Cv-HbC"/>
+                            <constraint firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="Peb-gB-R9X" secondAttribute="trailing" constant="10" id="cM5-o0-9d3"/>
+                            <constraint firstItem="YZe-4s-D03" firstAttribute="top" secondItem="ojO-bZ-jZr" secondAttribute="top" id="cXX-zC-gvd"/>
+                            <constraint firstAttribute="trailing" secondItem="J5W-Th-Uca" secondAttribute="trailing" constant="20" id="eUV-E9-pxk"/>
+                            <constraint firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="2qq-Vz-9fp" secondAttribute="trailing" constant="20" id="jID-bl-GZr"/>
+                            <constraint firstItem="J5W-Th-Uca" firstAttribute="leading" secondItem="ojO-bZ-jZr" secondAttribute="leading" constant="20" id="kw7-QX-TCC"/>
+                            <constraint firstItem="4IC-0B-JqF" firstAttribute="top" secondItem="2qq-Vz-9fp" secondAttribute="bottom" constant="20" id="lCh-CW-jjm"/>
+                            <constraint firstItem="Ksv-o4-h6Q" firstAttribute="top" secondItem="XVJ-eI-ALr" secondAttribute="top" id="mce-ZL-61O"/>
+                            <constraint firstItem="j6s-uR-V9d" firstAttribute="top" secondItem="ojO-bZ-jZr" secondAttribute="top" id="qND-As-8lc"/>
+                            <constraint firstAttribute="trailing" secondItem="j6s-uR-V9d" secondAttribute="trailing" id="t5g-ab-oWy"/>
+                            <constraint firstItem="Peb-gB-R9X" firstAttribute="top" secondItem="Ksv-o4-h6Q" secondAttribute="bottom" constant="20" id="wcI-PL-GHg"/>
+                            <constraint firstItem="Peb-gB-R9X" firstAttribute="leading" secondItem="ojO-bZ-jZr" secondAttribute="leadingMargin" constant="10" id="xTp-ci-n7d"/>
+                            <constraint firstItem="4IC-0B-JqF" firstAttribute="centerX" secondItem="ojO-bZ-jZr" secondAttribute="centerX" id="xlG-oe-cOV"/>
+                            <constraint firstItem="j6s-uR-V9d" firstAttribute="leading" secondItem="ojO-bZ-jZr" secondAttribute="leading" id="yqm-Hi-akW"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="prefix" destination="Ksv-o4-h6Q" id="8Zb-Wf-OZS"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="NtK-io-Ivp" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1052" y="-587.4384236453202"/>
         </scene>
         <!--Mail-->
         <scene sceneID="Gu3-pr-XD7">

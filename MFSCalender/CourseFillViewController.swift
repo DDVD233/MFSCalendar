@@ -49,20 +49,14 @@ class courseFillController: UIViewController {
             Preferences().doUpdateQuarter = true
         }
         
-        if Preferences().schoolName == "MFS" {
-            DispatchQueue.global().async {
-                self.importCourseNetClassroom()
-            }
-        } else {
-            DispatchQueue.global().async {
-                self.importCourseMySchool()
-            }
+        DispatchQueue.global().async {
+            self.importCourseMySchool()
         }
     }
     
     func importCourseMySchool() {
         let semaphore = DispatchSemaphore.init(value: 0)
-        NetworkOperations().getCourseFromMyMFS { (courseData) in
+        NetworkOperations().getCourseFromMySchool { (courseData) in
             let path = FileList.courseList.filePath
             NSArray(array: courseData).write(to: URL.init(fileURLWithPath: path), atomically: true)
             semaphore.signal()
@@ -122,7 +116,7 @@ class courseFillController: UIViewController {
         
         DispatchQueue.global().async(group: group, execute: {
             let semaphore = DispatchSemaphore.init(value: 0)
-            NetworkOperations().getCourseFromMyMFS { (courseData) in
+            NetworkOperations().getCourseFromMySchool { (courseData) in
                 print(courseData)
                 let path = FileList.courseList.filePath
                 NSArray(array: courseData).write(to: URL.init(fileURLWithPath: path), atomically: true)

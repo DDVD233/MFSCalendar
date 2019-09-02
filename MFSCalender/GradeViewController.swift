@@ -255,7 +255,7 @@ class gradeViewController: UITableViewController {
     func getcumGrade(completion: @escaping () -> Void = ({ () in })) {
         let className = classObject["className"] as? String ?? ""
         let durationId = school.getDurationNumber(quarter: quarterSelected)
-        NetworkOperations().getCourseFromMyMFS(durationId: String(durationId), completion: { (courseData) in
+        NetworkOperations().getCourseFromMySchool(durationId: String(durationId), completion: { (courseData) in
             if let presentingClass = courseData.filter({ $0["sectionidentifier"] as? String ?? "" == className }).first {
                 self.cumGrade = Float(presentingClass["cumgrade"] as? String ?? "") ?? 0.0
             }

@@ -165,7 +165,7 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
         
         if Preferences().schoolName == "MFS" {
             self.logoPhoto.image = UIImage(named: "MFS Logo.jpg")
-        } else {
+        } else if Preferences().schoolName == "CMH" {
             self.logoPhoto.image = UIImage(named: "CMH Logo.png ")
         }
 

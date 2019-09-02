@@ -29,15 +29,25 @@ class SchoolSelectionViewController: UIViewController {
         let loginVC = self.storyboard!.instantiateViewController(withIdentifier: "loginController")
         show(loginVC, sender: self)
     }
+    
+    func showCustomVC() {
+        let customVC = self.storyboard!.instantiateViewController(withIdentifier: "customSchoolViewController")
+        show(customVC, sender: self)
+    }
 }
 
 extension SchoolSelectionViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return schoolList.count
+        return schoolList.count + 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "BasicTitle", for: indexPath)
+        
+        if indexPath.row == schoolList.count {
+            cell.textLabel?.text = "School Not Listed? Click here."
+            return cell
+        }
         
         let schoolDict = schoolList[safe: indexPath.row] ?? [String: String]()
         cell.textLabel?.text = schoolDict["schoolName"]
@@ -46,6 +56,9 @@ extension SchoolSelectionViewController: UITableViewDataSource, UITableViewDeleg
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if indexPath.row == schoolList.count {
+            showCustomVC()
+        }
         Preferences().baseURL = schoolList[safe: indexPath.row]?["schoolURL"] ?? ""
         Preferences().schoolName = schoolList[safe: indexPath.row]?["schoolCode"] ?? ""
         

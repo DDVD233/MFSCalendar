@@ -52,7 +52,7 @@ extension MyService: TargetType {
         case .getAllEmails, .getEmailWithID:
             return URL(string: Preferences().davidBaseURL)!
         default:
-            return URL(string: Preferences().baseURL)!
+            return URL(string: Preferences().baseURL) ?? URL(string: "http://www.myschoolapp.com")!
         }
     }
     var path: String {
