@@ -204,11 +204,13 @@ extension EmailListViewController: UITableViewDelegate, UITableViewDataSource {
         guard let emailObject = emailListInSection[safe: indexPath.row] else {
             return cell
         }
+        
         cell.subject.text = emailObject.subject
         cell.senderName.text = emailObject.senderName
         cell.body.text = emailObject.body.convertToHtml()?.string.removeNewLine() ?? ""
         
         cell.unreadIndicator.isHidden = emailObject.isRead
+        cell.body.backgroundColor = UIColor.clear
         
         return cell
     }

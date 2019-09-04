@@ -62,6 +62,16 @@ func setLargeTitle(on viewController: UIViewController) {
         navigationBar.barStyle = .black
         navigationBar.prefersLargeTitles = true
         navigationBar.barTintColor = UIColor(hexString: 0xFF7E79)
+        if #available(iOS 13.0, *) {
+            let navBarAppearance = UINavigationBarAppearance()
+            navBarAppearance.configureWithOpaqueBackground()
+            navBarAppearance.backgroundColor = UIColor(hexString: 0xFF7E79)
+            navBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+            navBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+            navBarAppearance.shadowColor = nil // line
+            navigationBar.scrollEdgeAppearance = navBarAppearance
+            navigationBar.standardAppearance = navBarAppearance
+        }
         //viewController.navigationItem.largeTitleDisplayMode = .never
         //    viewController.navigationController?.setBackgroundColor(UIColor(hexString: 0xFF7E79))
     } else {
