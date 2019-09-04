@@ -14,6 +14,7 @@ import SkyFloatingLabelTextField
 import NotificationCenter
 import Crashlytics
 import SwiftDate
+import SwiftyJSON
 
 class LoginView {
     func getProfile() {
@@ -112,6 +113,24 @@ class LoginView {
         })
         
         semaphore.wait()
+    }
+    
+    func getPersonaId() {
+        guard loginAuthentication().success else { return }
+        provider.request(MyService.getSchoolContext, callbackQueue: DispatchQueue.global()) { (result) in
+            switch result {
+            case let .success(response):
+                do {
+                    let json = try JSON(data: response.data)
+                    let personaId = json["Personas"][0]["Id"].int ?? 0
+                    Preferences().personaId = String(personaId)
+                } catch {
+                    presentErrorMessage(presentMessage: error.localizedDescription, layout: .cardView)
+                }
+            case let .failure(error):
+                presentErrorMessage(presentMessage: error.localizedDescription, layout: .cardView)
+            }
+        }
     }
     
     func downloadSmallProfilePhoto(photoLink: String) {
@@ -312,6 +331,10 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
         DispatchQueue.global().async(group: group) {
             self.initDayData()
         }
+        
+//        DispatchQueue.global().async(group: group) {
+//            LoginView().getPersonaId()
+//        }
         
         DispatchQueue.global().async(group: group) {
             let semaphore = DispatchSemaphore(value: 0)

@@ -61,6 +61,7 @@ extension SchoolSelectionViewController: UITableViewDataSource, UITableViewDeleg
         }
         Preferences().baseURL = schoolList[safe: indexPath.row]?["schoolURL"] ?? ""
         Preferences().schoolName = schoolList[safe: indexPath.row]?["schoolCode"] ?? ""
+//        print(Preferences().schoolName)
         
         showLoginVC()
     }

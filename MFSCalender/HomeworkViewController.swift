@@ -110,6 +110,7 @@ class homeworkViewController: UITableViewController, UIViewControllerPreviewingD
         let daySelectedString = formatter.string(from: daySelected!).addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
         let dayEndString = filter == 2 ? formatter.string(from: daySelected! + 1.months).addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)! : daySelectedString
         let url = Preferences().baseURL + "/api/DataDirect/AssignmentCenterAssignments/?format=json&filter=\(String(describing: filter))&dateStart=\(daySelectedString)&dateEnd=\(dayEndString)&persona=2"
+        print(url)
         let request = URLRequest(url: URL(string: url)!)
         
         var originalData = [[String:Any]]()

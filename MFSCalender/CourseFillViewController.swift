@@ -213,13 +213,13 @@ class courseFillController: UIViewController {
         let startTime = String(Int((DateInRegion() - 1.years).date.timeIntervalSince1970))
         let endTime = String(Int((DateInRegion() + 1.years).date.timeIntervalSince1970))
         let semaphore = DispatchSemaphore.init(value: 0)
+        let userId = Preferences().userID ?? ""
         
-        provider.request(MyService.getSchedule(userID: Preferences().userID ?? "", startTime: startTime, endTime: endTime),
+        provider.request(MyService.getSchedule(userID: userId, startTime: startTime, endTime: endTime),
                          callbackQueue: DispatchQueue.global(), progress: nil) { (result) in
             switch result {
             case .success(let response):
                 do {
-        //                                    print(response.request?.url)
                     guard let json = try JSONSerialization.jsonObject(with: response.data, options: .allowFragments) as? [[String: Any]] else {
                         presentErrorMessage(presentMessage: "JSON Format Incorrect", layout: .cardView)
         //                                        print(String(data: response.data, encoding: .utf8))
@@ -311,7 +311,6 @@ class courseFillController: UIViewController {
             let startTimeString = classObject["start"] as? String ?? ""
             guard let startTime = formatter.date(from: startTimeString) else {
                 continue
-                
             }
             
             formatter.dateFormat = "yyyyMMdd"
@@ -320,29 +319,10 @@ class courseFillController: UIViewController {
             if startTimeString == endTimeString {
                 // All Day Event
                 let title = classObject["title"] as? String ?? ""
-                if title.lowercased().contains("day") {
-                    var dayString = ""
-                    // This is only for CMH. May remove this later.
-                    if title.contains("A-") || title.contains("A ") {
-                        dayString = "A"
-                    } else if title.contains("B-") || title.contains("B ") {
-                        dayString = "B"
-                    }
+                let dayString = title[0,0]
+                dayDict[dateString] = dayString
 
-                    if title.contains("Assembly") {
-                        dayString.insert("A", at: dayString.startIndex)
-                    } else if title.contains("Late Start") {
-                        dayString.insert("L", at: dayString.startIndex)
-                    } else if title.contains("Mass") {
-                        dayString.insert("M", at: dayString.startIndex)
-                    } else if title.contains("GPS") {
-                        dayString.insert("G", at: dayString.startIndex)
-                    }
-
-                    dayDict[dateString] = dayString
-                }
-
-                continue
+//                continue
             }
             
             var modifiedClassObject = classObject

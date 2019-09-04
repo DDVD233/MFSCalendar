@@ -23,6 +23,7 @@ enum MyService {
     case getSchedule(userID: String, startTime: String, endTime: String)
     case getEventsIDList(startDate: String, endDate: String)
     case downloadEventsFromMySchool(startDate: String, endDate: String, idList: [String])
+    case getSchoolContext
 
     //Dwei
     case getCalendarData
@@ -76,6 +77,8 @@ extension MyService: TargetType {
             return "/api/mycalendar/list/"
         case .downloadEventsFromMySchool:
             return "/api/mycalendar/events"
+        case .getSchoolContext:
+            return "/api/webapp/context"
         
 
                 // Dwei
@@ -138,7 +141,7 @@ extension MyService: TargetType {
         case .reportSteps(let steps, let username, let link):
             return ["name": username, "link": link, "steps": steps]
         case .getSchedule(let userID, let startTime, let endTime):
-            return ["format": "json", "viewerID": userID, "personaId": "2", "viewerPersonaId": "2", "start": startTime, "end": endTime]
+            return ["format": "json", "viewerId": userID, "personaId": "2", "viewerPersonaId": "2", "start": startTime, "end": endTime]
         case .getEmailWithID(let username, let password, let id):
             return ["name": username, "password": password, "id": id]
         case .getEventsIDList(let startDate, let endDate):

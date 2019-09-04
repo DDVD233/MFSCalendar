@@ -1077,6 +1077,14 @@
                                             <outlet property="titleLabel" destination="MMW-aR-Zs0" id="lCe-Gs-WwS"/>
                                         </connections>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="swipeCell" rowHeight="44" id="pik-Xa-09D" customClass="EmailTableHeader" customModule="MFSMobile" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="219.33333333333334" width="375" height="44.000000000000028"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="pik-Xa-09D" id="VC9-tt-dem" customClass="SwipeTableViewCell">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.666666666666664"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
                                 </prototypes>
                             </tableView>
                         </subviews>

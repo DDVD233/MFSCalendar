@@ -29,6 +29,15 @@ public class Preferences {
         }
     }
     
+    public var personaId: String? {
+        get {
+            return userDefaults.string(forKey: "personaId" )
+        }
+        set(value) {
+            userDefaults.set(value, forKey: "personaId" )
+        }
+    }
+    
     public var baseURL: String {
         // If not MFS or CMH
         get {
@@ -83,7 +92,7 @@ public class Preferences {
         }
     }
     
-    public var schoolName: String? {
+    public var schoolName: String {
         get {
             return userDefaults.string(forKey: "schoolName" ) ?? "NA"
         }

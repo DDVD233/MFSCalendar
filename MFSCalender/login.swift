@@ -79,6 +79,7 @@ public func loginAuthentication() -> (success: Bool, token: String, userId: Stri
                     userID = String(describing: resDict["UserId"]!)
                     Preferences().token = token
                     Preferences().userID = userID
+                    
                     Preferences().loginTime = Date()
                     //print(HTTPCookieStorage.shared.cookies(for: response!.url!))
                 }

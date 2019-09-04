@@ -34,7 +34,6 @@ class NewMoreViewController: UICollectionViewController  {
 //            hidesBottomBarWhenPushed = false
 //        }
         if Preferences().schoolName == "MFS" {
-            
             contentList = [myCourses, lunchMenu, serviceHourS, logout, about, settings, stepChallenge]
         } else {
             contentList = [myCourses, lunchMenu, logout, about, settings]

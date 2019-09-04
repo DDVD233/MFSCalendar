@@ -212,7 +212,7 @@ class NetworkOperations {
     }
     
     func downloadEventsFromMySchool(idList: [String], completion: @escaping () -> Void) {
-        let startDate = Date() - 3.months
+        let startDate = Date() - 1.months
         let endDate = Date() + 8.months
         
         let formatter = DateFormatter()
@@ -223,6 +223,7 @@ class NetworkOperations {
         let context = delegate.persistentContainer.viewContext
         
         formatter.dateFormat = "M/dd/yyyy h:mm a"
+        formatter.locale = Locale(identifier: "en_US_POSIX")
         provider.request(MyService.downloadEventsFromMySchool(startDate: startDateString, endDate: endDateString, idList: idList), callbackQueue: DispatchQueue.global()) { (result) in
             switch result {
             case .success(let response):
@@ -233,11 +234,8 @@ class NetworkOperations {
                         return
                     }
                     
-                    print(response.request?.url)
-                    print(json)
-                    print(json.count)
-                    
                     for event in json {
+                        print(event)
                         guard let startDate = formatter.date(from: event["StartDate"] as? String ?? "") else {
                             continue
                         }
@@ -260,6 +258,8 @@ class NetworkOperations {
                         
                         fetchRequest.predicate = predicate
                         let res = try! context.fetch(fetchRequest)
+                        let paths = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)
+                        print(paths[0])
                         
                         if res.count == 0 {
                             let entity = NSEntityDescription.entity(forEntityName: "Events", in: context)
@@ -344,6 +344,7 @@ class NetworkOperations {
     
     func downloadLargeProfilePhoto() {
         if let largeFileLink = userDefaults.string(forKey: "largePhotoLink") {
+            print(largeFileLink)
             provider.request(.downloadLargeProfilePhoto(link: largeFileLink), completion: { result in
                 switch result {
                 case .success(_):
