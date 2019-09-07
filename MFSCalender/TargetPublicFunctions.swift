@@ -111,7 +111,8 @@ class ClassView {
     
     func getMarkingPeriodID(durationID: String, leadSectionID: String, completion: @escaping (Int) -> Void) {
         let userID = loginAuthentication().userId
-        let url = Preferences().baseURL +  "/api/gradebook/GradeBookMyDayMarkingPeriods?durationSectionList=[{\"DurationId\":\(durationID),\"LeadSectionList\":[{\"LeadSectionId\":\(leadSectionID)}]}]&userId=\(userID)&personaId=2"
+        let personaId = Preferences().personaId ?? "2"
+        let url = Preferences().baseURL +  "/api/gradebook/GradeBookMyDayMarkingPeriods?durationSectionList=[{\"DurationId\":\(durationID),\"LeadSectionList\":[{\"LeadSectionId\":\(leadSectionID)}]}]&userId=\(userID)&personaId=\(personaId)"
         print(url)
         let escapedURL = url.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
 //        print

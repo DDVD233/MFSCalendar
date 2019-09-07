@@ -41,7 +41,7 @@ public class Preferences {
     public var baseURL: String {
         // If not MFS or CMH
         get {
-            switch self.schoolName ?? "" {
+            switch self.schoolName {
             case "MFS":
                 return "https://mfriends.myschoolapp.com"
             case "CMH":
@@ -94,7 +94,7 @@ public class Preferences {
     
     public var schoolName: String {
         get {
-            return userDefaults.string(forKey: "schoolName" ) ?? "NA"
+            return userDefaults.string(forKey: "schoolName" ) ?? "MFS"
         }
         set(value) {
             userDefaults.set(value, forKey: "schoolName" )

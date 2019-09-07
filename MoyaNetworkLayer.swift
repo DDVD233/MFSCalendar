@@ -141,7 +141,8 @@ extension MyService: TargetType {
         case .reportSteps(let steps, let username, let link):
             return ["name": username, "link": link, "steps": steps]
         case .getSchedule(let userID, let startTime, let endTime):
-            return ["format": "json", "viewerId": userID, "personaId": "2", "viewerPersonaId": "2", "start": startTime, "end": endTime]
+            let personaId = Preferences().personaId ?? "2"
+            return ["format": "json", "viewerId": userID, "personaId": personaId, "viewerPersonaId": personaId, "start": startTime, "end": endTime]
         case .getEmailWithID(let username, let password, let id):
             return ["name": username, "password": password, "id": id]
         case .getEventsIDList(let startDate, let endDate):

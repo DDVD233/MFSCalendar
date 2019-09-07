@@ -99,6 +99,8 @@ class LoginView {
                         }
                     }
                     
+                    
+                    
                 } catch {
                     NSLog("Data parsing failed")
                     DispatchQueue.main.async {
@@ -332,9 +334,9 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
             self.initDayData()
         }
         
-//        DispatchQueue.global().async(group: group) {
-//            LoginView().getPersonaId()
-//        }
+        DispatchQueue.global().async(group: group) {
+            LoginView().getPersonaId()
+        }
         
         DispatchQueue.global().async(group: group) {
             let semaphore = DispatchSemaphore(value: 0)

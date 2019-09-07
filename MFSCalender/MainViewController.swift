@@ -161,8 +161,6 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
             self.stopTimer()
         })
         
-        presentAdIfNeeded()
-        
         startTimer()
     }
     
@@ -189,18 +187,9 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         eventViewController.view.translatesAutoresizingMaskIntoConstraints = false
     }
     
-    func presentAdIfNeeded() {
-        let presentationDate = "2018-11-30 12:56:00".toDate()!
-        if Date().isBeforeDate(presentationDate.date, granularity: .minute) &&
-            !Preferences().didPresentCapstoneAd {
-            let adVC = self.storyboard!.instantiateViewController(withIdentifier: "adVC")
-            self.present(adVC, animated: true, completion: nil)
-        }
-    }
-    
     func adaptationScheduleFix() {
         let preferences = Preferences()
-        if preferences.dataBuild < 1600 {
+        if preferences.dataBuild < 2900 {
             preferences.dataBuild = Int(Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "") ?? 0
             LoginView().getProfile()
             DispatchQueue.main.async {
@@ -224,11 +213,11 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
             NetworkOperations().refreshEvents()
         })
         
-        if Preferences().schoolName ?? "" == "MFS" {
-            DispatchQueue.global().async(group: group, execute: {
-                self.refreshData()
-            })
-        }
+//        if Preferences().schoolName ?? "" == "MFS" {
+//            DispatchQueue.global().async(group: group, execute: {
+//                self.refreshData()
+//            })
+//        }
 
         group.wait()
         

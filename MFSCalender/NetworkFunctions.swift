@@ -235,7 +235,6 @@ class NetworkOperations {
                     }
                     
                     for event in json {
-                        print(event)
                         guard let startDate = formatter.date(from: event["StartDate"] as? String ?? "") else {
                             continue
                         }
@@ -364,7 +363,8 @@ class NetworkOperations {
         let userID = loginAuthentication().userId
         let schoolYear = school.getSchoolYear()
         let schoolYearLabel = String(schoolYear) + "+-+" + String(schoolYear + 1)
-        let url = Preferences().baseURL + "/api/DataDirect/StudentGroupTermList/?studentUserId=\(userID)&schoolYearLabel=\(schoolYearLabel)&personaId=2"
+        let personaId = Preferences().personaId ?? "2"
+        let url = Preferences().baseURL + "/api/DataDirect/StudentGroupTermList/?studentUserId=\(userID)&schoolYearLabel=\(schoolYearLabel)&personaId=\(personaId)"
         
         let task = URLSession.shared.dataTask(with: URL(string: url)!) { (data, response, error) in
             guard error == nil else {

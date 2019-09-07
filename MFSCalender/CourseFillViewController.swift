@@ -681,7 +681,7 @@ class courseFillController: UIViewController {
         return removeIndex
     }
 
-//    Finish creating schedule
+    //    Legacy: Not Used anymore
     func fillStudyHallAndLunch(letter: String) {
         let path = FileList.classDate(date: letter).filePath
         var listClasses = NSArray(contentsOfFile: path) as! [[String: Any]]

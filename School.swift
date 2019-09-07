@@ -134,6 +134,9 @@ public class School {
     func meetTimeForPeriod(periodObject: [String: Any]) -> String {
         let startTime = timeToAMFormat(time: periodObject["startTime"] as? Int ?? 0)
         let endTime = timeToAMFormat(time: periodObject["endTime"] as? Int ?? 0)
+        if startTime == endTime {
+            return ""
+        }
         return startTime + " - " + endTime
     }
     
