@@ -405,6 +405,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
                 print("Latest version:", newVersion)
                 if newVersion != version {
                     refresh = true
+                    Preferences().version = newVersion
                 }
             case let .failure(error):
                 presentErrorMessage(presentMessage: error.localizedDescription, layout: .statusLine)

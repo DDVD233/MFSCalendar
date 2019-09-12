@@ -409,10 +409,10 @@
 				E4B340031F0891AE00D6039A /* ClassPagerViewController.swift */,
 				E472A1631EFB735C00EF5A74 /* ClassListViewController.swift */,
 				E4E8B2191F1C5AF200913DAE /* GradeViewController.swift */,
+				E48B85A81F96691D000DC288 /* NewMoreViewController.swift */,
 				E49E53411F995156003011A6 /* MobileServeIntroViewController.swift */,
 				E42786871F568A5F00583D1E /* AboutViewController.swift */,
 				E42786891F568EB100583D1E /* ProfileViewController.swift */,
-				E48B85A81F96691D000DC288 /* NewMoreViewController.swift */,
 			);
 			name = "More View";
 			sourceTree = "<group>";
@@ -1225,7 +1225,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Class Schedule/Class Schedule.entitlements";
 				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				INFOPLIST_FILE = "Class Schedule/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MARKETING_VERSION = 1.8.3;
 				PRODUCT_BUNDLE_IDENTIFIER = org.dwei.ClassSchedule;
@@ -1245,7 +1245,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Class Schedule/Class Schedule.entitlements";
 				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				INFOPLIST_FILE = "Class Schedule/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MARKETING_VERSION = 1.8.3;
 				PRODUCT_BUNDLE_IDENTIFIER = org.dwei.ClassSchedule;
@@ -1468,7 +1468,7 @@
 				CODE_SIGN_ENTITLEMENTS = MFSCalender/MFSCalender.entitlements;
 				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				INFOPLIST_FILE = MFSCalender/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 1.8.3;
 				PRODUCT_BUNDLE_IDENTIFIER = org.dwei;
@@ -1487,7 +1487,7 @@
 				CODE_SIGN_ENTITLEMENTS = MFSCalender/MFSCalender.entitlements;
 				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				INFOPLIST_FILE = MFSCalender/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 1.8.3;
 				PRODUCT_BUNDLE_IDENTIFIER = org.dwei;

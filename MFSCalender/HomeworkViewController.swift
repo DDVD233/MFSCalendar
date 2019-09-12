@@ -492,6 +492,8 @@ class homeworkViewCell: UITableViewCell {
         } else {
             shortDescription.isUserInteractionEnabled = false
         }
+        
+        shortDescription.textColor = UIColor.init(named: "DarkTextColor")
     }
     
     @IBAction func submit(_ sender: Any) {
