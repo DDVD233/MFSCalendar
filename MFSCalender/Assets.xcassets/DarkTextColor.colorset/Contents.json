@@ -8,7 +8,7 @@
       "idiom" : "universal",
       "color" : {
         "platform" : "ios",
-        "reference" : "groupTableViewBackgroundColor"
+        "reference" : "darkTextColor"
       }
     },
     {
@@ -21,7 +21,7 @@
       ],
       "color" : {
         "platform" : "ios",
-        "reference" : "lightTextColor"
+        "reference" : "darkTextColor"
       }
     },
     {
@@ -34,7 +34,7 @@
       ],
       "color" : {
         "platform" : "ios",
-        "reference" : "labelColor"
+        "reference" : "lightTextColor"
       }
     }
   ]
