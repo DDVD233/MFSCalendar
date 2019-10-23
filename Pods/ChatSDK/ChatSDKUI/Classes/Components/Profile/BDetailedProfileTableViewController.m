@@ -95,32 +95,11 @@
         user = BChatSDK.currentUser;
     }
     
-    self.profilePictureButton.userInteractionEnabled = NO;
-    if (!self.userIsCurrent) {
-        self.title = user.name;
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[NSBundle uiImageNamed:@"icn_22_chat.png"]
-                                                                                  style:UIBarButtonItemStylePlain
-                                                                                 target:self
-                                                                                 action:@selector(startChat)];
-        
-    }
-    else {
-        [self cell:blockUserCell setHidden:YES];
-        [self cell:addContactCell setHidden:YES];
-    }
-    
     [self refreshInterfaceAnimated:NO];
 }
 
 -(void) viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-//    _userObserver = [[NSNotificationCenter defaultCenter] addObserverForName:bNotificationUserUpdated
-//                                                                      object:Nil
-//                                                                       queue:dispatch_get_main_queue()
-//                                                                  usingBlock:^(NSNotification * notification) {
-//            [self refreshInterfaceAnimated:NO];
-//    }];
-
 }
 
 -(void) viewWillDisappear:(BOOL)animated {
@@ -135,6 +114,15 @@
     // Stop the app from crashing when we log out
     if (!user) {
         return;
+    }
+    
+    self.profilePictureButton.userInteractionEnabled = NO;
+    if (!self.user.isMe) {
+        self.title = user.name;
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[NSBundle uiImageNamed:@"icn_22_chat.png"]
+                                                                                  style:UIBarButtonItemStylePlain
+                                                                                 target:self
+                                                                                 action:@selector(startChat)];
     }
 
     //
@@ -188,41 +176,42 @@
     //
     // Profile picture
     //
-    
-    // Set the profile picture
-    // Does the user already have a profile picture?
-    [user loadProfileImage: YES].thenOnMain(^id(UIImage * image) {
-        [profilePictureButton setImage:image forState:UIControlStateNormal];
-        return image;
-    }, Nil);
+
+    [profilePictureButton loadAvatarForUser:user forControlState:UIControlStateNormal];
     
     //
     // State
     //
     
-    NSString * state = [BAvailabilityState titleForKey:user.state];
+    NSString * availability = [BAvailabilityState titleForKey:user.availability];
     
     // There are two more states... If the user has no state but they are online
     // then their state is online. If they are offline, their state is offline
-    if (!state || !state.length) {
+    if (!availability || !availability.length) {
         if (user.online.boolValue) {
-            state = [NSBundle t:bAvailable];
+            availability = [NSBundle t:bAvailable];
         }
         else {
-            state = [NSBundle t:bOffline];
+            availability = [NSBundle t:bOffline];
         }
     }
-    availabilityLabel.text = state;
+    availabilityLabel.text = availability;
     
     [self cell:availabilityCell setHidden:!availabilityLabel.text || !availabilityLabel.text.length];
+
+    //
+    // Contact
+    //
     
+    [self cell:addContactCell setHidden:user.isMe];
+
     //
     // Blocking
     //
     
-    [self cell:blockUserCell setHidden:!BChatSDK.blocking || !BChatSDK.blocking.serviceAvailable];
+    [self cell:blockUserCell setHidden:user.isMe || !BChatSDK.blocking || !BChatSDK.blocking.serviceAvailable];
     
-    BOOL isBlocked = [BChatSDK.blocking isBlocked:user];
+    BOOL isBlocked = [BChatSDK.blocking isBlocked:user.entityID];
     [self setIsBlocked:isBlocked setRemote:NO];
     
     if (self.isContact) {
@@ -266,9 +255,8 @@
 -(id<PUserConnection>) userConnection {
     // Get the user connection
     id<PUser> currentUser = BChatSDK.currentUser;
-    id<PUserConnection> connection = Nil;
     for (id<PUserConnection> connection in [currentUser connectionsWithType:bUserConnectionTypeContact]) {
-        if ([connection.user.entityID isEqualToString:user.entityID]) {
+        if ([connection.user isEqualToEntity:user]) {
             return connection;
         }
     }
@@ -281,23 +269,23 @@
     [blockUserActivityIndicator startAnimating];
     
     promise_completionHandler_t success = ^id(id success) {
-        blockImageView.highlighted = isBlocked;
-        blockTextView.text = isBlocked ? [NSBundle t:bUnblock] : [NSBundle t:bBlock];
-        blockUserActivityIndicator.hidden = YES;
+        self.blockImageView.highlighted = isBlocked;
+        self.blockTextView.text = isBlocked ? [NSBundle t:bUnblock] : [NSBundle t:bBlock];
+        self.blockUserActivityIndicator.hidden = YES;
         return Nil;
     };
     
     promise_errorHandler_t error = ^id(NSError * error) {
-        blockUserActivityIndicator.hidden = YES;
+        self.blockUserActivityIndicator.hidden = YES;
         return Nil;
     };
     
     if (setRemote) {
         if (isBlocked) {
-            [BChatSDK.blocking blockUser:user].thenOnMain(success, error);
+            [BChatSDK.blocking blockUser:user.entityID].thenOnMain(success, error);
         }
         else {
-            [BChatSDK.blocking unblockUser:user].thenOnMain(success, error);
+            [BChatSDK.blocking unblockUser:user.entityID].thenOnMain(success, error);
         }
     }
     else {
@@ -307,7 +295,7 @@
 
 -(void) deleteUser {
     [BChatSDK.contact deleteContact:self.user withType:bUserConnectionTypeContact].thenOnMain(^id(id success) {
-        [self.navigationController popViewControllerAnimated:YES];
+        [self refreshInterfaceAnimated:NO];
         return Nil;
     }, ^id(NSError * error) {
         [UIView alertWithTitle:[NSBundle t:bErrorTitle] withError:error];
@@ -317,7 +305,7 @@
 
 -(void) addContact {
     [BChatSDK.contact addContact:self.user withType:bUserConnectionTypeContact].thenOnMain(^id(id success) {
-        [self refreshInterfaceAnimated:YES];
+        [self refreshInterfaceAnimated:NO];
         return Nil;
     }, ^id(NSError * error) {
         [UIView alertWithTitle:[NSBundle t:bErrorTitle] withError:error];
@@ -329,10 +317,10 @@
     return blockImageView.highlighted;
 }
 
--(UIImage *) profilePicture {
-    id<PUser> user = BChatSDK.currentUser;
-    return user.imageAsImage;
-}
+//-(UIImage *) profilePicture {
+//    id<PUser> user = BChatSDK.currentUser;
+//    return user.imageAsImage;
+//}
 
 -(void) startChat {
     [BChatSDK.core createThreadWithUsers:@[self.user] threadCreated:^(NSError * error, id<PThread> thread) {

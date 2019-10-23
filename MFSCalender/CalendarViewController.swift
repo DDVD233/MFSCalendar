@@ -8,7 +8,6 @@
 
 import UIKit
 import FSCalendar
-import Crashlytics
 import SnapKit
 import XLPagerTabStrip
 

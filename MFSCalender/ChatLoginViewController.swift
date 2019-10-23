@@ -11,7 +11,7 @@ import SkyFloatingLabelTextField
 import NVActivityIndicatorView
 import NotificationCenter
 import ChatSDK
-import ChatSDKFirebase
+//import ChatSDKFirebase
 
 class ChatLoginViewController: UIViewController, UITextFieldDelegate {
     
@@ -128,7 +128,7 @@ class ChatLoginViewController: UIViewController, UITextFieldDelegate {
         
         let photoLink = pref.baseURL + (userDefaults.string(forKey: "largePhotoLink") ?? "")
         
-        let schoolName = pref.schoolName ?? ""
+        let schoolName = pref.schoolName
         BChatSDK.core()?.currentUserModel()?.setMetaValue(schoolName, forKey: "School")
         
 //        BFirebaseSearchHandler().users(forIndexes: ["School"], withValue: schoolName, limit: 999) { (user) in
@@ -151,7 +151,6 @@ class ChatLoginViewController: UIViewController, UITextFieldDelegate {
         
         let currentUser = BChatSDK.currentUser()
         _ = AppDelegate().application(UIApplication.shared, didFinishLaunchingWithOptions: nil)
-        BHookNotification.notificationDidAuthenticate(currentUser!)
         self.indicatorView.isHidden = true
         parentVC.setUpViews()
         self.view.removeFromSuperview()

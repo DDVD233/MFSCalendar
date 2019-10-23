@@ -12,7 +12,6 @@
 #import <ChatSDK/UI.h>
 
 #define bOnlineIndicatorColor @"88bb45"
-#define bUnreadIndicatorColor @"ff7e79"
 
 @implementation BThreadCell
 
@@ -22,11 +21,10 @@
     self.profileImageView.layer.borderColor = [UIColor darkGrayColor].CGColor;
     self.profileImageView.layer.borderWidth = 1.0;
     self.messageTextView.userInteractionEnabled = NO;
+    self.messageTextView.textContainer.lineBreakMode = NSLineBreakByTruncatingTail;
+    self.unreadView.layer.borderColor = [UIColor darkGrayColor].CGColor;
     self.unreadView.layer.borderWidth = 1.0;
     self.unreadView.layer.cornerRadius = self.unreadView.fh / 2.0;
-    self.unreadView.layer.borderColor = [BCoreUtilities colorWithHexString:bUnreadIndicatorColor].CGColor;
-    self.unreadView.layer.backgroundColor = [BCoreUtilities colorWithHexString:bUnreadIndicatorColor].CGColor;
-    
     
     self.unreadMessagesLabel.layer.cornerRadius = 5;
     self.unreadMessagesLabel.clipsToBounds = YES;

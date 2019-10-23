@@ -10,8 +10,11 @@
 #define PHookHandler_h
 
 #define bHookDidAuthenticate @"bHookDidAuthenticate"
-#define bHookDidLogin @"bHookDidLogin"
-#define bHookDidSignUp @"bHookDidSignUp"
+
+#define bHook_AuthenticationType @"bHook_AuthenticationType"
+#define bHook_AuthenticationTypeLogin @"login"
+#define bHook_AuthenticationTypeSignUp @"signup"
+#define bHook_AuthenticationTypeCached @"cached"
 
 #define bHookWillLogout @"bHookWillLogout"
 #define bHookDidLogout @"bHookDidLogout"
@@ -26,12 +29,20 @@
 #define bHookMessageRecieved @"bHookMessageRecieved"
 
 #define bHookMessageWillSend @"bHookMessageWillSend"
+#define bHookMessageSending @"bHookMessageSending"
 #define bHookMessageDidSend @"bHookMessageDidSend"
 #define bHookMessageWillUpload @"bHookMessageWillUpload"
 #define bHookMessageDidUpload @"bHookMessageDidUpload"
 
+#define bHookMessageWillBeDeleted @"bHookMessageWillBeDeleted"
+#define bHookMessageWasDeleted @"bHookMessageWasDeleted"
+
+#define bHookThreadAdded @"bHookThreadAdded"
+#define bHookThreadRemoved @"bHookThreadRemoved"
+
 #define bHook_PMessage @"bHook_PMessage"
 #define bHook_PUser @"bHook_PUser"
+#define bHook_PThread @"bHook_PThread"
 
 #define bHookInternetConnectivityDidChange @"bHookInternetConnectivityDidChange"
 #define bHookUserWillDisconnect @"bHookUserWillDisconnect"

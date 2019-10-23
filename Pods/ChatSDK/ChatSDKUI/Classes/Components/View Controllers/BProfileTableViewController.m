@@ -54,17 +54,14 @@
         _user = currentUser;
     }
     [self updateBlockButton];
-    
+        
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:self.title style:UIBarButtonItemStylePlain target:Nil action:Nil];
 
 }
 
 -(void) loadUserImage {
     if(_user) {
-        UIImage * image = _user.imageAsImage;
-        [profilePictureButton sd_setImageWithURL:[NSURL URLWithString:_user.imageURL]
-                                        forState:UIControlStateNormal
-                                placeholderImage:image];
+        [profilePictureButton loadAvatarForUser:_user forControlState:UIControlStateNormal];
     }
 }
 
@@ -86,7 +83,7 @@
     }];
     
     // This needs to be added here so it is reloaded each time
-    if ([_user.entityID isEqualToString:currentUser.entityID]) {
+    if (_user.isMe) {
         // Add a logout button
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:[NSBundle t:bLogout] style:UIBarButtonItemStylePlain target:self action:@selector(logout)];
         if(BChatSDK.ui.settingsViewController) {
@@ -205,7 +202,7 @@
     // Add the user to the index
     id<PUser> user = BChatSDK.currentUser;
     
-    if (user && user.entityID && [_user.entityID isEqualToString:user.entityID]) {
+    if (user && user.entityID && [_user isEqualToEntity:user]) {
         
         // User cannot set their name as white space
         if ([nameField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length) {
@@ -218,12 +215,7 @@
         }
         
         user.phoneNumber = phoneNumberField.text;
-        
-        [BChatSDK.search updateIndexForUser:user].thenOnMain(Nil, ^id(NSError * error) {
-            [UIView alertWithTitle:[NSBundle t:bErrorTitle] withError:error];
-            return error;
-        });
-        
+                
         // Update the user
         [BChatSDK.core pushUser];
     }
@@ -285,15 +277,14 @@
     id<PUser> user = BChatSDK.currentUser;
     [user setImage:UIImagePNGRepresentation(image)];
     
-    // Set the image now
     [BChatSDK.upload uploadImage:image].thenOnMain(^id(NSDictionary * urls) {
-    
+        
         // Set the meta data
         [user updateMeta:@{bUserImageURLKey: urls[bImagePath]}];
-    
+        
         // Update the user
         [BChatSDK.core pushUser];
-    
+        
         return urls;
     }, Nil);
     
@@ -387,7 +378,7 @@
     [self.rightActionButton setTitle:[NSBundle t:bBlock] forState:UIControlStateNormal];
     [self.rightActionButton setTitle:[NSBundle t:bUnblock] forState:UIControlStateSelected];
 
-    self.rightActionButton.hidden = !BChatSDK.blocking || [_user isEqual:BChatSDK.currentUser];
+    self.rightActionButton.hidden = !BChatSDK.blocking || _user.isMe;
     if(BChatSDK.blocking) {
         self.rightActionButton.selected = [BChatSDK.blocking isBlocked:_user.entityID];
     }

@@ -661,15 +661,7 @@ extension syllabusView: UITextViewDelegate {
     func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
 
         // Because the safari view controller no longer providing shared cookies between Safari, Safari View Controller instances, the app should use safari app to open links instead. (https://github.com/openid/AppAuth-iOS/issues/120)
-        if #available(iOS 11.0, *) {
-            return true
-        }
-
-        let safariViewController = SFSafariViewController(url: URL)
-
-        parentViewController?.present(safariViewController, animated: true, completion: nil)
-
-        return false
+        return true
     }
 }
 

@@ -28,9 +28,9 @@
 @synthesize emailTextField;
 @synthesize availabilityButton;
 @synthesize availabilityCell;
-@synthesize countryCell;
 @synthesize countryButton;
 @synthesize profilePictureButton;
+@synthesize countryPickerCell;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -69,7 +69,7 @@
     int i = 0;
     
     for (NSArray * option in _availabilityOptions) {
-        if([option.lastObject isEqualToString:user.state]) {
+        if([option.lastObject isEqualToString:user.availability]) {
             break;
         }
         i++;
@@ -87,16 +87,14 @@
     
     // Set the profile picture
     // Does the user already have a profile picture?
-    [user loadProfileImage: YES].thenOnMain(^id(UIImage * image) {
-        [profilePictureButton setImage:image forState:UIControlStateNormal];
-        return image;
-    }, Nil);
+    
+    [profilePictureButton loadAvatarForUser:user forControlState:UIControlStateNormal];
     profilePictureButton.layer.cornerRadius = 50;
     
     // Hide the picker cells - they are displayed when their button is pressed
     [self cell:availabilityCell setHidden:YES];
-    [self cell:countryCell setHidden:YES];
-    
+    [self cell:countryPickerCell setHidden:YES];
+
     [self reloadDataAnimated:NO];
     
 }
@@ -131,6 +129,21 @@
     _profileImage = [_profileImage resizedImage:bProfilePictureSize interpolationQuality:kCGInterpolationHigh];
     
     [profilePictureButton setImage:_profileImage forState:UIControlStateNormal];
+    
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    
+    // Upload the image
+    if(BChatSDK.upload.shouldUploadAvatar) {
+        [BChatSDK.upload uploadImage:_profileImage].thenOnMain(^id(NSDictionary * urls) {
+
+            // Set the meta data
+            [BChatSDK.currentUser updateMeta:@{bUserImageURLKey: urls[bImagePath]}];
+            
+            [MBProgressHUD hideHUDForView:self.view animated: YES];
+            
+            return urls;
+        }, Nil);
+    }
     
     [picker dismissViewControllerAnimated:YES completion:Nil];
 }
@@ -167,8 +180,8 @@
 }
 
 - (IBAction)countryButtonPressed:(UIButton *)sender {
-    BOOL hidden = ![self cellIsHidden: countryCell];
-    [self cell:countryCell setHidden:hidden];
+    BOOL hidden = ![self cellIsHidden: countryPickerCell];
+    [self cell:countryPickerCell setHidden:hidden];
     [sender setTintColor:hidden ? self.defaultButtonTintColor : [UIColor redColor]];
     [self reloadDataAnimated:NO];
 }
@@ -241,7 +254,6 @@
     [self dismissViewControllerAnimated:YES completion:Nil];
 }
 
-// #6679 Start bug fix for v3.0.2
 -(void) updateUserAndIndexes {
     
     // Add the user to the index
@@ -254,7 +266,7 @@
     [userWrapper setCountry: countryPickerView.selectedCountryCode];
     [user setPhoneNumber:phoneTextField.text];
     [user setEmail:emailTextField.text];
-    [user setState:[_availabilityOptions[[_availabilityPicker selectedRowInComponent:0]] lastObject]];
+    [user setAvailability:[_availabilityOptions[[_availabilityPicker selectedRowInComponent:0]] lastObject]];
     if (_profileImage) {
         [user setImage:UIImageJPEGRepresentation(_profileImage, 0.5)];
     }

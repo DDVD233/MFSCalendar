@@ -105,7 +105,7 @@
         _sendButton.keepHeight.equal = 40;
         _sendButton.keepWidth.equal = 48;
         _sendButton.translatesAutoresizingMaskIntoConstraints = NO;
-        
+                
         _textView.keepLeftOffsetTo(_optionsButton).equal = bMargin;
         _textView.keepRightOffsetTo(_sendButton).equal = bMargin;
         _textView.keepBottomInset.equal = bMargin;
@@ -315,19 +315,27 @@
 }
 
 -(void) optionsButtonPressed {
-    BOOL select = NO;
     if (_optionsButton.selected) {
-        if (_sendBarDelegate && [_sendBarDelegate respondsToSelector:@selector(showOptions)]) {
-            select = [_sendBarDelegate hideOptions];
-        }
+        [self hideOptions];
     }
     else {
-        if (_sendBarDelegate && [_sendBarDelegate respondsToSelector:@selector(showOptions)]) {
-            select = [_sendBarDelegate showOptions];
+        [self showOptions];
+    }
+}
+
+-(void) showOptions {
+    if (_sendBarDelegate && [_sendBarDelegate respondsToSelector:@selector(showOptions)]) {
+        if([_sendBarDelegate showOptions]) {
+            _optionsButton.selected = YES;
         }
     }
-    if(select) {
-        _optionsButton.selected = !_optionsButton.selected;
+}
+
+-(void) hideOptions {
+    if (_sendBarDelegate && [_sendBarDelegate respondsToSelector:@selector(showOptions)]) {
+        if([_sendBarDelegate hideOptions]) {
+            _optionsButton.selected = NO;
+        }
     }
 }
 
@@ -491,6 +499,7 @@
 
 -(BOOL) resignTextViewFirstResponder {
 //    [super resignFirstResponder];
+    [self hideOptions];
     return [_textView resignFirstResponder];
 }
 

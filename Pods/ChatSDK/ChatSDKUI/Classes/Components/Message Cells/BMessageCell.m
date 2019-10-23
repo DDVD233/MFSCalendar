@@ -127,14 +127,14 @@
     
     BOOL isMine = message.senderIsMe;
     if (isMine) {
-        [self setReadStatus:message.readStatus];
+        [self setReadStatus:message.messageReadStatus];
     }
     else {
         [self setReadStatus:bMessageReadStatusHide];
     }
     
     bMessagePos position = message.messagePosition;
-    id<PElmMessage> nextMessage = message.lazyNextMessage;
+    id<PElmMessage> nextMessage = message.nextMessage;
     
     // Set the bubble to be the correct color
     bubbleImageView.image = [[BMessageCache sharedCache] bubbleForMessage:message withColorWeight:colorWeight];
@@ -143,18 +143,20 @@
     _profilePicture.hidden = self.profilePictureHidden;
     
     // We only want to show the user picture if it is the latest message from the user
-    if (position & bMessagePosLast) {
+    if (position & BChatSDK.config.showMessageAvatarAtPosition) {
         if (message.userModel) {
-            if(message.userModel.imageURL) {
-                [_profilePicture sd_setImageWithURL:[NSURL URLWithString: message.userModel.imageURL]
-                                   placeholderImage:message.userModel.defaultImage options:SDWebImageLowPriority & SDWebImageScaleDownLargeImages];
-            }
-            else if (message.userModel.imageAsImage) {
-                [_profilePicture setImage:message.userModel.imageAsImage];
-            }
-            else {
-                [_profilePicture setImage:message.userModel.defaultImage];
-            }
+            [_profilePicture loadAvatar:message.userModel];
+            
+//            if(message.userModel.imageURL) {
+//                [_profilePicture sd_setImageWithURL:[NSURL URLWithString: message.userModel.imageURL]
+//                                   placeholderImage:message.userModel.defaultImage options:SDWebImageLowPriority & SDWebImageScaleDownLargeImages];
+//            }
+//            else if (message.userModel.imageAsImage) {
+//                [_profilePicture setImage:message.userModel.imageAsImage];
+//            }
+//            else {
+//                [_profilePicture setImage:message.userModel.defaultImage];
+//            }
         }
         else {
             // If the user doesn't have a profile picture set the default profile image
@@ -186,10 +188,16 @@
 //    // We only want to show the name label if the previous message was posted by someone else and if this is enabled in the thread
 //    // Or if the message is mine...
     
-    _nameLabel.hidden = ![_message showUserNameLabelForPosition:position];
+    _nameLabel.hidden = ![BMessageCell showUserNameLabelForMessage:message atPosition:@(position)];
     
     // Hide the read receipt view if this is a public thread or if read receipts are disabled
     _readMessageImageView.hidden = _message.thread.type.intValue & bThreadFilterPublic || !BChatSDK.readReceipt;
+    
+    _timeLabel.hidden = BChatSDK.config.combineTimeWithNameLabel;
+    
+    if (BChatSDK.config.combineTimeWithNameLabel) {
+        _nameLabel.text = [_nameLabel.text stringByAppendingFormat:@", %@", message.date.messageTimeAt];
+    }
 }
 
 -(void) willDisplayCell {
@@ -224,6 +232,26 @@
                                              ppDiameter)];
         
         _profilePicture.layer.cornerRadius = ppDiameter / 2.0;
+    }
+    
+    if (BChatSDK.config.nameLabelPosition == bNameLabelPositionBottom) {
+        // Set the margins and height for message
+        [bubbleImageView setFrame:CGRectMake(margin.left,
+                                             margin.top,
+                                             self.bubbleWidth,
+                                             self.bubbleHeight)];
+        
+        [_nameLabel setViewFrameY:self.bubbleHeight + 5];
+    }
+    if (BChatSDK.config.nameLabelPosition == bNameLabelPositionTop) {
+        float nameLabelHeight = self.nameHeight;
+        [bubbleImageView setFrame:CGRectMake(margin.left,
+                                             margin.top + nameLabelHeight,
+                                             self.bubbleWidth,
+                                             self.bubbleHeight)];
+        
+        [_nameLabel setViewFrameY:margin.top];
+        //        [_nameLabel setViewFrameX:50];
     }
     
     // Update the content view size for the message length
@@ -264,11 +292,17 @@
     
     // Layout the bubble
     // The bubble is translated the "margin" to the right of the profile picture
+    [_nameLabel setViewFrameX:0];
     if (!isMine) {
         [_profilePicture setViewFrameX:_profilePicture.hidden ? 0 : self.profilePicturePadding];
         [bubbleImageView setViewFrameX:self.bubbleMargin.left + _profilePicture.fx + _profilePicture.fw + xMargin];
-        [_nameLabel setViewFrameX:bTimeLabelPadding];
         
+        if (BChatSDK.config.nameLabelPosition == bNameLabelPositionBottom) {
+            [_nameLabel setViewFrameX:bTimeLabelPadding];
+        }
+        if (BChatSDK.config.nameLabelPosition == bNameLabelPositionTop) {
+            [_nameLabel setViewFrameX:bTimeLabelPadding + _profilePicture.fw];
+        }
         _timeLabel.textAlignment = NSTextAlignmentRight;
         _nameLabel.textAlignment = NSTextAlignmentLeft;
     }
@@ -302,7 +336,7 @@
 -(void) showProfileView {
     
     // Cannot view our own profile this way
-    if (![_message.userModel.entityID isEqualToString:BChatSDK.currentUser.entityID]) {
+    if (!_message.userModel.isMe) {
         UIViewController * profileView = [BChatSDK.ui profileViewControllerWithUser:_message.userModel];
         [self.navigationController pushViewController:profileView animated:YES];
     }
@@ -312,6 +346,32 @@
     NSLog(@"Method: cellContentView must be implemented in sub classes");
     assert(1 == 0);
     return Nil;
+}
+
++(BOOL)showUserNameLabelForMessage: (id<PMessage>) message atPosition: (NSNumber *) position {
+    
+    Class cellType = [BChatSDK.ui cellTypeForMessageType:message.type];
+    SEL selector = @selector(showUserNameLabelForMessage:atPosition:);
+    if ([cellType respondsToSelector:selector] && ![cellType isEqual:self.class]) {
+        return [cellType performSelector:selector withObject:message withObject: position];
+    }
+    
+    if (message.senderIsMe) {
+        return NO;
+    }
+    
+    // Show the label on the correct message
+    bMessagePos textPosition = BChatSDK.config.nameLabelPosition == bNameLabelPositionTop ? bMessagePosFirst : bMessagePosLast;
+    
+    if ((message.thread.type.intValue & bThreadFilterPublic || message.thread.users.count > 2) && position.intValue & textPosition) {
+        return YES;
+    }
+    
+    if (!(position.intValue & BChatSDK.config.showMessageAvatarAtPosition)) {
+        return NO;
+    }
+    
+    return NO;
 }
 
 // Change the color of a bubble. This method takes an image and loops over
@@ -473,7 +533,7 @@
 +(float) nameHeight: (id<PElmMessage>) message {
     bMessagePos pos = [message messagePosition];
     // Do we want to show the users name label
-    if ([message showUserNameLabelForPosition:pos]) {
+    if ([BMessageCell showUserNameLabelForMessage:message atPosition:@(pos)]) {
         return bUserNameHeight;
     }
     return 0;

@@ -130,6 +130,41 @@ We provide extensive documentation on Github but if you’re a non-technical use
 
 We are specialists in real-time application development including: Firebase, Firestore, XMPP and WebRTC for iOS and Android. If you need help integrating the Chat SDK with your app or another app development project email us at [team@sdk.chat](mailto: team@sdk.chat). 
 
+
+
+## Updating from 4.10.x to 4.11.x
+
+The latest update brings a range of improvements and new features including:
+
+- Detailed profile screen:
+	- User status
+	- User availability
+	- Country
+- Update to message view
+	- Vastly improved lazy loading
+	- Efficiency improvements
+- Contacts
+	- Add / remove contact from contact screen 
+
+There are also a range of bug fixes and overall improvments. If we aren't able to document all the changes but if you have any issues updating your project, you can post on this [issue](https://github.com/chat-sdk/chat-sdk-ios/issues/360) and we will answer your questions. 
+
+The [security rules](firebase-rules.json) have also been updated so make sure to bring your project up to date. 	
+
+**Update the CoreData model**
+
+Make sure that the CoreData model is the latest version. This model lives in `ChatSDK/CoreData/Resources/ChatSDK.xcdatamodelId`
+	
+Several schema have also been deprecated and will be removed at some point in the future. These include:
+
+- `message/to` field added
+- `message/meta` will replace `json_v2`
+- `message/from` will replace `user-firebase-id`
+- `thread/meta` will replace `details`
+- `thread/meta/creator` will replace `creator-entity-id`
+- `thread/meta/type` will replace `type_v4`
+
+At the moment these fields are not being used and are only included for future compatibility. However, in a future version of the client, the old fields will be removed and any old versions of the client will stop working.
+
 ## Running the demo project
 This repository contains a fully functional version of the Chat SDK which is configured using our Firebase account and social media logins. This is great way to test the features of the Chat SDK before you start itegrating it with your app. 
 
@@ -314,28 +349,11 @@ The Push Notification module allows you to send free push notifications using Fi
 
 ##### Setup Firebase Cloud Functions
 
-To handle push notifications, we use [Firebase Cloud Functions](https://firebase.google.com/docs/functions/). This service allows you to upload a script to Firebase hosting. This script monitors the realtime database and whenever a new messsage is detected, it sends a push notification to the recipient. 
-
-Below is a summary of the steps that are required to setup push using the Firebase Cloud Functions script. For further instructions you can look at the [Firebase Documentation](https://firebase.google.com/docs/functions/get-started). 
-
-1. Run `firebase login` and login using the browser
-2. Make a new directory to store your push functions in. It can be called anything
-3. Navigate to that directory using the terminal
-4. Run `firebase init functions`
-5. Choose the correct app from the list
-6. Choose `JavaScript`
-7. Choose `y` for ESLint
-8. Choose `Y` to install node dependencies
-9. Find the `functions` directory you've just created and copy the `index.js` file from [Github](https://raw.githubusercontent.com/chat-sdk/chat-sdk-ios/master/FirebasePushNotifications/index.js) into the directory
-10. Run `firebase deploy` 
-
-Now the script is active and push notifications will be set out automatically. 
+Follow the instructions on our [Chat SDK Firebase repository](https://github.com/chat-sdk/chat-sdk-firebase)
 
 ### Security Rules
 
-Firebase secures your data by allowing you to write rules to govern who can access the database and what can be written. On the Firebase dashboard click **Database** then the **Rules** tab. 
-
-Copy the contents of the [**rules.json**](https://github.com/chat-sdk/chat-sdk-ios/blob/master/rules.json) file into the rules and click publish.
+Firebase secures your data by allowing you to write rules to govern who can access the database and what can be written. The rules are also needed to enable user search. To enable the rules see the guide [Enabling Security Rules](https://github.com/chat-sdk/chat-sdk-firebase).
 
 ### Conclusion
 

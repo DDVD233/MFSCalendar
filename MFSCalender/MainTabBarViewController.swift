@@ -17,29 +17,29 @@ class MainTabBarViewController: UITabBarController, UITabBarControllerDelegate {
         super.viewDidLoad()
         self.delegate = self
         
-        NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: bNotificationBadgeUpdated), object: nil, queue: nil) { (notification) in
-            DispatchQueue.main.async {
-                self.updateBadge()
-            }
-        }
-        
-        NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: bNotificationMessageRemoved), object: nil, queue: nil) { (notification) in
-            DispatchQueue.main.async {
-                self.updateBadge()
-            }
-        }
-        
-        NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: bNotificationThreadRead), object: nil, queue: nil) { (notification) in
-            DispatchQueue.main.async {
-                self.updateBadge()
-            }
-        }
-        
-        NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: bNotificationThreadDeleted), object: nil, queue: nil) { (notification) in
-            DispatchQueue.main.async {
-                self.updateBadge()
-            }
-        }
+//        NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: bNotificationBadgeUpdated), object: nil, queue: nil) { (notification) in
+//            DispatchQueue.main.async {
+//                self.updateBadge()
+//            }
+//        }
+//
+//        NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: bNotificationFlaggedMessageRemoved), object: nil, queue: nil) { (notification) in
+//            DispatchQueue.main.async {
+//                self.updateBadge()
+//            }
+//        }
+//
+//        NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: bNotificationThreadRead), object: nil, queue: nil) { (notification) in
+//            DispatchQueue.main.async {
+//                self.updateBadge()
+//            }
+//        }
+//
+//        NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: bNotificationThreadMetaUpdated), object: nil, queue: nil) { (notification) in
+//            DispatchQueue.main.async {
+//                self.updateBadge()
+//            }
+//        }
         
 //        NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: bNotificationPresentChatView), object: nil, queue: nil) { (notification) in
 //            DispatchQueue.main.async {
@@ -53,44 +53,44 @@ class MainTabBarViewController: UITabBarController, UITabBarControllerDelegate {
 //            }
 //        }
         
-        let badge = UserDefaults.standard.integer(forKey: bMessagesBadgeValueKey)
-        self.setPrivateThreadsbadge(badge: badge)
+//        let badge = UserDefaults.standard.integer(forKey: bMessagesBadgeValueKey)
+//        self.setPrivateThreadsbadge(badge: badge)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.updateBadge()
-        BChatSDK.core()!.save()
+//        self.updateBadge()
+//        BChatSDK.core()!.save()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         // Handle push notifications - open the relevant chat
-        if let action = BChatSDK.shared()?.pushQueue()?.tryFirst() {
-            if action.type == bPushActionTypeOpenThread {
-                BChatSDK.shared()!.pushQueue()!.popFirst()
-                if let threadEntityID = action.payload[bPushThreadEntityID] as? String {
-                    if let thread = BChatSDK.db()!.fetchOrCreateEntity(withID: threadEntityID , withType: bThreadEntity) as? PThread {
-                        presentChatViewWithThread(thread: thread)
-                    }
-                }
-            }
-        }
+//        if let action = BChatSDK.shared()?.pushQueue()?.tryFirst() {
+//            if action.type == bPushActionTypeOpenThread {
+//                BChatSDK.shared()!.pushQueue()!.popFirst()
+//                if let threadEntityID = action.payload[bPushThreadEntityID] as? String {
+//                    if let thread = BChatSDK.db()!.fetchOrCreateEntity(withID: threadEntityID , withType: bThreadEntity) as? PThread {
+//                        presentChatViewWithThread(thread: thread)
+//                    }
+//                }
+//            }
+//        }
         
-        self.updateBadge()
+//        self.updateBadge()
     }
     
     // If the user changes tab they must be online
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
-        BChatSDK.core()?.setUserOnline()
-        BChatSDK.core()?.save()
-        if let nav = viewController as? UINavigationController {
-            // Should we enable or disable local notifications? We want to show them on every tab that isn't the thread view
-            let showNotification = !(nav.viewControllers.first?.isEqual(BChatSDK.ui()!.privateThreadsViewController()) ?? true) || !(nav.viewControllers.first?.isEqual(ChatViewController()) ?? true)
-            BChatSDK.ui()!.setShowLocalNotifications(showNotification)
-        }
-        
-        BChatSDK.ui()!.setShowLocalNotifications(false)
+//        BChatSDK.core()?.setUserOnline()
+//        BChatSDK.core()?.save()
+//        if let nav = viewController as? UINavigationController {
+//            // Should we enable or disable local notifications? We want to show them on every tab that isn't the thread view
+//            let showNotification = !(nav.viewControllers.first?.isEqual(BChatSDK.ui()!.privateThreadsViewController()) ?? true) || !(nav.viewControllers.first?.isEqual(ChatViewController()) ?? true)
+//            BChatSDK.ui()!.setShowLocalNotifications(showNotification)
+//        }
+//
+//        BChatSDK.ui()!.setShowLocalNotifications(false)
     }
     
     func presentChatViewWithThread(thread: PThread) {
@@ -109,30 +109,30 @@ class MainTabBarViewController: UITabBarController, UITabBarControllerDelegate {
         }
     }
     
-    func updateBadge() {
-        let privateThreadsMessageCount = unreadMessagesCount(type: bThreadFilterPrivate)
-        self.setPrivateThreadsbadge(badge: privateThreadsMessageCount)
-        
-        BChatSDK.core()?.save()
-    }
+//    func updateBadge() {
+//        let privateThreadsMessageCount = unreadMessagesCount(type: bThreadFilterPrivate)
+//        self.setPrivateThreadsbadge(badge: privateThreadsMessageCount)
+//        
+//        BChatSDK.core()?.save()
+//    }
     
-    func unreadMessagesCount(type: bThreadType) -> Int {
-        var i = 0
-        let threads = BChatSDK.core()!.threads(with: type) ?? [Any]()
-        for thread in threads {
-            guard let threadObj = thread as? PThread else { continue }
-            for message in threadObj.allMessages() {
-                guard let messageObj = message as? PMessage else { continue }
-                print(messageObj.readStatus?())
-                print(messageObj.read())
-                if !(messageObj.read()?.boolValue ?? true) {
-                    i += 1
-                }
-            }
-        }
-        
-        return i
-    }
+//    func unreadMessagesCount(type: bThreadType) -> Int {
+//        var i = 0
+//        let threads = BChatSDK.core()!.threads(with: type) ?? [Any]()
+//        for thread in threads {
+//            guard let threadObj = thread as? PThread else { continue }
+//            for message in threadObj.allMessages() {
+//                guard let messageObj = message as? PMessage else { continue }
+////                print(messageObj.readStatus?(forUserID: <#String?#>))
+////                print(messageObj.read())
+//                if !messageObj.isRead() {
+//                    i += 1
+//                }
+//            }
+//        }
+//
+//        return i
+//    }
     
     func setBadge(badge: Int, index: Int) {
         let badgeString: String? = badge == 0 ? nil : String(format: "%i", badge)

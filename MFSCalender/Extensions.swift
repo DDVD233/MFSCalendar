@@ -7,7 +7,9 @@
 //
 
 import UIKit
-import Crashlytics
+#if !targetEnvironment(macCatalyst)
+    import Crashlytics
+#endif
 //import Kanna
 
 //extension CourseMO {
@@ -97,7 +99,10 @@ extension String {
     func convertToHtml(isTitle: Bool = false) -> NSAttributedString? {
         let font = UIFont.systemFont(ofSize: 15).fontName
         let fontSize = isTitle ? "23" : "16"
-        CLSLogv("String to convert to HTML: %@", getVaList([self]))
+        #if !targetEnvironment(macCatalyst)
+            CLSLogv("String to convert to HTML: %@", getVaList([self]))
+        #endif
+        
         let htmlString = "<html>" +
                 "<head>" +
                 "<meta name=\"color-scheme\" value=\"light dark\">" +

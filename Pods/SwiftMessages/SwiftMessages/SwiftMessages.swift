@@ -62,11 +62,12 @@ open class SwiftMessages {
         case automatic
 
         /**
-         Displays the message in a new window at the specified window level. Use
-         `UIWindow.Level.normal` to display under the status bar and `UIWindow.Level.statusBar`
-         to display over. When displaying under the status bar, SwiftMessages automatically
-         increases the top margins of any message view that adopts the `MarginInsetting`
-         protocol (as `MessageView` does) to account for the status bar.
+         Displays the message in a new window at the specified window level.
+         SwiftMessages automatically increases the top margins of any message
+         view that adopts the `MarginInsetting` protocol (as `MessageView` does)
+         to account for the status bar. As of iOS 13, windows can no longer cover the
+         status bar. The only alternative is to set `Config.prefersStatusBarHidden = true`
+         to hide it.
         */
         case window(windowLevel: UIWindow.Level)
         
@@ -261,15 +262,22 @@ open class SwiftMessages {
         public var interactiveHide = true
         
         /**
-         Specifies the preferred status bar style when the view is displayed
-         directly behind the status bar, such as when using `.Window`
-         presentation context with a `UIWindow.Level.normal` window level
-         and `.Top` presentation style. This option is useful if the message
-         view has a background color that needs a different status bar style than
-         the current one. The default is `.Default`.
+         Specifies the preferred status bar style when the view is being
+         displayed in a window. This can be useful when the view is being
+         displayed behind the status bar and the message view has a background
+         color that needs a different status bar style than the current one.
+         The default is `nil`.
          */
         public var preferredStatusBarStyle: UIStatusBarStyle?
-        
+
+        /**
+         Specifies the preferred status bar visibility when the view is being
+         displayed in a window. As of iOS 13, windows can no longer cover the
+         status bar. The only alternative is to hide the status bar by setting
+         this options to `true`. Default is `nil`.
+         */
+        public var prefersStatusBarHidden: Bool?
+
         /**
          If a view controller is created to host the message view, should the view 
          controller auto rotate?  The default is 'true', meaning it should auto
@@ -316,6 +324,11 @@ open class SwiftMessages {
          of `WindowViewController`.
          */
         public var windowViewController: ((_ windowLevel: UIWindow.Level?, _ config: SwiftMessages.Config) -> WindowViewController)?
+
+        /**
+         Supply an instance of `KeyboardTrackingView` to have the message view avoid the keyboard.
+         */
+        public var keyboardTrackingView: KeyboardTrackingView?
     }
     
     /**
@@ -385,9 +398,9 @@ open class SwiftMessages {
     /**
      Hide the current message being displayed by animating it away.
      */
-    open func hide() {
+    open func hide(animated: Bool = true) {
         messageQueue.sync {
-            hideCurrent()
+            hideCurrent(animated: animated)
         }
     }
 
@@ -540,7 +553,7 @@ open class SwiftMessages {
         // the dismiss gesture begins before we've queued the autohide
         // block on animation completion.
         self.autohideToken = current
-        current.showDate = Date()
+        current.showDate = CACurrentMediaTime()
         DispatchQueue.main.async { [weak self] in
             guard let strongSelf = self else { return }
             do {
@@ -571,20 +584,22 @@ open class SwiftMessages {
         queue = queue.filter { $0.id != id }
         delays.ids.remove(id)
     }
-
-    fileprivate func hideCurrent() {
+ 
+    fileprivate func hideCurrent(animated: Bool = true) {
         guard let current = _current, !current.isHiding else { return }
-        let delay = current.delayHide ?? 0
-        DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self, weak current] in
-            guard let strongCurrent = current else { return }
-            strongCurrent.hide { (completed) in
-                guard completed, let strongSelf = self, let strongCurrent = current else { return }
+        let action = { [weak self] in
+            current.hide(animated: animated) { (completed) in
+                guard completed, let strongSelf = self else { return }
                 strongSelf.messageQueue.sync {
-                    guard strongSelf._current === strongCurrent else { return }
-                    strongSelf.counts[strongCurrent.id] = nil
+                    guard strongSelf._current === current else { return }
+                    strongSelf.counts[current.id] = nil
                     strongSelf._current = nil
                 }
             }
+        }
+        let delay = current.delayHide ?? 0
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+            action()
         }
     }
 
@@ -595,13 +610,17 @@ open class SwiftMessages {
         autohideToken = current
         if let pauseDuration = current.pauseDuration {
             let delayTime = DispatchTime.now() + pauseDuration
-            messageQueue.asyncAfter(deadline: delayTime, execute: { [weak self, weak current] in
-                guard let strongSelf = self, let current = current else { return }
+            messageQueue.asyncAfter(deadline: delayTime, execute: {
                 // Make sure we've still got a green light to auto-hide.
-                if strongSelf.autohideToken !== current { return }
-                strongSelf.internalHide(id: current.id)
+                if self.autohideToken !== current { return }
+                self.internalHide(id: current.id)
             })
         }
+    }
+
+    deinit {
+        // Prevent orphaned messages
+        hideCurrent()
     }
 }
 
@@ -826,8 +845,8 @@ extension SwiftMessages {
         globalInstance.show(config: config, view: view)
     }
 
-    public static func hide() {
-        globalInstance.hide()
+    public static func hide(animated: Bool = true) {
+        globalInstance.hide(animated: animated)
     }
     
     public static func hideAll() {

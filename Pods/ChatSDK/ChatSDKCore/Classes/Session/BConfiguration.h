@@ -18,6 +18,11 @@
 #define bXMPPPortKey @"port"
 #define bXMPPResourceKey @"resource"
 
+typedef enum {
+    bNameLabelPositionTop,
+    bNameLabelPositionBottom
+} bNameLabelPosition;
+
 @interface BConfiguration : NSObject {
     NSString * _defaultUserName;
     NSMutableDictionary * _messageBubblePadding;
@@ -42,6 +47,10 @@
 // set their name
 @property (nonatomic, readonly) NSString * defaultUserName;
 @property (nonatomic, readwrite) NSString * defaultUserNamePrefix;
+
+// These will be input into the login screen if they are set
+@property (nonatomic, readwrite) NSString * debugUsername;
+@property (nonatomic, readwrite) NSString * debugPassword;
 
 // Should empty chats be shown in the threads view?
 @property (nonatomic, readwrite) BOOL showEmptyChats;
@@ -123,6 +132,17 @@
 // Should the client send push notifications?
 @property(nonatomic, readwrite) BOOL clientPushEnabled;
 
+// Where should we show the user avatar?
+@property(nonatomic, readwrite) bMessagePos showMessageAvatarAtPosition;
+
+@property(nonatomic, readwrite) NSString * messageBubbleMaskFirst;
+@property(nonatomic, readwrite) NSString * messageBubbleMaskMiddle;
+@property(nonatomic, readwrite) NSString * messageBubbleMaskLast;
+@property(nonatomic, readwrite) NSString * messageBubbleMaskSingle;
+
+@property(nonatomic, readwrite) bNameLabelPosition nameLabelPosition;
+@property(nonatomic, readwrite) BOOL combineTimeWithNameLabel;
+
 // Allow the owner of a public thread to delete it
 @property (nonatomic, readwrite) BOOL allowPublicThreadDeletion;
 
@@ -156,8 +176,14 @@
 
 @property (nonatomic, readwrite) BOOL prefersLargeTitles;
 
+// The default search indexes - i.e. which user/meta values are we searching for? If you add
+// custom values remember to add the relevant indexOn values to the Firebase security rules
+@property (nonatomic, readwrite) NSArray * searchIndexes;
+
 // How many messages should be loaded initially when a chat is opened
+// Deprecated: use messagesToLoadPerBatch
 @property (nonatomic, readwrite) int chatMessagesToLoad;
+@property (nonatomic, readwrite) int messagesToLoadPerBatch;
 
 // Push notification sound - name of sound file to play i.e. "mySound"
 @property (nonatomic, readwrite) NSString * pushNotificationSound;
@@ -220,6 +246,8 @@
 
 // How long should a public chat room live until expires and is removed from the list
 @property (nonatomic, readwrite) int publicChatRoomLifetimeMinutes;
+
+@property (nonatomic, readwrite) BOOL vibrateOnNewMessage;
 
 +(BConfiguration *) configuration;
 

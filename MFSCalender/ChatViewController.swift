@@ -8,7 +8,7 @@
 
 import UIKit
 import ChatSDK
-import ChatSDKFirebase
+//import ChatSDKFirebase
 import SnapKit
 import SafariServices
 

@@ -12,7 +12,9 @@ import SwiftMessages
 import UICircularProgressRing
 import LTMorphingLabel
 import SwiftyJSON
-import FirebasePerformance
+#if !targetEnvironment(macCatalyst)
+    import FirebasePerformance
+#endif
 import Alamofire
 import SwiftDate
 
@@ -26,7 +28,9 @@ class courseFillController: UIViewController {
     @IBOutlet weak var topLabel: LTMorphingLabel!
     @IBOutlet weak var bottomLabel: LTMorphingLabel!
 
-    let trace = Performance.startTrace(name: "course fill trace")
+    #if !targetEnvironment(macCatalyst)
+        let trace = Performance.startTrace(name: "course fill trace")
+    #endif
     let baseURL = Preferences().davidBaseURL
 
     override func viewDidLoad() {
@@ -173,7 +177,9 @@ class courseFillController: UIViewController {
     
     func viewDismiss() {
         Preferences().courseInitialized = true
-        self.trace?.stop()
+        #if !targetEnvironment(macCatalyst)
+             self.trace?.stop()
+        #endif
         UIApplication.shared.isNetworkActivityIndicatorVisible = false
         self.dismiss(animated: true)
     }

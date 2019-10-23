@@ -16,7 +16,9 @@ import SVProgressHUD
 import Alamofire
 import Charts
 import SnapKit
-import Crashlytics
+#if !targetEnvironment(macCatalyst)
+    import Crashlytics
+#endif
 
 enum Quarters {
     case first
@@ -75,7 +77,10 @@ class gradeViewController: UITableViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         self.animate()
-        Answers.logContentView(withName: "Grade", contentType: "Grade", contentId: "2", customAttributes: nil)
+        #if !targetEnvironment(macCatalyst)
+            Answers.logContentView(withName: "Grade", contentType: "Grade", contentId: "2", customAttributes: nil)
+        #endif
+        
     }
     
     @objc func changeQuarter(sender: UIButton) {

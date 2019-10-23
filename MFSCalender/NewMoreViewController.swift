@@ -10,7 +10,6 @@ import UIKit
 import SCLAlertView
 import SVProgressHUD
 import Alamofire
-import Crashlytics
 import SafariServices
 import M13ProgressSuite
 import ChatSDK
@@ -218,7 +217,7 @@ extension NewMoreViewController {
         }
         
         let url = "https://mfs-calendar.appspot.com/serviceHour/\(username)/\(password)"
-        Crashlytics.sharedInstance().setObjectValue(url, forKey: "MobileServe_URL")
+//        Crashlytics.sharedInstance().setObjectValue(url, forKey: "MobileServe_URL")
         print(url)
         
         var serviceHour: Int? = nil
@@ -387,21 +386,21 @@ extension NewMoreViewController {
         
         let logOutAction = UIAlertAction(title: NSLocalizedString("Log Out the App", comment: ""), style: .default) { (alertAction) -> Void in
             NSLog("Logged Out")
-            _ = BIntegrationHelper.logout()?.thenOnMain({ result in
-                let preferences = Preferences()
-                preferences.didLogin = false
-                preferences.courseInitialized = false
-                preferences.firstName = nil
-                preferences.lastName = nil
-                preferences.lockerNumber = nil
-                preferences.lockerCombination = nil
-                let vc = self.storyboard?.instantiateViewController(withIdentifier: "MainTab")
-                self.present(vc!, animated: false, completion: nil)
-                return result
-            }, { error in
-                presentErrorMessage(presentMessage: error?.localizedDescription ?? "Unknown Error", layout: .cardView)
-                return error
-            })
+            let preferences = Preferences()
+            preferences.didLogin = false
+            preferences.courseInitialized = false
+            preferences.firstName = nil
+            preferences.lastName = nil
+            preferences.lockerNumber = nil
+            preferences.lockerCombination = nil
+            let vc = self.storyboard?.instantiateViewController(withIdentifier: "MainTab")
+            self.present(vc!, animated: false, completion: nil)
+//            _ = BIntegrationHelper.logout()?.thenOnMain({ result in
+//                return result
+//            }, { error in
+//                presentErrorMessage(presentMessage: error?.localizedDescription ?? "Unknown Error", layout: .cardView)
+//                return error
+//            })
         }
         
         logOutActionSheet.addAction(logoutClassChatAction)

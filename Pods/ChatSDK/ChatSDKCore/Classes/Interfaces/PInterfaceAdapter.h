@@ -18,6 +18,7 @@
 @protocol PImageViewController;
 @protocol PLocationViewController;
 @protocol PSplashScreenViewController;
+@protocol PProvider;
 
 @class BChatViewController;
 @class BFriendsListViewController;
@@ -116,7 +117,7 @@
 
 -(void) setSplashScreenViewController: (UIViewController<PSplashScreenViewController> *) controller;
 -(UIViewController<PSplashScreenViewController> *) splashScreenViewController;
--(UIViewController<PSplashScreenViewController> *) splashScreenNavigationController;
+-(UINavigationController *) splashScreenNavigationController;
 
 -(void) setLoginViewController: (UIViewController *) controller;
 -(UIViewController *) loginViewController;
@@ -124,6 +125,9 @@
 -(void) registerMessageWithCellClass: (Class) cellClass messageType: (NSNumber *) type;
 -(NSArray *) messageCellTypes;
 -(Class) cellTypeForMessageType: (NSNumber *) messageType;
+
+-(id<PProvider>) providerForName: (NSString *) name;
+-(void) setProvider: (id<PProvider>) provider forName: (NSString *) name;
 
 @end
 

@@ -10,7 +10,7 @@
         <!--Course Fill Controller-->
         <scene sceneID="vOk-zv-vpp">
             <objects>
-                <viewController storyboardIdentifier="courseFillController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="ktX-bn-vcC" customClass="courseFillController" customModule="MFSMobile" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="courseFillController" modalPresentationStyle="fullScreen" useStoryboardIdentifierAsRestorationIdentifier="YES" id="ktX-bn-vcC" customClass="courseFillController" customModule="MFSMobile" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="wiW-ry-Cpr"/>
                         <viewControllerLayoutGuide type="bottom" id="rnH-ia-Zy7"/>
@@ -1250,7 +1250,7 @@
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="80" sectionHeaderHeight="18" sectionFooterHeight="1" id="FPY-tO-elr">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="724"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <inset key="scrollIndicatorInsets" minX="0.0" minY="10" maxX="0.0" maxY="0.0"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="homeworkViewCell" rowHeight="155" id="u8Y-xh-dW2" customClass="homeworkViewCell" customModule="MFSMobile" customModuleProvider="target">
@@ -1365,6 +1365,7 @@
                                         <constraint firstItem="ejU-Qj-EwQ" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="wvd-i8-wpD" secondAttribute="trailing" constant="1" id="zQx-W2-got"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <gestureRecognizers/>
                                 <connections>
                                     <outlet property="activityIndicator" destination="Zw1-gV-8fs" id="T4N-d9-06W"/>
@@ -1816,7 +1817,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="uuS-vV-Kjc">
                         <nil key="title"/>
-                        <segmentedControl key="titleView" opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="Ksd-Ob-Zri">
+                        <segmentedControl key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="Ksd-Ob-Zri">
                             <rect key="frame" x="17" y="6" width="341" height="32"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <segments>
@@ -2067,7 +2068,7 @@
                                 <action selector="expandButton:" destination="QUz-Th-8ul" id="BXl-FN-H3g"/>
                             </connections>
                         </barButtonItem>
-                        <segmentedControl key="titleView" opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="fR1-y0-Ct9">
+                        <segmentedControl key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="fR1-y0-Ct9">
                             <rect key="frame" x="76" y="6" width="223" height="32"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <segments>
@@ -2437,6 +2438,7 @@
                                         <constraint firstItem="rDN-Pd-9AE" firstAttribute="top" secondItem="jxe-La-Ofp" secondAttribute="bottom" id="yhw-FL-77P"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <connections>
                                     <outlet property="showMoreView" destination="SgT-wc-J7l" id="qN4-dS-Ku6"/>
                                     <outlet property="syllabusDescription" destination="rDN-Pd-9AE" id="bSg-eG-lfL"/>
@@ -2450,6 +2452,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="113"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="homeworkTableHeader" rowHeight="46" id="QOd-HR-lcr" customClass="homeworkTableHeader" customModule="MFSMobile" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="555.33333206176758" width="375" height="46"/>
@@ -4202,7 +4205,7 @@
         <!--Navigation Controller-->
         <scene sceneID="wsA-g4-2U3">
             <objects>
-                <navigationController storyboardIdentifier="ftController" automaticallyAdjustsScrollViewInsets="NO" id="mVA-pN-fkz" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="ftController" automaticallyAdjustsScrollViewInsets="NO" modalPresentationStyle="fullScreen" id="mVA-pN-fkz" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" barStyle="black" id="idV-Do-K4j">
                         <rect key="frame" x="0.0" y="44" width="375" height="44"/>

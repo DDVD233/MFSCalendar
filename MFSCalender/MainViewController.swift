@@ -558,7 +558,9 @@ extension Main: UICollectionViewDelegate, UICollectionViewDataSource, UICollecti
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         screenWidth = size.width
-        classView.reloadData()
+        if !(classView == nil) {
+            classView.reloadData()
+        }
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

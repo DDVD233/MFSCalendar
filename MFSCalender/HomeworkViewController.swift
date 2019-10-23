@@ -15,7 +15,9 @@ import DZNEmptyDataSet
 import DGElasticPullToRefresh
 import XLPagerTabStrip
 import Alamofire
-import Crashlytics
+#if !targetEnvironment(macCatalyst)
+    import FirebaseAnalytics
+#endif
 import StoreKit
 
 
@@ -148,8 +150,14 @@ class homeworkViewController: UITableViewController, UIViewControllerPreviewingD
             self.navigationController?.cancelProgress()
             self.tableView.reloadData()
         }
+        #if !targetEnvironment(macCatalyst)
+        Analytics.logEvent(AnalyticsEventViewItem, parameters: [
+        AnalyticsParameterItemID: "id-HW",
+        AnalyticsParameterItemName: "Homework",
+        AnalyticsParameterContentType: "HW"
+        ])
+        #endif
         
-        Answers.logContentView(withName: "Homework", contentType: "Homework", contentId: "1", customAttributes: nil)
         
         requestReviewIfNeeded()
     }

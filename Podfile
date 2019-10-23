@@ -1,10 +1,11 @@
 project 'MFSMobile.xcodeproj'
-platform :ios, '10.0'
+platform :ios, '11.0'
 use_frameworks!
 # Main 
 
 
 target 'MFSMobile' do
+  pod 'AFNetworking', :git => 'https://github.com/blissapps/AFNetworking.git', :branch => 'feature/WKWebView'
   pod 'SwiftMessages'
   pod 'NVActivityIndicatorView'
   pod 'UICircularProgressRing'
@@ -18,10 +19,9 @@ target 'MFSMobile' do
   pod 'SwiftDate'
   pod 'DGElasticPullToRefresh', :git => 'https://github.com/KennethTsang/DGElasticPullToRefresh.git'
   pod 'XLPagerTabStrip'
-  pod 'Firebase/Core'
-  pod 'Firebase/Performance'
-  pod 'Fabric'
-  pod 'Crashlytics'
+#   pod 'Firebase/Core'
+#   pod 'Firebase/Performance'
+#   pod 'Fabric'
   pod 'Alamofire'
   pod 'SDWebImage'
   pod 'Moya'
@@ -30,14 +30,13 @@ target 'MFSMobile' do
   pod 'Down'
   pod 'Kanna'
   pod 'SVProgressHUD'
-  pod 'UrbanAirship-iOS-SDK'
   pod 'Charts'
-  pod 'p2.OAuth2'
+#   pod 'p2.OAuth2'
   pod 'SwiftyJSON'
   pod "ChatSDK"
-  pod "ChatSDKFirebase/Adapter"
-  pod "ChatSDKFirebase/FileStorage"
-  pod "ChatSDKFirebase/Push"
+#   pod "ChatSDKFirebase/Adapter"
+#   pod "ChatSDKFirebase/FileStorage"
+#   pod "ChatSDKFirebase/Push"
   pod 'SwipeCellKit'
   # pod 'GSKStretchyHeaderView'
 end

@@ -14,6 +14,9 @@
       location = "group:EmailRecord+CoreDataProperties.swift">
    </FileRef>
    <FileRef
+      location = "group:OAuth2/OAuth2.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:/Users/daiyuanping/Desktop/temp/MFSCalendar/MFSMobile.xcodeproj">
    </FileRef>
    <FileRef

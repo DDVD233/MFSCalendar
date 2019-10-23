@@ -10,8 +10,9 @@
 #endif
 #endif
 
-#import "BAccountDetails.h"
+#import "BAudioItem.h"
 #import "BAudioManager.h"
+#import "BAccountDetails.h"
 #import "BInterfaceManager.h"
 #import "BSettingsManager.h"
 #import "NSArray+KeyPair.h"
@@ -102,6 +103,7 @@
 #import "PUsersHandler.h"
 #import "PVideoMessageHandler.h"
 #import "UIImage+Resize.h"
+#import "PProvider.h"
 #import "BBackgroundPushAction.h"
 #import "BBackgroundPushNotificationQueue.h"
 #import "BLocalNotificationDelegate.h"
@@ -111,6 +113,8 @@
 #import "NSBundle+Core.h"
 #import "BCoreUtilities.h"
 #import "BFileCache.h"
+#import "BGoogleUtils.h"
+#import "BMessageSorter.h"
 #import "BNotificationObserverList.h"
 #import "BCoreDataStorageAdapter.h"
 #import "BCoreDataStorageModule.h"
@@ -136,11 +140,15 @@
 #import "PAction.h"
 #import "NSBundle+UI.h"
 #import "NSMutableArray+User.h"
+#import "UIButton+Avatar.h"
 #import "UIImage+Additions.h"
 #import "UIImage+ImageEffects.h"
+#import "UIImageView+Avatar.h"
 #import "UITextView+Resize.h"
 #import "UIView+Additions.h"
 #import "BChatViewController.h"
+#import "BLazyReloadManager.h"
+#import "BMessageManager.h"
 #import "BMessageSection.h"
 #import "BTextInputView.h"
 #import "BChatOption.h"
@@ -192,6 +200,7 @@
 #import "BUsersViewController.h"
 #import "BDefaultInterfaceAdapter.h"
 #import "BDefaultUIModule.h"
+#import "BMessageSectionDateProvider.h"
 #import "UI.h"
 
 FOUNDATION_EXPORT double ChatSDKVersionNumber;

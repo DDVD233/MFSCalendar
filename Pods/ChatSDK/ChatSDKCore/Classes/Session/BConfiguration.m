@@ -30,6 +30,7 @@
 @synthesize defaultBlankAvatar;
 @synthesize timeFormat;
 @synthesize chatMessagesToLoad;
+@synthesize messagesToLoadPerBatch;
 @synthesize pushNotificationSound;
 @synthesize firebaseGoogleServicesPlistName;
 @synthesize firebaseShouldConfigureAutomatically;
@@ -58,6 +59,17 @@
 @synthesize messageHistoryDownloadLimit;
 @synthesize messageDeletionListenerLimit;
 @synthesize readReceiptMaxAgeInSeconds;
+@synthesize searchIndexes;
+
+@synthesize vibrateOnNewMessage;
+
+@synthesize showMessageAvatarAtPosition;
+@synthesize messageBubbleMaskFirst;
+@synthesize messageBubbleMaskMiddle;
+@synthesize messageBubbleMaskLast;
+@synthesize messageBubbleMaskSingle;
+@synthesize nameLabelPosition;
+@synthesize combineTimeWithNameLabel;
 
 @synthesize inviteByEmailTitle;
 @synthesize inviteByEmailBody;
@@ -113,7 +125,9 @@
         
         pushNotificationSound = @"default";
         
-        chatMessagesToLoad = 50;
+        messagesToLoadPerBatch = 100;
+        chatMessagesToLoad = messagesToLoadPerBatch;
+
         audioMessageMaxLengthSeconds = 300;
         
         firebaseShouldConfigureAutomatically = YES;
@@ -180,6 +194,20 @@
         nearbyUsersMinimumLocationChangeToUpdateServer = 50;
         
         publicChatRoomLifetimeMinutes = 7 * 60 * 24;
+        
+        searchIndexes = @[bUserNameKey, bUserEmailKey, bUserPhoneKey, bUserNameLowercase];
+        
+        vibrateOnNewMessage = YES;
+        
+        showMessageAvatarAtPosition = bMessagePosLast;
+        
+        messageBubbleMaskFirst = @"chat_bubble_right_0S.png";
+        messageBubbleMaskMiddle = @"chat_bubble_right_SS.png";
+        messageBubbleMaskLast = @"chat_bubble_right_ST.png";
+        messageBubbleMaskSingle = @"chat_bubble_right_0T.png";
+        
+        nameLabelPosition = bNameLabelPositionBottom;
+        combineTimeWithNameLabel = NO;
         
     }
     return self;

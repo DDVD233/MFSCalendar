@@ -16,6 +16,7 @@
 #define bControllerKey @"bControllerKey"
 #define bControllerNameKey @"bControllerNameKey"
 
+
 @implementation BDefaultInterfaceAdapter
 
 @synthesize privateThreadsViewController = _privateThreadsViewController;
@@ -26,17 +27,26 @@
         _additionalChatOptions = [NSMutableArray new];
         _additionalTabBarViewControllers = [NSMutableArray new];
         _additionalSearchViewControllers = [NSMutableDictionary new];
-        _messageCellTypes = [NSMutableArray new];
-        // MEM1
-        //[[SDWebImageDownloader sharedDownloader] setShouldDecompressImages:NO];
+        _messageCellTypes = [NSMutableDictionary new];
+        _providers = [NSMutableDictionary new];
         
         [self registerMessageWithCellClass:BTextMessageCell.class messageType:@(bMessageTypeText)];
         [self registerMessageWithCellClass:BImageMessageCell.class messageType:@(bMessageTypeImage)];
         [self registerMessageWithCellClass:BLocationCell.class messageType:@(bMessageTypeLocation)];
         [self registerMessageWithCellClass:BSystemMessageCell.class messageType:@(bMessageTypeSystem)];
-
+        
+        // Setup default providers
+        [self setProvider:[BMessageSectionDateProvider new] forName:bMessageSectionDateProvider];
     }
     return self;
+}
+
+-(id<PProvider>) providerForName: (NSString *) name {
+    return _providers[name];
+}
+
+-(void) setProvider: (id<PProvider>) provider forName: (NSString *) name {
+    [_providers setObject:provider forKey:name];
 }
 
 -(void) addTabBarViewController: (UIViewController *) controller atIndex: (int) index {
@@ -360,22 +370,20 @@
 }
 
 -(void) registerMessageWithCellClass: (Class) cellClass messageType: (NSNumber *) type {
-    [_messageCellTypes addObject:@[cellClass, type]];
+    [_messageCellTypes setObject:cellClass forKey:type];
 }
 
 -(NSArray *) messageCellTypes {
-    return _messageCellTypes;
+    NSMutableArray * types = [NSMutableArray new];
+    for (NSNumber * type in _messageCellTypes.allKeys) {
+        [types addObject:@[_messageCellTypes[type], type]];
+    }
+    return types;
 }
 
 -(Class) cellTypeForMessageType: (NSNumber *) messageType {
-    for(NSArray * array in self.messageCellTypes) {
-        if([array.lastObject isEqualToNumber:messageType]) {
-            return array.firstObject;
-        }
-    }
-    return Nil;
+    return _messageCellTypes[messageType];
 }
-
 -(UIViewController<PSplashScreenViewController> *) splashScreenViewController {
     if (!_splashScreenViewController) {
         _splashScreenViewController = [[BSplashScreenViewController alloc] initWithNibName:Nil bundle:Nil];
@@ -383,7 +391,7 @@
     return _splashScreenViewController;
 }
 
--(UIViewController<PSplashScreenViewController> *) splashScreenNavigationController {
+-(UINavigationController *) splashScreenNavigationController {
     return [self navigationControllerWithRootViewController:self.splashScreenViewController];
 }
 

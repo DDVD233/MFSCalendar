@@ -8,11 +8,12 @@
 
 import UIKit
 import CoreData
-import Firebase
-import Fabric
-import Crashlytics
-import AirshipKit
-import ChatSDK
+#if !targetEnvironment(macCatalyst)
+    import Crashlytics
+    import FirebaseCore
+    import Fabric
+#endif
+//import ChatSDK
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -26,24 +27,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-//        FirebaseApp.configure()
+        #if !targetEnvironment(macCatalyst)
+        FirebaseApp.configure()
+        #endif
         
-        let config = BConfiguration.init();
-        config.rootPath = "test"
-        config.googleMapsApiKey = "AIzaSyAcNgntmKUbMZRAgany5xwTU6zRh-zfDtg"
-        config.allowUsersToCreatePublicChats = false
-        config.shouldAskForNotificationsPermission = false
-        config.messageHistoryDownloadLimit = 500
-        config.messageColorReply = "eeeeee"
-        config.messageColorMe = "ff7e79"
-        config.messageTextColorMe = "ffffff"
-        config.chatMessagesToLoad = 200
-        BChatSDK.initialize(config, app: application, options: launchOptions)
-        if BChatSDK.auth()!.isAuthenticated() {
-            _ = BChatSDK.auth()!.authenticate()
-            BChatSDK.push()!.registerForPushNotifications(with: application, launchOptions: launchOptions)
-        }
-        Fabric.with([Crashlytics()])
+//        let config = BConfiguration.init();
+//        config.rootPath = "test"
+//        config.googleMapsApiKey = "AIzaSyAcNgntmKUbMZRAgany5xwTU6zRh-zfDtg"
+//        config.allowUsersToCreatePublicChats = false
+//        config.shouldAskForNotificationsPermission = false
+//        config.messageHistoryDownloadLimit = 500
+//        config.messageColorReply = "eeeeee"
+//        config.messageColorMe = "ff7e79"
+//        config.messageTextColorMe = "ffffff"
+//        config.chatMessagesToLoad = 200
+//        BChatSDK.initialize(config, app: application, options: launchOptions)
+//        if BChatSDK.auth()!.isAuthenticated() {
+//            _ = BChatSDK.auth()!.authenticate()
+//            BChatSDK.push()!.registerForPushNotifications(with: application, launchOptions: launchOptions)
+//        }
+        #if !targetEnvironment(macCatalyst)
+            Fabric.with([Crashlytics()])
+        #endif
+        
         logUser()
         if (UIDevice().userInterfaceIdiom == .phone) && (UIScreen.main.nativeBounds.height == 2436) {
             Preferences().isiPhoneX = true
@@ -54,40 +60,40 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         //setPushNotification()
         
-        BChatSDK.shared()?.interfaceAdapter = MyAppInterfaceAdapter()
+//        BChatSDK.shared()?.interfaceAdapter = MyAppInterfaceAdapter()
         
         return true
     }
     
-    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-        BChatSDK.application(application, didRegisterForRemoteNotificationsWithDeviceToken: deviceToken)
-        print("RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRegistered!")
-        Messaging.messaging().apnsToken = deviceToken
-    }
-    
-    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
-        print("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFailToRegister")
-    }
-    
-    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-        print("Received!!!!!!!!")
-        print(userInfo)
-        BChatSDK.application(application, didReceiveRemoteNotification: userInfo)
-    }
-    
-    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any]) {
-        print("Received!!!!!!!!")
-        print(userInfo)
-        BChatSDK.application(application, didReceiveRemoteNotification: userInfo)
-    }
-    
-    func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
-        return BChatSDK.application(application, open: url, sourceApplication: sourceApplication, annotation: annotation)
-    }
-    
-    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
-        return BChatSDK.application(app, open: url, options: options)
-    }
+//    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+//        BChatSDK.application(application, didRegisterForRemoteNotificationsWithDeviceToken: deviceToken)
+//        print("RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRegistered!")
+//        Messaging.messaging().apnsToken = deviceToken
+//    }
+//
+//    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+//        print("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFailToRegister")
+//    }
+//    
+//    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+//        print("Received!!!!!!!!")
+//        print(userInfo)
+//        BChatSDK.application(application, didReceiveRemoteNotification: userInfo)
+//    }
+//
+//    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any]) {
+//        print("Received!!!!!!!!")
+//        print(userInfo)
+//        BChatSDK.application(application, didReceiveRemoteNotification: userInfo)
+//    }
+//
+//    func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
+//        return BChatSDK.application(application, open: url, sourceApplication: sourceApplication, annotation: annotation)
+//    }
+//
+//    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+//        return BChatSDK.application(app, open: url, options: options)
+//    }
     
     func logUser() {
 //        Crashlytics.sharedInstance().setUserEmail("user@fabric.io")
@@ -95,7 +101,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let firstName = Preferences().firstName ?? ""
         let lastName = Preferences().lastName ?? ""
         let fullName = firstName + " " + lastName
-        Crashlytics.sharedInstance().setUserName(fullName)
+        #if !targetEnvironment(macCatalyst)
+            Crashlytics.sharedInstance().setUserName(fullName)
+        #endif
     }
 
     func applicationWillResignActive(_ application: UIApplication) {

@@ -1,0 +1,5 @@
+framework module FirebaseRemoteConfig {
+umbrella header "FirebaseRemoteConfig.h"
+export *
+module * { export * }
+}

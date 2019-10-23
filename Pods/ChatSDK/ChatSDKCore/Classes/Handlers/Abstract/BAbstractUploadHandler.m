@@ -15,7 +15,7 @@
     
     // Upload the images:
     return [RXPromise all:@[
-        [self uploadFile:UIImageJPEGRepresentation(image, 0.9f) withName:@"image.jpg" mimeType:@"image/jpeg"],
+        [self uploadFile:UIImageJPEGRepresentation(image, 0.6f) withName:@"image.jpg" mimeType:@"image/jpeg"],
     ]].thenOnMain(^id(NSArray * results) {
         NSMutableDictionary * urls = [NSMutableDictionary new];
         for (NSDictionary * result in results) {
@@ -29,6 +29,12 @@
 
 -(RXPromise *) uploadFile:(NSData *)file withName: (NSString *) name mimeType: (NSString *) mimeType {
     assert(NO);
+}
+
+// By default we assume that we don't need to upload the
+// avatar.
+-(BOOL) shouldUploadAvatar {
+    return NO;
 }
 
 @end

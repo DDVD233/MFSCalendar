@@ -41,7 +41,12 @@ extension FileList {
     var filePath: String {
         switch self {
         case .supportedSchoolList:
-            return Bundle.main.bundlePath + "/" + fileName
+            var path = Bundle.main.bundlePath + "/Contents/Resources/" + fileName
+            #if !targetEnvironment(macCatalyst)
+                path = Bundle.main.bundlePath + "/" + fileName
+            #endif
+            print(path)
+            return path
         default:
             return userDocumentPath + "/" + fileName
         }

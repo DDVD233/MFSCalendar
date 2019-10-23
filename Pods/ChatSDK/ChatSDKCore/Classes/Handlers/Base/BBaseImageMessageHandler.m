@@ -23,13 +23,12 @@
 
     [BHookNotification notificationMessageWillUpload: message];
     
-    return [BChatSDK.upload uploadFile:UIImageJPEGRepresentation(resizedImage, 0.3) withName:@"image.jpg" mimeType:@"image/jpeg"].thenOnMain(^id(NSDictionary * info) {
+    return [BChatSDK.upload uploadFile:UIImageJPEGRepresentation(resizedImage, 0) withName:@"image.jpg" mimeType:@"image/jpeg"].thenOnMain(^id(NSDictionary * info) {
         
         NSURL * url = info[bFilePath] ? info[bFilePath] : Nil;
         NSString * urlString = url ? url.absoluteString : @"";
 
-        [message setJson:@{bMessageImageURL: urlString,
-                           bMessageThumbnailURL: urlString,
+        [message setMeta:@{bMessageImageURL: urlString,
                            bMessageImageWidth: @(image.size.width),
                            bMessageImageHeight: @(image.size.height)}];
         

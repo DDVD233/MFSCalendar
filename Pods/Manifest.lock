@@ -14,26 +14,26 @@ PODS:
   - AFNetworking/Serialization (3.2.1)
   - AFNetworking/UIKit (3.2.1):
     - AFNetworking/NSURLSession
-  - Alamofire (4.8.2)
+  - Alamofire (4.9.0)
   - Charts (3.3.0):
     - Charts/Core (= 3.3.0)
   - Charts/Core (3.3.0)
-  - ChatSDK (4.10.6):
-    - ChatSDK/Complete (= 4.10.6)
-  - ChatSDK/Complete (4.10.6):
+  - ChatSDK (4.11.9):
+    - ChatSDK/Complete (= 4.11.9)
+  - ChatSDK/Complete (4.11.9):
     - ChatSDK/Reachability
     - ChatSDK/UI
-  - ChatSDK/Core (4.10.6):
+  - ChatSDK/Core (4.11.9):
     - AFNetworking (~> 3.2.1)
     - DateTools (~> 2.0)
     - RXPromise (~> 1.0)
     - SAMKeychain
-  - ChatSDK/CoreData (4.10.6):
+  - ChatSDK/CoreData (4.11.9):
     - ChatSDK/Core
-  - ChatSDK/Reachability (4.10.6):
+  - ChatSDK/Reachability (4.11.9):
     - ChatSDK/Core
     - Reachability
-  - ChatSDK/UI (4.10.6):
+  - ChatSDK/UI (4.11.9):
     - ChatSDK/CoreData
     - ChatSDKKeepLayout
     - CountryPicker (~> 1.0)
@@ -44,152 +44,18 @@ PODS:
     - Toast (~> 4.0.0)
     - TOCropViewController (~> 2.0)
     - VENTokenField (~> 2.0)
-  - ChatSDKFirebase/Adapter (4.10.6):
-    - ChatSDK
-    - Firebase/Auth
-    - Firebase/Database
-  - ChatSDKFirebase/FileStorage (4.10.6):
-    - ChatSDKFirebase/Adapter
-    - Firebase/Storage
-  - ChatSDKFirebase/Push (4.10.6):
-    - ChatSDKFirebase/Adapter
-    - Firebase/Functions
-    - Firebase/Messaging
   - ChatSDKKeepLayout (1.7.7):
     - ChatSDKKeepLayout/Swift (= 1.7.7)
   - ChatSDKKeepLayout/ObjC (1.7.7)
   - ChatSDKKeepLayout/Swift (1.7.7):
     - ChatSDKKeepLayout/ObjC
   - CountryPicker (1.3)
-  - Crashlytics (3.12.0):
-    - Fabric (~> 1.9.0)
   - DateTools (2.0.0)
   - DGElasticPullToRefresh (1.1)
-  - Down (0.8.1)
+  - Down (0.8.6)
   - DZNEmptyDataSet (1.8.1)
-  - Fabric (1.9.0)
-  - Firebase/Auth (6.0.0):
-    - Firebase/CoreOnly
-    - FirebaseAuth (~> 6.0.0)
-  - Firebase/Core (6.0.0):
-    - Firebase/CoreOnly
-    - FirebaseAnalytics (= 6.0.0)
-  - Firebase/CoreOnly (6.0.0):
-    - FirebaseCore (= 6.0.0)
-  - Firebase/Database (6.0.0):
-    - Firebase/CoreOnly
-    - FirebaseDatabase (~> 6.0.0)
-  - Firebase/Functions (6.0.0):
-    - Firebase/CoreOnly
-    - FirebaseFunctions (~> 2.5.0)
-  - Firebase/Messaging (6.0.0):
-    - Firebase/CoreOnly
-    - FirebaseMessaging (~> 4.0.0)
-  - Firebase/Performance (6.0.0):
-    - Firebase/CoreOnly
-    - FirebasePerformance (~> 3.0.0)
-  - Firebase/Storage (6.0.0):
-    - Firebase/CoreOnly
-    - FirebaseStorage (~> 3.2.0)
-  - FirebaseABTesting (3.0.0):
-    - FirebaseCore (~> 6.0)
-    - Protobuf (~> 3.5)
-  - FirebaseAnalytics (6.0.0):
-    - FirebaseCore (~> 6.0)
-    - FirebaseInstanceID (~> 4.0)
-    - GoogleAppMeasurement (= 6.0.0)
-    - GoogleUtilities/AppDelegateSwizzler (~> 6.0)
-    - GoogleUtilities/MethodSwizzler (~> 6.0)
-    - GoogleUtilities/Network (~> 6.0)
-    - "GoogleUtilities/NSData+zlib (~> 6.0)"
-    - nanopb (~> 0.3)
-  - FirebaseAnalyticsInterop (1.2.0)
-  - FirebaseAuth (6.0.0):
-    - FirebaseAuthInterop (~> 1.0)
-    - FirebaseCore (~> 6.0)
-    - GoogleUtilities/AppDelegateSwizzler (~> 6.0)
-    - GoogleUtilities/Environment (~> 6.0)
-    - GTMSessionFetcher/Core (~> 1.1)
-  - FirebaseAuthInterop (1.0.0)
-  - FirebaseCore (6.0.0):
-    - GoogleUtilities/Environment (~> 6.0)
-    - GoogleUtilities/Logger (~> 6.0)
-  - FirebaseDatabase (6.0.0):
-    - FirebaseAuthInterop (~> 1.0)
-    - FirebaseCore (~> 6.0)
-    - leveldb-library (~> 1.18)
-  - FirebaseFunctions (2.5.0):
-    - FirebaseAuthInterop (~> 1.0)
-    - FirebaseCore (~> 6.0)
-    - GTMSessionFetcher/Core (~> 1.1)
-  - FirebaseInstanceID (4.0.0):
-    - FirebaseCore (~> 6.0)
-    - GoogleUtilities/Environment (~> 6.0)
-    - GoogleUtilities/UserDefaults (~> 6.0)
-  - FirebaseMessaging (4.0.0):
-    - FirebaseAnalyticsInterop (~> 1.1)
-    - FirebaseCore (~> 6.0)
-    - FirebaseInstanceID (~> 4.0)
-    - GoogleUtilities/AppDelegateSwizzler (~> 6.0)
-    - GoogleUtilities/Environment (~> 6.0)
-    - GoogleUtilities/Reachability (~> 6.0)
-    - GoogleUtilities/UserDefaults (~> 6.0)
-    - Protobuf (~> 3.1)
-  - FirebasePerformance (3.0.0):
-    - FirebaseCore (~> 6.0)
-    - FirebaseInstanceID (~> 4.0)
-    - FirebaseRemoteConfig (~> 4.0)
-    - GoogleToolboxForMac/Logger (~> 2.1)
-    - "GoogleToolboxForMac/NSData+zlib (~> 2.1)"
-    - GoogleUtilities/Environment (~> 6.0)
-    - GoogleUtilities/ISASwizzler (~> 6.0)
-    - GoogleUtilities/MethodSwizzler (~> 6.0)
-    - GTMSessionFetcher/Core (~> 1.1)
-    - Protobuf (~> 3.5)
-  - FirebaseRemoteConfig (4.0.0):
-    - FirebaseABTesting (~> 3.0)
-    - FirebaseCore (~> 6.0)
-    - FirebaseInstanceID (~> 4.0)
-    - GoogleUtilities/Environment (~> 6.0)
-    - "GoogleUtilities/NSData+zlib (~> 6.0)"
-    - Protobuf (~> 3.5)
-  - FirebaseStorage (3.2.0):
-    - FirebaseAuthInterop (~> 1.0)
-    - FirebaseCore (~> 6.0)
-    - GTMSessionFetcher/Core (~> 1.1)
   - FrameAccessor (1.3.2)
   - FSCalendar (2.8.0)
-  - GoogleAppMeasurement (6.0.0):
-    - GoogleUtilities/AppDelegateSwizzler (~> 6.0)
-    - GoogleUtilities/MethodSwizzler (~> 6.0)
-    - GoogleUtilities/Network (~> 6.0)
-    - "GoogleUtilities/NSData+zlib (~> 6.0)"
-    - nanopb (~> 0.3)
-  - GoogleToolboxForMac/Defines (2.2.0)
-  - GoogleToolboxForMac/Logger (2.2.0):
-    - GoogleToolboxForMac/Defines (= 2.2.0)
-  - "GoogleToolboxForMac/NSData+zlib (2.2.0)":
-    - GoogleToolboxForMac/Defines (= 2.2.0)
-  - GoogleUtilities/AppDelegateSwizzler (6.0.0):
-    - GoogleUtilities/Environment
-    - GoogleUtilities/Logger
-    - GoogleUtilities/Network
-  - GoogleUtilities/Environment (6.0.0)
-  - GoogleUtilities/ISASwizzler (6.0.0)
-  - GoogleUtilities/Logger (6.0.0):
-    - GoogleUtilities/Environment
-  - GoogleUtilities/MethodSwizzler (6.0.0):
-    - GoogleUtilities/Logger
-  - GoogleUtilities/Network (6.0.0):
-    - GoogleUtilities/Logger
-    - "GoogleUtilities/NSData+zlib"
-    - GoogleUtilities/Reachability
-  - "GoogleUtilities/NSData+zlib (6.0.0)"
-  - GoogleUtilities/Reachability (6.0.0):
-    - GoogleUtilities/Logger
-  - GoogleUtilities/UserDefaults (6.0.0):
-    - GoogleUtilities/Logger
-  - GTMSessionFetcher/Core (1.2.1)
   - Hakawai (5.1.6):
     - Hakawai/Core (= 5.1.6)
     - Hakawai/Mentions (= 5.1.6)
@@ -197,7 +63,6 @@ PODS:
   - Hakawai/Mentions (5.1.6):
     - Hakawai/Core
   - Kanna (5.0.0)
-  - leveldb-library (1.20)
   - LTMorphingLabel (0.7.0)
   - M13Checkbox (3.4.0)
   - M13ProgressSuite (1.2.5)
@@ -207,56 +72,42 @@ PODS:
   - Moya/Core (13.0.1):
     - Alamofire (~> 4.1)
     - Result (~> 4.1)
-  - nanopb (0.3.901):
-    - nanopb/decode (= 0.3.901)
-    - nanopb/encode (= 0.3.901)
-  - nanopb/decode (0.3.901)
-  - nanopb/encode (0.3.901)
-  - NVActivityIndicatorView (4.7.0):
-    - NVActivityIndicatorView/Presenter (= 4.7.0)
-  - NVActivityIndicatorView/Presenter (4.7.0)
-  - p2.OAuth2 (4.2.0)
-  - Protobuf (3.7.0)
+  - NVActivityIndicatorView (4.8.0):
+    - NVActivityIndicatorView/Presenter (= 4.8.0)
+  - NVActivityIndicatorView/Presenter (4.8.0)
   - Reachability (3.2)
   - Result (4.1.0)
   - RXPromise (1.0.5)
   - SAMKeychain (1.5.3)
   - SCLAlertView (0.8)
-  - SDWebImage (4.4.6):
-    - SDWebImage/Core (= 4.4.6)
-  - SDWebImage/Core (4.4.6)
+  - SDWebImage (4.4.7):
+    - SDWebImage/Core (= 4.4.7)
+  - SDWebImage/Core (4.4.7)
   - SkyFloatingLabelTextField (3.7.0)
-  - SnapKit (5.0.0)
+  - SnapKit (5.0.1)
   - StaticDataTableViewController (2.5.0)
   - SVProgressHUD (2.2.5)
-  - SwiftDate (6.0.2)
-  - SwiftMessages (6.0.2):
-    - SwiftMessages/App (= 6.0.2)
-  - SwiftMessages/App (6.0.2)
+  - SwiftDate (6.1.0)
+  - SwiftMessages (7.0.1):
+    - SwiftMessages/App (= 7.0.1)
+  - SwiftMessages/App (7.0.1)
   - SwiftyJSON (5.0.0)
-  - SwipeCellKit (2.6.0)
+  - SwipeCellKit (2.7.1)
   - Toast (4.0.0)
-  - TOCropViewController (2.5.0)
-  - UICircularProgressRing (6.1.0)
-  - UrbanAirship-iOS-SDK (10.2.2)
+  - TOCropViewController (2.5.1)
+  - UICircularProgressRing (6.3.0)
   - VENTokenField (2.5.2):
     - FrameAccessor (~> 1.0)
   - XLPagerTabStrip (9.0.0)
 
 DEPENDENCIES:
+  - AFNetworking (from `https://github.com/blissapps/AFNetworking.git`, branch `feature/WKWebView`)
   - Alamofire
   - Charts
   - ChatSDK
-  - ChatSDKFirebase/Adapter
-  - ChatSDKFirebase/FileStorage
-  - ChatSDKFirebase/Push
-  - Crashlytics
   - DGElasticPullToRefresh (from `https://github.com/KennethTsang/DGElasticPullToRefresh.git`)
   - Down
   - DZNEmptyDataSet
-  - Fabric
-  - Firebase/Core
-  - Firebase/Performance
   - FSCalendar
   - Kanna
   - LTMorphingLabel
@@ -264,7 +115,6 @@ DEPENDENCIES:
   - M13ProgressSuite (= 1.2.5)
   - Moya
   - NVActivityIndicatorView
-  - p2.OAuth2
   - SCLAlertView
   - SDWebImage
   - SkyFloatingLabelTextField
@@ -275,55 +125,28 @@ DEPENDENCIES:
   - SwiftyJSON
   - SwipeCellKit
   - UICircularProgressRing
-  - UrbanAirship-iOS-SDK
   - XLPagerTabStrip
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
-    - AFNetworking
+  trunk:
     - Alamofire
     - Charts
     - ChatSDK
-    - ChatSDKFirebase
     - ChatSDKKeepLayout
     - CountryPicker
-    - Crashlytics
     - DateTools
     - Down
     - DZNEmptyDataSet
-    - Fabric
-    - Firebase
-    - FirebaseABTesting
-    - FirebaseAnalytics
-    - FirebaseAnalyticsInterop
-    - FirebaseAuth
-    - FirebaseAuthInterop
-    - FirebaseCore
-    - FirebaseDatabase
-    - FirebaseFunctions
-    - FirebaseInstanceID
-    - FirebaseMessaging
-    - FirebasePerformance
-    - FirebaseRemoteConfig
-    - FirebaseStorage
     - FrameAccessor
     - FSCalendar
-    - GoogleAppMeasurement
-    - GoogleToolboxForMac
-    - GoogleUtilities
-    - GTMSessionFetcher
     - Hakawai
     - Kanna
-    - leveldb-library
     - LTMorphingLabel
     - M13Checkbox
     - M13ProgressSuite
     - MBProgressHUD
     - Moya
-    - nanopb
     - NVActivityIndicatorView
-    - p2.OAuth2
-    - Protobuf
     - Reachability
     - Result
     - RXPromise
@@ -341,86 +164,65 @@ SPEC REPOS:
     - Toast
     - TOCropViewController
     - UICircularProgressRing
-    - UrbanAirship-iOS-SDK
     - VENTokenField
     - XLPagerTabStrip
 
 EXTERNAL SOURCES:
+  AFNetworking:
+    :branch: feature/WKWebView
+    :git: https://github.com/blissapps/AFNetworking.git
   DGElasticPullToRefresh:
     :git: https://github.com/KennethTsang/DGElasticPullToRefresh.git
 
 CHECKOUT OPTIONS:
+  AFNetworking:
+    :commit: 060d895dbad78a47d9faa752c89ced41eabb1c39
+    :git: https://github.com/blissapps/AFNetworking.git
   DGElasticPullToRefresh:
     :commit: 274c5fe8998e31ea71a4dc250c7edee51e52a978
     :git: https://github.com/KennethTsang/DGElasticPullToRefresh.git
 
 SPEC CHECKSUMS:
-  AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
-  Alamofire: ae5c501addb7afdbb13687d7f2f722c78734c2d3
+  AFNetworking: ec5fea46b5bbabe15a8f4ee07b16d299ae4a97da
+  Alamofire: afc3e7c6db61476cb45cdd23fed06bad03bbc321
   Charts: e0dd4cd8f257bccf98407b58183ddca8e8d5b578
-  ChatSDK: 07626da45247ce86fe90f0a7a44052f713efbcea
-  ChatSDKFirebase: 2775ffe48c74987f68c05392cd19c10c5c105d1a
+  ChatSDK: 368ec4ca113ab55b0bd2263520eec48caebb77f2
   ChatSDKKeepLayout: 37d06edcd8f4da9676fb24c2f21b36569c067be0
   CountryPicker: 664c26411d833bb068c80beb15dc951eadde2911
-  Crashlytics: 07fb167b1694128c1c9a5a5cc319b0e9c3ca0933
   DateTools: 933ac9c490f21f92127cf690ccd8c397e0126caf
   DGElasticPullToRefresh: 28f11a6026302a90f8ffebbc6e24748e584dddd3
-  Down: 3aa5ab1aee1a2ffff3c07291e9210dac5cc462cd
+  Down: 3c758f2388fa739663023f400e742a988fa1e21d
   DZNEmptyDataSet: 9525833b9e68ac21c30253e1d3d7076cc828eaa7
-  Fabric: f988e33c97f08930a413e08123064d2e5f68d655
-  Firebase: fa80b9d987ca014a1ba9357496ef2a0178b28b12
-  FirebaseABTesting: a32c488eb75089a61eb3d86db061dfb909d765db
-  FirebaseAnalytics: 1743c5f4de3687d0745709dfdc4b1dea1484f44c
-  FirebaseAnalyticsInterop: efbe45c8385ec626e29f9525e5ebd38520dfb6c1
-  FirebaseAuth: efc72b0f6fe075d2a6de8d81a6d9de83ef2b47eb
-  FirebaseAuthInterop: 0ffa57668be100582bb7643d4fcb7615496c41fc
-  FirebaseCore: e38f025287b413255a53acc1945d048a112047f7
-  FirebaseDatabase: f48e067716864be2b855cf716b927ef375d6cfa0
-  FirebaseFunctions: b1a88637946b405dc7a4bbe86c2b71267f9fae19
-  FirebaseInstanceID: 0e0348a3c00a734fa376a070f5ad4533ad975cb5
-  FirebaseMessaging: c796d50864dc822a3c06c9c1c1444b37732b795b
-  FirebasePerformance: 3dd8dbe6eb1258b8d148eb33768f6aa6e1684127
-  FirebaseRemoteConfig: 40f75c6ea20a52bf65ef44e3898910dd5b57c532
-  FirebaseStorage: ff1e8f1f6cf1557a8694b0ef39d3e72cb60c42ac
   FrameAccessor: 0f7ba6ce37be9a5d0302a27c731dca70af8d438b
   FSCalendar: 3a5ed3636e2ba1b83ebebfcf0c2603105a6f5efe
-  GoogleAppMeasurement: 7f028ea162b72c8f326daec74afc95d94f7a47d6
-  GoogleToolboxForMac: ff31605b7d66400dcec09bed5861689aebadda4d
-  GoogleUtilities: f1faafc033ea203adf1783ce00af455bb99d0e5b
-  GTMSessionFetcher: 32aeca0aa144acea523e1c8e053089dec2cb98ca
   Hakawai: caf8cceda91548a12552d167e79c7dd88a88a7c2
   Kanna: a32875df62975f8f4b871e933b4ea1a5c3b8be0f
-  leveldb-library: 08cba283675b7ed2d99629a4bc5fd052cd2bb6a5
   LTMorphingLabel: 22147fb1ec2b0306537ccc348b36ea8617179b03
   M13Checkbox: 6f59404540ac98ba83a3d1afac335895a40c6a5d
   M13ProgressSuite: 1e8241ab42090c76558afbcbd4df23052c8edd41
   MBProgressHUD: e7baa36a220447d8aeb12769bf0585582f3866d9
   Moya: f4a4b80ff2f8a4ffc208dfb31cd91636622fee6e
-  nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
-  NVActivityIndicatorView: b19ddab2576f805cbe0fb2306cba3476e09a1dea
-  p2.OAuth2: d5ea9b928fc5d10d088d419db6f3380578b6f866
-  Protobuf: 7a877b7f3e5964e3fce995e2eb323dbc6831bb5a
+  NVActivityIndicatorView: d24b7ebcf80af5dcd994adb650e2b6c93379270f
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
   Result: bd966fac789cc6c1563440b348ab2598cc24d5c7
   RXPromise: b1e6d6d747db2e0dc53f11ba2a0fbff2456d25e5
   SAMKeychain: 483e1c9f32984d50ca961e26818a534283b4cd5c
   SCLAlertView: 6a77bb2edfc65e04dbe57725546cb4107a506b85
-  SDWebImage: 3f3f0c02f09798048c47a5ed0a13f17b063572d8
+  SDWebImage: c10d14a8883ebd89664f02a422006f66a85c0c5d
   SkyFloatingLabelTextField: 4b46db0ab1ccde0919cded29c656e6b4805eda04
-  SnapKit: fd22d10eb9aff484d79a8724eab922c1ddf89bcf
+  SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
   StaticDataTableViewController: 0c5c4a47861446dd3cfd52530ae801ec7662ce26
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
-  SwiftDate: bbed9b23bfec599bd62b9a305afc554f7bd0eb6f
-  SwiftMessages: 8b3cc68dba2f1c91aac1a74c90b10287aac35371
+  SwiftDate: fa2bb3962056bb44047b4b85a30044e5eae30b03
+  SwiftMessages: b577dc7043be8b299857ab35bb663dbff6483bd0
   SwiftyJSON: 36413e04c44ee145039d332b4f4e2d3e8d6c4db7
-  SwipeCellKit: 935ca28c187ec6e1ffb2b578cf8ddca842bfdcbb
+  SwipeCellKit: 3972254a826da74609926daf59b08d6c72e619ea
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
-  TOCropViewController: d86078d3a57a70c116bf3db7c89c80046a0e5fdf
-  UICircularProgressRing: b3eba859a515e4d9d38503eec913f09c28450785
-  UrbanAirship-iOS-SDK: a5ff86dcdb2582590aec635299931278cfeb53c4
+  TOCropViewController: 00dc36c4e4a0f4a45efa91adbf22df8a4fae01d3
+  UICircularProgressRing: e700fb0505328e88ee53c4ed92bee6d1a5b8bbe3
   VENTokenField: 5a19b838fb97f040e3d4c93f584b4adeaf3fc1ee
   XLPagerTabStrip: 61c57fd61f611ee5f01ff1495ad6fbee8bf496c5
 
-PODFILE CHECKSUM: 1e31ed7fca6586df4026aac02b0885f471d9078f
+PODFILE CHECKSUM: 80293adf97f9b73cd512781f52968196ebfb4f81
 
-COCOAPODS: 1.5.2
+COCOAPODS: 1.8.3

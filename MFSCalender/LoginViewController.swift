@@ -12,7 +12,9 @@ import NVActivityIndicatorView
 import SCLAlertView
 import SkyFloatingLabelTextField
 import NotificationCenter
-import Crashlytics
+#if !targetEnvironment(macCatalyst)
+    import Crashlytics
+#endif
 import SwiftDate
 import SwiftyJSON
 
@@ -315,7 +317,10 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
         }
         
         guard self.authentication() else {
-            Answers.logLogin(withMethod: "Default", success: false, customAttributes: [:])
+            #if !targetEnvironment(macCatalyst)
+                Answers.logLogin(withMethod: "Default", success: false, customAttributes: [:])
+            #endif
+            
             DispatchQueue.main.async {
                 self.indicatorView.isHidden = true
             }
@@ -352,8 +357,10 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
         }
         
         group.wait()
+        #if !targetEnvironment(macCatalyst)
+            Answers.logLogin(withMethod: "Default", success: true, customAttributes: [:])
+        #endif
         
-        Answers.logLogin(withMethod: "Default", success: true, customAttributes: [:])
         
         DispatchQueue.main.async {
             self.indicatorView.isHidden = true

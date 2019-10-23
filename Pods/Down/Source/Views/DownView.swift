@@ -25,9 +25,11 @@ open class DownView: WKWebView {
     ///   - openLinksInBrowser: Whether or not to open links using an external browser
     ///   - templateBundle: Optional custom template bundle. Leaving this as `nil` will use the bundle included with Down.
     ///   - configuration: Optional custom web view configuration.
+    ///   - options: `DownOptions` to modify parsing or rendering, defaulting to `.default`
     ///   - didLoadSuccessfully: Optional callback for when the web content has loaded successfully
     /// - Throws: `DownErrors` depending on the scenario
-    public init(frame: CGRect, markdownString: String, openLinksInBrowser: Bool = true, templateBundle: Bundle? = nil, configuration: WKWebViewConfiguration? = nil, didLoadSuccessfully: DownViewClosure? = nil) throws {
+    public init(frame: CGRect, markdownString: String, openLinksInBrowser: Bool = true, templateBundle: Bundle? = nil, configuration: WKWebViewConfiguration? = nil, options: DownOptions = .default, didLoadSuccessfully: DownViewClosure? = nil) throws {
+        self.options = options
         self.didLoadSuccessfully = didLoadSuccessfully
 
         if let templateBundle = templateBundle {
@@ -64,11 +66,15 @@ open class DownView: WKWebView {
     ///
     /// - Parameters:
     ///   - markdownString: A string containing CommonMark Markdown
+    ///   - options: `DownOptions` to modify parsing or rendering, defaulting to `.default`
     ///   - didLoadSuccessfully: Optional callback for when the web content has loaded successfully
     /// - Throws: `DownErrors` depending on the scenario
-    public func update(markdownString: String, didLoadSuccessfully: DownViewClosure? = nil) throws {
-        // Note: As the init method takes this callback already, we only overwrite it here if
+    public func update(markdownString: String, options: DownOptions? = nil, didLoadSuccessfully: DownViewClosure? = nil) throws {
+        // Note: As the init method sets this initially, we only overwrite them if
         // a non-nil value is passed in
+        if let options = options {
+            self.options = options
+        }
         if let didLoadSuccessfully = didLoadSuccessfully {
             self.didLoadSuccessfully = didLoadSuccessfully
         }
@@ -79,6 +85,7 @@ open class DownView: WKWebView {
     // MARK: - Private Properties
 
     let bundle: Bundle
+    var options: DownOptions
 
     private lazy var baseURL: URL = {
         return self.bundle.url(forResource: "index", withExtension: "html")!
@@ -88,7 +95,7 @@ open class DownView: WKWebView {
     private lazy var temporaryDirectoryURL: URL = {
         return try! FileManager.default.url(for: .itemReplacementDirectory,
                                             in: .userDomainMask,
-                                            appropriateFor: URL(fileURLWithPath: "/"),
+                                            appropriateFor: URL(fileURLWithPath: NSTemporaryDirectory()),
                                             create: true).appendingPathComponent("Down", isDirectory: true)
     }()
     #endif
@@ -101,7 +108,7 @@ open class DownView: WKWebView {
 private extension DownView {
 
     func loadHTMLView(_ markdownString: String) throws {
-        let htmlString = try markdownString.toHTML()
+        let htmlString = try markdownString.toHTML(options)
         let pageHTMLString = try htmlFromTemplate(htmlString)
 
         #if os(iOS)
@@ -179,7 +186,7 @@ extension DownView: WKNavigationDelegate {
     @available(iOSApplicationExtension, unavailable)
     func openURL(url: URL) {
         #if os(iOS)
-            UIApplication.shared.openURL(url)
+            _ = UIApplication.shared.openURL(url)
         #elseif os(macOS)
             NSWorkspace.shared.open(url)
         #endif
