@@ -118,8 +118,8 @@ extension String {
                 "<body>" +
                 self +
                 "</body></head></html>"
-        var attributes = [NSAttributedString.Key: AnyObject]()
-        attributes[.foregroundColor] = UIColor(named: "DarkTextColor")
+//        var attributes = [NSAttributedString.Key: AnyObject]()
+//        attributes[.foregroundColor] = UIColor(named: "DarkTextColor")
         if let data = htmlString.data(using: .utf8, allowLossyConversion: true) {
             if let formattedHtmlString = try? NSAttributedString(data: data, options: [.documentType: NSAttributedString.DocumentType.html, .characterEncoding: String.Encoding.utf8.rawValue], documentAttributes: nil) {
 //                formattedHtmlString.addAttribute(.foregroundColor, value: UIColor(named: "DarkTextColor"), range: Range()

@@ -70,6 +70,7 @@ public class School {
         let sortedClassData = classData.sorted { (a, b) -> Bool in
             return (a["startTime"] as? Int ?? 0) < (b["startTime"] as? Int ?? 0)
         }
+        print(sortedClassData)
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "HHmm"
@@ -103,13 +104,13 @@ public class School {
         
         if currentTime.isBeforeDate(startTime, granularity: .second) {
             timerString = NSLocalizedString("Starts in ", comment: "")
-            difference = currentTime - startTime
+            difference = startTime - currentTime
         } else if currentTime.isBeforeDate(endTime, granularity: .second) {
             timerString = NSLocalizedString("Ends in ", comment: "")
-            difference = currentTime - endTime
+            difference = endTime - currentTime
         } else {
             timerString = NSLocalizedString("Ended ", comment: "")
-            difference = endTime - currentTime
+            difference = currentTime - endTime
         }
         
         let minutes = Int(difference!).seconds.in(.minute)!

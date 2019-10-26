@@ -8228,6 +8228,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = CF1408CF629C7361332E53B88F7BD30C;
 			productRefGroup = 5C1BF0C63D1ED354BC89F0D73FD65E4F /* Products */;
@@ -10368,13 +10369,18 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 3FFC513867D40EECAF8FDB1CC74DDAE0 /* SwiftMessages.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/SwiftMessages";
 				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				IBSC_MODULE = SwiftMessages;
 				INFOPLIST_FILE = "Target Support Files/SwiftMessages/ResourceBundle-SwiftMessages-SwiftMessages-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				PRODUCT_BUNDLE_IDENTIFIER = org.cocoapods.SwiftMessages;
 				PRODUCT_NAME = SwiftMessages;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -11085,11 +11091,13 @@
 			baseConfigurationReference = DE99B7917A511F51DE81C621826FC7B0 /* TOCropViewController.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/TOCropViewController";
 				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				IBSC_MODULE = TOCropViewController;
 				INFOPLIST_FILE = "Target Support Files/TOCropViewController/ResourceBundle-TOCropViewControllerBundle-TOCropViewController-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				PRODUCT_BUNDLE_IDENTIFIER = org.cocoapods.TOCropViewControllerBundle;
 				PRODUCT_NAME = TOCropViewControllerBundle;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -11209,11 +11217,13 @@
 			baseConfigurationReference = AAE551FDF56DE1ECB6FFAC92F4C152A1 /* XLPagerTabStrip.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/XLPagerTabStrip";
 				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				IBSC_MODULE = XLPagerTabStrip;
 				INFOPLIST_FILE = "Target Support Files/XLPagerTabStrip/ResourceBundle-XLPagerTabStrip-XLPagerTabStrip-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				PRODUCT_BUNDLE_IDENTIFIER = org.cocoapods.XLPagerTabStrip;
 				PRODUCT_NAME = XLPagerTabStrip;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -11440,11 +11450,13 @@
 			baseConfigurationReference = A3AC949A5BB3499ED1AAD2782B6659DB /* ChatSDK.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/ChatSDK";
 				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				IBSC_MODULE = ChatSDK;
 				INFOPLIST_FILE = "Target Support Files/ChatSDK/ResourceBundle-ChatCore-ChatSDK-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				PRODUCT_BUNDLE_IDENTIFIER = org.cocoapods.ChatCore;
 				PRODUCT_NAME = ChatCore;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -11674,11 +11686,13 @@
 			baseConfigurationReference = A3AC949A5BB3499ED1AAD2782B6659DB /* ChatSDK.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/ChatSDK";
 				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				IBSC_MODULE = ChatSDK;
 				INFOPLIST_FILE = "Target Support Files/ChatSDK/ResourceBundle-ChatCoreData-ChatSDK-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				PRODUCT_BUNDLE_IDENTIFIER = org.dwei.cocoapods.ChatCoreData;
 				PRODUCT_NAME = ChatCoreData;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -11766,11 +11780,13 @@
 			baseConfigurationReference = A3AC949A5BB3499ED1AAD2782B6659DB /* ChatSDK.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/ChatSDK";
 				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				IBSC_MODULE = ChatSDK;
 				INFOPLIST_FILE = "Target Support Files/ChatSDK/ResourceBundle-ChatUI-ChatSDK-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				PRODUCT_BUNDLE_IDENTIFIER = org.cocoapods.ChatUI;
 				PRODUCT_NAME = ChatUI;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -12138,11 +12154,13 @@
 			baseConfigurationReference = A3AC949A5BB3499ED1AAD2782B6659DB /* ChatSDK.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/ChatSDK";
 				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				IBSC_MODULE = ChatSDK;
 				INFOPLIST_FILE = "Target Support Files/ChatSDK/ResourceBundle-ChatCoreData-ChatSDK-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				PRODUCT_BUNDLE_IDENTIFIER = org.dwei.cocoapods.ChatCoreData;
 				PRODUCT_NAME = ChatCoreData;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -12686,11 +12704,13 @@
 			baseConfigurationReference = AAE551FDF56DE1ECB6FFAC92F4C152A1 /* XLPagerTabStrip.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/XLPagerTabStrip";
 				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				IBSC_MODULE = XLPagerTabStrip;
 				INFOPLIST_FILE = "Target Support Files/XLPagerTabStrip/ResourceBundle-XLPagerTabStrip-XLPagerTabStrip-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				PRODUCT_BUNDLE_IDENTIFIER = org.cocoapods.XLPagerTabStrip;
 				PRODUCT_NAME = XLPagerTabStrip;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -12740,11 +12760,13 @@
 			baseConfigurationReference = A3AC949A5BB3499ED1AAD2782B6659DB /* ChatSDK.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/ChatSDK";
 				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				IBSC_MODULE = ChatSDK;
 				INFOPLIST_FILE = "Target Support Files/ChatSDK/ResourceBundle-ChatCore-ChatSDK-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				PRODUCT_BUNDLE_IDENTIFIER = org.cocoapods.ChatCore;
 				PRODUCT_NAME = ChatCore;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -13140,11 +13162,13 @@
 			baseConfigurationReference = DE99B7917A511F51DE81C621826FC7B0 /* TOCropViewController.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/TOCropViewController";
 				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				IBSC_MODULE = TOCropViewController;
 				INFOPLIST_FILE = "Target Support Files/TOCropViewController/ResourceBundle-TOCropViewControllerBundle-TOCropViewController-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				PRODUCT_BUNDLE_IDENTIFIER = org.cocoapods.TOCropViewControllerBundle;
 				PRODUCT_NAME = TOCropViewControllerBundle;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -13157,13 +13181,18 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 3FFC513867D40EECAF8FDB1CC74DDAE0 /* SwiftMessages.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/SwiftMessages";
 				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				IBSC_MODULE = SwiftMessages;
 				INFOPLIST_FILE = "Target Support Files/SwiftMessages/ResourceBundle-SwiftMessages-SwiftMessages-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				PRODUCT_BUNDLE_IDENTIFIER = org.cocoapods.SwiftMessages;
 				PRODUCT_NAME = SwiftMessages;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -13286,11 +13315,13 @@
 			baseConfigurationReference = A3AC949A5BB3499ED1AAD2782B6659DB /* ChatSDK.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/ChatSDK";
 				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				IBSC_MODULE = ChatSDK;
 				INFOPLIST_FILE = "Target Support Files/ChatSDK/ResourceBundle-ChatUI-ChatSDK-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				PRODUCT_BUNDLE_IDENTIFIER = org.cocoapods.ChatUI;
 				PRODUCT_NAME = ChatUI;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;

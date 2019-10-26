@@ -33,36 +33,6 @@ class customEventCellDashboard: UITableViewCell {
     }
 }
 
-class classViewCell: UICollectionViewCell {
-    var index: Int? = nil
-
-    @IBOutlet weak var period: UILabel!
-
-    @IBOutlet weak var className: UILabel!
-
-    @IBOutlet weak var teacher: UILabel!
-
-    @IBOutlet weak var roomNumber: UILabel!
-
-    @IBOutlet var classViewButton: UIButton!
-    
-
-    @IBAction func classViewButtonClicked(_ sender: Any) {
-        guard index != nil else {
-            return
-        }
-        Preferences().indexForCourseToPresent = index!
-        let classDetailViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "classDetailViewController")
-        if parentViewController != nil {
-            parentViewController!.show(classDetailViewController, sender: parentViewController)
-        }
-    }
-
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
-}
-
 class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
 
 //    override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -327,6 +297,10 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
             timer!.invalidate()
             timer = nil
         }
+    }
+    
+    func refreshTimerData() {
+        let newClasses = school.classesOnADayAfter(date: Date())
     }
 
     func refreshDisplayedData() {

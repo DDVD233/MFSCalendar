@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="O1K-uV-Ctu">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="O1K-uV-Ctu">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -90,27 +88,6 @@
             </objects>
             <point key="canvasLocation" x="2600" y="1158"/>
         </scene>
-        <!--Chat-->
-        <scene sceneID="WBl-Fc-Hyr">
-            <objects>
-                <viewController id="ySI-Cw-FyH" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="rSm-ux-MXW"/>
-                        <viewControllerLayoutGuide type="bottom" id="JLD-SL-jn3"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="RSm-bN-QwV">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <tabBarItem key="tabBarItem" title="Chat" image="Chat" id="Inl-Se-UAq">
-                        <inset key="imageInsets" minX="0.0" minY="3" maxX="0.0" maxY="-3"/>
-                    </tabBarItem>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="HYQ-VO-lDG" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1894" y="1675"/>
-        </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="Bfz-0L-XAJ">
             <objects>
@@ -127,7 +104,6 @@
                         <segue destination="01J-lp-oVM" kind="relationship" relationship="viewControllers" id="583-PH-kcd"/>
                         <segue destination="Ihz-Zz-enP" kind="relationship" relationship="viewControllers" id="1dX-C8-VAu"/>
                         <segue destination="X3R-pZ-w0S" kind="relationship" relationship="viewControllers" id="byF-NX-WBW"/>
-                        <segue destination="ySI-Cw-FyH" kind="relationship" relationship="viewControllers" id="bnh-Ma-uXz"/>
                         <segue destination="0JE-Ee-5nK" kind="relationship" relationship="viewControllers" id="pGX-Az-Aab"/>
                     </connections>
                 </tabBarController>
@@ -138,7 +114,6 @@
     </scenes>
     <resources>
         <image name="CalendarUnselected" width="25" height="25"/>
-        <image name="Chat" width="25" height="25"/>
         <image name="Homework" width="25" height="25"/>
         <image name="Today" width="25" height="25"/>
         <image name="TodaySelected" width="25" height="25"/>

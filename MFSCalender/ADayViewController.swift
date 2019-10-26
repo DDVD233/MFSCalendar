@@ -23,12 +23,32 @@ class customCell: UITableViewCell {
 
     @IBOutlet var teachersName: UILabel!
     
+    @IBOutlet var mainView: UIView!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
+        if #available(iOS 13.0, *) {
+            let hover = UIHoverGestureRecognizer(target: self, action: #selector(hovering(_:)))
+            mainView.addGestureRecognizer(hover)
+        }
+        
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
+    }
+    
+    @available(iOS 13.0, *)
+    @objc
+    func hovering(_ recognizer: UIHoverGestureRecognizer) {
+        switch recognizer.state {
+        case .began, .changed:
+            mainView.backgroundColor = UIColor(hexString: 0xFF8080)
+        case .ended:
+            mainView.backgroundColor = UIColor(hexString: 0xff6666)
+        default:
+            break
+        }
     }
 
 }

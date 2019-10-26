@@ -302,9 +302,11 @@ extension NewMoreViewController {
     func getLunchMenu() {
         switch Preferences().schoolName {
         case "MFS":
-            let lunchMenuURL = URL(string: "http://www.sagedining.com/sites/menu/menu.php?org=moorestownfriendsschool")!
-            let safariViewController = SFSafariViewController(url: lunchMenuURL)
-            self.present(safariViewController, animated: true, completion: nil)
+            DispatchQueue.main.async {
+                let lunchMenuURL = URL(string: "http://www.sagedining.com/sites/menu/menu.php?org=moorestownfriendsschool")!
+                let safariViewController = SFSafariViewController(url: lunchMenuURL)
+                self.present(safariViewController, animated: true, completion: nil)
+            }
         case "CMH":
             DispatchQueue.main.async {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = true
@@ -417,7 +419,7 @@ extension NewMoreViewController {
 // Flow Layout
 extension NewMoreViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let screenWidth = UIScreen.main.bounds.width
+        let screenWidth = collectionView.frame.width
         if indexPath.section == 0 {
             return CGSize(width: screenWidth, height: 120)
         } else {
