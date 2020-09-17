@@ -58,12 +58,13 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     var isVisible = true
     
     let eventViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier :"eventViewController") as! eventViewController
+    let region = Region(zone: TimeZone(identifier: "America/New_York")!)
 
     var screenWidth = UIScreen.main.bounds.width
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        SwiftDate.defaultRegion = Region.local
+        SwiftDate.defaultRegion = region
         setUpUI()
         
         let preferences = Preferences()
@@ -84,9 +85,6 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         }
 //        }
         
-        DispatchQueue.global().async {
-            self.adaptationScheduleFix()
-        }
         
         
         // Do any additional setup after loading the view, typically from a nib.
@@ -157,17 +155,17 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
         eventViewController.view.translatesAutoresizingMaskIntoConstraints = false
     }
     
-    func adaptationScheduleFix() {
-        let preferences = Preferences()
-        if preferences.dataBuild < 2900 {
-            preferences.dataBuild = Int(Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "") ?? 0
-            LoginView().getProfile()
-            DispatchQueue.main.async {
-                let vc = self.storyboard?.instantiateViewController(withIdentifier: "courseFillController")
-                self.present(vc!, animated: true, completion: nil)
-            }
-        }
-    }
+//    func adaptationScheduleFix() {
+//        let preferences = Preferences()
+//        if preferences.dataBuild < 2900 {
+//            preferences.dataBuild = Int(Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "") ?? 0
+//            LoginView().getProfile()
+//            DispatchQueue.main.async {
+//                let vc = self.storyboard?.instantiateViewController(withIdentifier: "courseFillController")
+//                self.present(vc!, animated: true, completion: nil)
+//            }
+//        }
+//    }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(true)
@@ -347,50 +345,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
             Preferences().doUpdateQuarter = true
             return true
         }
-
-//        当版本号不存在时，默认更新数据
-        let version = Preferences().version
-        
-        guard version != 0 else { return true }
-
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyyMMdd"
-        //let refreshDate = Preferences().refreshDate
-        //let date = formatter.string(from: Date())
-
-        //guard refreshDate != date else {
-        //    return false
-        //}
-
-        var refresh = false
-        let semaphore = DispatchSemaphore.init(value: 0)
-
-        provider.request(MyService.dataVersionCheck, completion: { result in
-            switch result {
-            case let .success(response):
-                guard let nversion = try? response.mapString() else {
-                    presentErrorMessage(presentMessage: NSLocalizedString("Version file not found", comment: ""), layout: .statusLine)
-                    return
-                }
-
-                guard let newVersion = Int(nversion) else {
-                    return
-                }
-                print("Latest version:", newVersion)
-                if newVersion != version {
-                    refresh = true
-                    Preferences().version = newVersion
-                }
-            case let .failure(error):
-                presentErrorMessage(presentMessage: error.localizedDescription, layout: .statusLine)
-            }
-
-            semaphore.signal()
-        })
-
-        semaphore.wait()
-
-        return refresh
+        return false
     }
 
 
@@ -403,6 +358,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
             formatter.dateFormat = "EEEE, MMMM d."
             //MMMM d, yyyy
             var today = formatter.string(from: date)
+            formatter.timeZone = TimeZone(identifier: "America/New_York")!
             let labelAttributes = [NSAttributedString.Key.font:
                 UIFont.init(name: self.dateLabel.font.fontName, size: self.dateLabel.font.pointSize) ?? UIFont()]
             if NSString(string: today).size(withAttributes: labelAttributes).width > self.dateLabel.bounds.size.width - 10 {
@@ -437,6 +393,7 @@ class Main: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     
     func eventDataFetching() {
         let selectedDate = Date()
+        
         eventViewController.selectedDate = selectedDate
         eventViewController.eventDataFetching()
     }
@@ -559,30 +516,6 @@ extension Main: UICollectionViewDelegate, UICollectionViewDataSource, UICollecti
         } else {
             cell.period.text = school.meetTimeForPeriod(periodObject: classData)
         }
-
-//        if let leadSectionId = ClassView().getLeadSectionID(classDict: classData) {
-//            print(listHomework)
-//            if let thisClassHomework = listHomework[String(leadSectionId)] {
-//                // cell.homeworkView.isHidden = false
-//
-//                let numberOfHomework = thisClassHomework.count
-//
-//                let numberOfCompletedHomework = thisClassHomework.filter({
-//                    ($0["assignment_status"] as? Int) == 1
-//                }).count
-//
-//                let numberOfUncompletedHomework = numberOfHomework - numberOfCompletedHomework
-//
-//                var homeworkButtonText = ""
-//                if numberOfUncompletedHomework == 0 {
-//                    homeworkButtonText = "All \(String(numberOfHomework)) HW were completed!"
-//                } else {
-//                    homeworkButtonText = "\(String(numberOfHomework)) uncompleted HW"
-//                }
-//
-//                cell.homeworkButton.setTitle(homeworkButtonText, for: .normal)
-//            }
-//        }
         cell.index = classData["index"] as? Int
 
         return cell

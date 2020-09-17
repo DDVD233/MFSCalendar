@@ -13,7 +13,8 @@ import SCLAlertView
 import SkyFloatingLabelTextField
 import NotificationCenter
 #if !targetEnvironment(macCatalyst)
-    import Crashlytics
+    import FirebaseCrashlytics
+    import FirebaseAnalytics
 #endif
 import SwiftDate
 import SwiftyJSON
@@ -318,7 +319,9 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
         
         guard self.authentication() else {
             #if !targetEnvironment(macCatalyst)
-                Answers.logLogin(withMethod: "Default", success: false, customAttributes: [:])
+            Analytics.logEvent("AnalyticsEventLogin", parameters: [
+                AnalyticsParameterSuccess: false
+            ])
             #endif
             
             DispatchQueue.main.async {
@@ -358,7 +361,9 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
         
         group.wait()
         #if !targetEnvironment(macCatalyst)
-            Answers.logLogin(withMethod: "Default", success: true, customAttributes: [:])
+        Analytics.logEvent("AnalyticsEventLogin", parameters: [
+            AnalyticsParameterSuccess: true
+        ])
         #endif
         
         

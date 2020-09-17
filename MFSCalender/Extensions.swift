@@ -8,7 +8,7 @@
 
 import UIKit
 #if !targetEnvironment(macCatalyst)
-    import Crashlytics
+    import FirebaseCrashlytics
 #endif
 //import Kanna
 
@@ -100,7 +100,7 @@ extension String {
         let font = UIFont.systemFont(ofSize: 15).fontName
         let fontSize = isTitle ? "23" : "16"
         #if !targetEnvironment(macCatalyst)
-            CLSLogv("String to convert to HTML: %@", getVaList([self]))
+        Crashlytics.crashlytics().log(format: "String to convert to HTML: %@", arguments: getVaList([self]))
         #endif
         
         let htmlString = "<html>" +

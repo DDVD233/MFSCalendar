@@ -10,7 +10,7 @@ import UIKit
 import XLPagerTabStrip
 import SwiftMessages
 import SDWebImage
-import DGElasticPullToRefresh
+import CRRefresh
 import DZNEmptyDataSet
 import SVProgressHUD
 
@@ -51,17 +51,14 @@ class classTopicViewController: UIViewController {
     }
 
     override func viewDidAppear(_ animated: Bool) {
-        let loadingview = DGElasticPullToRefreshLoadingViewCircle()
-        loadingview.tintColor = UIColor.white
-        topicsCollectionView.dg_addPullToRefreshWithActionHandler({ [weak self] () -> Void in
+        let animator = RamotionAnimator(ballColor: UIColor.white, waveColor: UIColor.salmon)
+        
+        topicsCollectionView.cr.addHeadRefresh(animator: animator) { [weak self] in
             if let leadSectionIdInt = self?.leadSectionIdInt {
                 self?.refreshTopics(leadSectionIdInt: leadSectionIdInt)
             }
-            //            self?.semaphore.wait()
-            self?.topicsCollectionView.dg_stopLoading()
-        }, loadingView: loadingview)
-        topicsCollectionView.dg_setPullToRefreshFillColor(UIColor(hexString: 0xFF7E79))
-        topicsCollectionView.dg_setPullToRefreshBackgroundColor(topicsCollectionView.backgroundColor!)
+            self?.topicsCollectionView.cr.endHeaderRefresh()
+        }
 
         DispatchQueue.global().async {
             let classObject = ClassView().getTheClassToPresent() ?? [String: Any]()
@@ -71,9 +68,9 @@ class classTopicViewController: UIViewController {
         }
     }
 
-    override func viewWillDisappear(_ animated: Bool) {
-        topicsCollectionView.dg_removePullToRefresh()
-    }
+//    override func viewWillDisappear(_ animated: Bool) {
+//        topicsCollectionView.dg_removePullToRefresh()
+//    }
 
     func refreshTopics(leadSectionIdInt: Int) {
         guard leadSectionIdInt != 0 else {

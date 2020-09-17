@@ -9,7 +9,7 @@
 import UIKit
 import SDWebImage
 import HealthKit
-import DGElasticPullToRefresh
+import CRRefresh
 import DZNEmptyDataSet
 import SwiftDate
 
@@ -26,15 +26,14 @@ class StepChallengeViewController: UIViewController {
         self.stepTable.dataSource = self
         stepTable.emptyDataSetSource = self
         stepTable.emptyDataSetDelegate = self
-        let loadingview = DGElasticPullToRefreshLoadingViewCircle()
-        loadingview.tintColor = UIColor.white
-        stepTable.dg_addPullToRefreshWithActionHandler({ [weak self] () -> Void in
+        
+        let animator = RamotionAnimator(ballColor: UIColor.white, waveColor: UIColor.salmon)
+        
+        stepTable.cr.addHeadRefresh(animator: animator) { [weak self] in
             StepChallenge().reportSteps()
             self?.getSteps()
-            self?.stepTable.dg_stopLoading()
-            }, loadingView: loadingview)
-        stepTable.dg_setPullToRefreshFillColor(UIColor(hexString: 0xFF7E79))
-        stepTable.dg_setPullToRefreshBackgroundColor(stepTable.backgroundColor!)
+            self?.stepTable.cr.endHeaderRefresh()
+        }
         
         if Preferences().isInStepChallenge {
             stepChallenge.reportSteps()

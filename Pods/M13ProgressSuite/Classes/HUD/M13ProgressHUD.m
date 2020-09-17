@@ -286,6 +286,7 @@
 - (void)setProgress:(CGFloat)progress animated:(BOOL)animated
 {
     [_progressView setProgress:progress animated:animated];
+	self.progress = progress;
 }
 
 - (void)performAction:(M13ProgressViewAction)action animated:(BOOL)animated
@@ -301,7 +302,7 @@
     [self setNeedsDisplay];
     
     onScreen = YES;
-
+    
     //Animate the HUD on screen
     CABasicAnimation *fadeAnimation = [CABasicAnimation animationWithKeyPath:@"opacity"];
     fadeAnimation.duration = _animationDuration;
@@ -320,7 +321,16 @@
     
     CABasicAnimation *positionAnimation = [CABasicAnimation animationWithKeyPath:@"position"];
     positionAnimation.duration = _animationDuration;
-    positionAnimation.fromValue = [NSValue valueWithCGPoint:_animationPoint];
+    
+    if (_animationCentered)
+    {
+        positionAnimation.fromValue = [NSValue valueWithCGPoint:backgroundView.layer.position];
+    }
+    else
+    {
+        positionAnimation.fromValue = [NSValue valueWithCGPoint:_animationPoint];
+    }
+    
     positionAnimation.toValue = [NSValue valueWithCGPoint:backgroundView.layer.position];
     positionAnimation.removedOnCompletion = YES;
     
@@ -341,7 +351,7 @@
     fadeAnimation.fromValue = [NSNumber numberWithFloat:1.0];
     fadeAnimation.toValue = [NSNumber numberWithFloat:0.0];
     fadeAnimation.removedOnCompletion = YES;
-
+    
     [self.layer addAnimation:fadeAnimation forKey:@"fadeAnimation"];
     self.layer.opacity = 0.0;
     
@@ -349,11 +359,24 @@
     scaleAnimation.fromValue = [NSNumber numberWithFloat:1.0];
     scaleAnimation.toValue = [NSNumber numberWithFloat:0.0];
     scaleAnimation.removedOnCompletion = YES;
-
+    
     CABasicAnimation *frameAnimation = [CABasicAnimation animationWithKeyPath:@"position"];
-    frameAnimation.fromValue = [NSValue valueWithCGPoint:backgroundView.layer.position];
-    frameAnimation.toValue = [NSValue valueWithCGPoint:_animationPoint];
+    
+    if (_animationCentered)
+    {
+        frameAnimation.toValue = [NSValue valueWithCGPoint:backgroundView.layer.position];
+    }
+    else
+    {
+        frameAnimation.toValue = [NSValue valueWithCGPoint:_animationPoint];
+    }
+    
     frameAnimation.removedOnCompletion = YES;
+    
+    if (!_animationCentered)
+    {
+        backgroundView.layer.position = _animationPoint;
+    }
     backgroundView.layer.position = _animationPoint;
     
     CAAnimationGroup *animationGroup = [CAAnimationGroup animation];
@@ -385,7 +408,7 @@
 
 - (void)deviceOrientationDidChange:(NSNotification *)notification {
     UIDeviceOrientation deviceOrientation = [notification.object orientation];
-
+    
     if (_shouldAutorotate && UIDeviceOrientationIsValidInterfaceOrientation(deviceOrientation)) {
         if (UIDeviceOrientationIsPortrait(deviceOrientation)) {
             if (deviceOrientation == UIDeviceOrientationPortraitUpsideDown) {
@@ -534,7 +557,7 @@
         }
         
         backgroundRect.origin.x = (self.bounds.size.width / 2.0) - (backgroundRect.size.width / 2.0);
-        backgroundRect.origin.y = (self.bounds.size.height / 2.0) - (_minimumSize.height / 2.0);        
+        backgroundRect.origin.y = (self.bounds.size.height / 2.0) - (_minimumSize.height / 2.0);
         
         //There is no status label text, center the progress view
         progressRect.origin.x = (backgroundRect.size.width / 2.0) - (progressRect.size.width / 2.0);
@@ -554,19 +577,19 @@
     if (onScreen) {
         //Set the frame of the background and its subviews
         [UIView animateWithDuration:_animationDuration animations:^{
-            backgroundView.frame = CGRectIntegral(backgroundRect);
-            _progressView.frame = CGRectIntegral(progressRect);
-            backgroundView.transform = CGAffineTransformMakeRotation([self angleForDeviceOrientation]);
+            self->backgroundView.frame = CGRectIntegral(backgroundRect);
+            self.progressView.frame = CGRectIntegral(progressRect);
+            self->backgroundView.transform = CGAffineTransformMakeRotation([self angleForDeviceOrientation]);
             //Fade the label
-            statusLabel.alpha = 0.0;
+            self->statusLabel.alpha = 0.0;
         } completion:^(BOOL finished) {
             if (finished) {
                 //Set the label frame
-                statusLabel.frame = CGRectIntegral(statusRect);
-                statusLabel.text = optimalStatusString;
-                [UIView animateWithDuration:_animationDuration animations:^{
+                self->statusLabel.frame = CGRectIntegral(statusRect);
+                self->statusLabel.text = self->optimalStatusString;
+                [UIView animateWithDuration:self.animationDuration animations:^{
                     //Show the label
-                    statusLabel.alpha = 1.0;
+                    self->statusLabel.alpha = 1.0;
                 }];
             }
         }];
@@ -608,17 +631,17 @@
         for (NSString *rect in sizesArray) {
             CGRect theRect = CGRectFromString(rect);
             //Sum the widths to calculate the mean width
-            standardDeviation += exp2f(theRect.size.width - meanWidth);
+            standardDeviation += exp2f((float)theRect.size.width - meanWidth);
         }
         standardDeviation = sqrtf(standardDeviation / wordsArray.count);
         //Correct the mean width if it is below the minimum size
-        if (meanWidth < _minimumSize.width) {
-            meanWidth = _minimumSize.width;
+        if (meanWidth < self.minimumSize.width) {
+            meanWidth = (float)self.minimumSize.width;
         }
         
         //Now calculate where to put line breaks. Lines can exceed the minimum width, but cannot exceed the minimum width plus the standard deviation. Single words can excced these limits.
         NSMutableString *correctedString = [[NSMutableString alloc] initWithString:wordsArray[0]];
-        float lineSize = CGRectFromString(sizesArray[0]).size.width;
+        float lineSize = (float)CGRectFromString(sizesArray[0]).size.width;
         for (int i = 1; i < wordsArray.count; i++) {
             NSString *word = wordsArray[i];
             CGRect wordRect = CGRectFromString(sizesArray[i]);
@@ -674,6 +697,11 @@
         //Create the gradient as an image, and then set it as the color of the mask view.
         UIGraphicsBeginImageContextWithOptions(self.bounds.size, NO, [UIScreen mainScreen].scale);
         CGContextRef context = UIGraphicsGetCurrentContext();
+        
+        if (!context) {
+            return;
+        }
+        
         //Create the gradient
         size_t locationsCount = 2;
         CGFloat locations[2] = {0.0f, 1.0f};
@@ -683,7 +711,7 @@
         CGColorSpaceRelease(colorSpace);
         //Draw the gradient
         CGPoint center = CGPointMake(self.bounds.size.width / 2.0, self.bounds.size.height / 2.0);
-        float radius = MIN(self.bounds.size.width , self.bounds.size.height) ;
+        float radius = (float)MIN(self.bounds.size.width , self.bounds.size.height) ;
         CGContextDrawRadialGradient (context, gradient, center, 0, center, radius, kCGGradientDrawsAfterEndLocation);
         CGGradientRelease(gradient);
         //Get the gradient image
@@ -691,6 +719,7 @@
         UIGraphicsEndImageContext();
         //Set the background
         maskView.backgroundColor = [UIColor colorWithPatternImage:image];
+        
     } else if (_maskType == M13ProgressHUDMaskTypeIOS7Blur) {
         // do nothing; we don't want to take a snapshot of the background for blurring now, no idea what the background is
     }
@@ -698,45 +727,45 @@
 
 - (void)redrawBlurs
 {
-        if (_maskType == M13ProgressHUDMaskTypeIOS7Blur) {
-            //Get the snapshot of the mask
-            __block UIImage *image = [self snapshotForBlurredBackgroundInView:maskView];
-            if (image != nil) {
-                //Apply the filters to blur the image
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                    image = [image applyLightEffect];
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        // Fade on content's change, if there was already an image.
-                        CATransition *transition = [CATransition new];
-                        transition.duration = 0.3;
-                        transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-                        transition.type = kCATransitionFade;
-                        [maskView.layer addAnimation:transition forKey:nil];
-                        maskView.backgroundColor = [UIColor colorWithPatternImage:image];
-                    });
+    if (_maskType == M13ProgressHUDMaskTypeIOS7Blur) {
+        //Get the snapshot of the mask
+        __block UIImage *image = [self snapshotForBlurredBackgroundInView:maskView];
+        if (image != nil) {
+            //Apply the filters to blur the image
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                image = [image applyLightEffect];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    // Fade on content's change, if there was already an image.
+                    CATransition *transition = [CATransition new];
+                    transition.duration = 0.3;
+                    transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+                    transition.type = kCATransitionFade;
+                    [self->maskView.layer addAnimation:transition forKey:nil];
+                    self->maskView.backgroundColor = [UIColor colorWithPatternImage:image];
                 });
-            }
+            });
         }
-        if (_applyBlurToBackground) {
-            //Get the snapshot of the mask
-            __block UIImage *image = [self snapshotForBlurredBackgroundInView:backgroundView];
-            if (image != nil) {
-                //Apply the filters to blur the image
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                    //image = [image applyLightEffect];
-                    image = [image applyLightEffect];
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        // Fade on content's change, if there was already an image.
-                        CATransition *transition = [CATransition new];
-                        transition.duration = 0.3;
-                        transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-                        transition.type = kCATransitionFade;
-                        [backgroundView.layer addAnimation:transition forKey:nil];
-                        backgroundView.backgroundColor = [UIColor colorWithPatternImage:image];
-                    });
+    }
+    if (_applyBlurToBackground) {
+        //Get the snapshot of the mask
+        __block UIImage *image = [self snapshotForBlurredBackgroundInView:backgroundView];
+        if (image != nil) {
+            //Apply the filters to blur the image
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                //image = [image applyLightEffect];
+                image = [image applyLightEffect];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    // Fade on content's change, if there was already an image.
+                    CATransition *transition = [CATransition new];
+                    transition.duration = 0.3;
+                    transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+                    transition.type = kCATransitionFade;
+                    [self->backgroundView.layer addAnimation:transition forKey:nil];
+                    self->backgroundView.backgroundColor = [UIColor colorWithPatternImage:image];
                 });
-            }
+            });
         }
+    }
 }
 
 - (UIImage *)snapshotForBlurredBackgroundInView:(UIView *)view
@@ -754,6 +783,9 @@
     //Draw the snapshot view into a UIImage
     UIGraphicsBeginImageContextWithOptions(snapshotView.bounds.size, YES, [UIScreen mainScreen].scale);
     CGContextRef context = UIGraphicsGetCurrentContext();
+    if (!context) {
+        return nil;
+    }
     CGContextTranslateCTM(context, viewRect.origin.x, viewRect.origin.y);
     BOOL result = [self.superview drawViewHierarchyInRect:viewRect afterScreenUpdates:YES];
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
@@ -789,7 +821,7 @@
 {
     for (id view in self.subviews) {
         //If the subview is a progress HUD return it.
-        if ([[view class] isSubclassOfClass:[M13ProgressView class]]) {
+        if ([[view class] isSubclassOfClass:[M13ProgressHUD class]]) {
             return view;
         }
     }

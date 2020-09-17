@@ -11,6 +11,7 @@ import DZNEmptyDataSet
 import XLPagerTabStrip
 import SafariServices
 import CoreData
+import SwiftDate
 
 class eventViewController: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate, IndicatorInfoProvider {
     
@@ -51,8 +52,13 @@ class eventViewController: UIViewController, DZNEmptyDataSetSource, DZNEmptyData
         
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         let fetchRequest: NSFetchRequest<Events> = Events.fetchRequest()
+        SwiftDate.defaultRegion = Region.init(zone: TimeZone(identifier: "America/New_York")!)
         let dateAtStartOfDay = thisSelectedDate.dateAtStartOf(.day)
+        print(dateAtStartOfDay)
+        print(dateAtStartOfDay.timeIntervalSince1970)
+        print("Documents Directory: ", FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last ?? "Not Found!")
         let dateAtEndOfDay = thisSelectedDate.dateAtEndOf(.day)
+        print(dateAtEndOfDay)
         
         // Starts before the end of day, ends after the starts of day today.
         let predicate = NSPredicate(format: "(startDate < %@) AND (endDate > %@)", dateAtEndOfDay as CVarArg, dateAtStartOfDay as CVarArg)
@@ -65,13 +71,13 @@ class eventViewController: UIViewController, DZNEmptyDataSetSource, DZNEmptyData
     }
     
     func reloadData() {
-        if Preferences().schoolName == "MFS" {
-            let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-            let event = Events(entity: NSEntityDescription.entity(forEntityName: "Events", in: context)!, insertInto: nil)
-            event.setValue("1st Period Announcement", forKey: "title")
-            
-            self.listEvents.insert(event, at: 0)
-        }
+//        if Preferences().schoolName == "MFS" {
+//            let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+//            let event = Events(entity: NSEntityDescription.entity(forEntityName: "Events", in: context)!, insertInto: nil)
+//            event.setValue("1st Period Announcement", forKey: "title")
+//
+//            self.listEvents.insert(event, at: 0)
+//        }
         
         DispatchQueue.main.async {
             if self.isViewLoaded && self.view != nil {
@@ -103,11 +109,11 @@ extension eventViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "eventTable", for: indexPath as IndexPath) as! customEventCell
         let row = indexPath.row
         
-        if row == 0 && Preferences().schoolName == "MFS" {
-            cell.selectionStyle = .default
-        } else {
-            cell.selectionStyle = .none
-        }
+//        if row == 0 && Preferences().schoolName == "MFS" {
+//            cell.selectionStyle = .default
+//        } else {
+//            cell.selectionStyle = .none
+//        }
         
         guard self.listEvents.indices.contains(row) else { return cell }
         let rowDict = self.listEvents[row]
@@ -131,12 +137,12 @@ extension eventViewController: UITableViewDelegate, UITableViewDataSource {
         return cell
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.row == 0 && Preferences().schoolName == "MFS" {
-            let url = URL.init(string: "https://sites.google.com/mfriends.org/us-students/home")!
-            let safariViewController = SFSafariViewController(url: url)
-            present(safariViewController, animated: true, completion: nil)
-        }
-    }
+//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//        if indexPath.row == 0 && Preferences().schoolName == "MFS" {
+//            let url = URL.init(string: "https://sites.google.com/mfriends.org/us-students/home")!
+//            let safariViewController = SFSafariViewController(url: url)
+//            present(safariViewController, animated: true, completion: nil)
+//        }
+//    }
 }
 

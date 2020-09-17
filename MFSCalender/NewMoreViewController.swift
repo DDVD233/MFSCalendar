@@ -12,7 +12,7 @@ import SVProgressHUD
 import Alamofire
 import SafariServices
 import M13ProgressSuite
-import ChatSDK
+//import ChatSDK
 import SCLAlertView
 
 class NewMoreViewController: UICollectionViewController  {
@@ -33,7 +33,7 @@ class NewMoreViewController: UICollectionViewController  {
 //            hidesBottomBarWhenPushed = false
 //        }
         if Preferences().schoolName == "MFS" {
-            contentList = [myCourses, lunchMenu, serviceHourS, logout, about, settings, stepChallenge]
+            contentList = [myCourses, lunchMenu, serviceHourS, logout, about, settings]
         } else {
             contentList = [myCourses, lunchMenu, logout, about, settings]
         }
@@ -227,7 +227,7 @@ extension NewMoreViewController {
             SVProgressHUD.show()
         }
         
-        Alamofire.request(url).response(queue: DispatchQueue.global(), completionHandler: { (result) in
+        AF.request(url).response(queue: DispatchQueue.global(), completionHandler: { (result) in
             guard result.error == nil else {
                 presentErrorMessage(presentMessage: result.error!.localizedDescription, layout: .cardView)
                 semaphore.signal()
@@ -368,23 +368,23 @@ extension NewMoreViewController {
     }
     
     func logout(sender: UIView) {
-        let logOutActionSheet = UIAlertController(title: nil, message: NSLocalizedString("Do you want to log out Class Chat or the app?", comment: ""), preferredStyle: .actionSheet)
+        let logOutActionSheet = UIAlertController(title: nil, message: NSLocalizedString("Do you want to log out?", comment: ""), preferredStyle: .actionSheet)
         
         let cancelAction = UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel) { (action) in
             NSLog("Canceled")
         }
         
-        let logoutClassChatAction = UIAlertAction(title: NSLocalizedString("Log out Class Chat", comment: ""), style: .default) { (alertAction) -> Void in
-            _ = BIntegrationHelper.logout()?.thenOnMain({ (result) in
-                let loginNotice = SCLAlertView()
-                loginNotice.showInfo(NSLocalizedString("Success", comment: ""), subTitle: NSLocalizedString("You've successfully logged out of Class Chat.", comment: ""), animationStyle: .bottomToTop)
-                return result
-            }, { error in
-                presentErrorMessage(presentMessage: error?.localizedDescription ?? "Unknown Error", layout: .cardView)
-                return error
-            })
-            NSLog("Class Chat Logged Out")
-        }
+//        let logoutClassChatAction = UIAlertAction(title: NSLocalizedString("Log out Class Chat", comment: ""), style: .default) { (alertAction) -> Void in
+//            _ = BIntegrationHelper.logout()?.thenOnMain({ (result) in
+//                let loginNotice = SCLAlertView()
+//                loginNotice.showInfo(NSLocalizedString("Success", comment: ""), subTitle: NSLocalizedString("You've successfully logged out of Class Chat.", comment: ""), animationStyle: .bottomToTop)
+//                return result
+//            }, { error in
+//                presentErrorMessage(presentMessage: error?.localizedDescription ?? "Unknown Error", layout: .cardView)
+//                return error
+//            })
+//            NSLog("Class Chat Logged Out")
+//        }
         
         let logOutAction = UIAlertAction(title: NSLocalizedString("Log Out the App", comment: ""), style: .default) { (alertAction) -> Void in
             NSLog("Logged Out")
@@ -405,7 +405,7 @@ extension NewMoreViewController {
 //            })
         }
         
-        logOutActionSheet.addAction(logoutClassChatAction)
+//        logOutActionSheet.addAction(logoutClassChatAction)
         logOutActionSheet.addAction(logOutAction)
         logOutActionSheet.addAction(cancelAction)
         

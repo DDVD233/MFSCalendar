@@ -1,6 +1,0 @@
-framework module VENTokenField {
-  umbrella header "VENTokenField-umbrella.h"
-
-  export *
-  module * { export * }
-}

@@ -12,7 +12,7 @@ import SwiftyJSON
 import M13Checkbox
 import SwiftDate
 import DZNEmptyDataSet
-import DGElasticPullToRefresh
+import CRRefresh
 import XLPagerTabStrip
 import Alamofire
 #if !targetEnvironment(macCatalyst)
@@ -49,14 +49,12 @@ class homeworkViewController: UITableViewController, UIViewControllerPreviewingD
 //
         
         if filter == 2 {
-            let loadingview = DGElasticPullToRefreshLoadingViewCircle()
-            loadingview.tintColor = UIColor.white
-            homeworkTable.dg_addPullToRefreshWithActionHandler({ [weak self] () -> Void in
+            let animator = RamotionAnimator(ballColor: UIColor.white, waveColor: UIColor.salmon)
+            
+            homeworkTable.cr.addHeadRefresh(animator: animator) { [weak self] in
                 self?.getHomework()
-                self?.tableView.dg_stopLoading()
-                }, loadingView: loadingview)
-            homeworkTable.dg_setPullToRefreshFillColor(UIColor(hexString: 0xFF7E79))
-            homeworkTable.dg_setPullToRefreshBackgroundColor(tableView.backgroundColor!)
+                self?.homeworkTable.cr.endHeaderRefresh()
+            }
         }
         
         if #available(iOS 11.0, *) {
@@ -163,20 +161,21 @@ class homeworkViewController: UITableViewController, UIViewControllerPreviewingD
     }
     
     func requestReviewIfNeeded() {
-        let presentationDate = DateInRegion(components: {
-            $0.year = 2018
-            $0.month = 12
-            $0.day = 1
-            $0.hour = 12
-            $0.minute = 0
-        })
-        
-        if (Preferences().reviewDate == nil) && DateInRegion().isBeforeDate(presentationDate!, granularity: .day) {
-            if #available(iOS 10.3, *) {
-                SKStoreReviewController.requestReview()
-                Preferences().reviewDate = Date()
-            }
-        }
+//        let presentationDate = DateInRegion(components: {
+//            $0.year = 2018
+//            $0.month = 12
+//            $0.day = 1
+//            $0.hour = 12
+//            $0.minute = 0
+//        })
+//
+//        if (Preferences().reviewDate == nil) && DateInRegion().isBeforeDate(presentationDate!, granularity: .day) {
+//            if #available(iOS 10.3, *) {
+//                SKStoreReviewController.requestReview()
+//                Preferences().reviewDate = Date()
+//            }
+//        }
+        return
     }
 
     func manageDate(originalData: [[String: Any]]) {

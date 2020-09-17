@@ -4,6 +4,7 @@
 //
 
 #import "UINavigationController+M13ProgressViewBar.h"
+#import "UIApplication+M13ProgressSuite.h"
 #import <objc/runtime.h>
 
 //Keys to set properties since one cannot define properties in a category.
@@ -19,6 +20,8 @@ static char indeterminateLayerKey;
 static char isShowingProgressKey;
 static char primaryColorKey;
 static char secondaryColorKey;
+static char backgroundColorKey;
+static char backgroundViewKey;
 
 @implementation UINavigationController (M13ProgressViewBar)
 
@@ -49,7 +52,7 @@ static char secondaryColorKey;
     if (animated == NO) {
         if (displayLink) {
             //Kill running animations
-            [displayLink removeFromRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
+            [displayLink invalidate];
             [self setDisplayLink:nil];
         }
         [self setProgress:progress];
@@ -59,7 +62,7 @@ static char secondaryColorKey;
         [self setAnimationToValue:progress];
         if (!displayLink) {
             //Create and setup the display link
-            [displayLink removeFromRunLoop:NSRunLoop.mainRunLoop forMode:NSRunLoopCommonModes];
+            [displayLink invalidate];
             displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(animateProgress:)];
             [self setDisplayLink:displayLink];
             [displayLink addToRunLoop:NSRunLoop.mainRunLoop forMode:NSRunLoopCommonModes];
@@ -75,7 +78,7 @@ static char secondaryColorKey;
         CGFloat dt = (displayLink.timestamp - [self getAnimationStartTime]) / [self getAnimationDuration];
         if (dt >= 1.0) {
             //Order is important! Otherwise concurrency will cause errors, because setProgress: will detect an animation in progress and try to stop it by itself. Once over one, set to actual progress amount. Animation is over.
-            [displayLink removeFromRunLoop:NSRunLoop.mainRunLoop forMode:NSRunLoopCommonModes];
+            [displayLink invalidate];
             [self setDisplayLink:nil];
             [self setProgress:[self getAnimationToValue]];
             return;
@@ -90,8 +93,8 @@ static char secondaryColorKey;
 - (void)finishProgress
 {
     UIView *progressView = [self getProgressView];
-
-    if (progressView) {
+    UIView *backgroundView = [self getBackgroundView];
+    if (progressView && backgroundView) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [UIView animateWithDuration:0.1 animations:^{
                 CGRect progressFrame = progressView.frame;
@@ -100,8 +103,11 @@ static char secondaryColorKey;
             } completion:^(BOOL finished) {
                 [UIView animateWithDuration:0.5 animations:^{
                     progressView.alpha = 0;
+                    backgroundView.alpha = 0;
                 } completion:^(BOOL finished) {
                     [progressView removeFromSuperview];
+                    [backgroundView removeFromSuperview];
+                    backgroundView.alpha = 1;
                     progressView.alpha = 1;
                     [self setTitle:nil];
                     [self setIsShowingProgressBar:NO];
@@ -114,14 +120,18 @@ static char secondaryColorKey;
 - (void)cancelProgress
 {
     UIView *progressView = [self getProgressView];
-    
-    if (progressView) {
+    UIView *backgroundView = [self getBackgroundView];
+
+    if (progressView && backgroundView) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [UIView animateWithDuration:0.5 animations:^{
                 progressView.alpha = 0;
+                backgroundView.alpha = 0;
             } completion:^(BOOL finished) {
                 [progressView removeFromSuperview];
+                [backgroundView removeFromSuperview];
                 progressView.alpha = 1;
+                backgroundView.alpha = 1;
                 [self setTitle:nil];
                 [self setIsShowingProgressBar:NO];
             }];
@@ -129,14 +139,35 @@ static char secondaryColorKey;
     }
 }
 
+#pragma mark Orientation
+
+- (UIInterfaceOrientation)currentDeviceOrientation
+{
+    UIInterfaceOrientation orientation;
+
+    if ([UIApplication isM13AppExtension]) {
+        if ([UIScreen mainScreen].bounds.size.width < [UIScreen mainScreen].bounds.size.height) {
+            orientation = UIInterfaceOrientationPortrait;
+        } else {
+            orientation = UIInterfaceOrientationLandscapeLeft;
+        }
+    } else {
+        orientation = [UIApplication safeM13SharedApplication].statusBarOrientation;
+    }
+  
+    return orientation;
+}
+
 #pragma mark Drawing
 
 - (void)showProgress
 {
     UIView *progressView = [self getProgressView];
+    UIView *backgroundView = [self getBackgroundView];
     
     [UIView animateWithDuration:.1 animations:^{
         progressView.alpha = 1;
+        backgroundView.alpha = 1;
     }];
     
     [self setIsShowingProgressBar:YES];
@@ -144,7 +175,7 @@ static char secondaryColorKey;
 
 - (void)updateProgress
 {
-    [self updateProgressWithInterfaceOrientation:[UIApplication sharedApplication].statusBarOrientation];
+    [self updateProgressWithInterfaceOrientation:[self currentDeviceOrientation]];
 }
 
 - (void)updateProgressWithInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -154,16 +185,39 @@ static char secondaryColorKey;
     if(!progressView)
 	{
 		progressView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 2.5)];
-		progressView.backgroundColor = self.navigationBar.tintColor;
-        if ([self getPrimaryColor]) {
-            progressView.backgroundColor = [self getPrimaryColor];
-        }
         progressView.clipsToBounds = YES;
         [self setProgressView:progressView];
 	}
     
+    if ([self getPrimaryColor]) {
+        progressView.backgroundColor = [self getPrimaryColor];
+    } else {
+        progressView.backgroundColor = self.navigationBar.tintColor;
+    }
+    
+    //Create background view if it doesn't exist
+    UIView *backgroundView = [self getBackgroundView];
+    if (!backgroundView)
+    {
+        backgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 2.5)];
+        backgroundView.clipsToBounds = YES;
+        [self setBackgroundView:backgroundView];
+    }
+    
+    if ([self getBackgroundColor]) {
+        backgroundView.backgroundColor = [self getBackgroundColor];
+    } else {
+        backgroundView.backgroundColor = [UIColor clearColor];
+    }
+    
     //Calculate the frame of the navigation bar, based off the orientation.
-    CGSize screenSize = [UIScreen mainScreen].bounds.size;
+    UIView *topView = self.topViewController.view;
+    CGSize screenSize;
+    if (topView) {
+        screenSize = topView.bounds.size;
+    } else {
+        screenSize = [UIScreen mainScreen].bounds.size;
+    }
     CGFloat width = 0.0;
     CGFloat height = 0.0;
     //Calculate the width of the screen
@@ -183,20 +237,21 @@ static char secondaryColorKey;
     
     //Check if the progress view is in its superview and if we are showing the bar.
     if (progressView.superview == nil && [self isShowingProgressBar]) {
+        [self.navigationBar addSubview:backgroundView];
         [self.navigationBar addSubview:progressView];
     }
     
     //Layout
     if (![self getIndeterminate]) {
         //Calculate the width of the progress view;
-        float progressWidth = width * [self getProgress];
+        float progressWidth = (float)width * (float)[self getProgress];
         //Set the frame of the progress view
         progressView.frame = CGRectMake(0, height - 2.5, progressWidth, 2.5);
     } else {
         //Calculate the width of the progress view
         progressView.frame = CGRectMake(0, height - 2.5, width, 2.5);
     }
-    
+    backgroundView.frame = CGRectMake(0, height - 2.5, width, 2.5);
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
@@ -207,7 +262,7 @@ static char secondaryColorKey;
 
 - (void)drawIndeterminate
 {
-    [self drawIndeterminateWithInterfaceOrientation:[UIApplication sharedApplication].statusBarOrientation];
+    [self drawIndeterminateWithInterfaceOrientation:[self currentDeviceOrientation]];
 }
 
 - (void)drawIndeterminateWithInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -224,20 +279,13 @@ static char secondaryColorKey;
         //Calculate the frame of the navigation bar, based off the orientation.
         CGSize screenSize = [UIScreen mainScreen].bounds.size;
         CGFloat width = 0.0;
-        CGFloat height = 0.0;
         //Calculate the width of the screen
         if (UIInterfaceOrientationIsLandscape(interfaceOrientation)) {
             //Use the maximum value
             width = MAX(screenSize.width, screenSize.height);
-            if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) {
-                height = 32.0; //Hate hardcoding values, but autolayout doesn't work, and cant retreive the new height until after the animation completes.
-            } else {
-                height = 44.0; //Hate hardcoding values, but autolayout doesn't work, and cant retreive the new height until after the animation completes.
-            }
         } else {
             //Use the minimum value
             width = MIN(screenSize.width, screenSize.height);
-            height = 44.0; //Hate hardcoding values, but autolayout doesn't work, and cant retreive the new height until after the animation completes.
         }
         
         //Create the pattern image
@@ -342,7 +390,7 @@ static char secondaryColorKey;
 
 - (void)setAnimationFromValue:(CGFloat)animationFromValue
 {
-    objc_setAssociatedObject(self, &animationFromKey, [NSNumber numberWithFloat:animationFromValue], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(self, &animationFromKey, [NSNumber numberWithFloat:(float)animationFromValue], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 - (CGFloat)getAnimationFromValue
@@ -353,7 +401,7 @@ static char secondaryColorKey;
 
 - (void)setAnimationToValue:(CGFloat)animationToValue
 {
-    objc_setAssociatedObject(self, &animationToKey, [NSNumber numberWithFloat:animationToValue], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(self, &animationToKey, [NSNumber numberWithFloat:(float)animationToValue], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 - (CGFloat)getAnimationToValue
@@ -364,7 +412,7 @@ static char secondaryColorKey;
 
 - (void)setAnimationStartTime:(NSTimeInterval)animationStartTime
 {
-    objc_setAssociatedObject(self, &animationStartTimeKey, [NSNumber numberWithFloat:animationStartTime], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(self, &animationStartTimeKey, [NSNumber numberWithFloat:(float)animationStartTime], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 - (NSTimeInterval)getAnimationStartTime
@@ -380,7 +428,7 @@ static char secondaryColorKey;
     } else if (progress < 0.0) {
         progress = 0.0;
     }
-    objc_setAssociatedObject(self, &progressKey, [NSNumber numberWithFloat:progress], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(self, &progressKey, [NSNumber numberWithFloat:(float)progress], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     //Draw the update
     if ([NSThread isMainThread]) {
         [self updateProgress];
@@ -418,6 +466,17 @@ static char secondaryColorKey;
     return objc_getAssociatedObject(self, &progressViewKey);
 }
 
+- (void)setBackgroundView:(UIView *)view
+{
+    objc_setAssociatedObject(self, &backgroundViewKey, view, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (UIView *)getBackgroundView
+{
+    return objc_getAssociatedObject(self, &backgroundViewKey);
+}
+
+
 - (void)setIndeterminate:(BOOL)indeterminate
 {
     objc_setAssociatedObject(self, &indeterminateKey, [NSNumber numberWithBool:indeterminate], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
@@ -443,7 +502,7 @@ static char secondaryColorKey;
 
 - (BOOL)isShowingProgressBar
 {
-    return objc_getAssociatedObject(self, &isShowingProgressKey);
+    return [objc_getAssociatedObject(self, &isShowingProgressKey) boolValue];
 }
 
 - (void)setPrimaryColor:(UIColor *)primaryColor
@@ -467,6 +526,17 @@ static char secondaryColorKey;
 - (UIColor *)getSecondaryColor
 {
     return objc_getAssociatedObject(self, &secondaryColorKey);
+}
+
+- (void)setBackgroundColor:(UIColor *)backgroundColor
+{
+    objc_setAssociatedObject(self, &backgroundColorKey, backgroundColor, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    [self setIndeterminate:[self getIndeterminate]];
+}
+
+- (UIColor *)getBackgroundColor
+{
+    return objc_getAssociatedObject(self, &backgroundColorKey);
 }
 
 @end

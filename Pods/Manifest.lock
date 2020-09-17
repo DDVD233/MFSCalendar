@@ -1,118 +1,66 @@
 PODS:
-  - AFNetworking (3.2.1):
-    - AFNetworking/NSURLSession (= 3.2.1)
-    - AFNetworking/Reachability (= 3.2.1)
-    - AFNetworking/Security (= 3.2.1)
-    - AFNetworking/Serialization (= 3.2.1)
-    - AFNetworking/UIKit (= 3.2.1)
-  - AFNetworking/NSURLSession (3.2.1):
+  - AFNetworking (4.0.1):
+    - AFNetworking/NSURLSession (= 4.0.1)
+    - AFNetworking/Reachability (= 4.0.1)
+    - AFNetworking/Security (= 4.0.1)
+    - AFNetworking/Serialization (= 4.0.1)
+    - AFNetworking/UIKit (= 4.0.1)
+  - AFNetworking/NSURLSession (4.0.1):
     - AFNetworking/Reachability
     - AFNetworking/Security
     - AFNetworking/Serialization
-  - AFNetworking/Reachability (3.2.1)
-  - AFNetworking/Security (3.2.1)
-  - AFNetworking/Serialization (3.2.1)
-  - AFNetworking/UIKit (3.2.1):
+  - AFNetworking/Reachability (4.0.1)
+  - AFNetworking/Security (4.0.1)
+  - AFNetworking/Serialization (4.0.1)
+  - AFNetworking/UIKit (4.0.1):
     - AFNetworking/NSURLSession
-  - Alamofire (4.9.0)
-  - Charts (3.3.0):
-    - Charts/Core (= 3.3.0)
-  - Charts/Core (3.3.0)
-  - ChatSDK (4.11.9):
-    - ChatSDK/Complete (= 4.11.9)
-  - ChatSDK/Complete (4.11.9):
-    - ChatSDK/Reachability
-    - ChatSDK/UI
-  - ChatSDK/Core (4.11.9):
-    - AFNetworking (~> 3.2.1)
-    - DateTools (~> 2.0)
-    - RXPromise (~> 1.0)
-    - SAMKeychain
-  - ChatSDK/CoreData (4.11.9):
-    - ChatSDK/Core
-  - ChatSDK/Reachability (4.11.9):
-    - ChatSDK/Core
-    - Reachability
-  - ChatSDK/UI (4.11.9):
-    - ChatSDK/CoreData
-    - ChatSDKKeepLayout
-    - CountryPicker (~> 1.0)
-    - Hakawai (~> 5.1.5)
-    - MBProgressHUD (~> 1.0)
-    - SDWebImage (~> 4.0)
-    - StaticDataTableViewController (~> 2.0)
-    - Toast (~> 4.0.0)
-    - TOCropViewController (~> 2.0)
-    - VENTokenField (~> 2.0)
-  - ChatSDKKeepLayout (1.7.7):
-    - ChatSDKKeepLayout/Swift (= 1.7.7)
-  - ChatSDKKeepLayout/ObjC (1.7.7)
-  - ChatSDKKeepLayout/Swift (1.7.7):
-    - ChatSDKKeepLayout/ObjC
-  - CountryPicker (1.3)
-  - DateTools (2.0.0)
-  - DGElasticPullToRefresh (1.1)
-  - Down (0.8.6)
+  - Alamofire (5.2.2)
+  - Charts (3.5.0):
+    - Charts/Core (= 3.5.0)
+  - Charts/Core (3.5.0)
+  - CRRefresh (1.1.3)
+  - Down (0.9.3)
   - DZNEmptyDataSet (1.8.1)
-  - FrameAccessor (1.3.2)
-  - FSCalendar (2.8.0)
-  - Hakawai (5.1.6):
-    - Hakawai/Core (= 5.1.6)
-    - Hakawai/Mentions (= 5.1.6)
-  - Hakawai/Core (5.1.6)
-  - Hakawai/Mentions (5.1.6):
-    - Hakawai/Core
-  - Kanna (5.0.0)
-  - LTMorphingLabel (0.7.0)
+  - FSCalendar (2.8.1)
+  - Kanna (5.2.2)
+  - LTMorphingLabel (0.8.1)
   - M13Checkbox (3.4.0)
-  - M13ProgressSuite (1.2.5)
-  - MBProgressHUD (1.1.0)
-  - Moya (13.0.1):
-    - Moya/Core (= 13.0.1)
-  - Moya/Core (13.0.1):
-    - Alamofire (~> 4.1)
-    - Result (~> 4.1)
-  - NVActivityIndicatorView (4.8.0):
-    - NVActivityIndicatorView/Presenter (= 4.8.0)
-  - NVActivityIndicatorView/Presenter (4.8.0)
-  - Reachability (3.2)
-  - Result (4.1.0)
-  - RXPromise (1.0.5)
-  - SAMKeychain (1.5.3)
+  - M13ProgressSuite (1.2.9)
+  - Moya (14.0.0):
+    - Moya/Core (= 14.0.0)
+  - Moya/Core (14.0.0):
+    - Alamofire (~> 5.0)
+  - NVActivityIndicatorView (5.0.1):
+    - NVActivityIndicatorView/Base (= 5.0.1)
+  - NVActivityIndicatorView/Base (5.0.1)
   - SCLAlertView (0.8)
-  - SDWebImage (4.4.7):
-    - SDWebImage/Core (= 4.4.7)
-  - SDWebImage/Core (4.4.7)
-  - SkyFloatingLabelTextField (3.7.0)
+  - SDWebImage (5.9.1):
+    - SDWebImage/Core (= 5.9.1)
+  - SDWebImage/Core (5.9.1)
+  - SkyFloatingLabelTextField (3.8.0)
   - SnapKit (5.0.1)
-  - StaticDataTableViewController (2.5.0)
   - SVProgressHUD (2.2.5)
-  - SwiftDate (6.1.0)
-  - SwiftMessages (7.0.1):
-    - SwiftMessages/App (= 7.0.1)
-  - SwiftMessages/App (7.0.1)
+  - SwiftDate (6.2.0)
+  - SwiftMessages (8.0.2):
+    - SwiftMessages/App (= 8.0.2)
+  - SwiftMessages/App (8.0.2)
   - SwiftyJSON (5.0.0)
   - SwipeCellKit (2.7.1)
-  - Toast (4.0.0)
-  - TOCropViewController (2.5.1)
-  - UICircularProgressRing (6.3.0)
-  - VENTokenField (2.5.2):
-    - FrameAccessor (~> 1.0)
+  - UICircularProgressRing (7.0.0)
   - XLPagerTabStrip (9.0.0)
 
 DEPENDENCIES:
-  - AFNetworking (from `https://github.com/blissapps/AFNetworking.git`, branch `feature/WKWebView`)
+  - AFNetworking
   - Alamofire
   - Charts
-  - ChatSDK
-  - DGElasticPullToRefresh (from `https://github.com/KennethTsang/DGElasticPullToRefresh.git`)
+  - CRRefresh
   - Down
   - DZNEmptyDataSet
   - FSCalendar
   - Kanna
   - LTMorphingLabel
   - M13Checkbox
-  - M13ProgressSuite (= 1.2.5)
+  - M13ProgressSuite
   - Moya
   - NVActivityIndicatorView
   - SCLAlertView
@@ -129,100 +77,57 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - AFNetworking
     - Alamofire
     - Charts
-    - ChatSDK
-    - ChatSDKKeepLayout
-    - CountryPicker
-    - DateTools
+    - CRRefresh
     - Down
     - DZNEmptyDataSet
-    - FrameAccessor
     - FSCalendar
-    - Hakawai
     - Kanna
     - LTMorphingLabel
     - M13Checkbox
     - M13ProgressSuite
-    - MBProgressHUD
     - Moya
     - NVActivityIndicatorView
-    - Reachability
-    - Result
-    - RXPromise
-    - SAMKeychain
     - SCLAlertView
     - SDWebImage
     - SkyFloatingLabelTextField
     - SnapKit
-    - StaticDataTableViewController
     - SVProgressHUD
     - SwiftDate
     - SwiftMessages
     - SwiftyJSON
     - SwipeCellKit
-    - Toast
-    - TOCropViewController
     - UICircularProgressRing
-    - VENTokenField
     - XLPagerTabStrip
 
-EXTERNAL SOURCES:
-  AFNetworking:
-    :branch: feature/WKWebView
-    :git: https://github.com/blissapps/AFNetworking.git
-  DGElasticPullToRefresh:
-    :git: https://github.com/KennethTsang/DGElasticPullToRefresh.git
-
-CHECKOUT OPTIONS:
-  AFNetworking:
-    :commit: 060d895dbad78a47d9faa752c89ced41eabb1c39
-    :git: https://github.com/blissapps/AFNetworking.git
-  DGElasticPullToRefresh:
-    :commit: 274c5fe8998e31ea71a4dc250c7edee51e52a978
-    :git: https://github.com/KennethTsang/DGElasticPullToRefresh.git
-
 SPEC CHECKSUMS:
-  AFNetworking: ec5fea46b5bbabe15a8f4ee07b16d299ae4a97da
-  Alamofire: afc3e7c6db61476cb45cdd23fed06bad03bbc321
-  Charts: e0dd4cd8f257bccf98407b58183ddca8e8d5b578
-  ChatSDK: 368ec4ca113ab55b0bd2263520eec48caebb77f2
-  ChatSDKKeepLayout: 37d06edcd8f4da9676fb24c2f21b36569c067be0
-  CountryPicker: 664c26411d833bb068c80beb15dc951eadde2911
-  DateTools: 933ac9c490f21f92127cf690ccd8c397e0126caf
-  DGElasticPullToRefresh: 28f11a6026302a90f8ffebbc6e24748e584dddd3
-  Down: 3c758f2388fa739663023f400e742a988fa1e21d
+  AFNetworking: 7864c38297c79aaca1500c33288e429c3451fdce
+  Alamofire: 814429acc853c6c54ff123fc3d2ef66803823ce0
+  Charts: 40a08591df1f8ad5c223ddedfb1a06da92f24f7c
+  CRRefresh: 1415d4ae06837fa7bb064c44f2e102f3ef517044
+  Down: 4553b984236807e384fa0ef7c7e360ef9f7c425d
   DZNEmptyDataSet: 9525833b9e68ac21c30253e1d3d7076cc828eaa7
-  FrameAccessor: 0f7ba6ce37be9a5d0302a27c731dca70af8d438b
-  FSCalendar: 3a5ed3636e2ba1b83ebebfcf0c2603105a6f5efe
-  Hakawai: caf8cceda91548a12552d167e79c7dd88a88a7c2
-  Kanna: a32875df62975f8f4b871e933b4ea1a5c3b8be0f
-  LTMorphingLabel: 22147fb1ec2b0306537ccc348b36ea8617179b03
+  FSCalendar: 5245140456fcbcac5824c203b98bd8068bdfee1a
+  Kanna: 2c4eddaaa4bfb9a1ed19e53c0b3d42ef02838046
+  LTMorphingLabel: c160673ab7220f4bcf6105308ad902fed8ffd3d0
   M13Checkbox: 6f59404540ac98ba83a3d1afac335895a40c6a5d
-  M13ProgressSuite: 1e8241ab42090c76558afbcbd4df23052c8edd41
-  MBProgressHUD: e7baa36a220447d8aeb12769bf0585582f3866d9
-  Moya: f4a4b80ff2f8a4ffc208dfb31cd91636622fee6e
-  NVActivityIndicatorView: d24b7ebcf80af5dcd994adb650e2b6c93379270f
-  Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
-  Result: bd966fac789cc6c1563440b348ab2598cc24d5c7
-  RXPromise: b1e6d6d747db2e0dc53f11ba2a0fbff2456d25e5
-  SAMKeychain: 483e1c9f32984d50ca961e26818a534283b4cd5c
+  M13ProgressSuite: ea9f7263e73e9215e6849dfa54e29ee0ad6a145c
+  Moya: 5b45dacb75adb009f97fde91c204c1e565d31916
+  NVActivityIndicatorView: 738e843cb8924e9e4fc3e559d0728031624bf860
   SCLAlertView: 6a77bb2edfc65e04dbe57725546cb4107a506b85
-  SDWebImage: c10d14a8883ebd89664f02a422006f66a85c0c5d
-  SkyFloatingLabelTextField: 4b46db0ab1ccde0919cded29c656e6b4805eda04
+  SDWebImage: a990c053fff71e388a10f3357edb0be17929c9c5
+  SkyFloatingLabelTextField: 5a338412114808e961fe2d14ea2c5452c8b6e4aa
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
-  StaticDataTableViewController: 0c5c4a47861446dd3cfd52530ae801ec7662ce26
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
-  SwiftDate: fa2bb3962056bb44047b4b85a30044e5eae30b03
-  SwiftMessages: b577dc7043be8b299857ab35bb663dbff6483bd0
+  SwiftDate: d117c3eb6beed72e47d3f4d1e3bc63fa1e66d7c3
+  SwiftMessages: 633304165351b8e3dcbb81a71f8efcd86f9c1669
   SwiftyJSON: 36413e04c44ee145039d332b4f4e2d3e8d6c4db7
   SwipeCellKit: 3972254a826da74609926daf59b08d6c72e619ea
-  Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
-  TOCropViewController: 00dc36c4e4a0f4a45efa91adbf22df8a4fae01d3
-  UICircularProgressRing: e700fb0505328e88ee53c4ed92bee6d1a5b8bbe3
-  VENTokenField: 5a19b838fb97f040e3d4c93f584b4adeaf3fc1ee
+  UICircularProgressRing: 738b48db0ec1fbbd8482d727979392bb8c272e8d
   XLPagerTabStrip: 61c57fd61f611ee5f01ff1495ad6fbee8bf496c5
 
-PODFILE CHECKSUM: 80293adf97f9b73cd512781f52968196ebfb4f81
+PODFILE CHECKSUM: aff3f73c57f9ff376708d66d8f5a67f51d9cacaa
 
-COCOAPODS: 1.8.3
+COCOAPODS: 1.10.0.rc.1

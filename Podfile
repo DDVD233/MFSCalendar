@@ -5,7 +5,7 @@ use_frameworks!
 
 
 target 'MFSMobile' do
-  pod 'AFNetworking', :git => 'https://github.com/blissapps/AFNetworking.git', :branch => 'feature/WKWebView'
+  pod 'AFNetworking'
   pod 'SwiftMessages'
   pod 'NVActivityIndicatorView'
   pod 'UICircularProgressRing'
@@ -17,15 +17,16 @@ target 'MFSMobile' do
   pod 'SwiftyJSON'
   pod 'M13Checkbox'
   pod 'SwiftDate'
-  pod 'DGElasticPullToRefresh', :git => 'https://github.com/KennethTsang/DGElasticPullToRefresh.git'
+  pod 'CRRefresh'
   pod 'XLPagerTabStrip'
-#   pod 'Firebase/Core'
-#   pod 'Firebase/Performance'
+  # pod 'Firebase/Performance'
+  # pod 'Firebase/Analytics'
+  # pod 'Firebase/Crashlytics'
 #   pod 'Fabric'
   pod 'Alamofire'
   pod 'SDWebImage'
   pod 'Moya'
-  pod 'M13ProgressSuite', "= 1.2.5"
+  pod 'M13ProgressSuite'
   pod 'SnapKit'
   pod 'Down'
   pod 'Kanna'
@@ -33,10 +34,6 @@ target 'MFSMobile' do
   pod 'Charts'
 #   pod 'p2.OAuth2'
   pod 'SwiftyJSON'
-  pod "ChatSDK"
-#   pod "ChatSDKFirebase/Adapter"
-#   pod "ChatSDKFirebase/FileStorage"
-#   pod "ChatSDKFirebase/Push"
   pod 'SwipeCellKit'
   # pod 'GSKStretchyHeaderView'
 end
@@ -45,7 +42,23 @@ target 'Class Schedule' do
   pod 'SwiftDate'
 end
 
+target 'Next ClassExtension' do
+  pod 'SwiftDate'
+end
+
 post_install do |installer|
   require 'fileutils'
   FileUtils.cp_r('Pods/Target Support Files/Pods-MFSMobile/Pods-MFSMobile-acknowledgements.markdown', 'MFSCalender/Acknowledgements.markdown', :remove_destination => true)
+  # installer.pods_project.targets.each do |target|
+  #   if target.name == "Pods-MFSMobile"
+  #     puts "Updating #{target.name} to exclude Crashlytics/Fabric"
+  #     target.build_configurations.each do |config|
+  #       xcconfig_path = config.base_configuration_reference.real_path
+  #       xcconfig = File.read(xcconfig_path)
+  #       xcconfig.sub!('-framework "FirebaseAnalytics"', '')
+  #       new_xcconfig = xcconfig + 'OTHER_LDFLAGS[sdk=iphone*] = -framework "FirebaseAnalytics"'
+  #       File.open(xcconfig_path, "w") { |file| file << new_xcconfig }
+  #     end
+  #   end
+  # end
 end

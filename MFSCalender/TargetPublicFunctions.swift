@@ -219,7 +219,7 @@ class ClassView {
                 
                 let downloadSemaphore = DispatchSemaphore.init(value: 0)
                 
-                let destination: DownloadRequest.DownloadFileDestination = { _, _ in
+                let destination: DownloadRequest.Destination = { _, _ in
                     let path = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
                     let photoPath = path.appending("/\(sectionId)_profile.png")
                     
@@ -232,7 +232,7 @@ class ClassView {
                 }
                 
                 
-                Alamofire.download(url, to: destination).resume()
+                AF.download(url, to: destination).resume()
                 downloadSemaphore.wait()
             }
         }

@@ -10,7 +10,7 @@ import UIKit
 import XLPagerTabStrip
 import SwiftMessages
 import SwiftyJSON
-import DGElasticPullToRefresh
+import CRRefresh
 import Alamofire
 import SnapKit
 import SafariServices
@@ -41,16 +41,14 @@ class classDetailViewController: UITableViewController, UIDocumentInteractionCon
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        let loadingView = DGElasticPullToRefreshLoadingViewCircle()
-        loadingView.tintColor = UIColor.white
-        classDetailTable.dg_addPullToRefreshWithActionHandler({ [weak self] () -> Void in
+        let animator = RamotionAnimator(ballColor: UIColor.white, waveColor: UIColor.salmon)
+        
+        classDetailTable.cr.addHeadRefresh(animator: animator) { [weak self] in
             DispatchQueue.global().async {
                 self?.refreshContent()
             }
-            self?.tableView.dg_stopLoading()
-        }, loadingView: loadingView)
-        classDetailTable.dg_setPullToRefreshFillColor(UIColor(hexString: 0xFF7E79))
-        classDetailTable.dg_setPullToRefreshBackgroundColor(tableView.backgroundColor!)
+            self?.tableView.cr.endHeaderRefresh()
+        }
 
     }
 
@@ -60,9 +58,9 @@ class classDetailViewController: UITableViewController, UIDocumentInteractionCon
         }
     }
 
-    override func viewWillDisappear(_ animated: Bool) {
-        classDetailTable.dg_removePullToRefresh()
-    }
+//    override func viewWillDisappear(_ animated: Bool) {
+//        classDetailTable.dg_removePullToRefresh()
+//    }
 
     func loadContent() {
 

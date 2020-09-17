@@ -8,7 +8,7 @@
 
 import UIKit
 import SwiftDate
-import DGElasticPullToRefresh
+import CRRefresh
 import DZNEmptyDataSet
 import CoreData
 import SwipeCellKit
@@ -32,14 +32,13 @@ class EmailListViewController: UIViewController {
         self.emailTable.emptyDataSetDelegate = self
         self.parent?.navigationItem.title = NSLocalizedString("Inbox", comment: "")
         
-        let loadingview = DGElasticPullToRefreshLoadingViewCircle()
-        loadingview.tintColor = UIColor.white
-        emailTable.dg_addPullToRefreshWithActionHandler({ [weak self] () -> Void in
+        
+        let animator = RamotionAnimator(ballColor: UIColor.white, waveColor: UIColor.salmon)
+        
+        emailTable.cr.addHeadRefresh(animator: animator) { [weak self] in
             self?.getAllEmails()
-            self?.emailTable.dg_stopLoading()
-            }, loadingView: loadingview)
-        emailTable.dg_setPullToRefreshFillColor(UIColor(hexString: 0xFF7E79))
-        emailTable.dg_setPullToRefreshBackgroundColor(emailTable.backgroundColor!)
+            self?.emailTable.cr.endHeaderRefresh()
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {

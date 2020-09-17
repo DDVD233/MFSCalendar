@@ -135,7 +135,7 @@ class NetworkOperations {
         let attachmentPath = userDocumentPath + "/" + fileName
         var returnURL: URL? = nil
         var networkError: Error? = nil
-        let destination: DownloadRequest.DownloadFileDestination = { _, _ in
+        let destination: DownloadRequest.Destination = { _, _ in
             let fileURL = URL(fileURLWithPath: attachmentPath)
             print(fileURL)
             
@@ -147,7 +147,7 @@ class NetworkOperations {
         }
         
         let queue = DispatchQueue(label: "com.cnoon.response-queue", qos: .utility, attributes: [.concurrent])
-        Alamofire.download(url, to: destination).response(queue: queue, completionHandler: { response in
+        AF.download(url, to: destination).response(queue: queue, completionHandler: { response in
             
             if response.error == nil {
                 
@@ -216,6 +216,7 @@ class NetworkOperations {
         let endDate = Date() + 8.months
         
         let formatter = DateFormatter()
+        formatter.timeZone = TimeZone(identifier: "America/New_York")!
         formatter.dateFormat = "MM/dd/yyyy"
         let startDateString = formatter.string(from: startDate)
         let endDateString = formatter.string(from: endDate)
@@ -245,6 +246,7 @@ class NetworkOperations {
                                 return startDate
                             }
                         }
+                        print(event)
                         guard let title = event["Title"] as? String else {
                             continue
                         }

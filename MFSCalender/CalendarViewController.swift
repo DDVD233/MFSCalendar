@@ -10,6 +10,7 @@ import UIKit
 import FSCalendar
 import SnapKit
 import XLPagerTabStrip
+import SwiftDate
 
 class customCalendarCell: UITableViewCell {
 
@@ -156,11 +157,15 @@ class CalendarViewController: SegmentedPagerTabStripViewController, UIGestureRec
     }
     
     func dataFetching() {
+        
         guard let checkDate = self.calendarView.selectedDates.first else {
             return
         }
         
-        classViewController.date = checkDate
+        let region = Region(zone: TimeZone(identifier: "America/New_York")!)
+        let dateInRegion = DateInRegion(checkDate, region: region)
+        
+        classViewController.date = dateInRegion.date
 //        self.dayOfSchool = self.checkDate(checkDate: checkDate)
 //        if self.dayOfSchool != "No School" {
 //            classViewController.daySelected = self.dayOfSchool

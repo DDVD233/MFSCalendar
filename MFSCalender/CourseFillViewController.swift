@@ -188,7 +188,7 @@ class courseFillController: UIViewController {
         var isRunning = true
         let url = self.baseURL + "/NCIsRunning"
         let semaphore = DispatchSemaphore(value: 0)
-        Alamofire.request(url).response { (result) in
+        AF.request(url).response { (result) in
             guard result.error == nil else {
                 presentErrorMessage(presentMessage: result.error!.localizedDescription, layout: .statusLine)
                 semaphore.signal()
@@ -268,7 +268,7 @@ class courseFillController: UIViewController {
         let urlString = Preferences().baseURL + "/api/datadirect/SectionInfoView/?format=json&sectionId=" + String(sectionID) + "&associationId=1"
         let semaphore = DispatchSemaphore(value: 0)
         
-        Alamofire.request(urlString).response(queue: DispatchQueue.global()) { (response) in
+        AF.request(urlString).response(queue: DispatchQueue.global()) { (response) in
             guard response.error == nil else {
                 presentErrorMessage(presentMessage: response.error!.localizedDescription, layout: .cardView)
                 semaphore.signal()
@@ -305,6 +305,8 @@ class courseFillController: UIViewController {
         var sortedClass = [String: [[String: Any]]]()
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "en_US")
+        formatter.timeZone = TimeZone.current
+        SwiftDate.defaultRegion = Region.local
         
         var dayDict = [String: String]()
         for classObject in json {

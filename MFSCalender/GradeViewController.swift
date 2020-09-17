@@ -11,14 +11,11 @@ import XLPagerTabStrip
 import UICircularProgressRing
 import SwiftyJSON
 import SwiftMessages
-import DGElasticPullToRefresh
+import CRRefresh
 import SVProgressHUD
 import Alamofire
 import Charts
 import SnapKit
-#if !targetEnvironment(macCatalyst)
-    import Crashlytics
-#endif
 
 enum Quarters {
     case first
@@ -63,23 +60,18 @@ class gradeViewController: UITableViewController {
         DispatchQueue.global().async {
             self.refreshView()
         }
-
-        let loadingview = DGElasticPullToRefreshLoadingViewCircle()
-        loadingview.tintColor = UIColor.white
-        tableView.dg_addPullToRefreshWithActionHandler({ [weak self] () -> Void in
+        
+        let animator = RamotionAnimator(ballColor: UIColor.white, waveColor: UIColor.salmon)
+        
+        tableView.cr.addHeadRefresh(animator: animator) { [weak self] in
             self?.refreshView()
-            self?.tableView.dg_stopLoading()
-        }, loadingView: loadingview)
-        tableView.dg_setPullToRefreshFillColor(UIColor(hexString: 0xFF7E79))
-        tableView.dg_setPullToRefreshBackgroundColor(tableView.backgroundColor!)
+            self?.tableView.cr.endHeaderRefresh()
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         self.animate()
-        #if !targetEnvironment(macCatalyst)
-            Answers.logContentView(withName: "Grade", contentType: "Grade", contentId: "2", customAttributes: nil)
-        #endif
         
     }
     
@@ -186,9 +178,9 @@ class gradeViewController: UITableViewController {
 //        }
     }
 
-    override func viewWillDisappear(_ animated: Bool) {
-        tableView.dg_removePullToRefresh()
-    }
+//    override func viewWillDisappear(_ animated: Bool) {
+//        tableView.dg_removePullToRefresh()
+//    }
     
     func getGradeDetail() {
         guard loginAuthentication().success else { return }
@@ -201,7 +193,7 @@ class gradeViewController: UITableViewController {
         ClassView().getMarkingPeriodID(durationID: String(durationID), leadSectionID: sectionID) { (markingPeriodID) in
             let url = Preferences().baseURL + "/api/datadirect/GradeBookPerformanceAssignmentStudentList/?sectionId=\(sectionID)&markingPeriodId=\(markingPeriodID)&studentUserId=\(userID)"
             
-            Alamofire.request(url).response(queue: DispatchQueue.global(), completionHandler: { result in
+            AF.request(url).response(queue: DispatchQueue.global(), completionHandler: { result in
                 if result.error == nil {
                     do {
                         let json = try JSONSerialization.jsonObject(with: result.data!, options: .allowFragments) as? [[String: Any]] ?? [[String: Any]]()

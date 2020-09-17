@@ -22,13 +22,14 @@ class customSchoolViewController: UIViewController {
         let prefixString = prefix.text!
         
         let testURL = "https://" + prefixString + ".myschoolapp.com"
-        Alamofire.request(testURL).response(queue: DispatchQueue.global()) { (response) in
-            if response.error != nil {
-                print("This is NOT a valid URL")
-            } else {
-                print("This is a valid url")
-            }
-        }
+        
+//        Alamofire.request(testURL).response(queue: DispatchQueue.global()) { (response) in
+//            if response.error != nil {
+//                print("This is NOT a valid URL")
+//            } else {
+//                print("This is a valid url")
+//            }
+//        }
     }
     
 }

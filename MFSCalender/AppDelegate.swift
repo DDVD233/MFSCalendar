@@ -9,9 +9,8 @@
 import UIKit
 import CoreData
 #if !targetEnvironment(macCatalyst)
-    import Crashlytics
+    import FirebaseCrashlytics
     import FirebaseCore
-    import Fabric
 #endif
 //import ChatSDK
 
@@ -46,9 +45,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //            _ = BChatSDK.auth()!.authenticate()
 //            BChatSDK.push()!.registerForPushNotifications(with: application, launchOptions: launchOptions)
 //        }
-        #if !targetEnvironment(macCatalyst)
-            Fabric.with([Crashlytics()])
-        #endif
         
         logUser()
         if (UIDevice().userInterfaceIdiom == .phone) && (UIScreen.main.nativeBounds.height == 2436) {
@@ -102,7 +98,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let lastName = Preferences().lastName ?? ""
         let fullName = firstName + " " + lastName
         #if !targetEnvironment(macCatalyst)
-            Crashlytics.sharedInstance().setUserName(fullName)
+        Crashlytics.crashlytics().setUserID(fullName)
         #endif
     }
 

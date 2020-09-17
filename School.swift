@@ -67,16 +67,22 @@ public class School {
             return classData
         }
         
-        let sortedClassData = classData.sorted { (a, b) -> Bool in
+        var sortedClassData = classData.sorted { (a, b) -> Bool in
             return (a["startTime"] as? Int ?? 0) < (b["startTime"] as? Int ?? 0)
         }
-        print(sortedClassData)
+        
+        sortedClassData = sortedClassData.filter({ (classObject) -> Bool in
+            let name = classObject["className"] as? String ?? ""
+            return !name.contains("(MFS)")
+        })
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "HHmm"
+        dateFormatter.timeZone = TimeZone(identifier: "America/New_York")!
         let currentTime = Int(dateFormatter.string(from: time)) ?? 0
         
         let filteredData = sortedClassData.filter { (a) -> Bool in
+            
             return (a["endTime"] as? Int ?? 0) > currentTime
         }
         
@@ -86,9 +92,8 @@ public class School {
     func periodTimerString(time: Date, index: Int) -> String {
         var timerString: String = ""
         guard let period = classesOnADayAfter(date: time)[safe: index] else { return "" }
-        SwiftDate.defaultRegion = Region.local
-        let currentTime = DateInRegion(time, region: Region.local)
-        print(currentTime)
+        let region = Region(zone: TimeZone(identifier: "America/New_York")!)
+        let currentTime = DateInRegion(time, region: region)
         
         let startTimeInt = period["startTime"] as? Int ?? 0
         let startTime = currentTime.dateBySet([Calendar.Component.hour : Int(startTimeInt/100),

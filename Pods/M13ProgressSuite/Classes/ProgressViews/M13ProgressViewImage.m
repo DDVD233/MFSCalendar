@@ -111,7 +111,7 @@
     if (animated == NO) {
         if (_displayLink) {
             //Kill running animations
-            [_displayLink removeFromRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
+            [_displayLink invalidate];
             _displayLink = nil;
         }
         [super setProgress:progress animated:NO];
@@ -122,7 +122,7 @@
         _animationToValue = progress;
         if (!_displayLink) {
             //Create and setup the display link
-            [self.displayLink removeFromRunLoop:NSRunLoop.mainRunLoop forMode:NSRunLoopCommonModes];
+            [self.displayLink invalidate];
             self.displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(animateProgress:)];
             [self.displayLink addToRunLoop:NSRunLoop.mainRunLoop forMode:NSRunLoopCommonModes];
         } /*else {
@@ -134,18 +134,18 @@
 - (void)animateProgress:(CADisplayLink *)displayLink
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        CGFloat dt = (displayLink.timestamp - _animationStartTime) / self.animationDuration;
+        CGFloat dt = (displayLink.timestamp - self.animationStartTime) / self.animationDuration;
         if (dt >= 1.0) {
             //Order is important! Otherwise concurrency will cause errors, because setProgress: will detect an animation in progress and try to stop it by itself. Once over one, set to actual progress amount. Animation is over.
-            [self.displayLink removeFromRunLoop:NSRunLoop.mainRunLoop forMode:NSRunLoopCommonModes];
+            [self.displayLink invalidate];
             self.displayLink = nil;
-            [super setProgress:_animationToValue animated:NO];
+            [super setProgress:self.animationToValue animated:NO];
             [self setNeedsDisplay];
             return;
         }
         
         //Set progress
-        [super setProgress:_animationFromValue + dt * (_animationToValue - _animationFromValue) animated:YES];
+        [super setProgress:self.animationFromValue + dt * (self.animationToValue - self.animationFromValue) animated:YES];
         [self setNeedsDisplay];
         
     });
@@ -187,15 +187,15 @@
 - (UIImage *)createImageForCurrentProgress
 {
     const int ALPHA = 0;
-    const int RED = 1;
+    const int RED = 3;
     const int GREEN = 2;
-    const int BLUE = 3;
-    
+    const int BLUE = 1;
+
     //Create image rectangle with current image width/height
     CGRect imageRect = CGRectMake(0, 0, _progressImage.size.width * _progressImage.scale, _progressImage.size.height * _progressImage.scale);
     
-    int width = imageRect.size.width;
-    int height = imageRect.size.height;
+    int width = (int)imageRect.size.width;
+    int height = (int)imageRect.size.height;
     
     //The pixels will be painted to this array
     uint32_t *pixels = (uint32_t *) malloc(width * height * sizeof(uint32_t));
@@ -218,13 +218,13 @@
     int yTo = height;
     
     if (_progressDirection == M13ProgressViewImageProgressDirectionBottomToTop) {
-        yTo = height * (1 - self.progress);
+        yTo = (int)(height * (1 - self.progress));
     } else if (_progressDirection == M13ProgressViewImageProgressDirectionTopToBottom) {
-        yFrom = height * self.progress;
+        yFrom = (int)(height * self.progress);
     } else if (_progressDirection == M13ProgressViewImageProgressDirectionLeftToRight) {
-        xFrom = width * self.progress;
+        xFrom = (int)(width * self.progress);
     } else if (_progressDirection == M13ProgressViewImageProgressDirectionRightToLeft) {
-        xTo = width * (1 - self.progress);
+        xTo = (int)(width * (1 - self.progress));
     }
     
     for (int x = xFrom; x < xTo; x++) {
@@ -234,7 +234,7 @@
             //Convert
             if (_drawGreyscaleBackground) {
                 //Convert to grayscale using luma coding: http://en.wikipedia.org/wiki/Grayscale#Converting_color_to_grayscale
-                uint32_t gray = 0.3 * rgbaPixel[RED] + 0.59 * rgbaPixel[GREEN] + 0.11 * rgbaPixel[BLUE];
+                uint8_t gray = (uint8_t)(0.3 * rgbaPixel[RED] + 0.59 * rgbaPixel[GREEN] + 0.11 * rgbaPixel[BLUE]);
                 // set the pixels to gray
                 rgbaPixel[RED] = gray;
                 rgbaPixel[GREEN] = gray;

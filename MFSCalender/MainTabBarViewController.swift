@@ -8,7 +8,7 @@
 
 import UIKit
 import NotificationCenter
-import ChatSDK
+//import ChatSDK
 
 class MainTabBarViewController: UITabBarController, UITabBarControllerDelegate {
     let bMessagesBadgeValueKey = "bMessagesBadgeValueKey"
@@ -93,26 +93,26 @@ class MainTabBarViewController: UITabBarController, UITabBarControllerDelegate {
 //        BChatSDK.ui()!.setShowLocalNotifications(false)
     }
     
-    func presentChatViewWithThread(thread: PThread) {
-        self.selectedIndex = indexOfPrivateThread
-        
-        // Reset navigation stack
-        for nav in self.viewControllers ?? [UIViewController]() {
-            if let navObj = nav as? UINavigationController {
-                if let firstVC = navObj.viewControllers.first {
-                    navObj.setViewControllers([firstVC], animated: false)
-                }
-            }
-        }
-        
-        if let navigationControllerAtIndex = self.viewControllers?[indexOfPrivateThread] as? UINavigationController, let chatViewController = MyChatViewController(thread: thread) { navigationControllerAtIndex.pushViewController(chatViewController, animated: true)
-        }
-    }
+//    func presentChatViewWithThread(thread: PThread) {
+//        self.selectedIndex = indexOfPrivateThread
+//
+//        // Reset navigation stack
+//        for nav in self.viewControllers ?? [UIViewController]() {
+//            if let navObj = nav as? UINavigationController {
+//                if let firstVC = navObj.viewControllers.first {
+//                    navObj.setViewControllers([firstVC], animated: false)
+//                }
+//            }
+//        }
+//
+//        if let navigationControllerAtIndex = self.viewControllers?[indexOfPrivateThread] as? UINavigationController, let chatViewController = MyChatViewController(thread: thread) { navigationControllerAtIndex.pushViewController(chatViewController, animated: true)
+//        }
+//    }
     
 //    func updateBadge() {
 //        let privateThreadsMessageCount = unreadMessagesCount(type: bThreadFilterPrivate)
 //        self.setPrivateThreadsbadge(badge: privateThreadsMessageCount)
-//        
+//
 //        BChatSDK.core()?.save()
 //    }
     
@@ -134,17 +134,17 @@ class MainTabBarViewController: UITabBarController, UITabBarControllerDelegate {
 //        return i
 //    }
     
-    func setBadge(badge: Int, index: Int) {
-        let badgeString: String? = badge == 0 ? nil : String(format: "%i", badge)
-        self.tabBar.items?[index].badgeValue = badgeString
-    }
-    
-    func setPrivateThreadsbadge(badge: Int) {
-        self.setBadge(badge: badge, index: indexOfPrivateThread)
-        UserDefaults.standard.set(badge, forKey: bMessagesBadgeValueKey)
-        
-        if BChatSDK.shared()!.configuration.appBadgeEnabled {
-            UIApplication.shared.applicationIconBadgeNumber = badge
-        }
-    }
+//    func setBadge(badge: Int, index: Int) {
+//        let badgeString: String? = badge == 0 ? nil : String(format: "%i", badge)
+//        self.tabBar.items?[index].badgeValue = badgeString
+//    }
+//
+//    func setPrivateThreadsbadge(badge: Int) {
+//        self.setBadge(badge: badge, index: indexOfPrivateThread)
+//        UserDefaults.standard.set(badge, forKey: bMessagesBadgeValueKey)
+//
+//        if BChatSDK.shared()!.configuration.appBadgeEnabled {
+//            UIApplication.shared.applicationIconBadgeNumber = badge
+//        }
+//    }
 }
