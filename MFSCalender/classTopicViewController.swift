@@ -10,7 +10,7 @@ import UIKit
 import XLPagerTabStrip
 import SwiftMessages
 import SDWebImage
-import CRRefresh
+import DGElasticPullToRefresh
 import DZNEmptyDataSet
 import SVProgressHUD
 
@@ -51,14 +51,17 @@ class classTopicViewController: UIViewController {
     }
 
     override func viewDidAppear(_ animated: Bool) {
-        let animator = RamotionAnimator(ballColor: UIColor.white, waveColor: UIColor.salmon)
-        
-        topicsCollectionView.cr.addHeadRefresh(animator: animator) { [weak self] in
+        let loadingview = DGElasticPullToRefreshLoadingViewCircle()
+        loadingview.tintColor = UIColor.white
+        topicsCollectionView.dg_addPullToRefreshWithActionHandler({ [weak self] () -> Void in
             if let leadSectionIdInt = self?.leadSectionIdInt {
                 self?.refreshTopics(leadSectionIdInt: leadSectionIdInt)
             }
-            self?.topicsCollectionView.cr.endHeaderRefresh()
-        }
+            //            self?.semaphore.wait()
+            self?.topicsCollectionView.dg_stopLoading()
+        }, loadingView: loadingview)
+        topicsCollectionView.dg_setPullToRefreshFillColor(UIColor(hexString: 0xFF7E79))
+        topicsCollectionView.dg_setPullToRefreshBackgroundColor(topicsCollectionView.backgroundColor!)
 
         DispatchQueue.global().async {
             let classObject = ClassView().getTheClassToPresent() ?? [String: Any]()

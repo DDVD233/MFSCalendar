@@ -12,7 +12,7 @@ import SwiftyJSON
 import M13Checkbox
 import SwiftDate
 import DZNEmptyDataSet
-import CRRefresh
+import DGElasticPullToRefresh
 import XLPagerTabStrip
 import Alamofire
 #if !targetEnvironment(macCatalyst)
@@ -49,12 +49,14 @@ class homeworkViewController: UITableViewController, UIViewControllerPreviewingD
 //
         
         if filter == 2 {
-            let animator = RamotionAnimator(ballColor: UIColor.white, waveColor: UIColor.salmon)
-            
-            homeworkTable.cr.addHeadRefresh(animator: animator) { [weak self] in
+            let loadingview = DGElasticPullToRefreshLoadingViewCircle()
+            loadingview.tintColor = UIColor.white
+            homeworkTable.dg_addPullToRefreshWithActionHandler({ [weak self] () -> Void in
                 self?.getHomework()
-                self?.homeworkTable.cr.endHeaderRefresh()
-            }
+                self?.tableView.dg_stopLoading()
+                }, loadingView: loadingview)
+            homeworkTable.dg_setPullToRefreshFillColor(UIColor(hexString: 0xFF7E79))
+            homeworkTable.dg_setPullToRefreshBackgroundColor(tableView.backgroundColor!)
         }
         
         if #available(iOS 11.0, *) {
@@ -106,6 +108,7 @@ class homeworkViewController: UITableViewController, UIViewControllerPreviewingD
         
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "en_US")
+        formatter.timeZone = TimeZone(identifier: "America/New_York")
         formatter.dateFormat = "M/d/yyyy"
         let daySelectedString = formatter.string(from: daySelected!).addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
         let dayEndString = filter == 2 ? formatter.string(from: daySelected! + 1.months).addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)! : daySelectedString

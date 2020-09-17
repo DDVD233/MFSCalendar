@@ -45,6 +45,7 @@ public func loginAuthentication() -> (success: Bool, token: String, userId: Stri
 //    }
 //
     let accountCheckURL = Preferences().baseURL + "/api/authentication/login"
+    print(accountCheckURL)
     let url = NSURL(string: accountCheckURL)
     var request = URLRequest(url: url! as URL)
     request.addValue("application/json", forHTTPHeaderField: "Content-Type")

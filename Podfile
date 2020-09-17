@@ -15,6 +15,7 @@ target 'MFSMobile' do
   pod 'FSCalendar'
   pod 'LTMorphingLabel'
   pod 'SwiftyJSON'
+  pod 'DGElasticPullToRefresh', :git => 'https://github.com/Lateblumer88/DGElasticPullToRefresh.git', :branch => 'Feature/Swift5Support'
   pod 'M13Checkbox'
   pod 'SwiftDate'
   pod 'CRRefresh'

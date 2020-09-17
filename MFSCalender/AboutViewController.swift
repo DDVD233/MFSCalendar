@@ -24,13 +24,12 @@ class aboutView: UITableViewController, MFMailComposeViewControllerDelegate {
     override func viewDidAppear(_ animated: Bool) {
         let podAckFile = Bundle.main.url(forResource: "Acknowledgements", withExtension: "markdown")!
         let down = Down(markdownString: try! String(contentsOf: podAckFile))
-        tableView.estimatedRowHeight = 50
         
         if let attributedString = try? down.toAttributedString() {
             dependenciesTextView.attributedText = attributedString
             dependenciesTextView.isScrollEnabled = false
             dependenciesTextView.sizeToFit()
-            tableView.reloadData()
+//            tableView.reloadData()
         }
     }
     
@@ -72,5 +71,15 @@ class aboutView: UITableViewController, MFMailComposeViewControllerDelegate {
     // MARK: MFMailComposeViewControllerDelegate Method
     func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
         controller.dismiss(animated: true, completion: nil)
+    }
+}
+
+extension aboutView {
+    override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.section == 2 {
+            return 2000
+        } else {
+            return 100
+        }
     }
 }

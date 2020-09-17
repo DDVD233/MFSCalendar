@@ -269,23 +269,25 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
     }
 
     func errorMessage(presentMessage: String) {
-        let view = MessageView.viewFromNib(layout: .cardView)
-        view.configureTheme(.error)
-        var icon: String? = nil
-        if presentMessage == NSLocalizedString("The username/password is incorrect. Please check your spelling.", comment: "") {
-            icon = "🤔"
-        } else {
-            icon = "😱"
+        DispatchQueue.main.async {
+            let view = MessageView.viewFromNib(layout: .cardView)
+            view.configureTheme(.error)
+            var icon: String? = nil
+            if presentMessage == NSLocalizedString("The username/password is incorrect. Please check your spelling.", comment: "") {
+                icon = "🤔"
+            } else {
+                icon = "😱"
+            }
+            view.configureContent(title: "Error!", body: presentMessage, iconText: icon!)
+            if presentMessage == NSLocalizedString("The username/password is incorrect. Please check your spelling.", comment: "") {
+                view.button?.setTitle(NSLocalizedString("Forgot Password", comment: ""), for: .normal)
+                view.button?.addTarget(self, action: #selector(self.wrongPassword(button:)), for: .touchUpInside)
+            } else {
+                view.button?.isHidden = true
+            }
+            let config = SwiftMessages.Config()
+            SwiftMessages.show(config: config, view: view)
         }
-        view.configureContent(title: "Error!", body: presentMessage, iconText: icon!)
-        if presentMessage == NSLocalizedString("The username/password is incorrect. Please check your spelling.", comment: "") {
-            view.button?.setTitle(NSLocalizedString("Forgot Password", comment: ""), for: .normal)
-            view.button?.addTarget(self, action: #selector(wrongPassword(button:)), for: .touchUpInside)
-        } else {
-            view.button?.isHidden = true
-        }
-        let config = SwiftMessages.Config()
-        SwiftMessages.show(config: config, view: view)
     }
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {

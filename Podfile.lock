@@ -19,6 +19,7 @@ PODS:
     - Charts/Core (= 3.5.0)
   - Charts/Core (3.5.0)
   - CRRefresh (1.1.3)
+  - DGElasticPullToRefresh (1.1)
   - Down (0.9.3)
   - DZNEmptyDataSet (1.8.1)
   - FSCalendar (2.8.1)
@@ -54,6 +55,7 @@ DEPENDENCIES:
   - Alamofire
   - Charts
   - CRRefresh
+  - DGElasticPullToRefresh (from `https://github.com/Lateblumer88/DGElasticPullToRefresh.git`, branch `Feature/Swift5Support`)
   - Down
   - DZNEmptyDataSet
   - FSCalendar
@@ -102,11 +104,22 @@ SPEC REPOS:
     - UICircularProgressRing
     - XLPagerTabStrip
 
+EXTERNAL SOURCES:
+  DGElasticPullToRefresh:
+    :branch: Feature/Swift5Support
+    :git: https://github.com/Lateblumer88/DGElasticPullToRefresh.git
+
+CHECKOUT OPTIONS:
+  DGElasticPullToRefresh:
+    :commit: 5fee7765a5f7ae601c98d717a1350eb99a27ee12
+    :git: https://github.com/Lateblumer88/DGElasticPullToRefresh.git
+
 SPEC CHECKSUMS:
   AFNetworking: 7864c38297c79aaca1500c33288e429c3451fdce
   Alamofire: 814429acc853c6c54ff123fc3d2ef66803823ce0
   Charts: 40a08591df1f8ad5c223ddedfb1a06da92f24f7c
   CRRefresh: 1415d4ae06837fa7bb064c44f2e102f3ef517044
+  DGElasticPullToRefresh: 28f11a6026302a90f8ffebbc6e24748e584dddd3
   Down: 4553b984236807e384fa0ef7c7e360ef9f7c425d
   DZNEmptyDataSet: 9525833b9e68ac21c30253e1d3d7076cc828eaa7
   FSCalendar: 5245140456fcbcac5824c203b98bd8068bdfee1a
@@ -128,6 +141,6 @@ SPEC CHECKSUMS:
   UICircularProgressRing: 738b48db0ec1fbbd8482d727979392bb8c272e8d
   XLPagerTabStrip: 61c57fd61f611ee5f01ff1495ad6fbee8bf496c5
 
-PODFILE CHECKSUM: aff3f73c57f9ff376708d66d8f5a67f51d9cacaa
+PODFILE CHECKSUM: 0dde51974a7ec51d257f8f7fcb6fabd5f2b47af3
 
 COCOAPODS: 1.10.0.rc.1

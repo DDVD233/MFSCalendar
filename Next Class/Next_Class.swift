@@ -28,25 +28,38 @@ struct Provider: IntentTimelineProvider {
         let listClasses = school.classesOnADayAfter(date: Date())
         if listClasses.isEmpty {  // No Class on This Day.
             let entry = SimpleEntry(date: Date(), configuration: configuration, nextClass: nil)
-            let region = Region(zone: TimeZone(identifier: "America/New_York")!)
-            let endDate = DateInRegion(region: region).dateAtEndOf(.day)
+//            let region = Region(zone: TimeZone(identifier: "America/New_York")!)
+            let endDate = Date() + 5.minutes
             let timeLine = Timeline(entries: [entry], policy: .after(endDate.date))
             completion(timeLine)
+            return
         }
         
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "en_US")
-        formatter.timeZone = TimeZone.current
+        formatter.timeZone = TimeZone(identifier: "America/New_York")
         SwiftDate.defaultRegion = Region(zone: TimeZone(identifier: "America/New_York")!)
         formatter.dateFormat = "M/dd/yyyy hh:mm a"
         
         let fileManager = FileManager.default
         
-        for classObject in listClasses {
-            let startTimeString = classObject["start"] as? String ?? ""
-            guard let startTime = formatter.date(from: startTimeString) else {
-                continue
+        for (index, classObject) in listClasses.enumerated() {
+            print(listClasses)
+            var startTime: Date? {
+                if index == 0 {
+                    let startTimeString = classObject["start"] as? String ?? ""
+                    let startDate = formatter.date(from: startTimeString)
+                    if startDate != nil && startDate! < Date() {  // The class has already started
+                        return nil
+                    }
+                    return Date()
+                } else {
+                    let startTimeString = listClasses[index - 1]["start"] as? String ?? ""
+                    return formatter.date(from: startTimeString)
+                }
             }
+            
+            guard startTime != nil else { continue }
             
             var imageName: String? = nil
             if let sectionID = self.getLeadSectionID(classDict: classObject) {
@@ -58,8 +71,9 @@ struct Provider: IntentTimelineProvider {
             
             let nextClass = ClassDetail(className: classObject["className"] as? String ?? ""
                                         , imagePath: imageName)
+            
             entries.append(
-                SimpleEntry(date: startTime,
+                SimpleEntry(date: startTime!,
                             configuration: configuration,
                             nextClass: nextClass)
             )
@@ -70,9 +84,9 @@ struct Provider: IntentTimelineProvider {
     }
     
     func getLeadSectionID(classDict: [String: Any]) -> Int? {
-        if let leadSectionID = classDict["leadsectionid"] as? Int {
+        if let leadSectionID = classDict["LeadSectionId"] as? Int {
             return leadSectionID
-        } else if let sectionID = classDict["sectionid"] as? Int {
+        } else if let sectionID = classDict["SectionId"] as? Int {
             return sectionID
         } else {
             return nil
@@ -97,13 +111,31 @@ struct Next_ClassEntryView : View {
     var body: some View {
         ZStack {
             Color(red: 1, green: 126/255, blue: 121/255)
-                .ignoresSafeArea()
-            VStack {
+            
+            if entry.nextClass?.imagePath != nil {
+                Image(uiImage: UIImage(contentsOfFile: entry.nextClass!.imagePath!)!)
+                    .resizable()
+//                    .blur(radius: 5.0)
+                    .scaledToFill()
+                
+                Rectangle()
+                    .foregroundColor(Color.black.opacity(0.4))
+            }
+            
+            
+            
+            VStack(spacing: 20) {
+                
                 Text("Next Class")
                     .foregroundColor(.white)
                     .font(.headline)
+                
                 Text(entry.nextClass?.className ?? "")
                     .foregroundColor(.white)
+                    .lineLimit(3)
+                    .multilineTextAlignment(.center)
+                    .padding()
+                
             }
         }
     }

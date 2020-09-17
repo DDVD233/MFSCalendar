@@ -11,7 +11,7 @@ import XLPagerTabStrip
 import UICircularProgressRing
 import SwiftyJSON
 import SwiftMessages
-import CRRefresh
+import DGElasticPullToRefresh
 import SVProgressHUD
 import Alamofire
 import Charts
@@ -60,13 +60,15 @@ class gradeViewController: UITableViewController {
         DispatchQueue.global().async {
             self.refreshView()
         }
-        
-        let animator = RamotionAnimator(ballColor: UIColor.white, waveColor: UIColor.salmon)
-        
-        tableView.cr.addHeadRefresh(animator: animator) { [weak self] in
+
+        let loadingview = DGElasticPullToRefreshLoadingViewCircle()
+        loadingview.tintColor = UIColor.white
+        tableView.dg_addPullToRefreshWithActionHandler({ [weak self] () -> Void in
             self?.refreshView()
-            self?.tableView.cr.endHeaderRefresh()
-        }
+            self?.tableView.dg_stopLoading()
+        }, loadingView: loadingview)
+        tableView.dg_setPullToRefreshFillColor(UIColor(hexString: 0xFF7E79))
+        tableView.dg_setPullToRefreshBackgroundColor(tableView.backgroundColor!)
     }
     
     override func viewDidAppear(_ animated: Bool) {

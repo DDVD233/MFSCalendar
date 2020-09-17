@@ -67,7 +67,7 @@ open class RamotionAnimator: UIView, CRRefreshProtocol {
             if let scrollView = view.scrollView {
                 bounceLayer = RamotionBounceLayer(frame: scrollView.bounds, execute: execute, ballColor: ballColor, waveColor: waveColor)
                 if let superView = scrollView.superview {
-                    superView.layer.addSublayer(bounceLayer!)
+                    superView.layer.insertSublayer(bounceLayer!, below: scrollView.layer)
                 }
             }
         }

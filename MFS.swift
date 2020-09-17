@@ -49,18 +49,22 @@ public class MFS: School {
         
         listClasses = allClasses
         
-//        formatter.dateFormat = "EE"
-//        formatter.locale = Locale(identifier: "en_US")
-//        formatter.timeZone = TimeZone(identifier: "America/New_York")
-//        let weekDay = formatter.string(from: date)
-        //let lunch = ["className": "Lunch", "roomNumber": "DH/C", "teacher": "", "period": 11] as [String: Any]
-//        if listClasses.count >= 6 && weekDay == "Wed" {
-//            let meetingForWorship = ["className": "Meeting For Worship", "roomNumber": "Meeting House", "teacher": "", "period": 4, "startTime": 1042, "endTime": 1124] as [String: Any]
-//            listClasses.removeAll { (classToBeExamined: [String: Any]) -> Bool in
-//                return (classToBeExamined["startTime"] as? Int ?? 0) == 1042
-//            }
-//            listClasses.append(meetingForWorship)
-//        }
+        listClasses.sort(by: { ($0["startTime"] as? Int ?? 0) < ($1["startTime"] as? Int ?? 0) })
+        
+        return listClasses
+    }
+    
+    override func getClassDataAt(date: String) -> [[String: Any]] {
+        //var period = period
+        listClasses = [[String: Any]]()
+        let dateString = date
+        let path = FileList.classDate(date: dateString).filePath
+        
+        guard let allClasses = NSArray(contentsOfFile: path) as? Array<Dictionary<String, Any>> else {
+            return listClasses
+        }
+        
+        listClasses = allClasses
         
         listClasses.sort(by: { ($0["startTime"] as? Int ?? 0) < ($1["startTime"] as? Int ?? 0) })
         

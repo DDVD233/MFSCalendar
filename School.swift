@@ -27,6 +27,10 @@ public class School {
     init() {
         dayLetterList = ""
     }
+    func getClassDataAt(date: String) -> [[String: Any]] {
+        return listClasses
+    }
+    
     func getClassDataAt(date: Date) -> [[String: Any]] {
         return listClasses
     }
@@ -61,7 +65,12 @@ public class School {
     }
     
     func classesOnADayAfter(date time: Date) -> [[String: Any]] {
-        let classData = getClassDataAt(date: time)
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyyMMdd"
+        formatter.timeZone = TimeZone(identifier: "America/New_York")
+        let dateString = formatter.string(from: time)
+        
+        let classData = getClassDataAt(date: dateString)
         
         if classData.isEmpty {
             return classData
