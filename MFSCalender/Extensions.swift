@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if !targetEnvironment(macCatalyst)
-    import FirebaseCrashlytics
-#endif
 //import Kanna
 
 //extension CourseMO {
@@ -99,9 +96,6 @@ extension String {
     func convertToHtml(isTitle: Bool = false) -> NSAttributedString? {
         let font = UIFont.systemFont(ofSize: 15).fontName
         let fontSize = isTitle ? "23" : "16"
-        #if !targetEnvironment(macCatalyst)
-        Crashlytics.crashlytics().log(format: "String to convert to HTML: %@", arguments: getVaList([self]))
-        #endif
         
         let htmlString = "<html>" +
                 "<head>" +

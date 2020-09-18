@@ -26,9 +26,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        #if !targetEnvironment(macCatalyst)
         FirebaseApp.configure()
-        #endif
         
 //        let config = BConfiguration.init();
 //        config.rootPath = "test"
