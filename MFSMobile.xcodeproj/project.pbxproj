@@ -224,6 +224,7 @@
 		7EE7A78B4FE1956097F467F3 /* Pods-MFSMobile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MFSMobile.release.xcconfig"; path = "Target Support Files/Pods-MFSMobile/Pods-MFSMobile.release.xcconfig"; sourceTree = "<group>"; };
 		ACACEFE6BAAC5BF9E6FFD16E /* Pods_MFSMobile.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MFSMobile.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0071D73E53C60D28963AD51 /* Pods_Class_Schedule.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Class_Schedule.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E4091486251493A400B04462 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Next_Class.strings; sourceTree = "<group>"; };
 		E4106372228772E000A8F280 /* ChatInterfaceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatInterfaceManager.swift; sourceTree = "<group>"; };
 		E412E2BA201261B80082540B /* EventViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventViewController.swift; sourceTree = "<group>"; };
 		E413AB0D1EE89441001EB189 /* Achievement.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Achievement.png; sourceTree = "<group>"; };
@@ -677,7 +678,6 @@
 			children = (
 				E497DFEB2512419400852BCC /* Next_Class.swift */,
 				E41C5DFE25125DED00428606 /* SwiftUIExtensions.swift */,
-				E44822DD251545950072B355 /* Next_Class.intentdefinition */,
 				E497DFEE2512419500852BCC /* Assets.xcassets */,
 				E497DFF02512419500852BCC /* Info.plist */,
 				E465418E25147B0300BBD625 /* NextClassView.swift */,
@@ -798,6 +798,7 @@
 				E4E5504B2295811F00C2F46F /* SupportedSchoolList.plist */,
 				E4369F712289927B006462F3 /* MainTabBarViewController.swift */,
 				E470C38421EE6A5E00E5C358 /* SchoolSelectionViewController.swift */,
+				E44822DD251545950072B355 /* Next_Class.intentdefinition */,
 				E419C50C21ADB63400CE8B3A /* CapstoneAd.swift */,
 				E43611BA21A45BFE00994A10 /* StepChallengeViewController.swift */,
 				E48A0A3B214AC842005ABB87 /* MailViewController.swift */,
@@ -1399,6 +1400,7 @@
 				E44822E92515459A0072B355 /* en */,
 				E44822F02515459D0072B355 /* zh-Hans */,
 				E44822F72515459E0072B355 /* ja */,
+				E4091486251493A400B04462 /* es */,
 			);
 			name = Next_Class.intentdefinition;
 			sourceTree = "<group>";
@@ -1468,7 +1470,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CODE_SIGN_ENTITLEMENTS = "Class Schedule/Class Schedule.entitlements";
-				CURRENT_PROJECT_VERSION = 3305;
+				CURRENT_PROJECT_VERSION = 3325;
 				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				INFOPLIST_FILE = "Class Schedule/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -1477,7 +1479,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.1.0;
+				MARKETING_VERSION = 2.1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = org.dwei.ClassSchedule;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1494,7 +1496,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CODE_SIGN_ENTITLEMENTS = "Class Schedule/Class Schedule.entitlements";
-				CURRENT_PROJECT_VERSION = 3305;
+				CURRENT_PROJECT_VERSION = 3325;
 				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				INFOPLIST_FILE = "Class Schedule/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -1503,7 +1505,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.1.0;
+				MARKETING_VERSION = 2.1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = org.dwei.ClassSchedule;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1630,18 +1632,19 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_ENTITLEMENTS = "Next ClassExtension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3305;
+				CURRENT_PROJECT_VERSION = 3325;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = "Next Class/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 13.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.1.0;
+				MARKETING_VERSION = 2.1.2;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.dwei.Next-Class";
@@ -1666,17 +1669,18 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_ENTITLEMENTS = "Next ClassExtension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3305;
+				CURRENT_PROJECT_VERSION = 3325;
 				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = "Next Class/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 13.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.1.0;
+				MARKETING_VERSION = 2.1.2;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.dwei.Next-Class";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1813,7 +1817,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3305;
+				CURRENT_PROJECT_VERSION = 3325;
 				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = YES;
 				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				"ENABLE_HARDENED_RUNTIME[sdk=macosx*]" = YES;
@@ -1825,11 +1829,12 @@
 				);
 				INFOPLIST_FILE = MFSCalender/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 13.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.1.0;
+				MARKETING_VERSION = 2.1.2;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1860,7 +1865,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3305;
+				CURRENT_PROJECT_VERSION = 3325;
 				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = YES;
 				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				"ENABLE_HARDENED_RUNTIME[sdk=macosx*]" = YES;
@@ -1872,11 +1877,12 @@
 				);
 				INFOPLIST_FILE = MFSCalender/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 13.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.1.0;
+				MARKETING_VERSION = 2.1.2;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",

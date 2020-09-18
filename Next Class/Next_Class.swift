@@ -12,24 +12,28 @@ import Intents
 import SwiftDate
 
 struct Provider: IntentTimelineProvider {
+    typealias Entry = SimpleEntry
+    
+    typealias Intent = NextClassIntent
+    
     let path = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
     func placeholder(in context: Context) -> SimpleEntry {
-        SimpleEntry(date: Date(), configuration: ConfigurationIntent(), nextClass: nil, homework: nil, error: "MFS Mobile")
+        SimpleEntry(date: Date(), configuration: NextClassIntent(), nextClass: nil, homework: nil, error: "MFS Mobile")
     }
 
-    func getSnapshot(for configuration: ConfigurationIntent, in context: Context, completion: @escaping (SimpleEntry) -> ()) {
+    func getSnapshot(for configuration: NextClassIntent, in context: Context, completion: @escaping (SimpleEntry) -> ()) {
         let entry = SimpleEntry(date: Date(), configuration: configuration, nextClass: nil, homework: nil, error: "MFS Mobile")
         completion(entry)
     }
     
-    func completeWithError(for configuration: ConfigurationIntent, error: String) -> Timeline<SimpleEntry> {
+    func completeWithError(for configuration: NextClassIntent, error: String) -> Timeline<SimpleEntry> {
         let entry = SimpleEntry(date: Date(), configuration: configuration, nextClass: nil, homework: nil, error: error)
         let endDate = Date() + 5.minutes
         let timeLine = Timeline(entries: [entry], policy: .after(endDate.date))
         return timeLine
     }
 
-    func getTimeline(for configuration: ConfigurationIntent, in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
+    func getTimeline(for configuration: NextClassIntent, in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
         var entries: [SimpleEntry] = []
         let listClasses = school.classesOnADayAfter(date: Date())
         if listClasses.isEmpty {  // No Class on This Day or end of school day.
@@ -102,7 +106,7 @@ struct Provider: IntentTimelineProvider {
 
 struct SimpleEntry: TimelineEntry {
     let date: Date
-    let configuration: ConfigurationIntent
+    let configuration: NextClassIntent
     let nextClass: ClassDetail?
     let homework: HomeworkData?
     let error: String?
@@ -120,14 +124,14 @@ struct HomeworkData {
 }
 
 struct HomeworkFetch {
-    func completeWithError(for configuration: ConfigurationIntent, error: String) -> Timeline<SimpleEntry> {
+    func completeWithError(for configuration: NextClassIntent, error: String) -> Timeline<SimpleEntry> {
         let entry = SimpleEntry(date: Date(), configuration: configuration, nextClass: nil, homework: nil, error: error)
         let endDate = Date() + 5.minutes
         let timeLine = Timeline(entries: [entry], policy: .after(endDate.date))
         return timeLine
     }
     
-    func returnWithHomeworkCount(configuration: ConfigurationIntent, completionWithHomework: @escaping (Timeline<SimpleEntry>) -> ()) {
+    func returnWithHomeworkCount(configuration: NextClassIntent, completionWithHomework: @escaping (Timeline<SimpleEntry>) -> ()) {
         guard loginAuthentication().success else {
             completionWithHomework(completeWithError(for: configuration, error: "Not logged in"))
             return
@@ -254,7 +258,7 @@ struct Next_Class: Widget {
     @State var currentClass = [String: Any]()
 
     var body: some WidgetConfiguration {
-        IntentConfiguration(kind: kind, intent: ConfigurationIntent.self, provider: Provider()) { entry in
+        IntentConfiguration(kind: kind, intent: NextClassIntent.self, provider: Provider()) { entry in
             Next_ClassEntryView(entry: entry)
         }
         .configurationDisplayName("Next Class")
@@ -265,7 +269,7 @@ struct Next_Class: Widget {
 struct Next_Class_Previews: PreviewProvider {
     static var previews: some View {
         Next_ClassEntryView(entry: SimpleEntry(date: Date(),
-                                               configuration: ConfigurationIntent(),
+                                               configuration: NextClassIntent(),
                                                nextClass: ClassDetail(className: "a", imagePath: nil, roomNumber: nil),
                                                homework: nil,
                                                error: nil))

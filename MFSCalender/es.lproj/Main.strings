@@ -1,9 +1,9 @@
 
 /* Class = "UIViewController"; title = "Course List"; ObjectID = "0RJ-yP-WMX"; */
-"0RJ-yP-WMX.title" = "Course List";
+"0RJ-yP-WMX.title" = "Lista de Cursos";
 
 /* Class = "UILabel"; text = "Label"; ObjectID = "0xK-gp-QVI"; */
-"0xK-gp-QVI.text" = "Label";
+"0xK-gp-QVI.text" = "Etiqueta";
 
 /* Class = "UILabel"; text = "N/A"; ObjectID = "19q-6s-urR"; */
 "19q-6s-urR.text" = "N/A";
@@ -18,40 +18,40 @@
 "1jk-d8-RnA.text" = "3305";
 
 /* Class = "UINavigationItem"; title = "Homework"; ObjectID = "2Cr-mv-nvG"; */
-"2Cr-mv-nvG.title" = "Homework";
+"2Cr-mv-nvG.title" = "Tarea";
 
 /* Class = "UILabel"; text = "time"; ObjectID = "2hI-c8-LxD"; */
-"2hI-c8-LxD.text" = "time";
+"2hI-c8-LxD.text" = "hora";
 
 /* Class = "UILabel"; text = "What's the Subdomain of Your mySchool URL?"; ObjectID = "2qq-Vz-9fp"; */
-"2qq-Vz-9fp.text" = "What's the Subdomain of Your mySchool URL?";
+"2qq-Vz-9fp.text" = "¿Cuál es el subdominio de su URL de mySchool?";
 
 /* Class = "UILabel"; text = "Key"; ObjectID = "2xY-fX-ha7"; */
-"2xY-fX-ha7.text" = "Key";
+"2xY-fX-ha7.text" = "llave";
 
 /* Class = "UILabel"; text = "Value"; ObjectID = "36Z-Pr-YWx"; */
-"36Z-Pr-YWx.text" = "Value";
+"36Z-Pr-YWx.text" = "Valor";
 
 /* Class = "UILabel"; text = "N"; ObjectID = "3Bf-CK-3a3"; */
 "3Bf-CK-3a3.text" = "N";
 
 /* Class = "UITableViewController"; title = "About"; ObjectID = "3kg-Bk-lvv"; */
-"3kg-Bk-lvv.title" = "About";
+"3kg-Bk-lvv.title" = "Sobre";
 
 /* Class = "UILabel"; text = "Grade"; ObjectID = "49n-vH-q96"; */
-"49n-vH-q96.text" = "Grade";
+"49n-vH-q96.text" = "Nota";
 
 /* Class = "UILabel"; text = "Your mySchool URL should look like this:"; ObjectID = "4IC-0B-JqF"; */
-"4IC-0B-JqF.text" = "Your mySchool URL should look like this:";
+"4IC-0B-JqF.text" = "Su URL de mySchool debería verse así:";
 
 /* Class = "UITabBarItem"; title = "Timetable"; ObjectID = "4oN-GM-rFw"; */
-"4oN-GM-rFw.title" = "Timetable";
+"4oN-GM-rFw.title" = "Calendario";
 
 /* Class = "UILabel"; text = "Room"; ObjectID = "6in-tx-ezS"; */
-"6in-tx-ezS.text" = "Room";
+"6in-tx-ezS.text" = "Habitación";
 
 /* Class = "UIViewController"; title = "Step Challenge"; ObjectID = "74F-zA-lB3"; */
-"74F-zA-lB3.title" = "Step Challenge";
+"74F-zA-lB3.title" = "Paso desafío";
 
 /* Class = "UILabel"; text = "Label"; ObjectID = "7gf-By-MrG"; */
 "7gf-By-MrG.text" = "Label";
@@ -60,28 +60,28 @@
 "7he-fP-i1K.text" = "Label";
 
 /* Class = "UIViewController"; title = "Class Information"; ObjectID = "8Ug-j0-Kmo"; */
-"8Ug-j0-Kmo.title" = "Class Information";
+"8Ug-j0-Kmo.title" = "Información de Clase";
 
 /* Class = "UIButton"; normalTitle = " "; ObjectID = "8Wk-gW-WdH"; */
 "8Wk-gW-WdH.normalTitle" = " ";
 
 /* Class = "UILabel"; text = "Period"; ObjectID = "9HT-Ws-hTX"; */
-"9HT-Ws-hTX.text" = "Period";
+"9HT-Ws-hTX.text" = "Período";
 
 /* Class = "UIBarButtonItem"; title = "Back"; ObjectID = "9e5-Da-MZM"; */
-"9e5-Da-MZM.title" = "Back";
+"9e5-Da-MZM.title" = "Detrás";
 
 /* Class = "UIButton"; normalTitle = "Visit My Github Page For this App"; ObjectID = "A5Q-Qk-I4u"; */
-"A5Q-Qk-I4u.normalTitle" = "Visit My Github Page For this App";
+"A5Q-Qk-I4u.normalTitle" = "Visita Mi Página de Github para Esta Aplicación";
 
 /* Class = "UIButton"; normalTitle = "Show More..."; ObjectID = "AIg-f2-PPx"; */
-"AIg-f2-PPx.normalTitle" = "Show More...";
+"AIg-f2-PPx.normalTitle" = "Mostrar Más...";
 
 /* Class = "UITabBarItem"; title = "Chat"; ObjectID = "Aga-Lb-dZZ"; */
-"Aga-Lb-dZZ.title" = "Chat";
+"Aga-Lb-dZZ.title" = "Charla";
 
 /* Class = "UILabel"; text = "Name"; ObjectID = "BUZ-Jh-ASa"; */
-"BUZ-Jh-ASa.text" = "Name";
+"BUZ-Jh-ASa.text" = "Nombre";
 
 /* Class = "UILabel"; text = "Build"; ObjectID = "Bad-So-nd2"; */
 "Bad-So-nd2.text" = "Build";
@@ -102,43 +102,43 @@
 "Ehi-wG-6sB.text" = "Label";
 
 /* Class = "UIButton"; normalTitle = "Show More..."; ObjectID = "FEh-ma-Zph"; */
-"FEh-ma-Zph.normalTitle" = "Show More...";
+"FEh-ma-Zph.normalTitle" = "Mostrar Más...";
 
 /* Class = "UILabel"; text = "Label"; ObjectID = "FEm-2t-CIb"; */
 "FEm-2t-CIb.text" = "Label";
 
 /* Class = "UIButton"; normalTitle = "Maybe Later"; ObjectID = "FnA-2E-Jq7"; */
-"FnA-2E-Jq7.normalTitle" = "Maybe Later";
+"FnA-2E-Jq7.normalTitle" = "Quizas Mas Tarde";
 
 /* Class = "UINavigationItem"; title = "Me"; ObjectID = "For-Aw-wrN"; */
 "For-Aw-wrN.title" = "Me";
 
 /* Class = "UITabBarItem"; title = "Calendar"; ObjectID = "Ga6-gg-IQU"; */
-"Ga6-gg-IQU.title" = "Calendar";
+"Ga6-gg-IQU.title" = "Calendario";
 
 /* Class = "UILabel"; text = "About Me"; ObjectID = "Hyr-Cw-9vl"; */
-"Hyr-Cw-9vl.text" = "About Me";
+"Hyr-Cw-9vl.text" = "Sobre Mi";
 
 /* Class = "UILabel"; text = "Name"; ObjectID = "Id0-Z3-70o"; */
-"Id0-Z3-70o.text" = "Name";
+"Id0-Z3-70o.text" = "Nombre";
 
 /* Class = "UIButton"; normalTitle = "CONFIRM"; ObjectID = "J5W-Th-Uca"; */
-"J5W-Th-Uca.normalTitle" = "CONFIRM";
+"J5W-Th-Uca.normalTitle" = "CONFIRMAR";
 
 /* Class = "UILabel"; text = "Total Points"; ObjectID = "J9X-FF-EYx"; */
-"J9X-FF-EYx.text" = "Total Points";
+"J9X-FF-EYx.text" = "Puntos Totales";
 
 /* Class = "UILabel"; text = "Label"; ObjectID = "JCO-Y8-H3U"; */
 "JCO-Y8-H3U.text" = "Label";
 
 /* Class = "UILabel"; text = "Teacher's Name"; ObjectID = "JNj-nw-gIh"; */
-"JNj-nw-gIh.text" = "Teacher's Name";
+"JNj-nw-gIh.text" = "Nombre del Profesor";
 
 /* Class = "UILabel"; text = "Quarter"; ObjectID = "JNv-Hn-mlE"; */
 "JNv-Hn-mlE.text" = "Quarter";
 
 /* Class = "UIButton"; normalTitle = "LOG IN"; ObjectID = "KCT-Og-t2k"; */
-"KCT-Og-t2k.normalTitle" = "LOG IN";
+"KCT-Og-t2k.normalTitle" = "INICIAR SESIÓN";
 
 /* Class = "UISegmentedControl"; Ksd-Ob-Zri.segmentTitles[0] = "First"; ObjectID = "Ksd-Ob-Zri"; */
 "Ksd-Ob-Zri.segmentTitles[0]" = "First";
@@ -147,31 +147,31 @@
 "Ksd-Ob-Zri.segmentTitles[1]" = "Second";
 
 /* Class = "UITextField"; placeholder = "Subdomain Here"; ObjectID = "Ksv-o4-h6Q"; */
-"Ksv-o4-h6Q.placeholder" = "Subdomain Here";
+"Ksv-o4-h6Q.placeholder" = "Subdominio Aquí";
 
 /* Class = "UILabel"; text = "Current Class"; ObjectID = "L1A-eY-tem"; */
-"L1A-eY-tem.text" = "Current Class";
+"L1A-eY-tem.text" = "Clase Actual";
 
 /* Class = "UILabel"; text = "Label"; ObjectID = "L1l-eQ-GA5"; */
 "L1l-eQ-GA5.text" = "Label";
 
 /* Class = "UILabel"; text = "Special Thanks To:"; ObjectID = "Ll4-VK-RMp"; */
-"Ll4-VK-RMp.text" = "Special Thanks To:";
+"Ll4-VK-RMp.text" = "Agradecimientos Especiales a:";
 
 /* Class = "UIViewController"; title = "Assignment Detail"; ObjectID = "Loo-xY-UXg"; */
-"Loo-xY-UXg.title" = "Assignment Detail";
+"Loo-xY-UXg.title" = "Detalle de Tarea";
 
 /* Class = "UILabel"; text = "Label"; ObjectID = "MMW-aR-Zs0"; */
 "MMW-aR-Zs0.text" = "Label";
 
 /* Class = "UILabel"; text = "Name"; ObjectID = "MXW-Yw-wpi"; */
-"MXW-Yw-wpi.text" = "Name";
+"MXW-Yw-wpi.text" = "Nombre";
 
 /* Class = "UILabel"; text = "While we are updating your courses"; ObjectID = "Mge-lm-nyj"; */
-"Mge-lm-nyj.text" = "While we are updating your courses";
+"Mge-lm-nyj.text" = "Mientras estamos actualizando tus cursos";
 
 /* Class = "UIButton"; normalTitle = "Register"; ObjectID = "OGx-a2-XTP"; */
-"OGx-a2-XTP.normalTitle" = "Register";
+"OGx-a2-XTP.normalTitle" = "Registro";
 
 /* Class = "UILabel"; text = ".myschoolapp.com"; ObjectID = "Peb-gB-R9X"; */
 "Peb-gB-R9X.text" = ".myschoolapp.com";
@@ -180,10 +180,10 @@
 "Pi1-Ui-NJU.text" = "Label";
 
 /* Class = "UIButton"; normalTitle = "LOG IN"; ObjectID = "Prf-DT-sB9"; */
-"Prf-DT-sB9.normalTitle" = "LOG IN";
+"Prf-DT-sB9.normalTitle" = "INICIAR SESIÓN";
 
 /* Class = "UICollectionViewController"; title = "Me"; ObjectID = "Q0f-l8-tfz"; */
-"Q0f-l8-tfz.title" = "Me";
+"Q0f-l8-tfz.title" = "Yo";
 
 /* Class = "UILabel"; text = "MFS Mobile"; ObjectID = "R8L-if-2Sq"; */
 "R8L-if-2Sq.text" = "MFS Mobile";
@@ -192,10 +192,10 @@
 "RRC-aI-PNR.text" = "Email";
 
 /* Class = "UITableViewController"; title = "Class Detail"; ObjectID = "SIS-mR-Y8t"; */
-"SIS-mR-Y8t.title" = "Class Detail";
+"SIS-mR-Y8t.title" = "Detalle de Clase";
 
 /* Class = "UIButton"; normalTitle = "Login"; ObjectID = "SiZ-UJ-i2p"; */
-"SiZ-UJ-i2p.normalTitle" = "Login";
+"SiZ-UJ-i2p.normalTitle" = "Iniciar Sesión";
 
 /* Class = "UITabBarController"; title = "MainTab"; ObjectID = "TWf-dU-uxH"; */
 "TWf-dU-uxH.title" = "MainTab";
@@ -204,28 +204,28 @@
 "UZ1-Ja-cer.text" = "Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.";
 
 /* Class = "UITextView"; text = "If you haven't registered for MobileServe yet, please do so as soon as possible. Thanks!"; ObjectID = "VUf-kG-IM0"; */
-"VUf-kG-IM0.text" = "If you haven't registered for MobileServe yet, please do so as soon as possible. Thanks!";
+"VUf-kG-IM0.text" = "Si aún no se ha registrado en MobileServe, hágalo lo antes posible. ¡Gracias!";
 
 /* Class = "UILabel"; text = "Label"; ObjectID = "Vdw-R0-Gj3"; */
 "Vdw-R0-Gj3.text" = "Label";
 
 /* Class = "UIBarButtonItem"; title = "Today"; ObjectID = "Vqp-lJ-jaV"; */
-"Vqp-lJ-jaV.title" = "Today";
+"Vqp-lJ-jaV.title" = "Hoy";
 
 /* Class = "UITableViewController"; title = "Settings"; ObjectID = "XRE-Nj-Rag"; */
-"XRE-Nj-Rag.title" = "Settings";
+"XRE-Nj-Rag.title" = "Ajustes";
 
 /* Class = "UILabel"; text = "https://"; ObjectID = "XVJ-eI-ALr"; */
 "XVJ-eI-ALr.text" = "https://";
 
 /* Class = "UILabel"; text = "Acknowledgement"; ObjectID = "YHJ-2A-3dZ"; */
-"YHJ-2A-3dZ.text" = "Acknowledgement";
+"YHJ-2A-3dZ.text" = "Reconocimiento";
 
 /* Class = "UILabel"; text = "Label"; ObjectID = "ZdZ-Cf-5lE"; */
 "ZdZ-Cf-5lE.text" = "Label";
 
 /* Class = "UIButton"; normalTitle = "Send Email"; ObjectID = "Zoq-dN-cof"; */
-"Zoq-dN-cof.normalTitle" = "Send Email";
+"Zoq-dN-cof.normalTitle" = "Enviar Email";
 
 /* Class = "UISegmentedControl"; a0k-pl-4C0.segmentTitles[0] = "First"; ObjectID = "a0k-pl-4C0"; */
 "a0k-pl-4C0.segmentTitles[0]" = "First";
@@ -240,16 +240,16 @@
 "a0k-pl-4C0.segmentTitles[3]" = "Fourth";
 
 /* Class = "UITabBarItem"; title = "Today"; ObjectID = "abE-uF-9cL"; */
-"abE-uF-9cL.title" = "Today";
+"abE-uF-9cL.title" = "Hoy";
 
 /* Class = "UILabel"; text = "Name"; ObjectID = "arN-ek-zeF"; */
-"arN-ek-zeF.text" = "Name";
+"arN-ek-zeF.text" = "Nombre";
 
 /* Class = "UINavigationItem"; title = "A Day"; ObjectID = "bQk-s9-hqs"; */
 "bQk-s9-hqs.title" = "A Day";
 
 /* Class = "UITabBarItem"; title = "Homework"; ObjectID = "bSa-Cf-LM5"; */
-"bSa-Cf-LM5.title" = "Homework";
+"bSa-Cf-LM5.title" = "Tarea";
 
 /* Class = "UILabel"; text = "Label"; ObjectID = "bjt-Fh-sHd"; */
 "bjt-Fh-sHd.text" = "Label";
@@ -270,7 +270,7 @@
 "eX9-aB-hZR.text" = "Label";
 
 /* Class = "UIButton"; normalTitle = "LOG IN"; ObjectID = "eff-bQ-VpN"; */
-"eff-bQ-VpN.normalTitle" = "LOG IN";
+"eff-bQ-VpN.normalTitle" = "INICIAR SESIÓN";
 
 /* Class = "UITextView"; text = "Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda."; ObjectID = "ejU-Qj-EwQ"; */
 "ejU-Qj-EwQ.text" = "Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.";
@@ -279,10 +279,10 @@
 "emS-Zt-K2o.text" = "You can login using your mobileserve account to check your total service hour. Wanna try it out?";
 
 /* Class = "UITableViewSection"; footerTitle = "Please send me an email or submit an issue on Github if you need any help. "; ObjectID = "f58-G3-a9j"; */
-"f58-G3-a9j.footerTitle" = "Please send me an email or submit an issue on Github if you need any help. ";
+"f58-G3-a9j.footerTitle" = "Envíeme un correo electrónico o envíe un problema en Github si necesita ayuda. ";
 
 /* Class = "UITableViewSection"; headerTitle = "Contact Information"; ObjectID = "f58-G3-a9j"; */
-"f58-G3-a9j.headerTitle" = "Contact Information";
+"f58-G3-a9j.headerTitle" = "Información del Contacto";
 
 /* Class = "UITextView"; text = "MFS Mobile now supports MobileServe!"; ObjectID = "f7u-Pk-F51"; */
 "f7u-Pk-F51.text" = "MFS Mobile now supports MobileServe!";
@@ -300,7 +300,7 @@
 "g9s-0k-R1y.text" = "Advisor";
 
 /* Class = "UILabel"; text = "Date"; ObjectID = "hOV-gt-8od"; */
-"hOV-gt-8od.text" = "Date";
+"hOV-gt-8od.text" = "La Fecha";
 
 /* Class = "UILabel"; text = "hiuhiuhiuhiuhiu "; ObjectID = "hz3-Dg-hZ1"; */
 "hz3-Dg-hZ1.text" = "hiuhiuhiuhiuhiu ";
@@ -312,7 +312,7 @@
 "jxe-La-Ofp.normalTitle" = "Button";
 
 /* Class = "UIViewController"; title = "Mail"; ObjectID = "kHl-UL-Fwq"; */
-"kHl-UL-Fwq.title" = "Mail";
+"kHl-UL-Fwq.title" = "Correo";
 
 /* Class = "UILabel"; text = "Room"; ObjectID = "l4m-jp-B4s"; */
 "l4m-jp-B4s.text" = "Room";
@@ -321,10 +321,10 @@
 "lVi-dq-L3q.text" = "123123";
 
 /* Class = "UITableViewController"; title = "Profile"; ObjectID = "laA-fL-7Hp"; */
-"laA-fL-7Hp.title" = "Profile";
+"laA-fL-7Hp.title" = "Perfil";
 
 /* Class = "UILabel"; text = "Select Your School"; ObjectID = "lce-Uo-RVe"; */
-"lce-Uo-RVe.text" = "Select Your School";
+"lce-Uo-RVe.text" = "Selecciona Tu Escuela";
 
 /* Class = "UITextView"; text = "- Class of 2017: Andy Pang, Sherry Wang - Class of 2018: Susu Guo, Mia Peng - Class of 2019: Chris Gu, Shuxuan Lyu"; ObjectID = "mhn-Vi-b94"; */
 "mhn-Vi-b94.text" = "- Class of 2017: Andy Pang, Sherry Wang - Class of 2018: Susu Guo, Mia Peng - Class of 2019: Chris Gu, Shuxuan Lyu";
@@ -342,43 +342,43 @@
 "ooY-hM-yuu.text" = "hiuhiuhiuhiuhiu uhiuhiuhiuhiuhiuh hiuhiuhiuhiuhiu";
 
 /* Class = "UIViewController"; title = "Main"; ObjectID = "pL9-2o-whX"; */
-"pL9-2o-whX.title" = "Main";
+"pL9-2o-whX.title" = "Pagina Principal";
 
 /* Class = "UILabel"; text = "Label"; ObjectID = "pQE-yv-qYi"; */
 "pQE-yv-qYi.text" = "Label";
 
 /* Class = "UILabel"; text = "Please Wait"; ObjectID = "poj-9P-jXp"; */
-"poj-9P-jXp.text" = "Please Wait";
+"poj-9P-jXp.text" = "Por Favor Espera";
 
 /* Class = "UILabel"; text = "Thanks for your support!"; ObjectID = "pv9-7J-xYx"; */
-"pv9-7J-xYx.text" = "Thanks for your support!";
+"pv9-7J-xYx.text" = "¡Gracias por su apoyo!";
 
 /* Class = "UIButton"; normalTitle = "OK"; ObjectID = "pwW-U7-lFq"; */
 "pwW-U7-lFq.normalTitle" = "OK";
 
 /* Class = "UILabel"; text = "Title"; ObjectID = "q8B-nI-ogg"; */
-"q8B-nI-ogg.text" = "Title";
+"q8B-nI-ogg.text" = "Título";
 
 /* Class = "UILabel"; text = "Title qwerty"; ObjectID = "qXf-rX-DEx"; */
-"qXf-rX-DEx.text" = "Title qwerty";
+"qXf-rX-DEx.text" = "Título qwerty";
 
 /* Class = "UILabel"; text = "Date"; ObjectID = "qav-cm-dna"; */
-"qav-cm-dna.text" = "Date";
+"qav-cm-dna.text" = "La Fecha";
 
 /* Class = "UITextView"; text = "Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda. hfieruhafuheaoubcvuaiebrvbcuiasbbvbhadbvjhbjhsbchj iudcuaesfiouhuefawubfueiaw"; ObjectID = "rDN-Pd-9AE"; */
 "rDN-Pd-9AE.text" = "Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda. hfieruhafuheaoubcvuaiebrvbcuiasbbvbhadbvjhbjhsbchj iudcuaesfiouhuefawubfueiaw";
 
 /* Class = "UILabel"; text = "Capstone Audiences"; ObjectID = "rGR-2j-1LK"; */
-"rGR-2j-1LK.text" = "Capstone Audiences";
+"rGR-2j-1LK.text" = "Audiencias de Capstone";
 
 /* Class = "UILabel"; text = "Grade"; ObjectID = "reN-G7-IAC"; */
-"reN-G7-IAC.text" = "Grade";
+"reN-G7-IAC.text" = "Nota";
 
 /* Class = "UILabel"; text = "Beta Testers"; ObjectID = "sSB-FL-Hq8"; */
-"sSB-FL-Hq8.text" = "Beta Testers";
+"sSB-FL-Hq8.text" = "Beta Probadores";
 
 /* Class = "UITextView"; text = "Register for MobileServe"; ObjectID = "t0g-lT-uv4"; */
-"t0g-lT-uv4.text" = "Register for MobileServe";
+"t0g-lT-uv4.text" = "Regístrese para MobileServe";
 
 /* Class = "UILabel"; text = "@mfriends.org"; ObjectID = "tMD-iZ-CBx"; */
 "tMD-iZ-CBx.text" = "@mfriends.org";
@@ -399,19 +399,19 @@
 "uxc-AZ-jZq.text" = "255";
 
 /* Class = "UIButton"; normalTitle = "Cancel"; ObjectID = "vAX-ny-rch"; */
-"vAX-ny-rch.normalTitle" = "Cancel";
+"vAX-ny-rch.normalTitle" = "Cancelar";
 
 /* Class = "UILabel"; text = "Label"; ObjectID = "whC-FT-atg"; */
 "whC-FT-atg.text" = "Label";
 
 /* Class = "UILabel"; text = "Cumulative Grade"; ObjectID = "ws8-Ti-aCJ"; */
-"ws8-Ti-aCJ.text" = "Cumulative Grade";
+"ws8-Ti-aCJ.text" = "Nota acumulativo";
 
 /* Class = "UIButton"; normalTitle = "SUBMIT"; ObjectID = "wvd-i8-wpD"; */
-"wvd-i8-wpD.normalTitle" = "SUBMIT";
+"wvd-i8-wpD.normalTitle" = "ENVIAR";
 
 /* Class = "UIButton"; normalTitle = "Add to Calendar"; ObjectID = "xTJ-RK-4kM"; */
-"xTJ-RK-4kM.normalTitle" = "Add to Calendar";
+"xTJ-RK-4kM.normalTitle" = "Añadir al Calendario";
 
 /* Class = "UILabel"; text = "Label"; ObjectID = "zxu-Y2-pWy"; */
 "zxu-Y2-pWy.text" = "Label";
