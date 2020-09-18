@@ -34,6 +34,7 @@ struct Provider: IntentTimelineProvider {
         let listClasses = school.classesOnADayAfter(date: Date())
         if listClasses.isEmpty {  // No Class on This Day or end of school day.
             HomeworkFetch().returnWithHomeworkCount(configuration: configuration, completionWithHomework: completion)
+            return
         }
         
         let formatter = DateFormatter()
@@ -169,8 +170,12 @@ struct HomeworkFetch {
                                                 error: nil)
                         let endDate = Date() + 5.minutes
                         let timeLine = Timeline(entries: [entry], policy: .after(endDate.date))
+                        
                         completionWithHomework(timeLine)
+                        return
                     }
+                    
+                    completionWithHomework(completeWithError(for: configuration, error: "Unknown Error"))
                 } catch {
                     completionWithHomework(completeWithError(for: configuration, error: "Data parsing failed"))
                     NSLog("Data parsing failed")
@@ -178,8 +183,6 @@ struct HomeworkFetch {
             } else {
                 completionWithHomework(completeWithError(for: configuration, error: error!.localizedDescription))
             }
-            
-            completionWithHomework(completeWithError(for: configuration, error: "Unknown Error"))
         })
 
         task.resume()
@@ -203,29 +206,42 @@ struct Next_ClassEntryView : View {
                     .foregroundColor(Color.black.opacity(0.4))
             }
             
-            
-            
-            VStack(spacing: 20) {
-                if entry.nextClass != nil {
-                    Text("Next Class")
+            if entry.nextClass != nil {
+                NextClassView(nextClass: entry.nextClass!)
+            } else if entry.homework != nil {
+                VStack {
+                    Text("Homework")
                         .foregroundColor(.white)
                         .font(.headline)
+                        .padding()
                     
-                    Text(entry.nextClass!.className)
-                        .foregroundColor(.white)
-                        .lineLimit(3)
-                        .multilineTextAlignment(.center)
-                        .padding(.horizontal)
-                    
-                    if entry.nextClass!.roomNumber != nil {
-                        Text(entry.nextClass!.roomNumber!)
+                    HStack {
+                        VStack(alignment: .center) {
+                            Text(String(entry.homework!.completed))
+                                .foregroundColor(.white)
+                                .font(.largeTitle)
+
+                            Text("done")
+                                .foregroundColor(.white)
+                                .font(.caption)
+                        }
+                        
+                        Text("/")
                             .foregroundColor(.white)
-                            .lineLimit(1)
-                            .font(.caption)
+                            .font(.largeTitle)
+                        
+                        VStack {
+                            Text(String(entry.homework!.total))
+                                .foregroundColor(.white)
+                                .font(.largeTitle)
+
+                            Text("due")
+                                .foregroundColor(.white)
+                                .font(.caption)
+                        }
                     }
-                    
+                    .padding()
                 }
-                
             }
         }
     }
@@ -241,8 +257,8 @@ struct Next_Class: Widget {
         IntentConfiguration(kind: kind, intent: ConfigurationIntent.self, provider: Provider()) { entry in
             Next_ClassEntryView(entry: entry)
         }
-        .configurationDisplayName("My Widget")
-        .description("This is an example widget.")
+        .configurationDisplayName("Next Class")
+        .description("This widget displays your next class.")
     }
 }
 

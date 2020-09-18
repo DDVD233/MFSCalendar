@@ -10,6 +10,7 @@ import UIKit
 import M13Checkbox
 import SafariServices
 import SVProgressHUD
+import WidgetKit
 
 class homeworKDetailViewController: UIViewController, SFSafariViewControllerDelegate, UIDocumentInteractionControllerDelegate {
     
@@ -396,6 +397,9 @@ class homeworkDetailViewCell: UITableViewCell {
             }
             
             DispatchQueue.main.async {
+                if #available(iOS 14.0, *) {
+                    WidgetCenter.shared.reloadAllTimelines()
+                }
                 self.activityIndicator.isHidden = true
                 self.activityIndicator.stopAnimating()
             }

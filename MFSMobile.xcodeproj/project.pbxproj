@@ -20,11 +20,8 @@
 		E41C5E032512FF7C00428606 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E41C5E022512FF7200428606 /* libsqlite3.tbd */; };
 		E41C5E052512FF8D00428606 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E41C5E042512FF8800428606 /* libz.tbd */; };
 		E41C5E072512FFA100428606 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E41C5E062512FF9A00428606 /* libc++.tbd */; };
-		E41C5E092512FFB000428606 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E41C5E082512FFB000428606 /* StoreKit.framework */; };
 		E41C5E282513116D00428606 /* GTMSessionFetcher.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = E41C5E272513116D00428606 /* GTMSessionFetcher.xcframework */; };
 		E41C5E4F2513140600428606 /* FirebaseCrashlytics.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = E41C5E4C2513140500428606 /* FirebaseCrashlytics.xcframework */; };
-		E41C5E502513140600428606 /* run in Resources */ = {isa = PBXBuildFile; fileRef = E41C5E4D2513140500428606 /* run */; };
-		E41C5E512513140600428606 /* upload-symbols in Resources */ = {isa = PBXBuildFile; fileRef = E41C5E4E2513140500428606 /* upload-symbols */; };
 		E41C5E592513140C00428606 /* FirebaseRemoteConfig.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = E41C5E532513140C00428606 /* FirebaseRemoteConfig.xcframework */; };
 		E41C5E5B2513140C00428606 /* FirebasePerformance.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E41C5E552513140C00428606 /* FirebasePerformance.framework */; };
 		E41C5E5C2513140C00428606 /* FirebaseABTesting.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = E41C5E562513140C00428606 /* FirebaseABTesting.xcframework */; };
@@ -53,6 +50,8 @@
 		E440F1BC1EEA7F4E004AFD0B /* MoyaNetworkLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E440F1BB1EEA7F4E004AFD0B /* MoyaNetworkLayer.swift */; };
 		E445E73E1EAD8B7D00794560 /* MoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E445E73D1EAD8B7D00794560 /* MoreViewController.swift */; };
 		E44632501F9BB020004F8E2E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E4F86B3C1DF0E20C00CAD72B /* LaunchScreen.storyboard */; };
+		E44822DA251545950072B355 /* Next_Class.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = E44822DD251545950072B355 /* Next_Class.intentdefinition */; };
+		E44822DB251545950072B355 /* Next_Class.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = E44822DD251545950072B355 /* Next_Class.intentdefinition */; };
 		E44CC0DB231C30790078191C /* NewChatLoginPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E44CC0D5231C30790078191C /* NewChatLoginPresenter.swift */; };
 		E44CC0DC231C30790078191C /* NewChatLoginWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E44CC0D6231C30790078191C /* NewChatLoginWorker.swift */; };
 		E44CC0DD231C30790078191C /* NewChatLoginRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E44CC0D7231C30790078191C /* NewChatLoginRouter.swift */; };
@@ -64,6 +63,7 @@
 		E45476EB1E8B3607004466D0 /* th-menu2.png in Resources */ = {isa = PBXBuildFile; fileRef = E45476EA1E8B3607004466D0 /* th-menu2.png */; };
 		E45510EF1F4D6F09001CF9BE /* GroupPossibleContent.plist in Resources */ = {isa = PBXBuildFile; fileRef = E45510EE1F4D6F09001CF9BE /* GroupPossibleContent.plist */; };
 		E465416A2514781100BBD625 /* FirebaseCrashlytics.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = E41C5E4C2513140500428606 /* FirebaseCrashlytics.xcframework */; };
+		E465418F25147B0300BBD625 /* NextClassView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E465418E25147B0300BBD625 /* NextClassView.swift */; };
 		E470C37F21EE355A00E5C358 /* School.swift in Sources */ = {isa = PBXBuildFile; fileRef = E470C37E21EE355A00E5C358 /* School.swift */; };
 		E470C38021EE503400E5C358 /* MFS.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4288E1320360F6600E4488D /* MFS.swift */; };
 		E470C38121EE503700E5C358 /* School.swift in Sources */ = {isa = PBXBuildFile; fileRef = E470C37E21EE355A00E5C358 /* School.swift */; };
@@ -106,8 +106,6 @@
 		E497DFE92512419400852BCC /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E497DFE82512419400852BCC /* SwiftUI.framework */; };
 		E497DFEC2512419400852BCC /* Next_Class.swift in Sources */ = {isa = PBXBuildFile; fileRef = E497DFEB2512419400852BCC /* Next_Class.swift */; };
 		E497DFEF2512419500852BCC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E497DFEE2512419500852BCC /* Assets.xcassets */; };
-		E497DFF12512419500852BCC /* Next_Class.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = E497DFED2512419400852BCC /* Next_Class.intentdefinition */; };
-		E497DFF22512419500852BCC /* Next_Class.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = E497DFED2512419400852BCC /* Next_Class.intentdefinition */; };
 		E497DFF52512419500852BCC /* Next ClassExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = E497DFE52512419400852BCC /* Next ClassExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		E497DFFA2512435800852BCC /* MFS.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4288E1320360F6600E4488D /* MFS.swift */; };
 		E497DFFB2512435A00852BCC /* CMH.swift in Sources */ = {isa = PBXBuildFile; fileRef = E470C38621EEB23700E5C358 /* CMH.swift */; };
@@ -271,6 +269,10 @@
 		E440F1BB1EEA7F4E004AFD0B /* MoyaNetworkLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MoyaNetworkLayer.swift; path = ../MoyaNetworkLayer.swift; sourceTree = "<group>"; };
 		E44484D71E13A105002C68D5 /* MFSCalender.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MFSCalender.entitlements; sourceTree = "<group>"; };
 		E445E73D1EAD8B7D00794560 /* MoreViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoreViewController.swift; sourceTree = "<group>"; };
+		E44822DC251545950072B355 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; name = Base; path = Base.lproj/Next_Class.intentdefinition; sourceTree = "<group>"; };
+		E44822E92515459A0072B355 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Next_Class.strings; sourceTree = "<group>"; };
+		E44822F02515459D0072B355 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Next_Class.strings"; sourceTree = "<group>"; };
+		E44822F72515459E0072B355 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Next_Class.strings; sourceTree = "<group>"; };
 		E44CC0D5231C30790078191C /* NewChatLoginPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewChatLoginPresenter.swift; sourceTree = "<group>"; };
 		E44CC0D6231C30790078191C /* NewChatLoginWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewChatLoginWorker.swift; sourceTree = "<group>"; };
 		E44CC0D7231C30790078191C /* NewChatLoginRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewChatLoginRouter.swift; sourceTree = "<group>"; };
@@ -281,6 +283,7 @@
 		E453F0D01EA137D900BCE58D /* CalendarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = CalendarViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		E45476EA1E8B3607004466D0 /* th-menu2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "th-menu2.png"; sourceTree = "<group>"; };
 		E45510EE1F4D6F09001CF9BE /* GroupPossibleContent.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = GroupPossibleContent.plist; sourceTree = "<group>"; };
+		E465418E25147B0300BBD625 /* NextClassView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NextClassView.swift; sourceTree = "<group>"; };
 		E470C37E21EE355A00E5C358 /* School.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = School.swift; sourceTree = "<group>"; };
 		E470C38221EE692200E5C358 /* CMH Logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "CMH Logo.png"; sourceTree = "<group>"; };
 		E470C38421EE6A5E00E5C358 /* SchoolSelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchoolSelectionViewController.swift; sourceTree = "<group>"; };
@@ -364,7 +367,6 @@
 		E497DFE62512419400852BCC /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		E497DFE82512419400852BCC /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		E497DFEB2512419400852BCC /* Next_Class.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Next_Class.swift; sourceTree = "<group>"; };
-		E497DFED2512419400852BCC /* Next_Class.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = Next_Class.intentdefinition; sourceTree = "<group>"; };
 		E497DFEE2512419500852BCC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E497DFF02512419500852BCC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E497DFF62512419500852BCC /* Next ClassExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Next ClassExtension.entitlements"; sourceTree = "<group>"; };
@@ -460,7 +462,6 @@
 				E41C5E072512FFA100428606 /* libc++.tbd in Frameworks */,
 				E41C5E702513141600428606 /* FirebaseCore.xcframework in Frameworks */,
 				E41C5E6B2513141600428606 /* GoogleAppMeasurement.framework in Frameworks */,
-				E41C5E092512FFB000428606 /* StoreKit.framework in Frameworks */,
 				E41C5E712513141600428606 /* GoogleDataTransport.xcframework in Frameworks */,
 				E41C5E592513140C00428606 /* FirebaseRemoteConfig.xcframework in Frameworks */,
 				E41C5E4F2513140600428606 /* FirebaseCrashlytics.xcframework in Frameworks */,
@@ -676,9 +677,10 @@
 			children = (
 				E497DFEB2512419400852BCC /* Next_Class.swift */,
 				E41C5DFE25125DED00428606 /* SwiftUIExtensions.swift */,
-				E497DFED2512419400852BCC /* Next_Class.intentdefinition */,
+				E44822DD251545950072B355 /* Next_Class.intentdefinition */,
 				E497DFEE2512419500852BCC /* Assets.xcassets */,
 				E497DFF02512419500852BCC /* Info.plist */,
+				E465418E25147B0300BBD625 /* NextClassView.swift */,
 			);
 			path = "Next Class";
 			sourceTree = "<group>";
@@ -955,9 +957,7 @@
 					};
 					E4F86B2C1DF0E20C00CAD72B = {
 						CreatedOnToolsVersion = 8.1;
-						DevelopmentTeam = HWH6G9P2V2;
 						LastSwiftMigration = 1020;
-						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
 								enabled = 1;
@@ -1043,7 +1043,6 @@
 				E49E53401F990524003011A6 /* MSIntro.png in Resources */,
 				E4FB5A8B1F96E82400D7FED1 /* CourseBackground.jpg in Resources */,
 				E436EDC41F96E3AF00395DA5 /* MenuService.png in Resources */,
-				E41C5E502513140600428606 /* run in Resources */,
 				E49522A11F96DFA200C17A83 /* Arrowhead-Right.png in Resources */,
 				E495229C1F96CD6900C17A83 /* MenuAbout.png in Resources */,
 				E495229D1F96CD6900C17A83 /* MenuCourses.png in Resources */,
@@ -1065,7 +1064,6 @@
 				E49321881F5D32E800C65067 /* .travis.yml in Resources */,
 				E413AB121EE8A796001EB189 /* brush_pencil.png in Resources */,
 				E413AB101EE89683001EB189 /* questionmark.png in Resources */,
-				E41C5E512513140600428606 /* upload-symbols in Resources */,
 				E4EEFB131DF274EA00F199BE /* Images.xcassets in Resources */,
 				E470C38321EE692300E5C358 /* CMH Logo.png in Resources */,
 				E4F86B361DF0E20C00CAD72B /* Main.storyboard in Resources */,
@@ -1290,7 +1288,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E497DFF12512419500852BCC /* Next_Class.intentdefinition in Sources */,
+				E44822DB251545950072B355 /* Next_Class.intentdefinition in Sources */,
 				E497DFEC2512419400852BCC /* Next_Class.swift in Sources */,
 				E497DFFB2512435A00852BCC /* CMH.swift in Sources */,
 				E41C5DFD2512492000428606 /* FileList.swift in Sources */,
@@ -1298,6 +1296,7 @@
 				E497DFFE2512436700852BCC /* ProjectPublicFunctions.swift in Sources */,
 				E4EFCD562514699E0048F692 /* login.swift in Sources */,
 				E4EFCD5C251469E60048F692 /* Extensions.swift in Sources */,
+				E465418F25147B0300BBD625 /* NextClassView.swift in Sources */,
 				E497DFFA2512435800852BCC /* MFS.swift in Sources */,
 				E497DFFD2512436300852BCC /* UserDefaults.swift in Sources */,
 			);
@@ -1315,7 +1314,7 @@
 				E4B340041F0891AE00D6039A /* ClassPagerViewController.swift in Sources */,
 				E470C37F21EE355A00E5C358 /* School.swift in Sources */,
 				E4CE439B1EAD0D51000D743B /* LoginViewController.swift in Sources */,
-				E497DFF22512419500852BCC /* Next_Class.intentdefinition in Sources */,
+				E44822DA251545950072B355 /* Next_Class.intentdefinition in Sources */,
 				E470C38521EE6A5E00E5C358 /* SchoolSelectionViewController.swift in Sources */,
 				E427868A1F568EB100583D1E /* ProfileViewController.swift in Sources */,
 				E4F86B331DF0E20C00CAD72B /* MainViewController.swift in Sources */,
@@ -1393,6 +1392,17 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		E44822DD251545950072B355 /* Next_Class.intentdefinition */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E44822DC251545950072B355 /* Base */,
+				E44822E92515459A0072B355 /* en */,
+				E44822F02515459D0072B355 /* zh-Hans */,
+				E44822F72515459E0072B355 /* ja */,
+			);
+			name = Next_Class.intentdefinition;
+			sourceTree = "<group>";
+		};
 		E484E65A1EFA337F0056F2D5 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -1458,7 +1468,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CODE_SIGN_ENTITLEMENTS = "Class Schedule/Class Schedule.entitlements";
-				CURRENT_PROJECT_VERSION = 3195;
+				CURRENT_PROJECT_VERSION = 3305;
 				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				INFOPLIST_FILE = "Class Schedule/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -1467,7 +1477,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.0.2;
+				MARKETING_VERSION = 2.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.dwei.ClassSchedule;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1484,7 +1494,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CODE_SIGN_ENTITLEMENTS = "Class Schedule/Class Schedule.entitlements";
-				CURRENT_PROJECT_VERSION = 3195;
+				CURRENT_PROJECT_VERSION = 3305;
 				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				INFOPLIST_FILE = "Class Schedule/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -1493,7 +1503,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.0.2;
+				MARKETING_VERSION = 2.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.dwei.ClassSchedule;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1620,6 +1630,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_ENTITLEMENTS = "Next ClassExtension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 3305;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -1630,6 +1641,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
+				MARKETING_VERSION = 2.1.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.dwei.Next-Class";
@@ -1654,6 +1666,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_ENTITLEMENTS = "Next ClassExtension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 3305;
 				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = "Next Class/Info.plist";
@@ -1663,6 +1676,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
+				MARKETING_VERSION = 2.1.0;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.dwei.Next-Class";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1796,9 +1810,13 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-Plan P";
 				CODE_SIGN_ENTITLEMENTS = MFSCalender/MFSCalender.entitlements;
-				CURRENT_PROJECT_VERSION = 3195;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 3305;
 				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = YES;
 				DEVELOPMENT_TEAM = HWH6G9P2V2;
+				"ENABLE_HARDENED_RUNTIME[sdk=macosx*]" = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -1811,7 +1829,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.2;
+				MARKETING_VERSION = 2.1.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1824,6 +1842,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.dwei;
 				PRODUCT_NAME = "MFS Mobile";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1837,9 +1857,13 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-Plan P";
 				CODE_SIGN_ENTITLEMENTS = MFSCalender/MFSCalender.entitlements;
-				CURRENT_PROJECT_VERSION = 3195;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 3305;
 				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = YES;
 				DEVELOPMENT_TEAM = HWH6G9P2V2;
+				"ENABLE_HARDENED_RUNTIME[sdk=macosx*]" = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -1852,7 +1876,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.2;
+				MARKETING_VERSION = 2.1.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1865,6 +1889,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.dwei;
 				PRODUCT_NAME = "MFS Mobile";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

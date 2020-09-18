@@ -73,8 +73,6 @@
 	<string>public.app-category.education</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>MKDirectionsApplicationSupportedModes</key>
-	<array/>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
@@ -102,6 +100,10 @@
 	<string>The app may use photo library to submit homework or send to friends.</string>
 	<key>NSRemindersUsageDescription</key>
 	<string>Add events to calendar</string>
+	<key>NSUserActivityTypes</key>
+	<array>
+		<string>NextClassIntent</string>
+	</array>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>

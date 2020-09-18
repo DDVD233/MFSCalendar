@@ -19,6 +19,7 @@ import Alamofire
     import FirebaseAnalytics
 #endif
 import StoreKit
+import WidgetKit
 
 
 class homeworkViewController: UITableViewController, UIViewControllerPreviewingDelegate, IndicatorInfoProvider, UIDocumentPickerDelegate {
@@ -593,6 +594,9 @@ class homeworkViewCell: UITableViewCell {
             }
             
             DispatchQueue.main.async {
+                if #available(iOS 14.0, *) {
+                    WidgetCenter.shared.reloadAllTimelines()
+                }
                 self.activityIndicator.isHidden = true
                 self.activityIndicator.stopAnimating()
             }
