@@ -86,14 +86,14 @@ func disableLargeTitle(on viewController: UIViewController) {
 }
 
 public func presentErrorMessage(presentMessage: String, layout: MessageView.Layout) {
-    let view = MessageView.viewFromNib(layout: layout)
-    view.configureTheme(.error)
-    let icon = "😱"
-    view.configureContent(title: "Error!", body: presentMessage, iconText: icon)
-    print("[ERROR] " + presentMessage)
-    view.button?.isHidden = true
-    let config = SwiftMessages.Config()
     DispatchQueue.main.async {
+        let view = MessageView.viewFromNib(layout: layout)
+        view.configureTheme(.error)
+        let icon = "😱"
+        view.configureContent(title: "Error!", body: presentMessage, iconText: icon)
+        print("[ERROR] " + presentMessage)
+        view.button?.isHidden = true
+        let config = SwiftMessages.Config()
         SwiftMessages.show(config: config, view: view)
     }
 }
@@ -276,7 +276,9 @@ class ClassView {
 
         let dataTask = session.dataTask(with: request3, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
             if error == nil {
-                let json = try! JSON(data: data!)
+                guard let json = try? JSON(data: data!) else {
+                    return 
+                }
                 if let filePath = json[0]["FilenameUrl"].string {
                     photoLink = "https:" + filePath
                 } else {

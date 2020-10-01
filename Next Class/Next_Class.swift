@@ -22,7 +22,17 @@ struct Provider: IntentTimelineProvider {
     }
 
     func getSnapshot(for configuration: NextClassIntent, in context: Context, completion: @escaping (SimpleEntry) -> ()) {
-        let entry = SimpleEntry(date: Date(), configuration: configuration, nextClass: nil, homework: nil, error: "MFS Mobile")
+        let sampleImage = Bundle.main.path(forResource: "WidgetSampleBackground", ofType: "png")
+        print(Bundle.main.bundlePath)
+        let nextClass = ClassDetail(className: "AP Studio",
+                                    imagePath: sampleImage,
+                                    roomNumber: "Main Building USArt")
+        print(sampleImage)
+        let entry = SimpleEntry(date: Date(),
+                                configuration: configuration,
+                                nextClass: nextClass,
+                                homework: nil,
+                                error: nil)
         completion(entry)
     }
     
