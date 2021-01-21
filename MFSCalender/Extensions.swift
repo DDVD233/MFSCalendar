@@ -89,7 +89,6 @@ extension String {
     
     func removeNewLine() -> String {
         let str = self.replacingOccurrences(of: "^\\n*", with: "", options: .regularExpression)
-        print(str)
         return str
     }
 
