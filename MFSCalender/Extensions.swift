@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Foundation
 //import Kanna
 
 //extension CourseMO {
@@ -140,11 +141,11 @@ extension UIColor {
 }
 
 
-extension UIView {
-    func copyView() -> AnyObject {
-        return NSKeyedUnarchiver.unarchiveObject(with: NSKeyedArchiver.archivedData(withRootObject: self))! as AnyObject
-    }
-}
+//extension UIView {
+//    func copyView() -> AnyObject {
+//        return NSKeyedArchiver.unarchivedObject(ofClass: self, from: NSKeyedArchiver.archivedData(withRootObject: self))! as AnyObject
+//    }
+//}
 
 
 extension UIImage {

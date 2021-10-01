@@ -73,7 +73,6 @@
 		E48D4E051E61FC26008B0A97 /* TodayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48D4E041E61FC26008B0A97 /* TodayViewController.swift */; };
 		E48D4E081E61FC26008B0A97 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E48D4E061E61FC26008B0A97 /* MainInterface.storyboard */; };
 		E48D4E0C1E61FC26008B0A97 /* Class Schedule.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = E48D4DFF1E61FC25008B0A97 /* Class Schedule.appex */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		E48F15531F745BF400A36904 /* MFSCalendarTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48F15521F745BF400A36904 /* MFSCalendarTests.swift */; };
 		E49321881F5D32E800C65067 /* .travis.yml in Resources */ = {isa = PBXBuildFile; fileRef = E49321871F5D32E800C65067 /* .travis.yml */; };
 		E495229C1F96CD6900C17A83 /* MenuAbout.png in Resources */ = {isa = PBXBuildFile; fileRef = E49522981F96C4A900C17A83 /* MenuAbout.png */; };
 		E495229D1F96CD6900C17A83 /* MenuCourses.png in Resources */ = {isa = PBXBuildFile; fileRef = E49522991F96C4AA00C17A83 /* MenuCourses.png */; };
@@ -97,7 +96,6 @@
 		E4ADC9EE1E882172002A46F7 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4ADC9ED1E882172002A46F7 /* Extensions.swift */; };
 		E4B340041F0891AE00D6039A /* ClassPagerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B340031F0891AE00D6039A /* ClassPagerViewController.swift */; };
 		E4B340061F08942000D6039A /* classTopicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B340051F08942000D6039A /* classTopicViewController.swift */; };
-		E4B6F4C11F746AE600F56C4D /* MFSCalendarUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48F15601F7467D900A36904 /* MFSCalendarUITests.swift */; };
 		E4B9378120C71DE500F0A225 /* NetworkFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B9378020C71DE500F0A225 /* NetworkFunctions.swift */; };
 		E4BD88961F35973C0000FEF3 /* TargetPublicFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BD88951F35973C0000FEF3 /* TargetPublicFunctions.swift */; };
 		E4BD88981F383A060000FEF3 /* ClassTimetableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BD88971F383A060000FEF3 /* ClassTimetableViewController.swift */; };
@@ -143,20 +141,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = E48D4DFE1E61FC25008B0A97;
 			remoteInfo = "Class Schedule";
-		};
-		E48F15551F745BF400A36904 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E4F86B251DF0E20C00CAD72B /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = E4F86B2C1DF0E20C00CAD72B;
-			remoteInfo = MFSCalendar;
-		};
-		E48F15631F7467D900A36904 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E4F86B251DF0E20C00CAD72B /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = E4F86B2C1DF0E20C00CAD72B;
-			remoteInfo = MFSCalendar;
 		};
 		E497DFF32512419500852BCC /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -279,12 +263,6 @@
 		E48D4E041E61FC26008B0A97 /* TodayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = TodayViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		E48D4E091E61FC26008B0A97 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E48D4E111E620698008B0A97 /* Class Schedule.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Class Schedule.entitlements"; sourceTree = "<group>"; };
-		E48F15501F745BF400A36904 /* MFSMobileTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MFSMobileTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		E48F15521F745BF400A36904 /* MFSCalendarTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MFSCalendarTests.swift; sourceTree = "<group>"; };
-		E48F15541F745BF400A36904 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		E48F155E1F7467D900A36904 /* MFSMobileUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MFSMobileUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		E48F15601F7467D900A36904 /* MFSCalendarUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MFSCalendarUITests.swift; sourceTree = "<group>"; };
-		E48F15621F7467D900A36904 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E48F159A1F74687200A36904 /* Alamofire.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Alamofire.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E48F159B1F74687200A36904 /* DGElasticPullToRefresh.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DGElasticPullToRefresh.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E48F159C1F74687200A36904 /* Down.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Down.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -379,20 +357,6 @@
 			files = (
 				E48D4E021E61FC26008B0A97 /* NotificationCenter.framework in Frameworks */,
 				10073BBBD6576FE65C298AE5 /* Pods_Class_Schedule.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		E48F154D1F745BF400A36904 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		E48F155B1F7467D900A36904 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -532,24 +496,6 @@
 			path = "Class Schedule";
 			sourceTree = "<group>";
 		};
-		E48F15511F745BF400A36904 /* MFSCalendarTests */ = {
-			isa = PBXGroup;
-			children = (
-				E48F15521F745BF400A36904 /* MFSCalendarTests.swift */,
-				E48F15541F745BF400A36904 /* Info.plist */,
-			);
-			path = MFSCalendarTests;
-			sourceTree = "<group>";
-		};
-		E48F155F1F7467D900A36904 /* MFSCalendarUITests */ = {
-			isa = PBXGroup;
-			children = (
-				E48F15601F7467D900A36904 /* MFSCalendarUITests.swift */,
-				E48F15621F7467D900A36904 /* Info.plist */,
-			);
-			path = MFSCalendarUITests;
-			sourceTree = "<group>";
-		};
 		E497DFEA2512419400852BCC /* Next Class */ = {
 			isa = PBXGroup;
 			children = (
@@ -620,8 +566,6 @@
 				E4EBD9951F9BAAED0046CAD1 /* AirshipConfig.plist */,
 				E4F86B2F1DF0E20C00CAD72B /* MFSCalendar */,
 				E48D4E031E61FC26008B0A97 /* Class Schedule Widget */,
-				E48F15511F745BF400A36904 /* MFSCalendarTests */,
-				E48F155F1F7467D900A36904 /* MFSCalendarUITests */,
 				E497DFEA2512419400852BCC /* Next Class */,
 				E48D4E001E61FC26008B0A97 /* Frameworks */,
 				E4F86B2E1DF0E20C00CAD72B /* Products */,
@@ -635,8 +579,6 @@
 			children = (
 				E4F86B2D1DF0E20C00CAD72B /* MFS Mobile.app */,
 				E48D4DFF1E61FC25008B0A97 /* Class Schedule.appex */,
-				E48F15501F745BF400A36904 /* MFSMobileTests.xctest */,
-				E48F155E1F7467D900A36904 /* MFSMobileUITests.xctest */,
 				E497DFE52512419400852BCC /* Next ClassExtension.appex */,
 			);
 			name = Products;
@@ -715,42 +657,6 @@
 			productReference = E48D4DFF1E61FC25008B0A97 /* Class Schedule.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
-		E48F154F1F745BF400A36904 /* MFSMobileTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = E48F15571F745BF400A36904 /* Build configuration list for PBXNativeTarget "MFSMobileTests" */;
-			buildPhases = (
-				E48F154C1F745BF400A36904 /* Sources */,
-				E48F154D1F745BF400A36904 /* Frameworks */,
-				E48F154E1F745BF400A36904 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				E48F15561F745BF400A36904 /* PBXTargetDependency */,
-			);
-			name = MFSMobileTests;
-			productName = MFSCalendarTests;
-			productReference = E48F15501F745BF400A36904 /* MFSMobileTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		E48F155D1F7467D900A36904 /* MFSMobileUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = E48F15651F7467D900A36904 /* Build configuration list for PBXNativeTarget "MFSMobileUITests" */;
-			buildPhases = (
-				E48F155A1F7467D900A36904 /* Sources */,
-				E48F155B1F7467D900A36904 /* Frameworks */,
-				E48F155C1F7467D900A36904 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				E48F15641F7467D900A36904 /* PBXTargetDependency */,
-			);
-			name = MFSMobileUITests;
-			productName = MFSCalendarUITests;
-			productReference = E48F155E1F7467D900A36904 /* MFSMobileUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 		E497DFE42512419400852BCC /* Next ClassExtension */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = E497DFF92512419500852BCC /* Build configuration list for PBXNativeTarget "Next ClassExtension" */;
@@ -800,7 +706,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1200;
-				LastUpgradeCheck = 1000;
+				LastUpgradeCheck = 1300;
 				ORGANIZATIONNAME = David;
 				TargetAttributes = {
 					E48D4DFE1E61FC25008B0A97 = {
@@ -816,19 +722,6 @@
 								enabled = 0;
 							};
 						};
-					};
-					E48F154F1F745BF400A36904 = {
-						CreatedOnToolsVersion = 9.0;
-						DevelopmentTeam = HWH6G9P2V2;
-						ProvisioningStyle = Automatic;
-						TestTargetID = E4F86B2C1DF0E20C00CAD72B;
-					};
-					E48F155D1F7467D900A36904 = {
-						CreatedOnToolsVersion = 9.0;
-						DevelopmentTeam = HWH6G9P2V2;
-						LastSwiftMigration = 1020;
-						ProvisioningStyle = Automatic;
-						TestTargetID = E4F86B2C1DF0E20C00CAD72B;
 					};
 					E497DFE42512419400852BCC = {
 						CreatedOnToolsVersion = 12.0;
@@ -874,8 +767,6 @@
 			targets = (
 				E4F86B2C1DF0E20C00CAD72B /* MFSMobile */,
 				E48D4DFE1E61FC25008B0A97 /* Class Schedule */,
-				E48F154F1F745BF400A36904 /* MFSMobileTests */,
-				E48F155D1F7467D900A36904 /* MFSMobileUITests */,
 				E497DFE42512419400852BCC /* Next ClassExtension */,
 			);
 		};
@@ -887,20 +778,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				E48D4E081E61FC26008B0A97 /* MainInterface.storyboard in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		E48F154E1F745BF400A36904 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		E48F155C1F7467D900A36904 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1098,22 +975,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		E48F154C1F745BF400A36904 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				E48F15531F745BF400A36904 /* MFSCalendarTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		E48F155A1F7467D900A36904 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				E4B6F4C11F746AE600F56C4D /* MFSCalendarUITests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		E497DFE12512419400852BCC /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1196,16 +1057,6 @@
 			platformFilter = ios;
 			target = E48D4DFE1E61FC25008B0A97 /* Class Schedule */;
 			targetProxy = E48D4E0A1E61FC26008B0A97 /* PBXContainerItemProxy */;
-		};
-		E48F15561F745BF400A36904 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = E4F86B2C1DF0E20C00CAD72B /* MFSMobile */;
-			targetProxy = E48F15551F745BF400A36904 /* PBXContainerItemProxy */;
-		};
-		E48F15641F7467D900A36904 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = E4F86B2C1DF0E20C00CAD72B /* MFSMobile */;
-			targetProxy = E48F15631F7467D900A36904 /* PBXContainerItemProxy */;
 		};
 		E497DFF42512419500852BCC /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1293,16 +1144,16 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CODE_SIGN_ENTITLEMENTS = "Class Schedule/Class Schedule.entitlements";
-				CURRENT_PROJECT_VERSION = 3360;
+				CURRENT_PROJECT_VERSION = 3365;
 				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				INFOPLIST_FILE = "Class Schedule/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.2.0;
+				MARKETING_VERSION = 2.2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = org.dwei.ClassSchedule;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1319,126 +1170,22 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CODE_SIGN_ENTITLEMENTS = "Class Schedule/Class Schedule.entitlements";
-				CURRENT_PROJECT_VERSION = 3360;
+				CURRENT_PROJECT_VERSION = 3365;
 				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				INFOPLIST_FILE = "Class Schedule/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.2.0;
+				MARKETING_VERSION = 2.2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = org.dwei.ClassSchedule;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
-		E48F15581F745BF400A36904 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = HWH6G9P2V2;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = MFSCalendarTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.dwei.MFSCalendarTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MFSMobile.app/MFSMobile";
-			};
-			name = Debug;
-		};
-		E48F15591F745BF400A36904 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = HWH6G9P2V2;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = MFSCalendarTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.dwei.MFSCalendarTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MFSMobile.app/MFSMobile";
-			};
-			name = Release;
-		};
-		E48F15661F7467D900A36904 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = HWH6G9P2V2;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = MFSCalendarUITests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.dwei.MFSCalendarUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = MFSCalendar;
-			};
-			name = Debug;
-		};
-		E48F15671F7467D900A36904 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = HWH6G9P2V2;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = MFSCalendarUITests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.dwei.MFSCalendarUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = MFSCalendar;
 			};
 			name = Release;
 		};
@@ -1455,25 +1202,26 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_ENTITLEMENTS = "Next ClassExtension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3360;
+				CURRENT_PROJECT_VERSION = 3365;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = "Next Class/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
-				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 13.1;
+				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 14.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.2.0;
+				MARKETING_VERSION = 2.2.1;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.dwei.Next-Class";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1492,23 +1240,24 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_ENTITLEMENTS = "Next ClassExtension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3360;
+				CURRENT_PROJECT_VERSION = 3365;
 				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = "Next Class/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
-				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 13.1;
+				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 14.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.2.0;
+				MARKETING_VERSION = 2.2.1;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.dwei.Next-Class";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1540,6 +1289,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -1601,6 +1351,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -1640,7 +1391,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3360;
+				CURRENT_PROJECT_VERSION = 3365;
 				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = YES;
 				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				"ENABLE_HARDENED_RUNTIME[sdk=macosx*]" = YES;
@@ -1651,13 +1402,13 @@
 					"$(PROJECT_DIR)/FirebasePerformance",
 				);
 				INFOPLIST_FILE = MFSCalender/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 13.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 14.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.2.0;
+				MARKETING_VERSION = 2.2.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1688,7 +1439,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3360;
+				CURRENT_PROJECT_VERSION = 3365;
 				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = YES;
 				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				"ENABLE_HARDENED_RUNTIME[sdk=macosx*]" = YES;
@@ -1699,13 +1450,13 @@
 					"$(PROJECT_DIR)/FirebasePerformance",
 				);
 				INFOPLIST_FILE = MFSCalender/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 13.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 14.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.2.0;
+				MARKETING_VERSION = 2.2.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1734,24 +1485,6 @@
 			buildConfigurations = (
 				E48D4E0E1E61FC26008B0A97 /* Debug */,
 				E48D4E0F1E61FC26008B0A97 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		E48F15571F745BF400A36904 /* Build configuration list for PBXNativeTarget "MFSMobileTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				E48F15581F745BF400A36904 /* Debug */,
-				E48F15591F745BF400A36904 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		E48F15651F7467D900A36904 /* Build configuration list for PBXNativeTarget "MFSMobileUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				E48F15661F7467D900A36904 /* Debug */,
-				E48F15671F7467D900A36904 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

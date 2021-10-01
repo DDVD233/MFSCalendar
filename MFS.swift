@@ -87,7 +87,7 @@ public class MFS: School {
     func dayCheck(date: Date) -> String {
         var dayOfSchool: String? = nil
         let formatter = DateFormatter()
-        let plistPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
+//        let plistPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.org.dwei.MFSCalendar")!.path
         let path = FileList.day.filePath
         let dayDict = NSDictionary(contentsOfFile: path)
         formatter.dateFormat = "yyyyMMdd"
