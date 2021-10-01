@@ -222,6 +222,7 @@
 		E42786871F568A5F00583D1E /* AboutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
 		E42786891F568EB100583D1E /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		E4288E1320360F6600E4488D /* MFS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MFS.swift; sourceTree = "<group>"; };
+		E431C1A52707AC2C009B873E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
 		E43611BA21A45BFE00994A10 /* StepChallengeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepChallengeViewController.swift; sourceTree = "<group>"; };
 		E43611BC21A47CF900994A10 /* running.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = running.png; sourceTree = "<group>"; };
 		E43611C421A4B9D300994A10 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
@@ -1270,6 +1271,7 @@
 				E47D2103229EFD9C00C10484 /* zh-Hans */,
 				E4870BEF23639BCA008D980E /* es */,
 				E4870BF423639C12008D980E /* ja */,
+				E431C1A52707AC2C009B873E /* en */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
