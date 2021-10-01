@@ -95,9 +95,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let firstName = Preferences().firstName ?? ""
         let lastName = Preferences().lastName ?? ""
         let fullName = firstName + " " + lastName
-        #if !targetEnvironment(macCatalyst)
         Crashlytics.crashlytics().setUserID(fullName)
-        #endif
     }
 
     func applicationWillResignActive(_ application: UIApplication) {

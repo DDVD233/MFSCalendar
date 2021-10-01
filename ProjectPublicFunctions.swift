@@ -5,7 +5,7 @@
 //  Created by David on 2017/9/2.
 //  Copyright © 2017年 David. All rights reserved.
 //
-//  Hard code 一时爽，代码重构火葬场。 --戴维于2019年1月15日
+//  Hard code 一时爽，代码重构火葬场。 --DDavid于2019年1月15日
 
 import UIKit
 import SwiftDate
@@ -20,6 +20,10 @@ var school: School {
             return MFS()
         }
     }
+}
+
+public func printResponseString(data: Data) {
+    print(String(data: data, encoding: .utf8) ?? "")
 }
 
 public func canUpdateView(viewController: UIViewController) -> Bool {

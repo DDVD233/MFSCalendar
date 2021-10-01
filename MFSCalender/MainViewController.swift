@@ -528,32 +528,33 @@ extension Main {
     //刷新Day和Event数据，并更新版本号
     // @Legacy This is only for NetClassroom System. 
     func refreshData() {
-        guard Preferences().schoolName == "MFS" else { return }
-        let semaphore = DispatchSemaphore.init(value: 0)
-
-        provider.request(MyService.getCalendarData, completion: { result in
-            switch result {
-            case let .success(response):
-                do {
-                    guard let dayData = try response.mapJSON(failsOnEmptyData: false) as? Dictionary<String, Any> else {
-                        presentErrorMessage(presentMessage: "Incorrect file format for day data", layout: .statusLine)
-                        return
-                    }
-
-                    let dayFile = FileList.day.filePath
-
-                    print("Info: Day Data refreshed")
-                    NSDictionary(dictionary: dayData).write(toFile: dayFile, atomically: true)
-                } catch {
-                    presentErrorMessage(presentMessage: error.localizedDescription, layout: .statusLine)
-                }
-            case let .failure(error):
-                presentErrorMessage(presentMessage: error.localizedDescription, layout: .statusLine)
-            }
-
-            semaphore.signal()
-        })
-
-        semaphore.wait()
+        return
+//        guard Preferences().schoolName == "MFS" else { return }
+//        let semaphore = DispatchSemaphore.init(value: 0)
+//
+//        provider.request(MyService.getCalendarData, completion: { result in
+//            switch result {
+//            case let .success(response):
+//                do {
+//                    guard let dayData = try response.mapJSON(failsOnEmptyData: false) as? Dictionary<String, Any> else {
+//                        presentErrorMessage(presentMessage: "Incorrect file format for day data", layout: .statusLine)
+//                        return
+//                    }
+//
+//                    let dayFile = FileList.day.filePath
+//
+//                    print("Info: Day Data refreshed")
+//                    NSDictionary(dictionary: dayData).write(toFile: dayFile, atomically: true)
+//                } catch {
+//                    presentErrorMessage(presentMessage: error.localizedDescription, layout: .statusLine)
+//                }
+//            case let .failure(error):
+//                presentErrorMessage(presentMessage: error.localizedDescription, layout: .statusLine)
+//            }
+//
+//            semaphore.signal()
+//        })
+//
+//        semaphore.wait()
     }
 }

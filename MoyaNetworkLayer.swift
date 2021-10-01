@@ -21,7 +21,7 @@ enum MyService {
     case getClassContentData(contentName: String, sectionId: String)
     case sectionInfoView(sectionID: String)
     case getSchedule(userID: String, startTime: String, endTime: String)
-    case getEventsIDList(startDate: String, endDate: String)
+    case getEventsIDList(startDate: String, endDate: String, token: String)
     case downloadEventsFromMySchool(startDate: String, endDate: String, idList: [String])
     case getSchoolContext
 
@@ -145,8 +145,15 @@ extension MyService: TargetType {
             return ["format": "json", "viewerId": userID, "personaId": personaId, "viewerPersonaId": personaId, "start": startTime, "end": endTime]
         case .getEmailWithID(let username, let password, let id):
             return ["name": username, "password": password, "id": id]
-        case .getEventsIDList(let startDate, let endDate):
-            return ["startDate": startDate, "endDate": endDate, "settingsTypeId": "1", "calendarSetId": "1"]
+        case .getEventsIDList(let startDate, let endDate, let token):
+            return ["t": token, "startDate": startDate, "endDate": endDate, "settingsTypeId": "1", "calendarSetId": "1"]
+        case .downloadEventsFromMySchool(let startDate, let endDate, let idList):
+            let (_, token, _) = loginAuthentication()
+            
+            let filterString = idList.joined(separator: ",")
+            let parameter = ["startDate": startDate, "endDate": endDate, "filterString": filterString,
+                             "showPractice": "false", "recentSave": "false", "t": token] as [String : Any]
+            return parameter
         default: return nil
         }
     }
@@ -173,15 +180,6 @@ extension MyService: TargetType {
         switch self {
         case .downloadLargeProfilePhoto, .getCalendarEvent:
             return .downloadDestination(downloadDestination)
-        case .downloadEventsFromMySchool(let startDate, let endDate, let idList):
-            let filterString = idList.joined(separator: ",")
-            let parameter = ["startDate": startDate,
-                             "endDate": endDate,
-                             "filterString": filterString,
-                             "showPractice": "false",
-                             "recentSave": "false"
-                ] as [String : Any]
-            return .requestParameters(parameters: parameter, encoding: parameterEncoding)
         default:
             return .requestParameters(parameters: parameters ?? [:], encoding: parameterEncoding)
         }

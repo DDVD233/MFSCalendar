@@ -21,7 +21,6 @@ import SwiftyJSON
 
 class LoginView {
     func getProfile() {
-        
         let semaphore = DispatchSemaphore.init(value: 0)
         guard let token = Preferences().token else { return }
         guard let userID = Preferences().userID else { return }
@@ -348,6 +347,12 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
             LoginView().getPersonaId()
         }
         
+//        DispatchQueue.global().async(group: group) {
+//            self.versionCheck()
+//        }
+        
+        group.wait()
+        
         DispatchQueue.global().async(group: group) {
             let semaphore = DispatchSemaphore(value: 0)
             NetworkOperations().refreshEvents(completion: {
@@ -357,16 +362,9 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
             semaphore.wait()
         }
         
-        DispatchQueue.global().async(group: group) {
-            self.versionCheck()
-        }
-        
-        group.wait()
-        #if !targetEnvironment(macCatalyst)
         Analytics.logEvent("AnalyticsEventLogin", parameters: [
             AnalyticsParameterSuccess: true
         ])
-        #endif
         
         
         DispatchQueue.main.async {

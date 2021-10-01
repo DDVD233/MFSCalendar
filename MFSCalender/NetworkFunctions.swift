@@ -230,6 +230,7 @@ class NetworkOperations {
             case .success(let response):
                 do {
                     guard let json = try JSONSerialization.jsonObject(with: response.data, options: .allowFragments) as? [[String: Any]] else {
+                        print(String(data: response.data, encoding: .utf8) ?? "")
                         presentErrorMessage(presentMessage: "JSON incorrect format", layout: .statusLine)
                         completion()
                         return
@@ -301,18 +302,19 @@ class NetworkOperations {
     func downloadEventIDList(completion: @escaping ([String]?) -> Void) {
         let startDate = Date() - 3.months
         let endDate = Date() + 5.months
+        guard let token = Preferences().token else { return }
         
         let formatter = DateFormatter()
         formatter.dateFormat = "MM/dd/yyyy"
         let startDateString = formatter.string(from: startDate)
         let endDateString = formatter.string(from: endDate)
-        provider.request(MyService.getEventsIDList(startDate: startDateString, endDate: endDateString), callbackQueue: DispatchQueue.global()) { (result) in
+        provider.request(MyService.getEventsIDList(startDate: startDateString, endDate: endDateString, token: token), callbackQueue: DispatchQueue.global()) { (result) in
             switch result {
             case .success(let response):
                 do {
                     guard let json = try JSONSerialization.jsonObject(with: response.data, options: .allowFragments) as? [[String: Any]] else {
-                        presentErrorMessage(presentMessage: "JSON incorrect format", layout: .statusLine)
-//                        print(String(data: response.data, encoding: .utf8))
+//                        presentErrorMessage(presentMessage: "JSON incorrect format", layout: .statusLine)
+                        print(String(data: response.data, encoding: .utf8) ?? "")
                         completion(nil)
                         return
                     }
@@ -362,11 +364,12 @@ class NetworkOperations {
             completion()
             return
         }
-        let userID = loginAuthentication().userId
+        let (_, token, userID) = loginAuthentication()
         let schoolYear = school.getSchoolYear()
         let schoolYearLabel = String(schoolYear) + "+-+" + String(schoolYear + 1)
         let personaId = Preferences().personaId ?? "2"
-        let url = Preferences().baseURL + "/api/DataDirect/StudentGroupTermList/?studentUserId=\(userID)&schoolYearLabel=\(schoolYearLabel)&personaId=\(personaId)"
+        let url = Preferences().baseURL + "/api/DataDirect/StudentGroupTermList/?studentUserId=\(userID)&schoolYearLabel=\(schoolYearLabel)&personaId=\(personaId)&t=\(token)"
+        print(url)
         
         let task = URLSession.shared.dataTask(with: URL(string: url)!) { (data, response, error) in
             guard error == nil else {
@@ -377,6 +380,7 @@ class NetworkOperations {
             
             do {
                 guard var json = try JSONSerialization.jsonObject(with: data ?? Data(), options: .allowFragments) as? [[String: Any]] else {
+                    printResponseString(data: data ?? Data())
                     presentErrorMessage(presentMessage: "Quarter File Incorrect Format.", layout: .cardView)
                     completion()
                     return

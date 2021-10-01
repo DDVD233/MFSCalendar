@@ -21,20 +21,20 @@ public func loginAuthentication() -> (success: Bool, token: String, userId: Stri
     var userID: String? = ""
     var success: Bool = false
     
-    if let loginDate = Preferences().loginTime {
-        let now = Date()
-        let timeInterval = Int(now.timeIntervalSince(loginDate))
-        
-        if (timeInterval < 600) && (timeInterval > 0) {
-            success = true
-            token = Preferences().token
-            userID = Preferences().userID
-            
-            addLoginCookie(token: token!)
-            
-            return (success, token!, userID!)
-        }
-    }
+//    if let loginDate = Preferences().loginTime {
+//        let now = Date()
+//        let timeInterval = Int(now.timeIntervalSince(loginDate))
+//
+//        if (timeInterval < 600) && (timeInterval > 0) {
+//            success = true
+//            token = Preferences().token
+//            userID = Preferences().userID
+//
+//            addLoginCookie(token: token!)
+//
+//            return (success, token!, userID!)
+//        }
+//    }
 //
 //    guard let usernameTextUrlEscaped = usernameText.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) else {
 //        return (false, "Cannot convert to url string", "")
@@ -44,14 +44,16 @@ public func loginAuthentication() -> (success: Bool, token: String, userId: Stri
 //        return (false, "Cannot convert to url string", "")
 //    }
 //
-    let accountCheckURL = Preferences().baseURL + "/api/authentication/login"
+    let accountCheckURL = Preferences().baseURL + "/api/SignIn"
     print(accountCheckURL)
     let url = NSURL(string: accountCheckURL)
     var request = URLRequest(url: url! as URL)
-    request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+    request.addValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
     request.httpMethod = "POST"
-    let loginInfo = ["Username": usernameText, "Password": passwordText]
+    let loginInfo = ["username": usernameText, "password": passwordText]
     request.httpBody = try! JSONSerialization.data(withJSONObject: loginInfo, options: [])
+    request.setValue("Paw/3.3.1 (Macintosh; OS X/12.0.0) GCDHTTPRequest", forHTTPHeaderField: "User-Agent")
+    request.setValue("mfriends.myschoolapp.com", forHTTPHeaderField: "Host")
     
     let config = URLSessionConfiguration.default
     config.requestCachePolicy = .reloadIgnoringLocalCacheData
@@ -75,13 +77,29 @@ public func loginAuthentication() -> (success: Bool, token: String, userId: Stri
                 } else {
                     //                      When authentication is success.
                     print(resDict)
+                    if resDict["AuthenticationResult"] as? Int ?? 0 == -1 {
+                        printResponseString(data: request.httpBody ?? Data())
+//                        print(request.allHTTPHeaderFields)
+                        print(request.debugDescription)
+                    }
                     success = true
-                    token = resDict["Token"] as? String
-                    userID = String(describing: resDict["UserId"]!)
-                    Preferences().token = token
+                    let cookies = HTTPCookie.cookies(withResponseHeaderFields: (response as! HTTPURLResponse).allHeaderFields as! [String : String], for: URL(string: accountCheckURL)!)
+                    let tokenFilter = cookies.filter({ $0.name == "t" })
+                    if !tokenFilter.isEmpty {
+                        let thisToken = tokenFilter[0].value
+                        if !thisToken.isEmpty {
+                            Preferences().token = thisToken
+                            token = thisToken
+                        }
+                    } else {
+                        printResponseString(data: data ?? Data())
+                    }
+                    userID = String(describing: resDict["CurrentUserForExpired"] ?? 0)
                     Preferences().userID = userID
                     
-                    Preferences().loginTime = Date()
+                    if !tokenFilter.isEmpty {
+                        Preferences().loginTime = Date()
+                    }
                     //print(HTTPCookieStorage.shared.cookies(for: response!.url!))
                 }
             } catch {
