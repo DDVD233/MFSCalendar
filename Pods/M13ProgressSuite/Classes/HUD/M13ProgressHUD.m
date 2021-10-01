@@ -406,26 +406,26 @@
     [center removeObserver:self];
 }
 
-- (void)deviceOrientationDidChange:(NSNotification *)notification {
-    UIDeviceOrientation deviceOrientation = [notification.object orientation];
-    
-    if (_shouldAutorotate && UIDeviceOrientationIsValidInterfaceOrientation(deviceOrientation)) {
-        if (UIDeviceOrientationIsPortrait(deviceOrientation)) {
-            if (deviceOrientation == UIDeviceOrientationPortraitUpsideDown) {
-                _orientation = UIInterfaceOrientationPortraitUpsideDown;
-            } else {
-                _orientation = UIInterfaceOrientationPortrait;
-            }
-        } else {
-            if (deviceOrientation == UIDeviceOrientationLandscapeLeft) {
-                _orientation = UIInterfaceOrientationLandscapeLeft;
-            } else {
-                _orientation = UIInterfaceOrientationLandscapeRight;
-            }
-        }
-        [self layoutHUD];
-    }
-}
+//- (void)deviceOrientationDidChange:(NSNotification *)notification {
+//    UIDeviceOrientation deviceOrientation = [notification.object orientation];
+//    
+//    if (_shouldAutorotate && UIDeviceOrientationIsValidInterfaceOrientation(deviceOrientation)) {
+//        if (UIDeviceOrientationIsPortrait(deviceOrientation)) {
+//            if (deviceOrientation == UIDeviceOrientationPortraitUpsideDown) {
+//                _orientation = UIInterfaceOrientationPortraitUpsideDown;
+//            } else {
+//                _orientation = UIInterfaceOrientationPortrait;
+//            }
+//        } else {
+//            if (deviceOrientation == UIDeviceOrientationLandscapeLeft) {
+//                _orientation = UIInterfaceOrientationLandscapeLeft;
+//            } else {
+//                _orientation = UIInterfaceOrientationLandscapeRight;
+//            }
+//        }
+//        [self layoutHUD];
+//    }
+//}
 
 #pragma mark Layout
 

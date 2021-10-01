@@ -12,9 +12,7 @@ import SwiftMessages
 import UICircularProgressRing
 import LTMorphingLabel
 import SwiftyJSON
-#if !targetEnvironment(macCatalyst)
-    import FirebasePerformance
-#endif
+import FirebasePerformance
 import Alamofire
 import SwiftDate
 

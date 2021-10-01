@@ -14,40 +14,159 @@ PODS:
   - AFNetworking/Serialization (4.0.1)
   - AFNetworking/UIKit (4.0.1):
     - AFNetworking/NSURLSession
-  - Alamofire (5.2.2)
-  - Charts (3.5.0):
-    - Charts/Core (= 3.5.0)
-  - Charts/Core (3.5.0)
+  - Alamofire (5.4.4)
+  - Charts (3.6.0):
+    - Charts/Core (= 3.6.0)
+  - Charts/Core (3.6.0)
   - CRRefresh (1.1.3)
   - DGElasticPullToRefresh (1.1)
-  - Down (0.9.3)
+  - Down (0.11.0)
   - DZNEmptyDataSet (1.8.1)
-  - FSCalendar (2.8.1)
-  - Kanna (5.2.2)
-  - LTMorphingLabel (0.8.1)
+  - Firebase/Analytics (8.8.0):
+    - Firebase/Core
+  - Firebase/Core (8.8.0):
+    - Firebase/CoreOnly
+    - FirebaseAnalytics (~> 8.8.0)
+  - Firebase/CoreOnly (8.8.0):
+    - FirebaseCore (= 8.8.0)
+  - Firebase/Crashlytics (8.8.0):
+    - Firebase/CoreOnly
+    - FirebaseCrashlytics (~> 8.8.0)
+  - Firebase/Performance (8.8.0):
+    - Firebase/CoreOnly
+    - FirebasePerformance (~> 8.8.0)
+  - FirebaseABTesting (8.8.0):
+    - FirebaseCore (~> 8.0)
+  - FirebaseAnalytics (8.8.0):
+    - FirebaseAnalytics/AdIdSupport (= 8.8.0)
+    - FirebaseCore (~> 8.0)
+    - FirebaseInstallations (~> 8.0)
+    - GoogleUtilities/AppDelegateSwizzler (~> 7.4)
+    - GoogleUtilities/MethodSwizzler (~> 7.4)
+    - GoogleUtilities/Network (~> 7.4)
+    - "GoogleUtilities/NSData+zlib (~> 7.4)"
+    - nanopb (~> 2.30908.0)
+  - FirebaseAnalytics/AdIdSupport (8.8.0):
+    - FirebaseCore (~> 8.0)
+    - FirebaseInstallations (~> 8.0)
+    - GoogleAppMeasurement (= 8.8.0)
+    - GoogleUtilities/AppDelegateSwizzler (~> 7.4)
+    - GoogleUtilities/MethodSwizzler (~> 7.4)
+    - GoogleUtilities/Network (~> 7.4)
+    - "GoogleUtilities/NSData+zlib (~> 7.4)"
+    - nanopb (~> 2.30908.0)
+  - FirebaseCore (8.8.0):
+    - FirebaseCoreDiagnostics (~> 8.0)
+    - GoogleUtilities/Environment (~> 7.4)
+    - GoogleUtilities/Logger (~> 7.4)
+  - FirebaseCoreDiagnostics (8.8.0):
+    - GoogleDataTransport (~> 9.0)
+    - GoogleUtilities/Environment (~> 7.4)
+    - GoogleUtilities/Logger (~> 7.4)
+    - nanopb (~> 2.30908.0)
+  - FirebaseCrashlytics (8.8.0):
+    - FirebaseCore (~> 8.0)
+    - FirebaseInstallations (~> 8.0)
+    - GoogleDataTransport (~> 9.0)
+    - GoogleUtilities/Environment (~> 7.4)
+    - nanopb (~> 2.30908.0)
+    - PromisesObjC (< 3.0, >= 1.2)
+  - FirebaseInstallations (8.8.0):
+    - FirebaseCore (~> 8.0)
+    - GoogleUtilities/Environment (~> 7.4)
+    - GoogleUtilities/UserDefaults (~> 7.4)
+    - PromisesObjC (< 3.0, >= 1.2)
+  - FirebasePerformance (8.8.0):
+    - FirebaseCore (~> 8.0)
+    - FirebaseInstallations (~> 8.0)
+    - FirebaseRemoteConfig (~> 8.0)
+    - GoogleDataTransport (~> 9.0)
+    - GoogleUtilities/Environment (~> 7.4)
+    - GoogleUtilities/ISASwizzler (~> 7.4)
+    - GoogleUtilities/MethodSwizzler (~> 7.4)
+    - nanopb (~> 2.30908.0)
+  - FirebaseRemoteConfig (8.8.0):
+    - FirebaseABTesting (~> 8.0)
+    - FirebaseCore (~> 8.0)
+    - FirebaseInstallations (~> 8.0)
+    - GoogleUtilities/Environment (~> 7.4)
+    - "GoogleUtilities/NSData+zlib (~> 7.4)"
+  - FSCalendar (2.8.2)
+  - GoogleAppMeasurement (8.8.0):
+    - GoogleAppMeasurement/AdIdSupport (= 8.8.0)
+    - GoogleUtilities/AppDelegateSwizzler (~> 7.4)
+    - GoogleUtilities/MethodSwizzler (~> 7.4)
+    - GoogleUtilities/Network (~> 7.4)
+    - "GoogleUtilities/NSData+zlib (~> 7.4)"
+    - nanopb (~> 2.30908.0)
+  - GoogleAppMeasurement/AdIdSupport (8.8.0):
+    - GoogleAppMeasurement/WithoutAdIdSupport (= 8.8.0)
+    - GoogleUtilities/AppDelegateSwizzler (~> 7.4)
+    - GoogleUtilities/MethodSwizzler (~> 7.4)
+    - GoogleUtilities/Network (~> 7.4)
+    - "GoogleUtilities/NSData+zlib (~> 7.4)"
+    - nanopb (~> 2.30908.0)
+  - GoogleAppMeasurement/WithoutAdIdSupport (8.8.0):
+    - GoogleUtilities/AppDelegateSwizzler (~> 7.4)
+    - GoogleUtilities/MethodSwizzler (~> 7.4)
+    - GoogleUtilities/Network (~> 7.4)
+    - "GoogleUtilities/NSData+zlib (~> 7.4)"
+    - nanopb (~> 2.30908.0)
+  - GoogleDataTransport (9.1.0):
+    - GoogleUtilities/Environment (~> 7.2)
+    - nanopb (~> 2.30908.0)
+    - PromisesObjC (< 3.0, >= 1.2)
+  - GoogleUtilities/AppDelegateSwizzler (7.5.2):
+    - GoogleUtilities/Environment
+    - GoogleUtilities/Logger
+    - GoogleUtilities/Network
+  - GoogleUtilities/Environment (7.5.2):
+    - PromisesObjC (< 3.0, >= 1.2)
+  - GoogleUtilities/ISASwizzler (7.5.2)
+  - GoogleUtilities/Logger (7.5.2):
+    - GoogleUtilities/Environment
+  - GoogleUtilities/MethodSwizzler (7.5.2):
+    - GoogleUtilities/Logger
+  - GoogleUtilities/Network (7.5.2):
+    - GoogleUtilities/Logger
+    - "GoogleUtilities/NSData+zlib"
+    - GoogleUtilities/Reachability
+  - "GoogleUtilities/NSData+zlib (7.5.2)"
+  - GoogleUtilities/Reachability (7.5.2):
+    - GoogleUtilities/Logger
+  - GoogleUtilities/UserDefaults (7.5.2):
+    - GoogleUtilities/Logger
+  - Kanna (5.2.7)
+  - LTMorphingLabel (0.9.3)
   - M13Checkbox (3.4.0)
   - M13ProgressSuite (1.2.9)
-  - Moya (14.0.0):
-    - Moya/Core (= 14.0.0)
-  - Moya/Core (14.0.0):
+  - Moya (15.0.0):
+    - Moya/Core (= 15.0.0)
+  - Moya/Core (15.0.0):
     - Alamofire (~> 5.0)
-  - NVActivityIndicatorView (5.0.1):
-    - NVActivityIndicatorView/Base (= 5.0.1)
-  - NVActivityIndicatorView/Base (5.0.1)
+  - nanopb (2.30908.0):
+    - nanopb/decode (= 2.30908.0)
+    - nanopb/encode (= 2.30908.0)
+  - nanopb/decode (2.30908.0)
+  - nanopb/encode (2.30908.0)
+  - NVActivityIndicatorView (5.1.1):
+    - NVActivityIndicatorView/Base (= 5.1.1)
+  - NVActivityIndicatorView/Base (5.1.1)
+  - PromisesObjC (2.0.0)
   - SCLAlertView (0.8)
-  - SDWebImage (5.9.1):
-    - SDWebImage/Core (= 5.9.1)
-  - SDWebImage/Core (5.9.1)
-  - SkyFloatingLabelTextField (3.8.0)
+  - SDWebImage (5.12.0):
+    - SDWebImage/Core (= 5.12.0)
+  - SDWebImage/Core (5.12.0)
+  - SkyFloatingLabelTextField (4.0.0)
   - SnapKit (5.0.1)
   - SVProgressHUD (2.2.5)
-  - SwiftDate (6.2.0)
-  - SwiftMessages (8.0.2):
-    - SwiftMessages/App (= 8.0.2)
-  - SwiftMessages/App (8.0.2)
-  - SwiftyJSON (5.0.0)
+  - SwiftDate (6.3.1)
+  - SwiftMessages (9.0.4):
+    - SwiftMessages/App (= 9.0.4)
+  - SwiftMessages/App (9.0.4)
+  - SwiftyJSON (5.0.1)
   - SwipeCellKit (2.7.1)
-  - UICircularProgressRing (7.0.0)
+  - UICircularProgressRing (8.0.0)
   - XLPagerTabStrip (9.0.0)
 
 DEPENDENCIES:
@@ -58,6 +177,9 @@ DEPENDENCIES:
   - DGElasticPullToRefresh (from `https://github.com/Lateblumer88/DGElasticPullToRefresh.git`, branch `Feature/Swift5Support`)
   - Down
   - DZNEmptyDataSet
+  - Firebase/Analytics
+  - Firebase/Crashlytics
+  - Firebase/Performance
   - FSCalendar
   - Kanna
   - LTMorphingLabel
@@ -85,13 +207,27 @@ SPEC REPOS:
     - CRRefresh
     - Down
     - DZNEmptyDataSet
+    - Firebase
+    - FirebaseABTesting
+    - FirebaseAnalytics
+    - FirebaseCore
+    - FirebaseCoreDiagnostics
+    - FirebaseCrashlytics
+    - FirebaseInstallations
+    - FirebasePerformance
+    - FirebaseRemoteConfig
     - FSCalendar
+    - GoogleAppMeasurement
+    - GoogleDataTransport
+    - GoogleUtilities
     - Kanna
     - LTMorphingLabel
     - M13Checkbox
     - M13ProgressSuite
     - Moya
+    - nanopb
     - NVActivityIndicatorView
+    - PromisesObjC
     - SCLAlertView
     - SDWebImage
     - SkyFloatingLabelTextField
@@ -116,31 +252,45 @@ CHECKOUT OPTIONS:
 
 SPEC CHECKSUMS:
   AFNetworking: 7864c38297c79aaca1500c33288e429c3451fdce
-  Alamofire: 814429acc853c6c54ff123fc3d2ef66803823ce0
-  Charts: 40a08591df1f8ad5c223ddedfb1a06da92f24f7c
+  Alamofire: f3b09a368f1582ab751b3fff5460276e0d2cf5c9
+  Charts: b1e3a1f5a1c9ba5394438ca3b91bd8c9076310af
   CRRefresh: 1415d4ae06837fa7bb064c44f2e102f3ef517044
   DGElasticPullToRefresh: 28f11a6026302a90f8ffebbc6e24748e584dddd3
-  Down: 4553b984236807e384fa0ef7c7e360ef9f7c425d
+  Down: b6ba1bc985c9d2f4e15e3b293d2207766fa12612
   DZNEmptyDataSet: 9525833b9e68ac21c30253e1d3d7076cc828eaa7
-  FSCalendar: 5245140456fcbcac5824c203b98bd8068bdfee1a
-  Kanna: 2c4eddaaa4bfb9a1ed19e53c0b3d42ef02838046
-  LTMorphingLabel: c160673ab7220f4bcf6105308ad902fed8ffd3d0
+  Firebase: 629510f1a9ddb235f3a7c5c8ceb23ba887f0f814
+  FirebaseABTesting: 981336dd14d84787e33466e4247f77ec2343f8d9
+  FirebaseAnalytics: 5506ea8b867d8423485a84b4cd612d279f7b0b8a
+  FirebaseCore: 98b29e3828f0a53651c363937a7f7d92a19f1ba2
+  FirebaseCoreDiagnostics: fe77f42da6329d6d83d21fd9d621a6b704413bfc
+  FirebaseCrashlytics: 3660c045c8e45cc4276110562a0ef44cf43c8157
+  FirebaseInstallations: 2563cb18a723ef9c6ef18318a49519b75dce613c
+  FirebasePerformance: 0c01a7a496657d7cea86d40c0b1725259d164c6c
+  FirebaseRemoteConfig: f6365883d7950d784ee97bcdbbf1e442d4fa6119
+  FSCalendar: e6a2eb9c571bf0719ed797ef807e08426753c241
+  GoogleAppMeasurement: 5ba1164e3c844ba84272555e916d0a6d3d977e91
+  GoogleDataTransport: 85fd18ff3019bb85d3f2c551d04c481dedf71fc9
+  GoogleUtilities: 8de2a97a17e15b6b98e38e8770e2d129a57c0040
+  Kanna: 01cfbddc127f5ff0963692f285fcbc8a9d62d234
+  LTMorphingLabel: f2b256e4fe665aac27f0d0e8ccdcd79590f0cd70
   M13Checkbox: 6f59404540ac98ba83a3d1afac335895a40c6a5d
   M13ProgressSuite: ea9f7263e73e9215e6849dfa54e29ee0ad6a145c
-  Moya: 5b45dacb75adb009f97fde91c204c1e565d31916
-  NVActivityIndicatorView: 738e843cb8924e9e4fc3e559d0728031624bf860
+  Moya: 138f0573e53411fb3dc17016add0b748dfbd78ee
+  nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
+  NVActivityIndicatorView: 1f6c5687f1171810aa27a3296814dc2d7dec3667
+  PromisesObjC: 68159ce6952d93e17b2dfe273b8c40907db5ba58
   SCLAlertView: 6a77bb2edfc65e04dbe57725546cb4107a506b85
-  SDWebImage: a990c053fff71e388a10f3357edb0be17929c9c5
-  SkyFloatingLabelTextField: 5a338412114808e961fe2d14ea2c5452c8b6e4aa
+  SDWebImage: 4ea20cca2986adc5aacde07aa686742fd4c67a37
+  SkyFloatingLabelTextField: 79ddc40e4ad59707fedbb48d605417aee48bb78a
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
-  SwiftDate: d117c3eb6beed72e47d3f4d1e3bc63fa1e66d7c3
-  SwiftMessages: 633304165351b8e3dcbb81a71f8efcd86f9c1669
-  SwiftyJSON: 36413e04c44ee145039d332b4f4e2d3e8d6c4db7
+  SwiftDate: 72d28954e8e1c6c1c0f917ccc8005e4f83c7d4b2
+  SwiftMessages: 082ed63613a49fa8e749cd6000bb0a8b9bbc736f
+  SwiftyJSON: 2f33a42c6fbc52764d96f13368585094bfd8aa5e
   SwipeCellKit: 3972254a826da74609926daf59b08d6c72e619ea
-  UICircularProgressRing: 738b48db0ec1fbbd8482d727979392bb8c272e8d
+  UICircularProgressRing: 19927375b2b21b5fa5fd9582f15ccdef9659da16
   XLPagerTabStrip: 61c57fd61f611ee5f01ff1495ad6fbee8bf496c5
 
-PODFILE CHECKSUM: 0dde51974a7ec51d257f8f7fcb6fabd5f2b47af3
+PODFILE CHECKSUM: 804453e30ac8a88110e16871472eb1c425787bb9
 
-COCOAPODS: 1.10.0.rc.1
+COCOAPODS: 1.11.2
