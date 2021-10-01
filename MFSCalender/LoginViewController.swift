@@ -339,9 +339,9 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
             LoginView().getProfile()
         }
         
-        DispatchQueue.global().async(group: group) {
-            self.initDayData()
-        }
+//        DispatchQueue.global().async(group: group) {
+//            self.initDayData()
+//        }
         
         DispatchQueue.global().async(group: group) {
             LoginView().getPersonaId()
@@ -350,9 +350,6 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
 //        DispatchQueue.global().async(group: group) {
 //            self.versionCheck()
 //        }
-        
-        group.wait()
-        
         DispatchQueue.global().async(group: group) {
             let semaphore = DispatchSemaphore(value: 0)
             NetworkOperations().refreshEvents(completion: {
@@ -361,6 +358,8 @@ class firstTimeLaunchController: UIViewController, UITextFieldDelegate {
             
             semaphore.wait()
         }
+        
+        group.wait()
         
         Analytics.logEvent("AnalyticsEventLogin", parameters: [
             AnalyticsParameterSuccess: true

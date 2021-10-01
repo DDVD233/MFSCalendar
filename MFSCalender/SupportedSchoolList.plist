@@ -12,6 +12,14 @@
 	</dict>
 	<dict>
 		<key>schoolName</key>
+		<string>Moorestown Friends School</string>
+		<key>schoolURL</key>
+		<string>https://mfriends.myschoolapp.com</string>
+		<key>schoolCode</key>
+		<string>MFS</string>
+	</dict>
+	<dict>
+		<key>schoolName</key>
 		<string>Girls Preparatory School</string>
 		<key>schoolURL</key>
 		<string>https://gps.myschoolapp.com</string>
@@ -73,14 +81,6 @@
 		<string>https://fessenden.myschoolapp.com</string>
 		<key>schoolCode</key>
 		<string>TFS</string>
-	</dict>
-	<dict>
-		<key>schoolName</key>
-		<string>Moorestown Friends School</string>
-		<key>schoolURL</key>
-		<string>https://mfriends.myschoolapp.com</string>
-		<key>schoolCode</key>
-		<string>MFS</string>
 	</dict>
 	<dict>
 		<key>schoolName</key>

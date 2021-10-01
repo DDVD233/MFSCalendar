@@ -41,6 +41,7 @@ class NewMoreViewController: UICollectionViewController  {
         if Preferences().isDev {
             contentList.append("DON'T TOUCH")
         }
+        setLargeTitle(on: self)
     }
     
     override func viewDidAppear(_ animated: Bool) {

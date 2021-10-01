@@ -23,7 +23,7 @@ class SchoolSelectionViewController: UIViewController {
         
         schoolList = NSArray(contentsOfFile: FileList.supportedSchoolList.filePath) as? [[String: String]] ?? [[String: String]]()
         print(schoolList)
-        schoolList.sort(by: { ($0["schoolName"] ?? "") < ($1["schoolName"] ?? "") })
+//        schoolList.sort(by: { ($0["schoolName"] ?? "") < ($1["schoolName"] ?? "") })
     }
     
     func showLoginVC() {
@@ -52,6 +52,10 @@ extension SchoolSelectionViewController: UITableViewDataSource, UITableViewDeleg
         
         let schoolDict = schoolList[safe: indexPath.row] ?? [String: String]()
         cell.textLabel?.text = schoolDict["schoolName"]
+        if schoolDict["schoolCode"] ?? "" == "MFS" {
+            cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 30)
+            cell.textLabel?.numberOfLines = 0
+        }
         
         return cell
     }

@@ -89,6 +89,7 @@ class CalendarViewController: SegmentedPagerTabStripViewController, UIGestureRec
         
         self.calendarView.delegate = self
         self.calendarView.dataSource = self
+        setLargeTitle(on: self)
     }
     
     func addScopeGesture() {
@@ -203,7 +204,7 @@ class CalendarViewController: SegmentedPagerTabStripViewController, UIGestureRec
 
 
 
-extension CalendarViewController: FSCalendarDelegate, FSCalendarDataSource {
+extension CalendarViewController: FSCalendarDelegate, FSCalendarDataSource, FSCalendarDelegateAppearance {
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
         if #available(iOS 10.0, *) {
             let generator = UIImpactFeedbackGenerator(style: .medium)
@@ -227,6 +228,23 @@ extension CalendarViewController: FSCalendarDelegate, FSCalendarDataSource {
         } else {
             return day
         }
+    }
+    
+    func colorForDate(date: Date) -> UIColor {
+        let day = school.checkDate(checkDate: date)
+        if day == NSLocalizedString("No School", comment: "") || day.starts(with: "N") {
+            return UIColor.red
+        } else {
+            return UIColor.black
+        }
+    }
+    
+    func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, titleDefaultColorFor date: Date) -> UIColor? {
+        return colorForDate(date: date)
+    }
+    
+    func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, subtitleDefaultColorFor date: Date) -> UIColor? {
+        return colorForDate(date: date)
     }
     
     func calendar(_ calendar: FSCalendar, boundingRectWillChange bounds: CGRect, animated: Bool) {

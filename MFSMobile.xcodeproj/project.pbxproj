@@ -36,7 +36,6 @@
 		E4369F722289927B006462F3 /* MainTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4369F712289927B006462F3 /* MainTabBarViewController.swift */; };
 		E436EDC41F96E3AF00395DA5 /* MenuService.png in Resources */ = {isa = PBXBuildFile; fileRef = E436EDC31F96E3A000395DA5 /* MenuService.png */; };
 		E440F1BC1EEA7F4E004AFD0B /* MoyaNetworkLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E440F1BB1EEA7F4E004AFD0B /* MoyaNetworkLayer.swift */; };
-		E445E73E1EAD8B7D00794560 /* MoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E445E73D1EAD8B7D00794560 /* MoreViewController.swift */; };
 		E44632501F9BB020004F8E2E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E4F86B3C1DF0E20C00CAD72B /* LaunchScreen.storyboard */; };
 		E44822DA251545950072B355 /* Next_Class.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = E44822DD251545950072B355 /* Next_Class.intentdefinition */; };
 		E44822DB251545950072B355 /* Next_Class.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = E44822DD251545950072B355 /* Next_Class.intentdefinition */; };
@@ -231,7 +230,6 @@
 		E436EDC31F96E3A000395DA5 /* MenuService.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MenuService.png; sourceTree = "<group>"; };
 		E440F1BB1EEA7F4E004AFD0B /* MoyaNetworkLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MoyaNetworkLayer.swift; path = ../MoyaNetworkLayer.swift; sourceTree = "<group>"; };
 		E44484D71E13A105002C68D5 /* MFSCalender.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MFSCalender.entitlements; sourceTree = "<group>"; };
-		E445E73D1EAD8B7D00794560 /* MoreViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoreViewController.swift; sourceTree = "<group>"; };
 		E44822DC251545950072B355 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; name = Base; path = Base.lproj/Next_Class.intentdefinition; sourceTree = "<group>"; };
 		E44822E92515459A0072B355 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Next_Class.strings; sourceTree = "<group>"; };
 		E44822F02515459D0072B355 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Next_Class.strings"; sourceTree = "<group>"; };
@@ -453,7 +451,6 @@
 			children = (
 				E4BD88991F397BE80000FEF3 /* TopicDetailViewController.swift */,
 				E4B340051F08942000D6039A /* classTopicViewController.swift */,
-				E445E73D1EAD8B7D00794560 /* MoreViewController.swift */,
 				E472A15F1EFB6F8400EF5A74 /* ClassDetailViewController.swift */,
 				E472A1611EFB72EA00EF5A74 /* SettingViewController.swift */,
 				E4B340031F0891AE00D6039A /* ClassPagerViewController.swift */,
@@ -1163,7 +1160,6 @@
 				E419C50D21ADB63400CE8B3A /* CapstoneAd.swift in Sources */,
 				E4ADC9EE1E882172002A46F7 /* Extensions.swift in Sources */,
 				E472A1601EFB6F8400EF5A74 /* ClassDetailViewController.swift in Sources */,
-				E445E73E1EAD8B7D00794560 /* MoreViewController.swift in Sources */,
 				E4C46A2E1ED50CD3007F8F1A /* CourseFillViewController.swift in Sources */,
 				E4CE9F8B222B46BA0031AB49 /* Email.swift in Sources */,
 				E4CE0D7623188B1100B0CACC /* CustomSchoolViewController.swift in Sources */,
@@ -1297,7 +1293,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CODE_SIGN_ENTITLEMENTS = "Class Schedule/Class Schedule.entitlements";
-				CURRENT_PROJECT_VERSION = 3345;
+				CURRENT_PROJECT_VERSION = 3360;
 				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				INFOPLIST_FILE = "Class Schedule/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -1306,7 +1302,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.1.4;
+				MARKETING_VERSION = 2.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.dwei.ClassSchedule;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1323,7 +1319,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CODE_SIGN_ENTITLEMENTS = "Class Schedule/Class Schedule.entitlements";
-				CURRENT_PROJECT_VERSION = 3345;
+				CURRENT_PROJECT_VERSION = 3360;
 				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				INFOPLIST_FILE = "Class Schedule/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -1332,7 +1328,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.1.4;
+				MARKETING_VERSION = 2.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.dwei.ClassSchedule;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1459,7 +1455,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_ENTITLEMENTS = "Next ClassExtension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3345;
+				CURRENT_PROJECT_VERSION = 3360;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -1471,7 +1467,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.1.4;
+				MARKETING_VERSION = 2.2.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.dwei.Next-Class";
@@ -1496,7 +1492,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_ENTITLEMENTS = "Next ClassExtension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3345;
+				CURRENT_PROJECT_VERSION = 3360;
 				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = "Next Class/Info.plist";
@@ -1507,7 +1503,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.1.4;
+				MARKETING_VERSION = 2.2.0;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.dwei.Next-Class";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1644,7 +1640,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3345;
+				CURRENT_PROJECT_VERSION = 3360;
 				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = YES;
 				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				"ENABLE_HARDENED_RUNTIME[sdk=macosx*]" = YES;
@@ -1661,7 +1657,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.1.4;
+				MARKETING_VERSION = 2.2.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1692,7 +1688,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3345;
+				CURRENT_PROJECT_VERSION = 3360;
 				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = YES;
 				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				"ENABLE_HARDENED_RUNTIME[sdk=macosx*]" = YES;
@@ -1709,7 +1705,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.1.4;
+				MARKETING_VERSION = 2.2.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
