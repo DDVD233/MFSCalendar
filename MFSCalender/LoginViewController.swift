@@ -12,10 +12,8 @@ import NVActivityIndicatorView
 import SCLAlertView
 import SkyFloatingLabelTextField
 import NotificationCenter
-#if !targetEnvironment(macCatalyst)
-    import FirebaseCrashlytics
-    import FirebaseAnalytics
-#endif
+import FirebaseCrashlytics
+import FirebaseAnalytics
 import SwiftDate
 import SwiftyJSON
 

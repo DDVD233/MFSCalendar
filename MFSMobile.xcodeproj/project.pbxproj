@@ -185,7 +185,6 @@
 		785C35053D68959CC49D0461 /* Pods-MFSMobile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MFSMobile.debug.xcconfig"; path = "Target Support Files/Pods-MFSMobile/Pods-MFSMobile.debug.xcconfig"; sourceTree = "<group>"; };
 		814473F46A3D8405E72D9DC5 /* Pods-Class Schedule.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Class Schedule.release.xcconfig"; path = "Target Support Files/Pods-Class Schedule/Pods-Class Schedule.release.xcconfig"; sourceTree = "<group>"; };
 		8A64EFCE456130CB2F6419FC /* Pods_Next_ClassExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Next_ClassExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		E4091486251493A400B04462 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Next_Class.strings; sourceTree = "<group>"; };
 		E40915272514E21100B04462 /* WidgetSampleBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = WidgetSampleBackground.png; sourceTree = "<group>"; };
 		E4106372228772E000A8F280 /* ChatInterfaceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatInterfaceManager.swift; sourceTree = "<group>"; };
 		E412E2BA201261B80082540B /* EventViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventViewController.swift; sourceTree = "<group>"; };
@@ -214,10 +213,11 @@
 		E436EDC31F96E3A000395DA5 /* MenuService.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MenuService.png; sourceTree = "<group>"; };
 		E440F1BB1EEA7F4E004AFD0B /* MoyaNetworkLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MoyaNetworkLayer.swift; path = ../MoyaNetworkLayer.swift; sourceTree = "<group>"; };
 		E44484D71E13A105002C68D5 /* MFSCalender.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MFSCalender.entitlements; sourceTree = "<group>"; };
+		E44754F0270A55970069D490 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Next_Class.strings; sourceTree = "<group>"; };
+		E44754F2270A55A90069D490 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Next_Class.strings"; sourceTree = "<group>"; };
+		E44754F4270A55AB0069D490 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Next_Class.strings; sourceTree = "<group>"; };
+		E44754F6270A55AF0069D490 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Next_Class.strings; sourceTree = "<group>"; };
 		E44822DC251545950072B355 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; name = Base; path = Base.lproj/Next_Class.intentdefinition; sourceTree = "<group>"; };
-		E44822E92515459A0072B355 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Next_Class.strings; sourceTree = "<group>"; };
-		E44822F02515459D0072B355 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Next_Class.strings"; sourceTree = "<group>"; };
-		E44822F72515459E0072B355 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Next_Class.strings; sourceTree = "<group>"; };
 		E44DCD911EB80E0600CEB68A /* School.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = School.jpg; sourceTree = "<group>"; };
 		E453F0D01EA137D900BCE58D /* CalendarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = CalendarViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		E45476EA1E8B3607004466D0 /* th-menu2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "th-menu2.png"; sourceTree = "<group>"; };
@@ -1090,10 +1090,10 @@
 			isa = PBXVariantGroup;
 			children = (
 				E44822DC251545950072B355 /* Base */,
-				E44822E92515459A0072B355 /* en */,
-				E44822F02515459D0072B355 /* zh-Hans */,
-				E44822F72515459E0072B355 /* ja */,
-				E4091486251493A400B04462 /* es */,
+				E44754F0270A55970069D490 /* en */,
+				E44754F2270A55A90069D490 /* zh-Hans */,
+				E44754F4270A55AB0069D490 /* ja */,
+				E44754F6270A55AF0069D490 /* es */,
 			);
 			name = Next_Class.intentdefinition;
 			sourceTree = "<group>";
@@ -1173,7 +1173,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.2.1;
+				MARKETING_VERSION = 2.2.2;
 				PRODUCT_BUNDLE_IDENTIFIER = org.dwei.ClassSchedule;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1199,7 +1199,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.2.1;
+				MARKETING_VERSION = 2.2.2;
 				PRODUCT_BUNDLE_IDENTIFIER = org.dwei.ClassSchedule;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

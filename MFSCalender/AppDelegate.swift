@@ -8,10 +8,8 @@
 
 import UIKit
 import CoreData
-#if !targetEnvironment(macCatalyst)
-    import FirebaseCrashlytics
-    import FirebaseCore
-#endif
+import FirebaseCrashlytics
+import FirebaseCore
 //import ChatSDK
 
 @UIApplicationMain
