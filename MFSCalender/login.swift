@@ -21,21 +21,21 @@ public func loginAuthentication() -> (success: Bool, token: String, userId: Stri
     var userID: String? = ""
     var success: Bool = false
     
-//    if let loginDate = Preferences().loginTime {
-//        let now = Date()
-//        let timeInterval = Int(now.timeIntervalSince(loginDate))
-//
-//        if (timeInterval < 600) && (timeInterval > 0) {
-//            success = true
-//            token = Preferences().token
-//            userID = Preferences().userID
-//
-//            addLoginCookie(token: token!)
-//
-//            return (success, token!, userID!)
-//        }
-//    }
-//
+    if let loginDate = Preferences().loginTime {
+        let now = Date()
+        let timeInterval = Int(now.timeIntervalSince(loginDate))
+
+        if (timeInterval < 600) && (timeInterval > 0) {
+            success = true
+            token = Preferences().token
+            userID = Preferences().userID
+
+            addLoginCookie(token: token!)
+
+            return (success, token!, userID!)
+        }
+    }
+
 //    guard let usernameTextUrlEscaped = usernameText.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) else {
 //        return (false, "Cannot convert to url string", "")
 //    }
@@ -43,7 +43,7 @@ public func loginAuthentication() -> (success: Bool, token: String, userId: Stri
 //    guard let passwordTextUrlEscaped = passwordText.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) else {
 //        return (false, "Cannot convert to url string", "")
 //    }
-//
+
     let accountCheckURL = Preferences().baseURL + "/api/SignIn"
     print(accountCheckURL)
     let url = NSURL(string: accountCheckURL)
@@ -72,6 +72,7 @@ public func loginAuthentication() -> (success: Bool, token: String, userId: Stri
                     print("Login Error!")
                     if (resDict["ErrorType"] as! String) == "UNAUTHORIZED_ACCESS" {
                         token = "Incorrect password"
+                        clearData()
                     }
                     
                 } else {

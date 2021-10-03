@@ -389,13 +389,7 @@ extension NewMoreViewController {
         
         let logOutAction = UIAlertAction(title: NSLocalizedString("Log Out the App", comment: ""), style: .default) { (alertAction) -> Void in
             NSLog("Logged Out")
-            let preferences = Preferences()
-            preferences.didLogin = false
-            preferences.courseInitialized = false
-            preferences.firstName = nil
-            preferences.lastName = nil
-            preferences.lockerNumber = nil
-            preferences.lockerCombination = nil
+            clearData()
             let vc = self.storyboard?.instantiateViewController(withIdentifier: "MainTab")
             self.present(vc!, animated: false, completion: nil)
 //            _ = BIntegrationHelper.logout()?.thenOnMain({ result in

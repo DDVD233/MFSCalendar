@@ -297,7 +297,7 @@
 - (void)show:(BOOL)animated
 {
     //reset the blurs to the curent screen if need be
-    [self registerForNotificationCenter];
+//    [self registerForNotificationCenter];
     [self setNeedsLayout];
     [self setNeedsDisplay];
     
@@ -396,10 +396,10 @@
 
 #pragma mark - Notifications
 
-- (void)registerForNotificationCenter {
-    NSNotificationCenter *center = NSNotificationCenter.defaultCenter;
-    [center addObserver:self selector:@selector(deviceOrientationDidChange:) name:UIDeviceOrientationDidChangeNotification object:nil];
-}
+//- (void)registerForNotificationCenter {
+//    NSNotificationCenter *center = NSNotificationCenter.defaultCenter;
+//    [center addObserver:self selector:@selector(deviceOrientationDidChange:) name:UIDeviceOrientationDidChangeNotification object:nil];
+//}
 
 - (void)unregisterFromNotificationCenter {
     NSNotificationCenter *center = NSNotificationCenter.defaultCenter;
