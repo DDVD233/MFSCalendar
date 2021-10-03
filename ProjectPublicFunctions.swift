@@ -30,6 +30,17 @@ public func canUpdateView(viewController: UIViewController) -> Bool {
     return (viewController.viewIfLoaded?.window != nil)
 }
 
+public func clearData() {
+    let preferences = Preferences()
+    preferences.didLogin = false
+    preferences.password = ""
+    preferences.courseInitialized = false
+    preferences.firstName = nil
+    preferences.lastName = nil
+    preferences.lockerNumber = nil
+    preferences.lockerCombination = nil
+}
+
 //func getMeetTime(period: Int) -> String {
 //    switch period {
 //    case 1: return "8:00AM - 8:42AM"

@@ -23,17 +23,6 @@ func areEqual<T:Equatable>(type: T.Type, a: Any?, b: Any?) -> Bool? {
     return a == b
 }
 
-func clearData() {
-    let preferences = Preferences()
-    preferences.didLogin = false
-    preferences.password = ""
-    preferences.courseInitialized = false
-    preferences.firstName = nil
-    preferences.lastName = nil
-    preferences.lockerNumber = nil
-    preferences.lockerCombination = nil
-}
-
 public func getRequestVerification() -> String? {
     var requestVerification: String? = nil
     

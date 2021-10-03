@@ -90,6 +90,8 @@ class CalendarViewController: SegmentedPagerTabStripViewController, UIGestureRec
         self.calendarView.delegate = self
         self.calendarView.dataSource = self
         setLargeTitle(on: self)
+        
+        self.segmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .normal)
     }
     
     func addScopeGesture() {
@@ -232,7 +234,9 @@ extension CalendarViewController: FSCalendarDelegate, FSCalendarDataSource, FSCa
     
     func colorForDate(date: Date) -> UIColor {
         let day = school.checkDate(checkDate: date)
-        if day == NSLocalizedString("No School", comment: "") || day.starts(with: "N") {
+        if Calendar.current.isDateInToday(date) {
+            return UIColor.white
+        } else if day == NSLocalizedString("No School", comment: "") || day.starts(with: "N") {
             return UIColor.red
         } else {
             return UIColor.black
