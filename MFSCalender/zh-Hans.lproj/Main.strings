@@ -276,7 +276,8 @@
 "fR1-y0-Ct9.segmentTitles[1]" = "Second";
 
 /* Class = "UITextView"; text = "- Marcella Thanh-Guyet - Henry Powell - Chris Chen - Italia Vitella - Blythe Salamone - Maddie Mininno - Courtney Tarter - Alaisha Blue - Oscar Wan - Susu Guo - Mia Peng - Annabelle Crescenzo - Lauren Kam - Tylar Pierce - Andrew Rauscher - Jacob Del Angel - Dylan Zhou - Chris Gu"; ObjectID = "g42-Eq-D5j"; */
-"g42-Eq-D5j.text" = "- Marcella Thanh-Guyet - Henry Powell - Chris Chen - Italia Vitella - Blythe Salamone - Maddie Mininno - Courtney Tarter - Alaisha Blue - Oscar Wan - Susu Guo - Mia Peng - Annabelle Crescenzo - Lauren Kam - Tylar Pierce - Andrew Rauscher - Jacob Del Angel - Dylan Zhou - Chris Gu";
+"g42-Eq-D5j.text" = "- Marcella Thanh-Guyet - Henry Powell - Chris Chen - Italia Vitella - Blythe Salamone - Maddie Mininno - Courtney Tarter - Alaisha Blue - Oscar Wan - Susu Guo - Mia Peng - Annabelle Crescenzo - Lauren Kam - Tylar Pierce - Andrew Rauscher - Jacob Del Angel - Dylan Zhou - Chris Gu
+    - Leo Zhang";
 
 /* Class = "UILabel"; text = "Advisor"; ObjectID = "g9s-0k-R1y"; */
 "g9s-0k-R1y.text" = "导师";
@@ -306,7 +307,8 @@
 "lce-Uo-RVe.text" = "选择你的学校";
 
 /* Class = "UITextView"; text = "- Class of 2017: Andy Pang, Sherry Wang - Class of 2018: Susu Guo, Mia Peng - Class of 2019: Chris Gu, Shuxuan Lyu"; ObjectID = "mhn-Vi-b94"; */
-"mhn-Vi-b94.text" = "- Class of 2018: Andy Pang, Sherry Wang - Class of 2019: Susu Guo, Mia Peng - Class of 2020: Chris Gu, Shuxuan Lyu";
+"mhn-Vi-b94.text" = "- Class of 2018: Andy Pang, Sherry Wang - Class of 2019: Susu Guo, Mia Peng - Class of 2020: Chris Gu, Shuxuan Lyu
+    - Class of 2022: Leo Zhang";
 
 /* Class = "UILabel"; text = "Label"; ObjectID = "nJx-v6-03Q"; */
 "nJx-v6-03Q.text" = "Label";

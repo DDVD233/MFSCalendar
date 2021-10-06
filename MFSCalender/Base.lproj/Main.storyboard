@@ -3692,9 +3692,11 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" text="- Class of 2017: Andy Pang, Sherry Wang - Class of 2018: Susu Guo, Mia Peng - Class of 2019: Chris Gu, Shuxuan Lyu" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mhn-Vi-b94">
+                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mhn-Vi-b94">
                                                     <rect key="frame" x="20" y="48" width="374" height="93"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <string key="text">- Class of 2017: Andy Pang, Sherry Wang - Class of 2018: Susu Guo, Mia Peng - Class of 2019: Chris Gu, Shuxuan Lyu
+- Class of 2022: Leo Zhang</string>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                                 </textView>
@@ -3725,7 +3727,7 @@
                                                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g42-Eq-D5j">
                                                     <rect key="frame" x="20" y="48" width="374" height="393"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                    <string key="text">- Marcella Thanh-Guyet - Henry Powell - Chris Chen - Italia Vitella - Blythe Salamone - Maddie Mininno - Courtney Tarter - Alaisha Blue - Oscar Wan - Susu Guo - Mia Peng - Annabelle Crescenzo - Lauren Kam - Tylar Pierce - Andrew Rauscher - Jacob Del Angel - Dylan Zhou - Chris Gu</string>
+                                                    <mutableString key="text">- Marcella Thanh-Guyet - Henry Powell - Chris Chen - Italia Vitella - Blythe Salamone - Maddie Mininno - Courtney Tarter - Alaisha Blue - Oscar Wan - Susu Guo - Mia Peng - Annabelle Crescenzo - Lauren Kam - Tylar Pierce - Andrew Rauscher - Jacob Del Angel - Dylan Zhou - Chris Gu - Leo Zhang</mutableString>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                                 </textView>

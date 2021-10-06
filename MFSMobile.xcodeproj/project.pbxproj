@@ -1164,7 +1164,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CODE_SIGN_ENTITLEMENTS = "Class Schedule/Class Schedule.entitlements";
-				CURRENT_PROJECT_VERSION = 3375;
+				CURRENT_PROJECT_VERSION = 3395;
 				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				INFOPLIST_FILE = "Class Schedule/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -1173,7 +1173,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.2.2;
+				MARKETING_VERSION = 2.2.3;
 				PRODUCT_BUNDLE_IDENTIFIER = org.dwei.ClassSchedule;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1190,7 +1190,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CODE_SIGN_ENTITLEMENTS = "Class Schedule/Class Schedule.entitlements";
-				CURRENT_PROJECT_VERSION = 3375;
+				CURRENT_PROJECT_VERSION = 3395;
 				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				INFOPLIST_FILE = "Class Schedule/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -1199,7 +1199,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.2.2;
+				MARKETING_VERSION = 2.2.3;
 				PRODUCT_BUNDLE_IDENTIFIER = org.dwei.ClassSchedule;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1222,7 +1222,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_ENTITLEMENTS = "Next ClassExtension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3375;
+				CURRENT_PROJECT_VERSION = 3395;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -1234,7 +1234,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.2.2;
+				MARKETING_VERSION = 2.2.3;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.dwei.Next-Class";
@@ -1260,7 +1260,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_ENTITLEMENTS = "Next ClassExtension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3375;
+				CURRENT_PROJECT_VERSION = 3395;
 				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = "Next Class/Info.plist";
@@ -1271,7 +1271,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.2.2;
+				MARKETING_VERSION = 2.2.3;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.dwei.Next-Class";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1411,7 +1411,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3375;
+				CURRENT_PROJECT_VERSION = 3395;
 				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = YES;
 				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				"ENABLE_HARDENED_RUNTIME[sdk=macosx*]" = YES;
@@ -1428,7 +1428,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.2.2;
+				MARKETING_VERSION = 2.2.3;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1459,7 +1459,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3375;
+				CURRENT_PROJECT_VERSION = 3395;
 				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = YES;
 				DEVELOPMENT_TEAM = HWH6G9P2V2;
 				"ENABLE_HARDENED_RUNTIME[sdk=macosx*]" = YES;
@@ -1476,7 +1476,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.2.2;
+				MARKETING_VERSION = 2.2.3;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
